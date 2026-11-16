@@ -1,0 +1,39 @@
+# Game data
+
+Where the names, the stats and the images of the game come from, their terms, and how they follow the versions of the game. Checked on 2026-11-16; read by the steps that load game data (4, 5, 6).
+
+## Sources
+
+| Data | Source | Format | Terms |
+|---|---|---|---|
+| Passive tree: nodes, positions, links, stats, classes and ascendancies, images | [grindinggear/poe2-skilltree-export](https://github.com/grindinggear/poe2-skilltree-export), published by Grinding Gear Games; the only game data they export officially (see their [Data Exports](https://www.pathofexile.com/developer/docs/data)) | `data.json` (5 MB, 5,153 nodes) and `assets/`; a Git tag per version of the game (`0.4.0`, `0.5.2`) | No license file: made for tool developers, the data and images stay those of Grinding Gear Games |
+| Gems (names, tags, descriptions, icons), uniques, base items, ascendancies | [RePoE](https://github.com/repoe-fork/repoe), the community export of the files of the game, hosted at <https://repoe-fork.github.io/poe2/> (`skill_gems.json`, `base_items.json`, `uniques.json`, `ascendancies.json`…) | JSON, regenerated after each patch (last update on 2026-11-16) | The code is MIT; the data are those of Grinding Gear Games. « The file formats are not final » |
+
+Measured on the corpus (see [build-files-in-the-wild.md](build-files-in-the-wild.md)): every passive, gem, unique and ascendancy id written by a tool is found in these two sources.
+
+The inventory slots aren't in either source: they are a short fixed list (`Weapon1`, `Offhand1`, `Helm1`, `Ring2`, `Flask1`, `Charm1`, `Trinket1`…, the ids of the `Inventories` table of the game), laid out by Pathweaver itself, and their names are texts of the interface.
+
+Rejected:
+
+- **Path of Building (PoE2)**: MIT, complete, but its data are Lua files made for its own calculations.
+- **poe2db.tw**: a website without an API, its texts under CC BY-NC-SA 3.0.
+- **Extracting the files of the game ourselves** (PyPoE, poe-dat-viewer): what RePoE already does, kept as the way out if RePoE stops.
+
+## How Pathweaver uses them
+
+- The data are converted at build time by a script of the repository into compact files of the website, one folder per version of the game and per language (`en` only in version 1). The browser loads them from Pathweaver, never from GitHub or RePoE: the website keeps working if a source moves or stops.
+- Only what Pathweaver shows is kept: the size counts, the passive tree alone weighs 5 MB raw.
+- The version of the game of the data is shown in the warnings panel, so that an unknown id can be read as « made for another version ».
+- At each version of the game: run the script on the new version, check the corpus, commit the new folder. Path of Exile 2 1.0 (2026-12-11) changes a lot: steps 4 and 5 are built on its data.
+
+## French
+
+To check when French is added (version 1.x): which of the two sources carries the French texts of the game, and whether the names of `unique_name` must stay in English in the files.
+
+## Risks accepted
+
+On 2026-11-16, to be accepted by the owner with the pull request of step 0:
+
+- **No written policy of Grinding Gear Games for third-party tools.** Their [terms of use](https://www.pathofexile.com/legal/terms-of-use-and-privacy-policy) license the use of the website and the game, not the reuse of its data and images; the tree export exists for tool developers, and poe.ninja, Path of Building and Maxroll show the same images. Pathweaver states in its README and its pages that it isn't affiliated with Grinding Gear Games, and removes what they would ask to remove.
+- **RePoE is run by volunteers.** A late or broken update delays the data of a new version; the way out is to extract the files ourselves.
+- **The format of the data may change** at any version, for both sources: the conversion script fails loudly rather than producing incomplete data.
