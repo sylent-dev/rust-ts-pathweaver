@@ -1,4 +1,9 @@
 {
+  "attribution": {
+    "commit": "",
+    "pr": "",
+    "sessionUrl": false
+  },
   "disableClaudeAiConnectors": true,
   "skillOverrides": {
     "anthropic-skills:docx": "user-invocable-only",
