@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pathweaver · mock-up</title>
+<!--
+  The mock-up of Pathweaver (html-mockups skill), from the wireframes of docs/wireframes/.
+  This page only loads the small files of pathweaver/, in order: the styles (the page, the
+  tokens of each style, then one sheet per block), the scripts (the page and its controls, the
+  shared helpers, the sample data, one script per block), the sections, and the rendering last.
+  Plain tags, no modules, so that the files share their constants.
+
+  Serve the repository root without cache, on the port of the project:
+    python3 docs/mockups/serve.py 8796
+  then open http://127.0.0.1:8796/docs/mockups/pathweaver.html
+-->
+<link rel="stylesheet" href="pathweaver/css/page.css">
+<link rel="stylesheet" href="pathweaver/css/tokens.css">
+<link rel="stylesheet" href="pathweaver/css/app.css">
+<link rel="stylesheet" href="pathweaver/css/app-bar.css">
+<link rel="stylesheet" href="pathweaver/css/build-header.css">
+<link rel="stylesheet" href="pathweaver/css/level-band.css">
+<link rel="stylesheet" href="pathweaver/css/build-tabs.css">
+</head>
+<body>
+<p class="page-warning" id="file-warning" hidden>Opened as a file: serve the repository root (see the comment at the top of this page) so that every file of the mock-up loads.</p>
+<nav class="page-tabs" id="tabs" aria-label="Styles and variants"></nav>
+<main id="sheet"></main>
+<script src="pathweaver/js/page.js"></script>
+<script src="pathweaver/js/icons.js"></script>
+<script src="pathweaver/js/data-tree.js"></script>
+<script src="pathweaver/js/data-builds.js"></script>
+<script src="pathweaver/js/levels.js"></script>
+<script src="pathweaver/js/app-bar.js"></script>
+<script src="pathweaver/js/build-header.js"></script>
+<script src="pathweaver/js/level-band.js"></script>
+<script src="pathweaver/js/build-tabs.js"></script>
+<script src="pathweaver/sections/build-page.js"></script>
+<script src="pathweaver/js/render.js"></script>
+</body>
+</html>

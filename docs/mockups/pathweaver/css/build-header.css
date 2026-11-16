@@ -1,0 +1,6 @@
+/* The header of a build: 66 px. */
+.app-header { display: flex; align-items: center; gap: 14px; height: 66px; padding: 0 16px; border-bottom: 1px solid var(--line); }
+.app-header-text { flex: 1; min-width: 0; }
+.app-header-name { margin: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font: 400 20px/1.25 var(--font-title); }
+.app-header-by { margin: 2px 0 0; font-size: 13px; }
+.app-header-actions { display: flex; gap: 8px; align-self: flex-start; margin-top: 10px; }

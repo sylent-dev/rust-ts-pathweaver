@@ -1,0 +1,15 @@
+/* The level band: 84 px, the band colour. */
+.app-level { display: flex; align-items: center; height: 84px; padding: 0 20px 0 22px; background: var(--band); border-bottom: 1px solid var(--line); }
+.app-level-step { display: flex; flex-direction: column; align-items: center; gap: 4px; width: 30px; margin-top: 6px; font-size: 12px; }
+.app-level-arrow { display: grid; place-items: center; width: 30px; height: 30px; padding: 0; border: none; background: none; cursor: pointer; }
+.app-level-arrow:disabled { opacity: .3; cursor: default; }
+.app-level-step .app-number { min-height: 16px; }
+.app-level-now { display: flex; flex-direction: column; align-items: center; width: 80px; font-size: 12px; }
+.app-level-number { font-size: 36px; line-height: 1.05; }
+.app-level-track { position: relative; height: 40px; margin: 0 30px 0 34px; cursor: pointer; }
+.app-level-line { position: absolute; top: 12px; left: 0; right: 0; height: 0; border-top: 1px solid var(--line); }
+.app-level-marker { position: absolute; top: 5px; width: 0; height: 14px; border-left: 1px solid var(--weak); }
+.app-level-cursor { position: absolute; top: 2px; width: 20px; height: 20px; margin-left: -10px; border-radius: 50%; background: var(--accent); }
+.app-level-end { position: absolute; top: 24px; transform: translateX(-50%); font-size: 11px; }
+.app-level-changes { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 3px; font-size: 13px; }
+.app-level-change { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }

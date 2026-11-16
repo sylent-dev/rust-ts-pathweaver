@@ -1,0 +1,28 @@
+/* Styles: tokens only (CSS variables). The components use nothing else, and the canvas of the
+   tree reads them too (tree.js), so that a style is cheap to add or tweak. */
+
+/* Grey: the wireframe in HTML, to check the layout before any style (step 2a). */
+:root[data-theme="grey"] {
+  --font-text: system-ui, sans-serif;
+  --font-title: system-ui, sans-serif;
+  --font-number: system-ui, sans-serif;
+  --page: #ffffff;          /* the background of the window */
+  --band: #e9ecef;          /* the bands: app bar, level band */
+  --fill: #e9ecef;          /* a control, a slot with a hint */
+  --fill-strong: #ced4da;   /* a control pressed */
+  --line: #1e1e1e;          /* the outlines */
+  --line-weak: #adb5bd;     /* the separators */
+  --text: #1e1e1e;
+  --weak: #868e96;
+  --accent: #f76707;        /* the one accent: what is new, the cursor of the level */
+  --on-accent: #ffffff;
+  --radius: 4px;
+  /* The tree, read by the canvas. */
+  --tree-background: #ffffff;
+  --tree-edge: #dee2e6;
+  --tree-edge-taken: #495057;
+  --tree-node: #ffffff;
+  --tree-node-line: #adb5bd;
+  --tree-taken: #495057;
+  --tree-later: #adb5bd;
+}

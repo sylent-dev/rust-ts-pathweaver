@@ -1,0 +1,15 @@
+/* The window of the application and what every block shares. Classes of the application
+   start with `app-`, states with `is-`, so that they never collide. */
+.app-window { position: relative; overflow: hidden; background: var(--page); color: var(--text); font: 14px/1.35 var(--font-text); box-shadow: 0 8px 30px #0006; }
+.app-window button { font: inherit; color: inherit; }
+.app-portrait { flex: none; display: block; border-radius: 50%; object-fit: cover; background: var(--fill); }
+.app-weak { color: var(--weak); }
+.app-accent { color: var(--accent); }
+.app-number { font-family: var(--font-number); font-variant-numeric: tabular-nums; }
+.app-button { display: inline-flex; align-items: center; gap: 6px; height: 28px; padding: 0 12px; border: 1px solid var(--line); border-radius: var(--radius); background: var(--page); cursor: pointer; white-space: nowrap; }
+.app-button.is-filled { background: var(--fill); }
+.app-switch { display: inline-flex; align-items: center; gap: 2px; }
+.app-switch button { min-width: 34px; height: 22px; padding: 0 8px; border: 1px solid var(--line); border-radius: var(--radius); background: var(--page); cursor: pointer; font-size: 13px; }
+.app-switch button[aria-pressed="true"] { background: var(--fill-strong); }
+.app-switch .app-switch-label { margin-right: 6px; color: var(--weak); font-size: 13px; }
+.app-icon { flex: none; display: block; }

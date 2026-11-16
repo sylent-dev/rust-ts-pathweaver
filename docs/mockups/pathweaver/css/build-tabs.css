@@ -1,0 +1,4 @@
+/* The tabs of a build: 38 px, under the level band. */
+.app-tabs { display: flex; align-items: flex-end; gap: 6px; height: 38px; padding: 0 16px; border-bottom: 1px solid var(--line); }
+.app-tab { height: 32px; margin-bottom: -1px; padding: 0 14px; border: 1px solid var(--line); border-radius: var(--radius) var(--radius) 0 0; background: var(--fill); cursor: pointer; font-size: 14px; }
+.app-tab[aria-selected="true"] { background: var(--page); border-bottom-color: var(--page); }
