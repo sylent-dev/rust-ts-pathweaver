@@ -112,7 +112,8 @@ Step 7 of the roadmap. Some guides (Mobalytics) come as several files: one per r
   - **Overlap**: two builds that start at the same level block the merge, which shows the level in conflict, until a start level is changed or a build removed.
   - **Gap**: the first build starting above level 1 is a warning (nothing is shown below it), not a block.
   - **Different guides**: builds with different `link`s or ascendancies are a warning (« these builds don't seem to come from the same guide »), not a block.
-- The merged guide is one build: each entry applies over the levels of the builds that hold it, within its own `level_interval` if it has one, cut at the limits of each build. The name and the author are those of the first build, editable.
+- The merged guide is one build: each entry applies over the levels of the builds that hold it, within its own `level_interval` if it has one, cut at the limits of each build. The name is that of the first build without the part its level was guessed from (« lvl 1-14 - 0.5.5 Fubgun Flameblast Oil G » gives « 0.5.5 Fubgun Flameblast Oil G »), and the author is that of the first build; both are editable.
+- A build whose level can't be guessed (« Endgame - … ») blocks the merge until its start level is typed.
 - The merged guide joins the list of open builds; the builds it comes from stay open.
 
 ### Downloading a build
@@ -143,8 +144,24 @@ Step 9 of the roadmap.
 
 ### Screens
 
-- Pathweaver is used on a computer, from a window as narrow as half of a 1920-pixel screen, so that it fits next to the game. The minimum width is set with the wireframes.
-- On a phone, a page says that Pathweaver is used on a computer; when it was opened from a share link, it shows the name of the build and a button to copy the link.
+- Pathweaver is used on a computer, from a window as narrow as half of a 1920-pixel screen, so that it fits next to the game. The minimum width is **900 pixels** (half of a 1920-pixel screen, less the borders of the browser and its scroll bar): below it, the page keeps its width and scrolls sideways.
+- Below 600 pixels (a phone), a page says that Pathweaver is used on a computer; when it was opened from a share link, it shows the name of the build and a button to copy the link.
+
+### Window layout
+
+Agreed on the wireframes of [docs/wireframes/pathweaver.excalidraw](docs/wireframes/pathweaver.excalidraw) on 2026-11-16; the variants set aside are in `archive.excalidraw`. The wireframe only fixed this first layout: once approved, the mock-up of step 2 is the reference.
+
+- **App bar**, at the top of every page: « Pathweaver », which leads to the home page, then the open builds. Narrower than about 1,400 pixels, they are tabs (as many as fit, the others in a « +N ▾ » menu, which also holds **Merge…**), and a **+** opens files. From about 1,400 pixels, they move to a side panel on the left, with their full names, **+ Open files or JSON**, **Merge…** and **Home**.
+- **The page of a build**, from top to bottom:
+  - the header: the name, « by author · ascendancy (class) », and **Copy link**, **Download .build** and **⚠ warnings** (which leads to About);
+  - the level band: ◀ and ▶ with the level each goes to, the level in large, the track with its markers and the cursor, « what changes at N » on the right;
+  - five tabs: **Overview** (the default: the tree, and beside it what is new at this level, the skills and the inventory; side by side in a wide window), **Skills**, **Tree**, **Inventory** (the slots, and beside them the list of the hints at the level, then those to come), **About** (the description, the link to the guide, the file, the warnings).
+- What is new at the level stands out (the « New at N » box, the new gems, the new passives ringed on the tree), as does the cursor of the level: the one accent of the interface.
+- **The home page**: at the first visit, what Pathweaver does, a large drop zone with **Choose files** and **Paste JSON**, and where `.build` files come from; afterwards, a smaller drop zone over the library, one row per build (name, author, ascendancy, levels, last opened, **Open**, and a bin that asks once, in the row). Files dropped anywhere, on any page, open.
+- **Paste JSON** is a dialog; the reason a text isn't a build is written under it.
+- **Opening errors**: the first build opened is shown, and a notice names each file refused with its reason; it stays until it is closed. A damaged share link and private browsing are notices under the app bar.
+- **Merge…** is a page of its own: the open builds with a box to tick, the ticked ones in the order of their start levels (each in a field, with the levels it applies to), the merged guide as a track of named segments, the checks (what blocks stands out, what only warns doesn't), the name and the author, and **Merge N builds**, greyed while something blocks.
+- **Copy link** and **Download .build** answer in a box under their button: the length of the link and the Discord warning; where the game reads the file.
 
 ### Languages
 
