@@ -51,7 +51,8 @@ Pathweaver (the build viewer and planner of Path of Exile 2: the subtitle that g
 
 ### The level
 
-- The level of the character is chosen with a slider from 1 to 100, with keyboard arrows, and with **markers**: one at each level where something of the build starts or stops. A click on a marker moves the slider to it.
+- The level of the character is chosen with a slider from 1 to 100, and with **markers**: one at each level where a skill, a support or an inventory hint starts or stops, or where passives stop (a respec). A passive that starts makes no marker: a file can add one at every level (99 markers on a build of the corpus, 15 without them); the passives are counted in « what changes here ». A click on the track moves the slider there.
+- **◀ and ▶** on both sides of the level go to the previous and the next marker, each with the level it goes to written under it; the keyboard arrows do the same.
 - An entry (a passive, a skill, a support, an inventory slot) applies at a level when:
   - it has no `level_interval`: at every level;
   - its `level_interval` is `[min, max]`: from `min` to `max`, both included (`0` counts as `1`);

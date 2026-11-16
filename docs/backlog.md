@@ -8,6 +8,13 @@ Ideas, polish and edge cases found along the way that the current step doesn't n
 - **A gem in the wrong folder.** An id such as `Metadata/Items/Gems/SkillGemShieldWall` that exists in the other folder (`Gem/`) could show « did you mean… » in the warnings, once the editor can fix it.
 - **The meaning of a single-number `level_interval`.** Read as « from that level to 100 » until checked in the game.
 
+## The level band
+
+Set aside at the wireframes (2026-11-16, see `docs/wireframes/archive.excalidraw`), for when the use asks for them:
+
+- **The markers as buttons**: a row of the levels of the markers under the track, to jump to any of them in one click; ten of them sliding with the level when there are more.
+- **What comes next, named**: « Next · 65: + 2 supports on Spark » beside ▶, or on hovering a marker of the track.
+
 ## Passive tree
 
 - **The order of allocation**: number the passives on the tree (1, 2, 3…) for leveling, as Maxroll does and as some authors write in their hints.
