@@ -51,7 +51,7 @@ npm test         # Vitest
 
 ## Disclaimer
 
-Pathweaver isn't affiliated with or endorsed by Grinding Gear Games. Path of Exile is a trademark of Grinding Gear Games; the game data and images belong to them.
+Pathweaver isn't affiliated with or endorsed by Grinding Gear Games. Path of Exile is a trademark of Grinding Gear Games; the game data belong to them. Pathweaver uses no image of the game: its shapes and icons are its own.
 
 ## License
 
