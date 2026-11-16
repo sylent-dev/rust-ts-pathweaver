@@ -14,7 +14,7 @@ Pathweaver (the build viewer and planner of Path of Exile 2: the subtitle that g
 - **Level by level.** A build is a progression: the interface follows a level of the character, not separate profiles.
 - **A personal tool first.** Versions 1 and 1.5 serve the player who uses them: no account, no server, a static website; nothing leaves the browser unless the user copies a link.
 - **The rules in Rust, once.** The reading, the checks, the levels, the merging and the passive tree are in the core, so that the same code checks a file in the browser and, in version 2, on the server.
-- **The game data come from the game.** The names, the stats and the images come from the data of the game, never typed by hand (see [docs/game-data.md](docs/game-data.md)).
+- **The game data come from the game; the images are our own.** The names and the stats come from the data of the game, never typed by hand (see [docs/game-data.md](docs/game-data.md)). No image of the game is used: the shapes, marks and icons are drawn for Pathweaver.
 - **The documentation of Grinding Gear Games wins.** When the files in the wild disagree with the [documentation of the format](https://www.pathofexile.com/developer/docs/game#buildplanner), Pathweaver follows the documentation, and still reads the file.
 
 ## Versions
@@ -32,6 +32,7 @@ Pathweaver (the build viewer and planner of Path of Exile 2: the subtitle that g
 - **Damage and defences.** A `.build` file holds no item, and computing a character is the work of Path of Building. Pathweaver shows what the build takes, not what it deals.
 - **Phones and consoles.** Pathweaver is used on a computer (see [Screens](#screens)). On console, the game doesn't read local files: the players subscribe to builds on the website of Grinding Gear Games.
 - **Translating the author's texts.** The name, the description and the hints of a build are shown as their author wrote them, in their language.
+- **The images of the game.** Gems, passives and uniques are shown by their names and Pathweaver's own marks.
 
 ## Version 1
 
@@ -65,14 +66,14 @@ Pathweaver (the build viewer and planner of Path of Exile 2: the subtitle that g
 Step 4 of the roadmap.
 
 - The skill gems that apply at the level, each with its supports under it, in the order of the file. A support is shown when both it and its skill apply.
-- Each gem shows its name and its icon from the game data; on hover, its tags and its description from the game data, then the hint of the author (`additional_text`).
+- Each gem shows its name from the game data, with a mark of its own for its kind (skill, support, spirit) and its colour (strength, dexterity, intelligence); on hover, its tags and its description from the game data, then the hint of the author (`additional_text`).
 - Two lines of the same skill with different intervals (the same gem from 1 to 5, then from 6 to 14 with more supports) are two entries: at a level, only the one that applies is shown.
 
 ### Passive tree
 
 Step 5 of the roadmap.
 
-- The whole passive tree of the game, drawn as in the game, moved with the mouse and zoomed with the wheel.
+- The whole passive tree of the game, at the positions of the game, drawn with Pathweaver's own shapes for each kind of passive (small, notable, keystone, jewel socket, ascendancy); moved with the mouse and zoomed with the wheel.
 - At the level chosen: the passives the build has taken up to this level are lit; the passives it takes later are shown faded; the others are dimmed.
 - The ascendancy of the build, with its passives, beside the tree.
 - The weapon sets: the passives with a `weapon_set` of 1 or 2 belong to that set; a switch shows set 1 or set 2 on top of the shared passives (`weapon_set` 0 or absent).
@@ -84,7 +85,7 @@ Step 5 of the roadmap.
 Step 6 of the roadmap.
 
 - The inventory of the character laid out as in the game: weapons and offhands of both weapon sets, helmet, body armour, gloves, boots, belt, amulet, rings, flasks, charms.
-- A slot with a hint at the level is marked; on hover or click, it shows the hint and, when it names one, the unique item (`unique_name`) with its image from the game data.
+- A slot with a hint at the level is marked; on hover or click, it shows the hint and, when it names one, the unique item (`unique_name`) with its kind and its stats from the game data.
 - `slot_x` and `slot_y` say which cell of a slot with several cells the hint is for.
 - A `.build` file holds no item: an empty slot is just a slot the build says nothing about.
 

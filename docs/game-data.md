@@ -1,13 +1,13 @@
 # Game data
 
-Where the names, the stats and the images of the game come from, their terms, and how they follow the versions of the game. Checked on 2026-11-16; read by the steps that load game data (4, 5, 6).
+Where the names and the stats of the game come from, their terms, and how they follow the versions of the game. Checked on 2026-11-16; read by the steps that load game data (4, 5, 6).
 
 ## Sources
 
 | Data | Source | Format | Terms |
 |---|---|---|---|
-| Passive tree: nodes, positions, links, stats, classes and ascendancies, images | [grindinggear/poe2-skilltree-export](https://github.com/grindinggear/poe2-skilltree-export), published by Grinding Gear Games; the only game data they export officially (see their [Data Exports](https://www.pathofexile.com/developer/docs/data)) | `data.json` (5 MB, 5,153 nodes) and `assets/`; a Git tag per version of the game (`0.4.0`, `0.5.2`) | No license file: made for tool developers, the data and images stay those of Grinding Gear Games |
-| Gems (names, tags, descriptions, icons), uniques, base items, ascendancies | [RePoE](https://github.com/repoe-fork/repoe), the community export of the files of the game, hosted at <https://repoe-fork.github.io/poe2/> (`skill_gems.json`, `base_items.json`, `uniques.json`, `ascendancies.json`…) | JSON, regenerated after each patch (last update on 2026-11-16) | The code is MIT; the data are those of Grinding Gear Games. « The file formats are not final » |
+| Passive tree: nodes, positions, links, stats, classes and ascendancies | [grindinggear/poe2-skilltree-export](https://github.com/grindinggear/poe2-skilltree-export), published by Grinding Gear Games; the only game data they export officially (see their [Data Exports](https://www.pathofexile.com/developer/docs/data)) | `data.json` (5 MB, 5,153 nodes) and `assets/`; a Git tag per version of the game (`0.4.0`, `0.5.2`) | No license file: made for tool developers, the data stay those of Grinding Gear Games |
+| Gems (names, tags, descriptions), uniques, base items, ascendancies | [RePoE](https://github.com/repoe-fork/repoe), the community export of the files of the game, hosted at <https://repoe-fork.github.io/poe2/> (`skill_gems.json`, `base_items.json`, `uniques.json`, `ascendancies.json`…) | JSON, regenerated after each patch (last update on 2026-11-16) | The code is MIT; the data are those of Grinding Gear Games. « The file formats are not final » |
 
 Measured on the corpus (see [build-files-in-the-wild.md](build-files-in-the-wild.md)): every passive, gem, unique and ascendancy id written by a tool is found in these two sources.
 
@@ -24,7 +24,8 @@ Rejected:
 - The data are converted at build time by a script of the repository into compact files of the website, one folder per version of the game and per language (`en` only in version 1). The browser loads them from Pathweaver, never from GitHub or RePoE: the website keeps working if a source moves or stops.
 - Only what Pathweaver shows is kept: the size counts, the passive tree alone weighs 5 MB raw.
 - The version of the game of the data is shown in the warnings panel, so that an unknown id can be read as « made for another version ».
-- At each version of the game: run the script on the new version, check the corpus, commit the new folder. Path of Exile 2 1.0 (2026-12-11) changes a lot: steps 4 and 5 are built on its data.
+- At each version of the game: run the script on the new version, check the corpus, commit the new folder. Path of Exile 2 1.0 (2026-12-11) changes a lot: whether the passive tree is first built on the data of 0.5 or of 1.0 is decided at step 5, from how the steps before it went.
+- **No image of the game** (decided by the owner on 2026-11-16): the `assets/` of the tree export and the art referenced by RePoE aren't used. The shapes, marks and icons are Pathweaver's own, made with the mock-up.
 
 ## French
 
@@ -32,8 +33,8 @@ To check when French is added (version 1.x): which of the two sources carries th
 
 ## Risks accepted
 
-On 2026-11-16, to be accepted by the owner with the pull request of step 0:
+Accepted by the owner on 2026-11-16, with the specifications of version 1:
 
-- **No written policy of Grinding Gear Games for third-party tools.** Their [terms of use](https://www.pathofexile.com/legal/terms-of-use-and-privacy-policy) license the use of the website and the game, not the reuse of its data and images; the tree export exists for tool developers, and poe.ninja, Path of Building and Maxroll show the same images. Pathweaver states in its README and its pages that it isn't affiliated with Grinding Gear Games, and removes what they would ask to remove.
+- **No written policy of Grinding Gear Games for third-party tools.** Their [terms of use](https://www.pathofexile.com/legal/terms-of-use-and-privacy-policy) license the use of the website and the game, not the reuse of its data; the tree export exists for tool developers, and poe.ninja, Path of Building and Maxroll show the same names and stats. Pathweaver uses texts and positions only, no image of the game; it states in its README and its pages that it isn't affiliated with Grinding Gear Games, and removes what they would ask to remove.
 - **RePoE is run by volunteers.** A late or broken update delays the data of a new version; the way out is to extract the files ourselves.
 - **The format of the data may change** at any version, for both sources: the conversion script fails loudly rather than producing incomplete data.
