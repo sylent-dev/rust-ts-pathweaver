@@ -1,0 +1,123 @@
+//! The entries of a build: its passives, its skills with their supports, and the hints of its
+//! inventory slots.
+
+use serde::{Deserialize, Serialize};
+
+use crate::{Extra, LevelInterval};
+
+/// An entry the format lets write as its id alone, when it needs no other field:
+/// `"strength89"` or `{ "id": "strength89", "level_interval": [1, 20] }`. Kept in the form it
+/// was read in.
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[serde(untagged)]
+pub enum Entry<T> {
+    Id(String),
+    Detailed(T),
+}
+
+/// The fields every entry shares, through [`Entry::id`] and [`Entry::level_interval`].
+pub trait Identified {
+    fn id(&self) -> &str;
+    fn level_interval(&self) -> Option<&LevelInterval>;
+}
+
+impl<T: Identified> Entry<T> {
+    /// The id of the entry, in either form.
+    #[must_use]
+    pub fn id(&self) -> &str {
+        match self {
+            Self::Id(id) => id,
+            Self::Detailed(entry) => entry.id(),
+        }
+    }
+
+    /// The levels the entry is meant for; none for an entry written as its id alone.
+    #[must_use]
+    pub fn level_interval(&self) -> Option<&LevelInterval> {
+        match self {
+            Self::Id(_) => None,
+            Self::Detailed(entry) => entry.level_interval(),
+        }
+    }
+}
+
+/// A passive of the passive skill tree.
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct Passive {
+    /// An id of the `PassiveSkills` table, such as `strength89`.
+    pub id: String,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub level_interval: Option<LevelInterval>,
+    /// The weapon set the passive is allocated in, from 0 to 2.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub weapon_set: Option<u32>,
+    /// Shown when the passive is hovered in the game, with the markup of the game.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub additional_text: Option<String>,
+    #[serde(flatten)]
+    pub extra: Extra,
+}
+
+/// A skill gem, cut from an Uncut Skill Gem or an Uncut Spirit Gem.
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct Skill {
+    /// An id of the `BaseItemTypes` table, such as `Metadata/Items/Gems/SkillGemEarthquake`.
+    pub id: String,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub level_interval: Option<LevelInterval>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub additional_text: Option<String>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub support_skills: Option<Vec<Entry<Support>>>,
+    #[serde(flatten)]
+    pub extra: Extra,
+}
+
+/// A support gem of a skill.
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct Support {
+    /// An id of the `BaseItemTypes` table.
+    pub id: String,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub level_interval: Option<LevelInterval>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub additional_text: Option<String>,
+    #[serde(flatten)]
+    pub extra: Extra,
+}
+
+/// A hint shown on a slot of the inventory of the character.
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct InventorySlot {
+    /// An id of the `Inventories` table, such as `Weapon1`.
+    pub inventory_id: String,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub slot_x: Option<u32>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub slot_y: Option<u32>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub level_interval: Option<LevelInterval>,
+    /// A unique item suggested for the slot, a `UniqueName` of the `Words` table.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub unique_name: Option<String>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub additional_text: Option<String>,
+    #[serde(flatten)]
+    pub extra: Extra,
+}
+
+macro_rules! identified {
+    ($($entry:ty),*) => {
+        $(impl Identified for $entry {
+            fn id(&self) -> &str {
+                &self.id
+            }
+
+            fn level_interval(&self) -> Option<&LevelInterval> {
+                self.level_interval.as_ref()
+            }
+        })*
+    };
+}
+
+identified!(Passive, Skill, Support);

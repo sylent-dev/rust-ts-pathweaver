@@ -1,0 +1,25 @@
+[package]
+name = "pathweaver-wasm"
+description = "The bridge that exposes the core of Pathweaver to the interface, in WebAssembly."
+readme = "../../README.md"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+authors.workspace = true
+license.workspace = true
+repository.workspace = true
+publish.workspace = true
+
+[lib]
+# `cdylib` is the WebAssembly module loaded by the interface; `rlib` lets `cargo test` link
+# the bridge into its native tests.
+crate-type = ["cdylib", "rlib"]
+
+[dependencies]
+pathweaver-build-file.workspace = true
+serde.workspace = true
+tsify.workspace = true
+wasm-bindgen.workspace = true
+
+[lints]
+workspace = true

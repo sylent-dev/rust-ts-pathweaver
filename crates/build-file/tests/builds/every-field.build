@@ -1,0 +1,49 @@
+{
+    "name": "Every Field",
+    "author": "Pathweaver",
+    "description": "A build written for the tests: every field of version 1 of the format, in both of its forms.",
+    "ascendancy": "Warrior1",
+    "passives": [
+        "strength89",
+        {
+            "id": "melee17",
+            "level_interval": [1, 50],
+            "weapon_set": 1,
+            "additional_text": "<m>{<red>{Take it early}}"
+        },
+        {
+            "id": "melee18",
+            "level_interval": 40
+        }
+    ],
+    "skills": [
+        "Metadata/Items/Gems/SkillGemBoneshatter",
+        {
+            "id": "Metadata/Items/Gems/SkillGemEarthquake",
+            "level_interval": [1, 100],
+            "additional_text": "Cut it <green>{before} the second skill",
+            "support_skills": [
+                "Metadata/Items/Gems/SupportGemFastForward",
+                {
+                    "id": "Metadata/Items/Gems/SupportGemAftershock",
+                    "level_interval": [30, 100],
+                    "additional_text": "From level 30"
+                }
+            ]
+        }
+    ],
+    "inventory_slots": [
+        {
+            "inventory_id": "Weapon1",
+            "additional_text": "<silver>{Any two-handed mace}"
+        },
+        {
+            "inventory_id": "Ring1",
+            "slot_x": 0,
+            "slot_y": 0,
+            "level_interval": [60, 100],
+            "unique_name": "Blackflame",
+            "additional_text": "Late in the campaign"
+        }
+    ]
+}

@@ -1,0 +1,46 @@
+# The core of Pathweaver, in Rust: plain libraries tested with `cargo test`, and the thin
+# crate that exposes them to JavaScript once compiled to WebAssembly (see
+# docs/technical-choices.md).
+[workspace]
+members = ["crates/build-file", "crates/wasm"]
+resolver = "3"
+
+[workspace.package]
+version = "0.1.0"
+edition = "2024"
+rust-version = "1.93"
+authors = ["Aunim HASSAN"]
+license = "MIT OR Apache-2.0"
+repository = "https://github.com/sylent-dev/rust-ts-pathweaver"
+# An application, never published on crates.io.
+publish = false
+
+[workspace.dependencies]
+pathweaver-build-file = { path = "crates/build-file" }
+serde = { version = "1.0.228", features = ["derive"] }
+# `preserve_order`: the fields a build file holds and the format doesn't name are written back
+# in the order they were read in, not sorted.
+serde_json = { version = "1.0.145", features = ["preserve_order"] }
+# The TypeScript types of what crosses the bridge, generated from its Rust types, which
+# `serde-wasm-bindgen` (its `js` feature) turns into JavaScript objects, as in Stepwise.
+tsify = { version = "0.5.8", default-features = false, features = ["js"] }
+# Pinned to an exact version: the `wasm-bindgen` command-line tool that generates the
+# JavaScript glue must be at the very same version, or the module refuses to load.
+wasm-bindgen = "=0.2.130"
+
+[workspace.lints.rust]
+unsafe_code = "forbid"
+
+[workspace.lints.clippy]
+pedantic = { level = "warn", priority = -1 }
+# An exception to a lint is an `#[expect(..., reason = "...")]`: it says why, and it warns
+# once the code no longer needs it.
+allow_attributes = "warn"
+allow_attributes_without_reason = "warn"
+
+# The WebAssembly module of the website, tuned as in Stepwise; to measure again once the
+# passive tree is in.
+[profile.release]
+opt-level = 3
+lto = true
+codegen-units = 1
