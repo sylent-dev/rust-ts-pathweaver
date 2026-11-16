@@ -133,6 +133,7 @@ Follow [Conventional Commits 1.0.0](https://www.conventionalcommits.org/en/v1.0.
 - On critical code (what reads the files and the links of strangers, the matching of outside data; the project names its own in `roadmap.md`), run the review again after applying its fixes, with a test per fix, until no high or medium finding is left. When a second fix lands on the same case, look for the rule that makes the case impossible rather than a third condition.
 - A rule that reads the data (a heuristic, a threshold) is measured before it is decided: sort the wrong cases by cause, prototype the candidate rules behind a switch, show the exchange as numbers (the wrong answers gone against the right ones lost), say what the prototype doesn't cover, then let the owner choose; the prototype is thrown away and the rule written again with its tests. The corpus of `inputs/builds/` is the data to measure on.
 - When the owner puts a review off, nothing replaces it: finish the step, say what is left to them, and stop. Ask when an instruction can be read two ways.
+- When the owner asks to look at the Dependabot pull requests (the dependency updates, `.github/dependabot.yml`), run the `dependency-reviewer` subagent (`.claude/agents/dependency-reviewer.md`): it writes, in French, to `outputs/<YYYY-MM-DD>-dependency-review.md`, a recommendation for each one, with its link and the comment to post. Give the owner its summary table; never merge, close or comment a Dependabot pull request yourself unless the owner asks.
 
 ## Development
 
@@ -166,3 +167,5 @@ Follow [Conventional Commits 1.0.0](https://www.conventionalcommits.org/en/v1.0.
 
 - Pathweaver is a website: there is no release workflow. Its host is Cloudflare (decided on 2026-11-16, see `docs/technical-choices.md`); the deployment is set up by a step of `roadmap.md`.
 - A version tag (e.g. `v0.1.0`) matching the version of `[workspace.package]` in `Cargo.toml` names a version; it builds nothing on its own.
+- Before deploying a version, run the `security-auditor` subagent (`.claude/agents/security-auditor.md`) on the whole repository at `main`: it writes its findings, in French, to `outputs/<YYYY-MM-DD>-security-audit.md`. Summarize them to the owner, and fix the ones they approve in a pull request before the tag; a critical or high finding blocks the deployment. Before a patch version, the owner may limit the audit to the changes since the last audited version.
+- Follow `process.md` (Deployment): the version, the audit, the Dependabot pull requests, the guides of `docs/tests/` run again, then the tag.
