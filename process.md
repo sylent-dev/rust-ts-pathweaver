@@ -54,8 +54,10 @@ The `excalidraw-wireframes` skill (`.claude/skills/`) carries out this phase: it
 2. It checks the result with an SVG preview before handing it over.
 3. The owner edits it in VS Code with the **Excalidraw** extension (`pomdtr.excalidraw-editor`), or on excalidraw.com (**Open**, then **Save to…**).
 4. Iterate: the owner draws their version, Claude Code rearranges it and fills the gaps, the owner draws the next version, and so on. Claude Code commits the owner's version before changing it, so that every iteration stays in the history.
-5. Once the main frames are agreed, Claude Code draws the rest under them: other kinds of content, empty, loading and waiting states, errors, the other language.
+5. Once the main frames are agreed, Claude Code draws the rest: other kinds of content, empty, loading and waiting states, errors, the other language.
 6. Claude Code writes the agreed layout in `specs.md`.
+
+New frames always go at the top of the canvas, above the ones the owner has seen: the file opens at its top, so the owner finds them without scrolling.
 
 For a responsive interface, start with the narrowest layout (mobile first): it forces to choose the essential, and the wider layouts then only rearrange the same blocks. Draw the panels that open over the content (settings) too.
 
@@ -147,3 +149,4 @@ After the release, or after any phase that went badly:
 | stepwise | Twenty fixed boards of fonts couldn't show the combinations: one list per role at the top of the page, applied at once and kept in the address, made the mock-up something the owner tunes themselves. |
 | stepwise | Two series of proposals, one numbered and one lettered, led to a misunderstanding on "the B" and a whole iteration lost: number the proposals once, across every series. |
 | stepwise | Fable 5.2 on the parser, the checker, the interpreter and the bridge, whose design lasts; Opus 5.5 on the others; at the start of each step, a short form asks the owner to switch with `/model`. First compared by two reviews of step 4a: the same `code-reviewer` launched twice in parallel, one per model (the `model` of the subagent set at launch), each in its own file; the owner wants to keep it for critical code or tasks. To judge at the retrospective. |
+| pathweaver | The owner reloads the wireframe and lands at the top of the canvas: new frames drawn at the bottom went unseen; draw what is new at the top. |

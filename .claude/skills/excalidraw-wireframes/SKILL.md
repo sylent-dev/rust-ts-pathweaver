@@ -23,6 +23,7 @@ Write a Python generator in the scratchpad that uses `scripts/excalidraw.py` (re
 - **One group per block** (header, item, list, status bar…), so that the owner moves a block in one click.
 - **Sample data close to real ones**: real names, plausible numbers, long and short texts. Lorem ipsum hides the real constraints (a long name, a large number).
 - A title and a short legend at the top of the canvas: what the file shows, the breakpoints, "Layout only, no colors".
+- **What is new goes at the top of the canvas**, above what the owner has already seen: the extension opens the file at its top, so the owner finds the new frames at once without scrolling. Move the older rows down rather than adding below them.
 - Keep the generator: the next iteration reuses it.
 
 ## 3. Check before handing over
@@ -45,7 +46,7 @@ The best results came from this loop: **the owner draws, Claude Code rearranges 
 2. **Commit the owner's version first** (on the wireframes branch), so that every iteration stays in the history.
 3. Rearrange and complete it with a new id prefix per iteration (`v2`, `v3`…): the owner's elements are kept, the new ones never collide with them. Replace a whole frame (`remove_frames`) rather than patching elements one by one.
 4. One question per iteration: layout first; content and wording later.
-5. Once the main frames are agreed, draw the rest under them: the other kinds of content, the empty, loading and waiting states, the errors, the other language, the panels that open over the content.
+5. Once the main frames are agreed, draw the rest, at the top of the canvas: the other kinds of content, the empty, loading and waiting states, the errors, the other language, the panels that open over the content.
 
 ## 6. Finish
 
