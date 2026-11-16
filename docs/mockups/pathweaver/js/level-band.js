@@ -17,9 +17,11 @@ function changeLines(level) {
   const passives = [
     changes.passives > 0 ? `+ ${plural(changes.passives, "passive")}` : "",
     changes.removedPassives > 0 ? `− ${plural(changes.removedPassives, "passive")}` : "",
-    removed === 0 ? "nothing removed" : changes.removed > 0 ? `− ${changes.removed} removed` : "",
-  ].filter(Boolean).join(" · ");
-  return [added.length > 0 ? `+ ${added.join(" · ")}` : "", passives].filter(Boolean);
+    changes.removed > 0 ? `− ${changes.removed} removed` : "",
+  ].filter(Boolean);
+  if (added.length + passives.length === 0) return [];
+  if (removed === 0) passives.push("nothing removed");
+  return [added.length > 0 ? `+ ${added.join(" · ")}` : "", passives.join(" · ")].filter(Boolean);
 }
 
 function levelBand() {
@@ -27,7 +29,8 @@ function levelBand() {
   const all = markers();
   const previous = all.filter(marker => marker < level).at(-1);
   const next = all.find(marker => marker > level);
-  const isMarker = all.includes(level);
+  // Passives that start make no marker, but are still counted in what changes (specs.md, The level).
+  const lines = changeLines(level);
   const step = (direction, target) => `<div class="app-level-step">
       <button type="button" class="app-level-arrow" data-action="level-go" data-level="${target ?? ""}" ${target === undefined ? "disabled" : ""} aria-label="${direction} marker">${icon(20, ICONS[direction])}</button>
       <span class="app-weak app-number">${target ?? ""}</span>
@@ -44,8 +47,8 @@ function levelBand() {
       <span class="app-level-end app-weak app-number" style="left:${TRACK_WIDTH}px">${MAX_LEVEL}</span>
     </div>
     <div class="app-level-changes">
-      <span class="app-weak">${isMarker ? "What changes at" : "Nothing changes at"} ${level}</span>
-      ${isMarker ? changeLines(level).map(line => `<span class="app-level-change">${line}</span>`).join("") : ""}
+      <span class="app-weak">${lines.length > 0 ? "What changes at" : "Nothing changes at"} ${level}</span>
+      ${lines.map(line => `<span class="app-level-change">${line}</span>`).join("")}
     </div>
   </div>`;
 }
