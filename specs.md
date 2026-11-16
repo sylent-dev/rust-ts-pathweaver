@@ -41,7 +41,7 @@ Pathweaver (the build viewer and planner of Path of Exile 2: the subtitle that g
 - Three ways to open a build: drop one or several `.build` files on the page, choose them with a **Choose files** button, or paste the JSON of a build in a text field (poe.ninja offers to copy it). A share link and the library open builds too (see below).
 - Several builds are open at once: a list shows them by name, one of them is shown. Opening a build adds it to the list and shows it; a build is closed from the list, which takes it off the list only: it stays in the [library](#library).
 - The same build opened twice (the same content) isn't added again: the one already open is shown.
-- A file that can't be read is refused alone, with its name and the reason: not JSON (with the line of the error), not a build (no `name`), a value of the wrong type (with its field), larger than 1 MB (the largest file of the corpus is 72 KB). The other files dropped with it open.
+- A file that can't be read is refused alone, with its name and the reason: not JSON (with the number and the text of the line of the error, so that no one has to look for it), not a build (no `name`), a value of the wrong type (with its field), larger than 1 MB (the largest file of the corpus is 72 KB). The other files dropped with it open.
 - A byte order mark at the start of a file is skipped.
 
 ### The header of a build
@@ -159,7 +159,7 @@ Agreed on the wireframes of [docs/wireframes/pathweaver.excalidraw](docs/wirefra
   - five tabs: **Overview** (the default: the tree, and beside it what is new at this level, the skills and the inventory; side by side in a wide window), **Skills**, **Tree**, **Inventory** (the slots, and beside them the list of the hints at the level, then those to come), **About** (the description, the link to the guide, the file, the warnings).
 - What is new at the level stands out (the « New at N » box, the new gems, the new passives ringed on the tree), as does the cursor of the level: the one accent of the interface.
 - **The home page**: at the first visit, what Pathweaver does, a large drop zone with **Choose files** and **Paste JSON**, and where `.build` files come from; afterwards, a smaller drop zone over the library, one row per build (name, author, ascendancy, levels, last opened, **Open**, and a bin that asks once, in the row). Files dropped anywhere, on any page, open.
-- **Paste JSON** is a dialog; the reason a text isn't a build is written under it.
+- **Paste JSON** is a dialog; its field has a fixed size, can't be resized, and scrolls only when the text overflows; the reason a text isn't a build is written under it.
 - **Opening errors**: the first build opened is shown, and a notice names each file refused with its reason; it stays until it is closed. A damaged share link and private browsing are notices under the app bar.
 - **Merge…** is a page of its own: the open builds with a box to tick, the ticked ones in the order of their start levels (each in a field, with the levels it applies to), the merged guide as a track of named segments, the checks (what blocks stands out, what only warns doesn't), the name and the author, and **Merge N builds**, greyed while something blocks.
 - **Copy link** and **Download .build** answer in a box under their button: the length of the link and the Discord warning; where the game reads the file.
