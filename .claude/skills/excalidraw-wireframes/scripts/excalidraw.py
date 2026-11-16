@@ -28,6 +28,9 @@ INK = "#1e1e1e"
 WEAK = "#868e96"
 FILL = "#e9ecef"
 DARK_FILL = "#ced4da"
+# The one accent: only for what must stand out first (the current position, what is new),
+# never for decoration. Orange, so that it isn't taken for the blue of the frames.
+ACCENT = "#f76707"
 # Virgil, the hand-drawn font: the file reads as a draft, not as a design.
 HAND_DRAWN = 1
 # A fixed date: the generated file doesn't change when nothing changed.

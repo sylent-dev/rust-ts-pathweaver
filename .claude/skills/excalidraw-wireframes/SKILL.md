@@ -18,7 +18,8 @@ Only the layout is decided here: the style (colors, fonts) comes after, in the H
 
 Write a Python generator in the scratchpad that uses `scripts/excalidraw.py` (read its docstring), and save to `docs/wireframes/<name>.excalidraw`:
 
-- **Grayscale only** (`INK`, `WEAK`, `FILL`), the hand-drawn font: it reads as a draft, so the discussion stays on the layout.
+- **Grayscale** (`INK`, `WEAK`, `FILL`), the hand-drawn font: it reads as a draft, so the discussion stays on the layout.
+- **One accent** (`ACCENT`), only for what must stand out first (the current position, what is new): the hierarchy is part of the layout, and grayscale alone leaves it ambiguous. Never decorative, never a second accent; the legend says « accent = must stand out; the real colour is chosen in the mock-up ».
 - **One frame per screen, window size or state**, named after it ("Narrow · 420 px", "Settings open", "Error · offline").
 - **One group per block** (header, item, list, status bar…), so that the owner moves a block in one click.
 - **Sample data close to real ones**: real names, plausible numbers, long and short texts. Lorem ipsum hides the real constraints (a long name, a large number).
