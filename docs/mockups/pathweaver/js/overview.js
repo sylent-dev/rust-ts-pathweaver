@@ -31,10 +31,10 @@ function newAtBox(level) {
 
 function skillList(level) {
   const skills = skillsAt(level);
-  return `<h2 class="app-side-title">Skills · ${skills.length}</h2>
+  return `<h2 class="app-side-title app-title">Skills · ${skills.length}</h2>
     <ul class="app-skills">${skills.map(skill => {
       const isNew = startsAt(skill.levels, level) || skill.supports.some(support => startsAt(support.levels, level));
-      return `<li class="app-skill"><span class="app-gem"></span><span class="app-skill-name">${escapeHtml(skill.name)}</span>${isNew ? '<span class="app-accent app-skill-new">new</span>' : ""}<span class="app-weak app-skill-supports">${plural(skill.supports.length, "support")}</span></li>`;
+      return `<li class="app-skill"><span class="app-gem is-${skill.colour} ${skill.kind === "spirit" ? "is-spirit" : ""}" title="${skill.kind} gem"></span><span class="app-skill-name">${escapeHtml(skill.name)}</span>${isNew ? '<span class="app-accent app-skill-new">new</span>' : ""}<span class="app-weak app-skill-supports">${plural(skill.supports.length, "support")}</span></li>`;
     }).join("")}</ul>`;
 }
 
@@ -47,7 +47,7 @@ function inventoryBox(level) {
   const set = STATE.inventorySet;
   const slots = slotsAt(level, set);
   const hinted = (id, cell) => slots.some(slot => slot.id === id && (cell === undefined || slot.x === cell));
-  return `<h2 class="app-side-title">Inventory · ${plural(slotsAt(level).length, "hint")}</h2>
+  return `<h2 class="app-side-title app-title">Inventory · ${plural(slotsAt(level).length, "hint")}</h2>
     ${weaponSetSwitch("inventory-set", set)}
     <div class="app-inventory">${INVENTORY_LAYOUT.map(([base, x, y, width, height, cell]) => {
       const id = base === "Weapon" || base === "Offhand" ? `${base}${set}` : base;

@@ -7,7 +7,7 @@ function buildHeader() {
   return `<div class="app-header">
     ${portrait(SHOWN.portrait, 44)}
     <div class="app-header-text">
-      <h1 class="app-header-name">${escapeHtml(SHOWN.name)}</h1>
+      <h1 class="app-header-name app-title">${escapeHtml(SHOWN.name)}</h1>
       <p class="app-header-by app-weak">by ${escapeHtml(SHOWN.author)} · ${escapeHtml(SHOWN.ascendancy)} (${escapeHtml(SHOWN.class)})</p>
     </div>
     <div class="app-header-actions">

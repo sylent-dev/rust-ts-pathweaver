@@ -1,28 +1,227 @@
 /* Styles: tokens only (CSS variables). The components use nothing else, and the canvas of the
-   tree reads them too (tree.js), so that a style is cheap to add or tweak. */
+   tree reads them too (tree.js), so that a style is cheap to add or tweak. :root holds every
+   token with the value of Grey; each style sets only what it changes. */
 
-/* Grey: the wireframe in HTML, to check the layout before any style (step 2a). */
-:root[data-theme="grey"] {
+:root {
+  /* Type. */
   --font-text: system-ui, sans-serif;
   --font-title: system-ui, sans-serif;
   --font-number: system-ui, sans-serif;
-  --page: #ffffff;          /* the background of the window */
-  --band: #e9ecef;          /* the bands: app bar, level band */
-  --fill: #e9ecef;          /* a control, a slot with a hint */
-  --fill-strong: #ced4da;   /* a control pressed */
-  --line: #1e1e1e;          /* the outlines */
-  --line-weak: #adb5bd;     /* the separators */
+  --text-weight: 400;
+  --title-weight: 400;
+  --title-transform: none;
+  --title-spacing: 0;
+  --title-size: 20px;
+  --level-weight: 400;
+  --brand-size: 18px;   /* the name in the app bar, until the logo is drawn */
+  /* Surfaces: the window, the app bar, the level band, the side column, the boxes over the tree. */
+  --page: #ffffff;
+  --page-image: none;
+  --page-image-size: auto;
+  --bar: #e9ecef;
+  --bar-image: none;
+  --on-bar: #1e1e1e;
+  --band: #e9ecef;
+  --band-image: none;
+  --on-band: #1e1e1e;
+  --on-band-weak: #868e96;
+  --side: transparent;
+  --panel: #ffffff;
+  /* Controls. */
+  --tab: #e9ecef;
+  --on-tab: #1e1e1e;
+  --control: #ffffff;
+  --control-line: #1e1e1e;
+  --control-shadow: none;
+  --fill: #e9ecef;
+  --fill-strong: #ced4da;
+  --on-fill-strong: #1e1e1e;
+  /* Lines and shapes. */
+  --divider: #1e1e1e;
+  --line-weak: #adb5bd;
+  --border-width: 1px;
+  --radius: 4px;
+  --window-shadow: 0 8px 30px #0006;
+  --portrait-radius: 50%;
+  --portrait-ring: none;
+  /* Text and the one accent: what is new, the cursor of the level. */
   --text: #1e1e1e;
   --weak: #868e96;
-  --accent: #f76707;        /* the one accent: what is new, the cursor of the level */
+  --accent: #f76707;
+  --accent-soft: #1e1e1e;
   --on-accent: #ffffff;
-  --radius: 4px;
-  /* The tree, read by the canvas. */
+  --accent-glow: none;
+  --new-fill: transparent;
+  /* The level band. */
+  --track: #1e1e1e;
+  --track-width: 1px;
+  --marker: #868e96;
+  --cursor-radius: 50%;
+  /* The inventory. */
+  --slot-line: #1e1e1e;
+  --slot-fill: #e9ecef;
+  --slot-radius: 0;
+  /* The gems: a colour per attribute (strength, dexterity, intelligence, none) and a shape. */
+  --gem-str: #ced4da;
+  --gem-dex: #ced4da;
+  --gem-int: #ced4da;
+  --gem-none: #ced4da;
+  --gem-size: 11px;
+  --gem-radius: 50%;
+  --gem-rotate: 0deg;
+  --gem-clip: none;
+  --gem-line: 1px solid #1e1e1e;
+  --gem-glow: none;
+  /* The tree, read by the canvas: colours, the width of the links taken, a glow (blur in pixels)
+     on what is taken, and a shape per kind (circle, square, diamond, hex, star). */
   --tree-background: #ffffff;
   --tree-edge: #dee2e6;
   --tree-edge-taken: #495057;
+  --tree-edge-width: 2;
   --tree-node: #ffffff;
   --tree-node-line: #adb5bd;
   --tree-taken: #495057;
   --tree-later: #adb5bd;
+  --tree-glow: 0;
+  --tree-glow-colour: transparent;
+  --tree-shape-small: circle;
+  --tree-shape-notable: circle;
+  --tree-shape-keystone: circle;
+  --tree-shape-jewel: diamond;
+}
+
+/* 0 · Grey: the wireframe in HTML, to check the layout before any style (step 2a). */
+:root[data-theme="grey"] { }
+
+/* ———— The four: sober directions. ———— */
+
+/* 1 · Atlas: a map of the road, dark ink and parchment, engraved serif titles, a vermilion route. */
+:root[data-theme="atlas"] {
+  --font-text: "Alegreya Sans", sans-serif;
+  --font-title: "Cormorant Garamond", serif;
+  --font-number: "Alegreya Sans", sans-serif;
+  --title-weight: 700;
+  --title-size: 24px;
+  --page: #17130f;
+  --page-image: radial-gradient(ellipse at 30% 0%, #2a2219 0%, transparent 60%);
+  --bar: #120f0c; --on-bar: #eadfc8;
+  --band: #1f1a14; --on-band: #eadfc8; --on-band-weak: #a08f75;
+  --panel: #17130f;
+  --tab: #1f1a14; --on-tab: #a08f75;
+  --control: #1f1a14; --control-line: #6b5a44;
+  --fill: #2b241b; --fill-strong: #4a3d2d; --on-fill-strong: #eadfc8;
+  --divider: #3a3024; --line-weak: #3a3024;
+  --radius: 2px;
+  --portrait-ring: 0 0 0 1px #6b5a44;
+  --text: #eadfc8; --weak: #a08f75;
+  --accent: #e4572e; --accent-soft: #eadfc8; --on-accent: #17130f;
+  --track: #6b5a44; --marker: #8a7a62;
+  --slot-line: #6b5a44; --slot-fill: #2b241b;
+  --gem-str: #c8553d; --gem-dex: #7a9a4f; --gem-int: #4f7cac; --gem-none: #9c8b70;
+  --gem-size: 9px; --gem-radius: 0; --gem-rotate: 45deg; --gem-line: 1px solid #eadfc855;
+  --tree-background: #17130f;
+  --tree-edge: #2e271e; --tree-edge-taken: #eadfc8; --tree-edge-width: 1.6;
+  --tree-node: #17130f; --tree-node-line: #4a3f31;
+  --tree-taken: #eadfc8; --tree-later: #8a7a62;
+  --tree-shape-notable: diamond; --tree-shape-keystone: diamond;
+}
+
+/* 2 · Constellation: the tree as a night sky, deep navy, stars that glow, a gold accent. */
+:root[data-theme="constellation"] {
+  --font-text: "Inter", sans-serif;
+  --font-title: "Space Grotesk", sans-serif;
+  --font-number: "Space Grotesk", sans-serif;
+  --title-weight: 500;
+  --page: #070b18;
+  --page-image: radial-gradient(ellipse at 70% -10%, #1b2550 0%, transparent 55%);
+  --bar: #0c1226; --bar-image: linear-gradient(180deg, #111a36, #0c1226); --on-bar: #e6ebff;
+  --band: #0c1226; --band-image: linear-gradient(180deg, #0f1730, #0a1022); --on-band: #e6ebff; --on-band-weak: #8590b8;
+  --panel: #0b1124ee;
+  --tab: #0f1630; --on-tab: #8590b8;
+  --control: #0f1630; --control-line: #2c3866;
+  --fill: #151d3a; --fill-strong: #2c3866; --on-fill-strong: #ffffff;
+  --divider: #1a2347; --line-weak: #1a2347;
+  --radius: 8px;
+  --window-shadow: 0 10px 40px #000a;
+  --portrait-ring: 0 0 0 1px #2c3866, 0 0 12px #7ab8ff55;
+  --text: #e6ebff; --weak: #8590b8;
+  --accent: #ffd166; --accent-soft: #e6ebff; --on-accent: #070b18;
+  --accent-glow: 0 0 14px #ffd16688;
+  --track: #2c3866; --marker: #5d6b9e;
+  --slot-line: #2c3866; --slot-fill: #151d3a; --slot-radius: 6px;
+  --gem-str: #ff7a7a; --gem-dex: #7dffb0; --gem-int: #7ab8ff; --gem-none: #c9d1f0;
+  --gem-size: 10px; --gem-line: none; --gem-glow: 0 0 8px currentColor;
+  --tree-background: transparent;
+  --tree-edge: #1a2347; --tree-edge-taken: #b9c6ff; --tree-edge-width: 1.4;
+  --tree-node: #0b1124; --tree-node-line: #2c3866;
+  --tree-taken: #ffffff; --tree-later: #5d6b9e;
+  --tree-glow: 8; --tree-glow-colour: #9fb4ff;
+  --tree-shape-keystone: star; --tree-shape-jewel: star;
+}
+
+/* 3 · Blueprint: a technical drawing, a fine grid, square corners, monospaced figures. */
+:root[data-theme="blueprint"] {
+  --font-text: "IBM Plex Sans Condensed", sans-serif;
+  --font-title: "IBM Plex Mono", monospace;
+  --font-number: "IBM Plex Mono", monospace;
+  --title-weight: 600;
+  --title-transform: uppercase;
+  --title-spacing: .04em;
+  --title-size: 18px;
+  --brand-size: 16px;
+  --page: #0e2c4a;
+  --page-image: linear-gradient(#ffffff0c 1px, transparent 1px), linear-gradient(90deg, #ffffff0c 1px, transparent 1px);
+  --page-image-size: 16px 16px;
+  --bar: #0a2239; --on-bar: #e8f2fc;
+  --band: #0b2540; --on-band: #e8f2fc; --on-band-weak: #8fb0cf;
+  --panel: #0e2c4a;
+  --tab: #0b2540; --on-tab: #8fb0cf;
+  --control: #0e2c4a; --control-line: #8fb8dd;
+  --fill: #143a5e; --fill-strong: #e8f2fc; --on-fill-strong: #0e2c4a;
+  --divider: #3d6a94; --line-weak: #2a5580;
+  --radius: 0;
+  --portrait-radius: 0;
+  --portrait-ring: 0 0 0 1px #8fb8dd;
+  --text: #e8f2fc; --weak: #8fb0cf;
+  --accent: #ffd400; --accent-soft: #e8f2fc; --on-accent: #0e2c4a;
+  --track: #8fb8dd; --marker: #8fb8dd;
+  --cursor-radius: 0;
+  --slot-line: #8fb8dd; --slot-fill: #143a5e;
+  --gem-str: #ff8a80; --gem-dex: #9be7a0; --gem-int: #8fd0ff; --gem-none: #c5d6e6;
+  --gem-size: 9px; --gem-radius: 0; --gem-line: none;
+  --tree-background: transparent;
+  --tree-edge: #2f5d88; --tree-edge-taken: #e8f2fc; --tree-edge-width: 1.5;
+  --tree-node: #0e2c4a; --tree-node-line: #5b88b3;
+  --tree-taken: #e8f2fc; --tree-later: #6f98c0;
+  --tree-shape-small: square; --tree-shape-notable: square; --tree-shape-keystone: hex; --tree-shape-jewel: diamond;
+}
+
+/* 4 · Slate (from the design journal, rust-exile-market): near-black bands without borders,
+   white as the main action, Manrope and JetBrains Mono, one vivid orange. */
+:root[data-theme="slate"] {
+  --font-text: "Manrope", sans-serif;
+  --font-title: "Manrope", sans-serif;
+  --font-number: "JetBrains Mono", monospace;
+  --text-weight: 500;
+  --title-weight: 800;
+  --page: #151a20;
+  --bar: #0f1216; --on-bar: #e3e8ef;
+  --band: #0f1216; --on-band: #e3e8ef; --on-band-weak: #8692a3;
+  --side: #12161b;
+  --panel: #151a20;
+  --tab: #1d242d; --on-tab: #8692a3;
+  --control: #1d242d; --control-line: #1d242d;
+  --fill: #1d242d; --fill-strong: #f2f5f9; --on-fill-strong: #0f1216;
+  --divider: #0f1216; --line-weak: #2a3440;
+  --radius: 3px;
+  --text: #e3e8ef; --weak: #8692a3;
+  --accent: #ff8c1a; --accent-soft: #e3e8ef; --on-accent: #0f1216;
+  --track: #2a3440; --track-width: 2px; --marker: #4a5666;
+  --slot-line: #2a3440; --slot-fill: #2a3440; --slot-radius: 3px;
+  --gem-str: #e5534b; --gem-dex: #57ab5a; --gem-int: #539bf5; --gem-none: #8692a3;
+  --gem-size: 10px; --gem-line: none;
+  --tree-background: #151a20;
+  --tree-edge: #232b35; --tree-edge-taken: #e3e8ef;
+  --tree-node: #151a20; --tree-node-line: #3a4552;
+  --tree-taken: #e3e8ef; --tree-later: #6b7686;
 }

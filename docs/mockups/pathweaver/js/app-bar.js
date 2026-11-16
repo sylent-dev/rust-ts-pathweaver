@@ -8,7 +8,7 @@ function appBar(width) {
   const shown = BUILDS.open.slice(0, fit);
   const more = BUILDS.open.length - shown.length;
   return `<div class="app-bar">
-    <span class="app-bar-name">Pathweaver</span>
+    <span class="app-bar-name app-title">Pathweaver</span>
     <div class="app-bar-tabs" role="tablist">${shown.map((build, index) => `
       <div class="app-bar-tab ${index === 0 ? "is-current" : ""}" role="tab" aria-selected="${index === 0}" title="${escapeHtml(build.name)} · ${escapeHtml(build.ascendancy)}">
         ${portrait(build.portrait, 24)}<span class="app-bar-tab-name">${escapeHtml(build.name)}</span>

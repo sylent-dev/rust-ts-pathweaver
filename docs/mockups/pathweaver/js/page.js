@@ -9,8 +9,13 @@
 //   [title, [[label, html], …]]: a section script adds its own with addSection(), and the newest
 //   section comes first. Past ten sections, a table of contents under the header links to each.
 
+// The styles compared, numbered once (proposals 1 to 10): four sober, three bold, three wild.
 const THEMES = {
-  grey: { title: "Grey", text: "The wireframe in HTML: the layout and the real data, before any style." },
+  grey: { title: "0 · Grey", text: "The wireframe in HTML: the layout and the real data, before any style." },
+  atlas: { title: "1 · Atlas", text: "Sober. A map of the road: dark ink and parchment, engraved serif titles (Cormorant Garamond, Alegreya Sans), a vermilion route; diamond gems and notables." },
+  constellation: { title: "2 · Constellation", text: "Sober. The tree as a night sky: deep navy, the passives taken glow like stars, keystones as stars, a gold accent (Space Grotesk, Inter)." },
+  blueprint: { title: "3 · Blueprint", text: "Sober. A technical drawing: a fine grid, square corners, monospaced capitals (IBM Plex Mono and Sans Condensed), a safety yellow accent; square passives." },
+  slate: { title: "4 · Slate", text: "Sober, after rust-exile-market (the design journal): near-black bands without borders, white for the main action, Manrope and JetBrains Mono, one vivid orange." },
 };
 
 const VARIANTS = {
