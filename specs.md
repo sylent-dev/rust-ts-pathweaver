@@ -39,7 +39,7 @@ Pathweaver (the build viewer and planner of Path of Exile 2: the subtitle that g
 ### Opening builds
 
 - Three ways to open a build: drop one or several `.build` files on the page, choose them with a **Choose files** button, or paste the JSON of a build in a text field (poe.ninja offers to copy it). A share link and the library open builds too (see below).
-- Several builds are open at once: a list shows them by name, one of them is shown. Opening a build adds it to the list and shows it; a build is closed from the list.
+- Several builds are open at once: a list shows them by name, one of them is shown. Opening a build adds it to the list and shows it; a build is closed from the list, which takes it off the list only: it stays in the [library](#library).
 - The same build opened twice (the same content) isn't added again: the one already open is shown.
 - A file that can't be read is refused alone, with its name and the reason: not JSON (with the line of the error), not a build (no `name`), a value of the wrong type (with its field), larger than 1 MB (the largest file of the corpus is 72 KB). The other files dropped with it open.
 - A byte order mark at the start of a file is skipped.
@@ -135,8 +135,9 @@ Step 8 of the roadmap.
 
 Step 9 of the roadmap.
 
-- The open builds are kept in the browser: they are open again at the next visit, with the level each was shown at.
-- The home page lists the builds kept, by name and date; one is removed from the list for good.
+- The library holds every build opened in this browser; the list of open builds holds those at hand. Opening a build adds it to both; closing it takes it off the list of open builds, never out of the library.
+- The open builds are open again at the next visit, with the level each was shown at.
+- The home page lists the builds of the library, by name and date; one opens from there, or is removed from the library for good.
 - The builds are kept only in this browser, on this computer. When the browser refuses to keep them (private browsing), Pathweaver works the same and says that nothing will be kept.
 
 ### Screens
