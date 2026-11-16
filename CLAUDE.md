@@ -119,6 +119,10 @@ Follow [Conventional Commits 1.0.0](https://www.conventionalcommits.org/en/v1.0.
 - `rust-version` in `Cargo.toml` is the minimum Rust version: CI also builds with it. Raise it when a dependency or a language feature needs a newer Rust.
 - The `wasm-bindgen` crate is pinned to an exact version (`=x.y.z` in `Cargo.toml`): the command-line tool that generates the JavaScript glue must match it exactly. Update both together.
 
+## Lessons
+
+- When the owner corrects how Claude Code works, or a practice proves useful, add one line to `docs/lessons.md` at once (its date, the lesson, where it may go), in the pull request of the step under way: the retrospectives (`process.md`, Retrospective) sort them into `process.md`, this `CLAUDE.md`, the skills, the agents or the templates.
+
 ## Releases
 
 - Pathweaver is a website: there is no release workflow. Its host is Cloudflare (decided on 2026-11-16, see `docs/technical-choices.md`); the deployment is set up by a step of `roadmap.md`.

@@ -127,7 +127,8 @@ Steps that touch the user's system (clipboard, windows, files) are verified on t
 After the release, or after any phase that went badly:
 
 1. What took longer than expected? What had to be redone?
-2. Update this file, and the template (`CLAUDE.md`, `README.md`) when the lesson applies to every project.
+2. Sort the lessons of `docs/lessons.md` one by one with the owner, the decision written on each line: into this file, `CLAUDE.md`, a skill or an agent, the templates, or dropped.
+3. Update this file, and the template (`CLAUDE.md`, `README.md`) when the lesson applies to every project.
 
 ## Lessons learned
 
@@ -149,4 +150,3 @@ After the release, or after any phase that went badly:
 | stepwise | Twenty fixed boards of fonts couldn't show the combinations: one list per role at the top of the page, applied at once and kept in the address, made the mock-up something the owner tunes themselves. |
 | stepwise | Two series of proposals, one numbered and one lettered, led to a misunderstanding on "the B" and a whole iteration lost: number the proposals once, across every series. |
 | stepwise | Fable 5.2 on the parser, the checker, the interpreter and the bridge, whose design lasts; Opus 5.5 on the others; at the start of each step, a short form asks the owner to switch with `/model`. First compared by two reviews of step 4a: the same `code-reviewer` launched twice in parallel, one per model (the `model` of the subagent set at launch), each in its own file; the owner wants to keep it for critical code or tasks. To judge at the retrospective. |
-| pathweaver | The owner reloads the wireframe and lands at the top of the canvas: new frames drawn at the bottom went unseen; draw what is new at the top. |
