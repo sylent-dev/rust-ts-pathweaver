@@ -20,7 +20,7 @@ Read only by the steps that need them:
 ### Version 1: the viewer
 
 - [x] **1. Wireframes** (Opus 5.5): the page of a build (header, level slider, skills, tree, inventory, warnings), the list of open builds, the merging screen, the home page with the library, the phone page; at the width of half a 1920-pixel screen and wider (phase 3 of [process.md](process.md)).
-- [ ] **2. Mock-up** (Opus 5.5): phases 4 and 5 of [process.md](process.md), from the approved wireframes, with Pathweaver's own marks and shapes (the kinds of gems, of passives, the inventory slots): no image of the game.
+- [ ] **2. Mock-up** (Opus 5.5): phases 4 and 5 of [process.md](process.md), from the approved wireframes, with Pathweaver's own marks and shapes (the kinds of gems, of passives, the inventory slots); the portraits of the ascendancies are the only images of the game.
 - [ ] **3. Deployment** (Opus 5.5): the static website on Cloudflare, at its domain of `sylent.tools`.
 - [ ] **4. Skills** (Opus 5.5), with what every part uses, likely split into sub-steps at its start:
   - opening several builds (drop, **Choose files**, pasted JSON), the list of open builds, the errors of a file;

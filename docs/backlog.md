@@ -21,6 +21,10 @@ Set aside at the wireframes (2026-11-16, see `docs/wireframes/archive.excalidraw
 - **Search in the tree**: light the passives whose name or stats match a text (« life », « crit »), as Path of Building does.
 - **The passives as a list**, beside the canvas: for screen readers, and to copy them.
 
+## Images
+
+- **Icons of the gems and the uniques from the game** (noted 2026-11-16): the portraits of the ascendancies are the only images of the game so far; whether the gems and the uniques get theirs is decided when a step needs it.
+
 ## Later versions
 
 - **Comparing two builds**: what one takes that the other doesn't (version 2 compares the versions of a build).

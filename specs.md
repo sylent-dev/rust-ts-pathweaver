@@ -14,7 +14,7 @@ Pathweaver (the build viewer and planner of Path of Exile 2: the subtitle that g
 - **Level by level.** A build is a progression: the interface follows a level of the character, not separate profiles.
 - **A personal tool first.** Versions 1 and 1.5 serve the player who uses them: no account, no server, a static website; nothing leaves the browser unless the user copies a link.
 - **The rules in Rust, once.** The reading, the checks, the levels, the merging and the passive tree are in the core, so that the same code checks a file in the browser and, in version 2, on the server.
-- **The game data come from the game; the images are our own.** The names and the stats come from the data of the game, never typed by hand (see [docs/game-data.md](docs/game-data.md)). No image of the game is used: the shapes, marks and icons are drawn for Pathweaver.
+- **The game data come from the game; the images are our own, except the portraits.** The names and the stats come from the data of the game, never typed by hand (see [docs/game-data.md](docs/game-data.md)). The only images of the game are the portraits of the classes and ascendancies, so that a build is recognized at a glance; the other shapes, marks and icons are drawn for Pathweaver.
 - **The documentation of Grinding Gear Games wins.** When the files in the wild disagree with the [documentation of the format](https://www.pathofexile.com/developer/docs/game#buildplanner), Pathweaver follows the documentation, and still reads the file.
 
 ## Versions
@@ -32,7 +32,7 @@ Pathweaver (the build viewer and planner of Path of Exile 2: the subtitle that g
 - **Damage and defences.** A `.build` file holds no item, and computing a character is the work of Path of Building. Pathweaver shows what the build takes, not what it deals.
 - **Phones and consoles.** Pathweaver is used on a computer (see [Screens](#screens)). On console, the game doesn't read local files: the players subscribe to builds on the website of Grinding Gear Games.
 - **Translating the author's texts.** The name, the description and the hints of a build are shown as their author wrote them, in their language.
-- **The images of the game.** Gems, passives and uniques are shown by their names and Pathweaver's own marks.
+- **The images of the game, other than the portraits.** Gems, passives and uniques are shown by their names and Pathweaver's own marks.
 
 ## Version 1
 
@@ -151,6 +151,7 @@ Step 9 of the roadmap.
 
 Agreed on the wireframes of [docs/wireframes/pathweaver.excalidraw](docs/wireframes/pathweaver.excalidraw) on 2026-11-16; the variants set aside are in `archive.excalidraw`. The wireframe only fixed this first layout: once approved, the mock-up of step 2 is the reference.
 
+- **The portrait of the ascendancy** (of the class when the build has none) marks a build wherever it is named: its tab, its row of the side panel and of the library, its header, the phone page of a share link.
 - **App bar**, at the top of every page: « Pathweaver », which leads to the home page, then the open builds. Narrower than about 1,400 pixels, they are tabs (as many as fit, the others in a « +N ▾ » menu, which also holds **Merge…**), and a **+** opens files. From about 1,400 pixels, they move to a side panel on the left, with their full names, **+ Open files or JSON**, **Merge…** and **Home**.
 - **The page of a build**, from top to bottom:
   - the header: the name, « by author · ascendancy (class) », and **Copy link**, **Download .build** and **⚠ warnings** (which leads to About);
