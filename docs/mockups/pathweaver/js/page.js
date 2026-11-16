@@ -19,6 +19,9 @@ const THEMES = {
   ember: { title: "5 · Ember", text: "Bold. A forge at night: embers under the bands, condensed capitals (Barlow Condensed), a molten orange that glows; hexagonal gems and notables." },
   grove: { title: "6 · Grove", text: "Bold. The weaver's forest: moss and lichen, soft serif titles (Fraunces, Figtree), round shapes, leaf-shaped gems, a lime accent." },
   codex: { title: "7 · Codex", text: "Bold. A light page of an old book: black ink, serif everywhere (EB Garamond, Spectral), a black app bar, a vermilion rubric." },
+  neon: { title: "8 · Neon", text: "Wild. A synthwave night: magenta grid and lines on violet black, a cyan accent, everything glows (Orbitron, Rajdhani)." },
+  brutalist: { title: "9 · Brutalist", text: "Wild. White, thick black lines, hard shadows, an acid yellow level band, black capitals (Archivo Black, Space Mono); square passives." },
+  riso: { title: "10 · Riso", text: "Wild. A risograph print: fluorescent pink and blue on paper, halftone dots, shifted shadows, big rounded corners (Bricolage Grotesque, DM Mono)." },
 };
 
 const VARIANTS = {
