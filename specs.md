@@ -1,40 +1,152 @@
 # Specifications
 
-A first draft, written with the skeleton on 2026-11-16: the purpose and the versions are decided, the features of version 1 are to be specified in step 0 of [roadmap.md](roadmap.md), with the open questions below.
+What Pathweaver does, as the user sees it. Version 1 was specified at step 0 of [roadmap.md](roadmap.md) on 2026-11-16, from a corpus of 32 real `.build` files (see [docs/build-files-in-the-wild.md](docs/build-files-in-the-wild.md)); the later versions are specified when their turn comes.
 
 ## Purpose
 
 Path of Exile 2 reads `.build` files in its Build Planner since version 0.5: a JSON file that lists the passives, the skill gems and their supports, and hints on the inventory slots, each for a range of levels of the character. Guide sites and tools (poe.ninja, Maxroll, Mobalytics, Path of Building converters) export them; the only way to see what a file holds, before putting it in the game folder, is to read its JSON.
 
-Pathweaver (the build viewer and planner of Path of Exile 2: the subtitle that goes with the name everywhere, so that it is found by those who search for a build planner) shows a `.build` file as a player reads a build: its passive tree, its skills and its gear, at each level of the character. Later, it edits them, then hosts them for everyone to share.
+Pathweaver (the build viewer and planner of Path of Exile 2: the subtitle that goes with the name everywhere, so that it is found by those who search for a build planner) shows a `.build` file as a player reads a build: its passive tree, its skills and its gear, at each level of the character. Later, it edits them; then, in version 2, it hosts them for everyone to share.
 
 ## Design principles
 
 - **The `.build` file is the native format.** Not an export of a format of our own: a file opens whatever tool made it, and is written back without losing a field another tool put in it.
 - **Level by level.** A build is a progression: the interface follows a level of the character, not separate profiles.
-- **Everything runs in the browser** in versions 1 and 1.5: no account, no server, a static website.
-- **The rules in Rust, once.** The reading, the checks and the passive tree are in the core, so that the same code checks a file in the browser and, in version 2, on the server.
+- **A personal tool first.** Versions 1 and 1.5 serve the player who uses them: no account, no server, a static website; nothing leaves the browser unless the user copies a link.
+- **The rules in Rust, once.** The reading, the checks, the levels, the merging and the passive tree are in the core, so that the same code checks a file in the browser and, in version 2, on the server.
+- **The game data come from the game.** The names, the stats and the images come from the data of the game, never typed by hand (see [docs/game-data.md](docs/game-data.md)).
+- **The documentation of Grinding Gear Games wins.** When the files in the wild disagree with the [documentation of the format](https://www.pathofexile.com/developer/docs/game#buildplanner), Pathweaver follows the documentation, and still reads the file.
 
 ## Versions
 
 | Version | Content |
 |---|---|
-| 1 | The viewer: drop or choose a file, see its tree, skills and inventory at each level, share it by a link that holds the build. |
-| 1.5 | The editor: allocate passives on the tree, choose gems, write the hints, export the `.build` file. |
-| 2 | The platform: accounts, published builds, search, versions of a build and what changed between two. Hosted on Cloudflare (Workers, D1, R2). |
+| 1 | The viewer, for oneself: open one or several files, see their skills, tree and inventory at each level, merge the files of a guide into one, share a build by a link that holds it, keep one's builds in the browser. In English. |
+| 1.5 | The editor, for oneself: allocate passives on the tree, choose gems, write the hints, export the `.build` file. |
+| 1.x | French: the interface and the names of the game, once the French translations of the game have settled after its version 1.0 (2026-12-11). |
+| 2 | The community: accounts, published builds, votes for the best builds, search, versions of a build and what changed between two. Hosted on Cloudflare (Workers, D1, R2). |
 | 3 | The price of a build, with the prices of Exile Market. |
 
-## Features of version 1
+## Out of scope
 
-To specify in step 0. Open questions:
+- **Damage and defences.** A `.build` file holds no item, and computing a character is the work of Path of Building. Pathweaver shows what the build takes, not what it deals.
+- **Phones and consoles.** Pathweaver is used on a computer (see [Screens](#screens)). On console, the game doesn't read local files: the players subscribe to builds on the website of Grinding Gear Games.
+- **Translating the author's texts.** The name, the description and the hints of a build are shown as their author wrote them, in their language.
 
-- How the level is chosen (a slider from 1 to 100, the ranges of the file, both), and what the tree shows of the passives taken before and after it.
-- What a passive, a gem or a slot shows on hover: the stats of the game, the `additional_text` of the file in the markup of the game.
-- How a file that refers to ids the game data doesn't know (another version of the game) is shown: its entries listed apart, with a warning.
-- The share link: the build compressed in the fragment of the address, with a size limit to measure.
-- The languages of the interface: English first, French?
-- The game data (passive tree, gems, uniques): their sources, their licenses and how they are updated at each version of the game (see the `docs/game-data.md` of Exile Market).
+## Version 1
+
+### Opening builds
+
+- Three ways to open a build: drop one or several `.build` files on the page, choose them with a **Choose files** button, or paste the JSON of a build in a text field (poe.ninja offers to copy it). A share link and the library open builds too (see below).
+- Several builds are open at once: a list shows them by name, one of them is shown. Opening a build adds it to the list and shows it; a build is closed from the list.
+- The same build opened twice (the same content) isn't added again: the one already open is shown.
+- A file that can't be read is refused alone, with its name and the reason: not JSON (with the line of the error), not a build (no `name`), a value of the wrong type (with its field), larger than 1 MB (the largest file of the corpus is 72 KB). The other files dropped with it open.
+- A byte order mark at the start of a file is skipped.
+
+### The header of a build
+
+- The name of the build, its author, its ascendancy (name and class, from the game data) and its description, with the [markup](#the-authors-texts) of the game.
+- The `link` of the file (documented by Grinding Gear Games, usually the page of the guide) is shown as a link that opens in a new tab, only if it starts with `https://`; otherwise as plain text.
+
+### The level
+
+- The level of the character is chosen with a slider from 1 to 100, with keyboard arrows, and with **markers**: one at each level where something of the build starts or stops. A click on a marker moves the slider to it.
+- An entry (a passive, a skill, a support, an inventory slot) applies at a level when:
+  - it has no `level_interval`: at every level;
+  - its `level_interval` is `[min, max]`: from `min` to `max`, both included (`0` counts as `1`);
+  - its `level_interval` is a single number `n` (allowed by the documentation, without its meaning): from `n` to 100. To check in the game.
+  - an interval whose `min` is above its `max` applies at no level, and is listed among the [warnings](#unknown-and-invalid-entries).
+- A build opens at the highest level it covers (100 for most).
+- A build that is the same at every level (a snapshot of a character, from poe.ninja or Path of Building) has no marker; the slider says so.
+- **What changes here**: at a marker, each part (skills, tree, inventory) marks what starts at this level as new, and lists what stopped just before it as removed (for instance « − 34 passives » at a respec).
+
+### Skills
+
+Step 4 of the roadmap.
+
+- The skill gems that apply at the level, each with its supports under it, in the order of the file. A support is shown when both it and its skill apply.
+- Each gem shows its name and its icon from the game data; on hover, its tags and its description from the game data, then the hint of the author (`additional_text`).
+- Two lines of the same skill with different intervals (the same gem from 1 to 5, then from 6 to 14 with more supports) are two entries: at a level, only the one that applies is shown.
+
+### Passive tree
+
+Step 5 of the roadmap.
+
+- The whole passive tree of the game, drawn as in the game, moved with the mouse and zoomed with the wheel.
+- At the level chosen: the passives the build has taken up to this level are lit; the passives it takes later are shown faded; the others are dimmed.
+- The ascendancy of the build, with its passives, beside the tree.
+- The weapon sets: the passives with a `weapon_set` of 1 or 2 belong to that set; a switch shows set 1 or set 2 on top of the shared passives (`weapon_set` 0 or absent).
+- On hover, a passive shows its name and its stats from the game data, then the hint of the author.
+- The number of points the build has spent at the level: passives, ascendancy points, and those of each weapon set.
+
+### Inventory
+
+Step 6 of the roadmap.
+
+- The inventory of the character laid out as in the game: weapons and offhands of both weapon sets, helmet, body armour, gloves, boots, belt, amulet, rings, flasks, charms.
+- A slot with a hint at the level is marked; on hover or click, it shows the hint and, when it names one, the unique item (`unique_name`) with its image from the game data.
+- `slot_x` and `slot_y` say which cell of a slot with several cells the hint is for.
+- A `.build` file holds no item: an empty slot is just a slot the build says nothing about.
+
+### The author's texts
+
+- The description and the hints (`additional_text`) are shown with the markup of the game: the fonts `r`, `b`, `i`, `u`, `s`, `m`, `l`, the named colours and `rgb(r, g, b)`, nested; line breaks (`\n` or `\r\n`) are kept.
+- A tag Pathweaver doesn't know is shown as plain text. The texts of a file are never read as HTML: a file or a link from someone else is untrusted.
+
+### Unknown and invalid entries
+
+- An id that matches nothing in the game data (a passive, a gem, a unique, an ascendancy, a slot) is shown where it is with its raw id and an « unknown » mark, and listed in a **warnings** panel by part, with the version of the game data Pathweaver uses. A file made for another version of the game is the usual cause: Path of Exile 2 1.0 (2026-12-11) will rename and remove some.
+- Ids are compared exactly: `Metadata/Items/Gem/` and `Metadata/Items/Gems/` are two different folders of the game, each gem lives in one of them.
+- The rest of the build shows as usual; the file is written back as it was read.
+
+### Merging a guide
+
+Step 7 of the roadmap. Some guides (Mobalytics) come as several files: one per range of levels, each a snapshot of the build at that range.
+
+- From the list of open builds, the user picks several builds and merges them; or completes a merged guide with one more build, for lower or higher levels.
+- A screen lists the builds in the order of their levels, each with the level it starts at, guessed from its name (`lvl 15-32` starts at 15) and editable; a build whose level can't be guessed is asked for.
+- Each build applies from its start level to the level before the next one; the last one up to 100.
+- Checks before merging:
+  - **Overlap**: two builds that start at the same level block the merge, which shows the level in conflict, until a start level is changed or a build removed.
+  - **Gap**: the first build starting above level 1 is a warning (nothing is shown below it), not a block.
+  - **Different guides**: builds with different `link`s or ascendancies are a warning (« these builds don't seem to come from the same guide »), not a block.
+- The merged guide is one build: each entry applies over the levels of the builds that hold it, within its own `level_interval` if it has one, cut at the limits of each build. The name and the author are those of the first build, editable.
+- The merged guide joins the list of open builds; the builds it comes from stay open.
+
+### Downloading a build
+
+Step 7 of the roadmap.
+
+- Any open build, merged or not, downloads as a `.build` file, named after the build.
+- The file is written as it was read: the fields Pathweaver doesn't know and the form of each entry are kept; only the indentation may change.
+- With the download, a short help says where the game reads the files: `Documents/My Games/Path of Exile 2/BuildPlanner` on Windows, and the folder of the Proton prefix on Steam Deck, as in the documentation.
+
+### Share link
+
+Step 8 of the roadmap.
+
+- **Copy link** puts in the clipboard an address of Pathweaver that holds the whole build, compressed, after the `#`: the browser never sends that part to the server, so nothing is stored anywhere.
+- Opening such a link opens the build, as a file would.
+- The length of the link is shown; above 2,000 characters (a Discord message), a note says that it may not fit in a message. On the corpus, half of the builds fit in 1,900 characters, all in 7,400.
+- A link that is damaged or cut opens nothing and says why.
+
+### Library
+
+Step 9 of the roadmap.
+
+- The open builds are kept in the browser: they are open again at the next visit, with the level each was shown at.
+- The home page lists the builds kept, by name and date; one is removed from the list for good.
+- The builds are kept only in this browser, on this computer. When the browser refuses to keep them (private browsing), Pathweaver works the same and says that nothing will be kept.
+
+### Screens
+
+- Pathweaver is used on a computer, from a window as narrow as half of a 1920-pixel screen, so that it fits next to the game. The minimum width is set with the wireframes.
+- On a phone, a page says that Pathweaver is used on a computer; when it was opened from a share link, it shows the name of the build and a button to copy the link.
+
+### Languages
+
+- Version 1 is in English. Every text of the interface is in the translation file of English, none in the code, so that French is added in version 1.x without touching the code; the game data are loaded per language for the same reason.
 
 ## The `.build` format
 
-Version 1 of the format, experimental, documented by Grinding Gear Games at <https://www.pathofexile.com/developer/docs/game>; read by `crates/build-file`. Path of Exile 2 leaves early access with its version 1.0 on 2026-12-11: the format may change then.
+Version 1 of the format, experimental, documented by Grinding Gear Games at <https://www.pathofexile.com/developer/docs/game#buildplanner>; read by `crates/build-file`. Path of Exile 2 leaves early access with its version 1.0 on 2026-12-11: the format may change then. What the files in the wild do with it: [docs/build-files-in-the-wild.md](docs/build-files-in-the-wild.md).
