@@ -11,16 +11,27 @@ Read only by the steps that need them:
 - [Build files in the wild](docs/build-files-in-the-wild.md): what the files of the tools do with the format, measured on a corpus.
 - [Backlog](docs/backlog.md): ideas and edge cases for later; the owner decides when one becomes a step.
 - [Process](process.md): the phases of a project, from the specifications to the build.
+- [Roadmap archive](docs/roadmap-archive.md): the detail of the steps done.
 
 ## Steps
 
-- [x] **Skeleton**: the workspace (`crates/build-file`, `crates/wasm`, `web/`) on the model of Stepwise, the reading of a `.build` file without loss, a first page that summarizes a dropped file, the CI.
-- [x] **0. Specifications**: version 1 in [specs.md](specs.md), the game data in [docs/game-data.md](docs/game-data.md), the steps below.
+- [x] **Skeleton**: the workspace, the reading of a `.build` file, a first page, the CI (e45eff5).
+- [x] **0. Specifications** (#2, #3).
 
 ### Version 1: the viewer
 
-- [x] **1. Wireframes** (Opus 5.5): the page of a build (header, level slider, skills, tree, inventory, warnings), the list of open builds, the merging screen, the home page with the library, the phone page; at the width of half a 1920-pixel screen and wider (phase 3 of [process.md](process.md)).
-- [ ] **2. Mock-up** (Opus 5.5): phases 4 and 5 of [process.md](process.md), from the approved wireframes, with Pathweaver's own marks and shapes (the kinds of gems, of passives, the inventory slots); the portraits of the ascendancies are the only images of the game.
+- [x] **1. Wireframes** (#4).
+- [ ] **2. Mock-up** (Opus 5.5): phases 4 and 5 of [process.md](process.md), from the approved wireframes, with Pathweaver's own marks and shapes (the kinds of gems, of passives, the inventory slots); the portraits of the ascendancies are the only images of the game. The layout first, in grey, then the look, one question per sub-step, each a pull request with a stop for the owner; a sub-step that brings up more decisions opens another rather than growing. The owner's screen: 2,560 × 1,440 pixels. 10 pull requests expected.
+  - [ ] 2a: the page of a build in HTML, in grey (960 px, Overview), with real data; commits: the archive, this split and the server of the mock-up; the sample data computed from the corpus, the tree of 0.5.2 and the portraits; the skeleton of the page, the app bar, the header, the level band and the tabs; the Overview (the tree in a canvas, « New at N », the skills, the inventory).
+  - [ ] 2b: ten styles on that page, chosen by the owner (four, three bold, three wild); commits: the tokens of the four; of the three bold; of the three wild; a first mark of the gems and of the passives in each.
+  - [ ] 2c: the marks of the game, variants side by side; commits: the gems (kind and colour); the five shapes of passives; the inventory slots and the « unknown » mark.
+  - [ ] 2d: typography and colours; commits: a font per role and the numbers; the accent and the colours of the warnings; the density.
+  - [ ] 2e: the tree at its real size; commits: lit, faded and dimmed; the ring of what is new; the hover and the zoom, measured in frames per second.
+  - [ ] 2f: the motion, chosen by clicking; commits: the hover and the cursor of the level; the tabs and the boxes that open.
+  - [ ] 2g: the other views of a build; commits: Skills, Tree, Inventory and About at 960 px; 1,920 px with the side panel; the variants of the level band; the boxes of Copy link and Download.
+  - [ ] 2h: home and opening; commits: the first visit; the library; Paste JSON, the opening errors and the notices.
+  - [ ] 2i: Merge and the phone; commits: Merge ready; Merge to fix; the phone pages.
+  - [ ] 2j: the design system; commits: the tokens in `specs.md` and the mock-up as the single reference; the styles set aside removed and the entry of `design-journal.md`.
 - [ ] **3. Deployment** (Opus 5.5): the static website on Cloudflare, at its domain of `sylent.tools`.
 - [ ] **4. Skills** (Opus 5.5), with what every part uses, likely split into sub-steps at its start:
   - opening several builds (drop, **Choose files**, pasted JSON), the list of open builds, the errors of a file;
