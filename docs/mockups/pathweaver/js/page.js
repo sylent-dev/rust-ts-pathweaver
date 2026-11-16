@@ -16,6 +16,9 @@ const THEMES = {
   constellation: { title: "2 · Constellation", text: "Sober. The tree as a night sky: deep navy, the passives taken glow like stars, keystones as stars, a gold accent (Space Grotesk, Inter)." },
   blueprint: { title: "3 · Blueprint", text: "Sober. A technical drawing: a fine grid, square corners, monospaced capitals (IBM Plex Mono and Sans Condensed), a safety yellow accent; square passives." },
   slate: { title: "4 · Slate", text: "Sober, after rust-exile-market (the design journal): near-black bands without borders, white for the main action, Manrope and JetBrains Mono, one vivid orange." },
+  ember: { title: "5 · Ember", text: "Bold. A forge at night: embers under the bands, condensed capitals (Barlow Condensed), a molten orange that glows; hexagonal gems and notables." },
+  grove: { title: "6 · Grove", text: "Bold. The weaver's forest: moss and lichen, soft serif titles (Fraunces, Figtree), round shapes, leaf-shaped gems, a lime accent." },
+  codex: { title: "7 · Codex", text: "Bold. A light page of an old book: black ink, serif everywhere (EB Garamond, Spectral), a black app bar, a vermilion rubric." },
 };
 
 const VARIANTS = {
