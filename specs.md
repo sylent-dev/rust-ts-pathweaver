@@ -14,7 +14,7 @@ Pathweaver (the build viewer and planner of Path of Exile 2: the subtitle that g
 - **Level by level.** A build is a progression: the interface follows a level of the character, not separate profiles.
 - **A personal tool first.** Versions 1 and 1.5 serve the player who uses them: no account, no server, a static website; nothing leaves the browser unless the user copies a link.
 - **The rules in Rust, once.** The reading, the checks, the levels, the merging and the passive tree are in the core, so that the same code checks a file in the browser and, in version 2, on the server.
-- **The game data come from the game; the images are our own.** The names and the stats come from the data of the game, never typed by hand (see [docs/game-data.md](docs/game-data.md)). No image of the game is used: the shapes, marks and icons are drawn for Pathweaver.
+- **The game data come from the game; the images are our own, except the portraits.** The names and the stats come from the data of the game, never typed by hand (see [docs/game-data.md](docs/game-data.md)). The only images of the game are the portraits of the classes and ascendancies, so that a build is recognized at a glance; the other shapes, marks and icons are drawn for Pathweaver.
 - **The documentation of Grinding Gear Games wins.** When the files in the wild disagree with the [documentation of the format](https://www.pathofexile.com/developer/docs/game#buildplanner), Pathweaver follows the documentation, and still reads the file.
 
 ## Versions
@@ -32,16 +32,16 @@ Pathweaver (the build viewer and planner of Path of Exile 2: the subtitle that g
 - **Damage and defences.** A `.build` file holds no item, and computing a character is the work of Path of Building. Pathweaver shows what the build takes, not what it deals.
 - **Phones and consoles.** Pathweaver is used on a computer (see [Screens](#screens)). On console, the game doesn't read local files: the players subscribe to builds on the website of Grinding Gear Games.
 - **Translating the author's texts.** The name, the description and the hints of a build are shown as their author wrote them, in their language.
-- **The images of the game.** Gems, passives and uniques are shown by their names and Pathweaver's own marks.
+- **The images of the game, other than the portraits.** Gems, passives and uniques are shown by their names and Pathweaver's own marks.
 
 ## Version 1
 
 ### Opening builds
 
 - Three ways to open a build: drop one or several `.build` files on the page, choose them with a **Choose files** button, or paste the JSON of a build in a text field (poe.ninja offers to copy it). A share link and the library open builds too (see below).
-- Several builds are open at once: a list shows them by name, one of them is shown. Opening a build adds it to the list and shows it; a build is closed from the list.
+- Several builds are open at once: a list shows them by name, one of them is shown. Opening a build adds it to the list and shows it; a build is closed from the list, which takes it off the list only: it stays in the [library](#library).
 - The same build opened twice (the same content) isn't added again: the one already open is shown.
-- A file that can't be read is refused alone, with its name and the reason: not JSON (with the line of the error), not a build (no `name`), a value of the wrong type (with its field), larger than 1 MB (the largest file of the corpus is 72 KB). The other files dropped with it open.
+- A file that can't be read is refused alone, with its name and the reason: not JSON (with the number and the text of the line of the error, so that no one has to look for it), not a build (no `name`), a value of the wrong type (with its field), larger than 1 MB (the largest file of the corpus is 72 KB). The other files dropped with it open.
 - A byte order mark at the start of a file is skipped.
 
 ### The header of a build
@@ -51,7 +51,8 @@ Pathweaver (the build viewer and planner of Path of Exile 2: the subtitle that g
 
 ### The level
 
-- The level of the character is chosen with a slider from 1 to 100, with keyboard arrows, and with **markers**: one at each level where something of the build starts or stops. A click on a marker moves the slider to it.
+- The level of the character is chosen with a slider from 1 to 100, and with **markers**: one at each level where a skill, a support or an inventory hint starts or stops, or where passives stop (a respec). A passive that starts makes no marker: a file can add one at every level (99 markers on a build of the corpus, 15 without them); the passives are counted in « what changes here ». A click on the track moves the slider there.
+- **◀ and ▶** on both sides of the level go to the previous and the next marker, each with the level it goes to written under it; the keyboard arrows do the same.
 - An entry (a passive, a skill, a support, an inventory slot) applies at a level when:
   - it has no `level_interval`: at every level;
   - its `level_interval` is `[min, max]`: from `min` to `max`, both included (`0` counts as `1`);
@@ -111,7 +112,8 @@ Step 7 of the roadmap. Some guides (Mobalytics) come as several files: one per r
   - **Overlap**: two builds that start at the same level block the merge, which shows the level in conflict, until a start level is changed or a build removed.
   - **Gap**: the first build starting above level 1 is a warning (nothing is shown below it), not a block.
   - **Different guides**: builds with different `link`s or ascendancies are a warning (« these builds don't seem to come from the same guide »), not a block.
-- The merged guide is one build: each entry applies over the levels of the builds that hold it, within its own `level_interval` if it has one, cut at the limits of each build. The name and the author are those of the first build, editable.
+- The merged guide is one build: each entry applies over the levels of the builds that hold it, within its own `level_interval` if it has one, cut at the limits of each build. The name is that of the first build without the part its level was guessed from (« lvl 1-14 - 0.5.5 Fubgun Flameblast Oil G » gives « 0.5.5 Fubgun Flameblast Oil G »), and the author is that of the first build; both are editable.
+- A build whose level can't be guessed (« Endgame - … ») blocks the merge until its start level is typed.
 - The merged guide joins the list of open builds; the builds it comes from stay open.
 
 ### Downloading a build
@@ -135,14 +137,32 @@ Step 8 of the roadmap.
 
 Step 9 of the roadmap.
 
-- The open builds are kept in the browser: they are open again at the next visit, with the level each was shown at.
-- The home page lists the builds kept, by name and date; one is removed from the list for good.
+- The library holds every build opened in this browser; the list of open builds holds those at hand. Opening a build adds it to both; closing it takes it off the list of open builds, never out of the library.
+- The open builds are open again at the next visit, with the level each was shown at.
+- The home page lists the builds of the library, by name and date; one opens from there, or is removed from the library for good.
 - The builds are kept only in this browser, on this computer. When the browser refuses to keep them (private browsing), Pathweaver works the same and says that nothing will be kept.
 
 ### Screens
 
-- Pathweaver is used on a computer, from a window as narrow as half of a 1920-pixel screen, so that it fits next to the game. The minimum width is set with the wireframes.
-- On a phone, a page says that Pathweaver is used on a computer; when it was opened from a share link, it shows the name of the build and a button to copy the link.
+- Pathweaver is used on a computer, from a window as narrow as half of a 1920-pixel screen, so that it fits next to the game. The minimum width is **900 pixels** (half of a 1920-pixel screen, less the borders of the browser and its scroll bar): below it, the page keeps its width and scrolls sideways.
+- Below 600 pixels (a phone), a page says that Pathweaver is used on a computer; when it was opened from a share link, it shows the name of the build and a button to copy the link.
+
+### Window layout
+
+Agreed on the wireframes of [docs/wireframes/pathweaver.excalidraw](docs/wireframes/pathweaver.excalidraw) on 2026-11-16; the variants set aside are in `archive.excalidraw`. The wireframe only fixed this first layout: once approved, the mock-up of step 2 is the reference.
+
+- **The portrait of the ascendancy** (of the class when the build has none) marks a build wherever it is named: its tab, its row of the side panel and of the library, its header, the phone page of a share link.
+- **App bar**, at the top of every page: « Pathweaver », which leads to the home page, then the open builds. Narrower than about 1,400 pixels, they are tabs (as many as fit, the others in a « +N ▾ » menu, which also holds **Merge…**), and a **+** opens files. From about 1,400 pixels, they move to a side panel on the left, with their full names, **+ Open files or JSON**, **Merge…** and **Home**.
+- **The page of a build**, from top to bottom:
+  - the header: the name, « by author · ascendancy (class) », and **Copy link**, **Download .build** and **⚠ warnings** (which leads to About);
+  - the level band: ◀ and ▶ with the level each goes to, the level in large, the track with its markers and the cursor, « what changes at N » on the right;
+  - five tabs: **Overview** (the default: the tree, and beside it what is new at this level, the skills and the inventory; side by side in a wide window), **Skills**, **Tree**, **Inventory** (the slots, and beside them the list of the hints at the level, then those to come), **About** (the description, the link to the guide, the file, the warnings).
+- What is new at the level stands out (the « New at N » box, the new gems, the new passives ringed on the tree), as does the cursor of the level: the one accent of the interface.
+- **The home page**: at the first visit, a line drawn at random at each visit among « Die less. Plan more. », « Every exile needs a map. », « The tree is huge. Your path isn't. », « Know your next 99 levels. » and « Open a .build file. See the whole road. » (in the translation file, like every text: the French ones will be adapted, not translated word for word), then what Pathweaver does, a large drop zone with **Choose files** and **Paste JSON**, and where `.build` files come from; afterwards, a smaller drop zone over the library, one row per build (name, author, ascendancy, levels, last opened, **Open**, and a bin that asks once, in the row). Files dropped anywhere, on any page, open.
+- **Paste JSON** is a dialog; its field has a fixed size, can't be resized, and scrolls only when the text overflows; the reason a text isn't a build is written under it.
+- **Opening errors**: the first build opened is shown, and a notice names each file refused with its reason; it stays until it is closed. A damaged share link and private browsing are notices under the app bar.
+- **Merge…** is a page of its own: the open builds with a box to tick, the ticked ones in the order of their start levels (each in a field, with the levels it applies to), the merged guide as a track of named segments, the checks (what blocks stands out, what only warns doesn't), the name and the author, and **Merge N builds**, greyed while something blocks.
+- **Copy link** and **Download .build** answer in a box under their button: the length of the link and the Discord warning; where the game reads the file.
 
 ### Languages
 

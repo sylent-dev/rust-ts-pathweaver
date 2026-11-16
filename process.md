@@ -50,12 +50,14 @@ Goal: agree on the **layout**, without colors or code, in a format the owner can
 
 The `excalidraw-wireframes` skill (`.claude/skills/`) carries out this phase: its Python helpers write the file and preview it.
 
-1. Claude Code generates an Excalidraw file in `docs/wireframes/` (a script writes the JSON with the helpers of the skill): grayscale, sample data close to real ones, one frame per screen or window size, **one group per block** so that a block moves in one click (double-click a block to edit one of its elements, **Ctrl+Shift+G** to ungroup it).
+1. Claude Code generates an Excalidraw file in `docs/wireframes/` (a script writes the JSON with the helpers of the skill): grayscale with one accent for what must stand out, sample data computed from real files, one frame per screen or window size, **one group per block** so that a block moves in one click (double-click a block to edit one of its elements, **Ctrl+Shift+G** to ungroup it).
 2. It checks the result with an SVG preview before handing it over.
 3. The owner edits it in VS Code with the **Excalidraw** extension (`pomdtr.excalidraw-editor`), or on excalidraw.com (**Open**, then **Save to…**).
 4. Iterate: the owner draws their version, Claude Code rearranges it and fills the gaps, the owner draws the next version, and so on. Claude Code commits the owner's version before changing it, so that every iteration stays in the history.
-5. Once the main frames are agreed, Claude Code draws the rest under them: other kinds of content, empty, loading and waiting states, errors, the other language.
+5. Once the main frames are agreed, Claude Code draws the rest: other kinds of content, empty, loading and waiting states, errors, the other language.
 6. Claude Code writes the agreed layout in `specs.md`.
+
+New frames always go at the top of the canvas, above the ones the owner has seen: the file opens at its top, so the owner finds them without scrolling.
 
 For a responsive interface, start with the narrowest layout (mobile first): it forces to choose the essential, and the wider layouts then only rearrange the same blocks. Draw the panels that open over the content (settings) too.
 
@@ -125,7 +127,8 @@ Steps that touch the user's system (clipboard, windows, files) are verified on t
 After the release, or after any phase that went badly:
 
 1. What took longer than expected? What had to be redone?
-2. Update this file, and the template (`CLAUDE.md`, `README.md`) when the lesson applies to every project.
+2. Sort the lessons of `docs/lessons.md` one by one with the owner, the decision written on each line: into this file, `CLAUDE.md`, a skill or an agent, the templates, or dropped.
+3. Update this file, and the template (`CLAUDE.md`, `README.md`) when the lesson applies to every project.
 
 ## Lessons learned
 

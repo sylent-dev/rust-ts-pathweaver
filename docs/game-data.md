@@ -25,7 +25,7 @@ Rejected:
 - Only what Pathweaver shows is kept: the size counts, the passive tree alone weighs 5 MB raw.
 - The version of the game of the data is shown in the warnings panel, so that an unknown id can be read as « made for another version ».
 - At each version of the game: run the script on the new version, check the corpus, commit the new folder. Path of Exile 2 1.0 (2026-12-11) changes a lot: whether the passive tree is first built on the data of 0.5 or of 1.0 is decided at step 5, from how the steps before it went.
-- **No image of the game** (decided by the owner on 2026-11-16): the `assets/` of the tree export and the art referenced by RePoE aren't used. The shapes, marks and icons are Pathweaver's own, made with the mock-up.
+- **The portraits of the classes and ascendancies are the only images of the game** (decided by the owner on 2026-11-16, replacing « no image of the game » of the same day): they are cut from the `assets/background-<class>.webp` of the tree export (one sprite of 3,000 × 3,000 pixels per class: the class and each ascendancy, a round portrait of 1,500 pixels, placed by its `.json`), made small at build time, and bundled with the data of each version of the game, since 1.0 may change them. The other images of the tree export and the art referenced by RePoE aren't used: the shapes, marks and icons are Pathweaver's own, made with the mock-up. Other images (gems, uniques) are decided case by case, when a step needs them.
 
 ## French
 
@@ -35,6 +35,6 @@ To check when French is added (version 1.x): which of the two sources carries th
 
 Accepted by the owner on 2026-11-16, with the specifications of version 1:
 
-- **No written policy of Grinding Gear Games for third-party tools.** Their [terms of use](https://www.pathofexile.com/legal/terms-of-use-and-privacy-policy) license the use of the website and the game, not the reuse of its data; the tree export exists for tool developers, and poe.ninja, Path of Building and Maxroll show the same names and stats. Pathweaver uses texts and positions only, no image of the game; it states in its README and its pages that it isn't affiliated with Grinding Gear Games, and removes what they would ask to remove.
+- **No written policy of Grinding Gear Games for third-party tools.** Their [terms of use](https://www.pathofexile.com/legal/terms-of-use-and-privacy-policy) license the use of the website and the game, not the reuse of its data; the tree export exists for tool developers, and poe.ninja, Path of Building and Maxroll show the same names and stats. Pathweaver uses texts and positions, and the portraits of the classes and ascendancies only (accepted by the owner on 2026-11-16, knowing that no policy allows it: guide sites and databases use far more of the art of the game, and Grinding Gear Games lets them); it states in its README and its pages that it isn't affiliated with Grinding Gear Games, and removes what they would ask to remove.
 - **RePoE is run by volunteers.** A late or broken update delays the data of a new version; the way out is to extract the files ourselves.
 - **The format of the data may change** at any version, for both sources: the conversion script fails loudly rather than producing incomplete data.

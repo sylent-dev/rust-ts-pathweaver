@@ -47,7 +47,7 @@ Two folders are the exchange area between the owner and Claude Code. They are ig
 ## Process
 
 - Follow the phases of `process.md`: specifications, wireframes, mock-up, design system, then the build, one pull request per step.
-- For a user interface, start with editable Excalidraw wireframes in `docs/wireframes/` (grayscale, one group per block; `excalidraw-wireframes` skill), and build the HTML mock-up only once the owner has approved the layout (`html-mockups` skill).
+- For a user interface, start with editable Excalidraw wireframes in `docs/wireframes/` (grayscale with one accent for what must stand out, one group per block; `excalidraw-wireframes` skill), and build the HTML mock-up only once the owner has approved the layout (`html-mockups` skill).
 - During the specifications, check the documentation, rate limits and terms of use of every external service, and record its limits and the risks the owner accepts, with their date, in a note of `docs/` linked from `roadmap.md` (e.g. `docs/<service>-usage.md`).
 - For the mock-up, compare 3 or 4 styles that explore new directions for this application. `design-journal.md` records the past design experiences: use it as a source of ideas for one style at most, never as default rules. Give each open decision its own control on the mock-up page (tabs for a few distinct variants, lists that apply at once for values that combine, such as a font per role, sliders for values tuned by eye; see the `html-mockups` skill), and remove it once decided. A new section of the mock-up goes at the top of the page, so that the owner finds it at once; past ten sections, a table of contents under the header links to each.
 - A mock-up is split into small files (the shared styles and scripts, one style sheet and one script per block, one script per section), so that a change reads only what it needs.
@@ -118,6 +118,10 @@ Follow [Conventional Commits 1.0.0](https://www.conventionalcommits.org/en/v1.0.
 - The core never panics: the lints at the top of `crates/build-file/src/lib.rs` and the methods forbidden by `clippy.toml` rule out `unwrap`, `expect`, indexing, `panic!`, unchecked arithmetic and the like outside the tests, in every crate of the core and in `crates/wasm`. A panic would abort the WebAssembly module and the page; return an error instead.
 - `rust-version` in `Cargo.toml` is the minimum Rust version: CI also builds with it. Raise it when a dependency or a language feature needs a newer Rust.
 - The `wasm-bindgen` crate is pinned to an exact version (`=x.y.z` in `Cargo.toml`): the command-line tool that generates the JavaScript glue must match it exactly. Update both together.
+
+## Lessons
+
+- When the owner corrects how Claude Code works, or a practice proves useful, add one line to `docs/lessons.md` at once (its date, the lesson, where it may go), in the pull request of the step under way: the retrospectives (`process.md`, Retrospective) sort them into `process.md`, this `CLAUDE.md`, the skills, the agents or the templates.
 
 ## Releases
 
