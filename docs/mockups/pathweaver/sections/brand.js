@@ -1,9 +1,7 @@
 // The brand (2e), decided by the owner on 2026-11-17: the mark 88 · Bold (js/logo-mark.js), its
-// frame in the accent and its P in the text, at 24 px beside the name at 18 px, 9 px apart; the
+// frame in the accent and its P in the text, at 24 px beside the name at 16 px, 8 px apart; the
 // same mark as the favicon, which this page takes too. The weights, inks and sizes compared are in
 // the history of Git (commit 5e2394d).
-
-const BRAND_STYLES = ["frost", "frost-night", "ember"];
 
 // The browser around the favicon draws its tabs in its own colours, light or dark, whatever the
 // style of the page: those of a common browser.
@@ -17,8 +15,8 @@ const browserTabs = chrome => `<div class="brand-browser" style="--chrome-strip:
   <div class="brand-browser-tab">${logoMark(16)}<span>${escapeHtml(BUILDS.open[1].name)} · Pathweaver</span></div>
 </div>`;
 
-addSection(() => ["The brand · the mark beside the name in the app bar, on Frost, Frost Night and Ember; the favicon in the tabs of a light and a dark browser, with the accent of the style of the page",
-  [["The app bar", `<div class="brand-card">${BRAND_STYLES.map(style =>
+addSection(() => ["The brand · the mark beside the name in the app bar, in the style of the page; the favicon in the tabs of a light and a dark browser, with the accent of the style of the page",
+  [["The app bar", `<div class="brand-card">${shownStyles().map(style =>
     `<div class="brand-style" data-sample-theme="${style}" title="${THEMES[style].title}">${appBar(560)}</div>`).join("")}</div>`],
   ...Object.values(BROWSER_CHROMES).map(chrome => [chrome.title, browserTabs(chrome)])]]);
 

@@ -25,7 +25,7 @@ const VARIANTS = {
   shadowBlur: { label: "Shadow blur", range: { min: 0, max: 24, step: 1 }, variable: "--shadow-blur", unit: "px", fallback: "3" },
   shadowLight: { label: "Shadow, light", range: { min: 0, max: 60, step: 1 }, variable: "--shadow-alpha-light", unit: "%", fallback: "10" },
   shadowDark: { label: "Shadow, dark", range: { min: 0, max: 80, step: 1 }, variable: "--shadow-alpha-dark", unit: "%", fallback: "45" },
-  theme: { label: "Style", options: Object.fromEntries(Object.entries(THEMES).map(([key, theme]) => [key, theme.title])), fallback: "frost" },
+  theme: { label: "Style", options: Object.fromEntries(Object.entries(THEMES).map(([key, theme]) => [key, theme.title])), fallback: "frost-night" },
   // The second accent (css/accent-2.css): its colour, and what it marks.
   accent2: { label: "Accent 2", select: true, fallback: "amber", options: { amber: "Amber", blue: "Blue", coral: "Coral", mint: "Mint",
     violet: "Violet", magenta: "Magenta", lime: "Lime" } },
@@ -38,6 +38,11 @@ const VARIANTS = {
   size: { label: "Size", range: { min: 6, max: 200, step: 2 }, variable: "--texture-size", unit: "px", fallback: "24" },
   opacity: { label: "Opacity", range: { min: 0, max: 40, step: 1 }, variable: "--texture-opacity", unit: "%", fallback: "23" },
 };
+
+// The styles a section shows side by side: the style of the page alone, Frost Night by default, the
+// reference on which every setting is tuned first (the owner, 2026-11-18); Frost and Ember derive
+// from it, adjusted after, and are seen with the tabs of the style.
+const shownStyles = () => [chosen.theme];
 
 const SECTIONS = [];
 // The newest section goes at the top of the page: the scripts of the sections load oldest first.

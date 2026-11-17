@@ -166,6 +166,10 @@ Agreed on the wireframes of [docs/wireframes/pathweaver.excalidraw](docs/wirefra
 - **Merge…** is a page of its own: the open builds with a box to tick, the ticked ones in the order of their start levels (each in a field, with the levels it applies to), the merged guide as a track of named segments, the checks (what blocks stands out, what only warns doesn't), the name and the author, and **Merge N builds**, greyed while something blocks.
 - **Copy link** and **Download .build** answer in a box under their button: the length of the link and the Discord warning; where the game reads the file.
 
+### The style
+
+- **Frost Night is the reference style** (the owner, 2026-11-18): dark, a blue black, one blue. Every setting is tuned on it first; Frost (light) and Ember (amber on a neutral grey) derive from it and are adjusted after, the light one in a pass of its own, since a shadow, a texture or a grey portrait don't carry over as they are.
+
 ### The brand
 
 Decided by the owner on the mock-up (step 2, 2026-11-17), its reference.
