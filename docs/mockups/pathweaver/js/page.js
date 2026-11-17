@@ -32,14 +32,17 @@ const THEMES = {
   "frost-night": { title: "28 · Frost Night", text: "Asked for: Frost in negative, dark. Its density and its flat boxes on a blue black, pale blue lines, one blue (Geist, Geist Mono)." },
 };
 
-// The textures behind the blocks (css/textures.css): two layers, the second shifted against the first.
+// The textures behind the blocks (css/textures.css): two layers, the second shifted, turned and
+// drifting against the first, both faded towards a side.
 const PATTERNS = { none: "None", grid: "Grid", graph: "Graph paper", dots: "Dots", crosses: "Crosses", hatch: "Hatching",
-  diamonds: "Diamonds", triangles: "Triangles", hexagons: "Hexagons", pentagons: "Pentagons", rings: "Rings" };
+  lines: "Lines", waves: "Waves", zigzag: "Zigzag", diamonds: "Diamonds", triangles: "Triangles", hexagons: "Hexagons",
+  cubes: "Cubes", pentagons: "Pentagons", rings: "Rings", circuit: "Circuit", contours: "Contours", ripples: "Ripples",
+  rays: "Rays", stars: "Stars", grain: "Grain" };
 const TEXTURE_COLOURS = { text: "Grey (the text)", blue: "Pale blue", accent: "Accent" };
 const textureLayer = (n, pattern, colour, size, opacity) => ({
   [`pattern${n}`]: { label: `Texture ${n}`, options: PATTERNS, fallback: pattern, select: true },
   [`colour${n}`]: { label: `Colour ${n}`, options: TEXTURE_COLOURS, fallback: colour, select: true },
-  [`size${n}`]: { label: `Size ${n}`, range: { min: 6, max: 96, step: 2 }, variable: `--texture-size-${n}`, unit: "px", fallback: size },
+  [`size${n}`]: { label: `Size ${n}`, range: { min: 6, max: 200, step: 2 }, variable: `--texture-size-${n}`, unit: "px", fallback: size },
   [`opacity${n}`]: { label: `Opacity ${n}`, range: { min: 0, max: 40, step: 1 }, variable: `--texture-opacity-${n}`, unit: "%", fallback: opacity },
 });
 
@@ -48,9 +51,13 @@ const VARIANTS = {
   zone: { label: "Textured", select: true, fallback: "tree-side", options: { tree: "The tree", side: "The right column",
     "tree-side": "The tree and the right column", band: "The level band", top: "The header and the level band",
     blocks: "Every block", window: "The whole window" } },
+  fade: { label: "Fade", select: true, fallback: "none", options: { none: "None", edges: "Towards the middle",
+    centre: "Towards the edges", top: "Towards the bottom", corner: "From the top right corner" } },
   ...textureLayer(1, "grid", "text", "24", "8"),
   ...textureLayer(2, "grid", "blue", "24", "6"),
   shift: { label: "Shift 2", range: { min: 0, max: 48, step: 1 }, variable: "--texture-shift", unit: "px", fallback: "12" },
+  rotate: { label: "Turn 2 (°)", range: { min: 0, max: 90, step: 1 }, variable: "--texture-rotate", fallback: "0" },
+  motion: { label: "Motion 2", select: true, fallback: "still", options: { still: "Still", drift: "Drifting" } },
 };
 
 const SECTIONS = [];
