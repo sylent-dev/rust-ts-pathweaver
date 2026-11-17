@@ -22,7 +22,7 @@ const openBuildTab = (build, states = "") => `<div class="app-builds-tab ${state
     <button type="button" class="app-builds-close" aria-label="Close">${icon(12, ICONS.close)}</button>
   </div>`;
 
-// The band of the open builds, its tabs in the look of the list « Tab look » (data-tab-look):
+// The band of the open builds, its tabs underlined when current (css/app-bar.css):
 // full height, side by side, « Tab width » each, up to 240 when they all fit; those that don't fit go to the menu « +N ▾ », which
 // also holds Merge… and is always there. `menuOpen` shows the menu open.
 const TAB_MAX_WIDTH = 240, TAB_GAP = 0;
@@ -35,7 +35,7 @@ function buildsBand(width, builds = BUILDS.open, menuOpen = STATE.buildsMenu) {
   const shown = builds.slice(0, fit);
   const hidden = builds.slice(fit);
   const tabWidth = hidden.length ? TAB_WIDTH : Math.min(TAB_MAX_WIDTH, Math.floor((room + TAB_GAP) / builds.length) - TAB_GAP);
-  return `<div class="app-builds" data-tab-look="${chosen.barTab}" style="--tab-width:${tabWidth}px">
+  return `<div class="app-builds" style="--tab-width:${tabWidth}px">
     <div class="app-builds-tabs" role="tablist">${shown.map((build, index) => openBuildTab(build, index === 0 ? "is-current" : "")).join("")}</div>
     <span class="app-builds-more-wrap">
       <button type="button" class="app-builds-more ${menuOpen ? "is-open" : ""}" data-action="toggleBuildsMenu" aria-expanded="${menuOpen}" aria-label="More builds and Merge">${hidden.length ? `+${hidden.length}` : ""}${icon(12, ICONS.down)}</button>

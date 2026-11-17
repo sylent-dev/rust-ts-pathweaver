@@ -22,13 +22,12 @@ const THEMES = {
 const VARIANTS = {
   // The inks of the mark (css/logo.css): its frame, the three bars outside, and its P.
   // The two bands at the top (2e2, sections/bands.js): their shades. The tabs of the open builds
-  // (2e, sections/bar-tab.js): their look and the close button.
+  // (2e, sections/bar-tab.js): when the close button shows.
   bugLabel: { label: "Report a bug", options: { text: "Words", "icon-text": "Icon and words", icon: "Icon" }, fallback: "text" },
   reportWeight: { label: "Its weight", options: { 500: "500", 600: "600", 700: "700" }, variable: "--report-weight", fallback: "600" },
   // The width of a tab of an open build (2e2), the least it has when some don't fit.
   tabWidth: { label: "Tab width", options: { 168: "168", 184: "184", 200: "200" }, fallback: "184" },
   topShade: { label: "Top bands", select: true, fallback: "site-deep", options: { "site-deep": "The site darker", "same-deep": "Both darker", same: "Both as the bar", "builds-deep": "The open builds darker" } },
-  barTab: { label: "Tab look", select: true, fallback: "92", options: { 92: "92 · Card", 93: "93 · Underline", 95: "95 · Card, accent on top" } },
   barClose: { label: "Close ×", select: true, fallback: "always", options: { always: "Always", hover: "On the current tab and on hover" } },
   theme: { label: "Style", options: Object.fromEntries(Object.entries(THEMES).map(([key, theme]) => [key, theme.title])), fallback: "frost" },
   // The second accent (css/accent-2.css): its colour, and what it marks.

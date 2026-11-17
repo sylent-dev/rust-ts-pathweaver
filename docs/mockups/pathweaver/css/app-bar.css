@@ -44,17 +44,13 @@
 .app-builds-close:hover, .app-builds-tab.is-close-hover .app-builds-close { opacity: 1; background: color-mix(in srgb, currentColor 16%, transparent); }
 :root[data-bar-close="hover"] .app-builds-tab:not(.is-current, :hover, .is-hover, .is-close-hover) .app-builds-close { visibility: hidden; }
 
-/* 92 · Card, and 95 · Card with the accent on top: the current tab in the colour of the page, open
-   on it; the others a shade darker, lighter on hover, a line between them. */
-:is([data-tab-look="92"], [data-tab-look="95"]) .app-builds-tab { background: var(--tab); color: var(--on-tab); box-shadow: inset calc(-1 * var(--border-width, 1px)) 0 0 var(--control-line); }
-:is([data-tab-look="92"], [data-tab-look="95"]) .app-builds-tab:not(.is-current):is(:hover, .is-hover, .is-close-hover) { background: color-mix(in srgb, var(--tab), var(--page) 55%); color: var(--text); }
-:is([data-tab-look="92"], [data-tab-look="95"]) .app-builds-tab.is-current { background: var(--page); color: var(--text); }
-[data-tab-look="95"] .app-builds-tab.is-current { box-shadow: inset 0 2px 0 var(--accent), inset calc(-1 * var(--border-width, 1px)) 0 0 var(--control-line); }
-
-/* 93 · Underline: no box; the current tab underlined in the accent. */
-[data-tab-look="93"] .app-builds-tab { color: color-mix(in srgb, var(--on-bar) 68%, transparent); }
-[data-tab-look="93"] .app-builds-tab:is(:hover, .is-hover, .is-close-hover) { background: color-mix(in srgb, var(--on-bar) 7%, transparent); color: var(--on-bar); }
-[data-tab-look="93"] .app-builds-tab.is-current { color: var(--on-bar); box-shadow: inset 0 -2px 0 var(--accent); }
+/* 93 · Underline (the owner, 2026-11-17): no box, the other tabs in a weaker text; the current one
+   underlined in the accent across its whole width, its portrait included, so that it reads as one
+   block: the line is drawn over the portrait. */
+.app-builds-tab { position: relative; color: color-mix(in srgb, var(--on-bar) 68%, transparent); }
+.app-builds-tab:is(:hover, .is-hover, .is-close-hover) { background: color-mix(in srgb, var(--on-bar) 7%, transparent); color: var(--on-bar); }
+.app-builds-tab.is-current { color: var(--on-bar); }
+.app-builds-tab.is-current::after { content: ""; position: absolute; inset: auto 0 0; height: 2px; background: var(--accent); }
 
 /* The section of the tab (sections/bar-tab.js): the states side by side, then the page below. */
 .tab-states { display: flex; }
