@@ -21,7 +21,9 @@ const THEMES = {
 
 const VARIANTS = {
   // The inks of the mark (css/logo.css): its frame, the three bars outside, and its P.
-  // The tabs of the open builds (2e, sections/bar-tab.js): their look, the height of a card, the close button.
+  // The two bands at the top (2e2, sections/bands.js): their shades. The tabs of the open builds
+  // (2e, sections/bar-tab.js): their look, the height of a card, the close button.
+  topShade: { label: "Top bands", select: true, fallback: "site-deep", options: { "site-deep": "The site darker", "same-deep": "Both darker", same: "Both as the bar", "builds-deep": "The open builds darker" } },
   barTab: { label: "Tab look", select: true, fallback: "92", options: { 92: "92 · Card", 93: "93 · Underline", 94: "94 · Chip", 95: "95 · Card, accent on top" } },
   barTabHeight: { label: "Card height", options: { short: "36 px", full: "Full" }, fallback: "short" },
   barClose: { label: "Close ×", select: true, fallback: "always", options: { always: "Always", hover: "On the current tab and on hover" } },
@@ -32,7 +34,7 @@ const VARIANTS = {
   accent2On: { label: "Accent 2 on", select: true, fallback: "later", options: {
     later: "What comes later (tree, markers)", gear: "The gear (hints of the slots)", controls: "The pressed switches", all: "All three" } },
   // On trial on the three styles (2026-11-17): the app bar, the level band, the row of the tabs and the right column a shade darker, and the tabs of a build the full height of their band.
-  band: { label: "Bands", select: true, fallback: "deep", options: { deep: "Darker: the bar, the level band, the tabs, the column", lines: "As before" } },
+  band: { label: "Bands", select: true, fallback: "deep", options: { deep: "Darker: the level band, the tabs, the column", lines: "As before" } },
   tabs: { label: "Tabs", select: true, fallback: "full", options: { full: "Full height", short: "As before" } },
   colour: { label: "Colour", select: true, fallback: "blue", options: { text: "Grey (the text)", blue: "Pale blue", accent: "Accent" } },
   size: { label: "Size", range: { min: 6, max: 200, step: 2 }, variable: "--texture-size", unit: "px", fallback: "24" },

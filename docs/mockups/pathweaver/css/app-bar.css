@@ -4,18 +4,32 @@
 .app-site-bug { display: grid; place-items: center; width: 44px; height: 100%; margin-left: auto; color: inherit; opacity: .75; }
 .app-site-bug:hover { opacity: 1; background: color-mix(in srgb, var(--on-bar) 9%, transparent); }
 
-/* The band of the open builds: 44 px, their tabs of 168 px. */
+/* The band of the open builds: 44 px, their tabs of 168 px, up to 240 when they all fit. */
 .app-builds { display: flex; align-items: flex-end; gap: 6px; height: 44px; padding: 0 12px 0 14px; background: var(--bar-image), var(--bar); color: var(--on-bar); border-bottom: var(--border-width) solid var(--divider); }
 .app-site-brand { display: flex; align-items: center; gap: var(--brand-gap); flex: none; padding-right: 12px; }
 .app-site-brand .logo-mark { width: var(--brand-mark-size); height: var(--brand-mark-size); }
 .app-site-brand .logo-name { position: relative; top: var(--brand-name-offset); font-size: var(--brand-size); }
 .app-builds-more, .app-builds-open { align-self: center; display: inline-flex; align-items: center; gap: 4px; height: 26px; padding: 0 8px; border: var(--border-width) solid var(--control-line); border-radius: var(--radius); background: var(--control); color: var(--text); box-shadow: var(--control-shadow); cursor: pointer; font-size: 13px; }
 .app-builds-open { width: 30px; height: 28px; justify-content: center; padding: 0; }
+.app-builds-more.is-open { border-color: var(--accent); }
+
+/* The menu « +N ▾ »: the builds that don't fit, then Merge…, under its button, on its right edge. */
+.app-builds-more-wrap { position: relative; align-self: center; display: flex; }
+.app-builds-menu { position: absolute; z-index: 5; top: calc(100% + 6px); right: 0; width: 280px; padding: 4px; border: var(--border-width) solid var(--control-line); border-radius: var(--radius); background: var(--control); color: var(--text); box-shadow: 0 6px 18px rgb(0 0 0 / .22); font-size: 13px; }
+.app-builds-menu-item { display: flex; align-items: center; gap: 8px; height: 32px; padding: 0 8px; border-radius: calc(var(--radius) - 2px); cursor: pointer; }
+.app-builds-menu-item:hover { background: color-mix(in srgb, var(--text) 8%, transparent); }
+.app-builds-menu-item > span { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.app-builds-menu-line { height: var(--border-width, 1px); min-height: 1px; margin: 4px 6px; background: var(--divider); }
+
+/* The shade of the two bands (the list « Top bands »): the site darker and the open builds
+   lighter, both the same, or the other way round. */
+:root[data-top-shade="site-deep"] .app-site, :root[data-top-shade="builds-deep"] .app-builds,
+:root[data-top-shade="same-deep"] :is(.app-site, .app-builds) { background: var(--bar-image), var(--band-deep); }
 
 /* A build tab (2e): its portrait, its name cut to fit, its close button. The states have classes
    too (is-hover, is-close-hover), to be shown side by side without the mouse. */
 .app-builds-tabs { align-self: stretch; display: flex; align-items: flex-end; gap: 6px; }
-.app-builds-tab { display: flex; align-items: center; gap: 8px; width: 168px; height: 36px; box-sizing: border-box; padding: 0 6px; cursor: pointer; }
+.app-builds-tab { display: flex; align-items: center; gap: 8px; width: var(--tab-width, 168px); height: 36px; box-sizing: border-box; padding: 0 6px; cursor: pointer; }
 .app-builds-tab-name { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 13px; }
 .app-builds-close { display: grid; place-items: center; flex: none; width: 20px; height: 20px; padding: 0; border: none; border-radius: 50%; background: none; color: inherit; opacity: .6; cursor: pointer; }
 .app-builds-close:hover, .app-builds-tab.is-close-hover .app-builds-close { opacity: 1; background: color-mix(in srgb, currentColor 16%, transparent); }
@@ -47,3 +61,6 @@
 .tab-strip { overflow: hidden; border-radius: 6px; background: var(--page); }
 .tab-strip-page { height: 14px; }
 .tab-card { display: flex; flex-direction: column; gap: 6px; }
+
+/* The section of the two bands (sections/bands.js): the page under them, where the menu opens. */
+.bands-page { height: 150px; background: var(--page); }
