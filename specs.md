@@ -169,7 +169,7 @@ Agreed on the wireframes of [docs/wireframes/pathweaver.excalidraw](docs/wirefra
 Decided by the owner on the mock-up (step 2, 2026-11-17), its reference.
 
 - **The mark**: the owner's own, two rings of a triangle pointing down, the outer one in three bars, the inner one a P, every edge flat or at 60°; in its bold weight (bars a little wider than the gaps). Its frame is in the accent, its P in the colour of the text around it.
-- **In the app bar**: the mark at 24 pixels, then « Pathweaver » in Archivo 700, spaced -0.06 em, at 16 pixels, 8 pixels apart, the middle of its capitals on the middle of the mark.
+- **In the app bar**: the mark at 24 pixels, then « Pathweaver » in Archivo 700, spaced -0.06 em, at 16 pixels, 8 pixels apart, the middle of its capitals 1 pixel below the middle of the mark, tuned by eye.
 - **The favicon**: the same mark, an SVG drawn at 16 pixels, its frame in the accent, its P dark or light after the scheme of the system, as the browser draws its tabs.
 - Set aside: the weights as drawn, even and light, the mark on the pixel grid (sharper at 16 pixels, but a second drawing), the P alone, the mark on a square of the accent, the frame or the whole mark in one ink.
 

@@ -21,9 +21,6 @@ const THEMES = {
 
 const VARIANTS = {
   // The inks of the mark (css/logo.css): its frame, the three bars outside, and its P.
-  // The name beside the mark (2e): centred on it by the metrics of the font (the middle of its
-  // capitals on the middle of the mark), then moved by eye on the owner's screen, in pixels.
-  brandOffset: { label: "Name offset", options: { "-1px": "−1", "-0.5px": "−0.5", "0px": "0", "0.5px": "+0.5", "1px": "+1" }, variable: "--brand-name-offset", fallback: "0px" },
   theme: { label: "Style", options: Object.fromEntries(Object.entries(THEMES).map(([key, theme]) => [key, theme.title])), fallback: "frost" },
   // The second accent (css/accent-2.css): its colour, and what it marks.
   accent2: { label: "Accent 2", select: true, fallback: "amber", options: { amber: "Amber", blue: "Blue", coral: "Coral", mint: "Mint",
