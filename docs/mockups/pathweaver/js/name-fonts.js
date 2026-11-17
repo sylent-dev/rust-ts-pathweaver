@@ -58,16 +58,26 @@ const NAME_FONTS = {
 const LOGO_NAME = 'Path<span class="logo-name-w">w</span>eaver';
 
 const nameFontKey = family => family.toLowerCase().replace(/[^a-z0-9]+/g, "-");
-const NAME_FONT_LIST = Object.values(NAME_FONTS).flat().map(([family, weight]) => ({ key: nameFontKey(family), family, weight }));
+// Numbered once and for good after the weights of the mark (86 to 89): 90 to 221.
+const NAME_FONT_LIST = Object.values(NAME_FONTS).flat().map(([family, weight], index) => ({ id: 90 + index, key: nameFontKey(family), family, weight }));
+const nameFontQuery = (family, weight) => `family=${family.replace(/ /g, "+")}:wght@${weight}`;
 
 // Loads the font of the name once, then sets the variables that css/logo.css reads.
 function loadNameFont(key) {
   const font = NAME_FONT_LIST.find(candidate => candidate.key === key);
   if (!font) return;
-  const href = `https://fonts.googleapis.com/css2?family=${font.family.replace(/ /g, "+")}:wght@${font.weight}&display=swap`;
+  const href = `https://fonts.googleapis.com/css2?${nameFontQuery(font.family, font.weight)}&display=swap`;
   if (!document.querySelector(`link[href="${href}"]`)) {
     document.head.append(Object.assign(document.createElement("link"), { rel: "stylesheet", href }));
   }
   document.documentElement.style.setProperty("--name-font", `"${font.family}"`);
   document.documentElement.style.setProperty("--name-weight", font.weight);
+}
+
+// Loads every font at once, one sheet per kind, for the section that shows them side by side.
+function loadAllNameFonts() {
+  for (const fonts of Object.values(NAME_FONTS)) {
+    const href = `https://fonts.googleapis.com/css2?${fonts.map(([family, weight]) => nameFontQuery(family, weight)).join("&")}&display=swap`;
+    document.head.append(Object.assign(document.createElement("link"), { rel: "stylesheet", href }));
+  }
 }

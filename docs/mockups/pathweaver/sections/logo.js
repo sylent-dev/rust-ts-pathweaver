@@ -36,3 +36,34 @@ const nameCard = style => `<div class="name-card" data-sample-theme="${style}" t
 
 addSection(() => ["The name · its case, its font and its spacing, chosen by the lists « Name », « Font » and « Spacing » at the top of the page: alone, beside the mark, in the app bar, on Frost, Frost Night and Ember",
   LOGO_STYLES.map(style => [THEMES[style].title, nameCard(style)])]);
+
+// Every font of the name side by side (the owner, 2026-11-17), in small boxes sorted by kind, with
+// the case and the spacing of the lists; a click on a box picks its font in the list « Font ».
+loadAllNameFonts();
+
+const nameFontBox = font => `<button type="button" class="name-font-box ${chosen.nameFont === font.key ? "is-current" : ""}" data-action="name-font" data-font="${font.key}"
+    style="--name-font:'${font.family}';--name-weight:${font.weight}" title="${escapeHtml(font.family)}">
+  <small>${font.id} · ${escapeHtml(font.family)}</small><span class="logo-name">${LOGO_NAME}</span></button>`;
+
+ACTIONS["name-font"] = element => {
+  chosen.nameFont = element.dataset.font;
+  keepInAddress();
+  render();
+  return false;
+};
+
+addSection(() => ["The name in every font · 90 to 221, sorted by kind, with the case and the spacing of the lists; a click picks the font",
+  [["", Object.entries(NAME_FONTS).map(([kind, fonts]) => `<div class="name-font-kind"><h3>${kind}</h3><div class="name-font-grid">${
+    fonts.map(([family]) => nameFontBox(NAME_FONT_LIST.find(font => font.family === family))).join("")}</div></div>`).join("")]]]);
+
+// A wide font shrinks until the name fits its box; again once the fonts have loaded, and at each
+// change of the case or the spacing (which don't draw the page again).
+function fitNameFontBoxes() {
+  for (const name of document.querySelectorAll(".name-font-box .logo-name")) {
+    name.style.fontSize = "";
+    if (name.scrollWidth > name.clientWidth) name.style.fontSize = `${Math.floor(26 * name.clientWidth / name.scrollWidth)}px`;
+  }
+}
+AFTER_RENDER.push(fitNameFontBoxes);
+document.fonts.addEventListener("loadingdone", fitNameFontBoxes);
+document.getElementById("tabs").addEventListener("input", fitNameFontBoxes);
