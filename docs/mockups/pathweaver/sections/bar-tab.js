@@ -1,11 +1,11 @@
-// A tab of an open build (2e): four looks, each in its states side by side on the three
-// styles. The lists of the page set the look of the bar of the page of a build (« Tab look »), the
-// height of a card (« Card height ») and when the close button shows (« Close × »).
+// A tab of an open build (2e): the full height of the band, side by side, square corners, its
+// portrait square (the owner, 2026-11-17); three looks, each in its states side by side on the
+// three styles. The lists of the page set the look of the page of a build (« Tab look ») and when
+// the close button shows (« Close × »). 94, a chip, went with the tabs the full height.
 
 const TAB_LOOKS = {
   92: "Card: the current tab in the colour of the page, open on it, the others a shade darker",
-  93: "Underline: no box, the full height of the bar, the current tab underlined in the accent",
-  94: "Chip: a button in the middle of the bar, the current one raised like a control",
+  93: "Underline: no box, the current tab underlined in the accent",
   95: "Card with the accent on top: 92, the current tab with a line of the accent at its top",
 };
 
@@ -28,5 +28,5 @@ const tabCard = look => `<div class="tab-card">
   </div>`).join("")}
 </div>`;
 
-addSection(() => ["A build tab · four looks in their states, on Frost, Frost Night and Ember: the portrait, the name cut to fit, the close button; « Tab look » picks the look of the page of a build",
+addSection(() => ["A build tab · three looks in their states, on Frost, Frost Night and Ember: the portrait, the name cut to fit, the close button; « Tab look » picks the look of the page of a build",
   Object.entries(TAB_LOOKS).map(([look, text]) => [`${look} · ${text}`, tabCard(look)])]);

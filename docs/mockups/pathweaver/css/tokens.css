@@ -24,6 +24,8 @@
   --brand-name-offset: 1px;   /* the name 1 px below the middle of the mark, by eye (the owner, 2026-11-17) */
   /* The name of Pathweaver, the same in every style (the owner, 2026-11-17): Archivo in its own weight, tight. */
   --brand-font: "Archivo", sans-serif;
+  --site-shadow: 0 1px 3px rgb(0 0 0 / .1);   /* under the band of the site, very light */
+  --portrait-zoom: 76px;   /* the portrait of a tab, a disc, shown this large in its square of 44 px */
   --report-font: "Manrope", sans-serif;   /* Report a bug, in the band of the site (the owner, 2026-11-17) */
   --report-weight: 600;
   --report-size: 13px;
@@ -145,6 +147,7 @@
 /* 28 · Frost Night (Frost in negative, dark): the density and the flat boxes of Frost on a blue
    black, pale blue lines, one blue (Geist, Geist Mono). */
 :root[data-theme="frost-night"], [data-sample-theme="frost-night"] {
+  --site-shadow: 0 1px 4px rgb(0 0 0 / .45);   /* a dark page needs more to show it */
   --font-text: "Geist", sans-serif;
   --font-title: "Geist", sans-serif;
   --font-number: "Geist Mono", monospace;
@@ -181,6 +184,7 @@
 /* 29 · Ember (Frost Night on a neutral grey, dark): the density and the flat boxes of Frost on a
    very dark grey without blue, grey lines, amber first (Geist, Geist Mono). */
 :root[data-theme="ember"], [data-sample-theme="ember"] {
+  --site-shadow: 0 1px 4px rgb(0 0 0 / .45);
   --font-text: "Geist", sans-serif;
   --font-title: "Geist", sans-serif;
   --font-number: "Geist Mono", monospace;

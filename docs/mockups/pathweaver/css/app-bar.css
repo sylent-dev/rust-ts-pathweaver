@@ -1,6 +1,6 @@
 /* The band of the site: 44 px, the brand, then on the right the report of a bug, the full height
    of the band. */
-.app-site { display: flex; align-items: center; height: 44px; padding-left: 14px; background: var(--bar-image), var(--bar); color: var(--on-bar); border-bottom: var(--border-width) solid var(--divider); }
+.app-site { position: relative; z-index: 2; display: flex; align-items: center; height: 44px; padding-left: 14px; background: var(--bar-image), var(--bar); color: var(--on-bar); box-shadow: var(--site-shadow); }
 .app-site-bug { display: flex; align-items: center; justify-content: center; gap: 7px; min-width: 44px; height: 100%; box-sizing: border-box; margin-left: auto; padding: 0 16px; color: inherit; opacity: .75; text-decoration: none;
   font-family: var(--report-font); font-weight: var(--report-weight); font-size: var(--report-size); }
 /* The list « Report a bug »: the words alone, the icon and the words, or the icon alone. */
@@ -9,7 +9,7 @@
 .app-site-bug:hover { opacity: 1; background: color-mix(in srgb, var(--on-bar) 9%, transparent); }
 
 /* The band of the open builds: 44 px, their tabs of 168 px, up to 240 when they all fit. */
-.app-builds { display: flex; align-items: flex-end; gap: 6px; height: 44px; padding: 0 12px 0 14px; background: var(--bar-image), var(--bar); color: var(--on-bar); border-bottom: var(--border-width) solid var(--divider); }
+.app-builds { display: flex; align-items: flex-end; gap: 6px; height: 44px; padding: 0 12px 0 0; background: var(--bar-image), var(--bar); color: var(--on-bar); border-bottom: var(--border-width) solid var(--divider); }
 .app-site-brand { display: flex; align-items: center; gap: var(--brand-gap); flex: none; padding-right: 12px; }
 .app-site-brand .logo-mark { width: var(--brand-mark-size); height: var(--brand-mark-size); }
 .app-site-brand .logo-name { position: relative; top: var(--brand-name-offset); font-size: var(--brand-size); }
@@ -30,37 +30,34 @@
 :root[data-top-shade="site-deep"] .app-site, :root[data-top-shade="builds-deep"] .app-builds,
 :root[data-top-shade="same-deep"] :is(.app-site, .app-builds) { background: var(--bar-image), var(--band-deep); }
 
-/* A build tab (2e): its portrait, its name cut to fit, its close button. The states have classes
-   too (is-hover, is-close-hover), to be shown side by side without the mouse. */
-.app-builds-tabs { align-self: stretch; display: flex; align-items: flex-end; gap: 6px; }
-.app-builds-tab { display: flex; align-items: center; gap: 8px; width: var(--tab-width, 168px); height: 36px; box-sizing: border-box; padding: 0 6px; cursor: pointer; }
+/* A build tab (2e): the full height of the band, side by side, square corners (the owner,
+   2026-11-17); its portrait square the full height, its name cut to fit, its close button. The
+   states have classes too (is-hover, is-close-hover), to be shown side by side without the mouse. */
+.app-builds-tabs { align-self: stretch; display: flex; }
+.app-builds-tab { display: flex; align-items: center; gap: 8px; width: var(--tab-width, 168px); box-sizing: border-box; padding-right: 6px; cursor: pointer; }
+.app-builds-portrait { display: grid; place-items: center; flex: none; height: 100%; aspect-ratio: 1; overflow: hidden; }
+/* The portrait is a disc with a dark edge: shown larger, so that the square keeps its middle. */
+.app-builds-portrait .app-portrait { width: var(--portrait-zoom); height: var(--portrait-zoom); border-radius: 0; box-shadow: none; }
 .app-builds-tab-name { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 13px; }
 .app-builds-close { display: grid; place-items: center; flex: none; width: 20px; height: 20px; padding: 0; border: none; border-radius: 50%; background: none; color: inherit; opacity: .6; cursor: pointer; }
 .app-builds-close:hover, .app-builds-tab.is-close-hover .app-builds-close { opacity: 1; background: color-mix(in srgb, currentColor 16%, transparent); }
 :root[data-bar-close="hover"] .app-builds-tab:not(.is-current, :hover, .is-hover, .is-close-hover) .app-builds-close { visibility: hidden; }
 
 /* 92 · Card, and 95 · Card with the accent on top: the current tab in the colour of the page, open
-   on it; the others a shade darker, lighter on hover. */
-:is([data-tab-look="92"], [data-tab-look="95"]) .app-builds-tab { margin-bottom: calc(-1 * var(--border-width)); border: var(--border-width) solid var(--control-line); border-bottom: none; border-radius: var(--radius) var(--radius) 0 0; background: var(--tab); color: var(--on-tab); }
+   on it; the others a shade darker, lighter on hover, a line between them. */
+:is([data-tab-look="92"], [data-tab-look="95"]) .app-builds-tab { background: var(--tab); color: var(--on-tab); box-shadow: inset calc(-1 * var(--border-width, 1px)) 0 0 var(--control-line); }
 :is([data-tab-look="92"], [data-tab-look="95"]) .app-builds-tab:not(.is-current):is(:hover, .is-hover, .is-close-hover) { background: color-mix(in srgb, var(--tab), var(--page) 55%); color: var(--text); }
 :is([data-tab-look="92"], [data-tab-look="95"]) .app-builds-tab.is-current { background: var(--page); color: var(--text); }
-:root[data-bar-tab-height="full"] :is([data-tab-look="92"], [data-tab-look="95"]) .app-builds-tab { height: 100%; border-radius: 0; }
-[data-tab-look="95"] .app-builds-tab.is-current { box-shadow: inset 0 2px 0 var(--accent); }
+[data-tab-look="95"] .app-builds-tab.is-current { box-shadow: inset 0 2px 0 var(--accent), inset calc(-1 * var(--border-width, 1px)) 0 0 var(--control-line); }
 
-/* 93 · Underline: no box, the full height of the bar; the current tab underlined in the accent. */
-[data-tab-look="93"] .app-builds-tab { height: 100%; color: color-mix(in srgb, var(--on-bar) 68%, transparent); }
+/* 93 · Underline: no box; the current tab underlined in the accent. */
+[data-tab-look="93"] .app-builds-tab { color: color-mix(in srgb, var(--on-bar) 68%, transparent); }
 [data-tab-look="93"] .app-builds-tab:is(:hover, .is-hover, .is-close-hover) { background: color-mix(in srgb, var(--on-bar) 7%, transparent); color: var(--on-bar); }
 [data-tab-look="93"] .app-builds-tab.is-current { color: var(--on-bar); box-shadow: inset 0 -2px 0 var(--accent); }
 
-/* 94 · Chip: a button in the middle of the bar; the current one raised like a control. */
-[data-tab-look="94"] .app-builds-tab { align-self: center; height: 32px; border: var(--border-width) solid transparent; border-radius: var(--radius); color: color-mix(in srgb, var(--on-bar) 68%, transparent); }
-[data-tab-look="94"] .app-builds-tab:is(:hover, .is-hover, .is-close-hover) { background: color-mix(in srgb, var(--on-bar) 7%, transparent); color: var(--on-bar); }
-[data-tab-look="94"] .app-builds-tab.is-current { border-color: var(--control-line); background: var(--control); box-shadow: var(--control-shadow); color: var(--text); }
-[data-tab-look="94"] .app-builds-tabs { align-items: center; }
-
 /* The section of the tab (sections/bar-tab.js): the states side by side, then the page below. */
-.tab-states, .tab-strip .app-builds-tabs { display: flex; gap: 6px; }
-.tab-states { padding: 0 14px; }
+.tab-states { display: flex; }
+.tab-strip .app-builds { padding: 0; }
 .tab-states > span { width: 168px; color: #adb5bd; font-size: 12px; }
 .tab-strip { overflow: hidden; border-radius: 6px; background: var(--page); }
 .tab-strip-page { height: 14px; }

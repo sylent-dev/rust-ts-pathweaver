@@ -13,21 +13,22 @@ const siteBand = () => `<div class="app-site">
 
 const portrait = (key, size) => `<img class="app-portrait" src="pathweaver/img/portraits/${key}.webp" width="${size}" height="${size}" alt="">`;
 
-// A tab of an open build (2e): its portrait, its name cut to fit and its close button. `states`
+// A tab of an open build (2e): its portrait, square the full height of the band (the square inside
+// the disc the game gives), its name cut to fit and its close button. `states`
 // adds is-current, or is-hover and is-close-hover to show a state without the mouse.
 const openBuildTab = (build, states = "") => `<div class="app-builds-tab ${states}" role="tab" aria-selected="${states.includes("is-current")}" title="${escapeHtml(build.name)} · ${escapeHtml(build.ascendancy)}">
-    ${portrait(build.portrait, 24)}<span class="app-builds-tab-name">${escapeHtml(build.name)}</span>
+    <span class="app-builds-portrait">${portrait(build.portrait, 44)}</span><span class="app-builds-tab-name">${escapeHtml(build.name)}</span>
     <button type="button" class="app-builds-close" aria-label="Close">${icon(12, ICONS.close)}</button>
   </div>`;
 
 // The band of the open builds, its tabs in the look of the list « Tab look » (data-tab-look):
-// 168 px each, up to 240 when they all fit; those that don't fit go to the menu « +N ▾ », which
+// full height, side by side, 168 px each, up to 240 when they all fit; those that don't fit go to the menu « +N ▾ », which
 // also holds Merge… and is always there. `menuOpen` shows the menu open.
-const TAB_WIDTH = 168, TAB_MAX_WIDTH = 240, TAB_GAP = 6;
+const TAB_WIDTH = 168, TAB_MAX_WIDTH = 240, TAB_GAP = 0;
 STATE.buildsMenu = false;
 
 function buildsBand(width, builds = BUILDS.open, menuOpen = STATE.buildsMenu) {
-  const room = width - 28 - 100;   // the paddings, then « +N ▾ » and +
+  const room = width - 12 - 100;   // the padding on the right, then « +N ▾ » and +
   const fit = Math.max(1, Math.floor((room + TAB_GAP) / (TAB_WIDTH + TAB_GAP)));
   const shown = builds.slice(0, fit);
   const hidden = builds.slice(fit);
