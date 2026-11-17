@@ -25,4 +25,7 @@
   content: ""; position: absolute; inset: 0; z-index: -1; pointer-events: none;
   background: var(--texture-colour); opacity: var(--texture-opacity);
   mask-image: var(--texture); mask-size: var(--texture-size) var(--texture-size);
+  /* Shifted by half a small cell (an eighth of the tile), so that no line of the grid falls on the
+     edge of a block and reads as a border (the owner, 2026-11-18). */
+  mask-position: calc(var(--texture-size) / 8) calc(var(--texture-size) / 8);
 }
