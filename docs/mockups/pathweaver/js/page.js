@@ -21,8 +21,8 @@ const THEMES = {
 
 const VARIANTS = {
   // The inks of the mark (css/logo.css): its frame, the three bars outside, and its P.
-  // The tabs of the app bar (2e, sections/bar-tab.js): their look, the height of a card, the close button.
-  barTab: { label: "Bar tab", select: true, fallback: "92", options: { 92: "92 · Card", 93: "93 · Underline", 94: "94 · Chip", 95: "95 · Card, accent on top" } },
+  // The tabs of the open builds (2e, sections/bar-tab.js): their look, the height of a card, the close button.
+  barTab: { label: "Tab look", select: true, fallback: "92", options: { 92: "92 · Card", 93: "93 · Underline", 94: "94 · Chip", 95: "95 · Card, accent on top" } },
   barTabHeight: { label: "Card height", options: { short: "36 px", full: "Full" }, fallback: "short" },
   barClose: { label: "Close ×", select: true, fallback: "always", options: { always: "Always", hover: "On the current tab and on hover" } },
   theme: { label: "Style", options: Object.fromEntries(Object.entries(THEMES).map(([key, theme]) => [key, theme.title])), fallback: "frost" },

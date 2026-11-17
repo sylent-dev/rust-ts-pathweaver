@@ -18,5 +18,5 @@
 /* On trial (2026-11-17): the band a shade darker, for contrast now that there are no borders, and
    the same shade on the app bar, the row of the tabs and the right column. */
 :root[data-band="deep"] .app-level { background: var(--band-image), var(--band-deep); }
-:root[data-band="deep"] .app-bar { background: var(--bar-image), var(--band-deep); }
+:root[data-band="deep"] :is(.app-site, .app-builds) { background: var(--bar-image), var(--band-deep); }
 :root[data-band="deep"] :is(.app-tabs, .app-side) { background: var(--band-deep); }

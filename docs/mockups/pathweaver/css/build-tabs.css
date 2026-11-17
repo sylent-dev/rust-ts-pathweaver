@@ -3,7 +3,7 @@
 .app-tab { height: 32px; margin-bottom: calc(-1 * var(--border-width)); padding: 0 14px; border: var(--border-width) solid var(--control-line); border-radius: var(--radius) var(--radius) 0 0; background: var(--tab); color: var(--on-tab); cursor: pointer; font-size: 14px; }
 .app-tab[aria-selected="true"] { background: var(--page); color: var(--text); border-bottom-color: var(--page); }
 
-/* On trial (2026-11-17): tabs the full height of their band, square at the top; those of the app
-   bar have their own list (css/app-bar.css). */
+/* On trial (2026-11-17): tabs the full height of their band, square at the top; those of the open
+   builds have their own list (css/app-bar.css). */
 :root[data-tabs="full"] .app-tabs { padding-top: 0; }
 :root[data-tabs="full"] .app-tab { align-self: stretch; height: auto; border-radius: 0; }

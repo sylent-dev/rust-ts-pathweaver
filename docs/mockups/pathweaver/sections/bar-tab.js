@@ -1,5 +1,5 @@
-// A build tab of the app bar (2e): four looks, each in its states side by side on the three
-// styles. The lists of the page set the look of the bar of the page of a build (« Bar tab »), the
+// A tab of an open build (2e): four looks, each in its states side by side on the three
+// styles. The lists of the page set the look of the bar of the page of a build (« Tab look »), the
 // height of a card (« Card height ») and when the close button shows (« Close × »).
 
 const TAB_LOOKS = {
@@ -23,10 +23,10 @@ const TAB_STATES = [
 const tabCard = look => `<div class="tab-card">
   <div class="tab-states">${TAB_STATES.map(([label]) => `<span>${label}</span>`).join("")}</div>
   ${["frost", "frost-night", "ember"].map(style => `<div class="tab-strip" data-sample-theme="${style}" title="${THEMES[style].title}">
-    <div class="app-bar" data-tab-look="${look}"><div class="app-bar-tabs">${TAB_STATES.map(([, states, build]) => appBarTab(build, states)).join("")}</div></div>
+    <div class="app-builds" data-tab-look="${look}"><div class="app-builds-tabs">${TAB_STATES.map(([, states, build]) => openBuildTab(build, states)).join("")}</div></div>
     <div class="tab-strip-page"></div>
   </div>`).join("")}
 </div>`;
 
-addSection(() => ["A build tab · four looks in their states, on Frost, Frost Night and Ember: the portrait, the name cut to fit, the close button; « Bar tab » picks the look of the page of a build",
+addSection(() => ["A build tab · four looks in their states, on Frost, Frost Night and Ember: the portrait, the name cut to fit, the close button; « Tab look » picks the look of the page of a build",
   Object.entries(TAB_LOOKS).map(([look, text]) => [`${look} · ${text}`, tabCard(look)])]);

@@ -18,8 +18,8 @@
   --title-spacing: 0;
   --title-size: 20px;
   --level-weight: 400;
-  --brand-mark-size: 24px;   /* the mark in the app bar */
-  --brand-size: 16px;   /* the name in the app bar */
+  --brand-mark-size: 24px;   /* the mark in the band of the site */
+  --brand-size: 16px;   /* the name in the band of the site */
   --brand-gap: 8px;     /* between the mark and the name */
   --brand-name-offset: 1px;   /* the name 1 px below the middle of the mark, by eye (the owner, 2026-11-17) */
   /* The name of Pathweaver, the same in every style (the owner, 2026-11-17): Archivo in its own weight, tight. */
