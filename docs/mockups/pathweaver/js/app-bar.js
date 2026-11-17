@@ -1,14 +1,20 @@
-// The app bar, at the top of every page: the name, then the open builds as tabs (as many as fit,
+// The app bar, at the top of every page: the brand (the mark and the name), then the open builds as tabs (as many as fit,
 // the others in a « +N ▾ » menu, which also holds Merge…), and + to open files (specs.md, Window layout).
 
 const portrait = (key, size) => `<img class="app-portrait" src="pathweaver/img/portraits/${key}.webp" width="${size}" height="${size}" alt="">`;
 
-function appBar(width) {
-  const fit = Math.max(1, Math.floor((width - 130 - 100) / 174));
+// The mark chosen in the list « Mark in the bar », at the size of « Mark size »; none: the name alone.
+const brandMark = () => LOGO_WEIGHTS.find(weight => String(weight.id) === chosen.brandMark);
+const appBrand = (mark = brandMark()) =>
+  `<span class="app-bar-brand">${mark ? logoMark(mark, Number(chosen.brandMarkSize)) : ""}<span class="logo-name">Pathweaver</span></span>`;
+
+function appBar(width, mark = brandMark()) {
+  const brandWidth = 120 + (mark ? Number(chosen.brandMarkSize) + 10 : 0);
+  const fit = Math.max(1, Math.floor((width - brandWidth - 100) / 174));
   const shown = BUILDS.open.slice(0, fit);
   const more = BUILDS.open.length - shown.length;
   return `<div class="app-bar">
-    <span class="app-bar-name logo-name">Pathweaver</span>
+    ${appBrand(mark)}
     <div class="app-bar-tabs" role="tablist">${shown.map((build, index) => `
       <div class="app-bar-tab ${index === 0 ? "is-current" : ""}" role="tab" aria-selected="${index === 0}" title="${escapeHtml(build.name)} · ${escapeHtml(build.ascendancy)}">
         ${portrait(build.portrait, 24)}<span class="app-bar-tab-name">${escapeHtml(build.name)}</span>

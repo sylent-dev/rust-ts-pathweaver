@@ -22,6 +22,15 @@ const THEMES = {
 const VARIANTS = {
   // The inks of the mark (css/logo.css): its frame, the three bars outside, and its P.
   logoInk: { label: "Mark", select: true, fallback: "text", options: { text: "One ink (text)", accent: "One ink (accent)", "p-accent": "The P in accent", "frame-accent": "The frame in accent" } },
+  // The brand of the app bar (2e, sections/brand.js): the mark beside the name, its size, the name's
+  // size and the gap; the favicon of this page, to see it in the tab of the browser.
+  brandMark: { label: "Mark in the bar", select: true, fallback: "90", options: { none: "None, the name alone",
+    ...Object.fromEntries(LOGO_WEIGHTS.map(weight => [weight.id, `${weight.id} · ${weight.name}`])) } },
+  brandMarkSize: { label: "Mark size", options: { 20: "20", 24: "24", 28: "28", 32: "32" }, fallback: "24" },
+  brandSize: { label: "Name size", range: { min: 14, max: 26, step: 1 }, variable: "--brand-size", unit: "px", fallback: "18" },
+  brandGap: { label: "Gap", range: { min: 2, max: 20, step: 1 }, variable: "--brand-gap", unit: "px", fallback: "9" },
+  favicon: { label: "Favicon", select: true, fallback: "90", options: Object.fromEntries(LOGO_WEIGHTS.flatMap(weight => [
+    [weight.id, `${weight.id} · ${weight.name}`], [`${weight.id}-square`, `${weight.id} on the accent`]])) },
   theme: { label: "Style", options: Object.fromEntries(Object.entries(THEMES).map(([key, theme]) => [key, theme.title])), fallback: "frost" },
   // The second accent (css/accent-2.css): its colour, and what it marks.
   accent2: { label: "Accent 2", select: true, fallback: "amber", options: { amber: "Amber", blue: "Blue", coral: "Coral", mint: "Mint",

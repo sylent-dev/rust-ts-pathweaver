@@ -48,25 +48,68 @@ function logoPolygons(bar, gap) {
   ].map(lines => lines.map((line, index) => crossing(line, lines[(index + 1) % lines.length])));
 }
 
-// The weights compared, numbered after the fonts (72 to 85). The step (bar + gap) stays the same,
-// so that every weight has the same size.
+// The weights compared, numbered after the fonts (72 to 85). The step (bar + gap) stays the same
+// in 86 to 89, so that every weight has the same size; 90 and 91 are drawn for the size they are
+// shown at, every flat edge on a whole pixel (logoPixelFit).
 const LOGO_WEIGHTS = [
   { id: 86, name: "As drawn", bar: 23, gap: 26, note: "bars a little thinner than the gaps" },
   { id: 87, name: "Even", bar: 24.5, gap: 24.5, note: "bars as wide as the gaps" },
   { id: 88, name: "Bold", bar: 28, gap: 21, note: "for the small sizes" },
   { id: 89, name: "Light", bar: 19, gap: 30, note: "more air, thinner at 16 px" },
+  { id: 90, name: "On the pixel grid", pixel: true, note: "bars of whole pixels, twice the gaps: 2 and 1 px at 16 px" },
+  { id: 91, name: "The P alone", pixel: true, part: "p", note: "the inner ring, on the pixel grid: 3 px bars at 16 px" },
 ];
 
-// The mark as an SVG of `size` pixels: the outer ring (class logo-frame) and the P (logo-p),
-// each in its own ink (css/logo.css). The box is square, the mark centred in it.
-function logoMark(weight, size) {
-  const polygons = logoPolygons(weight.bar, weight.gap);
+const markPolygons = (part, bar, gap) => part === "p" ? logoPolygons(bar, gap).slice(3) : logoPolygons(bar, gap);
+
+function polygonBounds(polygons) {
   const xs = polygons.flat().map(([x]) => x);
   const ys = polygons.flat().map(([, y]) => y);
   const [left, right, top, bottom] = [Math.min(...xs), Math.max(...xs), Math.min(...ys), Math.max(...ys)];
-  const side = Math.max(right - left, bottom - top);
-  const box = [(left + right - side) / 2, (top + bottom - side) / 2, side, side].map(n => n.toFixed(2)).join(" ");
+  return { left, right, top, bottom, width: right - left, height: bottom - top };
+}
+
+// The mark on the pixel grid at `size` px: the largest step (bar + gap, in whole pixels, the bar
+// two thirds of it) whose mark leaves a pixel free, the top edge on a whole pixel. Every flat
+// edge is then on a whole pixel too; the edges at 60° can't be, whatever the drawing.
+function logoPixelFit(part, size) {
+  for (let step = Math.max(2, Math.floor(size / 3)); ; step -= 1) {
+    const bar = Math.round(step * 2 / 3);
+    const polygons = markPolygons(part, bar, step - bar);
+    const bounds = polygonBounds(polygons);
+    if (step === 2 || (bounds.width <= size - 1 && bounds.height <= size - 1)) {
+      const box = [(bounds.left + bounds.right - size) / 2, bounds.top - Math.round((size - bounds.height) / 2), size, size];
+      return { polygons, box, bar, gap: step - bar };
+    }
+  }
+}
+
+// The mark as an SVG of `size` pixels: the outer ring (class logo-frame) and the P (logo-p), each
+// in its own ink (css/logo.css), or in the colours of `inks` ({ frame, p }) when it leaves the page
+// (the favicon, the canvases of the zoom). The box is square, the mark centred in it.
+function logoMark(weight, size, inks) {
+  let polygons, box;
+  if (weight.pixel) ({ polygons, box } = logoPixelFit(weight.part, size));
+  else {
+    polygons = markPolygons(weight.part, weight.bar, weight.gap);
+    const bounds = polygonBounds(polygons);
+    const side = Math.max(bounds.width, bounds.height);
+    box = [(bounds.left + bounds.right - side) / 2, (bounds.top + bounds.bottom - side) / 2, side, side];
+  }
   const path = polygon => "M" + polygon.map(([x, y]) => `${x.toFixed(2)} ${y.toFixed(2)}`).join("L") + "Z";
-  return `<svg class="logo-mark" width="${size}" height="${size}" viewBox="${box}" aria-hidden="true">
-    <path class="logo-frame" d="${polygons.slice(0, 3).map(path).join("")}"/><path class="logo-p" d="${path(polygons[3])}"/></svg>`;
+  const paint = (kind, ink) => inks ? `fill="${ink}"` : `class="logo-${kind}"`;
+  const frame = polygons.length > 1 ? `<path ${paint("frame", inks?.frame)} d="${polygons.slice(0, 3).map(path).join("")}"/>` : "";
+  return `<svg class="logo-mark" xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}" viewBox="${box.map(n => n.toFixed(2)).join(" ")}" aria-hidden="true">
+    ${frame}<path ${paint("p", inks?.p)} d="${path(polygons.at(-1))}"/></svg>`;
+}
+
+// The mark on a square of the accent, in the ink that goes on it; the square keeps a margin of
+// whole pixels, so that a mark on the pixel grid stays on it.
+const logoSquare = (weight, size) =>
+  `<span class="logo-square" style="width:${size}px;height:${size}px">${logoMark(weight, size - 2 * Math.round(size * .11))}</span>`;
+
+// The inks of the list « Mark » as colours, for a mark that leaves the page.
+function logoInks(ink, text, accent) {
+  return { text: { frame: text, p: text }, accent: { frame: accent, p: accent },
+    "p-accent": { frame: text, p: accent }, "frame-accent": { frame: accent, p: text } }[ink];
 }
