@@ -1,0 +1,464 @@
+/* Styles 16 to 27: twelve mixes of the three the owner kept on 2026-11-17 (4 · Slate, 14 · Glass,
+   15 · Aurora), at three temperatures, dark and light. Tokens only, as in tokens.css. */
+
+/* ———— Four sober: close to their sources. ———— */
+
+/* 16 · Graphite (Slate × Glass, dark): the borderless bands of Slate, the rounded corners and the
+   teal edge of Glass, a teal accent. */
+:root[data-theme="graphite"] {
+  --font-text: "Manrope", sans-serif;
+  --font-title: "Manrope", sans-serif;
+  --font-number: "JetBrains Mono", monospace;
+  --text-weight: 500;
+  --title-weight: 800;
+  --page: #14171a;
+  --page-image: radial-gradient(ellipse at 100% 0%, #14b8a61f 0%, transparent 40%);
+  --bar: #0e1013; --on-bar: #e6eaee;
+  --band: #0e1013; --band-image: linear-gradient(90deg, #0e1013 50%, #10201f); --on-band: #e6eaee; --on-band-weak: #84909c;
+  --side: #111417;
+  --panel: #14171ae8;
+  --tab: #1b2025; --on-tab: #84909c;
+  --control: #1b2025; --control-line: #1b2025;
+  --fill: #1b2025; --fill-strong: #e6eaee; --on-fill-strong: #0e1013;
+  --divider: #0e1013; --line-weak: #262d34;
+  --radius: 10px;
+  --window-shadow: 0 0 0 1px #262d34, 0 20px 50px #000b;
+  --text: #e6eaee; --weak: #84909c;
+  --accent: #2dd4bf; --accent-soft: #e6eaee; --on-accent: #0e1013;
+  --new-fill: #2dd4bf0d;
+  --track: #262d34; --track-width: 3px; --marker: #46515c;
+  --slot-line: #262d34; --slot-fill: #1f2a2c; --slot-radius: 10px;
+  --gem-str: #f0614f; --gem-dex: #3ecf8e; --gem-int: #4c9df5; --gem-none: #84909c;
+  --gem-size: 10px; --gem-radius: 3px; --gem-line: none;
+  --tree-background: transparent;
+  --tree-edge: #1f252b; --tree-edge-taken: #e6eaee;
+  --tree-node: #14171a; --tree-node-line: #34404a;
+  --tree-taken: #e6eaee; --tree-later: #5e6a75;
+  --tree-shape-notable: hex; --tree-shape-keystone: hex;
+}
+
+/* 17 · Paper (Slate, light): Slate turned to day, light grey bands without borders, black for the
+   main action, its vivid orange. */
+:root[data-theme="paper"] {
+  --font-text: "Manrope", sans-serif;
+  --font-title: "Manrope", sans-serif;
+  --font-number: "JetBrains Mono", monospace;
+  --text-weight: 500;
+  --title-weight: 800;
+  --page: #f6f7f9;
+  --bar: #e9ecf0; --on-bar: #14181d;
+  --band: #ffffff; --on-band: #14181d; --on-band-weak: #6b7684;
+  --side: #eef1f4;
+  --panel: #ffffffee;
+  --tab: #e1e5ea; --on-tab: #5b6672;
+  --control: #ffffff; --control-line: #dfe3e8;
+  --fill: #e9ecf0; --fill-strong: #14181d; --on-fill-strong: #ffffff;
+  --divider: #e1e5ea; --line-weak: #e1e5ea;
+  --radius: 6px;
+  --window-shadow: 0 0 0 1px #e1e5ea, 0 20px 50px #14181d26;
+  --text: #14181d; --weak: #6b7684;
+  --accent: #ff6a00; --accent-soft: #14181d; --on-accent: #ffffff;
+  --new-fill: #ff6a000d;
+  --track: #d3d9df; --track-width: 3px; --marker: #9aa4ae;
+  --slot-line: #d3d9df; --slot-fill: #eef1f4; --slot-radius: 6px;
+  --gem-str: #e5484d; --gem-dex: #30a46c; --gem-int: #0091ff; --gem-none: #9aa4ae;
+  --gem-size: 10px; --gem-radius: 3px; --gem-line: none;
+  --tree-background: transparent;
+  --tree-edge: #e4e8ec; --tree-edge-taken: #14181d;
+  --tree-node: #ffffff; --tree-node-line: #c3cbd3;
+  --tree-taken: #14181d; --tree-later: #9aa4ae;
+}
+
+/* 18 · Frost (Aurora × Slate, light): the cool light of Aurora at the density of Slate, flat white
+   boxes, one blue (Geist, Geist Mono). */
+:root[data-theme="frost"] {
+  --font-text: "Geist", sans-serif;
+  --font-title: "Geist", sans-serif;
+  --font-number: "Geist Mono", monospace;
+  --title-weight: 600;
+  --title-spacing: -.02em;
+  --page: #eef2f8;
+  --page-image: radial-gradient(ellipse 80% 40% at 0% 0%, #dbe7ff 0%, transparent 70%);
+  --bar: #e2e9f4; --on-bar: #0f1b33;
+  --band: #f8fbff; --on-band: #0f1b33; --on-band-weak: #5c6c88;
+  --panel: #ffffffd9;
+  --tab: #dde6f3; --on-tab: #4a5a78;
+  --control: #ffffff; --control-line: #d5deec;
+  --control-shadow: 0 1px 2px #0f1b3314;
+  --fill: #e5ecf7; --fill-strong: #2563eb; --on-fill-strong: #ffffff;
+  --divider: #d5deec; --line-weak: #d5deec;
+  --radius: 8px;
+  --window-shadow: 0 24px 60px #0f1b332e;
+  --portrait-ring: 0 0 0 1px #d5deec;
+  --text: #0f1b33; --weak: #5c6c88;
+  --accent: #2563eb; --accent-soft: #2563eb; --on-accent: #ffffff;
+  --new-fill: #2563eb0d;
+  --track: #c1cfe6; --track-width: 2px; --marker: #8fa2c4;
+  --slot-line: #cfdaeb; --slot-fill: #e5ecf7; --slot-radius: 8px;
+  --gem-str: #e5484d; --gem-dex: #12a594; --gem-int: #2563eb; --gem-none: #8fa2c4;
+  --gem-size: 9px; --gem-radius: 2px; --gem-line: none;
+  --tree-background: transparent;
+  --tree-edge: #dce4f0; --tree-edge-taken: #2563eb; --tree-edge-width: 1.8;
+  --tree-node: #ffffff; --tree-node-line: #b4c3db;
+  --tree-taken: #0f1b33; --tree-later: #9fb2d1;
+  --tree-shape-keystone: diamond;
+}
+
+/* 19 · Midnight (Aurora, dark): the whole window under the night sky of Aurora, stars, a blue glow
+   from the top, white passives that glow. */
+:root[data-theme="midnight"] {
+  --font-text: "Instrument Sans", sans-serif;
+  --font-title: "Instrument Sans", sans-serif;
+  --font-number: "Instrument Sans", sans-serif;
+  --title-weight: 500;
+  --title-spacing: -.02em;
+  --title-size: 24px;
+  --level-weight: 500;
+  --page: #060b1f;
+  --page-image: radial-gradient(ellipse 90% 45% at 50% -8%, #1d4ed855 0%, transparent 70%), radial-gradient(circle at 12% 18%, #ffffff55 0 1px, transparent 1.6px), radial-gradient(circle at 83% 9%, #ffffff44 0 1px, transparent 1.6px), radial-gradient(circle at 64% 31%, #ffffff33 0 1px, transparent 1.6px), radial-gradient(circle at 38% 62%, #ffffff33 0 1px, transparent 1.6px);
+  --bar: #040817;
+  --bar-image: radial-gradient(circle at 16% 30%, #ffffffaa 0 1px, transparent 1.6px), radial-gradient(circle at 71% 22%, #ffffff99 0 1px, transparent 1.6px), radial-gradient(circle at 93% 64%, #ffffff66 0 1px, transparent 1.6px);
+  --on-bar: #ffffff;
+  --band: #08102e; --band-image: radial-gradient(ellipse 60% 200% at 50% 160%, #2f7bff88 0%, transparent 70%); --on-band: #eaf1ff; --on-band-weak: #8ea3cf;
+  --panel: #0a1230d9;
+  --tab: #0e1838; --on-tab: #8ea3cf;
+  --control: #0e1838; --control-line: #1f2f5e;
+  --fill: #12204a; --fill-strong: #ffffff; --on-fill-strong: #060b1f;
+  --divider: #142152; --line-weak: #142152;
+  --radius: 12px;
+  --window-shadow: 0 0 0 1px #142152, 0 30px 70px #000c;
+  --portrait-ring: 0 0 0 2px #2f7bff, 0 0 14px #2f7bff88;
+  --text: #eaf1ff; --weak: #8ea3cf;
+  --accent: #5aa2ff; --accent-soft: #eaf1ff; --on-accent: #060b1f;
+  --accent-glow: 0 0 16px #5aa2ffaa;
+  --new-fill: #5aa2ff12;
+  --track: #23366e; --track-width: 2px; --marker: #3d5592;
+  --slot-line: #1f2f5e; --slot-fill: #12204a; --slot-radius: 10px;
+  --gem-str: #ff6b8a; --gem-dex: #3ee0a8; --gem-int: #5aa2ff; --gem-none: #8ea3cf;
+  --gem-size: 10px; --gem-line: none; --gem-glow: 0 0 8px currentColor;
+  --tree-background: transparent;
+  --tree-edge: #111c44; --tree-edge-taken: #a8c8ff; --tree-edge-width: 1.8;
+  --tree-node: #070d24; --tree-node-line: #23366e;
+  --tree-taken: #ffffff; --tree-later: #4f67a3;
+  --tree-glow: 9; --tree-glow-colour: #5aa2ff;
+}
+
+/* ———— Four bold: a higher temperature. ———— */
+
+/* 20 · Lagoon (Glass, light): the glass dashboard by day, mint and teal, a dark teal app bar,
+   white cards with large corners, a gold accent. */
+:root[data-theme="lagoon"] {
+  --font-text: "Inter", sans-serif;
+  --font-title: "Archivo", sans-serif;
+  --font-number: "Archivo", sans-serif;
+  --title-weight: 800;
+  --title-transform: uppercase;
+  --title-size: 22px;
+  --brand-size: 14px;
+  --level-weight: 700;
+  --page: #eef6f5;
+  --page-image: radial-gradient(ellipse at 100% 0%, #5eead455 0%, transparent 45%), radial-gradient(ellipse at 0% 100%, #a7f3d055 0%, transparent 50%);
+  --bar: #0f2e2e; --on-bar: #e9fbf8;
+  --band: #d8efec; --band-image: linear-gradient(90deg, #ccebe6, #e7f6f3 60%, #fff3d1); --on-band: #0b2626; --on-band-weak: #4c6b69;
+  --panel: #ffffffd9;
+  --tab: #d6ebe8; --on-tab: #355654;
+  --control: #ffffff; --control-line: #c4dfdb;
+  --fill: #e2f1ef; --fill-strong: #0f2e2e; --on-fill-strong: #f5c443;
+  --divider: #cfe5e2; --line-weak: #cfe5e2;
+  --radius: 16px;
+  --window-shadow: 0 24px 60px #0f2e2e33;
+  --portrait-ring: 0 0 0 2px #ffffff;
+  --text: #0b2626; --weak: #557371;
+  --accent: #d18f00; --accent-soft: #0f766e; --on-accent: #0b2626;
+  --new-fill: #f5c44322;
+  --track: #b9d8d4; --track-width: 4px; --marker: #7fa9a4;
+  --slot-line: #b9d8d4; --slot-fill: #dff1ee; --slot-radius: 14px;
+  --gem-str: #ef4a2f; --gem-dex: #10b981; --gem-int: #2f86eb; --gem-none: #7fa9a4;
+  --gem-size: 12px; --gem-radius: 0; --gem-line: none;
+  --gem-clip: polygon(50% 0, 100% 25%, 100% 75%, 50% 100%, 0 75%, 0 25%);
+  --tree-background: transparent;
+  --tree-edge: #d4e7e4; --tree-edge-taken: #0f766e; --tree-edge-width: 2.2;
+  --tree-node: #ffffff; --tree-node-line: #a9cbc6;
+  --tree-taken: #0f2e2e; --tree-later: #8fbab4;
+  --tree-shape-notable: hex; --tree-shape-keystone: hex;
+}
+
+/* 21 · Dusk (Aurora at sunset, light): the app bar from violet to coral, a warm light page, serif
+   titles and figures (Instrument Serif), a coral accent. */
+:root[data-theme="dusk"] {
+  --font-text: "Instrument Sans", sans-serif;
+  --font-title: "Instrument Serif", serif;
+  --font-number: "Instrument Serif", serif;
+  --title-size: 28px;
+  --brand-size: 21px;
+  --page: #fbf4ef;
+  --page-image: radial-gradient(ellipse 120% 50% at 50% -10%, #ffd9c7 0%, transparent 70%);
+  --bar: #2a1340; --bar-image: linear-gradient(90deg, #2a1340, #6b2a5e 55%, #e0603f); --on-bar: #fff3ec;
+  --band: #ffe3d3; --band-image: linear-gradient(180deg, #f6a77f 0%, #ffd2bd 45%, #fbf4ef 100%); --on-band: #2a1340; --on-band-weak: #7a4a62;
+  --panel: #ffffffcc;
+  --tab: #f7dccd; --on-tab: #6b3a55;
+  --control: #ffffff; --control-line: #efd3c4;
+  --control-shadow: 0 1px 3px #2a134014;
+  --fill: #fbe6da; --fill-strong: #2a1340; --on-fill-strong: #ffffff;
+  --divider: #efd9cc; --line-weak: #efd9cc;
+  --radius: 14px;
+  --window-shadow: 0 30px 60px #2a134040;
+  --portrait-ring: 0 0 0 2px #ffffff, 0 0 0 3px #e0603f66;
+  --text: #2a1340; --weak: #8a6276;
+  --accent: #e0603f; --accent-soft: #e0603f; --on-accent: #ffffff;
+  --accent-glow: 0 0 14px #e0603f55;
+  --new-fill: #e0603f0d;
+  --track: #e6a88e; --track-width: 2px; --marker: #c4826c;
+  --slot-line: #efcfbf; --slot-fill: #fde7dc; --slot-radius: 12px;
+  --gem-str: #e0603f; --gem-dex: #3a9d6e; --gem-int: #5a5fd6; --gem-none: #b89aa8;
+  --gem-size: 10px; --gem-line: none;
+  --tree-background: transparent;
+  --tree-edge: #f1ddd2; --tree-edge-taken: #e0603f; --tree-edge-width: 2;
+  --tree-node: #fffaf6; --tree-node-line: #e2c3b3;
+  --tree-taken: #2a1340; --tree-later: #d7a993;
+  --tree-glow: 4; --tree-glow-colour: #e0603f55;
+}
+
+/* 22 · Ink (Slate in black and white, dark): pure black, white for everything taken, one electric
+   blue, square passives, tight capitals (Inter Tight). */
+:root[data-theme="ink"] {
+  --font-text: "Inter Tight", sans-serif;
+  --font-title: "Inter Tight", sans-serif;
+  --font-number: "JetBrains Mono", monospace;
+  --text-weight: 500;
+  --title-weight: 800;
+  --title-spacing: -.03em;
+  --title-size: 24px;
+  --level-weight: 800;
+  --page: #000000;
+  --bar: #000000; --on-bar: #ffffff;
+  --band: #0a0a0a; --on-band: #ffffff; --on-band-weak: #8a8a8a;
+  --panel: #000000e6;
+  --tab: #111111; --on-tab: #8a8a8a;
+  --control: #000000; --control-line: #333333;
+  --fill: #161616; --fill-strong: #ffffff; --on-fill-strong: #000000;
+  --divider: #222222; --line-weak: #222222;
+  --radius: 2px;
+  --window-shadow: 0 0 0 1px #2a2a2a, 0 20px 50px #000000;
+  --portrait-radius: 2px;
+  --portrait-ring: 0 0 0 1px #ffffff;
+  --text: #ffffff; --weak: #8a8a8a;
+  --accent: #3d5afe; --accent-soft: #ffffff; --on-accent: #ffffff;
+  --new-fill: #3d5afe14;
+  --track: #333333; --marker: #555555;
+  --cursor-radius: 0;
+  --slot-line: #333333; --slot-fill: #1a1a1a;
+  --gem-str: #ff5c5c; --gem-dex: #52d68a; --gem-int: #5c8dff; --gem-none: #8a8a8a;
+  --gem-size: 9px; --gem-radius: 0; --gem-line: none;
+  --tree-background: #000000;
+  --tree-edge: #1a1a1a; --tree-edge-taken: #ffffff; --tree-edge-width: 1.5;
+  --tree-node: #000000; --tree-node-line: #3a3a3a;
+  --tree-taken: #ffffff; --tree-later: #666666;
+  --tree-shape-small: square; --tree-shape-notable: square; --tree-shape-keystone: diamond;
+}
+
+/* 23 · Ice (Glass × Aurora, dark): frosted glass over coloured lights, the bands and the boxes
+   translucent, a cyan accent that glows (Sora). */
+:root[data-theme="ice"] {
+  --font-text: "Sora", sans-serif;
+  --font-title: "Sora", sans-serif;
+  --font-number: "Sora", sans-serif;
+  --title-weight: 600;
+  --title-spacing: -.01em;
+  --title-size: 21px;
+  --brand-size: 16px;
+  --level-weight: 600;
+  --page: #0b1220;
+  --page-image: radial-gradient(circle at 15% 20%, #2563eb40 0%, transparent 35%), radial-gradient(circle at 85% 75%, #14b8a640 0%, transparent 40%), radial-gradient(circle at 70% 10%, #a855f71f 0%, transparent 30%);
+  --bar: #ffffff0a; --on-bar: #eef4ff;
+  --band: #ffffff0d; --on-band: #eef4ff; --on-band-weak: #93a4c3;
+  --side: #ffffff06;
+  --panel: #0f1a2ecc;
+  --tab: #ffffff0d; --on-tab: #93a4c3;
+  --control: #ffffff12; --control-line: #ffffff26;
+  --fill: #ffffff12; --fill-strong: #e6f7ff; --on-fill-strong: #0b1220;
+  --divider: #ffffff1a; --line-weak: #ffffff1a;
+  --radius: 14px;
+  --window-shadow: 0 0 0 1px #ffffff1f, 0 30px 70px #000c;
+  --portrait-ring: 0 0 0 2px #ffffff40;
+  --text: #eef4ff; --weak: #93a4c3;
+  --accent: #67e8f9; --accent-soft: #67e8f9; --on-accent: #0b1220;
+  --accent-glow: 0 0 16px #67e8f988;
+  --new-fill: #67e8f90f;
+  --track: #ffffff26; --track-width: 3px; --marker: #ffffff40;
+  --slot-line: #ffffff26; --slot-fill: #ffffff12; --slot-radius: 12px;
+  --gem-str: #fb7185; --gem-dex: #5eead4; --gem-int: #93c5fd; --gem-none: #93a4c3;
+  --gem-size: 11px; --gem-line: none; --gem-glow: 0 0 8px currentColor;
+  --tree-background: transparent;
+  --tree-edge: #ffffff10; --tree-edge-taken: #cdeffd; --tree-edge-width: 2;
+  --tree-node: #0b1220; --tree-node-line: #ffffff2a;
+  --tree-taken: #e6f7ff; --tree-later: #5d7396;
+  --tree-glow: 10; --tree-glow-colour: #67e8f9aa;
+  --tree-shape-notable: hex;
+}
+
+/* ———— Four wild: an explosive temperature. ———— */
+
+/* 24 · Acid (Slate on acid, dark): an acid yellow app bar, everything in monospaced capitals, a
+   faint grid, the tree in acid that glows. */
+:root[data-theme="acid"] {
+  --font-text: "JetBrains Mono", monospace;
+  --font-title: "JetBrains Mono", monospace;
+  --font-number: "JetBrains Mono", monospace;
+  --title-weight: 800;
+  --title-transform: uppercase;
+  --title-spacing: .02em;
+  --title-size: 19px;
+  --brand-size: 14px;
+  --level-weight: 800;
+  --page: #0a0a0a;
+  --page-image: linear-gradient(#d4ff000a 1px, transparent 1px), linear-gradient(90deg, #d4ff000a 1px, transparent 1px);
+  --page-image-size: 24px 24px;
+  --bar: #d4ff00; --on-bar: #0a0a0a;
+  --band: #121212; --on-band: #f2f2f2; --on-band-weak: #7a7a7a;
+  --panel: #0a0a0ae6;
+  --tab: #1a1a1a; --on-tab: #b5d900;
+  --control: #0a0a0a; --control-line: #333333;
+  --fill: #1a1a1a; --fill-strong: #d4ff00; --on-fill-strong: #0a0a0a;
+  --divider: #2a2a2a; --line-weak: #2a2a2a;
+  --radius: 0;
+  --window-shadow: 0 0 0 1px #d4ff00, 0 20px 60px #000000;
+  --portrait-radius: 0;
+  --portrait-ring: 0 0 0 2px #0a0a0a;
+  --text: #f2f2f2; --weak: #7a7a7a;
+  --accent: #d4ff00; --accent-soft: #d4ff00; --on-accent: #0a0a0a;
+  --accent-glow: 0 0 18px #d4ff0066;
+  --new-fill: #d4ff000d;
+  --track: #d4ff00; --marker: #d4ff0099;
+  --cursor-radius: 0;
+  --slot-line: #333333; --slot-fill: #1d2400;
+  --gem-str: #ff3b3b; --gem-dex: #2bff88; --gem-int: #3bb0ff; --gem-none: #7a7a7a;
+  --gem-size: 10px; --gem-radius: 0; --gem-line: none;
+  --tree-background: transparent;
+  --tree-edge: #1a1a1a; --tree-edge-taken: #d4ff00; --tree-edge-width: 2;
+  --tree-node: #0a0a0a; --tree-node-line: #333333;
+  --tree-taken: #d4ff00; --tree-later: #5a6b00;
+  --tree-glow: 8; --tree-glow-colour: #d4ff00;
+  --tree-shape-small: square; --tree-shape-notable: square; --tree-shape-keystone: diamond;
+}
+
+/* 25 · Candy (Aurora in pastel, light): a mesh of pink, lilac and mint, the bands translucent,
+   very round, wide titles (Unbounded), a hot pink accent and a thick track. */
+:root[data-theme="candy"] {
+  --font-text: "Instrument Sans", sans-serif;
+  --font-title: "Unbounded", sans-serif;
+  --font-number: "Unbounded", sans-serif;
+  --text-weight: 500;
+  --title-weight: 600;
+  --title-size: 19px;
+  --brand-size: 13px;
+  --level-weight: 600;
+  --page: #fdf6ff;
+  --page-image: radial-gradient(circle at 0% 0%, #ffc8e8 0%, transparent 40%), radial-gradient(circle at 100% 20%, #c8d8ff 0%, transparent 45%), radial-gradient(circle at 60% 100%, #d4fff0 0%, transparent 45%);
+  --bar: #ffffff66; --on-bar: #3b1a5a;
+  --band: #ffffff8c; --on-band: #3b1a5a; --on-band-weak: #8a6aa8;
+  --panel: #ffffffcc;
+  --tab: #ffffff99; --on-tab: #7a5a98;
+  --control: #ffffff; --control-line: #ecd6fb;
+  --control-shadow: 0 2px 0 #ecd6fb;
+  --fill: #f6e8ff; --fill-strong: #ff4fa3; --on-fill-strong: #ffffff;
+  --divider: #f0dcfb; --line-weak: #f0dcfb;
+  --radius: 20px;
+  --window-shadow: 0 30px 60px #b05ad833;
+  --portrait-ring: 0 0 0 3px #ffffff, 0 0 0 5px #ff4fa366;
+  --text: #3b1a5a; --weak: #8a6aa8;
+  --accent: #ff4fa3; --accent-soft: #7b61ff; --on-accent: #ffffff;
+  --accent-glow: 0 6px 18px #ff4fa366;
+  --new-fill: #ff4fa30f;
+  --track: #e4c8f7; --track-width: 5px; --marker: #c8a2e6;
+  --slot-line: #ecd6fb; --slot-fill: #fbefff; --slot-radius: 16px;
+  --gem-str: #ff5c8a; --gem-dex: #2fd4a3; --gem-int: #7b61ff; --gem-none: #c8a2e6;
+  --gem-size: 12px; --gem-line: 2px solid #ffffff;
+  --tree-background: transparent;
+  --tree-edge: #efdffa; --tree-edge-taken: #7b61ff; --tree-edge-width: 3;
+  --tree-node: #ffffff; --tree-node-line: #dcc0f2;
+  --tree-taken: #7b61ff; --tree-later: #e7a9d3;
+  --tree-glow: 6; --tree-glow-colour: #7b61ff66;
+  --tree-shape-keystone: star;
+}
+
+/* 26 · Signal (Slate's orange as a surface, light): an orange app bar, a black level band, a warm
+   paper page, thick black lines and square shapes, bold capitals (Archivo). */
+:root[data-theme="signal"] {
+  --font-text: "Inter", sans-serif;
+  --font-title: "Archivo", sans-serif;
+  --font-number: "JetBrains Mono", monospace;
+  --text-weight: 500;
+  --title-weight: 800;
+  --title-transform: uppercase;
+  --title-spacing: -.01em;
+  --title-size: 22px;
+  --brand-size: 14px;
+  --level-weight: 800;
+  --page: #f4efe6;
+  --bar: #ff5a00; --on-bar: #140a00;
+  --band: #140a00; --on-band: #f4efe6; --on-band-weak: #b39a80;
+  --panel: #f4efe6ee;
+  --tab: #ff7a33; --on-tab: #140a00;
+  --control: #f4efe6; --control-line: #140a00;
+  --fill: #e8dfd0; --fill-strong: #140a00; --on-fill-strong: #ff5a00;
+  --divider: #140a00; --line-weak: #d8ccb8;
+  --border-width: 2px;
+  --radius: 0;
+  --window-shadow: 0 20px 50px #140a0040;
+  --portrait-radius: 0;
+  --portrait-ring: 0 0 0 2px #140a00;
+  --text: #140a00; --weak: #7a6650;
+  --accent: #ff5a00; --accent-soft: #140a00; --on-accent: #140a00;
+  --new-fill: #ff5a0012;
+  --track: #f4efe6; --track-width: 2px; --marker: #b39a80;
+  --cursor-radius: 0;
+  --slot-line: #140a00; --slot-fill: #ffd9c2;
+  --gem-str: #e5281f; --gem-dex: #1f9d55; --gem-int: #1f5fe5; --gem-none: #a08a70;
+  --gem-size: 11px; --gem-radius: 0; --gem-line: 2px solid #140a00;
+  --tree-background: transparent;
+  --tree-edge: #e2d8c8; --tree-edge-taken: #ff5a00; --tree-edge-width: 3;
+  --tree-node: #f4efe6; --tree-node-line: #b8a88f;
+  --tree-taken: #140a00; --tree-later: #c9b59a;
+  --tree-shape-small: square; --tree-shape-notable: square; --tree-shape-keystone: square;
+}
+
+/* 27 · Prism (Glass in iridescence, dark): dark glass lit by a band of colours, pink, violet,
+   cyan and gold, a magenta accent that glows (Sora, Inter, Geist Mono). */
+:root[data-theme="prism"] {
+  --font-text: "Inter", sans-serif;
+  --font-title: "Sora", sans-serif;
+  --font-number: "Geist Mono", monospace;
+  --title-weight: 700;
+  --title-spacing: -.01em;
+  --title-size: 22px;
+  --brand-size: 16px;
+  --level-weight: 500;
+  --page: #0d0d12;
+  --page-image: radial-gradient(ellipse at 100% 0%, #ff5ec433 0%, transparent 35%), radial-gradient(ellipse at 0% 100%, #4cc9f033 0%, transparent 40%);
+  --bar: #0d0d12; --bar-image: linear-gradient(90deg, #ff5ec455, #7b61ff55 35%, #4cc9f055 70%, #f5c44355); --on-bar: #ffffff;
+  --band: #121218; --band-image: linear-gradient(90deg, #f5c4431a, #4cc9f01a 50%, #ff5ec41a); --on-band: #ffffff; --on-band-weak: #9a9aae;
+  --panel: #121218e6;
+  --tab: #1a1a22; --on-tab: #9a9aae;
+  --control: #1a1a22; --control-line: #2c2c38;
+  --fill: #1f1f29; --fill-strong: #ffffff; --on-fill-strong: #0d0d12;
+  --divider: #22222c; --line-weak: #2c2c38;
+  --radius: 16px;
+  --window-shadow: 0 0 0 1px #ff5ec466, 0 0 40px #7b61ff33, 0 0 80px #4cc9f022, 0 24px 60px #000c;
+  --portrait-ring: 0 0 0 2px #ff5ec4, 0 0 14px #7b61ff88;
+  --text: #f4f4f8; --weak: #9a9aae;
+  --accent: #ff5ec4; --accent-soft: #4cc9f0; --on-accent: #0d0d12;
+  --accent-glow: 0 0 14px #ff5ec4aa, 0 0 28px #7b61ff66;
+  --new-fill: #ff5ec40d;
+  --track: #3a3a4a; --track-width: 3px; --marker: #5a5a6e;
+  --slot-line: #2c2c38; --slot-fill: #1f1f29; --slot-radius: 14px;
+  --gem-str: #ff5e7a; --gem-dex: #4cf0b0; --gem-int: #4cc9f0; --gem-none: #9a9aae;
+  --gem-size: 12px; --gem-radius: 0; --gem-line: none; --gem-glow: 0 0 8px currentColor;
+  --gem-clip: polygon(50% 0, 100% 25%, 100% 75%, 50% 100%, 0 75%, 0 25%);
+  --tree-background: transparent;
+  --tree-edge: #1c1c26; --tree-edge-taken: #4cc9f0; --tree-edge-width: 2;
+  --tree-node: #0d0d12; --tree-node-line: #2c2c38;
+  --tree-taken: #ffffff; --tree-later: #5a5a7a;
+  --tree-glow: 12; --tree-glow-colour: #7b61ff;
+  --tree-shape-notable: hex; --tree-shape-keystone: star;
+}
