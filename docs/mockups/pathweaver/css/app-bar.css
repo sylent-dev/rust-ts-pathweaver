@@ -1,7 +1,11 @@
-/* The band of the site: 44 px, the brand, then on the right the report of a bug, a square the
-   full height of the band. */
+/* The band of the site: 44 px, the brand, then on the right the report of a bug, the full height
+   of the band. */
 .app-site { display: flex; align-items: center; height: 44px; padding-left: 14px; background: var(--bar-image), var(--bar); color: var(--on-bar); border-bottom: var(--border-width) solid var(--divider); }
-.app-site-bug { display: grid; place-items: center; width: 44px; height: 100%; margin-left: auto; color: inherit; opacity: .75; }
+.app-site-bug { display: flex; align-items: center; justify-content: center; gap: 7px; min-width: 44px; height: 100%; box-sizing: border-box; margin-left: auto; padding: 0 16px; color: inherit; opacity: .75; text-decoration: none;
+  font-family: var(--report-font); font-weight: var(--report-weight); font-size: var(--report-size); }
+/* The list « Report a bug »: the words alone, the icon and the words, or the icon alone. */
+:root[data-bug-label="text"] .app-site-bug .app-icon, :root[data-bug-label="icon"] .app-site-bug > span { display: none; }
+:root[data-bug-label="icon"] .app-site-bug { padding: 0; }
 .app-site-bug:hover { opacity: 1; background: color-mix(in srgb, var(--on-bar) 9%, transparent); }
 
 /* The band of the open builds: 44 px, their tabs of 168 px, up to 240 when they all fit. */

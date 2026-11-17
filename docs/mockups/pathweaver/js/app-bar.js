@@ -3,11 +3,12 @@
 // come there); then the band of the open builds, their tabs (as many as fit, the others in a
 // « +N ▾ » menu, which also holds Merge…) and + to open files.
 
-// Report a bug: a new issue on GitHub, an icon alone the full height of the band.
+// Report a bug: a new issue on GitHub, the full height of the band; in words, in Manrope (the
+// owner, 2026-11-17: the band of the site has room in version 1), with or without the icon.
 const REPORT_BUG_URL = "https://github.com/sylent-dev/rust-ts-pathweaver/issues/new";
 const siteBand = () => `<div class="app-site">
     <span class="app-site-brand">${logoMark(24)}<span class="logo-name">Pathweaver</span></span>
-    <a class="app-site-bug" href="${REPORT_BUG_URL}" target="_blank" rel="noopener" title="Report a bug" aria-label="Report a bug">${icon(18, ICONS.bug)}</a>
+    <a class="app-site-bug" href="${REPORT_BUG_URL}" target="_blank" rel="noopener" title="Report a bug">${icon(16, ICONS.bug)}<span>Report a bug</span></a>
   </div>`;
 
 const portrait = (key, size) => `<img class="app-portrait" src="pathweaver/img/portraits/${key}.webp" width="${size}" height="${size}" alt="">`;
