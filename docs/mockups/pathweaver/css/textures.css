@@ -1,13 +1,14 @@
-/* The textures behind the blocks, an open decision (2026-11-17): two layers, each a pattern with
-   its colour, its size and its opacity, the second shifted, turned and set drifting against the
-   first, both faded towards a side; and the blocks they go behind. The controls of the page set
-   the data attributes and the variables used here (VARIANTS in page.js), and js/textures.js maps
-   each pattern to its layer. A pattern is a mask: its lines take the colour of their layer. */
+/* The texture behind the blocks (2026-11-17): one layer, a pattern with its colour, its size and
+   its opacity, and the blocks it goes behind; the owner chose graph paper in pale blue, 24 px at
+   23 %, behind every block but the tree, already dense. The controls of the page set the data
+   attributes and the variables used here (VARIANTS in page.js), and js/textures.js maps each
+   pattern to the layer. A pattern is a mask: its lines take the colour of the layer. A second
+   layer, shifted, turned, drifting and faded, was tried and set aside (docs/backlog.md). */
 
 :root {
   /* Each pattern: an image whose opaque pixels draw, the height of its tile for a width of 1
      (--ratio-, 1 when not set), and the width of its tile in sizes (--scale-, 1 when not set).
-     One image each: the layer adds the fade as a second mask, kept where both are opaque.
+     One image each, so that a mask stays one layer.
      No line runs along the edge of a tile whose height isn't whole pixels: it would show twice. */
   --pattern-none: none; --ratio-none: 1;
   --pattern-grid: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10 10' preserveAspectRatio='none'%3E%3Cpath d='M0 0H10M0 10H10M0 0V10M10 0V10' fill='none' stroke='black' vector-effect='non-scaling-stroke'/%3E%3C/svg%3E");
@@ -33,76 +34,33 @@
   --pattern-stars: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200' preserveAspectRatio='none'%3E%3Ccircle cx='66' cy='33' r='0.8'/%3E%3Ccircle cx='18' cy='107' r='1'/%3E%3Ccircle cx='116' cy='179' r='0.8'/%3E%3Ccircle cx='11' cy='87' r='0.8'/%3E%3Ccircle cx='50' cy='110' r='0.8'/%3E%3Ccircle cx='163' cy='28' r='0.8'/%3E%3Ccircle cx='125' cy='116' r='0.8'/%3E%3Ccircle cx='115' cy='80' r='0.8'/%3E%3Ccircle cx='13' cy='169' r='1'/%3E%3Ccircle cx='84' cy='108' r='1.8'/%3E%3Ccircle cx='63' cy='161' r='0.8'/%3E%3Ccircle cx='24' cy='114' r='0.8'/%3E%3Ccircle cx='76' cy='109' r='0.8'/%3E%3Ccircle cx='112' cy='123' r='1.2'/%3E%3Ccircle cx='135' cy='86' r='1'/%3E%3Ccircle cx='93' cy='181' r='1'/%3E%3Ccircle cx='62' cy='157' r='0.8'/%3E%3Ccircle cx='20' cy='62' r='1.2'/%3E%3Ccircle cx='172' cy='144' r='1'/%3E%3Ccircle cx='121' cy='18' r='1.8'/%3E%3Ccircle cx='84' cy='149' r='0.8'/%3E%3Ccircle cx='183' cy='85' r='0.8'/%3E%3Ccircle cx='151' cy='114' r='1'/%3E%3Ccircle cx='69' cy='71' r='1.2'/%3E%3Ccircle cx='115' cy='92' r='0.8'/%3E%3Ccircle cx='185' cy='95' r='0.8'/%3E%3Ccircle cx='16' cy='139' r='1.8'/%3E%3Ccircle cx='195' cy='162' r='1'/%3E%3Ccircle cx='142' cy='174' r='1'/%3E%3Ccircle cx='8' cy='93' r='0.8'/%3E%3Ccircle cx='121' cy='99' r='0.8'/%3E%3Ccircle cx='152' cy='29' r='0.8'/%3E%3Ccircle cx='80' cy='180' r='1.2'/%3E%3Ccircle cx='19' cy='90' r='1.8'/%3E%3Ccircle cx='57' cy='30' r='1.2'/%3E%3Ccircle cx='170' cy='57' r='1.2'/%3E%3Ccircle cx='193' cy='135' r='1.2'/%3E%3Ccircle cx='188' cy='33' r='0.8'/%3E%3Ccircle cx='33' cy='130' r='0.8'/%3E%3Ccircle cx='97' cy='117' r='1'/%3E%3Ccircle cx='58' cy='32' r='1.8'/%3E%3Ccircle cx='75' cy='113' r='0.8'/%3E%3Ccircle cx='137' cy='103' r='1.8'/%3E%3Ccircle cx='130' cy='146' r='1.2'/%3E%3Ccircle cx='177' cy='154' r='1.8'/%3E%3Ccircle cx='79' cy='81' r='0.8'/%3E%3Ccircle cx='96' cy='81' r='0.8'/%3E%3Ccircle cx='17' cy='44' r='0.8'/%3E%3Ccircle cx='25' cy='119' r='0.8'/%3E%3Ccircle cx='4' cy='33' r='0.8'/%3E%3Ccircle cx='186' cy='122' r='0.8'/%3E%3Ccircle cx='172' cy='122' r='0.8'/%3E%3Ccircle cx='126' cy='187' r='1.8'/%3E%3Ccircle cx='74' cy='28' r='1.2'/%3E%3Ccircle cx='195' cy='93' r='1.2'/%3E%3Ccircle cx='64' cy='32' r='1'/%3E%3Ccircle cx='146' cy='96' r='0.8'/%3E%3Ccircle cx='103' cy='43' r='1.8'/%3E%3Ccircle cx='73' cy='136' r='0.8'/%3E%3Ccircle cx='150' cy='61' r='0.8'/%3E%3Ccircle cx='138' cy='54' r='1'/%3E%3Ccircle cx='178' cy='72' r='0.8'/%3E%3Ccircle cx='106' cy='154' r='1'/%3E%3Ccircle cx='126' cy='122' r='0.8'/%3E%3Ccircle cx='159' cy='161' r='0.8'/%3E%3Ccircle cx='42' cy='99' r='0.8'/%3E%3Ccircle cx='194' cy='156' r='1.2'/%3E%3Ccircle cx='54' cy='137' r='1'/%3E%3Ccircle cx='90' cy='184' r='1'/%3E%3Ccircle cx='187' cy='74' r='0.8'/%3E%3C/svg%3E"); --scale-stars: 8;
   --pattern-ripples: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 400' preserveAspectRatio='none'%3E%3Ccircle cx='300' cy='100' r='10' fill='none' stroke='black' vector-effect='non-scaling-stroke'/%3E%3Ccircle cx='300' cy='100' r='20' fill='none' stroke='black' vector-effect='non-scaling-stroke'/%3E%3Ccircle cx='300' cy='100' r='30' fill='none' stroke='black' vector-effect='non-scaling-stroke'/%3E%3Ccircle cx='300' cy='100' r='40' fill='none' stroke='black' vector-effect='non-scaling-stroke'/%3E%3Ccircle cx='300' cy='100' r='50' fill='none' stroke='black' vector-effect='non-scaling-stroke'/%3E%3Ccircle cx='300' cy='100' r='60' fill='none' stroke='black' vector-effect='non-scaling-stroke'/%3E%3Ccircle cx='300' cy='100' r='70' fill='none' stroke='black' vector-effect='non-scaling-stroke'/%3E%3Ccircle cx='300' cy='100' r='80' fill='none' stroke='black' vector-effect='non-scaling-stroke'/%3E%3Ccircle cx='300' cy='100' r='90' fill='none' stroke='black' vector-effect='non-scaling-stroke'/%3E%3Ccircle cx='300' cy='100' r='100' fill='none' stroke='black' vector-effect='non-scaling-stroke'/%3E%3Ccircle cx='300' cy='100' r='110' fill='none' stroke='black' vector-effect='non-scaling-stroke'/%3E%3Ccircle cx='300' cy='100' r='120' fill='none' stroke='black' vector-effect='non-scaling-stroke'/%3E%3Ccircle cx='300' cy='100' r='130' fill='none' stroke='black' vector-effect='non-scaling-stroke'/%3E%3Ccircle cx='300' cy='100' r='140' fill='none' stroke='black' vector-effect='non-scaling-stroke'/%3E%3Ccircle cx='300' cy='100' r='150' fill='none' stroke='black' vector-effect='non-scaling-stroke'/%3E%3Ccircle cx='300' cy='100' r='160' fill='none' stroke='black' vector-effect='non-scaling-stroke'/%3E%3Ccircle cx='300' cy='100' r='170' fill='none' stroke='black' vector-effect='non-scaling-stroke'/%3E%3Ccircle cx='300' cy='100' r='180' fill='none' stroke='black' vector-effect='non-scaling-stroke'/%3E%3Ccircle cx='300' cy='100' r='190' fill='none' stroke='black' vector-effect='non-scaling-stroke'/%3E%3Ccircle cx='300' cy='100' r='200' fill='none' stroke='black' vector-effect='non-scaling-stroke'/%3E%3Ccircle cx='300' cy='100' r='210' fill='none' stroke='black' vector-effect='non-scaling-stroke'/%3E%3Ccircle cx='300' cy='100' r='220' fill='none' stroke='black' vector-effect='non-scaling-stroke'/%3E%3Ccircle cx='300' cy='100' r='230' fill='none' stroke='black' vector-effect='non-scaling-stroke'/%3E%3Ccircle cx='300' cy='100' r='240' fill='none' stroke='black' vector-effect='non-scaling-stroke'/%3E%3Ccircle cx='300' cy='100' r='250' fill='none' stroke='black' vector-effect='non-scaling-stroke'/%3E%3Ccircle cx='300' cy='100' r='260' fill='none' stroke='black' vector-effect='non-scaling-stroke'/%3E%3Ccircle cx='300' cy='100' r='270' fill='none' stroke='black' vector-effect='non-scaling-stroke'/%3E%3Ccircle cx='300' cy='100' r='280' fill='none' stroke='black' vector-effect='non-scaling-stroke'/%3E%3Ccircle cx='300' cy='100' r='290' fill='none' stroke='black' vector-effect='non-scaling-stroke'/%3E%3Ccircle cx='300' cy='100' r='300' fill='none' stroke='black' vector-effect='non-scaling-stroke'/%3E%3Ccircle cx='300' cy='100' r='310' fill='none' stroke='black' vector-effect='non-scaling-stroke'/%3E%3Ccircle cx='300' cy='100' r='320' fill='none' stroke='black' vector-effect='non-scaling-stroke'/%3E%3Ccircle cx='300' cy='100' r='330' fill='none' stroke='black' vector-effect='non-scaling-stroke'/%3E%3Ccircle cx='300' cy='100' r='340' fill='none' stroke='black' vector-effect='non-scaling-stroke'/%3E%3Ccircle cx='300' cy='100' r='350' fill='none' stroke='black' vector-effect='non-scaling-stroke'/%3E%3Ccircle cx='300' cy='100' r='360' fill='none' stroke='black' vector-effect='non-scaling-stroke'/%3E%3Ccircle cx='300' cy='100' r='370' fill='none' stroke='black' vector-effect='non-scaling-stroke'/%3E%3Ccircle cx='300' cy='100' r='380' fill='none' stroke='black' vector-effect='non-scaling-stroke'/%3E%3Ccircle cx='300' cy='100' r='390' fill='none' stroke='black' vector-effect='non-scaling-stroke'/%3E%3Ccircle cx='300' cy='100' r='400' fill='none' stroke='black' vector-effect='non-scaling-stroke'/%3E%3Ccircle cx='300' cy='100' r='410' fill='none' stroke='black' vector-effect='non-scaling-stroke'/%3E%3Ccircle cx='300' cy='100' r='420' fill='none' stroke='black' vector-effect='non-scaling-stroke'/%3E%3Ccircle cx='300' cy='100' r='430' fill='none' stroke='black' vector-effect='non-scaling-stroke'/%3E%3Ccircle cx='300' cy='100' r='440' fill='none' stroke='black' vector-effect='non-scaling-stroke'/%3E%3Ccircle cx='300' cy='100' r='450' fill='none' stroke='black' vector-effect='non-scaling-stroke'/%3E%3Ccircle cx='300' cy='100' r='460' fill='none' stroke='black' vector-effect='non-scaling-stroke'/%3E%3Ccircle cx='300' cy='100' r='470' fill='none' stroke='black' vector-effect='non-scaling-stroke'/%3E%3Ccircle cx='300' cy='100' r='480' fill='none' stroke='black' vector-effect='non-scaling-stroke'/%3E%3Ccircle cx='300' cy='100' r='490' fill='none' stroke='black' vector-effect='non-scaling-stroke'/%3E%3Ccircle cx='300' cy='100' r='500' fill='none' stroke='black' vector-effect='non-scaling-stroke'/%3E%3Ccircle cx='300' cy='100' r='510' fill='none' stroke='black' vector-effect='non-scaling-stroke'/%3E%3Ccircle cx='300' cy='100' r='520' fill='none' stroke='black' vector-effect='non-scaling-stroke'/%3E%3Ccircle cx='300' cy='100' r='530' fill='none' stroke='black' vector-effect='non-scaling-stroke'/%3E%3Ccircle cx='300' cy='100' r='540' fill='none' stroke='black' vector-effect='non-scaling-stroke'/%3E%3Ccircle cx='300' cy='100' r='550' fill='none' stroke='black' vector-effect='non-scaling-stroke'/%3E%3Ccircle cx='300' cy='100' r='560' fill='none' stroke='black' vector-effect='non-scaling-stroke'/%3E%3C/svg%3E"); --scale-ripples: 40;
   --pattern-rays: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 400' preserveAspectRatio='none'%3E%3Cpath d='M300 100L1000 100M300 100L996 173M300 100L985 246M300 100L966 316M300 100L939 385M300 100L906 450M300 100L866 511M300 100L820 568M300 100L768 620M300 100L711 666M300 100L650 706M300 100L585 739M300 100L516 766M300 100L446 785M300 100L373 796M300 100L300 800M300 100L227 796M300 100L154 785M300 100L84 766M300 100L15 739M300 100L-50 706M300 100L-111 666M300 100L-168 620M300 100L-220 568M300 100L-266 511M300 100L-306 450M300 100L-339 385M300 100L-366 316M300 100L-385 246M300 100L-396 173M300 100L-400 100M300 100L-396 27M300 100L-385 -46M300 100L-366 -116M300 100L-339 -185M300 100L-306 -250M300 100L-266 -311M300 100L-220 -368M300 100L-168 -420M300 100L-111 -466M300 100L-50 -506M300 100L15 -539M300 100L84 -566M300 100L154 -585M300 100L227 -596M300 100L300 -600M300 100L373 -596M300 100L446 -585M300 100L516 -566M300 100L585 -539M300 100L650 -506M300 100L711 -466M300 100L768 -420M300 100L820 -368M300 100L866 -311M300 100L906 -250M300 100L939 -185M300 100L966 -116M300 100L985 -46M300 100L996 27' fill='none' stroke='black' vector-effect='non-scaling-stroke'/%3E%3C/svg%3E"); --scale-rays: 40;
-  /* The colours a layer can take: the text of its block (a grey), a pale blue, the accent. */
+  /* The colours the layer can take: the text of its block (a grey), a pale blue, the accent. */
   --texture-text: currentColor;
   --texture-blue: #7aa7f0;
   --texture-accent: var(--accent);
-  --texture-on-1: 1; --texture-on-2: 1;
-  --fade: linear-gradient(#000, #000);
+  --texture-on: 1;
 }
 
-:root[data-colour1="text"] { --texture-colour-1: var(--texture-text); }
-:root[data-colour1="blue"] { --texture-colour-1: var(--texture-blue); }
-:root[data-colour1="accent"] { --texture-colour-1: var(--texture-accent); }
-:root[data-colour2="text"] { --texture-colour-2: var(--texture-text); }
-:root[data-colour2="blue"] { --texture-colour-2: var(--texture-blue); }
-:root[data-colour2="accent"] { --texture-colour-2: var(--texture-accent); }
+:root[data-colour="text"] { --texture-colour: var(--texture-text); }
+:root[data-colour="blue"] { --texture-colour: var(--texture-blue); }
+:root[data-colour="accent"] { --texture-colour: var(--texture-accent); }
 /* No pattern: no mask would paint the whole block, so the layer goes clear. */
-:root[data-pattern1="none"] { --texture-on-1: 0; }
-:root[data-pattern2="none"] { --texture-on-2: 0; }
-/* The fade: a second mask, the texture shows where it is opaque. */
-:root[data-fade="edges"] { --fade: radial-gradient(ellipse at center, transparent 25%, #000 95%); }
-:root[data-fade="centre"] { --fade: radial-gradient(ellipse at center, #000 10%, transparent 75%); }
-:root[data-fade="top"] { --fade: linear-gradient(#000, transparent 85%); }
-:root[data-fade="corner"] { --fade: radial-gradient(circle at 100% 0%, #000 0%, transparent 70%); }
+:root[data-pattern="none"] { --texture-on: 0; }
 
-/* The blocks that can take a texture: a layer under their content, in their own stacking context,
-   cut at their edges for a turned layer. */
+/* The blocks that can take the texture: a layer under their content, in their own stacking context. */
 .app-header, .app-level, .app-side { position: relative; }
-.app-window, .app-header, .app-level, .app-tree, .app-side { isolation: isolate; overflow: clip; }
+.app-window, .app-header, .app-level, .app-tree, .app-side { isolation: isolate; }
 
-/* A layer: n is 1 or 2 (--n- variables set below). */
-.app-layer, :root[data-zone="tree"] .app-tree::before,
+:root[data-zone="tree"] .app-tree::before,
 :root[data-zone="side"] .app-side::before,
 :root[data-zone="tree-side"] :is(.app-tree, .app-side)::before,
 :root[data-zone="band"] .app-level::before,
 :root[data-zone="top"] :is(.app-header, .app-level)::before,
+:root[data-zone="blocks-but-tree"] :is(.app-header, .app-level, .app-side)::before,
 :root[data-zone="blocks"] :is(.app-header, .app-level, .app-tree, .app-side)::before,
-:root[data-zone="window"] .app-window::before,
-:root[data-zone="tree"] .app-tree::after,
-:root[data-zone="side"] .app-side::after,
-:root[data-zone="tree-side"] :is(.app-tree, .app-side)::after,
-:root[data-zone="band"] .app-level::after,
-:root[data-zone="top"] :is(.app-header, .app-level)::after,
-:root[data-zone="blocks"] :is(.app-header, .app-level, .app-tree, .app-side)::after,
-:root[data-zone="window"] .app-window::after {
-  --tile: calc(var(--n-size) * var(--n-scale, 1));
+:root[data-zone="window"] .app-window::before {
+  --tile: calc(var(--texture-size) * var(--texture-scale, 1));
   content: ""; position: absolute; inset: 0; z-index: -1; pointer-events: none;
-  background: var(--n-colour); opacity: calc(var(--n-opacity) * var(--n-on));
-  mask-image: var(--n-texture), var(--fade);
-  mask-size: var(--tile) calc(var(--tile) * var(--n-ratio, 1)), 100% 100%;
-  mask-repeat: repeat, no-repeat;
-  mask-composite: intersect;
+  background: var(--texture-colour); opacity: calc(var(--texture-opacity) * var(--texture-on));
+  mask-image: var(--texture); mask-size: var(--tile) calc(var(--tile) * var(--texture-ratio, 1));
 }
-*::before { --n-texture: var(--texture-1); --n-ratio: var(--ratio-1); --n-scale: var(--scale-1); --n-size: var(--texture-size-1);
-  --n-colour: var(--texture-colour-1); --n-opacity: var(--texture-opacity-1); --n-on: var(--texture-on-1); }
-*::after { --n-texture: var(--texture-2); --n-ratio: var(--ratio-2); --n-scale: var(--scale-2); --n-size: var(--texture-size-2);
-  --n-colour: var(--texture-colour-2); --n-opacity: var(--texture-opacity-2); --n-on: var(--texture-on-2); }
-/* The second layer: shifted, and turned around its middle, made larger so that it still covers. */
-:root[data-zone] .app-window::after, :root[data-zone] :is(.app-header, .app-level, .app-tree, .app-side)::after {
-  inset: calc(var(--texture-rotate) * -.6%);
-  transform: rotate(calc(var(--texture-rotate) * 1deg));
-  mask-position: var(--texture-shift) var(--texture-shift), 0 0;
-}
-:root[data-motion="drift"] :is(.app-window, .app-header, .app-level, .app-tree, .app-side)::after {
-  animation: texture-drift 40s linear infinite;
-}
-@keyframes texture-drift {
-  to { mask-position: calc(var(--texture-shift) + var(--tile)) calc(var(--texture-shift) + var(--tile) * var(--n-ratio, 1)), 0 0; }
-}
-
-/* The swatches of the patterns (sections/textures.js), on the page of the style. */
-.page-swatches { display: flex; flex-wrap: wrap; gap: 12px; max-width: 1240px; }
-.page-swatch { position: relative; isolation: isolate; overflow: clip; display: flex; align-items: flex-end; width: 160px; height: 110px; box-sizing: border-box; padding: 8px; border-radius: var(--radius); background: var(--page-image), var(--page); background-size: var(--page-image-size); color: var(--text); font: 600 12px var(--font-text); box-shadow: var(--window-shadow); }
-.page-swatch b { padding: 2px 6px; border-radius: var(--radius); background: var(--panel); }
-.page-swatch .app-layer { --n-size: var(--texture-size-1); --n-colour: var(--texture-colour-1); --n-opacity: 35%; --n-on: 1; }

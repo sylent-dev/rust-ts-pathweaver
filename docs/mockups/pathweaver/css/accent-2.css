@@ -1,0 +1,19 @@
+/* The second accent, an open decision (2026-11-17): its colour among the candidates of each style
+   (--a2-…, css/tokens.css), and what it marks. The first accent stays on what is new at the level
+   (the cursor, the box « New at », the rings of the tree). */
+
+:root { --accent-2: var(--accent); }
+:root[data-accent2="amber"] { --accent-2: var(--a2-amber); }
+:root[data-accent2="coral"] { --accent-2: var(--a2-coral); }
+:root[data-accent2="mint"] { --accent-2: var(--a2-mint); }
+:root[data-accent2="violet"] { --accent-2: var(--a2-violet); }
+:root[data-accent2="magenta"] { --accent-2: var(--a2-magenta); }
+:root[data-accent2="lime"] { --accent-2: var(--a2-lime); }
+
+/* What comes later: the passives taken at a later level (the tree and its legend), and the markers
+   of the level band, where something changes. */
+:root:is([data-accent2-on="later"], [data-accent2-on="all"]) { --tree-later: var(--accent-2); --marker: var(--accent-2); }
+/* The gear: the dots of the slots that carry a hint. */
+:root:is([data-accent2-on="gear"], [data-accent2-on="all"]) { --accent-soft: var(--accent-2); }
+/* The controls: the pressed switches (the weapon sets). */
+:root:is([data-accent2-on="controls"], [data-accent2-on="all"]) { --fill-strong: var(--accent-2); --on-fill-strong: var(--on-accent-2); }

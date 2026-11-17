@@ -1,8 +1,8 @@
 /* Styles: tokens only (CSS variables). The components use nothing else, and the canvas of the
    tree reads them too (tree.js), so that a style is cheap to add or tweak. :root holds every
    token with the neutral value of the first grey pass; each style sets only what it changes.
-   The styles kept by the owner on 2026-11-17: 4 · Slate here, 14 · Glass and 15 · Aurora in
-   tokens-moodboard.css; their mixes, 16 to 27, in tokens-mixes.css. */
+   The two styles left, kept by the owner on 2026-11-17 after 28 proposals: 18 · Frost and
+   28 · Frost Night, its negative (the others are in the history of Git). */
 
 :root {
   /* Type. */
@@ -92,32 +92,78 @@
   --tree-shape-jewel: diamond;
 }
 
-/* 4 · Slate (from the design journal, rust-exile-market): near-black bands without borders,
-   white as the main action, Manrope and JetBrains Mono, one vivid orange. */
-:root[data-theme="slate"] {
-  --font-text: "Manrope", sans-serif;
-  --font-title: "Manrope", sans-serif;
-  --font-number: "JetBrains Mono", monospace;
-  --text-weight: 500;
-  --title-weight: 800;
-  --page: #151a20;
-  --bar: #0f1216; --on-bar: #e3e8ef;
-  --band: #0f1216; --on-band: #e3e8ef; --on-band-weak: #8692a3;
-  --side: #12161b;
-  --panel: #151a20;
-  --tab: #1d242d; --on-tab: #8692a3;
-  --control: #1d242d; --control-line: #1d242d;
-  --fill: #1d242d; --fill-strong: #f2f5f9; --on-fill-strong: #0f1216;
-  --divider: #0f1216; --line-weak: #2a3440;
-  --radius: 3px;
-  --text: #e3e8ef; --weak: #8692a3;
-  --accent: #ff8c1a; --accent-soft: #e3e8ef; --on-accent: #0f1216;
-  --track: #2a3440; --track-width: 2px; --marker: #4a5666;
-  --slot-line: #2a3440; --slot-fill: #2a3440; --slot-radius: 3px;
-  --gem-str: #e5534b; --gem-dex: #57ab5a; --gem-int: #539bf5; --gem-none: #8692a3;
-  --gem-size: 10px; --gem-line: none;
+/* 18 · Frost (Aurora × Slate, light): the cool light of Aurora at the density of Slate, flat white
+   boxes, one blue (Geist, Geist Mono). */
+:root[data-theme="frost"] {
+  --font-text: "Geist", sans-serif;
+  --font-title: "Geist", sans-serif;
+  --font-number: "Geist Mono", monospace;
+  --title-weight: 600;
+  --title-spacing: -.02em;
+  --page: #eef2f8;
+  --page-image: radial-gradient(ellipse 80% 40% at 0% 0%, #dbe7ff 0%, transparent 70%);
+  --bar: #e2e9f4; --on-bar: #0f1b33;
+  --band: #f8fbff; --on-band: #0f1b33; --on-band-weak: #5c6c88;
+  --panel: #ffffffd9;
+  --tab: #dde6f3; --on-tab: #4a5a78;
+  --control: #ffffff; --control-line: #d5deec;
+  --control-shadow: 0 1px 2px #0f1b3314;
+  --fill: #e5ecf7; --fill-strong: #2563eb; --on-fill-strong: #ffffff;
+  --divider: #d5deec; --line-weak: #d5deec;
+  --radius: 8px;
+  --window-shadow: 0 24px 60px #0f1b332e;
+  --portrait-ring: 0 0 0 1px #d5deec;
+  --text: #0f1b33; --weak: #5c6c88;
+  --accent: #2563eb; --accent-soft: #2563eb; --on-accent: #ffffff;
+  --new-fill: #2563eb0d;
+  --track: #c1cfe6; --track-width: 2px; --marker: #8fa2c4;
+  --slot-line: #cfdaeb; --slot-fill: #e5ecf7; --slot-radius: 8px;
+  --gem-str: #e5484d; --gem-dex: #12a594; --gem-int: #2563eb; --gem-none: #8fa2c4;
+  --gem-size: 9px; --gem-radius: 2px; --gem-line: none;
   --tree-background: transparent;
-  --tree-edge: #232b35; --tree-edge-taken: #e3e8ef;
-  --tree-node: #151a20; --tree-node-line: #3a4552;
-  --tree-taken: #e3e8ef; --tree-later: #6b7686;
+  --tree-edge: #dce4f0; --tree-edge-taken: #2563eb; --tree-edge-width: 1.8;
+  --tree-node: #ffffff; --tree-node-line: #b4c3db;
+  --tree-taken: #0f1b33; --tree-later: #9fb2d1;
+  --tree-shape-keystone: diamond;
+  /* The candidates for the second accent (css/accent-2.css), and the text on it. */
+  --a2-amber: #d97706; --a2-coral: #e8553a; --a2-mint: #0d9488; --a2-violet: #7c3aed; --a2-magenta: #db2777; --a2-lime: #65a30d;
+  --on-accent-2: #ffffff;
+}
+
+/* 28 · Frost Night (Frost in negative, dark): the density and the flat boxes of Frost on a blue
+   black, pale blue lines, one blue (Geist, Geist Mono). */
+:root[data-theme="frost-night"] {
+  --font-text: "Geist", sans-serif;
+  --font-title: "Geist", sans-serif;
+  --font-number: "Geist Mono", monospace;
+  --title-weight: 600;
+  --title-spacing: -.02em;
+  --page: #0c111b;
+  --page-image: radial-gradient(ellipse 80% 40% at 0% 0%, #172644 0%, transparent 70%);
+  --bar: #121a29; --on-bar: #e3eaf5;
+  --band: #0f1726; --on-band: #e3eaf5; --on-band-weak: #8393ad;
+  --panel: #0c111bd9;
+  --tab: #172133; --on-tab: #8393ad;
+  --control: #121a29; --control-line: #24304a;
+  --control-shadow: 0 1px 2px #00000066;
+  --fill: #172133; --fill-strong: #3b82f6; --on-fill-strong: #ffffff;
+  --divider: #1f2a40; --line-weak: #1f2a40;
+  --radius: 8px;
+  --window-shadow: 0 0 0 1px #1f2a40, 0 24px 60px #000000aa;
+  --portrait-ring: 0 0 0 1px #24304a;
+  --text: #e3eaf5; --weak: #8393ad;
+  --accent: #60a5fa; --accent-soft: #60a5fa; --on-accent: #0c111b;
+  --new-fill: #60a5fa12;
+  --track: #2a3a5c; --track-width: 2px; --marker: #4b5f86;
+  --slot-line: #24304a; --slot-fill: #172133; --slot-radius: 8px;
+  --gem-str: #f87171; --gem-dex: #2dd4bf; --gem-int: #60a5fa; --gem-none: #8393ad;
+  --gem-size: 9px; --gem-radius: 2px; --gem-line: none;
+  --tree-background: transparent;
+  --tree-edge: #18223a; --tree-edge-taken: #60a5fa; --tree-edge-width: 1.8;
+  --tree-node: #0c111b; --tree-node-line: #2a3a5c;
+  --tree-taken: #e3eaf5; --tree-later: #4b5f86;
+  --tree-shape-keystone: diamond;
+  /* The candidates for the second accent (css/accent-2.css), and the text on it. */
+  --a2-amber: #fbbf24; --a2-coral: #ff8a6b; --a2-mint: #2dd4bf; --a2-violet: #a78bfa; --a2-magenta: #f472b6; --a2-lime: #a3e635;
+  --on-accent-2: #0c111b;
 }

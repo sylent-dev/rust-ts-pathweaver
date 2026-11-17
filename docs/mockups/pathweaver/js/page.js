@@ -2,62 +2,40 @@
 //
 // - Each style only sets tokens (css/tokens.css, under :root[data-theme="…"]).
 // - VARIANTS holds one group of tabs per open decision; the address keeps the choices
-//   (e.g. ?theme=slate), to share them. A group is removed once decided.
+//   (e.g. ?theme=frost), to share them. A group is removed once decided.
 //   A value that combines with others is a list (`select: true` and the CSS `variable` it sets);
 //   a value tuned by eye is a slider (`range`, its `variable` and its `unit`).
 // - SECTIONS lists every scenario and state, each a function that returns
 //   [title, [[label, html], …]]: a section script adds its own with addSection(), and the newest
 //   section comes first. Past ten sections, a table of contents under the header links to each.
 
-// The styles compared, each numbered once and for good. The owner kept three on 2026-11-17 (4 · Slate,
-// 14 · Glass and 15 · Aurora, the last two from the moodboard, R### of
-// outputs/2026-11-16-moodboard-sources.md), then asked for twelve mixes of them (16 to 27): four
-// sober, four bold, four wild, dark and light.
+// The styles compared, each numbered once and for good: 28 proposals, of which the owner kept two on
+// 2026-11-17, 18 · Frost and its negative 28 · Frost Night (the others are in the history of Git).
 const THEMES = {
-  slate: { title: "4 · Slate", text: "Kept. Dark, after rust-exile-market (the design journal): near-black bands without borders, white for the main action, Manrope and JetBrains Mono, one vivid orange." },
-  glass: { title: "14 · Glass", text: "Kept, from R089. Dark: a glass dashboard, charcoal turning teal at its edge, large rounded corners, bold white capitals (Archivo, Inter), one gold; hexagonal gems and notables." },
-  aurora: { title: "15 · Aurora", text: "Kept, from R201. Light: a deep blue app bar with stars whose glow fades into the level band, white glass boxes, one blue (Instrument Sans)." },
-  graphite: { title: "16 · Graphite", text: "Sober, Slate × Glass, dark: the borderless bands of Slate, the rounded corners and the teal edge of Glass, a teal accent." },
-  paper: { title: "17 · Paper", text: "Sober, Slate turned to day, light: light grey bands without borders, black for the main action, its vivid orange." },
-  frost: { title: "18 · Frost", text: "Sober, Aurora × Slate, light: the cool light of Aurora at the density of Slate, flat white boxes, one blue (Geist, Geist Mono)." },
-  midnight: { title: "19 · Midnight", text: "Sober, Aurora by night, dark: the whole window under its starry sky, a blue glow from the top, white passives that glow." },
-  lagoon: { title: "20 · Lagoon", text: "Bold, Glass by day, light: mint and teal, a dark teal app bar, white cards with large corners, a gold accent." },
-  dusk: { title: "21 · Dusk", text: "Bold, Aurora at sunset, light: the app bar from violet to coral, a warm page, serif titles and figures (Instrument Serif), a coral accent." },
-  ink: { title: "22 · Ink", text: "Bold, Slate in black and white, dark: pure black, white for everything taken, one electric blue, square passives (Inter Tight)." },
-  ice: { title: "23 · Ice", text: "Bold, Glass × Aurora, dark: frosted glass over coloured lights, translucent bands and boxes, a cyan accent that glows (Sora)." },
-  acid: { title: "24 · Acid", text: "Wild, Slate on acid, dark: an acid yellow app bar, monospaced capitals everywhere, a faint grid, the tree in acid that glows." },
-  candy: { title: "25 · Candy", text: "Wild, Aurora in pastel, light: a mesh of pink, lilac and mint, translucent bands, very round, wide titles (Unbounded), a hot pink accent." },
-  signal: { title: "26 · Signal", text: "Wild, Slate's orange as a surface, light: an orange app bar, a black level band, warm paper, thick black lines and square shapes (Archivo)." },
-  prism: { title: "27 · Prism", text: "Wild, Glass in iridescence, dark: dark glass lit by a band of pink, violet, cyan and gold, a magenta accent that glows (Sora, Inter)." },
-  "frost-night": { title: "28 · Frost Night", text: "Asked for: Frost in negative, dark. Its density and its flat boxes on a blue black, pale blue lines, one blue (Geist, Geist Mono)." },
+  frost: { title: "18 · Frost", text: "Light: the cool light of Aurora at the density of Slate, flat white boxes, one blue (Geist, Geist Mono)." },
+  "frost-night": { title: "28 · Frost Night", text: "Dark, Frost in negative: its density and its flat boxes on a blue black, pale blue lines, one blue (Geist, Geist Mono)." },
 };
 
-// The textures behind the blocks (css/textures.css): two layers, the second shifted, turned and
-// drifting against the first, both faded towards a side.
+// The texture behind the blocks (css/textures.css), one layer.
 const PATTERNS = { none: "None", grid: "Grid", graph: "Graph paper", dots: "Dots", crosses: "Crosses", hatch: "Hatching",
   lines: "Lines", waves: "Waves", zigzag: "Zigzag", diamonds: "Diamonds", triangles: "Triangles", hexagons: "Hexagons",
   cubes: "Cubes", pentagons: "Pentagons", rings: "Rings", circuit: "Circuit", contours: "Contours", ripples: "Ripples",
   rays: "Rays", stars: "Stars", grain: "Grain" };
-const TEXTURE_COLOURS = { text: "Grey (the text)", blue: "Pale blue", accent: "Accent" };
-const textureLayer = (n, pattern, colour, size, opacity) => ({
-  [`pattern${n}`]: { label: `Texture ${n}`, options: PATTERNS, fallback: pattern, select: true },
-  [`colour${n}`]: { label: `Colour ${n}`, options: TEXTURE_COLOURS, fallback: colour, select: true },
-  [`size${n}`]: { label: `Size ${n}`, range: { min: 6, max: 200, step: 2 }, variable: `--texture-size-${n}`, unit: "px", fallback: size },
-  [`opacity${n}`]: { label: `Opacity ${n}`, range: { min: 0, max: 40, step: 1 }, variable: `--texture-opacity-${n}`, unit: "%", fallback: opacity },
-});
 
 const VARIANTS = {
-  theme: { label: "Style", options: Object.fromEntries(Object.entries(THEMES).map(([key, theme]) => [key, theme.title])), fallback: "slate" },
-  zone: { label: "Textured", select: true, fallback: "tree-side", options: { tree: "The tree", side: "The right column",
-    "tree-side": "The tree and the right column", band: "The level band", top: "The header and the level band",
-    blocks: "Every block", window: "The whole window" } },
-  fade: { label: "Fade", select: true, fallback: "none", options: { none: "None", edges: "Towards the middle",
-    centre: "Towards the edges", top: "Towards the bottom", corner: "From the top right corner" } },
-  ...textureLayer(1, "grid", "text", "24", "8"),
-  ...textureLayer(2, "grid", "blue", "24", "6"),
-  shift: { label: "Shift 2", range: { min: 0, max: 48, step: 1 }, variable: "--texture-shift", unit: "px", fallback: "12" },
-  rotate: { label: "Turn 2 (°)", range: { min: 0, max: 90, step: 1 }, variable: "--texture-rotate", fallback: "0" },
-  motion: { label: "Motion 2", select: true, fallback: "still", options: { still: "Still", drift: "Drifting" } },
+  theme: { label: "Style", options: Object.fromEntries(Object.entries(THEMES).map(([key, theme]) => [key, theme.title])), fallback: "frost" },
+  // The second accent (css/accent-2.css): its colour, and what it marks.
+  accent2: { label: "Accent 2", select: true, fallback: "amber", options: { amber: "Amber", coral: "Coral", mint: "Mint",
+    violet: "Violet", magenta: "Magenta", lime: "Lime" } },
+  accent2On: { label: "Accent 2 on", select: true, fallback: "later", options: {
+    later: "What comes later (tree, markers)", gear: "The gear (hints of the slots)", controls: "The pressed switches", all: "All three" } },
+  zone: { label: "Textured", select: true, fallback: "blocks-but-tree", options: { "blocks-but-tree": "Every block but the tree",
+    blocks: "Every block", side: "The right column", band: "The level band", top: "The header and the level band",
+    tree: "The tree", "tree-side": "The tree and the right column", window: "The whole window" } },
+  pattern: { label: "Texture", select: true, fallback: "graph", options: PATTERNS },
+  colour: { label: "Colour", select: true, fallback: "blue", options: { text: "Grey (the text)", blue: "Pale blue", accent: "Accent" } },
+  size: { label: "Size", range: { min: 6, max: 200, step: 2 }, variable: "--texture-size", unit: "px", fallback: "24" },
+  opacity: { label: "Opacity", range: { min: 0, max: 40, step: 1 }, variable: "--texture-opacity", unit: "%", fallback: "23" },
 };
 
 const SECTIONS = [];
