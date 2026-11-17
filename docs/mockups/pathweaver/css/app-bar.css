@@ -1,0 +1,10 @@
+/* The app bar: 44 px, the open builds as tabs of 168 px. */
+.app-bar { display: flex; align-items: flex-end; gap: 6px; height: 44px; padding: 0 12px 0 14px; background: var(--bar-image), var(--bar); color: var(--on-bar); border-bottom: var(--border-width) solid var(--divider); }
+.app-bar-name { align-self: center; width: 110px; font-size: var(--brand-size); white-space: nowrap; }
+.app-bar-tabs { display: flex; gap: 6px; }
+.app-bar-tab { display: flex; align-items: center; gap: 8px; width: 168px; height: 36px; box-sizing: border-box; margin-bottom: calc(-1 * var(--border-width)); padding: 0 6px; border: var(--border-width) solid var(--control-line); border-bottom: none; border-radius: var(--radius) var(--radius) 0 0; background: var(--tab); color: var(--on-tab); cursor: pointer; }
+.app-bar-tab.is-current { background: var(--page); color: var(--text); }
+.app-bar-tab-name { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 13px; }
+.app-bar-close { display: grid; place-items: center; width: 18px; height: 18px; padding: 0; border: none; background: none; color: inherit; opacity: .6; cursor: pointer; }
+.app-bar-more, .app-bar-open { align-self: center; display: inline-flex; align-items: center; gap: 4px; height: 26px; padding: 0 8px; border: var(--border-width) solid var(--control-line); border-radius: var(--radius); background: var(--control); color: var(--text); box-shadow: var(--control-shadow); cursor: pointer; font-size: 13px; }
+.app-bar-open { width: 30px; height: 28px; justify-content: center; padding: 0; }

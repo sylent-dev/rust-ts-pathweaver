@@ -1,0 +1,203 @@
+/* Styles: tokens only (CSS variables). The components use nothing else, and the canvas of the
+   tree reads them too (tree.js), so that a style is cheap to add or tweak. :root holds every
+   token with the neutral value of the first grey pass; each style sets only what it changes.
+   The two styles left, kept by the owner on 2026-11-17 after 28 proposals: 18 · Frost and
+   28 · Frost Night, its negative (the others are in the history of Git); then 29 · Ember, Frost
+   Night on a neutral grey with amber first (the owner, 2026-11-17). */
+
+:root {
+  /* Type. */
+  --font-text: system-ui, sans-serif;
+  --font-title: system-ui, sans-serif;
+  --font-number: system-ui, sans-serif;
+  --text-weight: 400;
+  --title-weight: 400;
+  --title-transform: none;
+  --title-spacing: 0;
+  --title-size: 20px;
+  --level-weight: 400;
+  --brand-size: 18px;   /* the name in the app bar, until the logo is drawn */
+  /* Surfaces: the window, the app bar, the level band, the side column, the boxes over the tree. */
+  --page: #ffffff;
+  --page-image: none;
+  --page-image-size: auto;
+  --bar: #e9ecef;
+  --bar-image: none;
+  --on-bar: #1e1e1e;
+  --band: #e9ecef;
+  --band-image: none;
+  --on-band: #1e1e1e;
+  --on-band-weak: #868e96;
+  --band-deep: #dee2e6;   /* the band without its lines (css/level-band.css): a shade darker than the page */
+  --side: transparent;
+  --panel: #ffffff;
+  /* Controls. */
+  --tab: #e9ecef;
+  --on-tab: #1e1e1e;
+  --control: #ffffff;
+  --control-line: #1e1e1e;
+  --control-shadow: none;
+  --fill: #e9ecef;
+  --fill-strong: #ced4da;
+  --on-fill-strong: #1e1e1e;
+  /* Lines and shapes. */
+  --divider: #1e1e1e;
+  --line-weak: #adb5bd;
+  --border-width: 0;   /* no borders: the blocks are told apart by their colours only (the owner, 2026-11-17) */
+  --radius: 4px;
+  --window-shadow: 0 8px 30px #0006;
+  --portrait-radius: 50%;
+  --portrait-ring: none;
+  /* Text and the one accent: what is new, the cursor of the level. */
+  --text: #1e1e1e;
+  --weak: #868e96;
+  --accent: #f76707;
+  --accent-soft: #1e1e1e;
+  --on-accent: #ffffff;
+  --accent-glow: none;
+  --new-fill: transparent;
+  /* The level band. */
+  --track: #1e1e1e;
+  --track-width: 1px;
+  --marker: #868e96;
+  --cursor-radius: 50%;
+  /* The inventory. */
+  --slot-empty: #f1f3f5;   /* an empty slot, a hinted one (--slot-fill) */
+  --slot-fill: #e9ecef;
+  --slot-radius: 0;
+  /* The gems: a colour per attribute (strength, dexterity, intelligence, none) and a shape. */
+  --gem-str: #ced4da;
+  --gem-dex: #ced4da;
+  --gem-int: #ced4da;
+  --gem-none: #ced4da;
+  --gem-size: 11px;
+  --gem-radius: 50%;
+  --gem-rotate: 0deg;
+  --gem-clip: none;
+  --gem-line: 1px solid #1e1e1e;
+  --gem-glow: none;
+  /* The tree, read by the canvas: colours, the width of the links taken, a glow (blur in pixels)
+     on what is taken, and a shape per kind (circle, square, diamond, hex, star). */
+  --tree-background: #ffffff;
+  --tree-edge: #dee2e6;
+  --tree-edge-taken: #495057;
+  --tree-edge-width: 2;
+  --tree-node: #ffffff;
+  --tree-node-line: #adb5bd;
+  --tree-taken: #495057;
+  --tree-later: #adb5bd;
+  --tree-glow: 0;
+  --tree-glow-colour: transparent;
+  --tree-shape-small: circle;
+  --tree-shape-notable: circle;
+  --tree-shape-keystone: circle;
+  --tree-shape-jewel: diamond;
+}
+
+/* 18 · Frost (Aurora × Slate, light): the cool light of Aurora at the density of Slate, flat white
+   boxes, one blue (Geist, Geist Mono). */
+:root[data-theme="frost"] {
+  --font-text: "Geist", sans-serif;
+  --font-title: "Geist", sans-serif;
+  --font-number: "Geist Mono", monospace;
+  --title-weight: 600;
+  --title-spacing: -.02em;
+  --page: #eef2f8;
+  --page-image: radial-gradient(ellipse 80% 40% at 0% 0%, #dbe7ff 0%, transparent 70%);
+  --bar: #e2e9f4; --on-bar: #0f1b33;
+  --band: #f8fbff; --on-band: #0f1b33; --on-band-weak: #5c6c88; --band-deep: #d9e2ef;
+  --panel: #ffffffd9;
+  --tab: #c9d5e6; --on-tab: #4a5a78;
+  --control: #ffffff; --control-line: #d5deec;
+  --fill: #e5ecf7; --fill-strong: #2563eb; --on-fill-strong: #ffffff;
+  --divider: #d5deec; --line-weak: #d5deec;
+  --radius: 8px;
+  --window-shadow: 0 24px 60px #0f1b332e;
+  --text: #0f1b33; --weak: #5c6c88;
+  --accent: #2563eb; --accent-soft: #2563eb; --on-accent: #ffffff;
+  --new-fill: #2563eb1a;
+  --track: #c1cfe6; --track-width: 2px; --marker: #8fa2c4;
+  --slot-empty: #cad6e7; --slot-fill: #f4f7fc; --slot-radius: 8px;
+  --gem-str: #e5484d; --gem-dex: #12a594; --gem-int: #2563eb; --gem-none: #8fa2c4;
+  --gem-size: 9px; --gem-radius: 2px; --gem-line: none;
+  --tree-background: transparent;
+  --tree-edge: #dce4f0; --tree-edge-taken: #2563eb; --tree-edge-width: 1.8;
+  --tree-node: #ffffff; --tree-node-line: #b4c3db;
+  --tree-taken: #0f1b33; --tree-later: #9fb2d1;
+  --tree-shape-keystone: diamond;
+  /* The candidates for the second accent (css/accent-2.css), and the text on it. */
+  --a2-amber: #d97706; --a2-blue: #0284c7; --a2-coral: #e8553a; --a2-mint: #0d9488; --a2-violet: #7c3aed; --a2-magenta: #db2777; --a2-lime: #65a30d;
+  --on-accent-2: #ffffff;
+}
+
+/* 28 · Frost Night (Frost in negative, dark): the density and the flat boxes of Frost on a blue
+   black, pale blue lines, one blue (Geist, Geist Mono). */
+:root[data-theme="frost-night"] {
+  --font-text: "Geist", sans-serif;
+  --font-title: "Geist", sans-serif;
+  --font-number: "Geist Mono", monospace;
+  --title-weight: 600;
+  --title-spacing: -.02em;
+  --page: #0c111b;
+  --page-image: radial-gradient(ellipse 80% 40% at 0% 0%, #172644 0%, transparent 70%);
+  --bar: #121a29; --on-bar: #e3eaf5;
+  --band: #0f1726; --on-band: #e3eaf5; --on-band-weak: #8393ad; --band-deep: #070b12;
+  --panel: #141d2ee6;
+  --tab: #172133; --on-tab: #8393ad;
+  --control: #1a2539; --control-line: #24304a;
+  --fill: #172133; --fill-strong: #3b82f6; --on-fill-strong: #ffffff;
+  --divider: #1f2a40; --line-weak: #1f2a40;
+  --radius: 8px;
+  --window-shadow: 0 24px 60px #000000aa;
+  --text: #e3eaf5; --weak: #8393ad;
+  --accent: #60a5fa; --accent-soft: #60a5fa; --on-accent: #0c111b;
+  --new-fill: #60a5fa24;
+  --track: #2a3a5c; --track-width: 2px; --marker: #4b5f86;
+  --slot-empty: #111a2a; --slot-fill: #1c2840; --slot-radius: 8px;
+  --gem-str: #f87171; --gem-dex: #2dd4bf; --gem-int: #60a5fa; --gem-none: #8393ad;
+  --gem-size: 9px; --gem-radius: 2px; --gem-line: none;
+  --tree-background: transparent;
+  --tree-edge: #18223a; --tree-edge-taken: #60a5fa; --tree-edge-width: 1.8;
+  --tree-node: #0c111b; --tree-node-line: #2a3a5c;
+  --tree-taken: #e3eaf5; --tree-later: #4b5f86;
+  --tree-shape-keystone: diamond;
+  /* The candidates for the second accent (css/accent-2.css), and the text on it. */
+  --a2-amber: #fbbf24; --a2-blue: #38bdf8; --a2-coral: #ff8a6b; --a2-mint: #2dd4bf; --a2-violet: #a78bfa; --a2-magenta: #f472b6; --a2-lime: #a3e635;
+  --on-accent-2: #0c111b;
+}
+
+/* 29 · Ember (Frost Night on a neutral grey, dark): the density and the flat boxes of Frost on a
+   very dark grey without blue, grey lines, amber first (Geist, Geist Mono). */
+:root[data-theme="ember"] {
+  --font-text: "Geist", sans-serif;
+  --font-title: "Geist", sans-serif;
+  --font-number: "Geist Mono", monospace;
+  --title-weight: 600;
+  --title-spacing: -.02em;
+  --page: #131314;
+  --page-image: radial-gradient(ellipse 80% 40% at 0% 0%, #2a2117 0%, transparent 70%);
+  --bar: #19191b; --on-bar: #ececee;
+  --band: #161618; --on-band: #ececee; --on-band-weak: #8e8e94; --band-deep: #0a0a0b;
+  --panel: #1e1e21e6;
+  --tab: #212124; --on-tab: #8e8e94;
+  --control: #252528; --control-line: #2c2c30;
+  --fill: #212124; --fill-strong: #f59e0b; --on-fill-strong: #131314;
+  --divider: #262629; --line-weak: #262629;
+  --radius: 8px;
+  --window-shadow: 0 24px 60px #000000aa;
+  --text: #ececee; --weak: #8e8e94;
+  --accent: #f59e0b; --accent-soft: #f59e0b; --on-accent: #131314;
+  --new-fill: #f59e0b24;
+  --track: #3a3a3f; --track-width: 2px; --marker: #5c5c63;
+  --slot-empty: #18181a; --slot-fill: #27272a; --slot-radius: 8px;
+  --gem-str: #f87171; --gem-dex: #2dd4bf; --gem-int: #60a5fa; --gem-none: #8e8e94;
+  --gem-size: 9px; --gem-radius: 2px; --gem-line: none;
+  --tree-background: transparent;
+  --tree-edge: #222225; --tree-edge-taken: #f59e0b; --tree-edge-width: 1.8;
+  --tree-node: #131314; --tree-node-line: #3a3a3f;
+  --tree-taken: #ececee; --tree-later: #5c5c63;
+  --tree-shape-keystone: diamond;
+  /* The candidates for the second accent; amber is already the first, so it stays amber. */
+  --a2-amber: #fbbf24; --a2-blue: #60a5fa; --a2-coral: #ff8a6b; --a2-mint: #2dd4bf; --a2-violet: #a78bfa; --a2-magenta: #f472b6; --a2-lime: #a3e635;
+  --on-accent-2: #131314;
+}
