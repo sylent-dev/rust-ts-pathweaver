@@ -1,21 +1,32 @@
 /* The band of the site: 44 px, the brand, then on the right its links, each the full height of
    the band. */
-.app-site { position: relative; z-index: 2; display: flex; align-items: center; height: 44px; padding-left: 14px; background: var(--bar-image), var(--bar); color: var(--on-bar); box-shadow: var(--band-shadow); }
+.app-site { position: relative; z-index: 2; display: flex; align-items: center; height: 44px; padding-left: 14px; background: var(--bar-image), var(--site-band, var(--bar)); color: var(--on-bar); box-shadow: var(--band-shadow); }
 .app-site-links { display: flex; height: 100%; margin-left: auto; }
 .app-site-link { display: flex; align-items: center; height: 100%; padding: 0 16px; color: inherit; opacity: .75; text-decoration: none;
   font-family: var(--site-link-font); font-weight: var(--site-link-weight); font-size: var(--site-link-size); }
 .app-site-link:hover { opacity: 1; background: color-mix(in srgb, var(--on-bar) 9%, transparent); }
 
-/* The band of the open builds: 44 px, a shade darker than the band of the site (the owner,
-   2026-11-18), their tabs of 184 px, up to 240 when they all fit; the same light shadow under it
-   as under the band of the site. */
-.app-builds { position: relative; z-index: 1; display: flex; align-items: flex-end; gap: 6px; height: 44px; padding: 0 12px 0 0; background: var(--bar-image), var(--band-deep); color: var(--on-bar); box-shadow: var(--band-shadow); }
+/* The band of the open builds: 44 px, their tabs of 184 px, up to 240 when they all fit; the same
+   light shadow under it as under the band of the site. */
+.app-builds { position: relative; z-index: 1; display: flex; align-items: flex-end; gap: 6px; height: 44px; padding: 0 12px 0 0; background: var(--bar-image), var(--builds-band, var(--band-deep)); color: var(--on-bar); box-shadow: var(--band-shadow); }
 .app-site-brand { display: flex; align-items: center; gap: var(--brand-gap); flex: none; padding-right: 12px; }
 .app-site-brand .logo-mark { width: var(--brand-mark-size); height: var(--brand-mark-size); }
 .app-site-brand .logo-name { position: relative; top: var(--brand-name-offset); font-size: var(--brand-size); }
 .app-builds-more, .app-builds-open { align-self: center; display: inline-flex; align-items: center; gap: 4px; height: 26px; padding: 0 8px; border: var(--border-width) solid var(--control-line); border-radius: var(--radius); background: var(--control); color: var(--text); box-shadow: var(--control-shadow); cursor: pointer; font-size: 13px; }
 .app-builds-open { width: 30px; height: 28px; justify-content: center; padding: 0; }
 .app-builds-more.is-open { border-color: var(--accent); }
+
+/* The shades of the two bands, one list for the light style and one for the dark ones (the owner,
+   2026-11-18: it depends on the mode): set on the element of the style, so that --bar and
+   --band-deep are those of its style, the page or a block of data-sample-theme. */
+:root[data-top-light="site-deep"]:is([data-theme="frost"]), :root[data-top-light="site-deep"] [data-sample-theme="frost"] { --site-band: var(--band-deep); --builds-band: var(--bar); }
+:root[data-top-light="builds-deep"]:is([data-theme="frost"]), :root[data-top-light="builds-deep"] [data-sample-theme="frost"] { --site-band: var(--bar); --builds-band: var(--band-deep); }
+:root[data-top-light="same-deep"]:is([data-theme="frost"]), :root[data-top-light="same-deep"] [data-sample-theme="frost"] { --site-band: var(--band-deep); --builds-band: var(--band-deep); }
+:root[data-top-light="same"]:is([data-theme="frost"]), :root[data-top-light="same"] [data-sample-theme="frost"] { --site-band: var(--bar); --builds-band: var(--bar); }
+:root[data-top-dark="site-deep"]:is([data-theme="frost-night"], [data-theme="ember"]), :root[data-top-dark="site-deep"] [data-sample-theme="frost-night"], :root[data-top-dark="site-deep"] [data-sample-theme="ember"] { --site-band: var(--band-deep); --builds-band: var(--bar); }
+:root[data-top-dark="builds-deep"]:is([data-theme="frost-night"], [data-theme="ember"]), :root[data-top-dark="builds-deep"] [data-sample-theme="frost-night"], :root[data-top-dark="builds-deep"] [data-sample-theme="ember"] { --site-band: var(--bar); --builds-band: var(--band-deep); }
+:root[data-top-dark="same-deep"]:is([data-theme="frost-night"], [data-theme="ember"]), :root[data-top-dark="same-deep"] [data-sample-theme="frost-night"], :root[data-top-dark="same-deep"] [data-sample-theme="ember"] { --site-band: var(--band-deep); --builds-band: var(--band-deep); }
+:root[data-top-dark="same"]:is([data-theme="frost-night"], [data-theme="ember"]), :root[data-top-dark="same"] [data-sample-theme="frost-night"], :root[data-top-dark="same"] [data-sample-theme="ember"] { --site-band: var(--bar); --builds-band: var(--bar); }
 
 /* The menu « +N ▾ »: the builds that don't fit, then Merge…, under its button, on its right edge. */
 .app-builds-more-wrap { position: relative; align-self: center; display: flex; }

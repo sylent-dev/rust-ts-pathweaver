@@ -23,6 +23,9 @@ const VARIANTS = {
   // The second link of the band of the site (2e2): it opens a box of what version 2 brings.
   nextLink: { label: "Second link", select: true, fallback: "next", options: { next: "What's next", v2: "What comes in V2",
     community: "Community · soon", soon: "Coming soon" } },
+  // The shades of the two bands at the top (2e2, css/app-bar.css), for the light style and for the dark ones.
+  topLight: { label: "Top bands, light", select: true, fallback: "builds-deep", options: { "site-deep": "The site darker", "builds-deep": "The open builds darker", "same-deep": "Both darker", same: "Both light" } },
+  topDark: { label: "Top bands, dark", select: true, fallback: "builds-deep", options: { "site-deep": "The site darker", "builds-deep": "The open builds darker", "same-deep": "Both darker", same: "Both light" } },
   theme: { label: "Style", options: Object.fromEntries(Object.entries(THEMES).map(([key, theme]) => [key, theme.title])), fallback: "frost" },
   // The second accent (css/accent-2.css): its colour, and what it marks.
   accent2: { label: "Accent 2", select: true, fallback: "amber", options: { amber: "Amber", blue: "Blue", coral: "Coral", mint: "Mint",
