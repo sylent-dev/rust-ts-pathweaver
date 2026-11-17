@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{{title}}</title>
+<!-- The page of a moodboard, filled by build.py: every board on one page to scroll, a click
+     picks a reference, the picks show at the top and copy in one click for the chat. -->
+<style>
+:root { --bg: #16181d; --band: #1f2228; --tile: #2a2d33; --text: #e8e8e8; --weak: #9aa0aa; --accent: #ffcc33; }
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--text); font: 15px/1.4 system-ui, sans-serif; }
+header { position: sticky; top: 0; z-index: 2; display: flex; flex-wrap: wrap; gap: 6px 14px; align-items: center; padding: 10px 16px; background: var(--band); box-shadow: 0 2px 8px #0008; }
+h1 { margin: 0 12px 0 0; font-size: 17px; }
+nav { display: flex; flex-wrap: wrap; gap: 4px 12px; }
+nav a { color: var(--weak); text-decoration: none; }
+nav a:hover { color: var(--text); }
+.picks { display: flex; flex-basis: 100%; gap: 10px; align-items: center; color: var(--weak); }
+.picks b { color: var(--accent); font-weight: 600; }
+.picks button { padding: 3px 10px; border: 0; border-radius: 4px; background: var(--accent); color: #111; font: inherit; cursor: pointer; }
+main { padding: 8px 16px 60px; }
+h2 { margin: 28px 0 12px; font-size: 20px; scroll-margin-top: 110px; }
+h2 small { color: var(--weak); font-size: 14px; font-weight: 400; }
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 420px), 1fr)); gap: 12px; }
+.tile { position: relative; overflow: hidden; aspect-ratio: 4 / 3; padding: 0; border: 3px solid transparent; border-radius: 6px; background: var(--tile); cursor: pointer; }
+.tile img { display: block; width: 100%; height: 100%; object-fit: contain; }
+.num { position: absolute; top: 0; left: 0; padding: 3px 9px; border-bottom-right-radius: 6px; background: var(--accent); color: #111; font-weight: 700; }
+.tile.is-picked { border-color: var(--accent); }
+.tile.is-picked .num::after { content: " ✓"; }
+</style>
+</head>
+<body>
+<header>
+  <h1>{{title}}</h1>
+  <nav>{{nav}}</nav>
+  <div class="picks">Click a reference to pick it: <b id="picks">none yet</b><button id="copy">Copy the numbers</button></div>
+</header>
+<main>{{sections}}</main>
+<script>
+const KEY = `moodboard-picks:${{{key}}}`;
+const picked = new Set();
+try { JSON.parse(localStorage.getItem(KEY) || "[]").forEach(ref => picked.add(ref)); } catch { /* no storage: the picks last until the reload */ }
+const byNumber = (a, b) => Number(a.slice(1)) - Number(b.slice(1));
+function show() {
+  const list = [...picked].sort(byNumber);
+  document.getElementById("picks").textContent = list.length ? list.join(", ") : "none yet";
+  document.querySelectorAll(".tile").forEach(tile => tile.classList.toggle("is-picked", picked.has(tile.dataset.ref)));
+  try { localStorage.setItem(KEY, JSON.stringify(list)); } catch { /* idem */ }
+}
+document.querySelectorAll(".tile").forEach(tile => tile.addEventListener("click", () => {
+  const ref = tile.dataset.ref;
+  if (picked.has(ref)) picked.delete(ref); else picked.add(ref);
+  show();
+}));
+document.getElementById("copy").addEventListener("click", () => navigator.clipboard?.writeText([...picked].sort(byNumber).join(", ")));
+show();
+</script>
+</body>
+</html>
