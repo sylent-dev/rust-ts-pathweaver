@@ -2,7 +2,7 @@
 .app-overview { display: flex; height: 668px; }
 .app-side { flex: none; width: 330px; box-sizing: border-box; padding: 12px 12px 12px 14px; overflow: hidden; background: var(--side); }
 .app-new { display: flex; flex-direction: column; gap: 3px; padding: 7px 10px 9px; border: var(--border-width) solid var(--accent); border-radius: var(--radius); background: var(--new-fill); box-shadow: var(--accent-glow); font-size: 13px; }
-.app-new.is-empty { border-color: var(--line-weak); box-shadow: none; background: none; }
+.app-new.is-empty { box-shadow: none; background: var(--fill); }
 .app-new-line { text-indent: -.8em; padding-left: .8em; }   /* a long line wraps under its text, not under its + */
 .app-side-title { margin: 16px 0 8px 4px; font-size: 15px; }
 .app-skills { margin: 0; padding: 0 0 0 4px; list-style: none; }
@@ -19,6 +19,6 @@
 .app-skill-supports { margin-left: auto; font-size: 12px; white-space: nowrap; }
 .app-side .app-switch { margin-left: 4px; }
 .app-inventory { position: relative; width: 216px; height: 216px; margin: 10px 0 0 4px; }
-.app-slot { position: absolute; display: grid; place-items: center; box-sizing: border-box; border: var(--border-width) solid var(--slot-line); border-radius: var(--slot-radius); color: var(--weak); font-size: 10px; }
+.app-slot { position: absolute; display: grid; place-items: center; box-sizing: border-box; border-radius: var(--slot-radius); background: var(--slot-empty); color: var(--weak); font-size: 10px; }
 .app-slot.is-hinted { background: var(--slot-fill); color: var(--text); }
 .app-slot.is-hinted::after { content: ""; position: absolute; top: 4px; right: 4px; width: 5px; height: 5px; border-radius: 50%; background: var(--accent-soft); }

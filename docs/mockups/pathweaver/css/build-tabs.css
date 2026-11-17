@@ -6,4 +6,4 @@
 /* On trial (2026-11-17): tabs the full height of their band, square at the top, here and in the app bar. */
 :root[data-tabs="full"] .app-tabs { padding-top: 0; }
 :root[data-tabs="full"] .app-bar-tabs { align-self: stretch; }
-:root[data-tabs="full"] :is(.app-tab, .app-bar-tab) { align-self: stretch; height: auto; border-top: none; border-radius: 0; }
+:root[data-tabs="full"] :is(.app-tab, .app-bar-tab) { align-self: stretch; height: auto; border-radius: 0; }

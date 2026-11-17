@@ -43,7 +43,7 @@
   /* Lines and shapes. */
   --divider: #1e1e1e;
   --line-weak: #adb5bd;
-  --border-width: 1px;
+  --border-width: 0;   /* no borders: the blocks are told apart by their colours only (the owner, 2026-11-17) */
   --radius: 4px;
   --window-shadow: 0 8px 30px #0006;
   --portrait-radius: 50%;
@@ -62,7 +62,7 @@
   --marker: #868e96;
   --cursor-radius: 50%;
   /* The inventory. */
-  --slot-line: #1e1e1e;
+  --slot-empty: #f1f3f5;   /* an empty slot, a hinted one (--slot-fill) */
   --slot-fill: #e9ecef;
   --slot-radius: 0;
   /* The gems: a colour per attribute (strength, dexterity, intelligence, none) and a shape. */
@@ -105,21 +105,19 @@
   --page: #eef2f8;
   --page-image: radial-gradient(ellipse 80% 40% at 0% 0%, #dbe7ff 0%, transparent 70%);
   --bar: #e2e9f4; --on-bar: #0f1b33;
-  --band: #f8fbff; --on-band: #0f1b33; --on-band-weak: #5c6c88; --band-deep: #dfe6f1;
+  --band: #f8fbff; --on-band: #0f1b33; --on-band-weak: #5c6c88; --band-deep: #d9e2ef;
   --panel: #ffffffd9;
-  --tab: #dde6f3; --on-tab: #4a5a78;
+  --tab: #c9d5e6; --on-tab: #4a5a78;
   --control: #ffffff; --control-line: #d5deec;
-  --control-shadow: 0 1px 2px #0f1b3314;
   --fill: #e5ecf7; --fill-strong: #2563eb; --on-fill-strong: #ffffff;
   --divider: #d5deec; --line-weak: #d5deec;
   --radius: 8px;
   --window-shadow: 0 24px 60px #0f1b332e;
-  --portrait-ring: 0 0 0 1px #d5deec;
   --text: #0f1b33; --weak: #5c6c88;
   --accent: #2563eb; --accent-soft: #2563eb; --on-accent: #ffffff;
-  --new-fill: #2563eb0d;
+  --new-fill: #2563eb1a;
   --track: #c1cfe6; --track-width: 2px; --marker: #8fa2c4;
-  --slot-line: #cfdaeb; --slot-fill: #e5ecf7; --slot-radius: 8px;
+  --slot-empty: #cad6e7; --slot-fill: #f4f7fc; --slot-radius: 8px;
   --gem-str: #e5484d; --gem-dex: #12a594; --gem-int: #2563eb; --gem-none: #8fa2c4;
   --gem-size: 9px; --gem-radius: 2px; --gem-line: none;
   --tree-background: transparent;
@@ -144,20 +142,18 @@
   --page-image: radial-gradient(ellipse 80% 40% at 0% 0%, #172644 0%, transparent 70%);
   --bar: #121a29; --on-bar: #e3eaf5;
   --band: #0f1726; --on-band: #e3eaf5; --on-band-weak: #8393ad; --band-deep: #070b12;
-  --panel: #0c111bd9;
+  --panel: #141d2ee6;
   --tab: #172133; --on-tab: #8393ad;
-  --control: #121a29; --control-line: #24304a;
-  --control-shadow: 0 1px 2px #00000066;
+  --control: #1a2539; --control-line: #24304a;
   --fill: #172133; --fill-strong: #3b82f6; --on-fill-strong: #ffffff;
   --divider: #1f2a40; --line-weak: #1f2a40;
   --radius: 8px;
-  --window-shadow: 0 0 0 1px #1f2a40, 0 24px 60px #000000aa;
-  --portrait-ring: 0 0 0 1px #24304a;
+  --window-shadow: 0 24px 60px #000000aa;
   --text: #e3eaf5; --weak: #8393ad;
   --accent: #60a5fa; --accent-soft: #60a5fa; --on-accent: #0c111b;
-  --new-fill: #60a5fa12;
+  --new-fill: #60a5fa24;
   --track: #2a3a5c; --track-width: 2px; --marker: #4b5f86;
-  --slot-line: #24304a; --slot-fill: #172133; --slot-radius: 8px;
+  --slot-empty: #111a2a; --slot-fill: #1c2840; --slot-radius: 8px;
   --gem-str: #f87171; --gem-dex: #2dd4bf; --gem-int: #60a5fa; --gem-none: #8393ad;
   --gem-size: 9px; --gem-radius: 2px; --gem-line: none;
   --tree-background: transparent;
@@ -182,20 +178,18 @@
   --page-image: radial-gradient(ellipse 80% 40% at 0% 0%, #2a2117 0%, transparent 70%);
   --bar: #19191b; --on-bar: #ececee;
   --band: #161618; --on-band: #ececee; --on-band-weak: #8e8e94; --band-deep: #0a0a0b;
-  --panel: #131314d9;
+  --panel: #1e1e21e6;
   --tab: #212124; --on-tab: #8e8e94;
-  --control: #19191b; --control-line: #2c2c30;
-  --control-shadow: 0 1px 2px #00000066;
+  --control: #252528; --control-line: #2c2c30;
   --fill: #212124; --fill-strong: #f59e0b; --on-fill-strong: #131314;
   --divider: #262629; --line-weak: #262629;
   --radius: 8px;
-  --window-shadow: 0 0 0 1px #262629, 0 24px 60px #000000aa;
-  --portrait-ring: 0 0 0 1px #2c2c30;
+  --window-shadow: 0 24px 60px #000000aa;
   --text: #ececee; --weak: #8e8e94;
   --accent: #f59e0b; --accent-soft: #f59e0b; --on-accent: #131314;
-  --new-fill: #f59e0b12;
+  --new-fill: #f59e0b24;
   --track: #3a3a3f; --track-width: 2px; --marker: #5c5c63;
-  --slot-line: #2c2c30; --slot-fill: #1d1d20; --slot-radius: 8px;
+  --slot-empty: #18181a; --slot-fill: #27272a; --slot-radius: 8px;
   --gem-str: #f87171; --gem-dex: #2dd4bf; --gem-int: #60a5fa; --gem-none: #8e8e94;
   --gem-size: 9px; --gem-radius: 2px; --gem-line: none;
   --tree-background: transparent;

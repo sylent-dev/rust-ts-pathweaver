@@ -26,8 +26,8 @@ const VARIANTS = {
     violet: "Violet", magenta: "Magenta", lime: "Lime" } },
   accent2On: { label: "Accent 2 on", select: true, fallback: "later", options: {
     later: "What comes later (tree, markers)", gear: "The gear (hints of the slots)", controls: "The pressed switches", all: "All three" } },
-  // On trial on the three styles (2026-11-17): the app bar, the level band without its lines and the right column a shade darker, and tabs the full height of their band.
-  band: { label: "Bands", select: true, fallback: "deep", options: { deep: "Darker: the bar, the level band (no lines), the column", lines: "As before" } },
+  // On trial on the three styles (2026-11-17): the app bar, the level band, the row of the tabs and the right column a shade darker, and tabs the full height of their band.
+  band: { label: "Bands", select: true, fallback: "deep", options: { deep: "Darker: the bar, the level band, the tabs, the column", lines: "As before" } },
   tabs: { label: "Tabs", select: true, fallback: "full", options: { full: "Full height", short: "As before" } },
   colour: { label: "Colour", select: true, fallback: "blue", options: { text: "Grey (the text)", blue: "Pale blue", accent: "Accent" } },
   size: { label: "Size", range: { min: 6, max: 200, step: 2 }, variable: "--texture-size", unit: "px", fallback: "24" },
