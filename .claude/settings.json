@@ -20,6 +20,7 @@
     "anthropic-skills:computer-use": "user-invocable-only",
     "claude-in-chrome": "user-invocable-only",
     "dataviz": "user-invocable-only",
-    "claude-api": "user-invocable-only"
+    "claude-api": "user-invocable-only",
+    "moodboards": "user-invocable-only"
   }
 }
