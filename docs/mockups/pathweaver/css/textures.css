@@ -31,5 +31,5 @@
 :root[data-zone="window"] .app-window::before {
   content: ""; position: absolute; inset: 0; z-index: -1; pointer-events: none;
   background: var(--texture-colour); opacity: var(--texture-opacity);
-  mask-image: var(--texture); mask-size: var(--texture-size);
+  mask-image: var(--texture); mask-size: var(--texture-size) var(--texture-size);
 }
