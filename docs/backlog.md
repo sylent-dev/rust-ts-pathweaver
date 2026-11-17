@@ -32,6 +32,7 @@ Set aside at the wireframes (2026-11-16, see `docs/wireframes/archive.excalidraw
 
 ## Later versions
 
+- **The side panel of the open builds** (layout, set aside by the owner on 2026-11-17 at step 2e2; depends on the band of the open builds): from about 1,400 pixels, the open builds in a panel on the left, with their full names, **+ Open files or JSON**, **Merge…** and **Home**, in place of the band of their tabs (the frames of `docs/wireframes/pathweaver.excalidraw`). Version 1 keeps the band at every width: a second layout to draw, code and test by hand at two widths.
 - **Comparing two builds**: what one takes that the other doesn't (version 2 compares the versions of a build).
 - **Sign in with a Path of Exile account** (OAuth of Grinding Gear Games) for version 2: verified authors, fewer fake accounts for the votes.
 - **A short link** for the builds too long for a message, stored by the server of version 2.

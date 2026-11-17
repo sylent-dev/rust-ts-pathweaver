@@ -151,8 +151,10 @@ Step 9 of the roadmap.
 
 Agreed on the wireframes of [docs/wireframes/pathweaver.excalidraw](docs/wireframes/pathweaver.excalidraw) on 2026-11-16; the variants set aside are in `archive.excalidraw`. The wireframe only fixed this first layout: once approved, the mock-up of step 2 is the reference.
 
-- **The portrait of the ascendancy** (of the class when the build has none) marks a build wherever it is named: its tab, its row of the side panel and of the library, its header, the phone page of a share link.
-- **App bar**, at the top of every page: « Pathweaver », which leads to the home page, then the open builds. Narrower than about 1,400 pixels, they are tabs (as many as fit, the others in a « +N ▾ » menu, which also holds **Merge…**), and a **+** opens files. From about 1,400 pixels, they move to a side panel on the left, with their full names, **+ Open files or JSON**, **Merge…** and **Home**.
+- **The portrait of the ascendancy** (of the class when the build has none) marks a build wherever it is named: its tab, its row of the library, its header, the phone page of a share link.
+- **Two bands of 44 pixels at the top of every page** (the owner, 2026-11-17; sketch in [docs/wireframes/app-bands.excalidraw](docs/wireframes/app-bands.excalidraw)), the site above, the open builds below, so that the menu of version 2 has its own room:
+  - **the band of the site**: the brand (see The brand), which leads to the home page; on the right, **Report a bug**, an icon alone the full height of the band, « Report a bug » on hover, which opens a new issue on GitHub. Version 2 adds the menu, the search, the settings and the account to it; version 1 has no settings.
+  - **the band of the open builds**, a shade lighter, at every width: their tabs (the portrait, the name cut to fit, the close button; 168 pixels, up to 240 when they all fit), then **+N ▾**, a menu of the builds that don't fit and **Merge…**, then **+**, which opens files.
 - **The page of a build**, from top to bottom:
   - the header: the name, « by author · ascendancy (class) », and **Copy link**, **Download .build** and **⚠ warnings** (which leads to About);
   - the level band: ◀ and ▶ with the level each goes to, the level in large, the track with its markers and the cursor, « what changes at N » on the right;
@@ -160,7 +162,7 @@ Agreed on the wireframes of [docs/wireframes/pathweaver.excalidraw](docs/wirefra
 - What is new at the level stands out (the « New at N » box, the new gems, the new passives ringed on the tree), as does the cursor of the level: the one accent of the interface.
 - **The home page**: at the first visit, a line drawn at random at each visit among « Die less. Plan more. », « Every exile needs a map. », « The tree is huge. Your path isn't. », « Know your next 99 levels. » and « Open a .build file. See the whole road. » (in the translation file, like every text: the French ones will be adapted, not translated word for word), then what Pathweaver does, a large drop zone with **Choose files** and **Paste JSON**, and where `.build` files come from; afterwards, a smaller drop zone over the library, one row per build (name, author, ascendancy, levels, last opened, **Open**, and a bin that asks once, in the row). Files dropped anywhere, on any page, open.
 - **Paste JSON** is a dialog; its field has a fixed size, can't be resized, and scrolls only when the text overflows; the reason a text isn't a build is written under it.
-- **Opening errors**: the first build opened is shown, and a notice names each file refused with its reason; it stays until it is closed. A damaged share link and private browsing are notices under the app bar.
+- **Opening errors**: the first build opened is shown, and a notice names each file refused with its reason; it stays until it is closed. A damaged share link and private browsing are notices under the two bands at the top.
 - **Merge…** is a page of its own: the open builds with a box to tick, the ticked ones in the order of their start levels (each in a field, with the levels it applies to), the merged guide as a track of named segments, the checks (what blocks stands out, what only warns doesn't), the name and the author, and **Merge N builds**, greyed while something blocks.
 - **Copy link** and **Download .build** answer in a box under their button: the length of the link and the Discord warning; where the game reads the file.
 
@@ -169,7 +171,7 @@ Agreed on the wireframes of [docs/wireframes/pathweaver.excalidraw](docs/wirefra
 Decided by the owner on the mock-up (step 2, 2026-11-17), its reference.
 
 - **The mark**: the owner's own, two rings of a triangle pointing down, the outer one in three bars, the inner one a P, every edge flat or at 60°; in its bold weight (bars a little wider than the gaps). Its frame is in the accent, its P in the colour of the text around it.
-- **In the app bar**: the mark at 24 pixels, then « Pathweaver » in Archivo 700, spaced -0.06 em, at 16 pixels, 8 pixels apart, the middle of its capitals 1 pixel below the middle of the mark, tuned by eye.
+- **In the band of the site**: the mark at 24 pixels, then « Pathweaver » in Archivo 700, spaced -0.06 em, at 16 pixels, 8 pixels apart, the middle of its capitals 1 pixel below the middle of the mark, tuned by eye.
 - **The favicon**: the same mark, an SVG drawn at 16 pixels, its frame in the accent, its P dark or light after the scheme of the system, as the browser draws its tabs.
 - Set aside: the weights as drawn, even and light, the mark on the pixel grid (sharper at 16 pixels, but a second drawing), the P alone, the mark on a square of the accent, the frame or the whole mark in one ink.
 
