@@ -12,9 +12,6 @@
 .app-site-brand { display: flex; align-items: center; gap: var(--brand-gap); flex: none; padding-right: 12px; }
 .app-site-brand .logo-mark { width: var(--brand-mark-size); height: var(--brand-mark-size); }
 .app-site-brand .logo-name { position: relative; top: var(--brand-name-offset); font-size: var(--brand-size); }
-.app-builds-more, .app-builds-open { align-self: center; display: inline-flex; align-items: center; gap: 4px; height: 26px; padding: 0 8px; border: var(--border-width) solid var(--control-line); border-radius: var(--radius); background: var(--control); color: var(--text); box-shadow: var(--control-shadow); cursor: pointer; font-size: 13px; }
-.app-builds-open { width: 30px; height: 28px; justify-content: center; padding: 0; }
-.app-builds-more.is-open { border-color: var(--accent); }
 
 /* The shades of the two bands, one list for the light style and one for the dark ones (the owner,
    2026-11-18: it depends on the mode): set on the element of the style, so that --bar and
@@ -28,13 +25,60 @@
 :root[data-top-dark="same-deep"]:is([data-theme="frost-night"], [data-theme="ember"]), :root[data-top-dark="same-deep"] [data-sample-theme="frost-night"], :root[data-top-dark="same-deep"] [data-sample-theme="ember"] { --site-band: var(--band-deep); --builds-band: var(--band-deep); }
 :root[data-top-dark="same"]:is([data-theme="frost-night"], [data-theme="ember"]), :root[data-top-dark="same"] [data-sample-theme="frost-night"], :root[data-top-dark="same"] [data-sample-theme="ember"] { --site-band: var(--bar); --builds-band: var(--bar); }
 
-/* The menu « +N ▾ »: the builds that don't fit, then Merge…, under its button, on its right edge. */
-.app-builds-more-wrap { position: relative; align-self: center; display: flex; }
-.app-builds-menu { position: absolute; z-index: 5; top: calc(100% + 6px); right: 0; width: 280px; padding: 4px; border: var(--border-width) solid var(--control-line); border-radius: var(--radius); background: var(--control); color: var(--text); box-shadow: 0 6px 18px rgb(0 0 0 / .22); font-size: 13px; }
-.app-builds-menu-item { display: flex; align-items: center; gap: 8px; height: 32px; padding: 0 8px; border-radius: calc(var(--radius) - 2px); cursor: pointer; }
-.app-builds-menu-item:hover { background: color-mix(in srgb, var(--text) 8%, transparent); }
-.app-builds-menu-item > span { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.app-builds-menu-line { height: var(--border-width, 1px); min-height: 1px; margin: 4px 6px; background: var(--divider); }
+/* The end of the band (2e2): « +N ▾ » and +, in four looks (« End of band », data-end-look), and the
+   menu of « +N ▾ », the builds that don't fit then Merge…, in three (« Menu », data-menu-look). The
+   states have classes too (is-hover, is-open), to be shown side by side without the mouse. */
+.app-builds-more-wrap { position: relative; display: flex; align-self: stretch; }
+.app-builds-more, .app-builds-open { display: inline-flex; align-items: center; justify-content: center; gap: 5px; padding: 0 10px; border: none; background: none; color: inherit; cursor: pointer; font-size: 13px; }
+.app-builds-open > span { display: none; }
+
+/* A · raised: two small controls in the middle of the band. */
+.app-builds[data-end-look="A"] :is(.app-builds-more-wrap, .app-builds-open) { align-self: center; }
+.app-builds[data-end-look="A"] :is(.app-builds-more, .app-builds-open) { height: 26px; padding: 0 8px; border: var(--border-width) solid var(--control-line); border-radius: var(--radius); background: var(--control); color: var(--text); box-shadow: var(--control-shadow); }
+.app-builds[data-end-look="A"] .app-builds-open { width: 30px; height: 28px; padding: 0; }
+.app-builds[data-end-look="A"] :is(.app-builds-more, .app-builds-open):is(:hover, .is-hover) { border-color: var(--accent); }
+.app-builds[data-end-look="A"] .app-builds-more.is-open { border-color: var(--accent); }
+
+/* B · flat, C · flat with a line before each, D · flat with « Open »: the full height of the band,
+   no box, a background on hover and while open, as the tabs. */
+.app-builds:not([data-end-look="A"]) { gap: 0; }
+.app-builds:not([data-end-look="A"]) :is(.app-builds-more, .app-builds-open) { align-self: stretch; height: 100%; min-width: 44px; color: color-mix(in srgb, var(--on-bar) 75%, transparent); }
+.app-builds:not([data-end-look="A"]) .app-builds-open { padding: 0; }
+.app-builds:not([data-end-look="A"]) :is(.app-builds-more, .app-builds-open):is(:hover, .is-hover) { background: color-mix(in srgb, var(--on-bar) 9%, transparent); color: var(--on-bar); }
+.app-builds:not([data-end-look="A"]) .app-builds-more.is-open { background: color-mix(in srgb, var(--on-bar) 13%, transparent); color: var(--on-bar); }
+.app-builds[data-end-look="C"] :is(.app-builds-more-wrap, .app-builds-open) { box-shadow: inset var(--border-width, 1px) 0 0 color-mix(in srgb, var(--on-bar) 24%, transparent); }
+.app-builds[data-end-look="D"] .app-builds-open { padding: 0 14px; }
+.app-builds[data-end-look="D"] .app-builds-open > span { display: inline; }
+
+/* 1 · a card: floating under its button, rounded, the builds in a row of 32 px, a small round portrait. */
+.app-builds-menu { position: absolute; z-index: 5; right: 0; width: 300px; font-size: 13px; }
+.app-builds-menu-item { display: flex; align-items: center; gap: 8px; cursor: pointer; }
+.app-builds-menu-text { display: flex; flex-direction: column; min-width: 0; }
+.app-builds-menu-text > span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; line-height: 1.2; }
+.app-builds-menu-portrait { flex: none; }
+.app-builds-menu-line { height: var(--border-width, 1px); min-height: 1px; background: var(--divider); }
+.app-builds[data-menu-look="1"] .app-builds-menu { top: calc(100% + 6px); padding: 4px; border: var(--border-width) solid var(--control-line); border-radius: var(--radius); background: var(--control); color: var(--text); box-shadow: 0 6px 18px rgb(0 0 0 / .22); }
+.app-builds[data-menu-look="1"] .app-builds-menu-item { height: 32px; padding: 0 8px; border-radius: calc(var(--radius) - 2px); }
+.app-builds[data-menu-look="1"] .app-builds-menu-item:hover { background: color-mix(in srgb, var(--text) 8%, transparent); }
+.app-builds[data-menu-look="1"] .app-builds-menu-portrait { width: 20px; height: 20px; border-radius: 50%; }
+.app-builds[data-menu-look="1"] .app-builds-menu-ascendancy { display: none; }
+.app-builds[data-menu-look="1"] .app-builds-menu-line { margin: 4px 6px; }
+
+/* 2 · attached: square corners, right under the band in its shade, each build a tab laid down (a row
+   of 44 px, its portrait square, its name over its ascendancy); 3 · the same, compact (32 px, the
+   name alone). */
+.app-builds:not([data-menu-look="1"]) .app-builds-menu { top: 100%; background: var(--bar-image), var(--builds-band, var(--band-deep)); color: var(--on-bar); box-shadow: 0 8px 18px rgb(0 0 0 / .28); }
+.app-builds:not([data-menu-look="1"]) .app-builds-menu-item { gap: 10px; padding-right: 12px; color: color-mix(in srgb, var(--on-bar) 80%, transparent); }
+.app-builds:not([data-menu-look="1"]) .app-builds-menu-item:hover { background: color-mix(in srgb, var(--on-bar) 9%, transparent); color: var(--on-bar); }
+.app-builds[data-menu-look="2"] .app-builds-menu-item { height: 44px; }
+.app-builds[data-menu-look="2"] .app-builds-menu-portrait { width: 44px; height: 44px; }
+.app-builds[data-menu-look="2"] .app-builds-menu-name { font-size: 12px; }
+.app-builds[data-menu-look="2"] .app-builds-menu-ascendancy { font-size: 11px; opacity: .7; }
+.app-builds[data-menu-look="3"] .app-builds-menu-item { height: 32px; }
+.app-builds[data-menu-look="3"] .app-builds-menu-portrait { width: 32px; height: 32px; }
+.app-builds[data-menu-look="3"] .app-builds-menu-ascendancy { display: none; }
+.app-builds:not([data-menu-look="1"]) .app-builds-menu-merge { height: 40px; padding-left: 14px; }
+.app-builds:not([data-menu-look="1"]) .app-builds-menu-line { background: color-mix(in srgb, var(--on-bar) 14%, transparent); }
 
 
 /* A build tab (2e): the full height of the band, side by side, square corners (the owner,
@@ -67,3 +111,12 @@
 
 /* The section of the two bands (sections/bands.js): the page under them, where the menu opens. */
 .bands-page { height: 150px; background: var(--page); }
+
+/* The sections of the end of the band (sections/band-end.js). */
+.end-states > span { width: 420px; }
+.end-states { gap: 8px; }
+.end-row { display: flex; gap: 8px; }
+.end-strip { width: 420px; }
+.menu-row { display: flex; gap: 8px; }
+.menu-window { overflow: visible; }
+.menu-page { height: 330px; }

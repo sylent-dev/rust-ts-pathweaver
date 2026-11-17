@@ -27,29 +27,36 @@ const openBuildTab = (build, states = "") => `<div class="app-builds-tab ${state
     <button type="button" class="app-builds-close" aria-label="Close">${icon(12, ICONS.close)}</button>
   </div>`;
 
-// The band of the open builds, its tabs underlined when current (css/app-bar.css):
-// full height, side by side, 184 px each, up to 240 when they all fit; those that don't fit go to the menu « +N ▾ », which
-// also holds Merge… and is always there. `menuOpen` shows the menu open.
+// The band of the open builds: its tabs full height, side by side, 184 px each, up to 240 when
+// they all fit; those that don't fit go to the menu « +N ▾ », which also holds Merge… and is always
+// there; then + to open files. The end of the band (« +N ▾ », + and the menu) in the looks of the
+// lists « End of band » and « Menu » (data-end-look, data-menu-look), under comparison (2e2);
+// `menuOpen` shows the menu open, `moreState` and `openState` a state of the two buttons.
 const TAB_WIDTH = 184, TAB_MAX_WIDTH = 240, TAB_GAP = 0;
 STATE.buildsMenu = false;
 
-function buildsBand(width, builds = BUILDS.open, menuOpen = STATE.buildsMenu) {
-  const room = width - 12 - 100;   // the padding on the right, then « +N ▾ » and +
+const menuBuild = build => `<div class="app-builds-menu-item" role="menuitem" title="${escapeHtml(build.name)} · ${escapeHtml(build.ascendancy)}">
+  <img class="app-builds-menu-portrait" src="pathweaver/img/portraits-square/${build.portrait}.webp" width="44" height="44" alt="">
+  <span class="app-builds-menu-text"><span class="app-builds-menu-name">${escapeHtml(build.name)}</span><span class="app-builds-menu-ascendancy">${escapeHtml(build.ascendancy)}</span></span>
+</div>`;
+
+function buildsBand(width, { builds = BUILDS.open, menuOpen = STATE.buildsMenu, endLook = chosen.endLook, menuLook = chosen.menuLook,
+  moreState = "", openState = "" } = {}) {
+  const room = width - 12 - (endLook === "A" ? 100 : 160);   // the padding on the right, then « +N ▾ » and +
   const fit = Math.max(1, Math.floor((room + TAB_GAP) / (TAB_WIDTH + TAB_GAP)));
   const shown = builds.slice(0, fit);
   const hidden = builds.slice(fit);
   const tabWidth = hidden.length ? TAB_WIDTH : Math.min(TAB_MAX_WIDTH, Math.floor((room + TAB_GAP) / builds.length) - TAB_GAP);
-  return `<div class="app-builds" style="--tab-width:${tabWidth}px">
+  return `<div class="app-builds" data-end-look="${endLook}" data-menu-look="${menuLook}" style="--tab-width:${tabWidth}px">
     <div class="app-builds-tabs" role="tablist">${shown.map((build, index) => openBuildTab(build, index === 0 ? "is-current" : "")).join("")}</div>
     <span class="app-builds-more-wrap">
-      <button type="button" class="app-builds-more ${menuOpen ? "is-open" : ""}" data-action="toggleBuildsMenu" aria-expanded="${menuOpen}" aria-label="More builds and Merge">${hidden.length ? `+${hidden.length}` : ""}${icon(12, ICONS.down)}</button>
-      ${menuOpen ? `<div class="app-builds-menu" role="menu">${hidden.map(build => `
-        <div class="app-builds-menu-item" role="menuitem" title="${escapeHtml(build.name)} · ${escapeHtml(build.ascendancy)}">${portrait(build.portrait, 20)}<span>${escapeHtml(build.name)}</span></div>`).join("")}
+      <button type="button" class="app-builds-more ${moreState} ${menuOpen ? "is-open" : ""}" data-action="toggleBuildsMenu" aria-expanded="${menuOpen}" aria-label="More builds and Merge">${hidden.length ? `+${hidden.length}` : ""}${icon(12, ICONS.down)}</button>
+      ${menuOpen ? `<div class="app-builds-menu" role="menu">${hidden.map(menuBuild).join("")}
         ${hidden.length ? `<div class="app-builds-menu-line"></div>` : ""}
-        <div class="app-builds-menu-item" role="menuitem">Merge…</div>
+        <div class="app-builds-menu-item app-builds-menu-merge" role="menuitem">Merge…</div>
       </div>` : ""}
     </span>
-    <button type="button" class="app-builds-open" title="Open files or paste JSON" aria-label="Open files or paste JSON">${icon(14, ICONS.plus)}</button>
+    <button type="button" class="app-builds-open ${openState}" title="Open files or paste JSON" aria-label="Open files or paste JSON">${icon(14, ICONS.plus)}<span>Open</span></button>
   </div>`;
 }
 ACTIONS.toggleBuildsMenu = () => {
