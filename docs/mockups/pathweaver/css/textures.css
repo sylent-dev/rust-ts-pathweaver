@@ -1,8 +1,8 @@
-/* The texture behind the blocks (2026-11-17): graph paper behind every block, the tree included,
-   both decided by the owner. Its colour, its size and its opacity are still tuned (VARIANTS in
-   page.js). The pattern is a mask: its lines take the colour
-   of the layer. The other patterns and a second layer, shifted, turned, drifting and faded, were
-   tried and set aside (docs/backlog.md). */
+/* The texture behind the blocks (2026-11-17): graph paper behind every block, the tree and the row
+   of the tabs included, decided by the owner. Its colour, its size and its opacity are still tuned
+   (VARIANTS in page.js). The pattern is a mask: its lines take the colour of the layer. The other
+   patterns and a second layer, shifted, turned, drifting and faded, were tried and set aside
+   (docs/backlog.md). */
 
 :root {
   /* Graph paper: a line every tile, and a fainter one every quarter. */
@@ -18,10 +18,10 @@
 :root[data-colour="accent"] { --texture-colour: var(--texture-accent); }
 
 /* The blocks that take the texture: a layer under their content, in their own stacking context. */
-.app-header, .app-level, .app-side { position: relative; }
-.app-header, .app-level, .app-tree, .app-side { isolation: isolate; }
+.app-header, .app-level, .app-tabs, .app-side { position: relative; }
+.app-header, .app-level, .app-tabs, .app-tree, .app-side { isolation: isolate; }
 
-:is(.app-header, .app-level, .app-tree, .app-side)::before {
+:is(.app-header, .app-level, .app-tabs, .app-tree, .app-side)::before {
   content: ""; position: absolute; inset: 0; z-index: -1; pointer-events: none;
   background: var(--texture-colour); opacity: var(--texture-opacity);
   mask-image: var(--texture); mask-size: var(--texture-size) var(--texture-size);
