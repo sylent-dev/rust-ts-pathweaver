@@ -3,10 +3,41 @@
 .app-bar-brand { align-self: center; display: flex; align-items: center; gap: var(--brand-gap); flex: none; padding-right: 12px; }
 .app-bar-brand .logo-mark { width: var(--brand-mark-size); height: var(--brand-mark-size); }
 .app-bar-brand .logo-name { position: relative; top: var(--brand-name-offset); font-size: var(--brand-size); }
-.app-bar-tabs { display: flex; gap: 6px; }
-.app-bar-tab { display: flex; align-items: center; gap: 8px; width: 168px; height: 36px; box-sizing: border-box; margin-bottom: calc(-1 * var(--border-width)); padding: 0 6px; border: var(--border-width) solid var(--control-line); border-bottom: none; border-radius: var(--radius) var(--radius) 0 0; background: var(--tab); color: var(--on-tab); cursor: pointer; }
-.app-bar-tab.is-current { background: var(--page); color: var(--text); }
-.app-bar-tab-name { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 13px; }
-.app-bar-close { display: grid; place-items: center; width: 18px; height: 18px; padding: 0; border: none; background: none; color: inherit; opacity: .6; cursor: pointer; }
 .app-bar-more, .app-bar-open { align-self: center; display: inline-flex; align-items: center; gap: 4px; height: 26px; padding: 0 8px; border: var(--border-width) solid var(--control-line); border-radius: var(--radius); background: var(--control); color: var(--text); box-shadow: var(--control-shadow); cursor: pointer; font-size: 13px; }
 .app-bar-open { width: 30px; height: 28px; justify-content: center; padding: 0; }
+
+/* A build tab (2e): its portrait, its name cut to fit, its close button. The states have classes
+   too (is-hover, is-close-hover), to be shown side by side without the mouse. */
+.app-bar-tabs { align-self: stretch; display: flex; align-items: flex-end; gap: 6px; }
+.app-bar-tab { display: flex; align-items: center; gap: 8px; width: 168px; height: 36px; box-sizing: border-box; padding: 0 6px; cursor: pointer; }
+.app-bar-tab-name { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 13px; }
+.app-bar-close { display: grid; place-items: center; flex: none; width: 20px; height: 20px; padding: 0; border: none; border-radius: 50%; background: none; color: inherit; opacity: .6; cursor: pointer; }
+.app-bar-close:hover, .app-bar-tab.is-close-hover .app-bar-close { opacity: 1; background: color-mix(in srgb, currentColor 16%, transparent); }
+:root[data-bar-close="hover"] .app-bar-tab:not(.is-current, :hover, .is-hover, .is-close-hover) .app-bar-close { visibility: hidden; }
+
+/* 92 · Card, and 95 · Card with the accent on top: the current tab in the colour of the page, open
+   on it; the others a shade darker, lighter on hover. */
+:is([data-tab-look="92"], [data-tab-look="95"]) .app-bar-tab { margin-bottom: calc(-1 * var(--border-width)); border: var(--border-width) solid var(--control-line); border-bottom: none; border-radius: var(--radius) var(--radius) 0 0; background: var(--tab); color: var(--on-tab); }
+:is([data-tab-look="92"], [data-tab-look="95"]) .app-bar-tab:not(.is-current):is(:hover, .is-hover, .is-close-hover) { background: color-mix(in srgb, var(--tab), var(--page) 55%); color: var(--text); }
+:is([data-tab-look="92"], [data-tab-look="95"]) .app-bar-tab.is-current { background: var(--page); color: var(--text); }
+:root[data-bar-tab-height="full"] :is([data-tab-look="92"], [data-tab-look="95"]) .app-bar-tab { height: 100%; border-radius: 0; }
+[data-tab-look="95"] .app-bar-tab.is-current { box-shadow: inset 0 2px 0 var(--accent); }
+
+/* 93 · Underline: no box, the full height of the bar; the current tab underlined in the accent. */
+[data-tab-look="93"] .app-bar-tab { height: 100%; color: color-mix(in srgb, var(--on-bar) 68%, transparent); }
+[data-tab-look="93"] .app-bar-tab:is(:hover, .is-hover, .is-close-hover) { background: color-mix(in srgb, var(--on-bar) 7%, transparent); color: var(--on-bar); }
+[data-tab-look="93"] .app-bar-tab.is-current { color: var(--on-bar); box-shadow: inset 0 -2px 0 var(--accent); }
+
+/* 94 · Chip: a button in the middle of the bar; the current one raised like a control. */
+[data-tab-look="94"] .app-bar-tab { align-self: center; height: 32px; border: var(--border-width) solid transparent; border-radius: var(--radius); color: color-mix(in srgb, var(--on-bar) 68%, transparent); }
+[data-tab-look="94"] .app-bar-tab:is(:hover, .is-hover, .is-close-hover) { background: color-mix(in srgb, var(--on-bar) 7%, transparent); color: var(--on-bar); }
+[data-tab-look="94"] .app-bar-tab.is-current { border-color: var(--control-line); background: var(--control); box-shadow: var(--control-shadow); color: var(--text); }
+[data-tab-look="94"] .app-bar-tabs { align-items: center; }
+
+/* The section of the tab (sections/bar-tab.js): the states side by side, then the page below. */
+.tab-states, .tab-strip .app-bar-tabs { display: flex; gap: 6px; }
+.tab-states { padding: 0 14px; }
+.tab-states > span { width: 168px; color: #adb5bd; font-size: 12px; }
+.tab-strip { overflow: hidden; border-radius: 6px; background: var(--page); }
+.tab-strip-page { height: 14px; }
+.tab-card { display: flex; flex-direction: column; gap: 6px; }

@@ -21,13 +21,17 @@ const THEMES = {
 
 const VARIANTS = {
   // The inks of the mark (css/logo.css): its frame, the three bars outside, and its P.
+  // The tabs of the app bar (2e, sections/bar-tab.js): their look, the height of a card, the close button.
+  barTab: { label: "Bar tab", select: true, fallback: "92", options: { 92: "92 · Card", 93: "93 · Underline", 94: "94 · Chip", 95: "95 · Card, accent on top" } },
+  barTabHeight: { label: "Card height", options: { short: "36 px", full: "Full" }, fallback: "short" },
+  barClose: { label: "Close ×", select: true, fallback: "always", options: { always: "Always", hover: "On the current tab and on hover" } },
   theme: { label: "Style", options: Object.fromEntries(Object.entries(THEMES).map(([key, theme]) => [key, theme.title])), fallback: "frost" },
   // The second accent (css/accent-2.css): its colour, and what it marks.
   accent2: { label: "Accent 2", select: true, fallback: "amber", options: { amber: "Amber", blue: "Blue", coral: "Coral", mint: "Mint",
     violet: "Violet", magenta: "Magenta", lime: "Lime" } },
   accent2On: { label: "Accent 2 on", select: true, fallback: "later", options: {
     later: "What comes later (tree, markers)", gear: "The gear (hints of the slots)", controls: "The pressed switches", all: "All three" } },
-  // On trial on the three styles (2026-11-17): the app bar, the level band, the row of the tabs and the right column a shade darker, and tabs the full height of their band.
+  // On trial on the three styles (2026-11-17): the app bar, the level band, the row of the tabs and the right column a shade darker, and the tabs of a build the full height of their band.
   band: { label: "Bands", select: true, fallback: "deep", options: { deep: "Darker: the bar, the level band, the tabs, the column", lines: "As before" } },
   tabs: { label: "Tabs", select: true, fallback: "full", options: { full: "Full height", short: "As before" } },
   colour: { label: "Colour", select: true, fallback: "blue", options: { text: "Grey (the text)", blue: "Pale blue", accent: "Accent" } },
