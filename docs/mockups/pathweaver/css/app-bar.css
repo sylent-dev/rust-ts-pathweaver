@@ -50,13 +50,12 @@
 .app-builds-close { display: grid; place-items: center; flex: none; width: 20px; height: 20px; padding: 0; border: none; border-radius: 50%; background: none; color: inherit; opacity: .6; cursor: pointer; }
 .app-builds-close:hover, .app-builds-tab.is-close-hover .app-builds-close { opacity: 1; background: color-mix(in srgb, currentColor 16%, transparent); }
 
-/* 93 · Underline (the owner, 2026-11-17): no box, the other tabs in a weaker text; the current one
-   underlined in the accent across its whole width, its portrait included, so that it reads as one
-   block: the line is drawn over the portrait. */
-.app-builds-tab { position: relative; color: color-mix(in srgb, var(--on-bar) 68%, transparent); }
+/* No box (the owner, 2026-11-17): the other tabs in a weaker text, the current one in the full
+   text. Its underline in the accent went on 2026-11-18 (the owner); it is in the history of Git
+   (commit 141b0eb). */
+.app-builds-tab { color: color-mix(in srgb, var(--on-bar) 68%, transparent); }
 .app-builds-tab:is(:hover, .is-hover, .is-close-hover) { background: color-mix(in srgb, var(--on-bar) 7%, transparent); color: var(--on-bar); }
 .app-builds-tab.is-current { color: var(--on-bar); }
-.app-builds-tab.is-current::after { content: ""; position: absolute; inset: auto 0 0; height: 2px; background: var(--accent); }
 
 /* The section of the tab (sections/bar-tab.js): the states side by side, then the page below. */
 .tab-states { display: flex; }

@@ -1,6 +1,6 @@
 // A tab of an open build (2e, the owner, 2026-11-17): the full height of the band, side by side,
-// square corners, its portrait square, its name over its ascendancy; 93 · Underline, the current
-// one underlined in the accent, its portrait included. Its states side by side on the three
+// square corners, its portrait square, its name over its ascendancy; no box, the current one in
+// the full text, the others weaker. Its states side by side on the three
 // styles, the close button always shown. The looks set aside (92 and 95, cards; 94,
 // a chip) are in the history of Git (commit 8473e84).
 
@@ -23,5 +23,5 @@ const tabCard = () => `<div class="tab-card" style="--tab-width:184px">
   </div>`).join("")}
 </div>`;
 
-addSection(() => ["A build tab · its states, on Frost, Frost Night and Ember: the portrait, the name over the ascendancy, the close button, the current one underlined",
-  [["93 · Underline", tabCard()]]]);
+addSection(() => ["A build tab · its states, on Frost, Frost Night and Ember: the portrait, the name over the ascendancy, the close button, the current one in the full text",
+  [["Without a box, the current one in the full text", tabCard()]]]);
