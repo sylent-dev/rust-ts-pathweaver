@@ -1,14 +1,18 @@
 // The two bands at the top of every page (specs.md, Window layout): the band of the site, the
-// brand and the report of a bug (the menu, the search, the settings and the account of version 2
-// come there); then the band of the open builds, their tabs (as many as fit, the others in a
+// brand, then Report a bug and Sign in (the menu, the search and the settings of version 2 come
+// there); then the band of the open builds, their tabs (as many as fit, the others in a
 // « +N ▾ » menu, which also holds Merge…) and + to open files.
 
-// Report a bug: a new issue on GitHub, the full height of the band; in words, in Manrope (the
-// owner, 2026-11-17: the band of the site has room in version 1), with or without the icon.
+// The links of the band of the site, in words, in Manrope, the full height of the band (the owner,
+// 2026-11-17): Report a bug opens a new issue on GitHub; Sign in, in version 1, will open a box
+// that says the community comes with version 2 (drawn later).
 const REPORT_BUG_URL = "https://github.com/sylent-dev/rust-ts-pathweaver/issues/new";
 const siteBand = () => `<div class="app-site">
     <span class="app-site-brand">${logoMark(24)}<span class="logo-name">Pathweaver</span></span>
-    <a class="app-site-bug" href="${REPORT_BUG_URL}" target="_blank" rel="noopener" title="Report a bug">${icon(16, ICONS.bug)}<span>Report a bug</span></a>
+    <nav class="app-site-links">
+      <a class="app-site-link" href="${REPORT_BUG_URL}" target="_blank" rel="noopener">Report a bug</a>
+      <a class="app-site-link" href="#" role="button">Sign in</a>
+    </nav>
   </div>`;
 
 const portrait = (key, size) => `<img class="app-portrait" src="pathweaver/img/portraits/${key}.webp" width="${size}" height="${size}" alt="">`;
@@ -23,13 +27,12 @@ const openBuildTab = (build, states = "") => `<div class="app-builds-tab ${state
   </div>`;
 
 // The band of the open builds, its tabs underlined when current (css/app-bar.css):
-// full height, side by side, « Tab width » each, up to 240 when they all fit; those that don't fit go to the menu « +N ▾ », which
+// full height, side by side, 184 px each, up to 240 when they all fit; those that don't fit go to the menu « +N ▾ », which
 // also holds Merge… and is always there. `menuOpen` shows the menu open.
-const TAB_MAX_WIDTH = 240, TAB_GAP = 0;
+const TAB_WIDTH = 184, TAB_MAX_WIDTH = 240, TAB_GAP = 0;
 STATE.buildsMenu = false;
 
 function buildsBand(width, builds = BUILDS.open, menuOpen = STATE.buildsMenu) {
-  const TAB_WIDTH = Number(chosen.tabWidth);
   const room = width - 12 - 100;   // the padding on the right, then « +N ▾ » and +
   const fit = Math.max(1, Math.floor((room + TAB_GAP) / (TAB_WIDTH + TAB_GAP)));
   const shown = builds.slice(0, fit);

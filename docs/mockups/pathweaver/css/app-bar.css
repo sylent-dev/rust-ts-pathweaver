@@ -1,14 +1,12 @@
-/* The band of the site: 44 px, the brand, then on the right the report of a bug, the full height
-   of the band. */
+/* The band of the site: 44 px, the brand, then on the right its links, each the full height of
+   the band. */
 .app-site { position: relative; z-index: 2; display: flex; align-items: center; height: 44px; padding-left: 14px; background: var(--bar-image), var(--bar); color: var(--on-bar); box-shadow: var(--site-shadow); }
-.app-site-bug { display: flex; align-items: center; justify-content: center; gap: 7px; min-width: 44px; height: 100%; box-sizing: border-box; margin-left: auto; padding: 0 16px; color: inherit; opacity: .75; text-decoration: none;
-  font-family: var(--report-font); font-weight: var(--report-weight); font-size: var(--report-size); }
-/* The list « Report a bug »: the words alone, the icon and the words, or the icon alone. */
-:root[data-bug-label="text"] .app-site-bug .app-icon, :root[data-bug-label="icon"] .app-site-bug > span { display: none; }
-:root[data-bug-label="icon"] .app-site-bug { padding: 0; }
-.app-site-bug:hover { opacity: 1; background: color-mix(in srgb, var(--on-bar) 9%, transparent); }
+.app-site-links { display: flex; height: 100%; margin-left: auto; }
+.app-site-link { display: flex; align-items: center; height: 100%; padding: 0 16px; color: inherit; opacity: .75; text-decoration: none;
+  font-family: var(--site-link-font); font-weight: var(--site-link-weight); font-size: var(--site-link-size); }
+.app-site-link:hover { opacity: 1; background: color-mix(in srgb, var(--on-bar) 9%, transparent); }
 
-/* The band of the open builds: 44 px, their tabs of « Tab width », up to 240 when they all fit. */
+/* The band of the open builds: 44 px, their tabs of 184 px, up to 240 when they all fit. */
 .app-builds { display: flex; align-items: flex-end; gap: 6px; height: 44px; padding: 0 12px 0 0; background: var(--bar-image), var(--bar); color: var(--on-bar); border-bottom: var(--border-width) solid var(--divider); }
 .app-site-brand { display: flex; align-items: center; gap: var(--brand-gap); flex: none; padding-right: 12px; }
 .app-site-brand .logo-mark { width: var(--brand-mark-size); height: var(--brand-mark-size); }
@@ -42,7 +40,6 @@
 .app-builds-tab-ascendancy { font-size: 11px; opacity: .7; }
 .app-builds-close { display: grid; place-items: center; flex: none; width: 20px; height: 20px; padding: 0; border: none; border-radius: 50%; background: none; color: inherit; opacity: .6; cursor: pointer; }
 .app-builds-close:hover, .app-builds-tab.is-close-hover .app-builds-close { opacity: 1; background: color-mix(in srgb, currentColor 16%, transparent); }
-:root[data-bar-close="hover"] .app-builds-tab:not(.is-current, :hover, .is-hover, .is-close-hover) .app-builds-close { visibility: hidden; }
 
 /* 93 · Underline (the owner, 2026-11-17): no box, the other tabs in a weaker text; the current one
    underlined in the accent across its whole width, its portrait included, so that it reads as one
@@ -55,7 +52,7 @@
 /* The section of the tab (sections/bar-tab.js): the states side by side, then the page below. */
 .tab-states { display: flex; }
 .tab-strip .app-builds { padding: 0; }
-.tab-states > span { width: var(--tab-width); color: #adb5bd; font-size: 12px; }
+.tab-states > span { width: 184px; color: #adb5bd; font-size: 12px; }
 .tab-strip { overflow: hidden; border-radius: 6px; background: var(--page); }
 .tab-strip-page { height: 14px; }
 .tab-card { display: flex; flex-direction: column; gap: 6px; }

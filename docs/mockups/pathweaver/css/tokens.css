@@ -25,9 +25,9 @@
   /* The name of Pathweaver, the same in every style (the owner, 2026-11-17): Archivo in its own weight, tight. */
   --brand-font: "Archivo", sans-serif;
   --site-shadow: 0 1px 3px rgb(0 0 0 / .1);   /* under the band of the site, very light */
-  --report-font: "Manrope", sans-serif;   /* Report a bug, in the band of the site (the owner, 2026-11-17) */
-  --report-weight: 600;
-  --report-size: 13px;
+  --site-link-font: "Manrope", sans-serif;   /* the links of the band of the site (the owner, 2026-11-17) */
+  --site-link-weight: 600;
+  --site-link-size: 13px;
   --brand-weight: 700;
   --brand-spacing: -0.06em;
   /* Surfaces: the window, the app bar, the level band, the side column, the boxes over the tree. */

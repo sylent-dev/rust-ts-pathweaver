@@ -31,7 +31,7 @@ Read only by the steps that need them:
   - [ ] 2h: the marks of the game, variants side by side; commits: the gems (kind and colour); the five shapes of passives; the inventory slots and the « unknown » mark.
   - [ ] 2i: the tree at its real size; commits: lit, faded and dimmed; the ring of what is new; the hover and the zoom, measured in frames per second. The legend, the buttons of the zoom and the box of the ascendancy come with it.
   - [ ] 2j: the motion, chosen by clicking; commits: the hover and the cursor of the level; the tabs and the boxes that open.
-  - [ ] 2k: the other views of a build; commits: Skills, Tree, Inventory and About at 960 px; 1,920 px with the side panel; the variants of the level band; the boxes of Copy link and Download.
+  - [ ] 2k: the other views of a build; commits: Skills, Tree, Inventory and About at 960 px; 1,920 px with the side panel; the variants of the level band; the boxes of Copy link and Download, and the box of Sign in (the community comes with version 2).
   - [ ] 2l: home and opening; commits: the first visit; the library; Paste JSON, the opening errors and the notices.
   - [ ] 2m: Merge and the phone; commits: Merge ready; Merge to fix; the phone pages.
   - [ ] 2n: the design system; commits: the tokens in `specs.md` and the mock-up as the single reference; the styles set aside removed and the entry of `design-journal.md`.
