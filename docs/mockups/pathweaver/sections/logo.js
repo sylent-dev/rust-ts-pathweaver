@@ -38,23 +38,58 @@ addSection(() => ["The name · its case, its font and its spacing, chosen by the
   LOGO_STYLES.map(style => [THEMES[style].title, nameCard(style)])]);
 
 // Every font of the name side by side (the owner, 2026-11-17), in small boxes sorted by kind, with
-// the case and the spacing of the lists; a click on a box picks its font in the list « Font ».
+// the case and the spacing of the lists. A click on a box adds it to the favourites or takes it
+// out, as on the moodboards, and shows its font large in the section of the name; the favourites
+// stay in the browser, show at the top with a button that copies their numbers for the chat, and
+// may be shown alone.
 loadAllNameFonts();
 
-const nameFontBox = font => `<button type="button" class="name-font-box ${chosen.nameFont === font.key ? "is-current" : ""}" data-action="name-font" data-font="${font.key}"
+const NAME_FAVOURITES_KEY = "pathweaver-mockup:name-favourites";
+STATE.nameFavourites = new Set();
+try { JSON.parse(localStorage.getItem(NAME_FAVOURITES_KEY) || "[]").forEach(key => STATE.nameFavourites.add(key)); } catch { /* no storage: the favourites last until the reload */ }
+STATE.nameFavouritesOnly = false;
+
+const nameFavouriteList = () => NAME_FONT_LIST.filter(font => STATE.nameFavourites.has(font.key));
+
+const nameFontBox = font => `<button type="button" class="name-font-box ${STATE.nameFavourites.has(font.key) ? "is-favourite" : ""} ${chosen.nameFont === font.key ? "is-current" : ""}"
+    data-action="name-favourite" data-font="${font.key}" aria-pressed="${STATE.nameFavourites.has(font.key)}"
     style="--name-font:'${font.family}';--name-weight:${font.weight}" title="${escapeHtml(font.family)}">
   <small>${font.id} · ${escapeHtml(font.family)}</small><span class="logo-name">${LOGO_NAME}</span></button>`;
 
-ACTIONS["name-font"] = element => {
-  chosen.nameFont = element.dataset.font;
+ACTIONS["name-favourite"] = element => {
+  const key = element.dataset.font;
+  if (STATE.nameFavourites.has(key)) STATE.nameFavourites.delete(key); else STATE.nameFavourites.add(key);
+  try { localStorage.setItem(NAME_FAVOURITES_KEY, JSON.stringify([...STATE.nameFavourites])); } catch { /* idem */ }
+  chosen.nameFont = key;
   keepInAddress();
   render();
   return false;
 };
+ACTIONS["name-favourites-only"] = () => {
+  STATE.nameFavouritesOnly = !STATE.nameFavouritesOnly;
+  return true;
+};
+ACTIONS["name-favourites-copy"] = () => {
+  navigator.clipboard?.writeText(nameFavouriteList().map(font => `${font.id} ${font.family}`).join(", "));
+  return false;
+};
 
-addSection(() => ["The name in every font · 90 to 221, sorted by kind, with the case and the spacing of the lists; a click picks the font",
-  [["", Object.entries(NAME_FONTS).map(([kind, fonts]) => `<div class="name-font-kind"><h3>${kind}</h3><div class="name-font-grid">${
-    fonts.map(([family]) => nameFontBox(NAME_FONT_LIST.find(font => font.family === family))).join("")}</div></div>`).join("")]]]);
+const nameFavouritesBar = () => {
+  const favourites = nameFavouriteList();
+  return `<div class="name-favourites">Click a box to add it to the favourites: <b>${favourites.length
+    ? favourites.map(font => `${font.id} ${escapeHtml(font.family)}`).join(", ") : "none yet"}</b>
+    <button type="button" data-action="name-favourites-copy">Copy the favourites</button>
+    <button type="button" data-action="name-favourites-only" aria-pressed="${STATE.nameFavouritesOnly}">Favourites only</button></div>`;
+};
+
+const nameFontKinds = () => Object.entries(NAME_FONTS).map(([kind, fonts]) => {
+  const shown = fonts.map(([family]) => NAME_FONT_LIST.find(font => font.family === family))
+    .filter(font => !STATE.nameFavouritesOnly || STATE.nameFavourites.has(font.key));
+  return shown.length ? `<div class="name-font-kind"><h3>${kind}</h3><div class="name-font-grid">${shown.map(nameFontBox).join("")}</div></div>` : "";
+}).join("");
+
+addSection(() => ["The name in every font · 90 to 221, sorted by kind, with the case and the spacing of the lists; a click adds a font to the favourites",
+  [["", nameFavouritesBar() + nameFontKinds()]]]);
 
 // A wide font shrinks until the name fits its box; again once the fonts have loaded, and at each
 // change of the case or the spacing (which don't draw the page again).

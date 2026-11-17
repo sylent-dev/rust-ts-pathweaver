@@ -45,6 +45,14 @@
 .name-font-box { display: flex; flex-direction: column; align-items: flex-start; gap: 6px; height: 68px; padding: 7px 10px; overflow: hidden;
   border: 1px solid transparent; border-radius: 5px; background: var(--page); color: var(--text); text-align: left; cursor: pointer; }
 .name-font-box:hover { border-color: var(--control-line); }
-.name-font-box.is-current { border-color: var(--accent); box-shadow: inset 0 0 0 1px var(--accent); }
+.name-font-box.is-current { border-color: var(--control-line); }
+.name-font-box.is-favourite { border-color: var(--accent); box-shadow: inset 0 0 0 2px var(--accent); }
+.name-font-box.is-favourite small::after { content: " ★"; color: var(--accent); }
+/* The favourites, at the top of the section, as on the moodboards. */
+.name-favourites { display: flex; flex-wrap: wrap; gap: 8px 12px; align-items: center; padding: 10px 0;
+  color: #adb5bd; font-size: 14px; }
+.name-favourites b { color: #ffd43b; font-weight: 600; }
+.name-favourites button { padding: 3px 10px; border: 1px solid #3a3f45; border-radius: 4px; background: #24272b; color: #dee2e6; font: inherit; cursor: pointer; }
+.name-favourites button[aria-pressed="true"] { border-color: #ffd43b; color: #ffd43b; }
 .name-font-box small { color: var(--weak); font: 10px/1 system-ui, sans-serif; }
 .name-font-box .logo-name { max-width: 100%; overflow: hidden; font-size: 26px; text-overflow: clip; }
