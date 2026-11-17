@@ -28,8 +28,7 @@
 /* The end of the band (2e2, the owner, 2026-11-18): « +N ▾ » and + the full height of the band, told
    apart by contrast, not by borders: a tinted background at rest, a stronger one on hover and while
    open; one line only, after « +N ▾ ». Their states have classes too (is-hover, is-open), to be
-   shown side by side without the mouse. The menu of « +N ▾ », the builds that don't fit then
-   Merge…, in three looks (« Menu », data-menu-look). */
+   shown side by side without the mouse. */
 .app-builds-more-wrap { position: relative; display: flex; align-self: stretch; }
 .app-builds-more, .app-builds-open { display: inline-flex; align-items: center; justify-content: center; gap: 5px; min-width: 44px; height: 100%; padding: 0 12px; border: none;
   background: color-mix(in srgb, var(--on-bar) 9%, transparent); color: var(--on-bar); cursor: pointer; font-size: 13px; }
@@ -38,36 +37,19 @@
 :is(.app-builds-more, .app-builds-open):is(:hover, .is-hover) { background: color-mix(in srgb, var(--on-bar) 16%, transparent); }
 .app-builds-more.is-open { background: color-mix(in srgb, var(--on-bar) 20%, transparent); }
 
-/* 1 · a card: floating under its button, rounded, the builds in a row of 32 px, a small round portrait. */
-.app-builds-menu { position: absolute; z-index: 5; right: 0; width: 300px; font-size: 13px; }
-.app-builds-menu-item { display: flex; align-items: center; gap: 8px; cursor: pointer; }
+/* The menu (the owner, 2026-11-18): attached under the band, in its shade, square corners, each
+   build a tab laid down (a row of 44 px, its portrait square, its name over its ascendancy), then
+   Merge… apart. */
+.app-builds-menu { position: absolute; z-index: 5; top: 100%; right: 0; width: 300px; background: var(--bar-image), var(--builds-band, var(--band-deep)); color: var(--on-bar); box-shadow: 0 8px 18px rgb(0 0 0 / .28); font-size: 13px; }
+.app-builds-menu-item { display: flex; align-items: center; gap: 10px; height: 44px; padding-right: 12px; color: color-mix(in srgb, var(--on-bar) 80%, transparent); cursor: pointer; }
+.app-builds-menu-item:hover { background: color-mix(in srgb, var(--on-bar) 9%, transparent); color: var(--on-bar); }
+.app-builds-menu-portrait { flex: none; width: 44px; height: 44px; }
 .app-builds-menu-text { display: flex; flex-direction: column; min-width: 0; }
 .app-builds-menu-text > span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; line-height: 1.2; }
-.app-builds-menu-portrait { flex: none; }
-.app-builds-menu-line { height: var(--border-width, 1px); min-height: 1px; background: var(--divider); }
-.app-builds[data-menu-look="1"] .app-builds-menu { top: calc(100% + 6px); padding: 4px; border: var(--border-width) solid var(--control-line); border-radius: var(--radius); background: var(--control); color: var(--text); box-shadow: 0 6px 18px rgb(0 0 0 / .22); }
-.app-builds[data-menu-look="1"] .app-builds-menu-item { height: 32px; padding: 0 8px; border-radius: calc(var(--radius) - 2px); }
-.app-builds[data-menu-look="1"] .app-builds-menu-item:hover { background: color-mix(in srgb, var(--text) 8%, transparent); }
-.app-builds[data-menu-look="1"] .app-builds-menu-portrait { width: 20px; height: 20px; border-radius: 50%; }
-.app-builds[data-menu-look="1"] .app-builds-menu-ascendancy { display: none; }
-.app-builds[data-menu-look="1"] .app-builds-menu-line { margin: 4px 6px; }
-
-/* 2 · attached: square corners, right under the band in its shade, each build a tab laid down (a row
-   of 44 px, its portrait square, its name over its ascendancy); 3 · the same, compact (32 px, the
-   name alone). */
-.app-builds:not([data-menu-look="1"]) .app-builds-menu { top: 100%; background: var(--bar-image), var(--builds-band, var(--band-deep)); color: var(--on-bar); box-shadow: 0 8px 18px rgb(0 0 0 / .28); }
-.app-builds:not([data-menu-look="1"]) .app-builds-menu-item { gap: 10px; padding-right: 12px; color: color-mix(in srgb, var(--on-bar) 80%, transparent); }
-.app-builds:not([data-menu-look="1"]) .app-builds-menu-item:hover { background: color-mix(in srgb, var(--on-bar) 9%, transparent); color: var(--on-bar); }
-.app-builds[data-menu-look="2"] .app-builds-menu-item { height: 44px; }
-.app-builds[data-menu-look="2"] .app-builds-menu-portrait { width: 44px; height: 44px; }
-.app-builds[data-menu-look="2"] .app-builds-menu-name { font-size: 12px; }
-.app-builds[data-menu-look="2"] .app-builds-menu-ascendancy { font-size: 11px; opacity: .7; }
-.app-builds[data-menu-look="3"] .app-builds-menu-item { height: 32px; }
-.app-builds[data-menu-look="3"] .app-builds-menu-portrait { width: 32px; height: 32px; }
-.app-builds[data-menu-look="3"] .app-builds-menu-ascendancy { display: none; }
-.app-builds:not([data-menu-look="1"]) .app-builds-menu-merge { height: 40px; padding-left: 14px; }
-.app-builds:not([data-menu-look="1"]) .app-builds-menu-line { background: color-mix(in srgb, var(--on-bar) 14%, transparent); }
-
+.app-builds-menu-name { font-size: 12px; }
+.app-builds-menu-ascendancy { font-size: 11px; opacity: .7; }
+.app-builds-menu-merge { height: 40px; padding-left: 14px; }
+.app-builds-menu-line { height: 1px; background: color-mix(in srgb, var(--on-bar) 14%, transparent); }
 
 /* A build tab (2e): the full height of the band, side by side, square corners (the owner,
    2026-11-17); its portrait square the full height, its name over its ascendancy, its close button. The
