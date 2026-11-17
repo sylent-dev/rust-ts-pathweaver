@@ -20,7 +20,7 @@ const THEMES = {
 
 
 const VARIANTS = {
-  // The shadow under the two bands at the top (2e2, css/tokens.css), tuned by eye.
+  // The shadow under the band of the open builds (2e2, css/tokens.css), tuned by eye.
   shadowY: { label: "Shadow offset", range: { min: 0, max: 8, step: 1 }, variable: "--shadow-y", unit: "px", fallback: "1" },
   shadowBlur: { label: "Shadow blur", range: { min: 0, max: 24, step: 1 }, variable: "--shadow-blur", unit: "px", fallback: "3" },
   shadowLight: { label: "Shadow, light", range: { min: 0, max: 60, step: 1 }, variable: "--shadow-alpha-light", unit: "%", fallback: "10" },

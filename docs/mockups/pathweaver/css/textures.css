@@ -18,10 +18,11 @@
 :root[data-colour="accent"] { --texture-colour: var(--texture-accent); }
 
 /* The blocks that take the texture: a layer under their content, in their own stacking context. */
+/* The band of the site takes it too (the owner, 2026-11-18), not the band of the open builds. */
 .app-header, .app-level, .app-tabs, .app-side { position: relative; }
-.app-header, .app-level, .app-tabs, .app-tree, .app-side { isolation: isolate; }
+.app-site, .app-header, .app-level, .app-tabs, .app-tree, .app-side { isolation: isolate; }
 
-:is(.app-header, .app-level, .app-tabs, .app-tree, .app-side)::before {
+:is(.app-site, .app-header, .app-level, .app-tabs, .app-tree, .app-side)::before {
   content: ""; position: absolute; inset: 0; z-index: -1; pointer-events: none;
   background: var(--texture-colour); opacity: var(--texture-opacity);
   mask-image: var(--texture); mask-size: var(--texture-size) var(--texture-size);

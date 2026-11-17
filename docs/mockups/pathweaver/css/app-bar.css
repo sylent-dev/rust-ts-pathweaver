@@ -1,6 +1,7 @@
 /* The band of the site: 44 px, the brand, then on the right its links, each the full height of
-   the band. */
-.app-site { position: relative; z-index: 2; display: flex; align-items: center; height: 44px; padding-left: 14px; background: var(--bar-image), var(--site-band, var(--bar)); color: var(--on-bar); box-shadow: var(--band-shadow); }
+   the band; the graph paper behind it (css/textures.css) and no shadow under it (the owner,
+   2026-11-18). */
+.app-site { position: relative; z-index: 2; display: flex; align-items: center; height: 44px; padding-left: 14px; background: var(--bar-image), var(--site-band, var(--bar)); color: var(--on-bar); }
 .app-site-links { display: flex; height: 100%; margin-left: auto; }
 .app-site-link { display: flex; align-items: center; height: 100%; padding: 0 16px; color: inherit; opacity: .75; text-decoration: none;
   font-family: var(--site-link-font); font-weight: var(--site-link-weight); font-size: var(--site-link-size); }
