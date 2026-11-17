@@ -1,30 +1,21 @@
-/* The mark and the name (2c), and the sections of the brand (2e, sections/brand.js). */
+/* The mark and the name (2c, 2e), and the section of the brand (sections/brand.js). */
 
 /* The name: its font, weight and spacing are tokens (css/tokens.css), here and in the app bar. */
 .logo-name { font-family: var(--brand-font); font-weight: var(--brand-weight); font-size: 18px; line-height: 1.15;
   letter-spacing: var(--brand-spacing); white-space: nowrap; }
 
-/* The inks of the mark, chosen by the list « Mark » (js/page.js): its frame and its P. */
-.logo-mark { flex: none; --logo-frame: currentColor; --logo-p: currentColor; }
-.logo-frame { fill: var(--logo-frame); }
-.logo-p { fill: var(--logo-p); }
-:root[data-logo-ink="accent"] .logo-mark { --logo-frame: var(--accent); --logo-p: var(--accent); }
-:root[data-logo-ink="p-accent"] .logo-mark { --logo-p: var(--accent); }
-:root[data-logo-ink="frame-accent"] .logo-mark { --logo-frame: var(--accent); }
-/* On a square of the accent, the mark takes the ink that goes on it, whatever the list says. */
-.logo-square { display: grid; place-items: center; flex: none; border-radius: 22%; background: var(--accent); color: var(--on-accent); }
-:root .logo-square .logo-mark { --logo-frame: currentColor; --logo-p: currentColor; }
+/* The inks of the mark (the owner, 2026-11-17): its frame, the three bars outside, in the accent;
+   its P in the text around it. */
+.logo-mark { flex: none; }
+.logo-frame { fill: var(--accent); }
+.logo-p { fill: currentColor; }
 
 /* The brand in the app bar: the same bar on the three styles side by side (data-sample-theme). */
 .brand-card { display: flex; gap: 8px; }
 .brand-style { width: 560px; overflow: hidden; border-radius: 6px; background: var(--page); }
 
-/* The mark alone, in the tabs of a browser, and its pixels. */
-.brand-mark-card { display: flex; align-items: stretch; gap: 8px; }
-.brand-sizes { display: flex; align-items: flex-end; gap: 16px; padding: 14px 18px; border-radius: 6px; background: var(--page); color: var(--text); }
+/* The favicon in the tabs of a browser, in the colours of the browser. */
 .brand-browser { display: flex; flex-direction: column; justify-content: center; gap: 4px; width: 250px; padding: 6px; border-radius: 6px; background: var(--chrome-strip); color: var(--chrome-text); font: 12px system-ui, sans-serif; }
 .brand-browser-tab { display: flex; align-items: center; gap: 8px; height: 32px; padding: 0 10px; border-radius: 6px; }
 .brand-browser-tab.is-current { background: var(--chrome-tab); box-shadow: 0 0 4px rgb(0 0 0 / .18); }
 .brand-browser-tab > span { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.brand-zooms { display: grid; grid-template-columns: repeat(4, 64px); gap: 6px; align-content: center; }
-.brand-zoom { image-rendering: pixelated; border-radius: 2px; }

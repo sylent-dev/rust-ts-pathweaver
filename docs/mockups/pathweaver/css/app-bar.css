@@ -1,7 +1,8 @@
 /* The app bar: 44 px, the open builds as tabs of 168 px. */
 .app-bar { display: flex; align-items: flex-end; gap: 6px; height: 44px; padding: 0 12px 0 14px; background: var(--bar-image), var(--bar); color: var(--on-bar); border-bottom: var(--border-width) solid var(--divider); }
 .app-bar-brand { align-self: center; display: flex; align-items: center; gap: var(--brand-gap); flex: none; padding-right: 12px; }
-.app-bar-brand .logo-name { font-size: var(--brand-size); }
+.app-bar-brand .logo-mark { width: var(--brand-mark-size); height: var(--brand-mark-size); }
+.app-bar-brand .logo-name { position: relative; top: var(--brand-name-offset); font-size: var(--brand-size); }
 .app-bar-tabs { display: flex; gap: 6px; }
 .app-bar-tab { display: flex; align-items: center; gap: 8px; width: 168px; height: 36px; box-sizing: border-box; margin-bottom: calc(-1 * var(--border-width)); padding: 0 6px; border: var(--border-width) solid var(--control-line); border-bottom: none; border-radius: var(--radius) var(--radius) 0 0; background: var(--tab); color: var(--on-tab); cursor: pointer; }
 .app-bar-tab.is-current { background: var(--page); color: var(--text); }

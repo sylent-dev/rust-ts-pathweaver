@@ -164,6 +164,15 @@ Agreed on the wireframes of [docs/wireframes/pathweaver.excalidraw](docs/wirefra
 - **Merge…** is a page of its own: the open builds with a box to tick, the ticked ones in the order of their start levels (each in a field, with the levels it applies to), the merged guide as a track of named segments, the checks (what blocks stands out, what only warns doesn't), the name and the author, and **Merge N builds**, greyed while something blocks.
 - **Copy link** and **Download .build** answer in a box under their button: the length of the link and the Discord warning; where the game reads the file.
 
+### The brand
+
+Decided by the owner on the mock-up (step 2, 2026-11-17), its reference.
+
+- **The mark**: the owner's own, two rings of a triangle pointing down, the outer one in three bars, the inner one a P, every edge flat or at 60°; in its bold weight (bars a little wider than the gaps). Its frame is in the accent, its P in the colour of the text around it.
+- **In the app bar**: the mark at 24 pixels, then « Pathweaver » in Archivo 700, spaced -0.06 em, at 16 pixels, 8 pixels apart, the middle of its capitals on the middle of the mark.
+- **The favicon**: the same mark, an SVG drawn at 16 pixels, its frame in the accent, its P dark or light after the scheme of the system, as the browser draws its tabs.
+- Set aside: the weights as drawn, even and light, the mark on the pixel grid (sharper at 16 pixels, but a second drawing), the P alone, the mark on a square of the accent, the frame or the whole mark in one ink.
+
 ### Languages
 
 - Version 1 is in English. Every text of the interface is in the translation file of English, none in the code, so that French is added in version 1.x without touching the code; the game data are loaded per language for the same reason.

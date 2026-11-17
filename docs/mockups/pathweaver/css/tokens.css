@@ -18,8 +18,10 @@
   --title-spacing: 0;
   --title-size: 20px;
   --level-weight: 400;
-  --brand-size: 18px;   /* the name in the app bar */
-  --brand-gap: 9px;     /* between the mark and the name */
+  --brand-mark-size: 24px;   /* the mark in the app bar */
+  --brand-size: 16px;   /* the name in the app bar */
+  --brand-gap: 8px;     /* between the mark and the name */
+  --brand-name-offset: 0px;   /* the name moved down (or up) from its centre, tuned by eye */
   /* The name of Pathweaver, the same in every style (the owner, 2026-11-17): Archivo in its own weight, tight. */
   --brand-font: "Archivo", sans-serif;
   --brand-weight: 700;
