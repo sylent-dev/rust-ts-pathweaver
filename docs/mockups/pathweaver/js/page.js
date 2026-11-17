@@ -20,9 +20,6 @@ const THEMES = {
 
 
 const VARIANTS = {
-  // The current tab of the open builds (2e2, sections/bar-tab.js), told apart by contrast.
-  currentLook: { label: "Current tab", select: true, fallback: "96", options: { 96: "96 · A lighter background", 97: "97 · The colour of the page",
-    98: "98 · The other portraits grey", 99: "99 · Tinted with the accent (hotter)", 100: "100 · Filled with the accent (explosive)" } },
   theme: { label: "Style", options: Object.fromEntries(Object.entries(THEMES).map(([key, theme]) => [key, theme.title])), fallback: "frost" },
   // The second accent (css/accent-2.css): its colour, and what it marks.
   accent2: { label: "Accent 2", select: true, fallback: "amber", options: { amber: "Amber", blue: "Blue", coral: "Coral", mint: "Mint",

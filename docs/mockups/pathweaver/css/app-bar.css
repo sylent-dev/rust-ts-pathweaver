@@ -66,16 +66,11 @@
 .app-builds-tab:is(:hover, .is-hover, .is-close-hover) { background: color-mix(in srgb, var(--on-bar) 7%, transparent); color: var(--on-bar); }
 .app-builds-tab.is-current { color: var(--on-bar); }
 
-/* The current tab, in five looks under comparison (« Current tab », data-current-look on the band),
-   by contrast only: 96 a lighter background; 97 the colour of the page; 98 the other portraits
-   grey and dimmed; 99 (hotter) a background tinted with the accent, the other portraits grey;
-   100 (explosive) filled with the accent, its text in the ink on the accent, the others grey. */
-.app-builds[data-current-look="96"] .app-builds-tab.is-current { background: color-mix(in srgb, var(--on-bar) 14%, transparent); }
-.app-builds[data-current-look="97"] .app-builds-tab.is-current { background: var(--page); color: var(--text); }
-.app-builds:is([data-current-look="98"], [data-current-look="99"], [data-current-look="100"]) .app-builds-tab:not(.is-current) .app-builds-portrait { filter: grayscale(1) brightness(.8); opacity: .55; }
-.app-builds:is([data-current-look="98"], [data-current-look="99"], [data-current-look="100"]) .app-builds-tab:not(.is-current):is(:hover, .is-hover, .is-close-hover) .app-builds-portrait { filter: grayscale(.3); opacity: .9; }
-.app-builds[data-current-look="99"] .app-builds-tab.is-current { background: color-mix(in srgb, var(--accent) 24%, transparent); }
-.app-builds[data-current-look="100"] .app-builds-tab.is-current { background: var(--accent); color: var(--on-accent); }
+/* The current tab (the owner, 2026-11-18): the only portrait in colour, the others grey and dimmed,
+   a little less on hover. The looks set aside (96 a lighter background, 97 the colour of the page,
+   99 tinted with the accent, 100 filled with it) are in the history of Git (commit ee61467). */
+.app-builds-tab:not(.is-current) .app-builds-portrait { filter: grayscale(1) brightness(.8); opacity: .55; }
+.app-builds-tab:not(.is-current):is(:hover, .is-hover, .is-close-hover) .app-builds-portrait { filter: grayscale(.3); opacity: .9; }
 
 /* The section of the tab (sections/bar-tab.js): the states side by side, then the page below. */
 .tab-states { display: flex; }

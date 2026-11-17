@@ -46,7 +46,7 @@ function buildsBand(width, { builds = BUILDS.open, menuOpen = STATE.buildsMenu,
   const shown = builds.slice(0, fit);
   const hidden = builds.slice(fit);
   const tabWidth = hidden.length ? TAB_WIDTH : Math.min(TAB_MAX_WIDTH, Math.floor((room + TAB_GAP) / builds.length) - TAB_GAP);
-  return `<div class="app-builds" data-current-look="${chosen.currentLook}" style="--tab-width:${tabWidth}px">
+  return `<div class="app-builds" style="--tab-width:${tabWidth}px">
     <div class="app-builds-tabs" role="tablist">${shown.map((build, index) => openBuildTab(build, index === 0 ? "is-current" : "")).join("")}</div>
     <span class="app-builds-more-wrap">
       <button type="button" class="app-builds-more ${moreState} ${menuOpen ? "is-open" : ""}" data-action="toggleBuildsMenu" aria-expanded="${menuOpen}" aria-label="More builds and Merge">${hidden.length ? `+${hidden.length}` : ""}${icon(12, ICONS.down)}</button>
