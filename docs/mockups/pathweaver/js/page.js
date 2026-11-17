@@ -26,6 +26,9 @@ const VARIANTS = {
     violet: "Violet", magenta: "Magenta", lime: "Lime" } },
   accent2On: { label: "Accent 2 on", select: true, fallback: "later", options: {
     later: "What comes later (tree, markers)", gear: "The gear (hints of the slots)", controls: "The pressed switches", all: "All three" } },
+  // On trial on the three styles (2026-11-17): the level band without its lines, and tabs the full height of their band.
+  band: { label: "Level band", select: true, fallback: "deep", options: { deep: "Darker, no lines", lines: "With its lines" } },
+  tabs: { label: "Tabs", select: true, fallback: "full", options: { full: "Full height", short: "As before" } },
   zone: { label: "Graph paper", select: true, fallback: "blocks-but-tree", options: { "blocks-but-tree": "Every block but the tree",
     blocks: "Every block", side: "The right column", band: "The level band", top: "The header and the level band",
     tree: "The tree", "tree-side": "The tree and the right column", window: "The whole window" } },

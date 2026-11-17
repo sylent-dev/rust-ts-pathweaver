@@ -14,3 +14,7 @@
 .app-level-end { position: absolute; top: 24px; transform: translateX(-50%); font-size: 11px; }
 .app-level-changes { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 3px; font-size: 13px; }
 .app-level-change { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+/* On trial (2026-11-17): the band without its lines, above and below, a shade darker for contrast. */
+:root[data-band="deep"] .app-header { border-bottom: none; }
+:root[data-band="deep"] .app-level { border-bottom: none; background: var(--band-image), var(--band-deep); }

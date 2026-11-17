@@ -28,6 +28,7 @@
   --band-image: none;
   --on-band: #1e1e1e;
   --on-band-weak: #868e96;
+  --band-deep: #dee2e6;   /* the band without its lines (css/level-band.css): a shade darker than the page */
   --side: transparent;
   --panel: #ffffff;
   /* Controls. */
@@ -104,7 +105,7 @@
   --page: #eef2f8;
   --page-image: radial-gradient(ellipse 80% 40% at 0% 0%, #dbe7ff 0%, transparent 70%);
   --bar: #e2e9f4; --on-bar: #0f1b33;
-  --band: #f8fbff; --on-band: #0f1b33; --on-band-weak: #5c6c88;
+  --band: #f8fbff; --on-band: #0f1b33; --on-band-weak: #5c6c88; --band-deep: #dfe6f1;
   --panel: #ffffffd9;
   --tab: #dde6f3; --on-tab: #4a5a78;
   --control: #ffffff; --control-line: #d5deec;
@@ -142,7 +143,7 @@
   --page: #0c111b;
   --page-image: radial-gradient(ellipse 80% 40% at 0% 0%, #172644 0%, transparent 70%);
   --bar: #121a29; --on-bar: #e3eaf5;
-  --band: #0f1726; --on-band: #e3eaf5; --on-band-weak: #8393ad;
+  --band: #0f1726; --on-band: #e3eaf5; --on-band-weak: #8393ad; --band-deep: #070b12;
   --panel: #0c111bd9;
   --tab: #172133; --on-tab: #8393ad;
   --control: #121a29; --control-line: #24304a;
@@ -180,7 +181,7 @@
   --page: #131314;
   --page-image: radial-gradient(ellipse 80% 40% at 0% 0%, #2a2117 0%, transparent 70%);
   --bar: #19191b; --on-bar: #ececee;
-  --band: #161618; --on-band: #ececee; --on-band-weak: #8e8e94;
+  --band: #161618; --on-band: #ececee; --on-band-weak: #8e8e94; --band-deep: #0a0a0b;
   --panel: #131314d9;
   --tab: #212124; --on-tab: #8e8e94;
   --control: #19191b; --control-line: #2c2c30;

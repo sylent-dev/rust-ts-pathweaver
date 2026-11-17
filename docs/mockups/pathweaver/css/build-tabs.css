@@ -2,3 +2,8 @@
 .app-tabs { display: flex; align-items: flex-end; gap: 6px; height: 38px; padding: 0 16px; border-bottom: var(--border-width) solid var(--divider); }
 .app-tab { height: 32px; margin-bottom: calc(-1 * var(--border-width)); padding: 0 14px; border: var(--border-width) solid var(--control-line); border-radius: var(--radius) var(--radius) 0 0; background: var(--tab); color: var(--on-tab); cursor: pointer; font-size: 14px; }
 .app-tab[aria-selected="true"] { background: var(--page); color: var(--text); border-bottom-color: var(--page); }
+
+/* On trial (2026-11-17): tabs the full height of their band, square at the top, here and in the app bar. */
+:root[data-tabs="full"] .app-tabs { padding-top: 0; }
+:root[data-tabs="full"] .app-bar-tabs { align-self: stretch; }
+:root[data-tabs="full"] :is(.app-tab, .app-bar-tab) { align-self: stretch; height: auto; border-top: none; border-radius: 0; }
