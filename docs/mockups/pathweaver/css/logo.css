@@ -8,8 +8,21 @@
 .logo-style { display: flex; flex-direction: column; width: 300px; overflow: hidden; border-radius: 6px; background: var(--page); color: var(--text); }
 
 .logo-big { display: grid; place-items: center; height: 170px; }
+
+/* The name alone and with the mark, large (sections/logo.js, the section of the name). */
+.name-card { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 26px; width: 600px; overflow: hidden; padding: 34px 20px; border-radius: 6px; background: var(--page); color: var(--text); }
+.name-card .logo-name.is-alone { font-size: 56px; }
+.name-lockup { display: flex; align-items: center; gap: 14px; }
+.name-lockup .logo-name { font-size: 34px; }
+.name-card .logo-bar { align-self: stretch; margin: 0 -20px -34px; }
 .logo-bar { display: flex; align-items: center; gap: 9px; height: 44px; padding: 0 14px; background: var(--band-deep); color: var(--on-bar); }
-.logo-name { font: 600 18px/1 var(--font-title, "Geist"), sans-serif; white-space: nowrap; }
+/* The name: its font, case and spacing are chosen by the lists « Name », « Font » and « Spacing »
+   (js/page.js), here and in the app bar of the page of a build. */
+.logo-name { font-family: var(--name-font, "Geist"), sans-serif; font-weight: var(--name-weight, 600); font-size: 18px; line-height: 1.15;
+  letter-spacing: var(--name-spacing, 0); text-transform: none; white-space: nowrap; }
+:root[data-name-case="upper"] .logo-name { text-transform: uppercase; }
+:root[data-name-case="lower"] .logo-name { text-transform: lowercase; }
+:root[data-name-case="camel"] .logo-name-w { text-transform: uppercase; }
 /* The tab of the browser: its title is in the browser's own font, only the icon is ours. */
 .logo-tab { display: flex; align-items: center; gap: 8px; height: 34px; padding: 0 12px; background: var(--bar); color: var(--on-bar); font: 12px system-ui, sans-serif; }
 .logo-tab > span { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }

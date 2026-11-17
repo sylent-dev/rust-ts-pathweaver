@@ -4,7 +4,8 @@
 // - VARIANTS holds one group of tabs per open decision; the address keeps the choices
 //   (e.g. ?theme=frost), to share them. A group is removed once decided.
 //   A value that combines with others is a list (`select: true` and the CSS `variable` it sets);
-//   a value tuned by eye is a slider (`range`, its `variable` and its `unit`).
+//   a value tuned by eye is a slider (`range`, its `variable` and its `unit`). A long list may
+//   sort its options into `groups`; a variant with `apply` runs it on each choice.
 // - SECTIONS lists every scenario and state, each a function that returns
 //   [title, [[label, html], …]]: a section script adds its own with addSection(), and the newest
 //   section comes first. Past ten sections, a table of contents under the header links to each.
@@ -20,6 +21,12 @@ const THEMES = {
 
 
 const VARIANTS = {
+  // The name (2c): its case, its font (js/name-fonts.js) and its spacing, read by css/logo.css.
+  nameCase: { label: "Name", select: true, fallback: "title", options: { title: "Pathweaver", camel: "PathWeaver", upper: "PATHWEAVER", lower: "pathweaver" } },
+  nameFont: { label: "Font", select: true, fallback: "geist", apply: loadNameFont,
+    groups: Object.fromEntries(Object.entries(NAME_FONTS).map(([group, fonts]) => [group, Object.fromEntries(fonts.map(([family]) => [nameFontKey(family), family]))])),
+    options: Object.fromEntries(NAME_FONT_LIST.map(font => [font.key, font.family])) },
+  nameSpacing: { label: "Spacing", range: { min: -0.06, max: 0.4, step: 0.01 }, variable: "--name-spacing", unit: "em", fallback: "0" },
   // The inks of the mark (css/logo.css): its frame, the three bars outside, and its P.
   logoInk: { label: "Mark", select: true, fallback: "text", options: { text: "One ink (text)", accent: "One ink (accent)", "p-accent": "The P in accent", "frame-accent": "The frame in accent" } },
   theme: { label: "Style", options: Object.fromEntries(Object.entries(THEMES).map(([key, theme]) => [key, theme.title])), fallback: "frost" },
@@ -60,16 +67,21 @@ const escapeHtml = text => String(text).replace(/[&<>"']/g, c => `&#${c.charCode
 function applyVariables() {
   for (const [key, variant] of Object.entries(VARIANTS)) {
     if (variant.variable) document.documentElement.style.setProperty(variant.variable, chosen[key] + (variant.unit ?? ""));
+    variant.apply?.(chosen[key]);
   }
 }
 const keepInAddress = () => history.replaceState(null, "", "?" + new URLSearchParams(chosen) + location.hash);
+
+const selectOptions = (options, current) => Object.entries(options).map(([value, label]) =>
+  `<option value="${value}" ${current === value ? "selected" : ""}>${label}</option>`).join("");
 
 function renderControls() {
   document.getElementById("tabs").innerHTML = Object.entries(VARIANTS).map(([key, variant]) => variant.range
     ? `<label class="group"><span>${variant.label}</span><input type="range" data-variant="${key}" min="${variant.range.min}" max="${variant.range.max}" step="${variant.range.step}" value="${chosen[key]}"><output>${chosen[key]}${variant.unit ?? ""}</output></label>`
     : variant.select
-    ? `<label class="group"><span>${variant.label}</span><select data-variant="${key}">${Object.entries(variant.options).map(([value, label]) =>
-      `<option value="${value}" ${chosen[key] === value ? "selected" : ""}>${label}</option>`).join("")}</select></label>`
+    ? `<label class="group"><span>${variant.label}</span><select data-variant="${key}">${variant.groups
+      ? Object.entries(variant.groups).map(([group, options]) => `<optgroup label="${group}">${selectOptions(options, chosen[key])}</optgroup>`).join("")
+      : selectOptions(variant.options, chosen[key])}</select></label>`
     : `<div class="group"><span>${variant.label}</span>${Object.entries(variant.options).map(([value, label]) =>
       `<button type="button" data-variant="${key}" data-value="${value}" aria-pressed="${chosen[key] === value}">${label}</button>`).join("")}</div>`).join("");
 }
