@@ -250,7 +250,7 @@
   --slot-line: #333333; --slot-fill: #1a1a1a;
   --gem-str: #ff5c5c; --gem-dex: #52d68a; --gem-int: #5c8dff; --gem-none: #8a8a8a;
   --gem-size: 9px; --gem-radius: 0; --gem-line: none;
-  --tree-background: #000000;
+  --tree-background: transparent;
   --tree-edge: #1a1a1a; --tree-edge-taken: #ffffff; --tree-edge-width: 1.5;
   --tree-node: #000000; --tree-node-line: #3a3a3a;
   --tree-taken: #ffffff; --tree-later: #666666;
@@ -461,4 +461,41 @@
   --tree-taken: #ffffff; --tree-later: #5a5a7a;
   --tree-glow: 12; --tree-glow-colour: #7b61ff;
   --tree-shape-notable: hex; --tree-shape-keystone: star;
+}
+
+/* ———— Asked for on 2026-11-17. ———— */
+
+/* 28 · Frost Night (Frost in negative, dark): the density and the flat boxes of Frost on a blue
+   black, pale blue lines, one blue (Geist, Geist Mono). */
+:root[data-theme="frost-night"] {
+  --font-text: "Geist", sans-serif;
+  --font-title: "Geist", sans-serif;
+  --font-number: "Geist Mono", monospace;
+  --title-weight: 600;
+  --title-spacing: -.02em;
+  --page: #0c111b;
+  --page-image: radial-gradient(ellipse 80% 40% at 0% 0%, #172644 0%, transparent 70%);
+  --bar: #121a29; --on-bar: #e3eaf5;
+  --band: #0f1726; --on-band: #e3eaf5; --on-band-weak: #8393ad;
+  --panel: #0c111bd9;
+  --tab: #172133; --on-tab: #8393ad;
+  --control: #121a29; --control-line: #24304a;
+  --control-shadow: 0 1px 2px #00000066;
+  --fill: #172133; --fill-strong: #3b82f6; --on-fill-strong: #ffffff;
+  --divider: #1f2a40; --line-weak: #1f2a40;
+  --radius: 8px;
+  --window-shadow: 0 0 0 1px #1f2a40, 0 24px 60px #000000aa;
+  --portrait-ring: 0 0 0 1px #24304a;
+  --text: #e3eaf5; --weak: #8393ad;
+  --accent: #60a5fa; --accent-soft: #60a5fa; --on-accent: #0c111b;
+  --new-fill: #60a5fa12;
+  --track: #2a3a5c; --track-width: 2px; --marker: #4b5f86;
+  --slot-line: #24304a; --slot-fill: #172133; --slot-radius: 8px;
+  --gem-str: #f87171; --gem-dex: #2dd4bf; --gem-int: #60a5fa; --gem-none: #8393ad;
+  --gem-size: 9px; --gem-radius: 2px; --gem-line: none;
+  --tree-background: transparent;
+  --tree-edge: #18223a; --tree-edge-taken: #60a5fa; --tree-edge-width: 1.8;
+  --tree-node: #0c111b; --tree-node-line: #2a3a5c;
+  --tree-taken: #e3eaf5; --tree-later: #4b5f86;
+  --tree-shape-keystone: diamond;
 }

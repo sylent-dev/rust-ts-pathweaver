@@ -1,0 +1,83 @@
+/* The textures behind the blocks, an open decision (2026-11-17): two layers, each a pattern with
+   its colour, its size and its opacity, the second shifted against the first; and the blocks they
+   go behind. The controls of the page set the data attributes and the variables used here
+   (VARIANTS in page.js). A pattern is a mask: its lines take the colour of their layer. */
+
+:root {
+  /* Each pattern: an image whose opaque pixels draw, and the height of its tile for a width of 1.
+     No line runs along the edge of a tile whose height isn't whole pixels: it would show twice. */
+  --pattern-none: none; --ratio-none: 1;
+  --pattern-grid: linear-gradient(#000 1px, transparent 1px), linear-gradient(90deg, #000 1px, transparent 1px); --ratio-grid: 1;
+  --pattern-graph: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40' preserveAspectRatio='none'%3E%3Cpath d='M0 0H40M0 40H40M0 0V40M40 0V40' fill='none' stroke='black' vector-effect='non-scaling-stroke'/%3E%3Cpath d='M0 10H40M0 20H40M0 30H40M10 0V40M20 0V40M30 0V40' fill='none' stroke='black' stroke-opacity='.4' vector-effect='non-scaling-stroke'/%3E%3C/svg%3E"); --ratio-graph: 1;
+  --pattern-dots: radial-gradient(circle, #000 1px, transparent 1.6px); --ratio-dots: 1;
+  --pattern-crosses: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' preserveAspectRatio='none'%3E%3Cpath d='M10 7V13M7 10H13' fill='none' stroke='black' vector-effect='non-scaling-stroke'/%3E%3C/svg%3E"); --ratio-crosses: 1;
+  --pattern-hatch: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10 10' preserveAspectRatio='none'%3E%3Cpath d='M0 10L10 0M-1 1L1 -1M9 11L11 9' fill='none' stroke='black' vector-effect='non-scaling-stroke'/%3E%3C/svg%3E"); --ratio-hatch: 1;
+  --pattern-diamonds: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10 10' preserveAspectRatio='none'%3E%3Cpath d='M0 5L5 0L10 5L5 10Z' fill='none' stroke='black' vector-effect='non-scaling-stroke'/%3E%3C/svg%3E"); --ratio-diamonds: 1;
+  --pattern-triangles: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10 17.32' preserveAspectRatio='none'%3E%3Cpath d='M0 4.33H10M0 12.99H10M-2.5 0L7.5 17.32M7.5 0L17.5 17.32M12.5 0L2.5 17.32M2.5 0L-7.5 17.32' fill='none' stroke='black' vector-effect='non-scaling-stroke'/%3E%3C/svg%3E"); --ratio-triangles: 1.732;
+  --pattern-hexagons: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 56 100' preserveAspectRatio='none'%3E%3Cpath d='M28 66L0 50L0 16L28 0L56 16L56 50L28 66L28 100M28 0L28 -34' fill='none' stroke='black' vector-effect='non-scaling-stroke'/%3E%3C/svg%3E"); --ratio-hexagons: 1.786;
+  /* The Cairo tiling: pentagons, four per square, around bars that turn a quarter from square to square. */
+  --pattern-pentagons: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' preserveAspectRatio='none'%3E%3Cpath d='M2.26 5H7.74M0 0L2.26 5L0 10M10 0L7.74 5L10 10M15 2.26V7.74M10 0L15 2.26L20 0M10 10L15 7.74L20 10M5 12.26V17.74M0 10L5 12.26L10 10M0 20L5 17.74L10 20M12.26 15H17.74M10 10L12.26 15L10 20M20 10L17.74 15L20 20' fill='none' stroke='black' vector-effect='non-scaling-stroke'/%3E%3C/svg%3E"); --ratio-pentagons: 1;
+  --pattern-rings: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' preserveAspectRatio='none'%3E%3Ccircle cx='10' cy='10' r='8' fill='none' stroke='black' vector-effect='non-scaling-stroke'/%3E%3C/svg%3E"); --ratio-rings: 1;
+  /* The colours a layer can take: the text of its block (a grey), a pale blue, the accent. */
+  --texture-text: currentColor;
+  --texture-blue: #7aa7f0;
+  --texture-accent: var(--accent);
+}
+
+:root[data-pattern1="grid"] { --texture-1: var(--pattern-grid); --ratio-1: var(--ratio-grid); }
+:root[data-pattern1="graph"] { --texture-1: var(--pattern-graph); --ratio-1: var(--ratio-graph); }
+:root[data-pattern1="dots"] { --texture-1: var(--pattern-dots); --ratio-1: var(--ratio-dots); }
+:root[data-pattern1="crosses"] { --texture-1: var(--pattern-crosses); --ratio-1: var(--ratio-crosses); }
+:root[data-pattern1="hatch"] { --texture-1: var(--pattern-hatch); --ratio-1: var(--ratio-hatch); }
+:root[data-pattern1="diamonds"] { --texture-1: var(--pattern-diamonds); --ratio-1: var(--ratio-diamonds); }
+:root[data-pattern1="triangles"] { --texture-1: var(--pattern-triangles); --ratio-1: var(--ratio-triangles); }
+:root[data-pattern1="hexagons"] { --texture-1: var(--pattern-hexagons); --ratio-1: var(--ratio-hexagons); }
+:root[data-pattern1="pentagons"] { --texture-1: var(--pattern-pentagons); --ratio-1: var(--ratio-pentagons); }
+:root[data-pattern1="rings"] { --texture-1: var(--pattern-rings); --ratio-1: var(--ratio-rings); }
+:root[data-pattern2="grid"] { --texture-2: var(--pattern-grid); --ratio-2: var(--ratio-grid); }
+:root[data-pattern2="graph"] { --texture-2: var(--pattern-graph); --ratio-2: var(--ratio-graph); }
+:root[data-pattern2="dots"] { --texture-2: var(--pattern-dots); --ratio-2: var(--ratio-dots); }
+:root[data-pattern2="crosses"] { --texture-2: var(--pattern-crosses); --ratio-2: var(--ratio-crosses); }
+:root[data-pattern2="hatch"] { --texture-2: var(--pattern-hatch); --ratio-2: var(--ratio-hatch); }
+:root[data-pattern2="diamonds"] { --texture-2: var(--pattern-diamonds); --ratio-2: var(--ratio-diamonds); }
+:root[data-pattern2="triangles"] { --texture-2: var(--pattern-triangles); --ratio-2: var(--ratio-triangles); }
+:root[data-pattern2="hexagons"] { --texture-2: var(--pattern-hexagons); --ratio-2: var(--ratio-hexagons); }
+:root[data-pattern2="pentagons"] { --texture-2: var(--pattern-pentagons); --ratio-2: var(--ratio-pentagons); }
+:root[data-pattern2="rings"] { --texture-2: var(--pattern-rings); --ratio-2: var(--ratio-rings); }
+:root[data-colour1="text"] { --texture-colour-1: var(--texture-text); }
+:root[data-colour1="blue"] { --texture-colour-1: var(--texture-blue); }
+:root[data-colour1="accent"] { --texture-colour-1: var(--texture-accent); }
+:root[data-colour2="text"] { --texture-colour-2: var(--texture-text); }
+:root[data-colour2="blue"] { --texture-colour-2: var(--texture-blue); }
+:root[data-colour2="accent"] { --texture-colour-2: var(--texture-accent); }
+/* No pattern: no mask would paint the whole block, so the layer goes clear. */
+:root[data-pattern1="none"] { --texture-colour-1: transparent; }
+:root[data-pattern2="none"] { --texture-colour-2: transparent; }
+
+/* The blocks that can take a texture: a layer under their content, in their own stacking context. */
+.app-header, .app-level, .app-side { position: relative; }
+.app-window, .app-header, .app-level, .app-tree, .app-side { isolation: isolate; }
+
+:root[data-zone="tree"] .app-tree::before,
+:root[data-zone="side"] .app-side::before,
+:root[data-zone="tree-side"] :is(.app-tree, .app-side)::before,
+:root[data-zone="band"] .app-level::before,
+:root[data-zone="top"] :is(.app-header, .app-level)::before,
+:root[data-zone="blocks"] :is(.app-header, .app-level, .app-tree, .app-side)::before,
+:root[data-zone="window"] .app-window::before {
+  content: ""; position: absolute; inset: 0; z-index: -1; pointer-events: none;
+  background: var(--texture-colour-1); opacity: var(--texture-opacity-1);
+  mask-image: var(--texture-1); mask-size: var(--texture-size-1) calc(var(--texture-size-1) * var(--ratio-1));
+}
+:root[data-zone="tree"] .app-tree::after,
+:root[data-zone="side"] .app-side::after,
+:root[data-zone="tree-side"] :is(.app-tree, .app-side)::after,
+:root[data-zone="band"] .app-level::after,
+:root[data-zone="top"] :is(.app-header, .app-level)::after,
+:root[data-zone="blocks"] :is(.app-header, .app-level, .app-tree, .app-side)::after,
+:root[data-zone="window"] .app-window::after {
+  content: ""; position: absolute; inset: 0; z-index: -1; pointer-events: none;
+  background: var(--texture-colour-2); opacity: var(--texture-opacity-2);
+  mask-image: var(--texture-2); mask-size: var(--texture-size-2) calc(var(--texture-size-2) * var(--ratio-2));
+  mask-position: var(--texture-shift) var(--texture-shift);
+}

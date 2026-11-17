@@ -116,7 +116,7 @@
   --slot-line: #2a3440; --slot-fill: #2a3440; --slot-radius: 3px;
   --gem-str: #e5534b; --gem-dex: #57ab5a; --gem-int: #539bf5; --gem-none: #8692a3;
   --gem-size: 10px; --gem-line: none;
-  --tree-background: #151a20;
+  --tree-background: transparent;
   --tree-edge: #232b35; --tree-edge-taken: #e3e8ef;
   --tree-node: #151a20; --tree-node-line: #3a4552;
   --tree-taken: #e3e8ef; --tree-later: #6b7686;

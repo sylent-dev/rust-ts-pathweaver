@@ -29,10 +29,28 @@ const THEMES = {
   candy: { title: "25 · Candy", text: "Wild, Aurora in pastel, light: a mesh of pink, lilac and mint, translucent bands, very round, wide titles (Unbounded), a hot pink accent." },
   signal: { title: "26 · Signal", text: "Wild, Slate's orange as a surface, light: an orange app bar, a black level band, warm paper, thick black lines and square shapes (Archivo)." },
   prism: { title: "27 · Prism", text: "Wild, Glass in iridescence, dark: dark glass lit by a band of pink, violet, cyan and gold, a magenta accent that glows (Sora, Inter)." },
+  "frost-night": { title: "28 · Frost Night", text: "Asked for: Frost in negative, dark. Its density and its flat boxes on a blue black, pale blue lines, one blue (Geist, Geist Mono)." },
 };
+
+// The textures behind the blocks (css/textures.css): two layers, the second shifted against the first.
+const PATTERNS = { none: "None", grid: "Grid", graph: "Graph paper", dots: "Dots", crosses: "Crosses", hatch: "Hatching",
+  diamonds: "Diamonds", triangles: "Triangles", hexagons: "Hexagons", pentagons: "Pentagons", rings: "Rings" };
+const TEXTURE_COLOURS = { text: "Grey (the text)", blue: "Pale blue", accent: "Accent" };
+const textureLayer = (n, pattern, colour, size, opacity) => ({
+  [`pattern${n}`]: { label: `Texture ${n}`, options: PATTERNS, fallback: pattern, select: true },
+  [`colour${n}`]: { label: `Colour ${n}`, options: TEXTURE_COLOURS, fallback: colour, select: true },
+  [`size${n}`]: { label: `Size ${n}`, range: { min: 6, max: 96, step: 2 }, variable: `--texture-size-${n}`, unit: "px", fallback: size },
+  [`opacity${n}`]: { label: `Opacity ${n}`, range: { min: 0, max: 40, step: 1 }, variable: `--texture-opacity-${n}`, unit: "%", fallback: opacity },
+});
 
 const VARIANTS = {
   theme: { label: "Style", options: Object.fromEntries(Object.entries(THEMES).map(([key, theme]) => [key, theme.title])), fallback: "slate" },
+  zone: { label: "Textured", select: true, fallback: "tree-side", options: { tree: "The tree", side: "The right column",
+    "tree-side": "The tree and the right column", band: "The level band", top: "The header and the level band",
+    blocks: "Every block", window: "The whole window" } },
+  ...textureLayer(1, "grid", "text", "24", "8"),
+  ...textureLayer(2, "grid", "blue", "24", "6"),
+  shift: { label: "Shift 2", range: { min: 0, max: 48, step: 1 }, variable: "--texture-shift", unit: "px", fallback: "12" },
 };
 
 const SECTIONS = [];
@@ -106,6 +124,7 @@ document.getElementById("tabs").addEventListener("input", event => {
   const { variant } = event.target.dataset;
   if (!variant) return;
   chosen[variant] = event.target.value;
+  document.documentElement.dataset[variant] = chosen[variant];   // a list may be read by the CSS
   if (VARIANTS[variant].range) event.target.nextElementSibling.value = chosen[variant] + (VARIANTS[variant].unit ?? "");
   keepInAddress();
   applyVariables();
