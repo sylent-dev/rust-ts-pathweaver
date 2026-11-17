@@ -1,0 +1,38 @@
+/* The logo (2c): the owner's mark (js/logo-mark.js). Each card shows one weight on the three
+   styles side by side (data-sample-theme), at the sizes where the logo lives: large, in the app
+   bar, in the tab of the browser, and the mark alone. */
+.logo-card { display: flex; flex-direction: column; gap: 8px; }
+.logo-card-title { color: #e9ecef; font-size: 14px; font-weight: 600; }
+.logo-card-title small { color: #adb5bd; font-weight: 400; }
+.logo-styles { display: flex; gap: 6px; }
+.logo-style { display: flex; flex-direction: column; width: 300px; overflow: hidden; border-radius: 6px; background: var(--page); color: var(--text); }
+
+.logo-big { display: grid; place-items: center; height: 170px; }
+
+/* The name alone and with the mark, large (sections/logo.js, the section of the name). */
+.name-card { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 26px; width: 600px; overflow: hidden; padding: 34px 20px; border-radius: 6px; background: var(--page); color: var(--text); }
+.name-card .logo-name.is-alone { font-size: 56px; }
+.name-lockup { display: flex; align-items: center; gap: 14px; }
+.name-lockup .logo-name { font-size: 34px; }
+.name-card .logo-bar { align-self: stretch; margin: 0 -20px -34px; }
+.logo-bar { display: flex; align-items: center; gap: 9px; height: 44px; padding: 0 14px; background: var(--band-deep); color: var(--on-bar); }
+/* The name: its font, weight and spacing are tokens (css/tokens.css), here and in the app bar of
+   the page of a build. */
+.logo-name { font-family: var(--brand-font); font-weight: var(--brand-weight); font-size: 18px; line-height: 1.15;
+  letter-spacing: var(--brand-spacing); white-space: nowrap; }
+/* The tab of the browser: its title is in the browser's own font, only the icon is ours. */
+.logo-tab { display: flex; align-items: center; gap: 8px; height: 34px; padding: 0 12px; background: var(--bar); color: var(--on-bar); font: 12px system-ui, sans-serif; }
+.logo-tab > span { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.logo-icons { display: flex; align-items: flex-end; justify-content: center; gap: 14px; padding: 14px; }
+
+/* The inks of the mark, chosen by the list « Mark » (js/page.js): its frame and its P. */
+.logo-mark { flex: none; --logo-frame: currentColor; --logo-p: currentColor; }
+.logo-frame { fill: var(--logo-frame); }
+.logo-p { fill: var(--logo-p); }
+:root[data-logo-ink="accent"] .logo-mark { --logo-frame: var(--accent); --logo-p: var(--accent); }
+:root[data-logo-ink="p-accent"] .logo-mark { --logo-p: var(--accent); }
+:root[data-logo-ink="frame-accent"] .logo-mark { --logo-frame: var(--accent); }
+/* On a square of the accent, the mark takes the ink that goes on it, whatever the list says. */
+.logo-square { display: grid; place-items: center; flex: none; border-radius: 22%; background: var(--accent); color: var(--on-accent); }
+:root .logo-square .logo-mark { --logo-frame: currentColor; --logo-p: currentColor; }
+
