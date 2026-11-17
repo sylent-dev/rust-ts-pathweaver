@@ -9,7 +9,8 @@
 //   [title, [[label, html], …]]: a section script adds its own with addSection(), and the newest
 //   section comes first. Past ten sections, a table of contents under the header links to each.
 
-// The styles compared, numbered once (proposals 1 to 10): four sober, three bold, three wild.
+// The styles compared, numbered once: four sober, three bold, three wild (1 to 10), then one per
+// reference of the moodboard the owner picked (11 to 15, R### of outputs/2026-11-16-moodboard-sources.md).
 const THEMES = {
   grey: { title: "0 · Grey", text: "The wireframe in HTML: the layout and the real data, before any style." },
   atlas: { title: "1 · Atlas", text: "Sober. A map of the road: dark ink and parchment, engraved serif titles (Cormorant Garamond, Alegreya Sans), a vermilion route; diamond gems and notables." },
@@ -22,6 +23,11 @@ const THEMES = {
   neon: { title: "8 · Neon", text: "Wild. A synthwave night: magenta grid and lines on violet black, a cyan accent, everything glows (Orbitron, Rajdhani)." },
   brutalist: { title: "9 · Brutalist", text: "Wild. White, thick black lines, hard shadows, an acid yellow level band, black capitals (Archivo Black, Space Mono); square passives." },
   riso: { title: "10 · Riso", text: "Wild. A risograph print: fluorescent pink and blue on paper, halftone dots, shifted shadows, big rounded corners (Bricolage Grotesque, DM Mono)." },
+  mural: { title: "11 · Mural", text: "Moodboard, R030. An ancient mural in the void: black with faint concentric circles, white passives that glow, cream art-deco capitals (Federo, Jost), pill-shaped controls." },
+  lantern: { title: "12 · Lantern", text: "Moodboard, R041. A dark brass panel in a frame of blue light: gold for what is taken, the level band as a thick progress bar (Poppins)." },
+  sigil: { title: "13 · Sigil", text: "Moodboard, R008. A honeycomb on crimson black: gold hexagons for what is taken, a red glow for what is new, engraved Roman capitals (Cinzel, Spectral)." },
+  glass: { title: "14 · Glass", text: "Moodboard, R089. A dark glass dashboard: charcoal turning teal at its edge, large rounded corners, bold white capitals (Archivo, Inter), one gold; hexagonal gems and notables." },
+  aurora: { title: "15 · Aurora", text: "Moodboard, R201. A light page under a night sky: a deep blue app bar with stars and a glow that fades into the level band, white glass boxes, one blue (Instrument Sans)." },
 };
 
 const VARIANTS = {
