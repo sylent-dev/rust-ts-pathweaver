@@ -4,15 +4,15 @@
 // « +N ▾ » menu, which also holds Merge…) and + to open files.
 
 // The links of the band of the site, in words, in Manrope, the full height of the band (the owner,
-// 2026-11-17): Report a bug opens a new issue on GitHub; the second link (its words in the list
-// « Second link », rather than a Sign in that would lead nowhere in version 1) will open a box of
-// what version 2 brings, the community (drawn later, at 2k).
+// 2026-11-17): Report a bug opens a new issue on GitHub; What's next (the owner, 2026-11-18, rather
+// than a Sign in that would lead nowhere in version 1) will open a box of what version 2 brings, the
+// community (drawn later, at 2k).
 const REPORT_BUG_URL = "https://github.com/sylent-dev/rust-ts-pathweaver/issues/new";
 const siteBand = () => `<div class="app-site">
     <span class="app-site-brand">${logoMark(24)}<span class="logo-name">Pathweaver</span></span>
     <nav class="app-site-links">
       <a class="app-site-link" href="${REPORT_BUG_URL}" target="_blank" rel="noopener">Report a bug</a>
-      <a class="app-site-link" href="#" role="button">${VARIANTS.nextLink.options[chosen.nextLink]}</a>
+      <a class="app-site-link" href="#" role="button">What's next</a>
     </nav>
   </div>`;
 
@@ -46,7 +46,7 @@ function buildsBand(width, { builds = BUILDS.open, menuOpen = STATE.buildsMenu,
   const shown = builds.slice(0, fit);
   const hidden = builds.slice(fit);
   const tabWidth = hidden.length ? TAB_WIDTH : Math.min(TAB_MAX_WIDTH, Math.floor((room + TAB_GAP) / builds.length) - TAB_GAP);
-  return `<div class="app-builds" style="--tab-width:${tabWidth}px">
+  return `<div class="app-builds" data-current-look="${chosen.currentLook}" style="--tab-width:${tabWidth}px">
     <div class="app-builds-tabs" role="tablist">${shown.map((build, index) => openBuildTab(build, index === 0 ? "is-current" : "")).join("")}</div>
     <span class="app-builds-more-wrap">
       <button type="button" class="app-builds-more ${moreState} ${menuOpen ? "is-open" : ""}" data-action="toggleBuildsMenu" aria-expanded="${menuOpen}" aria-label="More builds and Merge">${hidden.length ? `+${hidden.length}` : ""}${icon(12, ICONS.down)}</button>

@@ -13,17 +13,12 @@
 .app-site-brand .logo-mark { width: var(--brand-mark-size); height: var(--brand-mark-size); }
 .app-site-brand .logo-name { position: relative; top: var(--brand-name-offset); font-size: var(--brand-size); }
 
-/* The shades of the two bands, one list for the light style and one for the dark ones (the owner,
-   2026-11-18: it depends on the mode): set on the element of the style, so that --bar and
-   --band-deep are those of its style, the page or a block of data-sample-theme. */
-:root[data-top-light="site-deep"]:is([data-theme="frost"]), :root[data-top-light="site-deep"] [data-sample-theme="frost"] { --site-band: var(--band-deep); --builds-band: var(--bar); }
-:root[data-top-light="builds-deep"]:is([data-theme="frost"]), :root[data-top-light="builds-deep"] [data-sample-theme="frost"] { --site-band: var(--bar); --builds-band: var(--band-deep); }
-:root[data-top-light="same-deep"]:is([data-theme="frost"]), :root[data-top-light="same-deep"] [data-sample-theme="frost"] { --site-band: var(--band-deep); --builds-band: var(--band-deep); }
-:root[data-top-light="same"]:is([data-theme="frost"]), :root[data-top-light="same"] [data-sample-theme="frost"] { --site-band: var(--bar); --builds-band: var(--bar); }
-:root[data-top-dark="site-deep"]:is([data-theme="frost-night"], [data-theme="ember"]), :root[data-top-dark="site-deep"] [data-sample-theme="frost-night"], :root[data-top-dark="site-deep"] [data-sample-theme="ember"] { --site-band: var(--band-deep); --builds-band: var(--bar); }
-:root[data-top-dark="builds-deep"]:is([data-theme="frost-night"], [data-theme="ember"]), :root[data-top-dark="builds-deep"] [data-sample-theme="frost-night"], :root[data-top-dark="builds-deep"] [data-sample-theme="ember"] { --site-band: var(--bar); --builds-band: var(--band-deep); }
-:root[data-top-dark="same-deep"]:is([data-theme="frost-night"], [data-theme="ember"]), :root[data-top-dark="same-deep"] [data-sample-theme="frost-night"], :root[data-top-dark="same-deep"] [data-sample-theme="ember"] { --site-band: var(--band-deep); --builds-band: var(--band-deep); }
-:root[data-top-dark="same"]:is([data-theme="frost-night"], [data-theme="ember"]), :root[data-top-dark="same"] [data-sample-theme="frost-night"], :root[data-top-dark="same"] [data-sample-theme="ember"] { --site-band: var(--bar); --builds-band: var(--bar); }
+/* The shades of the two bands (the owner, 2026-11-18): both light in the light style, both dark in
+   the dark ones; the shadow under the band of the site tells them apart. Set on the element of the
+   style, so that --bar and --band-deep are those of its style, the page or a block of
+   data-sample-theme. */
+:root[data-theme="frost"], [data-sample-theme="frost"] { --site-band: var(--bar); --builds-band: var(--bar); }
+:root:is([data-theme="frost-night"], [data-theme="ember"]), :is([data-sample-theme="frost-night"], [data-sample-theme="ember"]) { --site-band: var(--band-deep); --builds-band: var(--band-deep); }
 
 /* The end of the band (2e2, the owner, 2026-11-18): « +N ▾ » and + the full height of the band, told
    apart by contrast, not by borders: a tinted background at rest, a stronger one on hover and while
@@ -71,6 +66,17 @@
 .app-builds-tab:is(:hover, .is-hover, .is-close-hover) { background: color-mix(in srgb, var(--on-bar) 7%, transparent); color: var(--on-bar); }
 .app-builds-tab.is-current { color: var(--on-bar); }
 
+/* The current tab, in five looks under comparison (« Current tab », data-current-look on the band),
+   by contrast only: 96 a lighter background; 97 the colour of the page; 98 the other portraits
+   grey and dimmed; 99 (hotter) a background tinted with the accent, the other portraits grey;
+   100 (explosive) filled with the accent, its text in the ink on the accent, the others grey. */
+.app-builds[data-current-look="96"] .app-builds-tab.is-current { background: color-mix(in srgb, var(--on-bar) 14%, transparent); }
+.app-builds[data-current-look="97"] .app-builds-tab.is-current { background: var(--page); color: var(--text); }
+.app-builds:is([data-current-look="98"], [data-current-look="99"], [data-current-look="100"]) .app-builds-tab:not(.is-current) .app-builds-portrait { filter: grayscale(1) brightness(.8); opacity: .55; }
+.app-builds:is([data-current-look="98"], [data-current-look="99"], [data-current-look="100"]) .app-builds-tab:not(.is-current):is(:hover, .is-hover, .is-close-hover) .app-builds-portrait { filter: grayscale(.3); opacity: .9; }
+.app-builds[data-current-look="99"] .app-builds-tab.is-current { background: color-mix(in srgb, var(--accent) 24%, transparent); }
+.app-builds[data-current-look="100"] .app-builds-tab.is-current { background: var(--accent); color: var(--on-accent); }
+
 /* The section of the tab (sections/bar-tab.js): the states side by side, then the page below. */
 .tab-states { display: flex; }
 .tab-strip .app-builds { padding: 0; }
@@ -80,7 +86,7 @@
 .tab-card { display: flex; flex-direction: column; gap: 6px; }
 
 /* The section of the two bands (sections/bands.js): the page under them, where the menu opens. */
-.bands-page { height: 150px; background: var(--page); }
+.bands-page { height: 230px; background: var(--page); }
 
 /* The sections of the end of the band (sections/band-end.js). */
 .end-states > span { width: 420px; }
