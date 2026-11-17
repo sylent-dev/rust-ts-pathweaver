@@ -13,21 +13,23 @@ const siteBand = () => `<div class="app-site">
 
 const portrait = (key, size) => `<img class="app-portrait" src="pathweaver/img/portraits/${key}.webp" width="${size}" height="${size}" alt="">`;
 
-// A tab of an open build (2e): its portrait, square the full height of the band (the square inside
-// the disc the game gives), its name cut to fit and its close button. `states`
+// A tab of an open build (2e, the owner, 2026-11-17): its portrait, the square inside the disc the
+// game gives, the full height of the band; its name over its ascendancy, smaller and weaker, each
+// cut to fit; and its close button. `states`
 // adds is-current, or is-hover and is-close-hover to show a state without the mouse.
 const openBuildTab = (build, states = "") => `<div class="app-builds-tab ${states}" role="tab" aria-selected="${states.includes("is-current")}" title="${escapeHtml(build.name)} · ${escapeHtml(build.ascendancy)}">
-    <span class="app-builds-portrait">${portrait(build.portrait, 44)}</span><span class="app-builds-tab-name">${escapeHtml(build.name)}</span>
+    <img class="app-builds-portrait" src="pathweaver/img/portraits-square/${build.portrait}.webp" width="44" height="44" alt=""><span class="app-builds-tab-text"><span class="app-builds-tab-name">${escapeHtml(build.name)}</span><span class="app-builds-tab-ascendancy">${escapeHtml(build.ascendancy)}</span></span>
     <button type="button" class="app-builds-close" aria-label="Close">${icon(12, ICONS.close)}</button>
   </div>`;
 
 // The band of the open builds, its tabs in the look of the list « Tab look » (data-tab-look):
-// full height, side by side, 168 px each, up to 240 when they all fit; those that don't fit go to the menu « +N ▾ », which
+// full height, side by side, « Tab width » each, up to 240 when they all fit; those that don't fit go to the menu « +N ▾ », which
 // also holds Merge… and is always there. `menuOpen` shows the menu open.
-const TAB_WIDTH = 168, TAB_MAX_WIDTH = 240, TAB_GAP = 0;
+const TAB_MAX_WIDTH = 240, TAB_GAP = 0;
 STATE.buildsMenu = false;
 
 function buildsBand(width, builds = BUILDS.open, menuOpen = STATE.buildsMenu) {
+  const TAB_WIDTH = Number(chosen.tabWidth);
   const room = width - 12 - 100;   // the padding on the right, then « +N ▾ » and +
   const fit = Math.max(1, Math.floor((room + TAB_GAP) / (TAB_WIDTH + TAB_GAP)));
   const shown = builds.slice(0, fit);

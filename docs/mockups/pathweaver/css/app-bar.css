@@ -8,7 +8,7 @@
 :root[data-bug-label="icon"] .app-site-bug { padding: 0; }
 .app-site-bug:hover { opacity: 1; background: color-mix(in srgb, var(--on-bar) 9%, transparent); }
 
-/* The band of the open builds: 44 px, their tabs of 168 px, up to 240 when they all fit. */
+/* The band of the open builds: 44 px, their tabs of « Tab width », up to 240 when they all fit. */
 .app-builds { display: flex; align-items: flex-end; gap: 6px; height: 44px; padding: 0 12px 0 0; background: var(--bar-image), var(--bar); color: var(--on-bar); border-bottom: var(--border-width) solid var(--divider); }
 .app-site-brand { display: flex; align-items: center; gap: var(--brand-gap); flex: none; padding-right: 12px; }
 .app-site-brand .logo-mark { width: var(--brand-mark-size); height: var(--brand-mark-size); }
@@ -31,14 +31,15 @@
 :root[data-top-shade="same-deep"] :is(.app-site, .app-builds) { background: var(--bar-image), var(--band-deep); }
 
 /* A build tab (2e): the full height of the band, side by side, square corners (the owner,
-   2026-11-17); its portrait square the full height, its name cut to fit, its close button. The
+   2026-11-17); its portrait square the full height, its name over its ascendancy, its close button. The
    states have classes too (is-hover, is-close-hover), to be shown side by side without the mouse. */
 .app-builds-tabs { align-self: stretch; display: flex; }
-.app-builds-tab { display: flex; align-items: center; gap: 8px; width: var(--tab-width, 168px); box-sizing: border-box; padding-right: 6px; cursor: pointer; }
-.app-builds-portrait { display: grid; place-items: center; flex: none; height: 100%; aspect-ratio: 1; overflow: hidden; }
-/* The portrait is a disc with a dark edge: shown larger, so that the square keeps its middle. */
-.app-builds-portrait .app-portrait { width: var(--portrait-zoom); height: var(--portrait-zoom); border-radius: 0; box-shadow: none; }
-.app-builds-tab-name { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 13px; }
+.app-builds-tab { display: flex; align-items: center; gap: 8px; width: var(--tab-width); box-sizing: border-box; padding-right: 6px; cursor: pointer; }
+.app-builds-portrait { flex: none; display: block; height: 100%; aspect-ratio: 1; }
+.app-builds-tab-text { flex: 1; min-width: 0; display: flex; flex-direction: column; justify-content: center; gap: 1px; }
+.app-builds-tab-text > span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; line-height: 1.2; }
+.app-builds-tab-name { font-size: 12px; }
+.app-builds-tab-ascendancy { font-size: 11px; opacity: .7; }
 .app-builds-close { display: grid; place-items: center; flex: none; width: 20px; height: 20px; padding: 0; border: none; border-radius: 50%; background: none; color: inherit; opacity: .6; cursor: pointer; }
 .app-builds-close:hover, .app-builds-tab.is-close-hover .app-builds-close { opacity: 1; background: color-mix(in srgb, currentColor 16%, transparent); }
 :root[data-bar-close="hover"] .app-builds-tab:not(.is-current, :hover, .is-hover, .is-close-hover) .app-builds-close { visibility: hidden; }
@@ -58,7 +59,7 @@
 /* The section of the tab (sections/bar-tab.js): the states side by side, then the page below. */
 .tab-states { display: flex; }
 .tab-strip .app-builds { padding: 0; }
-.tab-states > span { width: 168px; color: #adb5bd; font-size: 12px; }
+.tab-states > span { width: var(--tab-width); color: #adb5bd; font-size: 12px; }
 .tab-strip { overflow: hidden; border-radius: 6px; background: var(--page); }
 .tab-strip-page { height: 14px; }
 .tab-card { display: flex; flex-direction: column; gap: 6px; }

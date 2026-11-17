@@ -20,7 +20,7 @@ const TAB_STATES = [
   ["Current, hover on ×", "is-current is-close-hover", BUILDS.open[4]],
 ];
 
-const tabCard = look => `<div class="tab-card">
+const tabCard = look => `<div class="tab-card" style="--tab-width:${chosen.tabWidth}px">
   <div class="tab-states">${TAB_STATES.map(([label]) => `<span>${label}</span>`).join("")}</div>
   ${["frost", "frost-night", "ember"].map(style => `<div class="tab-strip" data-sample-theme="${style}" title="${THEMES[style].title}">
     <div class="app-builds" data-tab-look="${look}"><div class="app-builds-tabs">${TAB_STATES.map(([, states, build]) => openBuildTab(build, states)).join("")}</div></div>

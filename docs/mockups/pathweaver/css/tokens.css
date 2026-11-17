@@ -25,7 +25,6 @@
   /* The name of Pathweaver, the same in every style (the owner, 2026-11-17): Archivo in its own weight, tight. */
   --brand-font: "Archivo", sans-serif;
   --site-shadow: 0 1px 3px rgb(0 0 0 / .1);   /* under the band of the site, very light */
-  --portrait-zoom: 76px;   /* the portrait of a tab, a disc, shown this large in its square of 44 px */
   --report-font: "Manrope", sans-serif;   /* Report a bug, in the band of the site (the owner, 2026-11-17) */
   --report-weight: 600;
   --report-size: 13px;
