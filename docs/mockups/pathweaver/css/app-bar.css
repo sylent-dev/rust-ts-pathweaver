@@ -8,7 +8,7 @@
 
 /* The band of the open builds: 44 px, their tabs of 184 px, up to 240 when they all fit; the same
    light shadow under it as under the band of the site. */
-.app-builds { position: relative; z-index: 1; display: flex; align-items: flex-end; gap: 6px; height: 44px; padding: 0 12px 0 0; background: var(--bar-image), var(--builds-band, var(--band-deep)); color: var(--on-bar); box-shadow: var(--band-shadow); }
+.app-builds { position: relative; z-index: 1; display: flex; align-items: flex-end; height: 44px; padding: 0 12px 0 0; background: var(--bar-image), var(--builds-band, var(--band-deep)); color: var(--on-bar); box-shadow: var(--band-shadow); }
 .app-site-brand { display: flex; align-items: center; gap: var(--brand-gap); flex: none; padding-right: 12px; }
 .app-site-brand .logo-mark { width: var(--brand-mark-size); height: var(--brand-mark-size); }
 .app-site-brand .logo-name { position: relative; top: var(--brand-name-offset); font-size: var(--brand-size); }
@@ -25,31 +25,18 @@
 :root[data-top-dark="same-deep"]:is([data-theme="frost-night"], [data-theme="ember"]), :root[data-top-dark="same-deep"] [data-sample-theme="frost-night"], :root[data-top-dark="same-deep"] [data-sample-theme="ember"] { --site-band: var(--band-deep); --builds-band: var(--band-deep); }
 :root[data-top-dark="same"]:is([data-theme="frost-night"], [data-theme="ember"]), :root[data-top-dark="same"] [data-sample-theme="frost-night"], :root[data-top-dark="same"] [data-sample-theme="ember"] { --site-band: var(--bar); --builds-band: var(--bar); }
 
-/* The end of the band (2e2): « +N ▾ » and +, in four looks (« End of band », data-end-look), and the
-   menu of « +N ▾ », the builds that don't fit then Merge…, in three (« Menu », data-menu-look). The
-   states have classes too (is-hover, is-open), to be shown side by side without the mouse. */
+/* The end of the band (2e2, the owner, 2026-11-18): « +N ▾ » and + the full height of the band, told
+   apart by contrast, not by borders: a tinted background at rest, a stronger one on hover and while
+   open; one line only, after « +N ▾ ». Their states have classes too (is-hover, is-open), to be
+   shown side by side without the mouse. The menu of « +N ▾ », the builds that don't fit then
+   Merge…, in three looks (« Menu », data-menu-look). */
 .app-builds-more-wrap { position: relative; display: flex; align-self: stretch; }
-.app-builds-more, .app-builds-open { display: inline-flex; align-items: center; justify-content: center; gap: 5px; padding: 0 10px; border: none; background: none; color: inherit; cursor: pointer; font-size: 13px; }
-.app-builds-open > span { display: none; }
-
-/* A · raised: two small controls in the middle of the band. */
-.app-builds[data-end-look="A"] :is(.app-builds-more-wrap, .app-builds-open) { align-self: center; }
-.app-builds[data-end-look="A"] :is(.app-builds-more, .app-builds-open) { height: 26px; padding: 0 8px; border: var(--border-width) solid var(--control-line); border-radius: var(--radius); background: var(--control); color: var(--text); box-shadow: var(--control-shadow); }
-.app-builds[data-end-look="A"] .app-builds-open { width: 30px; height: 28px; padding: 0; }
-.app-builds[data-end-look="A"] :is(.app-builds-more, .app-builds-open):is(:hover, .is-hover) { border-color: var(--accent); }
-.app-builds[data-end-look="A"] .app-builds-more.is-open { border-color: var(--accent); }
-
-/* B · flat, C · flat with a line of 1 px before each (a line, though the styles have no borders:
-   --border-width is 0), D · flat with « Open »: the full height of the band,
-   no box, a background on hover and while open, as the tabs. */
-.app-builds:not([data-end-look="A"]) { gap: 0; }
-.app-builds:not([data-end-look="A"]) :is(.app-builds-more, .app-builds-open) { align-self: stretch; height: 100%; min-width: 44px; color: color-mix(in srgb, var(--on-bar) 75%, transparent); }
-.app-builds:not([data-end-look="A"]) .app-builds-open { padding: 0; }
-.app-builds:not([data-end-look="A"]) :is(.app-builds-more, .app-builds-open):is(:hover, .is-hover) { background: color-mix(in srgb, var(--on-bar) 9%, transparent); color: var(--on-bar); }
-.app-builds:not([data-end-look="A"]) .app-builds-more.is-open { background: color-mix(in srgb, var(--on-bar) 13%, transparent); color: var(--on-bar); }
-.app-builds[data-end-look="C"] :is(.app-builds-more-wrap, .app-builds-open) { box-shadow: inset 1px 0 0 color-mix(in srgb, var(--on-bar) 24%, transparent); }
-.app-builds[data-end-look="D"] .app-builds-open { padding: 0 14px; }
-.app-builds[data-end-look="D"] .app-builds-open > span { display: inline; }
+.app-builds-more, .app-builds-open { display: inline-flex; align-items: center; justify-content: center; gap: 5px; min-width: 44px; height: 100%; padding: 0 12px; border: none;
+  background: color-mix(in srgb, var(--on-bar) 9%, transparent); color: var(--on-bar); cursor: pointer; font-size: 13px; }
+.app-builds-open { padding: 0; }
+.app-builds-more { box-shadow: inset -1px 0 0 color-mix(in srgb, var(--on-bar) 24%, transparent); }
+:is(.app-builds-more, .app-builds-open):is(:hover, .is-hover) { background: color-mix(in srgb, var(--on-bar) 16%, transparent); }
+.app-builds-more.is-open { background: color-mix(in srgb, var(--on-bar) 20%, transparent); }
 
 /* 1 · a card: floating under its button, rounded, the builds in a row of 32 px, a small round portrait. */
 .app-builds-menu { position: absolute; z-index: 5; right: 0; width: 300px; font-size: 13px; }
