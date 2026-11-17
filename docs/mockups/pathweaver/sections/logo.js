@@ -38,7 +38,7 @@ addSection(() => ["The name · its case, its font and its spacing, chosen by the
   LOGO_STYLES.map(style => [THEMES[style].title, nameCard(style)])]);
 
 // Every font of the name side by side (the owner, 2026-11-17), in small boxes sorted by kind, with
-// the case and the spacing of the lists. A click on a box adds it to the favourites or takes it
+// the case, the weight and the spacing of the lists. A click on a box adds it to the favourites or takes it
 // out, as on the moodboards, and shows its font large in the section of the name; the favourites
 // stay in the browser, show at the top with a button that copies their numbers for the chat, and
 // may be shown alone.
@@ -54,7 +54,7 @@ const nameFavouriteList = () => NAME_FONT_LIST.filter(font => STATE.nameFavourit
 const nameFontBox = font => `<button type="button" class="name-font-box ${STATE.nameFavourites.has(font.key) ? "is-favourite" : ""} ${chosen.nameFont === font.key ? "is-current" : ""}"
     data-action="name-favourite" data-font="${font.key}" aria-pressed="${STATE.nameFavourites.has(font.key)}"
     style="--name-font:'${font.family}';--name-weight:${font.weight}" title="${escapeHtml(font.family)}">
-  <small>${font.id} · ${escapeHtml(font.family)}</small><span class="logo-name">${LOGO_NAME}</span></button>`;
+  <small>${font.id} · ${escapeHtml(font.family)} · ${nameFontWeights(font)}</small><span class="logo-name">${LOGO_NAME}</span></button>`;
 
 ACTIONS["name-favourite"] = element => {
   const key = element.dataset.font;
@@ -88,7 +88,7 @@ const nameFontKinds = () => Object.entries(NAME_FONTS).map(([kind, fonts]) => {
   return shown.length ? `<div class="name-font-kind"><h3>${kind}</h3><div class="name-font-grid">${shown.map(nameFontBox).join("")}</div></div>` : "";
 }).join("");
 
-addSection(() => ["The name in every font · 90 to 221, sorted by kind, with the case and the spacing of the lists; a click adds a font to the favourites",
+addSection(() => ["The name in every font · 90 to 221, sorted by kind, with the case, the weight and the spacing of the lists; a click adds a font to the favourites",
   [["", nameFavouritesBar() + nameFontKinds()]]]);
 
 // A wide font shrinks until the name fits its box; again once the fonts have loaded, and at each

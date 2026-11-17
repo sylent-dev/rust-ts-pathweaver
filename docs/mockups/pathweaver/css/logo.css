@@ -18,7 +18,7 @@
 .logo-bar { display: flex; align-items: center; gap: 9px; height: 44px; padding: 0 14px; background: var(--band-deep); color: var(--on-bar); }
 /* The name: its font, case and spacing are chosen by the lists « Name », « Font » and « Spacing »
    (js/page.js), here and in the app bar of the page of a build. */
-.logo-name { font-family: var(--name-font, "Geist"), sans-serif; font-weight: var(--name-weight, 600); font-size: 18px; line-height: 1.15;
+.logo-name { font-family: var(--name-font, "Geist"), sans-serif; font-weight: var(--name-weight-chosen, var(--name-weight, 600)); font-synthesis: none; font-size: 18px; line-height: 1.15;
   letter-spacing: var(--name-spacing, 0); text-transform: none; white-space: nowrap; }
 :root[data-name-case="upper"] .logo-name { text-transform: uppercase; }
 :root[data-name-case="lower"] .logo-name { text-transform: lowercase; }
@@ -54,5 +54,5 @@
 .name-favourites b { color: #ffd43b; font-weight: 600; }
 .name-favourites button { padding: 3px 10px; border: 1px solid #3a3f45; border-radius: 4px; background: #24272b; color: #dee2e6; font: inherit; cursor: pointer; }
 .name-favourites button[aria-pressed="true"] { border-color: #ffd43b; color: #ffd43b; }
-.name-font-box small { color: var(--weak); font: 10px/1 system-ui, sans-serif; }
+.name-font-box small { max-width: 100%; overflow: hidden; color: var(--weak); font: 10px/1 system-ui, sans-serif; white-space: nowrap; text-overflow: ellipsis; }
 .name-font-box .logo-name { max-width: 100%; overflow: hidden; font-size: 26px; text-overflow: clip; }
