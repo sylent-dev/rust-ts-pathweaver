@@ -1,21 +1,27 @@
-/* The logo in text (2c): the name in a font, and its P as the icon of the browser tab. Each card
-   shows one font on the three styles side by side (data-sample-theme), at the sizes where the
-   logo lives: large, in the app bar, in the tab of the browser, and the icon alone. */
+/* The logo (2c): the owner's mark (js/logo-mark.js). Each card shows one weight on the three
+   styles side by side (data-sample-theme), at the sizes where the logo lives: large, in the app
+   bar, in the tab of the browser, and the mark alone. */
 .logo-card { display: flex; flex-direction: column; gap: 8px; }
 .logo-card-title { color: #e9ecef; font-size: 14px; font-weight: 600; }
 .logo-card-title small { color: #adb5bd; font-weight: 400; }
 .logo-styles { display: flex; gap: 6px; }
 .logo-style { display: flex; flex-direction: column; width: 300px; overflow: hidden; border-radius: 6px; background: var(--page); color: var(--text); }
 
-.logo-name { font-family: var(--logo-font); font-weight: var(--logo-weight); letter-spacing: var(--logo-spacing, 0); line-height: 1; white-space: nowrap; }
-.logo-big { display: grid; place-items: center; height: 110px; font-size: 38px; }
-.logo-bar { display: flex; align-items: center; gap: 8px; height: 44px; padding: 0 14px; background: var(--band-deep); color: var(--on-bar); font-size: 18px; }
+.logo-big { display: grid; place-items: center; height: 170px; }
+.logo-bar { display: flex; align-items: center; gap: 9px; height: 44px; padding: 0 14px; background: var(--band-deep); color: var(--on-bar); }
+.logo-name { font: 600 18px/1 var(--font-title, "Geist"), sans-serif; white-space: nowrap; }
 /* The tab of the browser: its title is in the browser's own font, only the icon is ours. */
 .logo-tab { display: flex; align-items: center; gap: 8px; height: 34px; padding: 0 12px; background: var(--bar); color: var(--on-bar); font: 12px system-ui, sans-serif; }
 .logo-tab > span { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .logo-icons { display: flex; align-items: flex-end; justify-content: center; gap: 14px; padding: 14px; }
 
-/* The icon: the P of the font, on a square of the accent or alone in the ink. */
-.logo-icon { display: grid; place-items: center; flex: none; font-family: var(--logo-font); font-weight: var(--logo-weight); line-height: 1; }
-.logo-icon.is-square { border-radius: 22%; background: var(--accent); color: var(--on-accent); }
-.logo-icon.is-plain { color: var(--accent); }
+/* The inks of the mark, chosen by the list « Mark » (js/page.js): its frame and its P. */
+.logo-mark { flex: none; --logo-frame: currentColor; --logo-p: currentColor; }
+.logo-frame { fill: var(--logo-frame); }
+.logo-p { fill: var(--logo-p); }
+:root[data-logo-ink="accent"] .logo-mark { --logo-frame: var(--accent); --logo-p: var(--accent); }
+:root[data-logo-ink="p-accent"] .logo-mark { --logo-p: var(--accent); }
+:root[data-logo-ink="frame-accent"] .logo-mark { --logo-frame: var(--accent); }
+/* On a square of the accent, the mark takes the ink that goes on it, whatever the list says. */
+.logo-square { display: grid; place-items: center; flex: none; border-radius: 22%; background: var(--accent); color: var(--on-accent); }
+:root .logo-square .logo-mark { --logo-frame: currentColor; --logo-p: currentColor; }

@@ -20,6 +20,8 @@ const THEMES = {
 
 
 const VARIANTS = {
+  // The inks of the mark (css/logo.css): its frame, the three bars outside, and its P.
+  logoInk: { label: "Mark", select: true, fallback: "text", options: { text: "One ink (text)", accent: "One ink (accent)", "p-accent": "The P in accent", "frame-accent": "The frame in accent" } },
   theme: { label: "Style", options: Object.fromEntries(Object.entries(THEMES).map(([key, theme]) => [key, theme.title])), fallback: "frost" },
   // The second accent (css/accent-2.css): its colour, and what it marks.
   accent2: { label: "Accent 2", select: true, fallback: "amber", options: { amber: "Amber", blue: "Blue", coral: "Coral", mint: "Mint",

@@ -1,44 +1,26 @@
-// The logo (2c): a logo in text for version 1, the name in a font and its P as the icon of the
-// browser tab (the owner, 2026-11-17). The 42 marks drawn before (30 to 71) were set aside; they
-// are in the history of Git (commit 35aa8db), and a symbol waits in docs/backlog.md.
-//
-// Fourteen open fonts (SIL Open Font License, from Google Fonts while the font is chosen),
-// numbered after the marks, from sober to bold; each with the weight that suits it, and a smaller
-// size for the widest, so that the name fits the box.
-
-const LOGO_FONTS = [
-  { id: 72, name: "Geist", weight: 600, note: "the font of Frost today" },
-  { id: 73, name: "Space Grotesk", weight: 600, note: "a grotesque with quirks" },
-  { id: 74, name: "Sora", weight: 600, note: "round and wide" },
-  { id: 75, name: "Manrope", weight: 700, note: "modern, open" },
-  { id: 76, name: "Instrument Sans", weight: 600, note: "narrow and precise" },
-  { id: 77, name: "Bricolage Grotesque", weight: 600, note: "warm, ink traps" },
-  { id: 78, name: "Syne", weight: 700, note: "wide, a little odd" },
-  { id: 79, name: "Unbounded", weight: 600, size: 30, note: "very wide, rounded" },
-  { id: 80, name: "Chakra Petch", weight: 600, note: "cut corners, a game interface" },
-  { id: 81, name: "Rajdhani", weight: 700, note: "condensed, squared" },
-  { id: 82, name: "Michroma", weight: 400, size: 28, note: "wide, technical" },
-  { id: 83, name: "Big Shoulders Display", weight: 700, note: "tall and condensed" },
-  { id: 84, name: "Fraunces", weight: 600, note: "a soft serif" },
-  { id: 85, name: "Cinzel", weight: 700, note: "carved capitals, fantasy" },
-];
+// The logo (2c): the mark drawn by the owner in Inkscape (2026-11-17, js/logo-mark.js), in four
+// weights, each on the three styles at the sizes where it lives: large, in the app bar with the
+// name, in the tab of the browser, and alone at 64, 32 and 16 px, in its ink or on a square of
+// the accent. The name keeps the font of the style until 2d chooses the fonts.
+// The 42 marks (30 to 71) and the fourteen fonts of the name (72 to 85) were set aside; they are in
+// the history of Git (commits 35aa8db and fc3fc23).
 
 const LOGO_STYLES = ["frost", "frost-night", "ember"];
 
-const logoIcon = (size, kind) =>
-  `<span class="logo-icon is-${kind}" style="width:${size}px;height:${size}px;font-size:${Math.round(size * .74)}px">P</span>`;
+const logoSquare = (weight, size) =>
+  `<span class="logo-square" style="width:${size}px;height:${size}px">${logoMark(weight, Math.round(size * .78))}</span>`;
 
-const logoCard = font => `<div class="logo-card" style="--logo-font:'${font.name}';--logo-weight:${font.weight}">
-  <div class="logo-card-title">${font.id} · ${escapeHtml(font.name)} <small>${escapeHtml(font.note)}</small></div>
+const logoCard = weight => `<div class="logo-card">
+  <div class="logo-card-title">${weight.id} · ${escapeHtml(weight.name)} <small>${escapeHtml(weight.note)}</small></div>
   <div class="logo-styles">${LOGO_STYLES.map(style => `
     <div class="logo-style" data-sample-theme="${style}" title="${THEMES[style].title}">
-      <div class="logo-big logo-name" style="font-size:${font.size ?? 38}px">Pathweaver</div>
-      <div class="logo-bar">${logoIcon(22, "square")}<span class="logo-name">Pathweaver</span></div>
-      <div class="logo-tab">${logoIcon(16, "square")}<span>${escapeHtml(BUILDS.open[0].name)} · Pathweaver</span></div>
-      <div class="logo-icons">${logoIcon(64, "square")}${logoIcon(32, "square")}${logoIcon(16, "square")}${logoIcon(32, "plain")}${logoIcon(16, "plain")}</div>
+      <div class="logo-big">${logoMark(weight, 128)}</div>
+      <div class="logo-bar">${logoMark(weight, 24)}<span class="logo-name">Pathweaver</span></div>
+      <div class="logo-tab">${logoMark(weight, 16)}<span>${escapeHtml(BUILDS.open[0].name)} · Pathweaver</span></div>
+      <div class="logo-icons">${[64, 32, 16].map(size => logoMark(weight, size)).join("")}${[32, 16].map(size => logoSquare(weight, size)).join("")}</div>
     </div>`).join("")}
   </div>
 </div>`;
 
-addSection(() => ["The logo · the name in fourteen open fonts, with its P as the icon of the tab: large, in the app bar, in the tab of the browser, alone at 64, 32 and 16 px, on Frost, Frost Night and Ember",
-  LOGO_FONTS.map(font => ["", logoCard(font)])]);
+addSection(() => ["The logo · the owner's mark in four weights: large, in the app bar, in the tab of the browser, alone at 64, 32 and 16 px and on a square of the accent, on Frost, Frost Night and Ember",
+  LOGO_WEIGHTS.map(weight => ["", logoCard(weight)])]);
