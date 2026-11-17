@@ -20,6 +20,9 @@ const THEMES = {
 
 
 const VARIANTS = {
+  // The second link of the band of the site (2e2): it opens a box of what version 2 brings.
+  nextLink: { label: "Second link", select: true, fallback: "next", options: { next: "What's next", v2: "What comes in V2",
+    community: "Community · soon", soon: "Coming soon" } },
   // The two bands at the top (2e2, css/app-bar.css): their shades.
   topShade: { label: "Top bands", select: true, fallback: "site-deep", options: { "site-deep": "The site darker", "same-deep": "Both darker", same: "Both as the bar", "builds-deep": "The open builds darker" } },
   theme: { label: "Style", options: Object.fromEntries(Object.entries(THEMES).map(([key, theme]) => [key, theme.title])), fallback: "frost" },

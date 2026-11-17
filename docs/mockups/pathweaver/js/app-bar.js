@@ -1,17 +1,18 @@
 // The two bands at the top of every page (specs.md, Window layout): the band of the site, the
-// brand, then Report a bug and Sign in (the menu, the search and the settings of version 2 come
+// brand, then Report a bug and what comes next (the menu, the search and the settings of version 2 come
 // there); then the band of the open builds, their tabs (as many as fit, the others in a
 // « +N ▾ » menu, which also holds Merge…) and + to open files.
 
 // The links of the band of the site, in words, in Manrope, the full height of the band (the owner,
-// 2026-11-17): Report a bug opens a new issue on GitHub; Sign in, in version 1, will open a box
-// that says the community comes with version 2 (drawn later).
+// 2026-11-17): Report a bug opens a new issue on GitHub; the second link (its words in the list
+// « Second link », rather than a Sign in that would lead nowhere in version 1) will open a box of
+// what version 2 brings, the community (drawn later, at 2k).
 const REPORT_BUG_URL = "https://github.com/sylent-dev/rust-ts-pathweaver/issues/new";
 const siteBand = () => `<div class="app-site">
     <span class="app-site-brand">${logoMark(24)}<span class="logo-name">Pathweaver</span></span>
     <nav class="app-site-links">
       <a class="app-site-link" href="${REPORT_BUG_URL}" target="_blank" rel="noopener">Report a bug</a>
-      <a class="app-site-link" href="#" role="button">Sign in</a>
+      <a class="app-site-link" href="#" role="button">${VARIANTS.nextLink.options[chosen.nextLink]}</a>
     </nav>
   </div>`;
 
