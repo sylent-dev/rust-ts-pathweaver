@@ -1,7 +1,7 @@
 // The logo (2c): the mark drawn by the owner in Inkscape (2026-11-17, js/logo-mark.js), in four
 // weights, each on the three styles at the sizes where it lives: large, in the app bar with the
 // name, in the tab of the browser, and alone at 64, 32 and 16 px, in its ink or on a square of
-// the accent. The name keeps the font of the style until 2d chooses the fonts.
+// the accent, with the name.
 // The 42 marks (30 to 71) and the fourteen fonts of the name (72 to 85) were set aside; they are in
 // the history of Git (commits 35aa8db and fc3fc23).
 
@@ -15,7 +15,7 @@ const logoCard = weight => `<div class="logo-card">
   <div class="logo-styles">${LOGO_STYLES.map(style => `
     <div class="logo-style" data-sample-theme="${style}" title="${THEMES[style].title}">
       <div class="logo-big">${logoMark(weight, 128)}</div>
-      <div class="logo-bar">${logoMark(weight, 24)}<span class="logo-name">${LOGO_NAME}</span></div>
+      <div class="logo-bar">${logoMark(weight, 24)}<span class="logo-name">Pathweaver</span></div>
       <div class="logo-tab">${logoMark(weight, 16)}<span>${escapeHtml(BUILDS.open[0].name)} · Pathweaver</span></div>
       <div class="logo-icons">${[64, 32, 16].map(size => logoMark(weight, size)).join("")}${[32, 16].map(size => logoSquare(weight, size)).join("")}</div>
     </div>`).join("")}
@@ -25,80 +25,14 @@ const logoCard = weight => `<div class="logo-card">
 addSection(() => ["The logo · the owner's mark in four weights: large, in the app bar, in the tab of the browser, alone at 64, 32 and 16 px and on a square of the accent, on Frost, Frost Night and Ember",
   LOGO_WEIGHTS.map(weight => ["", logoCard(weight)])]);
 
-// The name (2c, the owner, 2026-11-17): its case, its font among some sixty of every kind, and its
-// spacing, chosen by the lists « Name », « Font » and « Spacing » at the top of the page; the app
-// bar of the page of a build follows them too. The mark beside it is the one as drawn (86).
+// The name (2c, the owner, 2026-11-17): Pathweaver, in Archivo in its own weight, 700, spaced
+// -0.06 em (css/tokens.css), chosen among 132 fonts and four cases (90 to 221, in the history of
+// Git, commit a32941b). Alone, beside the mark as drawn (86), in the app bar.
 const nameCard = style => `<div class="name-card" data-sample-theme="${style}" title="${THEMES[style].title}">
-  <span class="logo-name is-alone">${LOGO_NAME}</span>
-  <div class="name-lockup">${logoMark(LOGO_WEIGHTS[0], 44)}<span class="logo-name">${LOGO_NAME}</span></div>
-  <div class="logo-bar">${logoMark(LOGO_WEIGHTS[0], 24)}<span class="logo-name">${LOGO_NAME}</span></div>
+  <span class="logo-name is-alone">Pathweaver</span>
+  <div class="name-lockup">${logoMark(LOGO_WEIGHTS[0], 44)}<span class="logo-name">Pathweaver</span></div>
+  <div class="logo-bar">${logoMark(LOGO_WEIGHTS[0], 24)}<span class="logo-name">Pathweaver</span></div>
 </div>`;
 
-addSection(() => ["The name · its case, its font and its spacing, chosen by the lists « Name », « Font » and « Spacing » at the top of the page: alone, beside the mark, in the app bar, on Frost, Frost Night and Ember",
+addSection(() => ["The name · Pathweaver in Archivo 700, spaced -0.06 em: alone, beside the mark, in the app bar, on Frost, Frost Night and Ember",
   LOGO_STYLES.map(style => [THEMES[style].title, nameCard(style)])]);
-
-// Every font of the name side by side (the owner, 2026-11-17), in small boxes sorted by kind, with
-// the case, the weight and the spacing of the lists. A click on a box adds it to the favourites or takes it
-// out, as on the moodboards, and shows its font large in the section of the name; the favourites
-// stay in the browser, show at the top with a button that copies their numbers for the chat, and
-// may be shown alone.
-loadAllNameFonts();
-
-const NAME_FAVOURITES_KEY = "pathweaver-mockup:name-favourites";
-STATE.nameFavourites = new Set();
-try { JSON.parse(localStorage.getItem(NAME_FAVOURITES_KEY) || "[]").forEach(key => STATE.nameFavourites.add(key)); } catch { /* no storage: the favourites last until the reload */ }
-STATE.nameFavouritesOnly = false;
-
-const nameFavouriteList = () => NAME_FONT_LIST.filter(font => STATE.nameFavourites.has(font.key));
-
-const nameFontBox = font => `<button type="button" class="name-font-box ${STATE.nameFavourites.has(font.key) ? "is-favourite" : ""} ${chosen.nameFont === font.key ? "is-current" : ""}"
-    data-action="name-favourite" data-font="${font.key}" aria-pressed="${STATE.nameFavourites.has(font.key)}"
-    style="--name-font:'${font.family}';--name-weight:${font.weight}" title="${escapeHtml(font.family)}">
-  <small>${font.id} · ${escapeHtml(font.family)} · ${nameFontWeights(font)}</small><span class="logo-name">${LOGO_NAME}</span></button>`;
-
-ACTIONS["name-favourite"] = element => {
-  const key = element.dataset.font;
-  if (STATE.nameFavourites.has(key)) STATE.nameFavourites.delete(key); else STATE.nameFavourites.add(key);
-  try { localStorage.setItem(NAME_FAVOURITES_KEY, JSON.stringify([...STATE.nameFavourites])); } catch { /* idem */ }
-  chosen.nameFont = key;
-  keepInAddress();
-  render();
-  return false;
-};
-ACTIONS["name-favourites-only"] = () => {
-  STATE.nameFavouritesOnly = !STATE.nameFavouritesOnly;
-  return true;
-};
-ACTIONS["name-favourites-copy"] = () => {
-  navigator.clipboard?.writeText(nameFavouriteList().map(font => `${font.id} ${font.family}`).join(", "));
-  return false;
-};
-
-const nameFavouritesBar = () => {
-  const favourites = nameFavouriteList();
-  return `<div class="name-favourites">Click a box to add it to the favourites: <b>${favourites.length
-    ? favourites.map(font => `${font.id} ${escapeHtml(font.family)}`).join(", ") : "none yet"}</b>
-    <button type="button" data-action="name-favourites-copy">Copy the favourites</button>
-    <button type="button" data-action="name-favourites-only" aria-pressed="${STATE.nameFavouritesOnly}">Favourites only</button></div>`;
-};
-
-const nameFontKinds = () => Object.entries(NAME_FONTS).map(([kind, fonts]) => {
-  const shown = fonts.map(([family]) => NAME_FONT_LIST.find(font => font.family === family))
-    .filter(font => !STATE.nameFavouritesOnly || STATE.nameFavourites.has(font.key));
-  return shown.length ? `<div class="name-font-kind"><h3>${kind}</h3><div class="name-font-grid">${shown.map(nameFontBox).join("")}</div></div>` : "";
-}).join("");
-
-addSection(() => ["The name in every font · 90 to 221, sorted by kind, with the case, the weight and the spacing of the lists; a click adds a font to the favourites",
-  [["", nameFavouritesBar() + nameFontKinds()]]]);
-
-// A wide font shrinks until the name fits its box; again once the fonts have loaded, and at each
-// change of the case or the spacing (which don't draw the page again).
-function fitNameFontBoxes() {
-  for (const name of document.querySelectorAll(".name-font-box .logo-name")) {
-    name.style.fontSize = "";
-    if (name.scrollWidth > name.clientWidth) name.style.fontSize = `${Math.floor(26 * name.clientWidth / name.scrollWidth)}px`;
-  }
-}
-AFTER_RENDER.push(fitNameFontBoxes);
-document.fonts.addEventListener("loadingdone", fitNameFontBoxes);
-document.getElementById("tabs").addEventListener("input", fitNameFontBoxes);

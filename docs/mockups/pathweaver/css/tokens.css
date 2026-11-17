@@ -18,7 +18,11 @@
   --title-spacing: 0;
   --title-size: 20px;
   --level-weight: 400;
-  --brand-size: 18px;   /* the name in the app bar, until the logo is drawn */
+  --brand-size: 18px;   /* the name in the app bar */
+  /* The name of Pathweaver, the same in every style (the owner, 2026-11-17): Archivo in its own weight, tight. */
+  --brand-font: "Archivo", sans-serif;
+  --brand-weight: 700;
+  --brand-spacing: -0.06em;
   /* Surfaces: the window, the app bar, the level band, the side column, the boxes over the tree. */
   --page: #ffffff;
   --page-image: none;
