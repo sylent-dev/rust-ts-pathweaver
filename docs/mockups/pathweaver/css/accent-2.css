@@ -4,6 +4,7 @@
 
 :root { --accent-2: var(--accent); }
 :root[data-accent2="amber"] { --accent-2: var(--a2-amber); }
+:root[data-accent2="blue"] { --accent-2: var(--a2-blue); }
 :root[data-accent2="coral"] { --accent-2: var(--a2-coral); }
 :root[data-accent2="mint"] { --accent-2: var(--a2-mint); }
 :root[data-accent2="violet"] { --accent-2: var(--a2-violet); }

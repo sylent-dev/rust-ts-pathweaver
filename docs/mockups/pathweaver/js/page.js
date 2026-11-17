@@ -10,29 +10,25 @@
 //   section comes first. Past ten sections, a table of contents under the header links to each.
 
 // The styles compared, each numbered once and for good: 28 proposals, of which the owner kept two on
-// 2026-11-17, 18 · Frost and its negative 28 · Frost Night (the others are in the history of Git).
+// 2026-11-17, 18 · Frost and its negative 28 · Frost Night (the others are in the history of Git),
+// then 29 · Ember, Frost Night on a neutral grey with amber first.
 const THEMES = {
   frost: { title: "18 · Frost", text: "Light: the cool light of Aurora at the density of Slate, flat white boxes, one blue (Geist, Geist Mono)." },
   "frost-night": { title: "28 · Frost Night", text: "Dark, Frost in negative: its density and its flat boxes on a blue black, pale blue lines, one blue (Geist, Geist Mono)." },
+  ember: { title: "29 · Ember", text: "Dark, Frost Night on a very dark neutral grey: the same density and flat boxes, amber first (Geist, Geist Mono)." },
 };
 
-// The texture behind the blocks (css/textures.css), one layer.
-const PATTERNS = { none: "None", grid: "Grid", graph: "Graph paper", dots: "Dots", crosses: "Crosses", hatch: "Hatching",
-  lines: "Lines", waves: "Waves", zigzag: "Zigzag", diamonds: "Diamonds", triangles: "Triangles", hexagons: "Hexagons",
-  cubes: "Cubes", pentagons: "Pentagons", rings: "Rings", circuit: "Circuit", contours: "Contours", ripples: "Ripples",
-  rays: "Rays", stars: "Stars", grain: "Grain" };
 
 const VARIANTS = {
   theme: { label: "Style", options: Object.fromEntries(Object.entries(THEMES).map(([key, theme]) => [key, theme.title])), fallback: "frost" },
   // The second accent (css/accent-2.css): its colour, and what it marks.
-  accent2: { label: "Accent 2", select: true, fallback: "amber", options: { amber: "Amber", coral: "Coral", mint: "Mint",
+  accent2: { label: "Accent 2", select: true, fallback: "amber", options: { amber: "Amber", blue: "Blue", coral: "Coral", mint: "Mint",
     violet: "Violet", magenta: "Magenta", lime: "Lime" } },
   accent2On: { label: "Accent 2 on", select: true, fallback: "later", options: {
     later: "What comes later (tree, markers)", gear: "The gear (hints of the slots)", controls: "The pressed switches", all: "All three" } },
-  zone: { label: "Textured", select: true, fallback: "blocks-but-tree", options: { "blocks-but-tree": "Every block but the tree",
+  zone: { label: "Graph paper", select: true, fallback: "blocks-but-tree", options: { "blocks-but-tree": "Every block but the tree",
     blocks: "Every block", side: "The right column", band: "The level band", top: "The header and the level band",
     tree: "The tree", "tree-side": "The tree and the right column", window: "The whole window" } },
-  pattern: { label: "Texture", select: true, fallback: "graph", options: PATTERNS },
   colour: { label: "Colour", select: true, fallback: "blue", options: { text: "Grey (the text)", blue: "Pale blue", accent: "Accent" } },
   size: { label: "Size", range: { min: 6, max: 200, step: 2 }, variable: "--texture-size", unit: "px", fallback: "24" },
   opacity: { label: "Opacity", range: { min: 0, max: 40, step: 1 }, variable: "--texture-opacity", unit: "%", fallback: "23" },
