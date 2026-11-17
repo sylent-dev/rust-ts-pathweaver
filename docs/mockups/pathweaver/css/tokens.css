@@ -3,7 +3,9 @@
    token with the neutral value of the first grey pass; each style sets only what it changes.
    The two styles left, kept by the owner on 2026-11-17 after 28 proposals: 18 · Frost and
    28 · Frost Night, its negative (the others are in the history of Git); then 29 · Ember, Frost
-   Night on a neutral grey with amber first (the owner, 2026-11-17). */
+   Night on a neutral grey with amber first (the owner, 2026-11-17).
+   A block with data-sample-theme takes the tokens of that style whatever the page shows: the
+   three styles side by side (the logo). Every style sets the same tokens, so none leaks. */
 
 :root {
   /* Type. */
@@ -96,7 +98,7 @@
 
 /* 18 · Frost (Aurora × Slate, light): the cool light of Aurora at the density of Slate, flat white
    boxes, one blue (Geist, Geist Mono). */
-:root[data-theme="frost"] {
+:root[data-theme="frost"], [data-sample-theme="frost"] {
   --font-text: "Geist", sans-serif;
   --font-title: "Geist", sans-serif;
   --font-number: "Geist Mono", monospace;
@@ -132,7 +134,7 @@
 
 /* 28 · Frost Night (Frost in negative, dark): the density and the flat boxes of Frost on a blue
    black, pale blue lines, one blue (Geist, Geist Mono). */
-:root[data-theme="frost-night"] {
+:root[data-theme="frost-night"], [data-sample-theme="frost-night"] {
   --font-text: "Geist", sans-serif;
   --font-title: "Geist", sans-serif;
   --font-number: "Geist Mono", monospace;
@@ -168,7 +170,7 @@
 
 /* 29 · Ember (Frost Night on a neutral grey, dark): the density and the flat boxes of Frost on a
    very dark grey without blue, grey lines, amber first (Geist, Geist Mono). */
-:root[data-theme="ember"] {
+:root[data-theme="ember"], [data-sample-theme="ember"] {
   --font-text: "Geist", sans-serif;
   --font-title: "Geist", sans-serif;
   --font-number: "Geist Mono", monospace;
