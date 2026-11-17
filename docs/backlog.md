@@ -26,6 +26,10 @@ Set aside at the wireframes (2026-11-16, see `docs/wireframes/archive.excalidraw
 - **Icons of the gems and the uniques from the game** (noted 2026-11-16): the portraits of the ascendancies are the only images of the game so far; whether the gems and the uniques get theirs is decided when a step needs it.
 
 
+## Merging a guide
+
+- **Offer to merge the files of a guide** (an idea of Claude Code, taken by the owner on 2026-11-18 at step 2e2; for step 7, which it depends on): when several open builds share their `link` and their ascendancy, a line under the band of the open builds offers « 3 builds of the same guide · Merge », which opens the merging screen with them ticked. Merge… stays in the menu « +N ▾ », where it is hidden for a feature that sets Pathweaver apart.
+
 ## Method and skills
 
 - **The mock-up skill in reference files** (an idea of the owner, 2026-11-17; once the general look is chosen): `html-mockups` keeps `SKILL.md` short and points to files read only when needed, the way the skill already keeps `assets/` and `scripts/`. A `textures.md` (patterns as CSS masks, coloured by their layer; two layers shifted, turned, drifting, faded; a swatch of every pattern; tried in the mock-up, commit `a819b7b`, with the generator `docs/mockups/pathweaver/tools/make-patterns.py`), then `process.md` (Mock-up) and a pull request on each template (`ts-astro-static-website-template`, `rust-desktop-template`, `rust-cli-template`). Rather than a skill of its own, whose description would go with every message. The moodboard became the `moodboards` skill (2026-11-17), hidden from the model, which `html-mockups` points to.

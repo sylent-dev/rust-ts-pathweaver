@@ -6,9 +6,10 @@
   font-family: var(--site-link-font); font-weight: var(--site-link-weight); font-size: var(--site-link-size); }
 .app-site-link:hover { opacity: 1; background: color-mix(in srgb, var(--on-bar) 9%, transparent); }
 
-/* The band of the open builds: 44 px, their tabs of 184 px, up to 240 when they all fit; the same
-   light shadow under it as under the band of the site. */
-.app-builds { position: relative; z-index: 1; display: flex; align-items: flex-end; gap: 6px; height: 44px; padding: 0 12px 0 0; background: var(--bar-image), var(--bar); color: var(--on-bar); box-shadow: var(--band-shadow); }
+/* The band of the open builds: 44 px, a shade darker than the band of the site (the owner,
+   2026-11-18), their tabs of 184 px, up to 240 when they all fit; the same light shadow under it
+   as under the band of the site. */
+.app-builds { position: relative; z-index: 1; display: flex; align-items: flex-end; gap: 6px; height: 44px; padding: 0 12px 0 0; background: var(--bar-image), var(--band-deep); color: var(--on-bar); box-shadow: var(--band-shadow); }
 .app-site-brand { display: flex; align-items: center; gap: var(--brand-gap); flex: none; padding-right: 12px; }
 .app-site-brand .logo-mark { width: var(--brand-mark-size); height: var(--brand-mark-size); }
 .app-site-brand .logo-name { position: relative; top: var(--brand-name-offset); font-size: var(--brand-size); }
@@ -24,10 +25,6 @@
 .app-builds-menu-item > span { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .app-builds-menu-line { height: var(--border-width, 1px); min-height: 1px; margin: 4px 6px; background: var(--divider); }
 
-/* The shade of the two bands (the list « Top bands »): the site darker and the open builds
-   lighter, both the same, or the other way round. */
-:root[data-top-shade="site-deep"] .app-site, :root[data-top-shade="builds-deep"] .app-builds,
-:root[data-top-shade="same-deep"] :is(.app-site, .app-builds) { background: var(--bar-image), var(--band-deep); }
 
 /* A build tab (2e): the full height of the band, side by side, square corners (the owner,
    2026-11-17); its portrait square the full height, its name over its ascendancy, its close button. The
