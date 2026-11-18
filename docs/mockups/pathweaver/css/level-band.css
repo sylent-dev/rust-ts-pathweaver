@@ -16,7 +16,7 @@
 .app-level-change { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
 /* On trial (2026-11-17): the band a shade darker, for contrast now that there are no borders, and
-   the same shade on the app bar, the row of the tabs and the right column. */
+   the same shade on the row of the tabs and the right column; the two bands at the top have their
+   own list (css/app-bar.css). */
 :root[data-band="deep"] .app-level { background: var(--band-image), var(--band-deep); }
-:root[data-band="deep"] .app-bar { background: var(--bar-image), var(--band-deep); }
 :root[data-band="deep"] :is(.app-tabs, .app-side) { background: var(--band-deep); }

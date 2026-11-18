@@ -14,7 +14,7 @@ Pathweaver (the build viewer and planner of Path of Exile 2: the subtitle that g
 - **Level by level.** A build is a progression: the interface follows a level of the character, not separate profiles.
 - **A personal tool first.** Versions 1 and 1.5 serve the player who uses them: no account, no server, a static website; nothing leaves the browser unless the user copies a link.
 - **The rules in Rust, once.** The reading, the checks, the levels, the merging and the passive tree are in the core, so that the same code checks a file in the browser and, in version 2, on the server.
-- **The game data come from the game; the images are our own, except the portraits.** The names and the stats come from the data of the game, never typed by hand (see [docs/game-data.md](docs/game-data.md)). The only images of the game are the portraits of the classes and ascendancies, so that a build is recognized at a glance; the other shapes, marks and icons are drawn for Pathweaver.
+- **The game data come from the game; so do the portraits and the passive tree.** The names and the stats come from the data of the game, never typed by hand (see [docs/game-data.md](docs/game-data.md)). The images of the game are the portraits of the classes and ascendancies, so that a build is recognized at a glance, and the icons and frames of the passives, which give the tree its charm (the owner, 2026-11-18); the other shapes and marks are drawn for Pathweaver.
 - **The documentation of Grinding Gear Games wins.** When the files in the wild disagree with the [documentation of the format](https://www.pathofexile.com/developer/docs/game#buildplanner), Pathweaver follows the documentation, and still reads the file.
 
 ## Versions
@@ -32,7 +32,7 @@ Pathweaver (the build viewer and planner of Path of Exile 2: the subtitle that g
 - **Damage and defences.** A `.build` file holds no item, and computing a character is the work of Path of Building. Pathweaver shows what the build takes, not what it deals.
 - **Phones and consoles.** Pathweaver is used on a computer (see [Screens](#screens)). On console, the game doesn't read local files: the players subscribe to builds on the website of Grinding Gear Games.
 - **Translating the author's texts.** The name, the description and the hints of a build are shown as their author wrote them, in their language.
-- **The images of the game, other than the portraits.** Gems, passives and uniques are shown by their names and Pathweaver's own marks.
+- **The images of the game, other than the portraits and the passive tree.** Gems and uniques are shown by their names and Pathweaver's own marks.
 
 ## Version 1
 
@@ -74,7 +74,7 @@ Step 4 of the roadmap.
 
 Step 5 of the roadmap.
 
-- The whole passive tree of the game, at the positions of the game, drawn with Pathweaver's own shapes for each kind of passive (small, notable, keystone, jewel socket, ascendancy); moved with the mouse and zoomed with the wheel.
+- The whole passive tree of the game, at the positions of the game, drawn with the icons and frames of the game for each kind of passive (small, notable, keystone, jewel socket, ascendancy); moved with the mouse and zoomed with the wheel.
 - At the level chosen: the passives the build has taken up to this level are lit; the passives it takes later are shown faded; the others are dimmed.
 - The ascendancy of the build, with its passives, beside the tree.
 - The weapon sets: the passives with a `weapon_set` of 1 or 2 belong to that set; a switch shows set 1 or set 2 on top of the shared passives (`weapon_set` 0 or absent).
@@ -151,8 +151,10 @@ Step 9 of the roadmap.
 
 Agreed on the wireframes of [docs/wireframes/pathweaver.excalidraw](docs/wireframes/pathweaver.excalidraw) on 2026-11-16; the variants set aside are in `archive.excalidraw`. The wireframe only fixed this first layout: once approved, the mock-up of step 2 is the reference.
 
-- **The portrait of the ascendancy** (of the class when the build has none) marks a build wherever it is named: its tab, its row of the side panel and of the library, its header, the phone page of a share link.
-- **App bar**, at the top of every page: « Pathweaver », which leads to the home page, then the open builds. Narrower than about 1,400 pixels, they are tabs (as many as fit, the others in a « +N ▾ » menu, which also holds **Merge…**), and a **+** opens files. From about 1,400 pixels, they move to a side panel on the left, with their full names, **+ Open files or JSON**, **Merge…** and **Home**.
+- **The portrait of the ascendancy** (of the class when the build has none) marks a build wherever it is named: its tab, its row of the library, its header, the phone page of a share link.
+- **Two bands of 44 pixels at the top of every page** (the owner, 2026-11-17; sketch in [docs/wireframes/app-bands.excalidraw](docs/wireframes/app-bands.excalidraw)), the site above, the open builds below, so that the menu of version 2 has its own room; the band of the open builds only while a build is open (the owner, 2026-11-18): with nothing open, the home page comes right under the band of the site; the band of the site takes the graph paper of the blocks, the band of the open builds a very light shadow under it:
+  - **the band of the site**: the brand (see The brand), which leads to the home page; just after it, **My library**, the way back to the home page, the library, from anywhere (the owner, 2026-11-18), in the colour of the text with its line while the library is shown; on the right, two links in words, the three in Manrope 600, in the colour of the frame of the logo, each the full height of the band, on hover the words turning to the colour of the text and a line of 2 pixels in that colour drawing itself under them from the left, leaving to the right: **Report a bug**, which opens a new issue on GitHub, and **What's next**, which opens a box of what version 2 brings, the community (its wording and its look are drawn with the other boxes); not a Sign in, which would lead nowhere in version 1. Version 2 adds the menu, the search, the settings and the account to it; version 1 has no settings.
+  - **the band of the open builds**, at every width, in the shade of the band of the site (both light in the light style, both dark in the dark ones), the graph paper of the band of the site telling them apart: their tabs, the full height of the band, side by side, with square corners, without a box, by contrast: the current one in the full colour of the text and the only portrait in colour, the others in a weaker text, their portraits grey and dimmed (less on hover); the portrait square the full height of the tab, the largest square inside the disc the game gives; the name of the build as its file writes it, over the name of its ascendancy, smaller and weaker, each cut to fit, both in full on hover; the close button, always shown; 184 pixels, up to 240 when they all fit, then **+N ▾**, a menu attached under the band, in its shade, with square corners, each build that doesn't fit a tab laid down (its portrait square, its name over its ascendancy), growing out of +N ▾ when it opens and going a little past its size before it settles, then **Merge…**, then **+**, which adds a build: it leads to the library, its drop zone ready; on the library, no tab is the current one; both the full height of the band, told apart by contrast rather than borders (+N ▾ in the colour of the frame of the logo on the background of the band, turning to the colour of the text on hover and while open, like the links of the band of the site; +, the button that matters most, in the colour of the band on a white background, growing a little on hover), without a line between them.
 - **The page of a build**, from top to bottom:
   - the header: the name, « by author · ascendancy (class) », and **Copy link**, **Download .build** and **⚠ warnings** (which leads to About);
   - the level band: ◀ and ▶ with the level each goes to, the level in large, the track with its markers and the cursor, « what changes at N » on the right;
@@ -160,9 +162,22 @@ Agreed on the wireframes of [docs/wireframes/pathweaver.excalidraw](docs/wirefra
 - What is new at the level stands out (the « New at N » box, the new gems, the new passives ringed on the tree), as does the cursor of the level: the one accent of the interface.
 - **The home page**: at the first visit, a line drawn at random at each visit among « Die less. Plan more. », « Every exile needs a map. », « The tree is huge. Your path isn't. », « Know your next 99 levels. » and « Open a .build file. See the whole road. » (in the translation file, like every text: the French ones will be adapted, not translated word for word), then what Pathweaver does, a large drop zone with **Choose files** and **Paste JSON**, and where `.build` files come from; afterwards, a smaller drop zone over the library, one row per build (name, author, ascendancy, levels, last opened, **Open**, and a bin that asks once, in the row). Files dropped anywhere, on any page, open.
 - **Paste JSON** is a dialog; its field has a fixed size, can't be resized, and scrolls only when the text overflows; the reason a text isn't a build is written under it.
-- **Opening errors**: the first build opened is shown, and a notice names each file refused with its reason; it stays until it is closed. A damaged share link and private browsing are notices under the app bar.
+- **Opening errors**: the first build opened is shown, and a notice names each file refused with its reason; it stays until it is closed. A damaged share link and private browsing are notices under the two bands at the top.
 - **Merge…** is a page of its own: the open builds with a box to tick, the ticked ones in the order of their start levels (each in a field, with the levels it applies to), the merged guide as a track of named segments, the checks (what blocks stands out, what only warns doesn't), the name and the author, and **Merge N builds**, greyed while something blocks.
 - **Copy link** and **Download .build** answer in a box under their button: the length of the link and the Discord warning; where the game reads the file.
+
+### The style
+
+- **Frost Night is the reference style** (the owner, 2026-11-18): dark, a blue black, one blue. Every setting is tuned on it first; Frost (light) and Ember (amber on a neutral grey) derive from it and are adjusted after, the light one in a pass of its own, since a shadow, a texture or a grey portrait don't carry over as they are.
+
+### The brand
+
+Decided by the owner on the mock-up (step 2, 2026-11-17), its reference.
+
+- **The mark**: the owner's own, two rings of a triangle pointing down, the outer one in three bars, the inner one a P, every edge flat or at 60°; in its bold weight (bars a little wider than the gaps). Its frame is in the accent, its P in the colour of the text around it.
+- **In the band of the site**: the mark at 24 pixels, then « Pathweaver » in Archivo 700, spaced -0.06 em, at 16 pixels, 8 pixels apart, the middle of its capitals 1 pixel below the middle of the mark, tuned by eye.
+- **The favicon**: the same mark, an SVG drawn at 16 pixels, its frame in the accent, its P dark or light after the scheme of the system, as the browser draws its tabs.
+- Set aside: the weights as drawn, even and light, the mark on the pixel grid (sharper at 16 pixels, but a second drawing), the P alone, the mark on a square of the accent, the frame or the whole mark in one ink.
 
 ### Languages
 

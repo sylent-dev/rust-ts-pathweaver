@@ -1,10 +1,115 @@
-/* The app bar: 44 px, the open builds as tabs of 168 px. */
-.app-bar { display: flex; align-items: flex-end; gap: 6px; height: 44px; padding: 0 12px 0 14px; background: var(--bar-image), var(--bar); color: var(--on-bar); border-bottom: var(--border-width) solid var(--divider); }
-.app-bar-name { align-self: center; flex: none; min-width: 110px; padding-right: 12px; font-size: var(--brand-size); }
-.app-bar-tabs { display: flex; gap: 6px; }
-.app-bar-tab { display: flex; align-items: center; gap: 8px; width: 168px; height: 36px; box-sizing: border-box; margin-bottom: calc(-1 * var(--border-width)); padding: 0 6px; border: var(--border-width) solid var(--control-line); border-bottom: none; border-radius: var(--radius) var(--radius) 0 0; background: var(--tab); color: var(--on-tab); cursor: pointer; }
-.app-bar-tab.is-current { background: var(--page); color: var(--text); }
-.app-bar-tab-name { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 13px; }
-.app-bar-close { display: grid; place-items: center; width: 18px; height: 18px; padding: 0; border: none; background: none; color: inherit; opacity: .6; cursor: pointer; }
-.app-bar-more, .app-bar-open { align-self: center; display: inline-flex; align-items: center; gap: 4px; height: 26px; padding: 0 8px; border: var(--border-width) solid var(--control-line); border-radius: var(--radius); background: var(--control); color: var(--text); box-shadow: var(--control-shadow); cursor: pointer; font-size: 13px; }
-.app-bar-open { width: 30px; height: 28px; justify-content: center; padding: 0; }
+/* The band of the site: 44 px, the brand, then on the right its links, each the full height of
+   the band, in the colour of the frame of the logo; the graph paper behind it (css/textures.css)
+   and no shadow under it (the owner, 2026-11-18). */
+.app-site { position: relative; z-index: 2; display: flex; align-items: center; height: 44px; padding-left: 14px; background: var(--bar-image), var(--site-band, var(--bar)); color: var(--on-bar); }
+.app-site-nav, .app-site-links { display: flex; height: 100%; }
+.app-site-links { margin-left: auto; }
+.app-site-link { display: flex; align-items: center; height: 100%; padding: 0 16px; color: var(--accent); text-decoration: none; transition: color .3s;
+  font-family: var(--site-link-font); font-weight: var(--site-link-weight); font-size: var(--site-link-size); }
+/* On hover, the words turn from blue to the colour of the text of the band, and a line of 2 px in
+   that colour draws itself under them from the left, and leaves to the right (after sylent.art,
+   the owner, 2026-11-18). */
+.app-site-link:is(:hover, .is-hover) { color: var(--on-bar); }
+.app-site-label { position: relative; line-height: 1; }
+.app-site-label::after { content: ""; position: absolute; left: 0; right: 0; bottom: -8px; height: 2px; background: currentColor;
+  transform: scaleX(0); transform-origin: 100%; transition: transform .3s cubic-bezier(.2, .7, .2, 1); }
+.app-site-link:is(:hover, .is-hover) .app-site-label::after { transform: scaleX(1); transform-origin: 0; }
+/* The page shown (My library on the library): white with its line, as on hover. */
+.app-site-link.is-current { color: var(--on-bar); }
+.app-site-link.is-current .app-site-label::after { transform: none; }
+
+/* The band of the open builds: 44 px, their tabs of 184 px, up to 240 when they all fit; the same
+   light shadow under it as under the band of the site. */
+.app-builds { position: relative; z-index: 1; display: flex; align-items: flex-end; height: 44px; padding: 0 12px 0 0; background: var(--bar-image), var(--builds-band, var(--band-deep)); color: var(--on-bar); box-shadow: var(--band-shadow); }
+.app-site-brand { display: flex; align-items: center; gap: var(--brand-gap); flex: none; padding-right: 12px; }
+.app-site-brand .logo-mark { width: var(--brand-mark-size); height: var(--brand-mark-size); }
+.app-site-brand .logo-name { position: relative; top: var(--brand-name-offset); font-size: var(--brand-size); }
+
+/* The shades of the two bands (the owner, 2026-11-18): both light in the light style, both dark in
+   the dark ones; the shadow under the band of the site tells them apart. Set on the element of the
+   style, so that --bar and --band-deep are those of its style, the page or a block of
+   data-sample-theme. */
+:root[data-theme="frost"], [data-sample-theme="frost"] { --site-band: var(--bar); --builds-band: var(--bar); }
+:root:is([data-theme="frost-night"], [data-theme="ember"]), :is([data-sample-theme="frost-night"], [data-sample-theme="ember"]) { --site-band: var(--band-deep); --builds-band: var(--band-deep); }
+
+/* The end of the band (2e2, the owner, 2026-11-18): « +N ▾ » and + the full height of the band, told
+   apart by contrast, without a line between them. « +N ▾ » in the blue of the frame of the logo on
+   the background of the band, turning white on hover and while open, like the links of the band of
+   the site. + opens a build, the button that matters most: a white background, its + in the
+   colour of the band, the background a little dimmed and the + a little larger on hover. Their
+   states have classes too (is-hover, is-open), to be shown side by side without the mouse. */
+.app-builds-more-wrap { position: relative; display: flex; align-self: stretch; }
+.app-builds-more, .app-builds-open { display: inline-flex; align-items: center; justify-content: center; gap: 5px; min-width: 44px; height: 100%; padding: 0 12px; border: none;
+  cursor: pointer; font-size: 13px; transition: color .3s, background-color .3s; }
+.app-builds-more { background: var(--builds-band, var(--band-deep)); color: var(--accent); }
+.app-builds-more:is(:hover, .is-hover, .is-open) { color: var(--on-bar); }
+.app-builds-open { padding: 0; background: var(--on-bar); color: var(--builds-band, var(--band-deep)); }
+.app-builds-open:is(:hover, .is-hover) { background: color-mix(in srgb, var(--on-bar) 82%, transparent); }
+.app-builds-open svg { transition: transform .2s cubic-bezier(.34, 1.56, .64, 1); }
+.app-builds-open:is(:hover, .is-hover) svg { transform: scale(1.3); }
+
+/* The menu (the owner, 2026-11-18): attached under the band, in its shade, square corners, each
+   build a tab laid down (a row of 44 px, its portrait square, its name over its ascendancy), then
+   Merge… apart. */
+.app-builds-menu { position: absolute; z-index: 5; top: 100%; right: 0; width: 300px; background: var(--bar-image), var(--builds-band, var(--band-deep)); color: var(--on-bar); box-shadow: 0 8px 18px rgb(0 0 0 / .28); font-size: 13px; }
+.app-builds-menu-item { display: flex; align-items: center; gap: 10px; height: 44px; padding-right: 12px; color: color-mix(in srgb, var(--on-bar) 80%, transparent); cursor: pointer; }
+.app-builds-menu-item:hover { background: color-mix(in srgb, var(--on-bar) 9%, transparent); color: var(--on-bar); }
+.app-builds-menu-portrait { flex: none; width: 44px; height: 44px; }
+.app-builds-menu-text { display: flex; flex-direction: column; min-width: 0; }
+.app-builds-menu-text > span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; line-height: 1.2; }
+.app-builds-menu-name { font-size: 12px; }
+.app-builds-menu-ascendancy { font-size: 11px; opacity: .7; }
+.app-builds-menu-merge { height: 40px; padding-left: 14px; }
+.app-builds-menu-line { height: 1px; background: color-mix(in srgb, var(--on-bar) 14%, transparent); }
+
+/* A build tab (2e): the full height of the band, side by side, square corners (the owner,
+   2026-11-17); its portrait square the full height, its name over its ascendancy, its close button. The
+   states have classes too (is-hover, is-close-hover), to be shown side by side without the mouse. */
+.app-builds-tabs { align-self: stretch; display: flex; }
+.app-builds-tab { display: flex; align-items: center; gap: 8px; width: var(--tab-width); box-sizing: border-box; padding-right: 6px; cursor: pointer; }
+.app-builds-portrait { flex: none; display: block; height: 100%; aspect-ratio: 1; }
+.app-builds-tab-text { flex: 1; min-width: 0; display: flex; flex-direction: column; justify-content: center; gap: 1px; }
+.app-builds-tab-text > span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; line-height: 1.2; }
+.app-builds-tab-name { font-size: 12px; }
+.app-builds-tab-ascendancy { font-size: 11px; opacity: .7; }
+.app-builds-close { display: grid; place-items: center; flex: none; width: 20px; height: 20px; padding: 0; border: none; border-radius: 50%; background: none; color: inherit; opacity: .6; cursor: pointer; }
+.app-builds-close:hover, .app-builds-tab.is-close-hover .app-builds-close { opacity: 1; background: color-mix(in srgb, currentColor 16%, transparent); }
+
+/* No box (the owner, 2026-11-17): the other tabs in a weaker text, the current one in the full
+   text. Its underline in the accent went on 2026-11-18 (the owner); it is in the history of Git
+   (commit 141b0eb). */
+.app-builds-tab { color: color-mix(in srgb, var(--on-bar) 68%, transparent); }
+.app-builds-tab:is(:hover, .is-hover, .is-close-hover) { background: color-mix(in srgb, var(--on-bar) 7%, transparent); color: var(--on-bar); }
+.app-builds-tab.is-current { color: var(--on-bar); }
+
+/* The current tab (the owner, 2026-11-18): the only portrait in colour, the others grey and dimmed,
+   a little less on hover. The looks set aside (96 a lighter background, 97 the colour of the page,
+   99 tinted with the accent, 100 filled with it) are in the history of Git (commit ee61467). */
+.app-builds-tab:not(.is-current) .app-builds-portrait { filter: grayscale(1) brightness(.8); opacity: .55; }
+.app-builds-tab:not(.is-current):is(:hover, .is-hover, .is-close-hover) .app-builds-portrait { filter: grayscale(.3); opacity: .9; }
+
+/* The section of the tab (sections/bar-tab.js): the states side by side, then the page below. */
+.tab-states { display: flex; }
+.tab-strip .app-builds { padding: 0; }
+.tab-states > span { width: 184px; color: #adb5bd; font-size: 12px; }
+.tab-strip { overflow: hidden; border-radius: 6px; background: var(--page); }
+.tab-strip-page { height: 14px; }
+.tab-card { display: flex; flex-direction: column; gap: 6px; }
+
+/* The section of the two bands (sections/bands.js): the page under them, where the menu opens. */
+.bands-page { height: 230px; background: var(--page); }
+.library-page { display: grid; place-items: center; height: 72px; background: var(--page); color: var(--weak); font-size: 12px; }
+.library-first { height: 200px; align-content: center; gap: 12px; }
+.library-cta { height: 44px; padding: 0 22px; border: none; border-radius: 4px; background: var(--on-bar); color: var(--builds-band, var(--band-deep)); font: 600 14px "Manrope", sans-serif; cursor: pointer; }
+.link-row { display: flex; gap: 16px; }
+.link-states { display: flex; gap: 16px; }
+.link-states > span, .link-strip { width: 560px; flex: none; }
+
+/* The sections of the end of the band (sections/band-end.js). */
+.end-states > span { width: 420px; }
+.end-states { gap: 8px; }
+.end-row { display: flex; gap: 8px; }
+.end-strip { width: 420px; }
+.menu-row { display: flex; gap: 8px; }
+.menu-window { overflow: visible; }
+.menu-page { height: 330px; }

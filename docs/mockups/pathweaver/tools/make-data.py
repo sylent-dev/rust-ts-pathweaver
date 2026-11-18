@@ -9,7 +9,8 @@ From the repository root. Reads:
 - the names, kinds and colours of the gems (RePoE, base_items and skill_gems);
 - the builds of the corpus, in inputs/builds/ (local only, never committed).
 
-Writes js/data-tree.js, js/data-builds.js and img/portraits/*.webp next to this folder. The
+Writes js/data-tree.js, js/data-builds.js, img/portraits/*.webp (the discs) and
+img/portraits-square/*.webp (the square inside each disc, for the tabs) next to this folder. The
 downloads are kept in the cache folder (a temporary one by default) so that a second run is fast.
 The mock-up only: the website converts the game data with its own script, at step 4.
 """
@@ -39,6 +40,9 @@ OPEN = [
 # The portraits of the builds shown: the ascendancy id and its class sprite.
 PORTRAITS = {"Sorceress1": "sorceress", "Mercenary3": "mercenary", "Ranger1": "ranger", "Huntress1": "huntress"}
 PORTRAIT_SIZE = 128
+# The portrait of a tab (the owner, 2026-11-17): the largest square inside the disc, centred, made
+# small enough for the 44 px of a tab, twice for the screens of a higher density.
+SQUARE_SIZE = 88
 # The kinds of passives, in the order the mock-up reads them.
 KINDS = ["small", "notable", "keystone", "jewel", "attribute", "start"]
 
@@ -152,7 +156,8 @@ def build_data(build, names, gems, ascendancies):
 
 
 def portrait(cache, ascendancy, sprite):
-    """Cuts the round portrait of an ascendancy from the sprite of its class, made small."""
+    """Cuts the round portrait of an ascendancy from the sprite of its class, and the square inside
+    it, made small."""
     frames = json.loads(fetch(cache, f"{TREE_URL}/assets/background-{sprite}.json",
                               f"background-{sprite}.json").read_text())["frames"]
     image = fetch(cache, f"{TREE_URL}/assets/background-{sprite}.webp", f"background-{sprite}.webp")
@@ -161,6 +166,13 @@ def portrait(cache, ascendancy, sprite):
     target = OUT / "img" / "portraits" / f"{ascendancy.lower()}.webp"
     subprocess.run(["magick", str(image), "-crop", f"{frame['w']}x{frame['h']}+{frame['x']}+{frame['y']}",
                     "+repage", "-resize", f"{PORTRAIT_SIZE}x{PORTRAIT_SIZE}", "-quality", "82", str(target)],
+                   check=True)
+    side = int(frame["w"] / 2 ** 0.5)
+    inset = (frame["w"] - side) // 2
+    square = OUT / "img" / "portraits-square" / f"{ascendancy.lower()}.webp"
+    square.parent.mkdir(exist_ok=True)
+    subprocess.run(["magick", str(image), "-crop", f"{side}x{side}+{frame['x'] + inset}+{frame['y'] + inset}",
+                    "+repage", "-resize", f"{SQUARE_SIZE}x{SQUARE_SIZE}", "-quality", "82", str(square)],
                    check=True)
 
 

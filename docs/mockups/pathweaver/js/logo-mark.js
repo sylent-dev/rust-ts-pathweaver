@@ -48,25 +48,23 @@ function logoPolygons(bar, gap) {
   ].map(lines => lines.map((line, index) => crossing(line, lines[(index + 1) % lines.length])));
 }
 
-// The weights compared, numbered after the fonts (72 to 85). The step (bar + gap) stays the same,
-// so that every weight has the same size.
-const LOGO_WEIGHTS = [
-  { id: 86, name: "As drawn", bar: 23, gap: 26, note: "bars a little thinner than the gaps" },
-  { id: 87, name: "Even", bar: 24.5, gap: 24.5, note: "bars as wide as the gaps" },
-  { id: 88, name: "Bold", bar: 28, gap: 21, note: "for the small sizes" },
-  { id: 89, name: "Light", bar: 19, gap: 30, note: "more air, thinner at 16 px" },
-];
+// The weight kept by the owner (2026-11-17), 88 · Bold, among six: bars a little wider than the
+// gaps, for the small sizes. The others (86 as drawn, 87 even, 89 light, 90 on the pixel grid,
+// 91 the P alone) are in the history of Git (commit 5e2394d).
+const LOGO_MARK = { bar: 28, gap: 21 };
 
-// The mark as an SVG of `size` pixels: the outer ring (class logo-frame) and the P (logo-p),
-// each in its own ink (css/logo.css). The box is square, the mark centred in it.
-function logoMark(weight, size) {
-  const polygons = logoPolygons(weight.bar, weight.gap);
+// The mark as an SVG of `size` pixels: the outer ring (class logo-frame) in the accent and the P
+// (logo-p) in the text (css/logo.css), or in the colours of `inks` ({ frame, p }) when it leaves
+// the page (the favicon). The box is square, the mark centred in it.
+function logoMark(size, inks) {
+  const polygons = logoPolygons(LOGO_MARK.bar, LOGO_MARK.gap);
   const xs = polygons.flat().map(([x]) => x);
   const ys = polygons.flat().map(([, y]) => y);
   const [left, right, top, bottom] = [Math.min(...xs), Math.max(...xs), Math.min(...ys), Math.max(...ys)];
   const side = Math.max(right - left, bottom - top);
   const box = [(left + right - side) / 2, (top + bottom - side) / 2, side, side].map(n => n.toFixed(2)).join(" ");
   const path = polygon => "M" + polygon.map(([x, y]) => `${x.toFixed(2)} ${y.toFixed(2)}`).join("L") + "Z";
-  return `<svg class="logo-mark" width="${size}" height="${size}" viewBox="${box}" aria-hidden="true">
-    <path class="logo-frame" d="${polygons.slice(0, 3).map(path).join("")}"/><path class="logo-p" d="${path(polygons[3])}"/></svg>`;
+  const paint = (kind, ink) => inks ? `fill="${ink}"` : `class="logo-${kind}"`;
+  return `<svg class="logo-mark" xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}" viewBox="${box}" aria-hidden="true">
+    <path ${paint("frame", inks?.frame)} d="${polygons.slice(0, 3).map(path).join("")}"/><path ${paint("p", inks?.p)} d="${path(polygons[3])}"/></svg>`;
 }
