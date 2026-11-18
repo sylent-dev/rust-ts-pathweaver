@@ -17,7 +17,5 @@ const ICONS = {
   // can open on hover (css/library.css); its body empty, its outline alone, without the two lines
   // in it (the owner, 2026-11-18, after a filled one).
   bin: '<g class="bin-lid"><path d="M2.5 4.5h11M6 4.5V2.8h4v1.7"/></g><path d="M4 4.5l.8 8.7h6.4l.8-8.7"/>',
-  // The notice that isn't an error (2l3): private browsing.
-  info: '<circle cx="8" cy="8" r="6"/><path d="M8 7.2v3.8M8 4.9v.1"/>',
   arrow: '<path d="M2.5 8h11M9 3.5 13.5 8 9 12.5"/>',
 };

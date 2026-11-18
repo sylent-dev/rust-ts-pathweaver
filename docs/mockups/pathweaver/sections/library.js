@@ -52,12 +52,12 @@ const libraryRow = (build, state = "") => {
 };
 
 // The page: the bands, the band of the open builds while one is open; `rows` the states of the rows
-// by index; `drag` a file over the page; `paste` the strip become a field; `notices` under the bands
-// (sections/notices.js).
+// by index; `drag` a file over the page; `paste` the strip become a field; `notices` under the band
+// of the site (sections/notices.js).
 const libraryHome = ({ builds = LIBRARY, rows = {}, drag = false, paste = false, notices = "" } = {}) => {
   const open = builds.filter(build => build.open);
   return `<div class="app-window home-window home-library ${drag ? "is-drag" : ""}" ${drag ? "data-held" : ""} data-sample-theme="frost-night" style="width:${homeWidth()}px;height:${HOME_HEIGHT}px">
-    ${siteBand({ library: true })}${open.length ? buildsBand(homeWidth(), { builds: open, current: -1, menuOpen: false }) : ""}${notices}
+    ${siteBand({ library: true })}${notices}${open.length ? buildsBand(homeWidth(), { builds: open, current: -1, menuOpen: false }) : ""}
     <div class="library-page">
       <div class="library-inner">
         <div class="library-head"><h1>My library</h1><span>${builds.length} ${builds.length === 1 ? "build" : "builds"} · the last opened first</span></div>
