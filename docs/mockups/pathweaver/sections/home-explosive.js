@@ -13,7 +13,7 @@ const floodHome = () => homeWindow("flood", `
   <div class="home-flood-sources">From ${SOURCES.map(([name]) => name).join(" · ")} · ${HOME_TEXT.local}</div>
   <div class="home-flood-frame"></div>
   <div class="home-flood-let"><b>Let go.</b><span>1 file over the page: it opens at once</span></div>`, { band: false })
-  .replace("home-flood\"", `home-flood${STATE.homeDrag ? " is-drag" : ""}"`);
+  .replace("home-flood\"", `home-flood${STATE.homeDrag ? ' is-drag" data-held="' : ""}"`);
 
 const skyHome = () => homeWindow("sky", `${homeTreeCanvas("sky")}
   <div class="home-sky-top">${homeBrand(26)}${homeLinks()}</div>

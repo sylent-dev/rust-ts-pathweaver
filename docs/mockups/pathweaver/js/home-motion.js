@@ -24,8 +24,9 @@ function mountHomeTrees() {
 }
 AFTER_RENDER.push(mountHomeTrees);
 
-// E1 · The page is the drop zone: the grid lit around the pointer, and the whole window lit while
-// a real file is dragged over it (try with any file of the desktop: the mock-up opens nothing).
+// E1 and E1b · The page is the drop zone: the grid lit around the pointer, and the whole window
+// lit while a real file is dragged over it (try with any file of the desktop: the mock-up opens
+// nothing); a window drawn in that state holds it (data-held).
 STATE.homeDrag = false;
 ACTIONS.homeDrag = () => {
   STATE.homeDrag = !STATE.homeDrag;
@@ -33,27 +34,27 @@ ACTIONS.homeDrag = () => {
 };
 const sheet = document.getElementById("sheet");
 sheet.addEventListener("pointermove", event => {
-  const flood = event.target.closest(".home-flood");
+  const flood = event.target.closest(".home-flood, .home-drop");
   if (!flood) return;
   const box = flood.getBoundingClientRect();
   flood.style.setProperty("--home-x", `${event.clientX - box.left}px`);
   flood.style.setProperty("--home-y", `${event.clientY - box.top}px`);
 });
 sheet.addEventListener("dragover", event => {
-  const flood = event.target.closest(".home-flood");
+  const flood = event.target.closest(".home-flood, .home-drop");
   if (!flood) return;
   event.preventDefault();
   flood.classList.add("is-drag");
 });
 sheet.addEventListener("dragleave", event => {
-  const flood = event.target.closest(".home-flood");
-  if (flood && !flood.contains(event.relatedTarget) && !STATE.homeDrag) flood.classList.remove("is-drag");
+  const flood = event.target.closest(".home-flood, .home-drop");
+  if (flood && !flood.contains(event.relatedTarget) && !flood.hasAttribute("data-held")) flood.classList.remove("is-drag");
 });
 sheet.addEventListener("drop", event => {
-  const flood = event.target.closest(".home-flood");
+  const flood = event.target.closest(".home-flood, .home-drop");
   if (!flood) return;
   event.preventDefault();
-  if (!STATE.homeDrag) flood.classList.remove("is-drag");
+  if (!flood.hasAttribute("data-held")) flood.classList.remove("is-drag");
 });
 
 // The walk of the two animated variants: the level goes from 1 to 100 in WALK_SECONDS, waits, and
