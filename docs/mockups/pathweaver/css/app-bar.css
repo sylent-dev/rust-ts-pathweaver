@@ -3,10 +3,12 @@
    and no shadow under it (the owner, 2026-11-18). */
 .app-site { position: relative; z-index: 2; display: flex; align-items: center; height: 44px; padding-left: 14px; background: var(--bar-image), var(--site-band, var(--bar)); color: var(--on-bar); }
 .app-site-links { display: flex; height: 100%; margin-left: auto; }
-.app-site-link { display: flex; align-items: center; height: 100%; padding: 0 16px; color: var(--accent); text-decoration: none;
+.app-site-link { display: flex; align-items: center; height: 100%; padding: 0 16px; color: var(--accent); text-decoration: none; transition: color .3s;
   font-family: var(--site-link-font); font-weight: var(--site-link-weight); font-size: var(--site-link-size); }
-/* On hover, a line of 2 px draws itself under the words from the left, and leaves to the right,
-   in their blue (after sylent.art, the owner, 2026-11-18). */
+/* On hover, the words turn from blue to the colour of the text of the band, and a line of 2 px in
+   that colour draws itself under them from the left, and leaves to the right (after sylent.art,
+   the owner, 2026-11-18). */
+.app-site-link:is(:hover, .is-hover) { color: var(--on-bar); }
 .app-site-label { position: relative; line-height: 1; }
 .app-site-label::after { content: ""; position: absolute; left: 0; right: 0; bottom: -8px; height: 2px; background: currentColor;
   transform: scaleX(0); transform-origin: 100%; transition: transform .3s cubic-bezier(.2, .7, .2, 1); }
