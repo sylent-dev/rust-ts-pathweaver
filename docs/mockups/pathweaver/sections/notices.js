@@ -8,7 +8,7 @@
 // Pathweaver works the same); no icon, the shade and the words say it (the owner, 2026-11-18); its
 // title; the files refused, each its name, its reason and the line of the error when there is
 // one; or a note; its close button, a square in the corner.
-const noticeFile = ([name, reason, line]) => `<li><span class="app-notice-file">${escapeHtml(name)}</span> <span class="app-notice-reason">${reason}</span>${line ? `<code>${escapeHtml(line)}</code>` : ""}</li>`;
+const noticeFile = ([name, reason, line]) => `<li>${escapeHtml(name)} <span class="app-notice-reason">${reason}</span>${line ? `<code>${escapeHtml(line)}</code>` : ""}</li>`;
 const notice = ({ kind = "error", title, files = [], note = "" }) => `<div class="app-notice is-${kind}" role="${kind === "error" ? "alert" : "status"}">
     <div class="app-notice-text"><strong>${title}</strong>${files.length ? `<ul>${files.map(noticeFile).join("")}</ul>` : ""}${note ? `<span class="app-notice-note">${note}</span>` : ""}</div>
     <button type="button" class="app-notice-close" aria-label="Close" title="Close">${icon(16, ICONS.close)}</button>
