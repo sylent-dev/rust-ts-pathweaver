@@ -7,6 +7,11 @@
    among twelve fonts and four cases). */
 .home-title { display: flex; flex-direction: column; align-items: center; gap: 14px; max-width: 860px; margin-bottom: 14px; text-align: center; }
 .home-title-game { color: var(--weak); font-family: var(--font-number); font-size: 12px; letter-spacing: .24em; text-transform: uppercase; }
+/* As the page loads, the game rises from behind the title to its place, fading in (the owner,
+   2026-11-18); still when the system asks for less motion. */
+.home-title-game { position: relative; z-index: 0; animation: home-game-rise 1.4s cubic-bezier(.22, 1, .36, 1) .35s both; }
+.home-title h1 { position: relative; z-index: 1; }
+@keyframes home-game-rise { from { opacity: 0; transform: translateY(34px); filter: blur(3px); } }
 .home-title h1 { margin: 0; color: var(--text); font-family: var(--brand-font); font-weight: 800; font-size: 42px; line-height: 1; letter-spacing: -.06em; text-wrap: balance; }
 
 /* The notes of a plan: the three things a build shows, their lines drawn to the zone, their dots
@@ -30,5 +35,5 @@
 @keyframes home-note-dot { 50% { box-shadow: 0 0 0 4px color-mix(in srgb, var(--text) 20%, transparent); } }
 
 @media (prefers-reduced-motion: reduce) {
-  .home-note b, .home-note i, .home-note i::after { animation: none; }
+  .home-note b, .home-note i, .home-note i::after, .home-title-game { animation: none; }
 }
