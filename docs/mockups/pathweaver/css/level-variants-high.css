@@ -10,8 +10,13 @@
 .lv6-steps { flex: none; display: flex; flex-direction: column; gap: 1px; height: 100%; }
 .lv6-block { flex: 1; flex-direction: row; gap: 8px; width: 70px; justify-content: center; background: var(--band); transition: background .2s; }
 .lv6-block:not(:disabled):hover { background: color-mix(in srgb, var(--on-band) 10%, var(--band)); }
-.lv6-track { height: 40px; margin: 0 26px; }
-.lv6-cursor { position: absolute; top: 3px; width: 10px; height: 20px; margin-left: -5px; background: var(--accent); }
+.lv6-track { align-self: stretch; height: 84px; margin: 0 26px; }
+/* The line of the track at the height of the seam between ◀ and ▶, the middle of the band; the
+   markers in the accent, the cursor of the level in the colour of the text (the owner, 2026-11-18). */
+.lv6 .lv2-line { top: 41px; }
+.lv6 .lv2-tick { top: 36px; background: var(--accent); }
+.lv6 .lv2-cursor { top: 28px; background: var(--on-band); }   /* no glow: hard to judge, kitsch at worst (the owner, 2026-11-18) */
+.lv6 .lv-end { top: 52px; }
 .lv6-chips { flex: 1; min-width: 0; display: flex; flex-wrap: wrap; gap: 4px; max-height: 52px; overflow: hidden; }
 .lv-chip { display: inline-flex; align-items: center; gap: 6px; height: 24px; padding: 0 8px; background: var(--band); font-size: 12px; white-space: nowrap; }
 .lv-chip i { width: 7px; height: 7px; }

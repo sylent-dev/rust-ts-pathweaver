@@ -6,6 +6,22 @@ const lvTicks = (context, width, className) => context.all.map(marker =>
   `<span class="${className} ${marker <= context.level ? "is-passed" : ""}" style="left:${levelX(marker, width)}px" title="${markerWords(marker)}"></span>`).join("");
 const lvEnds = width => `<span class="lv-end app-number" style="left:0">1</span><span class="lv-end app-number" style="left:${width}px">${MAX_LEVEL}</span>`;
 
+// The track cut at each marker into stretches: those passed, the one of the level (lit), those to
+// come; the cursor a bar at the level (4).
+function lvStretches(context, width) {
+  const bounds = [1, ...context.all.filter(marker => marker > 1), MAX_LEVEL + 1];
+  return bounds.slice(0, -1).map((start, index) => {
+    const end = bounds[index + 1];
+    const left = levelX(start, width);
+    const right = end > MAX_LEVEL ? width : levelX(end, width);
+    const state = context.level >= end ? "is-passed" : context.level >= start ? "is-current" : "";
+    return `<span class="lv4-stretch ${state}" style="left:${left}px;width:${Math.max(1, right - left - 2)}px" title="${markerWords(start)}"></span>`;
+  }).join("") + `<span class="lv4-cursor" style="left:${levelX(context.level, width)}px"></span>`;
+}
+
+// The track of 2: a thin line, the markers in grey, the cursor a bar (2 and 6).
+const lvBarTrack = (context, width) => `<span class="lv2-line"></span>${lvTicks(context, width, "lv2-tick")}<span class="lv2-cursor" style="left:${levelX(context.level, width)}px"></span>`;
+
 addLevelVariant({ n: 1, temperature: "normal", name: "Square cursor",
   note: "today's band in the language of the header: a square cursor, the track filled up to it in the accent, the ticks on whole pixels",
   render: context => {
@@ -34,9 +50,7 @@ addLevelVariant({ n: 2, temperature: "normal", name: "Arrow blocks",
       <div class="lv2-now"><span class="app-weak">Level</span><span class="lv2-number app-number">${context.level}</span></div>
       ${lvStep("next", context.next, "lv2-block")}
       <div class="lv-track lv2-track" data-action="level-track" style="width:${width}px">
-        <span class="lv2-line"></span>
-        ${lvTicks(context, width, "lv2-tick")}
-        <span class="lv2-cursor" style="left:${levelX(context.level, width)}px"></span>
+        ${lvBarTrack(context, width)}
         ${lvEnds(width)}
       </div>
       ${lvChanges(context)}
@@ -68,21 +82,12 @@ addLevelVariant({ n: 4, temperature: "normal", name: "Stretches",
   note: "the track cut at each marker into stretches of the build: those passed, the one you are in (lit), those to come",
   render: context => {
     const width = 470;
-    const bounds = [1, ...context.all.filter(marker => marker > 1), MAX_LEVEL + 1];
-    const stretches = bounds.slice(0, -1).map((start, index) => {
-      const end = bounds[index + 1];
-      const left = levelX(start, width);
-      const right = end > MAX_LEVEL ? width : levelX(end, width);
-      const state = context.level >= end ? "is-passed" : context.level >= start ? "is-current" : "";
-      return `<span class="lv4-stretch ${state}" style="left:${left}px;width:${Math.max(1, right - left - 2)}px" title="${markerWords(start)}"></span>`;
-    }).join("");
     return `<div class="lv lv4">
       ${lvStep("previous", context.previous)}
       <div class="lv1-now"><span class="app-weak">Level</span><span class="lv1-number app-number">${context.level}</span></div>
       ${lvStep("next", context.next)}
       <div class="lv-track lv4-track" data-action="level-track" style="width:${width}px">
-        ${stretches}
-        <span class="lv4-cursor" style="left:${levelX(context.level, width)}px"></span>
+        ${lvStretches(context, width)}
         ${lvEnds(width)}
       </div>
       ${lvChanges(context)}

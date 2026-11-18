@@ -5,17 +5,14 @@ const lvChips = level => changeChips(level).map(chip => `<span class="lv-chip ${
   chip.colour ? `<i style="background:${gemColour(chip.colour)}"></i>` : chip.slot ? '<i class="is-slot"></i>' : ""}${escapeHtml(chip.text)}</span>`).join("");
 
 addLevelVariant({ n: 6, temperature: "high", name: "Giant level",
-  note: "the level in Archivo 800 at 64 px, ◀ and ▶ stacked as two half-height blocks beside it; what changes as chips, a gem in its colour, a hint of the gear outlined",
+  note: "kept: « Level » over the level in Archivo 800 at 58 px, centred; ◀ and ▶ stacked as two half-height blocks beside it; the track of L2, a thin line, the markers in grey, the cursor a bar; what changes as chips, a gem in its colour, a hint of the gear outlined",
   render: context => {
     const width = 400;
-    const x = levelX(context.level, width);
     return `<div class="lv lv6">
       <div class="lv6-now"><span class="lv6-label">Level</span><span class="lv6-number">${context.level}</span></div>
       <div class="lv6-steps">${lvStep("previous", context.previous, "lv6-block")}${lvStep("next", context.next, "lv6-block")}</div>
       <div class="lv-track lv6-track" data-action="level-track" style="width:${width}px">
-        <span class="lv1-line"></span><span class="lv1-fill" style="width:${x}px"></span>
-        ${lvTicks(context, width, "lv1-tick")}
-        <span class="lv6-cursor" style="left:${x}px"></span>
+        ${lvBarTrack(context, width)}
         ${lvEnds(width)}
       </div>
       <div class="lv6-chips">${lvChips(context.level) || '<span class="app-weak">Nothing changes here</span>'}</div>
