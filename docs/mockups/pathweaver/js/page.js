@@ -25,12 +25,6 @@ const VARIANTS = {
   shadowBlur: { label: "Shadow blur", range: { min: 0, max: 24, step: 1 }, variable: "--shadow-blur", unit: "px", fallback: "3" },
   shadowLight: { label: "Shadow, light", range: { min: 0, max: 60, step: 1 }, variable: "--shadow-alpha-light", unit: "%", fallback: "10" },
   shadowDark: { label: "Shadow, dark", range: { min: 0, max: 80, step: 1 }, variable: "--shadow-alpha-dark", unit: "%", fallback: "45" },
-  // How the menu of « +N ▾ » shows itself (css/menu-reveal.css): three looks at a normal temperature,
-  // three at a high one, three explosive (the owner, 2026-11-18).
-  menuReveal: { label: "Menu opening", select: true, fallback: "slide", options: {
-    fade: "Normal · 1 · Fade", slide: "Normal · 2 · Slide", unroll: "Normal · 3 · Unroll",
-    cascade: "High · 4 · Cascade", pop: "High · 5 · Pop", "unroll-rows": "High · 6 · Unroll and rows",
-    spring: "Explosive · 7 · Spring", flaps: "Explosive · 8 · Flaps", burst: "Explosive · 9 · Burst" } },
   theme: { label: "Style", options: Object.fromEntries(Object.entries(THEMES).map(([key, theme]) => [key, theme.title])), fallback: "frost-night" },
   // The second accent (css/accent-2.css): its colour, and what it marks.
   accent2: { label: "Accent 2", select: true, fallback: "amber", options: { amber: "Amber", blue: "Blue", coral: "Coral", mint: "Mint",
