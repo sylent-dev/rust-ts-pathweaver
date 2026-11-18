@@ -8,7 +8,7 @@
 .lv6-label { padding-left: .12em; font-size: 11px; line-height: 1; text-box: trim-both cap alphabetic; letter-spacing: .12em; text-transform: uppercase; color: var(--on-band-weak); }
 .lv6-number { font: 800 58px/1 var(--brand-font); text-box: trim-both cap alphabetic; letter-spacing: -.05em; margin-right: .05em; font-variant-numeric: tabular-nums; }
 .lv6-steps { flex: none; display: flex; flex-direction: column; gap: 1px; height: 100%; }
-.lv6-block { flex: 1; flex-direction: row; gap: 8px; width: 70px; justify-content: center; background: var(--band); transition: background .2s; }
+.lv6-block { flex: 1; flex-direction: row; gap: 8px; width: 84px; justify-content: center; background: var(--band); transition: background .2s; }
 .lv6-block:not(:disabled):hover { background: color-mix(in srgb, var(--on-band) 10%, var(--band)); }
 .lv6-track { align-self: stretch; height: 84px; margin: 0 26px; }
 /* The line of the track at the height of the seam between ◀ and ▶, the middle of the band; the
@@ -17,12 +17,10 @@
 .lv6 .lv2-tick { top: 36px; background: var(--accent); }
 .lv6 .lv2-cursor { top: 28px; background: var(--on-band); }   /* no glow: hard to judge, kitsch at worst (the owner, 2026-11-18) */
 .lv6 .lv-end { top: 52px; }
-/* « N changes at N » and its window (css/level-changes.css): the link starts on the D of Download
-   .build in the header, 842 px from the left of a window of 960, the two in one column (the owner,
-   2026-11-18, rather than ending on it, which left the track shorter and the end of the band empty);
-   the window hangs under the band, over the page, its right edge on the margin of the band. */
+/* « N changes » here, between ◀ and ▶, three blocks of 27 px, the line of the track at the height
+   of the middle one (25, the owner, 2026-11-18); the window of what changes hangs under the band,
+   over the page, from the left edge of the column (css/level-changes.css). */
 .lv6 { overflow: visible; z-index: 4; }
-.lv6-changes { position: relative; flex: 1; align-self: stretch; display: flex; align-items: center; min-width: 0; }
 
 /* 7 · Markers by kind. */
 .lv7 { padding: 0 20px 0 22px; }

@@ -1,16 +1,17 @@
 /* « N changes at N » and its window (2g, js/level-changes.js). */
 
-/* The link: in the accent, the colour of the text on hover and while its window is open, like
-   Download .build and « +N ▾ ». */
-.lv .lvc-link { height: 44px; color: var(--accent); font-size: 13px; font-weight: 600; white-space: nowrap; transition: color .3s; }
-.lv .lvc-link:hover, .lv .lvc-link.is-open { color: var(--on-band); }
-.lvc-none { color: var(--on-band-weak); font-size: 13px; white-space: nowrap; }
+/* « N changes », the block between ◀ and ▶ (25): a shade of the accent over the band, its words in
+   the accent, the colour of the text on hover and while its window is open. */
+.lv .lvc-here { display: flex; align-items: center; justify-content: center; font-size: 12px; white-space: nowrap; }
+.lv .lvc-link { background: color-mix(in srgb, var(--accent) 12%, var(--band)); color: var(--accent); font-weight: 600; transition: color .3s, background .2s; }
+.lv .lvc-link:hover, .lv .lvc-link.is-open { background: color-mix(in srgb, var(--accent) 22%, var(--band)); color: var(--on-band); }
+.lvc-none { color: var(--on-band-weak); }
 
-/* The window: attached under the band, in its shade, square corners, its right edge on the margin
-   of the band; it scrolls when a level changes more than it holds. */
-.lvc-window { position: absolute; top: 100%; right: 0; z-index: 5; width: 360px; max-height: 420px; overflow-y: auto; padding: 6px 0 10px;
+/* The window: attached under the band, in its shade, square corners, its left edge on that of the
+   column of the arrows; it scrolls when a level changes more than it holds. */
+.lvc-window { position: absolute; top: 100%; left: 124px; z-index: 5; width: 360px; max-height: 420px; overflow-y: auto; padding: 6px 0 10px;
   background: var(--band-image), var(--band-deep); color: var(--on-band); box-shadow: 0 8px 18px rgb(0 0 0 / .28); font-size: 13px; }
-.lvc-window.is-opening { transform-origin: top right; animation: reveal-pop 280ms cubic-bezier(.34, 1.56, .64, 1) both; }
+.lvc-window.is-opening { transform-origin: top left; animation: reveal-pop 280ms cubic-bezier(.34, 1.56, .64, 1) both; }
 .lvc-part { padding: 8px 16px 2px; }
 .lvc-title { display: flex; gap: 8px; margin: 0 0 6px; font-size: 11px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: var(--on-band-weak); }
 .lvc-title span { color: var(--on-band); opacity: .6; letter-spacing: 0; }
@@ -34,8 +35,8 @@
 .lvc-foot .lvc-note { margin: 0 4px 0 0; }
 
 /* The section of the window on other builds (sections/level-changes.js): the band of the case, its
-   link open, the page under it where the window hangs. */
+   level and « N changes » open, the page under it where the window hangs. */
 .lvc-case { position: relative; overflow: visible; }
-.lvc-case .lv { justify-content: space-between; padding: 0 18px 0 22px; overflow: visible; z-index: 4; }
-.lvc-case .lv6-changes { flex: none; width: 100px; }
+.lvc-case .lv { overflow: visible; z-index: 4; }
+.lvc-case-name { margin-left: 26px; }
 .lvc-case-page { height: 440px; }

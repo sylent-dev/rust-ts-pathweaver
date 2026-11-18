@@ -1,23 +1,27 @@
 // The level band at a high temperature (2g): bolder, the track telling more of the build.
 
 addLevelVariant({ n: 6, temperature: "high", name: "Giant level",
-  note: "kept: « Level » over the level in Archivo 800 at 58 px, centred; ◀ and ▶ stacked as two half-height blocks; the track of L2 on their seam, the markers in the accent, the cursor of the level white; « N changes at N », a link to the window of what changes (js/level-changes.js)",
+  note: "kept: « Level » over the level in Archivo 800 at 58 px, centred; ◀ the marker before, « N changes » here, ▶ the marker after, three blocks (25); the track of L2 from « here », the markers in the accent, the cursor of the level white; « N changes » opens the window of what changes (js/level-changes.js)",
   render: (context, { window = false } = {}) => {
-    // The track as long as the band allows (the owner, 2026-11-18): up to the link, which starts on
-    // the D of Download .build in the header.
-    const width = 596;
+    // The track as long as the band allows, from the column of the arrows to the margin of the band.
+    const width = 708;
     const record = BUILDS.changes.shown.levels[context.level];
     const open = window && STATE.changesOpen && record !== undefined;
     return `<div class="lv lv6">
       <div class="lv6-now"><span class="lv6-label">Level</span><span class="lv6-number">${context.level}</span></div>
-      <div class="lv6-steps">${lvStep("previous", context.previous, "lv6-block")}${lvStep("next", context.next, "lv6-block")}</div>
+      ${levelSteps(context, record, open)}
       <div class="lv-track lv6-track" data-action="level-track" style="width:${width}px">
         ${lvBarTrack(context, width)}
         ${lvEnds(width)}
       </div>
-      <div class="lv6-changes">${changesLink(record, context.level, open)}${open ? changesWindow(record, context.level, { opening: STATE.changesOpening }) : ""}</div>
+      ${open ? changesWindow(record, context.level, { opening: STATE.changesOpening }) : ""}
     </div>`;
   } });
+
+// The column of the arrows in three (25, the owner, 2026-11-18): ◀ the marker before, « N changes »
+// here, ▶ the marker after; the line of the track leaves from « here ».
+const levelSteps = (context, record, open) => `<div class="lv6-steps">${lvStep("previous", context.previous, "lv6-block")}${
+  changesLink(record, open)}${lvStep("next", context.next, "lv6-block")}</div>`;
 
 addLevelVariant({ n: 7, temperature: "high", name: "Markers by kind",
   note: "each marker says what it brings: the gems over the line in their colours (a skill larger than a support), the gear under it outlined; the cursor a line the full height",

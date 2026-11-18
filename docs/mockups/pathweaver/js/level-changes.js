@@ -1,4 +1,4 @@
-// « N changes at N » and its window (2g, the owner, 2026-11-18): the band says how many things
+// « N changes » and its window (2g, the owner, 2026-11-18): the band says how many things
 // change at the level, a link; the window lists them all, by category, without choosing which
 // matter most. It hangs under the band, in the language of the menu of « +N ▾ », and stays open
 // while ◀ ▶ and the track move the level, so that a build is read from marker to marker.
@@ -12,12 +12,11 @@ ICONS.note = '<path d="M3.5 2.5h9v11h-9z"/><path d="M5.8 5.5h4.4M5.8 8h4.4M5.8 1
 const noteMark = has => has ? `<span class="lvc-note" title="The author left a note">${icon(12, ICONS.note)}</span>` : "";
 const gemSquare = colour => `<i class="lvc-gem" style="background:${gemColour(colour)}"></i>`;
 
-// The link of the band: the number of changes, or « No change » in grey when there is none (short
-// enough for the column of Download .build);
-// no chevron, since it opens a window, not a menu (the owner, 2026-11-18).
-function changesLink(record, level, open) {
-  if (!record) return `<span class="lvc-none">No change at ${level}</span>`;
-  return `<button type="button" class="lvc-link ${open ? "is-open" : ""}" data-action="changes-toggle" aria-expanded="${open}">${plural(record.count, "change")} at ${level}</button>`;
+// « N changes », the block between ◀ and ▶, or « No change » in grey when there is none; no
+// chevron, since it opens a window, not a menu (the owner, 2026-11-18).
+function changesLink(record, open) {
+  if (!record) return `<span class="lv6-block lvc-here lvc-none">No change</span>`;
+  return `<button type="button" class="lv6-block lvc-here lvc-link ${open ? "is-open" : ""}" data-action="changes-toggle" aria-expanded="${open}">${plural(record.count, "change")}</button>`;
 }
 
 // `style` places the window under what opened it, when that isn't the right end of the band.
