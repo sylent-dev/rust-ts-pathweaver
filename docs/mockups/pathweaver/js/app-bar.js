@@ -63,7 +63,7 @@ function buildsBand(width, { builds = BUILDS.open, current = 0, menuOpen = STATE
         <div class="app-builds-menu-item app-builds-menu-merge" role="menuitem">Merge…</div>
       </div>` : ""}
     </span>
-    <button type="button" class="app-builds-open ${openState}" title="Add a build" aria-label="Add a build">${icon(14, ICONS.plus)}</button>
+    <button type="button" class="app-builds-open ${openState}" title="Add a build" aria-label="Add a build">${icon(14, ICONS.add)}</button>
   </div>`;
 }
 ACTIONS.toggleBuildsMenu = () => {

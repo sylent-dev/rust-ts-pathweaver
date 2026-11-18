@@ -1,0 +1,67 @@
+/* The first visit at a high temperature (sections/home-high.js): the page shows what Pathweaver
+   is about (the tree, the levels, the mark) before it explains it. */
+
+/* H1 · The tree: the whole passive tree behind the page, the path of a build lit; the band of the
+   site leaves, its brand and links float over the tree. */
+.home-tree { position: relative; isolation: isolate; }
+.home-tree-canvas { position: absolute; inset: 0; z-index: -2; width: 100%; height: 100%;
+  --tree-edge: #1b2741; --tree-node-line: #2a3a5c; }
+.home-tree::before { content: ""; position: absolute; inset: 0; z-index: -1; pointer-events: none;
+  background: linear-gradient(90deg, var(--page) 0%, color-mix(in srgb, var(--page) 88%, transparent) 38%, transparent 70%); }
+.home-tree-top { display: flex; align-items: center; justify-content: space-between; height: 64px; padding: 0 12px 0 28px; }
+.home-tree-main { flex: 1; display: flex; flex-direction: column; justify-content: center; gap: 24px; width: 520px; padding: 0 0 64px 56px; }
+.home-tree .home-tagline { font-size: 60px; }
+.home-tree-does { margin: 0; color: var(--weak); font-size: 16px; line-height: 1.55; }
+.home-tree-actions { display: flex; gap: 10px; }
+.home-tree-foot { position: absolute; left: 56px; bottom: 28px; color: var(--weak); font-size: 12.5px; }
+.home-tree-foot b { color: var(--text); font-weight: 600; }
+.home-tree-legend { position: absolute; right: 24px; bottom: 24px; display: flex; align-items: center; gap: 8px; color: var(--weak); font-size: 12px; }
+.home-tree-legend i { width: 18px; height: 2px; background: var(--accent); }
+
+/* H2 · From 1 to 100: the level band of a build grown into the hero, its cursor walking the road. */
+@property --home-level { syntax: "<integer>"; inherits: true; initial-value: 1; }
+.home-road-main { flex: 1; display: flex; flex-direction: column; justify-content: center; gap: 40px; padding: 40px 56px 32px; }
+.home-road .home-tagline { font-size: 56px; text-align: center; }
+.home-road-head { display: flex; flex-direction: column; align-items: center; gap: 12px; }
+.home-road-band { display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 28px; }
+.home-road-end { font-family: var(--font-number); font-size: 112px; font-weight: 400; line-height: .8; letter-spacing: -.06em; color: var(--weak); }
+.home-road-end:last-child { color: var(--text); }
+.home-road-track { position: relative; height: 80px; }
+.home-road-track::before { content: ""; position: absolute; left: 0; right: 0; top: 50%; height: 3px; margin-top: -1.5px; border-radius: 2px; background: var(--track); }
+.home-road-track > i { position: absolute; top: 50%; width: 2px; height: 16px; margin: -8px 0 0 -1px; background: var(--marker); }
+.home-road-cursor { position: absolute; top: 50%; left: 0; animation: home-road 9s cubic-bezier(.55, 0, .45, 1) infinite; }
+.home-road-cursor::before { content: ""; position: absolute; width: 22px; height: 22px; margin: -11px 0 0 -11px; border-radius: 50%; background: var(--accent);
+  box-shadow: 0 0 0 6px color-mix(in srgb, var(--accent) 22%, transparent), 0 0 32px var(--accent); }
+.home-road-cursor::after { counter-reset: level var(--home-level); content: counter(level); position: absolute; bottom: 20px; transform: translateX(-50%);
+  color: var(--accent); font-family: var(--font-number); font-size: 22px; font-weight: 500; }
+.home-road-trail { position: absolute; left: 0; top: 50%; height: 3px; margin-top: -1.5px; border-radius: 2px; background: var(--accent);
+  animation: home-road-trail 9s cubic-bezier(.55, 0, .45, 1) infinite; }
+@keyframes home-road { 0%, 6% { left: 0; --home-level: 1; } 88%, 100% { left: 100%; --home-level: 100; } }
+@keyframes home-road-trail { 0%, 6% { width: 0; } 88%, 100% { width: 100%; } }
+.home-road-call { display: grid; grid-template-columns: 1fr auto; align-items: center; gap: 32px; padding: 24px 28px; border-radius: 14px; background: var(--fill); }
+.home-road-call p { margin: 0; color: var(--weak); font-size: 15px; line-height: 1.5; }
+.home-road-call p strong { display: block; margin-bottom: 4px; color: var(--text); font-size: 18px; font-weight: 600; }
+.home-road-actions { display: flex; align-items: center; gap: 10px; }
+.home-road-foot { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; color: var(--weak); font-size: 12.5px; }
+.home-road-foot .home-chip { padding: 4px 10px; border-radius: 99px; background: var(--control); color: var(--text); }
+
+/* H3 · Poster: the line in very large condensed capitals, the mark of the brand cropped behind
+   it, a slab of graph paper to drop the files on. */
+.home-poster { position: relative; isolation: isolate; }
+.home-poster-mark { position: absolute; z-index: -1; right: -180px; top: 20px; opacity: .13; pointer-events: none; }
+.home-poster-mark .logo-p { fill: var(--text); }
+.home-poster-top { display: flex; align-items: center; justify-content: space-between; height: 64px; padding: 0 12px 0 32px; }
+.home-poster-main { flex: 1; display: flex; flex-direction: column; justify-content: center; gap: 20px; padding: 0 32px 32px; }
+.home-poster .home-tagline { max-width: 90%; font-family: var(--brand-font); font-stretch: 72%; font-weight: 800; font-size: 10.5cqw; line-height: .9; letter-spacing: -.02em; text-transform: uppercase; }
+.home-poster-does { max-width: 520px; margin: 0; color: var(--weak); font-size: 17px; line-height: 1.5; }
+.home-poster-slab { flex: none; display: grid; grid-template-columns: 1fr auto; align-items: center; gap: 32px; height: 200px; padding: 0 40px; background: var(--fill);
+  box-shadow: inset 0 3px 0 var(--accent); }
+.home-poster-slab strong { display: block; font-family: var(--brand-font); font-stretch: 72%; font-weight: 800; font-size: 34px; text-transform: uppercase; letter-spacing: .01em; }
+.home-poster-slab span { color: var(--weak); font-size: 13.5px; }
+.home-poster-actions { display: flex; gap: 10px; }
+
+/* Less motion: the cursor waits at level 24, its trail drawn up to it. */
+@media (prefers-reduced-motion: reduce) {
+  .home-road-cursor { animation: none; left: 23.2%; --home-level: 24; }
+  .home-road-trail { animation: none; width: 23.2%; }
+}

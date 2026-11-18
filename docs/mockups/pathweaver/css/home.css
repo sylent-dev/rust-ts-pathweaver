@@ -1,0 +1,35 @@
+/* The home page at the first visit (2l): what its nine variants share (js/home.js). */
+
+.home-window { container-type: inline-size; display: flex; flex-direction: column; }
+.home-window > .app-site { flex: none; }
+.home-tagline { margin: 0; cursor: pointer; font-family: var(--font-title); font-weight: var(--title-weight); letter-spacing: -.03em; line-height: 1.05; text-wrap: balance; }
+.home-subtitle { color: var(--accent); font-family: var(--site-link-font); font-weight: 600; font-size: 13px; letter-spacing: .02em; }
+
+/* The call to action, the one filled button; Paste JSON beside it, quieter. */
+.home-cta, .home-paste { display: inline-flex; align-items: center; gap: 9px; height: 44px; padding: 0 20px; border: none; border-radius: var(--radius); cursor: pointer;
+  font-weight: 600; font-size: 15px; white-space: nowrap; transition: background-color .2s, color .2s, transform .2s, box-shadow .2s; }
+.home-cta { background: var(--fill-strong); color: var(--on-fill-strong); }
+.home-cta:hover { background: color-mix(in srgb, var(--fill-strong) 82%, white); }
+.home-paste { background: var(--control); color: var(--text); }
+.home-paste:hover { background: color-mix(in srgb, var(--control) 80%, var(--text)); }
+.home-drop-hint { color: var(--weak); font-size: 13px; }
+
+.home-sources-title { margin: 0 0 8px; color: var(--weak); font-size: 12px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; }
+.home-sources { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px 24px; }
+.home-source { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.home-source-name { font-weight: 600; }
+.home-source-how { color: var(--weak); font-size: 12.5px; }
+.home-local { color: var(--weak); font-size: 12.5px; }
+
+/* The brand and the links, for the variants that leave the band of the site. */
+.home-brand { display: inline-flex; align-items: center; gap: 10px; flex: none; color: var(--text); }
+.home-brand .logo-name { font-size: 22px; }
+.home-links { display: flex; height: 44px; }
+.home-links .app-site-link:is(:hover, .is-hover) { color: var(--text); }
+
+/* A layer of graph paper inside a block, as behind the blocks of the page (css/textures.css). */
+.home-paper { position: relative; isolation: isolate; }
+.home-paper::before { content: ""; position: absolute; inset: 0; z-index: -1; pointer-events: none; border-radius: inherit;
+  background: var(--texture-colour); opacity: var(--texture-opacity);
+  mask-image: var(--texture); mask-size: var(--texture-size) var(--texture-size);
+  mask-position: calc(var(--texture-size) / 8) calc(var(--texture-size) / 8); }
