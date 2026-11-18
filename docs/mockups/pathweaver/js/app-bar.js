@@ -2,7 +2,8 @@
 // brand and My library, then Report a bug and what comes next (the menu, the search and the
 // settings of version 2 come there); then, once a build is open, the band of the open builds, their
 // tabs (as many as fit, the others in a « +N ▾ » menu, which also holds Merge…) and + to add a
-// build, which leads to the library.
+// build, which opens the choice of files of the system at once (the owner, 2026-11-18: My library
+// already leads to the library).
 
 // The links of the band of the site, in words, in Manrope, the full height of the band (the owner,
 // 2026-11-17): Report a bug opens a new issue on GitHub; What's next (the owner, 2026-11-18, rather
@@ -36,7 +37,7 @@ const openBuildTab = (build, states = "") => `<div class="app-builds-tab ${state
 
 // The band of the open builds: its tabs full height, side by side, 184 px each, up to 240 when
 // they all fit; those that don't fit go to the menu « +N ▾ », which also holds Merge… and is always
-// there; then + to add a build, which leads to the library. The band is drawn only while a build is
+// there; then + to add a build, which opens the choice of files. The band is drawn only while a build is
 // open. `current` is the index of the build shown (-1 on the library), `menuOpen` shows the menu
 // open, `moreState` and `openState` a state of the two buttons.
 const TAB_WIDTH = 184, TAB_MAX_WIDTH = 240, TAB_GAP = 0;
@@ -63,7 +64,7 @@ function buildsBand(width, { builds = BUILDS.open, current = 0, menuOpen = STATE
         <div class="app-builds-menu-item app-builds-menu-merge" role="menuitem">Merge…</div>
       </div>` : ""}
     </span>
-    <button type="button" class="app-builds-open ${openState}" title="Add a build" aria-label="Add a build">${icon(14, ICONS.add)}</button>
+    <button type="button" class="app-builds-open ${openState}" title="Open .build files" aria-label="Open .build files">${icon(14, ICONS.add)}</button>
   </div>`;
 }
 ACTIONS.toggleBuildsMenu = () => {
