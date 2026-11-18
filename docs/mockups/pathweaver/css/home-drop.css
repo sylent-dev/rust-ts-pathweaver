@@ -3,7 +3,7 @@
    mark of the brand in a watermark behind; the graph paper over the whole window, where a fluid
    runs along the lines under the pointer (js/grid-fluid.js) or a light follows it (« Pointer »). */
 
-.home-drop { position: relative; isolation: isolate; --home-grid: 48px; --home-spot: 200px; transition: --home-spot .6s cubic-bezier(.2, .7, .2, 1); }
+.home-drop { position: relative; isolation: isolate; --home-fluid: #ffffff; --home-grid: 48px; --home-spot: 200px; transition: --home-spot .6s cubic-bezier(.2, .7, .2, 1); }
 .home-drop::before, .home-drop::after { content: ""; position: absolute; inset: 0; z-index: -1; pointer-events: none;
   mask-size: var(--home-grid) var(--home-grid), 100% 100%; mask-repeat: repeat, no-repeat; mask-composite: intersect; }
 .home-drop::before { background: var(--texture-blue); opacity: .16; mask-image: var(--texture), linear-gradient(#000, #000); }

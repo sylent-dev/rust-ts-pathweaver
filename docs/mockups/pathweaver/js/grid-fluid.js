@@ -1,5 +1,6 @@
 // The fluid of the graph paper (2l, the owner, 2026-11-18: « like on sylent.art »), after
-// src/scripts/grid-fluid.ts of sylent.art, in the accent instead of its orange.
+// src/scripts/grid-fluid.ts of sylent.art, in white instead of its orange (the owner, 2026-11-18;
+// --home-fluid, css/home-drop.css).
 //
 // Under the pointer, a fluid runs along the lines of the grid. Each crossing holds some energy:
 // the pointer pours energy into the crossings around it as it moves, the energy spreads to the
@@ -28,8 +29,8 @@ function fluidOf(host) {
     const context = canvas.getContext("2d");
     context.setTransform(ratio, 0, 0, ratio, 0, 0);
     const columns = Math.ceil(width / cell) + 1, rows = Math.ceil(height / cell) + 1;
-    const accent = getComputedStyle(host).getPropertyValue("--accent").trim();
-    const rgb = [1, 3, 5].map(i => parseInt(accent.slice(i, i + 2), 16)).join(" ");
+    const ink = getComputedStyle(host).getPropertyValue("--home-fluid").trim();   // a #rrggbb
+    const rgb = [1, 3, 5].map(i => parseInt(ink.slice(i, i + 2), 16)).join(" ");
     fluid = { canvas, context, cell, width, height, columns, rows, rgb, pointer: null,
       energy: new Float32Array(columns * rows), next: new Float32Array(columns * rows) };
     fluids.set(canvas, fluid);
