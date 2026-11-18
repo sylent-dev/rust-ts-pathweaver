@@ -23,7 +23,8 @@ Set aside at the wireframes (2026-11-16, see `docs/wireframes/archive.excalidraw
 
 ## Images
 
-- **Icons of the gems and the uniques from the game** (noted 2026-11-16): the portraits of the ascendancies are the only images of the game so far; whether the gems and the uniques get theirs is decided when a step needs it.
+- **Icons of the gems and the uniques from the game** (noted 2026-11-16): the portraits of the ascendancies and the icons of the passives are the only images of the game so far; whether the gems and the uniques get theirs is decided when a step needs it.
+- **The art behind the groups of the passive tree** (noted 2026-11-18, with the icons of the passives at 2h2): `mastery-effect-active.webp` and `mastery-effect-disabled.webp` of the tree export, 640 KB, the large drawings of the 365 masteries; once the tree with its icons has been seen.
 
 
 ## Merging a guide
