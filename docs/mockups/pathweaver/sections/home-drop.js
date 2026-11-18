@@ -1,7 +1,7 @@
-// E1b · The drop zone (2l, css/home-drop.css, js/grid-fluid.js): E1 reworked by the owner
-// (2026-11-18). The line in large leaves; the page holds a zone made to drop the files on,
-// « Add your first build » in it, Paste JSON in a link under it, the mark of the brand in a
-// watermark behind, the footer of E1. Files dropped anywhere on the page still open.
+// The first visit (2l, css/home-drop.css, js/grid-fluid.js; the owner's E1b, 2026-11-18): the
+// page holds a zone made to drop the files on, « Add your first build » in it, Paste JSON in a link
+// under it, the mark of the brand in a watermark behind, the sources at the foot. Files dropped
+// anywhere on the page still open.
 
 // The icon of the zone (the owner, 2026-11-18, no. 10 of the series, « raccord avec le plus
 // d'après »): the corners of a zone around the + of the band of the builds, which leads here, drawn
@@ -39,9 +39,9 @@ const dropHome = ({ drag = false, zone = dropZoneCall(drag), state = "", field =
     </div>
     ${link}
   </div>
-  <div class="home-drop-sources">From ${SOURCES.map(([name]) => name).join(" · ")} · ${HOME_TEXT.local}</div>`, { band: false })
+  <div class="home-drop-sources">From ${SOURCES.join(" · ")} · ${HOME_TEXT.local}</div>`, { band: false })
   .replace('home-drop"', `home-drop${drag ? ' is-drag" data-held="' : ""}" data-home-fluid`);
 
-addSection(() => ["E1b · The drop zone, E1 reworked: move the pointer over the graph paper",
+addSection(() => ["Home · the first visit: move the pointer over the graph paper",
   [["At rest: hover the zone, drag any file over the window", dropHome()],
    ["A file over the page: the zone lights up", dropHome({ drag: true })]]]);

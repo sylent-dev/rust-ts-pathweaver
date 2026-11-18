@@ -1,8 +1,8 @@
-/* E1b · The drop zone (sections/home-drop.js), E1 reworked by the owner (2026-11-18): no line in
-   large, a zone made to drop the files on, « Add your first build » in it, Paste JSON under it; the
-   mark of the brand in a watermark behind; the graph paper over the whole window, where a fluid
-   runs along the lines under the pointer (js/grid-fluid.js; the owner kept it over the light of
-   E1, 2026-11-18), the light coming back only to light the whole grid while a file is over it. */
+/* The first visit (sections/home-drop.js; the owner's E1b, 2026-11-18): a zone made to drop the
+   files on, « Add your first build » in it, Paste JSON under it; the mark of the brand in a
+   watermark behind; the graph paper over the whole window, where a fluid runs along the lines
+   under the pointer (js/grid-fluid.js), the light coming back only to light the whole grid while
+   a file is over it. */
 
 .home-drop { position: relative; isolation: isolate; --home-fluid: #ffffff; --home-grid: 48px; --home-spot: 200px; transition: --home-spot .6s cubic-bezier(.2, .7, .2, 1); }
 .home-drop::before, .home-drop::after { content: ""; position: absolute; inset: 0; z-index: -1; pointer-events: none;
