@@ -10,7 +10,7 @@
 // community (drawn later, at 2k).
 const REPORT_BUG_URL = "https://github.com/sylent-dev/rust-ts-pathweaver/issues/new";
 // My library (the owner, 2026-11-18): the way back to the home page, the library, from anywhere,
-// in the same style, just after the brand; white with its line while it is the page shown
+// in the same style, just after the brand; white while it is the page shown, its line only on hover
 // (`library`); `libraryState` adds is-hover, to show it without the mouse.
 const siteBand = ({ library = false, libraryState = "" } = {}) => `<div class="app-site">
     <span class="app-site-brand">${logoMark(24)}<span class="logo-name">Pathweaver</span></span>
