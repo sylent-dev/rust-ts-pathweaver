@@ -25,10 +25,11 @@ const libraryMeta = build => [build.author && `by ${escapeHtml(build.author)}`, 
   build.levels ? `levels ${build.levels[0]}–${build.levels[1]}` : "snapshot"].filter(Boolean).join(" · ");
 
 // A row: the portrait square the full height of the row, the name over who wrote it, the
-// ascendancy and the levels; when it was opened last; Open, greyed when its tab is already in the
-// band (the owner, 2026-11-18, rather than a mark « open »); the bin. `state`: is-asking when the
-// bin was clicked: the row asks, in its place, and says that the tab closes too when the build is
-// open; a long name is cut, never the question.
+// ascendancy and the levels; when it was opened last; the bin. The row is a link (the owner,
+// 2026-11-18, rather than a word Open): a click anywhere but on the bin opens the build, or shows
+// its tab when it is already open. `state`: is-hover to show the hover; is-asking when the bin was
+// clicked: the row asks, in its place, and says that the tab closes too when the build is open; a
+// long name is cut, never the question.
 const rowPortrait = build => `<img class="library-portrait" src="pathweaver/img/portraits-square/${build.portrait}.webp" width="56" height="56" alt="">`;
 const libraryRow = (build, state = "") => {
   const name = escapeHtml(build.name.trim());
@@ -40,13 +41,12 @@ const libraryRow = (build, state = "") => {
       <button type="button" class="library-cancel">Cancel</button>
     </li>`;
   }
-  return `<li class="library-row ${state}" title="${name}">
-    ${rowPortrait(build)}
-    <span class="library-text"><span class="library-name">${name}</span><span class="library-meta">${libraryMeta(build)}</span></span>
-    <span class="library-date">${build.opened}</span>
-    ${build.open
-    ? `<a class="app-site-link library-open is-disabled" role="link" aria-disabled="true" title="Already open: its tab is in the band"><span class="app-site-label">Open</span></a>`
-    : `<a class="app-site-link library-open" href="#" role="button"><span class="app-site-label">Open</span></a>`}
+  return `<li class="library-row ${state}">
+    <a class="library-link" href="#" title="${name}">
+      ${rowPortrait(build)}
+      <span class="library-text"><span class="library-name">${name}</span><span class="library-meta">${libraryMeta(build)}</span></span>
+      <span class="library-date">${build.opened}</span>
+    </a>
     <button type="button" class="library-bin" aria-label="Remove from the library" title="Remove from the library">${icon(16, ICONS.bin)}</button>
   </li>`;
 };
@@ -69,7 +69,7 @@ const libraryHome = ({ builds = LIBRARY, rows = {}, drag = false, paste = false 
 };
 
 addSection(() => ["Home · the library: the page once a build was opened, the two bands at its top",
-  [["Fourteen builds, five open (their Open greyed): a long name in full in its title", libraryHome()],
+  [["Fourteen builds, five open: hover a row, and click it to open the build (or show its tab when it is open)", libraryHome({ rows: { 6: "is-hover" } })],
    ["The bin clicked: the row asks once, in its place; an open build says that its tab closes too", libraryHome({ rows: { 4: "is-asking" } })],
    ["A file over the page: the strip lights up, wherever the file is let go", libraryHome({ drag: true })],
    ["Paste JSON: the strip becomes a field, taller, and a paste opens the build at once", libraryHome({ paste: true })],

@@ -31,26 +31,25 @@
 .library-paste:is(:hover, .is-hover) span { transform: scale(1.08); }
 
 /* The rows, 56 px, touching, a shade lighter than the page one row in two, for the eye to follow a
-   row (the owner, 2026-11-18). No hover: only Open and the bin act, and the whole row lit would
-   promise a click it doesn't answer (the owner, 2026-11-18). */
+   row (the owner, 2026-11-18). Each is a link but for its bin: lighter on hover, since a click
+   anywhere opens the build (the owner, 2026-11-18, rather than a word Open). */
 .library-list { display: flex; flex-direction: column; margin: 0; padding: 0; list-style: none; }
-.library-row { display: flex; align-items: center; gap: 16px; height: 56px; padding-right: 10px; background: rgb(255 255 255 / 5%); }
+.library-row { display: flex; align-items: center; height: 56px; background: rgb(255 255 255 / 5%); transition: background-color .2s; }
 .library-row:nth-child(even) { background: rgb(255 255 255 / 1.5%); }
+.library-row:not(.is-asking):is(:hover, .is-hover) { background: rgb(255 255 255 / 9%); }
+.library-link { flex: 1; min-width: 0; display: flex; align-items: center; gap: 16px; height: 100%; color: inherit; text-decoration: none; }
+.library-link:focus-visible { outline: 2px solid var(--accent); outline-offset: -2px; }
 .library-portrait { flex: none; display: block; width: 56px; height: 56px; object-fit: cover; }
 .library-text { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 3px; }
 .library-name, .library-meta { overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
 .library-name { font-size: 14.5px; font-weight: 600; }
 .library-meta { color: var(--weak); font-size: 12.5px; }
 .library-date { flex: none; width: 124px; white-space: nowrap; color: var(--weak); font-family: var(--font-number); font-size: 12px; text-align: right; }
-.library-open.app-site-link { height: 56px; padding: 0 12px; }
-/* Open, greyed and without its line, when the tab of the build is already in the band. */
-.library-open.is-disabled, .library-open.is-disabled:hover { color: color-mix(in srgb, var(--weak) 55%, transparent); cursor: default; }
-.library-open.is-disabled .app-site-label::after { display: none; }
-.library-bin { flex: none; display: grid; place-items: center; width: 36px; height: 36px; padding: 0; border: none; background: none; color: var(--weak); cursor: pointer; transition: color .2s; }
+.library-bin { flex: none; display: grid; place-items: center; width: 56px; height: 56px; margin-left: 16px; padding: 0; border: none; background: none; color: var(--weak); cursor: pointer; transition: color .2s; }
 .library-bin:hover { color: #ef4444; }
 
 /* The row that asks: in its place, a red shade, Remove in the red, Cancel in words. */
-.library-row.is-asking { background: color-mix(in srgb, #ef4444 12%, transparent); }
+.library-row.is-asking { gap: 16px; padding-right: 10px; background: color-mix(in srgb, #ef4444 12%, transparent); }
 .library-ask { flex: 1; min-width: 0; display: flex; white-space: pre; }
 .library-ask > span { flex: none; }
 .library-ask > .library-ask-name { flex: 0 1 auto; min-width: 0; overflow: hidden; text-overflow: ellipsis; }
