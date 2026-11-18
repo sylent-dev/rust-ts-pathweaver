@@ -3,15 +3,12 @@
    (css/home-drop-files.css). */
 .home-drop-zone.is-paste { position: relative; cursor: text; }
 .home-drop-zone.is-paste:is(:focus-within, .is-focus):not(.is-refused) { box-shadow: inset 0 0 0 1.5px var(--accent); }
-.home-paste-field { position: absolute; inset: 0; width: 100%; height: 100%; box-sizing: border-box; padding: 18px 22px 48px; border: none; border-radius: inherit;
+.home-paste-field { position: absolute; inset: 0; width: 100%; height: 100%; box-sizing: border-box; padding: 18px 22px; border: none; border-radius: inherit;
   background: none; color: var(--text); font-family: var(--font-number); font-size: 12.5px; line-height: 1.6; resize: none; outline: none; caret-color: var(--accent); }
-.home-drop-zone.is-refused .home-paste-field { color: var(--weak); }
+.home-drop-zone.is-refused .home-paste-field { color: var(--weak); height: calc(100% - 44px); }   /* its text, scrolled, never under the reason */
 /* The call, at the centre while the field is empty. */
 .home-paste-hint { display: flex; flex-direction: column; align-items: center; gap: 10px; pointer-events: none; }
 .home-paste-field:not(:placeholder-shown) ~ .home-paste-hint { display: none; }
-/* The reason of a refused text, at the foot of the field, over a long soft fade of black (the owner,
-   2026-11-18: « un noir plus diffus »; a blue grey tried and left), the text under it blurring as it
-   fades. */
-.home-drop-zone .home-paste-reason { position: absolute; left: 1.5px; right: 1.5px; bottom: 1.5px; padding: 72px 22px 16px; pointer-events: none;
-  background: linear-gradient(rgb(0 0 0 / 0%), rgb(0 0 0 / 30%) 30%, rgb(0 0 0 / 65%) 65%, rgb(0 0 0 / 85%));
-  backdrop-filter: blur(2px); -webkit-mask-image: linear-gradient(transparent, #000 55%); mask-image: linear-gradient(transparent, #000 55%); }
+/* The reason of a refused text, at the foot of the field, on the black of the zone, without a fade
+   (the owner, 2026-11-18, after a black and a blue grey); the field stops above it. */
+.home-drop-zone .home-paste-reason { position: absolute; left: 22px; right: 22px; bottom: 16px; pointer-events: none; }
