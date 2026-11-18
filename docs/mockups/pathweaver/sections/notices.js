@@ -31,6 +31,16 @@ const NOTICES = {
 // The page of a build with its notices under the two bands.
 const noticeWindow = list => `<div class="app-window" style="width:960px">${appBar(960)}${notices(list)}${buildHeader()}${levelBand()}${buildTabs()}${overview()}</div>`;
 
+addSection(() => ["Notices · a damaged share link, and private browsing: the same shape as the files refused",
+  [["A damaged link while builds are open: the build shown before stays, the notice says why", noticeWindow([NOTICES.link])],
+   ["A damaged link with no build open: the library, the notice under the band of the site",
+    libraryHome({ builds: LIBRARY.map(build => ({ ...build, open: false })), notices: notices([NOTICES.link]) })],
+   ["A damaged link at the first visit: no bands, the zone says why, like a file refused",
+    dropHome({ zone: refusedZone("That link can't be opened", "It was cut: it ends after 1,204 of its characters."), state: "is-refused" })],
+   ["Private browsing: grey, not an error; Pathweaver works the same", noticeWindow([NOTICES.private])],
+   ["Private browsing at the first visit: its foot says it, rather than a notice", dropHome({ local: HOME_TEXT.private })],
+   ["Both at once: the error first", noticeWindow([NOTICES.link, NOTICES.private])]]]);
+
 addSection(() => ["Notices · the files refused while a build opens: choose the shape with the tabs « Notice »",
   [["Four files dropped, one build opened and shown: the notice names the three others and why, until it is closed", noticeWindow([NOTICES.refused])],
    ["One file refused", noticeWindow([NOTICES.refusedOne])]]]);

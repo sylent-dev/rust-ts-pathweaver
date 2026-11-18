@@ -5,6 +5,8 @@
 // The texts, in the translation file like every text.
 const HOME_TEXT = {
   local: "Your builds stay in this browser. Nothing is sent anywhere.",
+  // Private browsing (2l3): the browser refuses to keep the builds; Pathweaver works the same.
+  private: "This browser keeps nothing (private browsing): your builds will be gone once it's closed.",
 };
 // The sources of a file the interface may name (decided by the owner on 2026-11-16).
 const SOURCES = ["Mobalytics", "Maxroll", "poe.ninja", "Path of Building"];
