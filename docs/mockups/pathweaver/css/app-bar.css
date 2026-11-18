@@ -29,19 +29,18 @@
 :root:is([data-theme="frost-night"], [data-theme="ember"]), :is([data-sample-theme="frost-night"], [data-sample-theme="ember"]) { --site-band: var(--band-deep); --builds-band: var(--band-deep); }
 
 /* The end of the band (2e2, the owner, 2026-11-18): « +N ▾ » and + the full height of the band, told
-   apart by contrast, not by borders; one line only, after « +N ▾ ». « +N ▾ » in the blue of the
-   frame of the logo on the background of the band, turning white on hover and while open, like the
-   links of the band of the site; + the same, growing a little on hover, without a background
-   (the owner, 2026-11-18: soberer than the white background of before). Their states have classes
-   too (is-hover, is-open), to be shown side by side without the mouse. */
+   apart by contrast, without a line between them. « +N ▾ » in the blue of the frame of the logo on
+   the background of the band, turning white on hover and while open, like the links of the band of
+   the site. + opens a build, the button that matters most: a white background, its + in the
+   colour of the band, the background a little dimmed and the + a little larger on hover. Their
+   states have classes too (is-hover, is-open), to be shown side by side without the mouse. */
 .app-builds-more-wrap { position: relative; display: flex; align-self: stretch; }
 .app-builds-more, .app-builds-open { display: inline-flex; align-items: center; justify-content: center; gap: 5px; min-width: 44px; height: 100%; padding: 0 12px; border: none;
   cursor: pointer; font-size: 13px; transition: color .3s, background-color .3s; }
-.app-builds-more, .app-builds-open { background: var(--builds-band, var(--band-deep)); color: var(--accent); }
-/* The line between them in the blue too (the owner, 2026-11-18). */
-.app-builds-more { box-shadow: inset -1px 0 0 var(--accent); }
-.app-builds-more:is(:hover, .is-hover, .is-open), .app-builds-open:is(:hover, .is-hover) { color: var(--on-bar); }
-.app-builds-open { padding: 0; }
+.app-builds-more { background: var(--builds-band, var(--band-deep)); color: var(--accent); }
+.app-builds-more:is(:hover, .is-hover, .is-open) { color: var(--on-bar); }
+.app-builds-open { padding: 0; background: var(--on-bar); color: var(--builds-band, var(--band-deep)); }
+.app-builds-open:is(:hover, .is-hover) { background: color-mix(in srgb, var(--on-bar) 82%, transparent); }
 .app-builds-open svg { transition: transform .2s cubic-bezier(.34, 1.56, .64, 1); }
 .app-builds-open:is(:hover, .is-hover) svg { transform: scale(1.3); }
 

@@ -27,5 +27,5 @@ const menuCard = () => `<div class="menu-row">${shownStyles().map(style =>
 addSection(() => ["The menu of « +N ▾ » · open, in the style of the page: the builds that don't fit, then Merge…; click « +N ▾ » to see it open (5 · Pop)",
   [["Attached under the band, in its shade, each build a tab laid down", menuCard()]]]);
 
-addSection(() => ["The end of the band · « +N ▾ » and +, told apart by contrast, one line after « +N ▾ », at rest and on hover, in the style of the page",
+addSection(() => ["The end of the band · « +N ▾ » and +, told apart by contrast, no line between them, at rest and on hover, in the style of the page",
   [["A tinted background at rest, a stronger one on hover", endCard()]]]);
