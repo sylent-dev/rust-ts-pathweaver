@@ -34,11 +34,9 @@ const VARIANTS = {
   // The width of the windows of the home page (2l): the smallest, and a wide window of the owner's screen.
   homeWidth: { label: "Home width", options: { 960: "960 px", 1600: "1,600 px" }, fallback: "960" },
   // E1b, the first visit reworked by the owner (2026-11-18): what the pointer does on the graph
-  // paper, which lines the fluid runs along, and the mark of the brand behind the drop zone.
+  // paper, the opacity of the black of the drop zone, and the mark of the brand behind it.
   homePointer: { label: "Pointer", select: true, fallback: "fluid", options: { fluid: "The fluid on the lines", light: "The light (E1)", both: "Both" } },
-  fluidLines: { label: "Fluid lines", select: true, fallback: "main", options: { main: "The main lines (48 px)", every: "Every line (12 px)" } },
-  fluidVolatility: { label: "Volatility", range: { min: 0, max: 100, step: 5 }, unit: "%", fallback: "60" },
-  fluidPersistence: { label: "Persistence", range: { min: 940, max: 995, step: 1 }, fallback: "985" },
+  zoneOpacity: { label: "Zone", range: { min: 20, max: 90, step: 1 }, variable: "--home-zone-opacity", unit: "%", fallback: "50" },
   watermark: { label: "Watermark", range: { min: 0, max: 30, step: 1 }, variable: "--home-watermark", unit: "%", fallback: "7" },
   opacity: { label: "Opacity", range: { min: 0, max: 40, step: 1 }, variable: "--texture-opacity", unit: "%", fallback: "23" },
 };

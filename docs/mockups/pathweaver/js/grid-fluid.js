@@ -6,16 +6,16 @@
 // the pointer pours energy into the crossings around it as it moves, the energy spreads to the
 // neighbour crossings and fades, and each line glows with the energy of its two ends. A host marks
 // itself with data-home-fluid; the fluid is drawn in a canvas placed over its grid (.home-fluid).
-// « Fluid lines » sets the cell: the main lines of the paper, or every line.
+// It runs along the main lines of the paper, every 48 px (the owner, 2026-11-18).
 //
 // More organic, « like blood flowing in veins » (the owner, 2026-11-18), with « Volatility »: a
 // network of veins is laid on the grid once (random walks along its lines, which branch), the
 // same at each visit. The fluid poured off the veins fades fast; what reaches a vein runs along
 // it, downstream, in surges at each beat of a heart (lub, dub), and the glow swells with the beat.
-// « Persistence » sets how slowly the fluid fades in the veins. At 0 % of volatility and a
-// persistence of 968, the fluid of sylent.art.
+// The persistence sets how slowly the fluid fades in the veins. Tuned by the owner on sliders
+// (2026-11-18): a volatility of 65 %, a persistence of 975; at 0 % and 968, the fluid of sylent.art.
 
-const FLUID_CELLS = { main: 48, every: 12 };
+const FLUID_CELL = 48, FLUID_VOLATILITY = 0.65, FLUID_PERSISTENCE = 0.975;
 
 // A small seeded random, so that the veins are the same at each visit.
 function seededRandom(seed) {
@@ -68,10 +68,10 @@ function fluidOf(host) {
     canvas.setAttribute("aria-hidden", "true");
     host.querySelector(":scope > .home-drop-mark")?.after(canvas) ?? host.prepend(canvas);
   }
-  const cell = FLUID_CELLS[chosen.fluidLines] ?? 48;
+  const cell = FLUID_CELL;
   const width = canvas.clientWidth, height = canvas.clientHeight;
   let fluid = fluids.get(canvas);
-  if (!fluid || fluid.cell !== cell || fluid.width !== width || fluid.height !== height) {
+  if (!fluid || fluid.width !== width || fluid.height !== height) {
     const ratio = Math.min(devicePixelRatio, 2);
     canvas.width = Math.round(width * ratio);
     canvas.height = Math.round(height * ratio);
@@ -100,7 +100,7 @@ AFTER_RENDER.push(mountFluids);
 addEventListener("pointermove", event => {
   if (!fluidOn()) return;
   for (const host of document.querySelectorAll("[data-home-fluid]")) {
-    const fluid = fluidOf(host);   // made again when « Fluid lines » or the size changed
+    const fluid = fluidOf(host);   // made again when the size changed
     const box = fluid.canvas.getBoundingClientRect();
     const x = event.clientX - box.left, y = event.clientY - box.top;
     if (x < 0 || y < 0 || x > box.width || y > box.height) {
@@ -111,7 +111,7 @@ addEventListener("pointermove", event => {
     fluid.pointer = { x, y };
     const { cell, columns, rows, energy } = fluid;
     const amount = Math.min(0.9, 0.12 + moved / 60);
-    const volatility = Number(chosen.fluidVolatility) / 100;
+    const volatility = FLUID_VOLATILITY;
     const reach = cell * 1.6;
     for (let row = Math.max(0, Math.floor((y - reach) / cell)); row <= Math.min(rows - 1, Math.ceil((y + reach) / cell)); row++) {
       for (let column = Math.max(0, Math.floor((x - reach) / cell)); column <= Math.min(columns - 1, Math.ceil((x + reach) / cell)); column++) {
@@ -153,8 +153,8 @@ function fluidStep(fluid) {
   // Spread: each crossing moves toward the weighted mean of its neighbours, then fades: in a vein
   // at the persistence, off the veins faster as the volatility grows, so that the fluid stays in
   // the veins.
-  const volatility = Number(chosen.fluidVolatility) / 100;
-  const fade = Number(chosen.fluidPersistence) / 1000;
+  const volatility = FLUID_VOLATILITY;
+  const fade = FLUID_PERSISTENCE;
   const fadeOff = fade - volatility * 0.12;
   const time = performance.now() / 1000;
   const { onVein, down } = fluid;
