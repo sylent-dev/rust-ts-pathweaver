@@ -38,7 +38,7 @@ const VARIANTS = {
   titleFont: { label: "Title font", select: true, fallback: "archivo", options: { archivo: "Archivo condensed 900 (the brand)", "archivo-wide": "Archivo wide 800",
     manrope: "Manrope 800", geist: "Geist 700", space: "Space Grotesk 700", chakra: "Chakra Petch 700", unbounded: "Unbounded 700",
     shoulders: "Big Shoulders Display 900", bricolage: "Bricolage Grotesque 800", syne: "Syne 800", serif: "Instrument Serif" } },
-  titleCase: { label: "Title case", select: true, draw: true, fallback: "upper", options: { lower: "lowercase", upper: "UPPERCASE", capital: "Capital Case" } },
+  titleCase: { label: "Title case", select: true, draw: true, fallback: "upper", options: { lower: "lowercase", upper: "UPPERCASE", sentence: "Sentence case", capital: "Capital Case" } },
   titleSize: { label: "Title size", range: { min: 32, max: 96, step: 2 }, variable: "--home-title-size", unit: "px", fallback: "56" },
   titleSpacing: { label: "Title spacing", range: { min: -0.08, max: 0.2, step: 0.005 }, variable: "--home-title-spacing", unit: "em", fallback: "0" },
   opacity: { label: "Opacity", range: { min: 0, max: 40, step: 1 }, variable: "--texture-opacity", unit: "%", fallback: "23" },

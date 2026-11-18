@@ -10,7 +10,7 @@
 .home-title h1 { margin: 0; color: var(--text); font-family: var(--home-title-family, "Archivo"), sans-serif; font-stretch: 62%; font-weight: 900;
   font-size: var(--home-title-size, 56px); line-height: .92; letter-spacing: var(--home-title-spacing, 0em); text-transform: uppercase; text-wrap: balance; }
 :root[data-title-case="lower"] .home-title h1 { text-transform: lowercase; line-height: 1; }
-:root[data-title-case="capital"] .home-title h1 { text-transform: none; line-height: 1; }   /* its words written so (js/home-line.js) */
+:root:is([data-title-case="sentence"], [data-title-case="capital"]) .home-title h1 { text-transform: none; line-height: 1; }   /* its words written so (js/home-line.js) */
 :root[data-title-font="archivo-wide"] .home-title h1 { font-stretch: 125%; font-weight: 800; }
 :root[data-title-font="manrope"] .home-title h1 { --home-title-family: "Manrope"; font-weight: 800; }
 :root[data-title-font="geist"] .home-title h1 { --home-title-family: "Geist"; font-weight: 700; }

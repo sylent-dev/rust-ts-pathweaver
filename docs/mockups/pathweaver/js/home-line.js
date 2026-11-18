@@ -7,7 +7,8 @@
 // accent is the colour of the links, and they can't be clicked (the owner, 2026-11-18).
 
 // In capital case, its small word stays small, as English titles keep it (CSS would raise it).
-const HOME_TITLE = { lower: "Weave your path to level 100", upper: "Weave your path to level 100", capital: "Weave Your Path to Level 100" };
+const HOME_TITLE = { lower: "Weave your path to level 100", upper: "Weave your path to level 100", sentence: "Weave your path to level 100",
+  capital: "Weave Your Path to Level 100" };
 const HOME_SHOWS = ["The passive tree", "The skills", "The gear"];
 
 const homeTitle = () => `<div class="home-title">
