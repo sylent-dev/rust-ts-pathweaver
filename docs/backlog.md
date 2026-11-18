@@ -27,10 +27,6 @@ Set aside at the wireframes (2026-11-16, see `docs/wireframes/archive.excalidraw
 - **The art behind the groups of the passive tree** (noted 2026-11-18, with the icons of the passives at 2h2): `mastery-effect-active.webp` and `mastery-effect-disabled.webp` of the tree export, 640 KB, the large drawings of the 365 masteries; once the tree with its icons has been seen.
 
 
-## Motion
-
-- **The burst for a rare moment** (the owner, 2026-11-18, at 2e2: « le burst a quelque chose »): the opening 9 · Burst of the menu of « +N ▾ » (it bursts out turned and small, in a flash of the blue of the logo that fades; css/menu-reveal.css at commit 4d866fd), set aside for a menu opened often, kept for a moment that happens once in a while, such as a build that has just opened; for step 2j, the motion.
-
 ## Merging a guide
 
 - **Offer to merge the files of a guide** (an idea of Claude Code, taken by the owner on 2026-11-18 at step 2e2; for step 7, which it depends on): when several open builds share their `link` and their ascendancy, a line under the band of the open builds offers « 3 builds of the same guide · Merge », which opens the merging screen with them ticked. Merge… stays in the menu « +N ▾ », where it is hidden for a feature that sets Pathweaver apart.

@@ -2,6 +2,6 @@
    nine looks (three at a normal temperature, three high, three explosive): the menu grows out of
    « +N ▾ », its corner on the button, and goes a little past its size before it settles. It plays
    each time the menu is drawn. The eight others are in the history of Git (commit 4d866fd); 9 · Burst
-   waits in the backlog, for a rarer moment. */
+   opens the box of What's next instead (the owner, 2026-11-18, step 2k). */
 .app-builds-menu { transform-origin: top right; animation: reveal-pop 280ms cubic-bezier(.34, 1.56, .64, 1) both; }
 @keyframes reveal-pop { from { opacity: 0; transform: scale(.85); } }
