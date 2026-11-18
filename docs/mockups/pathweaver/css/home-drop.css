@@ -31,10 +31,13 @@
 .home-drop-zone strong { font-size: 22px; font-weight: 600; letter-spacing: -.01em; }
 .home-drop-zone span { color: var(--weak); font-size: 13.5px; }
 .home-drop-zone:is(:hover, .is-hover) { background: rgb(0 0 0 / min(100%, calc(var(--home-zone-opacity, 50%) + 15%))); }
-.home-drop-zone:is(:hover, .is-hover) > .app-icon { transform: translateY(-4px); }
+/* The corners close in toward the + rather than the icon rising (the owner, 2026-11-18): each
+   along its diagonal, in units of the icon (24 a side); a little on hover, firmly with a file. */
+.drop-mark-corner { transition: transform .35s cubic-bezier(.34, 1.56, .64, 1); }
+.home-drop-zone:is(:hover, .is-hover) .drop-mark-corner { transform: translate(1.2px, 1.2px); }
+.home-drop.is-drag .home-drop-zone .drop-mark-corner { transform: translate(2.4px, 2.4px); }
 .home-drop.is-drag .home-drop-zone { background: color-mix(in srgb, var(--accent) 16%, var(--page));
   box-shadow: 0 0 0 8px color-mix(in srgb, var(--accent) 16%, transparent), 0 0 60px color-mix(in srgb, var(--accent) 45%, transparent); transform: scale(1.03); }
-.home-drop.is-drag .home-drop-zone > .app-icon { transform: translateY(6px); }
 
 /* Paste JSON, a link under the zone, like the links of the band of the site (its line on hover). */
 .home-drop-paste.app-site-link { height: 32px; padding: 0 4px; }
