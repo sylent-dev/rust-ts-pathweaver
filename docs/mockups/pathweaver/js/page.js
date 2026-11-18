@@ -35,7 +35,7 @@ const VARIANTS = {
   // The width of the windows of the home page (2l): the smallest, and a wide window of the owner's screen.
   homeWidth: { label: "Home width", options: { 960: "960 px", 1600: "1,600 px" }, fallback: "960" },
   // The font, the case, the size and the spacing of the letters of the title of the drop zone of E1b (js/home-line.js).
-  titleFont: { label: "Title font", select: true, fallback: "archivo", options: { archivo: "Archivo condensed 900 (the brand)", "archivo-wide": "Archivo wide 800",
+  titleFont: { label: "Title font", select: true, fallback: "archivo", options: { archivo: "Archivo condensed 900 (the brand)", "archivo-normal": "Archivo 800 (its normal width)", "archivo-wide": "Archivo wide 800",
     manrope: "Manrope 800", geist: "Geist 700", space: "Space Grotesk 700", chakra: "Chakra Petch 700", unbounded: "Unbounded 700",
     shoulders: "Big Shoulders Display 900", bricolage: "Bricolage Grotesque 800", syne: "Syne 800", serif: "Instrument Serif" } },
   titleCase: { label: "Title case", select: true, draw: true, fallback: "upper", options: { lower: "lowercase", upper: "UPPERCASE", sentence: "Sentence case", capital: "Capital Case" } },

@@ -11,6 +11,7 @@
   font-size: var(--home-title-size, 56px); line-height: .92; letter-spacing: var(--home-title-spacing, 0em); text-transform: uppercase; text-wrap: balance; }
 :root[data-title-case="lower"] .home-title h1 { text-transform: lowercase; line-height: 1; }
 :root:is([data-title-case="sentence"], [data-title-case="capital"]) .home-title h1 { text-transform: none; line-height: 1; }   /* its words written so (js/home-line.js) */
+:root[data-title-font="archivo-normal"] .home-title h1 { font-stretch: 100%; font-weight: 800; }
 :root[data-title-font="archivo-wide"] .home-title h1 { font-stretch: 125%; font-weight: 800; }
 :root[data-title-font="manrope"] .home-title h1 { --home-title-family: "Manrope"; font-weight: 800; }
 :root[data-title-font="geist"] .home-title h1 { --home-title-family: "Geist"; font-weight: 700; }
