@@ -29,15 +29,19 @@
 :root:is([data-theme="frost-night"], [data-theme="ember"]), :is([data-sample-theme="frost-night"], [data-sample-theme="ember"]) { --site-band: var(--band-deep); --builds-band: var(--band-deep); }
 
 /* The end of the band (2e2, the owner, 2026-11-18): « +N ▾ » and + the full height of the band, told
-   apart by contrast, not by borders: in the colour of the frame of the logo, no background at rest,
-   a tinted one on hover and while open; one line only, after « +N ▾ ». Their states have classes too (is-hover, is-open), to be
+   apart by contrast, not by borders: in the colour of the frame of the logo; « +N ▾ » without background at rest,
+   a tinted one on hover and while open, + on white; one line only, after « +N ▾ ». Their states have classes too (is-hover, is-open), to be
    shown side by side without the mouse. */
 .app-builds-more-wrap { position: relative; display: flex; align-self: stretch; }
 .app-builds-more, .app-builds-open { display: inline-flex; align-items: center; justify-content: center; gap: 5px; min-width: 44px; height: 100%; padding: 0 12px; border: none;
   background: none; color: var(--accent); cursor: pointer; font-size: 13px; }
 .app-builds-open { padding: 0; }
 .app-builds-more { box-shadow: inset -1px 0 0 color-mix(in srgb, var(--on-bar) 24%, transparent); }
-:is(.app-builds-more, .app-builds-open):is(:hover, .is-hover) { background: color-mix(in srgb, var(--on-bar) 16%, transparent); }
+.app-builds-more:is(:hover, .is-hover) { background: color-mix(in srgb, var(--on-bar) 16%, transparent); }
+/* + opens a build, the button that matters most: a white background, its + in the blue of the
+   frame of the logo; a little dimmed on hover (the owner, 2026-11-18). */
+.app-builds-open { background: var(--on-bar); }
+.app-builds-open:is(:hover, .is-hover) { background: color-mix(in srgb, var(--on-bar) 82%, transparent); }
 .app-builds-more.is-open { background: color-mix(in srgb, var(--on-bar) 20%, transparent); }
 
 /* The menu (the owner, 2026-11-18): attached under the band, in its shade, square corners, each
