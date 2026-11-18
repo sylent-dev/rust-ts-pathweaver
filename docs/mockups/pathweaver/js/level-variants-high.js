@@ -3,7 +3,9 @@
 addLevelVariant({ n: 6, temperature: "high", name: "Giant level",
   note: "kept: « Level » over the level in Archivo 800 at 58 px, centred; ◀ and ▶ stacked as two half-height blocks; the track of L2 on their seam, the markers in the accent, the cursor of the level white; « N changes at N », a link to the window of what changes (js/level-changes.js)",
   render: (context, { window = false } = {}) => {
-    const width = 400;
+    // The track as long as the band allows (the owner, 2026-11-18): up to the link, which starts on
+    // the D of Download .build in the header.
+    const width = 596;
     const record = BUILDS.changes.shown.levels[context.level];
     const open = window && STATE.changesOpen && record !== undefined;
     return `<div class="lv lv6">

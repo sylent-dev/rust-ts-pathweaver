@@ -208,36 +208,60 @@ def plain(text):
 
 
 def state_at(build, level, ascendancy):
-    """What a build holds at a level: its skills (id → support ids, and their notes), its gear
-    ((slot, x, y) → item) and its passives ((id, weapon set) → whether it is of the ascendancy)."""
+    """What a build holds at a level, as its file says: its skills (id → note, and support id →
+    note), its gear (slot id → the items of its hints, each with its text; a list, since the three
+    charms share Charm1, whatever their place) and its passives ((id, weapon set) → of the
+    ascendancy, with a note)."""
     applies = lambda entry: isinstance(entry, dict) and interval(entry)[0] <= level <= interval(entry)[1]
-    note = lambda entry: bool((entry.get("additional_text") or "").strip())
+    text = lambda entry: (entry.get("additional_text") or "").strip()
     skills, notes = {}, {}
     for skill in filter(applies, build.get("skills", [])):
         supports = skills.setdefault(skill["id"], {})
-        notes[skill["id"]] = notes.get(skill["id"], False) or note(skill)
+        notes[skill["id"]] = notes.get(skill["id"], "") + text(skill)
         for support in filter(applies, skill.get("support_skills", [])):
-            supports[support["id"]] = supports.get(support["id"], False) or note(support)
-    # A slot by its id and its place: the charms share one id (Charm1), told apart by slot_x.
-    gear = {(slot["inventory_id"], slot.get("slot_x", 0), slot.get("slot_y", 0)):
-            (plain(slot.get("unique_name") or first_line(slot.get("additional_text"))), bool(slot.get("unique_name")))
-            for slot in filter(applies, build.get("inventory_slots", []))}
-    passives = {(p["id"], p.get("weapon_set", 0)): (p["id"] in ascendancy, note(p))
+            supports[support["id"]] = supports.get(support["id"], "") + text(support)
+    gear = {}
+    for slot in filter(applies, build.get("inventory_slots", [])):
+        name = plain(slot.get("unique_name") or first_line(slot.get("additional_text")))
+        gear.setdefault(slot["inventory_id"], []).append((name, bool(slot.get("unique_name")), text(slot)))
+    passives = {(p["id"], p.get("weapon_set", 0)): (p["id"] in ascendancy, bool(text(p)))
                 for p in filter(applies, build.get("passives", []))}
     return skills, notes, gear, passives
 
 
+def gear_changes(gear, old_gear):
+    """The hints added, replaced (another item on a slot that holds one), removed, and set again
+    with another text, slot by slot."""
+    added, replaced, removed, retold = [], [], [], []
+    for slot in sorted(set(gear) | set(old_gear)):
+        new = [entry[:2] for entry in gear.get(slot, [])]
+        old = [entry[:2] for entry in old_gear.get(slot, [])]
+        coming = [entry for entry in new if entry not in old]
+        going = [entry for entry in old if entry not in new]
+        # A hint replaces another only when one leaves and one comes on its slot: where several
+        # share a slot (the flasks, the charms), which replaces which can't be read from the file.
+        pairs = 1 if len(coming) == len(going) == 1 else 0
+        item = lambda entry: dict(slot=slot, item=entry[0], unique=entry[1])
+        replaced += [dict(item(c), before=g[0]) for c, g in zip(coming[:pairs], going[:pairs])]
+        added += [item(c) for c in coming[pairs:]]
+        removed += [item(g) for g in going[pairs:]]
+        old_texts = {entry[:2]: entry[2] for entry in old_gear.get(slot, [])}
+        retold += [dict(name=entry[0], kind="gear", on=slot) for entry in gear.get(slot, [])
+                   if entry[:2] in old_texts and old_texts[entry[:2]] != entry[2]]
+    return {"added": added, "replaced": replaced, "removed": removed}, retold
+
+
 def changes_at(build, level, tree, names, gems):
-    """What changes at a level, by category (2g, the owner, 2026-11-18): what the build holds at it
-    and didn't hold at the level before, and the reverse. An entry that stops and starts again the
-    same at the next level changes nothing (70 of the 81 supports « added » at 71 by a build of the
-    corpus). A gem or a hint counts as one change, each group of passives as one; a new skill
-    brings its supports with it; a note of the author marks its entry rather than counting."""
+    """What changes at a level, by category (2g, the owner, 2026-11-18): what the file says the
+    build holds at it and didn't hold at the level before, and the reverse. An entry that stops and
+    starts again the same at the next level (the same id, the same place, the same note) changes
+    nothing: 70 of the 81 supports « added » at 71 by a build of the corpus; one that comes back with
+    another note of its author is a change of its note. A gem, a hint or a note counts as one change,
+    each group of passives as one; a new skill brings its supports with it."""
     ascendancy = {node["id"] for node in tree["nodes"].values() if node.get("ascendancyId") and "id" in node}
     skills, notes, gear, passives = state_at(build, level, ascendancy)
-    old_skills, _, old_gear, old_passives = state_at(build, level - 1, ascendancy) if level > 1 else ({}, {}, {}, {})
-    named = lambda gem_id, note=False: dict(name=gem({"id": gem_id}, names, gems)["name"], colour=gem({"id": gem_id}, names, gems)["colour"], note=note)
-    item = lambda slot, value: dict(slot=slot[0], item=value[0], unique=value[1])
+    old_skills, old_notes, old_gear, old_passives = state_at(build, level - 1, ascendancy) if level > 1 else ({}, {}, {}, {})
+    named = lambda gem_id, note="": dict(name=gem({"id": gem_id}, names, gems)["name"], colour=gem({"id": gem_id}, names, gems)["colour"], note=bool(note))
     # The passives taken at the level: (weapon set, of the ascendancy, with a note) of each.
     taken = [(key[1], asc, has_note) for key, (asc, has_note) in passives.items() if key not in old_passives]
     groups = {
@@ -248,24 +272,26 @@ def changes_at(build, level, tree, names, gems):
         "givenBack": sum(1 for key in old_passives if key not in passives),
         "notes": sum(1 for _, _, has_note in taken if has_note),
     }
+    kept = [i for i in skills if i in old_skills]
+    gear_record, gear_notes = gear_changes(gear, old_gear)
     record = {
         "skills": {
             "added": [dict(named(i, notes[i]), supports=[named(s, n) for s, n in skills[i].items()]) for i in skills if i not in old_skills],
             "removed": [named(i) for i in old_skills if i not in skills],
         },
         "supports": {
-            "added": [dict(named(s, n), skill=named(i)["name"]) for i in skills if i in old_skills for s, n in skills[i].items() if s not in old_skills[i]],
-            "removed": [dict(named(s), skill=named(i)["name"]) for i in skills if i in old_skills for s in old_skills[i] if s not in skills[i]],
+            "added": [dict(named(s, n), skill=named(i)["name"]) for i in kept for s, n in skills[i].items() if s not in old_skills[i]],
+            "removed": [dict(named(s), skill=named(i)["name"]) for i in kept for s in old_skills[i] if s not in skills[i]],
         },
         "passives": groups,
-        "gear": {
-            "added": [item(slot, value) for slot, value in gear.items() if slot not in old_gear],
-            "replaced": [dict(item(slot, value), before=old_gear[slot][0]) for slot, value in gear.items() if slot in old_gear and old_gear[slot] != value],
-            "removed": [item(slot, value) for slot, value in old_gear.items() if slot not in gear],
-        },
+        "gear": gear_record,
+        "notes": [dict(name=named(i)["name"], kind="skill") for i in kept if notes[i] != old_notes[i]]
+                 + [dict(name=named(s)["name"], kind="support", on=named(i)["name"]) for i in kept for s in skills[i]
+                    if s in old_skills[i] and skills[i][s] != old_skills[i][s]]
+                 + gear_notes,
     }
     count = (sum(len(v) for part in ("skills", "supports", "gear") for v in record[part].values())
-             + sum(1 for key, value in groups.items() if key != "notes" and value > 0))
+             + len(record["notes"]) + sum(1 for key, value in groups.items() if key != "notes" and value > 0))
     return dict(record, count=count) if count else None
 
 

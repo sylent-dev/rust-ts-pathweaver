@@ -12,17 +12,21 @@ ICONS.note = '<path d="M3.5 2.5h9v11h-9z"/><path d="M5.8 5.5h4.4M5.8 8h4.4M5.8 1
 const noteMark = has => has ? `<span class="lvc-note" title="The author left a note">${icon(12, ICONS.note)}</span>` : "";
 const gemSquare = colour => `<i class="lvc-gem" style="background:${gemColour(colour)}"></i>`;
 
-// The link of the band: the number of changes, or « Nothing changes » in grey when there is none.
+// The link of the band: the number of changes, or « No change » in grey when there is none (short
+// enough for the column of Download .build);
+// no chevron, since it opens a window, not a menu (the owner, 2026-11-18).
 function changesLink(record, level, open) {
-  if (!record) return `<span class="lvc-none">Nothing changes at ${level}</span>`;
-  return `<button type="button" class="lvc-link ${open ? "is-open" : ""}" data-action="changes-toggle" aria-expanded="${open}">${plural(record.count, "change")} at ${level}${icon(12, ICONS.down)}</button>`;
+  if (!record) return `<span class="lvc-none">No change at ${level}</span>`;
+  return `<button type="button" class="lvc-link ${open ? "is-open" : ""}" data-action="changes-toggle" aria-expanded="${open}">${plural(record.count, "change")} at ${level}</button>`;
 }
 
 function changesWindow(record, level, { opening = false } = {}) {
   const row = (sign, body) => `<li class="lvc-row ${sign === "−" ? "is-removed" : ""}"><span class="lvc-sign">${sign}</span><span class="lvc-body">${body}</span></li>`;
   const part = (title, rows) => rows.length === 0 ? "" : `<section class="lvc-part"><h3 class="lvc-title">${title}<span>${rows.length}</span></h3><ul>${rows.join("")}</ul></section>`;
-  const { skills, supports, passives, gear } = record;
+  const { skills, supports, passives, gear, notes } = record;
   const slot = id => escapeHtml(SLOT_NAMES[id] ?? id);
+  // A note set again with other words: on a gem, the note of its author; on a hint, its text.
+  const noteOf = entry => entry.kind === "gear" ? `${slot(entry.on)} · new text` : entry.kind === "support" ? `on ${escapeHtml(entry.on)} · new note` : "new note";
   const itemName = entry => `${escapeHtml(entry.item || "a hint")}${entry.unique ? ' <span class="lvc-tag">unique</span>' : ""}`;
   const passiveRows = [
     passives.taken > 0 ? row("+", plural(passives.taken, "passive")) : "",
@@ -48,6 +52,7 @@ function changesWindow(record, level, { opening = false } = {}) {
       ...gear.replaced.map(entry => row("⇄", `<span class="lvc-slot">${slot(entry.slot)}</span><span class="lvc-item">${itemName(entry)} <span class="lvc-on">for ${escapeHtml(entry.before || "a hint")}</span></span>`)),
       ...gear.removed.map(entry => row("−", `<span class="lvc-slot">${slot(entry.slot)}</span><span class="lvc-item">${itemName(entry)}</span>`)),
     ])}
+    ${part("Notes", notes.map(entry => row(icon(12, ICONS.note), `${escapeHtml(entry.name)} <span class="lvc-on">${noteOf(entry)}</span>`)))}
   </div>`;
 }
 

@@ -17,8 +17,10 @@
 .lv6 .lv2-tick { top: 36px; background: var(--accent); }
 .lv6 .lv2-cursor { top: 28px; background: var(--on-band); }   /* no glow: hard to judge, kitsch at worst (the owner, 2026-11-18) */
 .lv6 .lv-end { top: 52px; }
-/* « N changes at N » and its window (css/level-changes.css): the window hangs under the band, over
-   the page, its right edge on the margin of the band. */
+/* « N changes at N » and its window (css/level-changes.css): the link starts on the D of Download
+   .build in the header, 842 px from the left of a window of 960, the two in one column (the owner,
+   2026-11-18, rather than ending on it, which left the track shorter and the end of the band empty);
+   the window hangs under the band, over the page, its right edge on the margin of the band. */
 .lv6 { overflow: visible; z-index: 4; }
 .lv6-changes { position: relative; flex: 1; align-self: stretch; display: flex; align-items: center; min-width: 0; }
 

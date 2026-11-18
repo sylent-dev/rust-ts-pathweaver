@@ -2,11 +2,9 @@
 
 /* The link: in the accent, the colour of the text on hover and while its window is open, like
    Download .build and « +N ▾ ». */
-.lv .lvc-link { display: inline-flex; align-items: center; gap: 6px; height: 44px; color: var(--accent); font-size: 13px; font-weight: 600; transition: color .3s; }
+.lv .lvc-link { height: 44px; color: var(--accent); font-size: 13px; font-weight: 600; white-space: nowrap; transition: color .3s; }
 .lv .lvc-link:hover, .lv .lvc-link.is-open { color: var(--on-band); }
-.lvc-link .app-icon { transition: transform .2s; }
-.lvc-link.is-open .app-icon { transform: rotate(180deg); }
-.lvc-none { color: var(--on-band-weak); font-size: 13px; }
+.lvc-none { color: var(--on-band-weak); font-size: 13px; white-space: nowrap; }
 
 /* The window: attached under the band, in its shade, square corners, its right edge on the margin
    of the band; it scrolls when a level changes more than it holds. */
@@ -39,5 +37,5 @@
    link open, the page under it where the window hangs. */
 .lvc-case { position: relative; overflow: visible; }
 .lvc-case .lv { justify-content: space-between; padding: 0 18px 0 22px; overflow: visible; z-index: 4; }
-.lvc-case .lv6-changes { flex: none; }
+.lvc-case .lv6-changes { flex: none; width: 100px; }
 .lvc-case-page { height: 440px; }
