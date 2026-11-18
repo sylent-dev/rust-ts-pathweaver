@@ -20,11 +20,6 @@ const THEMES = {
 
 
 const VARIANTS = {
-  // The shadow under the band of the open builds (2e2, css/tokens.css), tuned by eye.
-  shadowY: { label: "Shadow offset", range: { min: 0, max: 8, step: 1 }, variable: "--shadow-y", unit: "px", fallback: "1" },
-  shadowBlur: { label: "Shadow blur", range: { min: 0, max: 24, step: 1 }, variable: "--shadow-blur", unit: "px", fallback: "3" },
-  shadowLight: { label: "Shadow, light", range: { min: 0, max: 60, step: 1 }, variable: "--shadow-alpha-light", unit: "%", fallback: "10" },
-  shadowDark: { label: "Shadow, dark", range: { min: 0, max: 80, step: 1 }, variable: "--shadow-alpha-dark", unit: "%", fallback: "45" },
   theme: { label: "Style", options: Object.fromEntries(Object.entries(THEMES).map(([key, theme]) => [key, theme.title])), fallback: "frost-night" },
   // The second accent (css/accent-2.css): its colour, and what it marks.
   accent2: { label: "Accent 2", select: true, fallback: "amber", options: { amber: "Amber", blue: "Blue", coral: "Coral", mint: "Mint",

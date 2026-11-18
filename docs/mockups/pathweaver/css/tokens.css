@@ -24,8 +24,8 @@
   --brand-name-offset: 1px;   /* the name 1 px below the middle of the mark, by eye (the owner, 2026-11-17) */
   /* The name of Pathweaver, the same in every style (the owner, 2026-11-17): Archivo in its own weight, tight. */
   --brand-font: "Archivo", sans-serif;
-  /* The shadow under the band of the open builds, very light; its offset, blur and opacity tuned by eye
-     with the sliders of the page (2e2), the opacity apart for the light style and the dark ones. */
+  /* The shadow under the band of the open builds, very light (2e2, the owner, 2026-11-18): 1 px down,
+     3 px of blur, its opacity apart for the light style and the dark ones. */
   --shadow-y: 1px;
   --shadow-blur: 3px;
   --shadow-alpha-light: 10%;
