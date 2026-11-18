@@ -20,12 +20,12 @@
 /* The close button (the owner, 2026-11-18: larger): a square of 44 px on the right, centred on the
    height of the notice, its × in the
    vivid red of the errors (grey on private browsing, which isn't one), turning white on hover
-   while it grows like the + of the band of the open builds and turns 90° to the right (a quarter
-   turn keeps it a ×; 45° would make it a +), with the same small overshoot; the background
+   while it grows like the + of the band of the open builds, with the same small overshoot,
+   without turning (the owner, 2026-11-18); the background
    unchanged; at once when the system asks for less motion. */
 .app-notice-close { flex: none; display: grid; place-items: center; align-self: center; width: 44px; height: 44px; padding: 0; border: none; background: none; color: var(--error); cursor: pointer; transition: color .2s; }
 .app-notice.is-info .app-notice-close { color: var(--weak); }
 .app-notice .app-notice-close:is(:hover, .is-hover) { color: #ffffff; }
 .app-notice-close svg { transition: transform .2s cubic-bezier(.34, 1.56, .64, 1); }
-.app-notice-close:is(:hover, .is-hover) svg { transform: scale(1.3) rotate(90deg); }
+.app-notice-close:is(:hover, .is-hover) svg { transform: scale(1.3); }
 @media (prefers-reduced-motion: reduce) { .app-notice-close, .app-notice-close svg { transition: none; } }
