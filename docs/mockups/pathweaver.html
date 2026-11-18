@@ -8,7 +8,7 @@
   The mock-up of Pathweaver (html-mockups skill), from the wireframes of docs/wireframes/.
   This page only loads the small files of pathweaver/, in order: the styles (the page, the
   tokens of each style and the second accent, then one sheet per block, the texture last),
-  the scripts (the page and its controls, the shared helpers, the sample data, one script per
+  the scripts (the fonts proposed for each role, the page and its controls, the shared helpers, the sample data, one script per
   block), the sections, and the rendering last.
   Plain tags, no modules, so that the files share their constants.
 
@@ -44,12 +44,14 @@
 <link rel="stylesheet" href="pathweaver/css/home-line.css">
 <link rel="stylesheet" href="pathweaver/css/library.css">
 <link rel="stylesheet" href="pathweaver/css/notices.css">
+<link rel="stylesheet" href="pathweaver/css/fonts.css">
 <link rel="stylesheet" href="pathweaver/css/textures.css">
 </head>
 <body>
 <p class="page-warning" id="file-warning" hidden>Opened as a file: serve the repository root (see the comment at the top of this page) so that every file of the mock-up loads.</p>
 <nav class="page-tabs" id="tabs" aria-label="Styles and variants"></nav>
 <main id="sheet"></main>
+<script src="pathweaver/js/role-fonts.js"></script>
 <script src="pathweaver/js/page.js"></script>
 <script src="pathweaver/js/icons.js"></script>
 <script src="pathweaver/js/data-tree.js"></script>
@@ -76,6 +78,7 @@
 <script src="pathweaver/sections/home-paste.js"></script>
 <script src="pathweaver/sections/library.js"></script>
 <script src="pathweaver/sections/notices.js"></script>
+<script src="pathweaver/sections/fonts.js"></script>
 <script src="pathweaver/js/render.js"></script>
 </body>
 </html>
