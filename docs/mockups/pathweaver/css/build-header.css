@@ -5,5 +5,16 @@
 .app-header-by { margin: 2px 0 0; font-size: 13px; }
 /* The class, a grey a little darker than the rest of the line: the weak grey mixed with the page. */
 .app-header-class { color: color-mix(in srgb, var(--weak) 70%, var(--page)); }
-.app-header-actions { display: flex; gap: 8px; align-self: flex-start; margin-top: 10px; }
+.app-header-actions { display: flex; align-items: center; gap: 8px; }
 .app-header-portrait { flex: none; display: block; height: 100%; aspect-ratio: 1; object-fit: cover; }
+
+/* The file of the build (2f2): a page, « Download .build » in the accent over its size, no field.
+   On hover, its words turn from the accent to the colour of the text, without a line (the owner,
+   2026-11-18). */
+.app-file { display: flex; align-items: center; gap: 10px; height: 48px; padding: 0 4px 0 10px; border: none; background: none; text-align: left; cursor: pointer; }
+.app-file:active { cursor: grabbing; }
+.app-file-icon { flex: none; display: block; }
+.app-file-text { display: flex; flex-direction: column; gap: 4px; }
+.app-file-label { color: var(--accent); font-size: 13px; font-weight: 600; line-height: 1.1; transition: color .3s; }
+.app-file:hover .app-file-label { color: var(--text); }
+.app-file small { color: var(--weak); font-size: 12px; line-height: 1.1; }
