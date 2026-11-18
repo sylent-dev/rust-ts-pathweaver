@@ -10,7 +10,7 @@ const dropZoneCall = drag => `${dropMark(56)}
   <strong>${drag ? "Let go to open it" : "Add your first build"}</strong>
   <span>${drag ? "1 file over the page" : "Drop a .build file here, or click to choose it"}</span>`;
 
-const dropHome = ({ drag = false, zone = dropZoneCall(drag), state = "", field = false, link = dropLink("Paste JSON") } = {}) => homeWindow("drop", `
+const dropHome = ({ drag = false, zone = dropZoneCall(drag), state = "", field = false, link = dropLink("Paste JSON"), local = HOME_TEXT.local } = {}) => homeWindow("drop", `
   <div class="home-drop-mark">${logoMark(620)}</div>
   <div class="home-drop-top">${homeBrand(26)}${homeLinks()}</div>
   <div class="home-drop-main">
@@ -21,7 +21,7 @@ const dropHome = ({ drag = false, zone = dropZoneCall(drag), state = "", field =
     </div>
     ${link}
   </div>
-  <div class="home-drop-sources">From ${SOURCES.join(" · ")} · ${HOME_TEXT.local}</div>`, { band: false })
+  <div class="home-drop-sources">From ${SOURCES.join(" · ")} · ${local}</div>`, { band: false })
   .replace('home-drop"', `home-drop${drag ? ' is-drag" data-held="' : ""}" data-home-fluid`);
 
 addSection(() => ["Home · the first visit: move the pointer over the graph paper",
