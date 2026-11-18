@@ -12,11 +12,19 @@ const endCard = () => `<div class="tab-card">
     `<div class="tab-strip end-strip">${buildsBand(420, { builds: SEVEN_BUILDS, menuOpen: false, ...states })}<div class="tab-strip-page"></div></div>`).join("")}</div>`).join("")}
 </div>`;
 
+// The menu of this section opens and closes on its own, open at first: a click on « +N ▾ » plays
+// the opening chosen in the list « Menu opening » (css/menu-reveal.css), and so does a new choice.
+STATE.menuDemo = true;
+ACTIONS.toggleMenuDemo = () => {
+  STATE.menuDemo = !STATE.menuDemo;
+  return true;
+};
+
 const menuCard = () => `<div class="menu-row">${shownStyles().map(style =>
   `<div class="app-window menu-window" data-sample-theme="${style}" title="${THEMES[style].title}" style="width:560px">${
-    buildsBand(560, { builds: SEVEN_BUILDS, menuOpen: true })}<div class="menu-page"></div></div>`).join("")}</div>`;
+    buildsBand(560, { builds: SEVEN_BUILDS, menuOpen: STATE.menuDemo, action: "toggleMenuDemo" })}<div class="menu-page"></div></div>`).join("")}</div>`;
 
-addSection(() => ["The menu of « +N ▾ » · open, in the style of the page: the builds that don't fit, then Merge…",
+addSection(() => ["The menu of « +N ▾ » · open, in the style of the page: the builds that don't fit, then Merge…; click « +N ▾ » to see it open, the look picked in the list « Menu opening »",
   [["Attached under the band, in its shade, each build a tab laid down", menuCard()]]]);
 
 addSection(() => ["The end of the band · « +N ▾ » and +, told apart by contrast, one line after « +N ▾ », at rest and on hover, in the style of the page",

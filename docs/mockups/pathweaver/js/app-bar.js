@@ -34,13 +34,13 @@ const openBuildTab = (build, states = "") => `<div class="app-builds-tab ${state
 const TAB_WIDTH = 184, TAB_MAX_WIDTH = 240, TAB_GAP = 0;
 STATE.buildsMenu = false;
 
-const menuBuild = build => `<div class="app-builds-menu-item" role="menuitem" title="${escapeHtml(build.name)} · ${escapeHtml(build.ascendancy)}">
+const menuBuild = (build, row) => `<div class="app-builds-menu-item" role="menuitem" style="--row:${row}" title="${escapeHtml(build.name)} · ${escapeHtml(build.ascendancy)}">
   <img class="app-builds-menu-portrait" src="pathweaver/img/portraits-square/${build.portrait}.webp" width="44" height="44" alt="">
   <span class="app-builds-menu-text"><span class="app-builds-menu-name">${escapeHtml(build.name)}</span><span class="app-builds-menu-ascendancy">${escapeHtml(build.ascendancy)}</span></span>
 </div>`;
 
 function buildsBand(width, { builds = BUILDS.open, menuOpen = STATE.buildsMenu,
-  moreState = "", openState = "" } = {}) {
+  moreState = "", openState = "", action = "toggleBuildsMenu" } = {}) {
   const room = width - 12 - 110;   // the padding on the right, then « +N ▾ » and +
   const fit = Math.max(1, Math.floor((room + TAB_GAP) / (TAB_WIDTH + TAB_GAP)));
   const shown = builds.slice(0, fit);
@@ -49,10 +49,10 @@ function buildsBand(width, { builds = BUILDS.open, menuOpen = STATE.buildsMenu,
   return `<div class="app-builds" style="--tab-width:${tabWidth}px">
     <div class="app-builds-tabs" role="tablist">${shown.map((build, index) => openBuildTab(build, index === 0 ? "is-current" : "")).join("")}</div>
     <span class="app-builds-more-wrap">
-      <button type="button" class="app-builds-more ${moreState} ${menuOpen ? "is-open" : ""}" data-action="toggleBuildsMenu" aria-expanded="${menuOpen}" aria-label="More builds and Merge">${hidden.length ? `+${hidden.length}` : ""}${icon(12, ICONS.down)}</button>
+      <button type="button" class="app-builds-more ${moreState} ${menuOpen ? "is-open" : ""}" data-action="${action}" aria-expanded="${menuOpen}" aria-label="More builds and Merge">${hidden.length ? `+${hidden.length}` : ""}${icon(12, ICONS.down)}</button>
       ${menuOpen ? `<div class="app-builds-menu" role="menu">${hidden.map(menuBuild).join("")}
-        ${hidden.length ? `<div class="app-builds-menu-line"></div>` : ""}
-        <div class="app-builds-menu-item app-builds-menu-merge" role="menuitem">Merge…</div>
+        ${hidden.length ? `<div class="app-builds-menu-line" style="--row:${hidden.length}"></div>` : ""}
+        <div class="app-builds-menu-item app-builds-menu-merge" role="menuitem" style="--row:${hidden.length + 1}">Merge…</div>
       </div>` : ""}
     </span>
     <button type="button" class="app-builds-open ${openState}" title="Open files or paste JSON" aria-label="Open files or paste JSON">${icon(14, ICONS.plus)}</button>
