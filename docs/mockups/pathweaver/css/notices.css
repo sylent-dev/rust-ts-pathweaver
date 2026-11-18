@@ -17,12 +17,13 @@
 .app-notice-reason { color: var(--error); }
 .app-notice code { margin-left: 8px; padding: 1px 6px; background: rgb(0 0 0 / 28%); font-family: var(--font-number); font-size: 10.5px; }
 .app-notice-note { color: var(--weak); }
-/* The close button (the owner, 2026-11-18: larger): a square of 44 px in the corner, its × in the
+/* The close button (the owner, 2026-11-18: larger): a square of 44 px on the right, centred on the
+   height of the notice, its × in the
    vivid red of the errors (grey on private browsing, which isn't one), turning white on hover
    while it grows like the + of the band of the open builds and turns 90° to the right (a quarter
    turn keeps it a ×; 45° would make it a +), with the same small overshoot; the background
    unchanged; at once when the system asks for less motion. */
-.app-notice-close { flex: none; display: grid; place-items: center; width: 44px; height: 44px; padding: 0; border: none; background: none; color: var(--error); cursor: pointer; transition: color .2s; }
+.app-notice-close { flex: none; display: grid; place-items: center; align-self: center; width: 44px; height: 44px; padding: 0; border: none; background: none; color: var(--error); cursor: pointer; transition: color .2s; }
 .app-notice.is-info .app-notice-close { color: var(--weak); }
 .app-notice .app-notice-close:is(:hover, .is-hover) { color: #ffffff; }
 .app-notice-close svg { transition: transform .2s cubic-bezier(.34, 1.56, .64, 1); }
