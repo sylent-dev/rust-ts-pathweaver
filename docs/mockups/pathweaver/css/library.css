@@ -11,8 +11,8 @@
 .library-head span { color: var(--weak); font-size: 13px; }
 
 /* The strip: the zone of the first visit (css/home-drop.css), low and wide, its icon on the left;
-   Paste JSON beside it, on its right. */
-.library-drop-row { display: flex; align-items: center; gap: 12px; }
+   Paste JSON on its right, against it. */
+.library-drop-row { display: flex; align-items: stretch; }
 .home-drop-zone.library-drop { flex: 1; flex-direction: row; justify-content: flex-start; gap: 18px; width: auto; height: 84px; padding: 0 26px; }
 .home-drop-zone .library-drop-text { display: flex; flex-direction: column; gap: 4px; color: var(--text); }
 .home-drop-zone.library-drop strong { font-size: 16px; }
@@ -21,21 +21,32 @@
   box-shadow: 0 0 0 6px color-mix(in srgb, var(--accent) 16%, transparent), 0 0 40px color-mix(in srgb, var(--accent) 40%, transparent); }
 .home-library.is-drag .library-drop .drop-mark-corner { transform: translate(2.4px, 2.4px); }
 
-/* The rows, 56 px, 2 px apart, in a shade a little lighter than the page; lighter on hover. */
-.library-list { display: flex; flex-direction: column; gap: 2px; margin: 0; padding: 0; list-style: none; }
-.library-row { display: flex; align-items: center; gap: 16px; height: 56px; padding-right: 10px; background: rgb(255 255 255 / 3.5%); transition: background-color .2s; }
-.library-row:is(:hover, .is-hover) { background: rgb(255 255 255 / 7%); }
+/* Paste JSON: a button in the style of the + of the band of the open builds (css/app-bar.css; the
+   owner, 2026-11-18): the full height of the strip, square, white, its words in the colour of the
+   band, the white a little dimmed and the words a little larger on hover. */
+.library-paste { flex: none; display: grid; place-items: center; padding: 0 24px; border: none; cursor: pointer; background: var(--on-bar); color: var(--builds-band, var(--band-deep));
+  font-family: var(--site-link-font); font-weight: var(--site-link-weight); font-size: 14px; transition: background-color .3s; }
+.library-paste span { transition: transform .2s cubic-bezier(.34, 1.56, .64, 1); }
+.library-paste:is(:hover, .is-hover) { background: color-mix(in srgb, var(--on-bar) 82%, transparent); }
+.library-paste:is(:hover, .is-hover) span { transform: scale(1.08); }
+
+/* The rows, 56 px, touching, a shade lighter than the page one row in two, for the eye to follow a
+   row (the owner, 2026-11-18); lighter on hover. */
+.library-list { display: flex; flex-direction: column; margin: 0; padding: 0; list-style: none; }
+.library-row { display: flex; align-items: center; gap: 16px; height: 56px; padding-right: 10px; background: rgb(255 255 255 / 5%); transition: background-color .2s; }
+.library-row:nth-child(even) { background: rgb(255 255 255 / 1.5%); }
+.library-row:is(:hover, .is-hover) { background: rgb(255 255 255 / 9%); }
 .library-portrait { flex: none; display: block; width: 56px; height: 56px; object-fit: cover; filter: grayscale(.35) brightness(.9); transition: filter .2s; }
 .library-row:is(:hover, .is-hover) .library-portrait { filter: none; }
 .library-text { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 3px; }
 .library-name, .library-meta { overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
 .library-name { font-size: 14.5px; font-weight: 600; }
 .library-meta { color: var(--weak); font-size: 12.5px; }
-/* « open »: its tab is in the band; in white with a dot, never in the accent, since it can't be clicked. */
-.library-open-mark { display: inline-flex; align-items: center; gap: 7px; flex: none; color: var(--text); font-family: var(--font-number); font-size: 11px; letter-spacing: .12em; text-transform: uppercase; }
-.library-open-mark::before { content: ""; width: 6px; height: 6px; background: var(--text); }
 .library-date { flex: none; width: 124px; white-space: nowrap; color: var(--weak); font-family: var(--font-number); font-size: 12px; text-align: right; }
 .library-open.app-site-link { height: 56px; padding: 0 12px; }
+/* Open, greyed and without its line, when the tab of the build is already in the band. */
+.library-open.is-disabled, .library-open.is-disabled:hover { color: color-mix(in srgb, var(--weak) 55%, transparent); cursor: default; }
+.library-open.is-disabled .app-site-label::after { display: none; }
 .library-bin { flex: none; display: grid; place-items: center; width: 36px; height: 36px; padding: 0; border: none; background: none; color: var(--weak); cursor: pointer; transition: color .2s; }
 .library-bin:hover { color: #ef4444; }
 
