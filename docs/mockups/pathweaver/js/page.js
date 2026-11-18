@@ -34,12 +34,7 @@ const VARIANTS = {
   size: { label: "Size", range: { min: 6, max: 200, step: 2 }, variable: "--texture-size", unit: "px", fallback: "24" },
   // The width of the windows of the home page (2l): the smallest, and a wide window of the owner's screen.
   homeWidth: { label: "Home width", options: { 960: "960 px", 1600: "1,600 px" }, fallback: "960" },
-  // The title of the drop zone of E1b (js/home-line.js): its words, its font, its size; the list
-  // of the words draws the page again (`draw`).
-  homeTitle: { label: "Title", select: true, draw: true, fallback: "t1", options: {
-    t1: "Your build, level by level", t2: "Your path, level by level", t3: "See your build at every level", t4: "Every level of your build, mapped",
-    t5: "Your build, from level 1 to 100", t6: "Know what to take at every level", t7: "Weave your path to level 100",
-    t8: "Plan every level. Play every level.", t9: "From level 1 to 100, one step at a time", t10: "The whole road of your build" } },
+  // The title of the drop zone of E1b (js/home-line.js): its font and its size.
   titleFont: { label: "Title font", select: true, fallback: "manrope", options: { manrope: "Manrope 800", geist: "Geist 700", archivo: "Archivo condensed 900 (the brand)",
     "archivo-wide": "Archivo wide 800", space: "Space Grotesk 700", chakra: "Chakra Petch 700", unbounded: "Unbounded 700", shoulders: "Big Shoulders Display 900",
     bricolage: "Bricolage Grotesque 800", syne: "Syne 800", serif: "Instrument Serif" } },
