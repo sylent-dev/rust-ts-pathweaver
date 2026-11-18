@@ -31,6 +31,8 @@ const VARIANTS = {
   tabs: { label: "Tabs", select: true, fallback: "full", options: { full: "Full height", short: "As before" } },
   colour: { label: "Colour", select: true, fallback: "blue", options: { text: "Grey (the text)", blue: "Pale blue", accent: "Accent" } },
   size: { label: "Size", range: { min: 6, max: 200, step: 2 }, variable: "--texture-size", unit: "px", fallback: "24" },
+  // The width of the windows of the home page (2l): the smallest, and a wide window of the owner's screen.
+  homeWidth: { label: "Home width", options: { 960: "960 px", 1600: "1,600 px" }, fallback: "960" },
   opacity: { label: "Opacity", range: { min: 0, max: 40, step: 1 }, variable: "--texture-opacity", unit: "%", fallback: "23" },
 };
 
