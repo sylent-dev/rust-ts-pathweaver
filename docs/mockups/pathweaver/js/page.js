@@ -33,8 +33,6 @@ const VARIANTS = {
   size: { label: "Size", range: { min: 6, max: 200, step: 2 }, variable: "--texture-size", unit: "px", fallback: "24" },
   // The width of the windows of the home page (2l): the smallest, and a wide window of the owner's screen.
   homeWidth: { label: "Home width", options: { 960: "960 px", 1600: "1,600 px" }, fallback: "960" },
-  // The corners of the icon of the drop zone, on trial (the owner, 2026-11-18: « un truc un peu plus anguleux »).
-  dropCorners: { label: "Corners", options: { round: "Rounded", square: "Square" }, fallback: "round" },
   opacity: { label: "Opacity", range: { min: 0, max: 40, step: 1 }, variable: "--texture-opacity", unit: "%", fallback: "23" },
 };
 

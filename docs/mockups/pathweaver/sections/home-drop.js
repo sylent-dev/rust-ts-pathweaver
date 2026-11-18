@@ -5,21 +5,16 @@
 
 // The icon of the zone (the owner, 2026-11-18, no. 10 of the series, « raccord avec le plus
 // d'après »): the corners of a zone around the + of the band of the builds, which leads here, drawn
-// alike (its two strokes, in a box half wider). Its corners close in toward the +: a little on hover,
-// firmly while a file is over the page (css/home-drop.css). « Corners » at the top of the page:
-// rounded, like the icons of the site, or square, with square ends, on trial.
-const DROP_CORNERS = {
-  round: ["M1.5 6.5V3.5a2 2 0 0 1 2-2h3", "round"],
-  square: ["M1.5 6.5v-5h5", "butt"],
-};
+// alike (its two strokes, in a box half wider). Square, its corners at a right angle and its ends
+// cut flat (the owner, 2026-11-18: « un truc un peu plus anguleux »), like the + of the band
+// (ICONS.add). Its corners close in toward the +: a little on hover, firmly while a file is over
+// the page (css/home-drop.css).
 const dropMark = size => {
-  const [corner, cap] = DROP_CORNERS[chosen.dropCorners] ?? DROP_CORNERS.round;
-  const join = cap === "round" ? "round" : "miter";
   // One corner drawn four times, turned around the centre; each moves along its own diagonal.
   const corners = [0, 90, 180, 270].map(turn =>
-    `<g transform="rotate(${turn} 12 12)"><path class="drop-mark-corner" d="${corner}"/></g>`).join("");
+    `<g transform="rotate(${turn} 12 12)"><path class="drop-mark-corner" d="M1.5 6.5v-5h5"/></g>`).join("");
   return `<svg class="app-icon drop-mark" width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"
-    stroke-linecap="${cap}" stroke-linejoin="${join}" aria-hidden="true">${corners}<path d="M12 6v12M6 12h12"/></svg>`;
+    stroke-linecap="butt" stroke-linejoin="miter" aria-hidden="true">${corners}<path d="M12 6v12M6 12h12"/></svg>`;
 };
 
 // What the zone holds: at rest, its call; while a file is over the page, « Let go ». A variant may
@@ -39,6 +34,6 @@ const dropHome = ({ drag = false, zone = dropZoneCall(drag), state = "" } = {}) 
   <div class="home-drop-sources">From ${SOURCES.map(([name]) => name).join(" · ")} · ${HOME_TEXT.local}</div>`, { band: false })
   .replace('home-drop"', `home-drop${drag ? ' is-drag" data-held="' : ""}" data-home-fluid`);
 
-addSection(() => ["E1b · The drop zone, E1 reworked: move the pointer over the graph paper; « Corners » at the top of the page",
+addSection(() => ["E1b · The drop zone, E1 reworked: move the pointer over the graph paper",
   [["At rest: hover the zone, drag any file over the window", dropHome()],
    ["A file over the page: the zone lights up", dropHome({ drag: true })]]]);
