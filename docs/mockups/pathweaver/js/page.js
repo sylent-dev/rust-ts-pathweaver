@@ -33,6 +33,9 @@ const VARIANTS = {
   size: { label: "Size", range: { min: 6, max: 200, step: 2 }, variable: "--texture-size", unit: "px", fallback: "24" },
   // The width of the windows of the home page (2l): the smallest, and a wide window of the owner's screen.
   homeWidth: { label: "Home width", options: { 960: "960 px", 1600: "1,600 px" }, fallback: "960" },
+  // The red of the errors of the home page (the zone that refuses a file, the field of Paste JSON), on trial.
+  errorRed: { label: "Error red", select: true, variable: "--error-red", fallback: "#ff6b6b", options: {
+    "#ff6b6b": "Coral #ff6b6b", "#fb7185": "Rose #fb7185", "#ef4444": "Vivid #ef4444", "#fca5a5": "Pale #fca5a5", "#f87171": "As before #f87171" } },
   opacity: { label: "Opacity", range: { min: 0, max: 40, step: 1 }, variable: "--texture-opacity", unit: "%", fallback: "23" },
 };
 
