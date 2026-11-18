@@ -28,4 +28,4 @@ addSection(() => ["The menu of « +N ▾ » · open, in the style of the page: t
   [["Attached under the band, in its shade, each build a tab laid down", menuCard()]]]);
 
 addSection(() => ["The end of the band · « +N ▾ » and +, told apart by contrast, no line between them, at rest and on hover, in the style of the page",
-  [["A tinted background at rest, a stronger one on hover", endCard()]]]);
+  [["« +N ▾ » blue, white on hover; + on white, larger on hover", endCard()]]]);
