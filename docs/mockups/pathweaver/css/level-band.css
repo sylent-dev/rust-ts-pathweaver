@@ -1,22 +1,28 @@
-/* The level band: 84 px, the band colour. */
-.app-level { display: flex; align-items: center; height: 84px; padding: 0 20px 0 22px; background: var(--band-image), var(--band); color: var(--on-band); border-bottom: var(--border-width) solid var(--divider); }
-.app-level .app-weak { color: var(--on-band-weak); }
-.app-level-step { display: flex; flex-direction: column; align-items: center; gap: 4px; width: 30px; margin-top: 6px; font-size: 12px; }
-.app-level-arrow { display: grid; place-items: center; width: 30px; height: 30px; padding: 0; border: none; background: none; cursor: pointer; }
-.app-level-arrow:disabled { opacity: .3; cursor: default; }
-.app-level-step .app-number { min-height: 16px; }
-.app-level-now { display: flex; flex-direction: column; align-items: center; width: 80px; font-size: 12px; }
-.app-level-number { font-size: 36px; line-height: 1.05; font-weight: var(--level-weight); }
-.app-level-track { position: relative; height: 40px; margin: 0 30px 0 34px; cursor: pointer; }
-.app-level-line { position: absolute; top: 12px; left: 0; right: 0; height: 0; border-top: var(--track-width) solid var(--track); }
-.app-level-marker { position: absolute; top: 5px; width: 0; height: 14px; border-left: 1px solid var(--marker); }
-.app-level-cursor { position: absolute; top: 2px; width: 20px; height: 20px; margin-left: -10px; border-radius: var(--cursor-radius); background: var(--accent); box-shadow: var(--accent-glow); }
-.app-level-end { position: absolute; top: 24px; transform: translateX(-50%); font-size: 11px; }
-.app-level-changes { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 3px; font-size: 13px; }
-.app-level-change { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+/* The level band (2g, the owner, 2026-11-18; L6, specs.md, Window layout): 84 px, the darker shade
+   of the bands, the graph paper (css/textures.css). Its window of what changes hangs under it, over
+   the page (css/level-changes.css). */
+.app-level { display: flex; align-items: center; height: 84px; padding-right: 18px; overflow: visible; z-index: 4;
+  background: var(--band-image), var(--band-deep); color: var(--on-band); font-size: 13px; }
+:where(.app-level) button { padding: 0; border: none; background: none; color: var(--on-band); cursor: pointer; }
+:where(.app-level) button:disabled { opacity: .3; cursor: default; }
 
-/* On trial (2026-11-17): the band a shade darker, for contrast now that there are no borders, and
-   the same shade on the row of the tabs and the right column; the two bands at the top have their
-   own list (css/app-bar.css). */
-:root[data-band="deep"] .app-level { background: var(--band-image), var(--band-deep); }
-:root[data-band="deep"] :is(.app-tabs, .app-side) { background: var(--band-deep); }
+/* « Level » over the number, 58 px, the group centred in its box both ways; each trimmed to the
+   height of its capitals and figures, so that the centre is that of their ink. */
+.app-level-now { flex: none; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 7px; width: 124px; height: 100%; }
+.app-level-label { padding-left: .12em; font-size: 11px; line-height: 1; text-box: trim-both cap alphabetic; letter-spacing: .12em; text-transform: uppercase; color: var(--on-band-weak); }
+.app-level-number { font: 800 58px/1 var(--brand-font); text-box: trim-both cap alphabetic; letter-spacing: -.05em; margin-right: .05em; font-variant-numeric: tabular-nums; }
+
+/* ◀, « N changes », ▶: three blocks of 27 px, in the shade of the band, lighter on hover. */
+.app-level-steps { flex: none; display: flex; flex-direction: column; gap: 1px; width: 84px; height: 100%; }
+.app-level-block { flex: 1; display: flex; align-items: center; justify-content: center; gap: 8px; background: var(--band); transition: background .2s; }
+.app-level-step:not(:disabled):hover { background: color-mix(in srgb, var(--on-band) 10%, var(--band)); }
+.app-level-step .app-number { font-size: 12px; color: var(--on-band-weak); }
+
+/* The track, from the column to the margin of the band: its line at the height of « here », the
+   markers in the accent, the cursor of the level white, without glow (hard to judge, kitsch at
+   worst: the owner, 2026-11-18). */
+.app-level-track { position: relative; flex: none; align-self: stretch; height: 84px; margin-left: 26px; cursor: pointer; }
+.app-level-line { position: absolute; top: 41px; left: 0; right: 0; height: 2px; background: var(--track); }
+.app-level-marker { position: absolute; top: 36px; width: 1px; height: 12px; background: var(--accent); }
+.app-level-cursor { position: absolute; top: 28px; width: 4px; height: 28px; margin-left: -2px; background: var(--on-band); }
+.app-level-end { position: absolute; top: 52px; transform: translateX(-50%); font-size: 11px; color: var(--on-band-weak); }
