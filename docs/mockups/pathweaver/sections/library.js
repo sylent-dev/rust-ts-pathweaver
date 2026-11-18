@@ -26,9 +26,9 @@ const libraryMeta = build => [build.author && `by ${escapeHtml(build.author)}`, 
 
 // A row: the portrait square the full height of the row, the name over who wrote it, the
 // ascendancy and the levels; when it was opened last; Open, greyed when its tab is already in the
-// band (the owner, 2026-11-18, rather than a mark « open »); the bin. `state`: is-hover to show the hover; is-asking when the bin was clicked: the row asks,
-// in its place, and says that the tab closes too when the build is open; a long name is cut, never
-// the question.
+// band (the owner, 2026-11-18, rather than a mark « open »); the bin. `state`: is-asking when the
+// bin was clicked: the row asks, in its place, and says that the tab closes too when the build is
+// open; a long name is cut, never the question.
 const rowPortrait = build => `<img class="library-portrait" src="pathweaver/img/portraits-square/${build.portrait}.webp" width="56" height="56" alt="">`;
 const libraryRow = (build, state = "") => {
   const name = escapeHtml(build.name.trim());
@@ -69,7 +69,7 @@ const libraryHome = ({ builds = LIBRARY, rows = {}, drag = false, paste = false 
 };
 
 addSection(() => ["Home · the library: the page once a build was opened, the two bands at its top",
-  [["Fourteen builds, five open (their Open greyed): hover a row, its name in full in its title", libraryHome({ rows: { 6: "is-hover" } })],
+  [["Fourteen builds, five open (their Open greyed): a long name in full in its title", libraryHome()],
    ["The bin clicked: the row asks once, in its place; an open build says that its tab closes too", libraryHome({ rows: { 4: "is-asking" } })],
    ["A file over the page: the strip lights up, wherever the file is let go", libraryHome({ drag: true })],
    ["Paste JSON: the strip becomes a field, taller, and a paste opens the build at once", libraryHome({ paste: true })],
