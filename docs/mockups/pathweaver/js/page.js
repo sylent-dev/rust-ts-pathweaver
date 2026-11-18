@@ -34,6 +34,7 @@ const VARIANTS = {
   // The width of the windows of the home page (2l): the smallest, and a wide window of the owner's screen.
   homeWidth: { label: "Home width", options: { 960: "960 px", 1600: "1,600 px" }, fallback: "960" },
   // E1b, the first visit reworked by the owner (2026-11-18): the opacity of the black of the drop zone.
+  dropIcon: { label: "Icon", select: true, fallback: "1", options: Object.fromEntries(Array.from({ length: 20 }, (_, i) => [String(i + 1), String(i + 1)])) },
   zoneOpacity: { label: "Zone", range: { min: 20, max: 90, step: 1 }, variable: "--home-zone-opacity", unit: "%", fallback: "50" },
   opacity: { label: "Opacity", range: { min: 0, max: 40, step: 1 }, variable: "--texture-opacity", unit: "%", fallback: "23" },
 };

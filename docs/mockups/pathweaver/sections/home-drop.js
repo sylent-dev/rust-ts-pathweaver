@@ -8,7 +8,7 @@ const dropHome = ({ drag = false } = {}) => homeWindow("drop", `
   <div class="home-drop-top">${homeBrand(26)}${homeLinks()}</div>
   <div class="home-drop-main">
     <button type="button" class="home-drop-zone">
-      ${icon(40, ICONS.drop)}
+      ${dropIcon(40)}
       <strong>${drag ? "Let go to open it" : "Add your first build"}</strong>
       <span>${drag ? "1 file over the page" : "Drop a .build file here, or click to choose it"}</span>
     </button>
