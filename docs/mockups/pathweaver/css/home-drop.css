@@ -21,7 +21,7 @@
 .home-drop-top { display: flex; align-items: center; justify-content: space-between; height: 64px; padding: 0 12px 0 28px; }
 .home-drop-main { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 18px; padding: 0 40px 64px; }
 
-/* The zone: a button that chooses the files, and where they are dropped; without a border (the
+/* The zone: a block that acts as a button, which chooses the files, and where they are dropped; without a border (the
    owner, 2026-11-18, to see), a transparent black, darker than the page (its opacity on
    « Zone »), darker still on hover, its corners less round (the owner, 2026-11-18). */
 .home-drop-zone { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px; width: 560px; height: 260px; padding: 0;
