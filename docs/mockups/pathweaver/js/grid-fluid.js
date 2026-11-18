@@ -87,7 +87,7 @@ function fluidOf(host) {
   return fluid;
 }
 
-const fluidOn = () => chosen.homePointer !== "light" && !lessMotion();
+const fluidOn = () => !lessMotion();
 
 function mountFluids() {
   for (const canvas of [...fluids.keys()]) if (!canvas.isConnected) fluids.delete(canvas);

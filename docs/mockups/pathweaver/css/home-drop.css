@@ -1,7 +1,8 @@
 /* E1b · The drop zone (sections/home-drop.js), E1 reworked by the owner (2026-11-18): no line in
    large, a zone made to drop the files on, « Add your first build » in it, Paste JSON under it; the
    mark of the brand in a watermark behind; the graph paper over the whole window, where a fluid
-   runs along the lines under the pointer (js/grid-fluid.js) or a light follows it (« Pointer »). */
+   runs along the lines under the pointer (js/grid-fluid.js; the owner kept it over the light of
+   E1, 2026-11-18), the light coming back only to light the whole grid while a file is over it. */
 
 .home-drop { position: relative; isolation: isolate; --home-fluid: #ffffff; --home-grid: 48px; --home-spot: 200px; transition: --home-spot .6s cubic-bezier(.2, .7, .2, 1); }
 .home-drop::before, .home-drop::after { content: ""; position: absolute; inset: 0; z-index: -1; pointer-events: none;
@@ -9,13 +10,12 @@
 .home-drop::before { background: var(--texture-blue); opacity: .16; mask-image: var(--texture), linear-gradient(#000, #000); }
 .home-drop::after { background: var(--accent);
   mask-image: var(--texture), radial-gradient(circle var(--home-spot) at var(--home-x, 50%) var(--home-y, 40%), #000 0%, transparent 100%); }
-:root[data-home-pointer="fluid"] .home-drop:not(.is-drag)::after { display: none; }
+.home-drop:not(.is-drag)::after { display: none; }
 .home-drop.is-drag { --home-spot: 1600px; }
 .home-fluid { position: absolute; inset: 0; z-index: -1; width: 100%; height: 100%; pointer-events: none; }
-:root[data-home-pointer="light"] .home-fluid { display: none; }
 
-/* The watermark: the mark, large, behind the zone, its opacity tuned by eye (« Watermark »). */
-.home-drop-mark { position: absolute; z-index: -1; left: 50%; top: 50%; transform: translate(-50%, -54%); opacity: var(--home-watermark, 7%); pointer-events: none; }
+/* The watermark: the mark, large, behind the zone, at 3 % (the owner, 2026-11-18). */
+.home-drop-mark { position: absolute; z-index: -1; left: 50%; top: 50%; transform: translate(-50%, -54%); opacity: 3%; pointer-events: none; }
 .home-drop-mark .logo-p { fill: var(--text); }
 
 .home-drop-top { display: flex; align-items: center; justify-content: space-between; height: 64px; padding: 0 12px 0 28px; }

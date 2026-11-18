@@ -17,6 +17,6 @@ const dropHome = ({ drag = false } = {}) => homeWindow("drop", `
   <div class="home-drop-sources">From ${SOURCES.map(([name]) => name).join(" · ")} · ${HOME_TEXT.local}</div>`, { band: false })
   .replace('home-drop"', `home-drop${drag ? ' is-drag" data-held="' : ""}" data-home-fluid`);
 
-addSection(() => ["E1b · The drop zone, E1 reworked: move the pointer over the graph paper; « Pointer », « Zone » and « Watermark » at the top of the page",
+addSection(() => ["E1b · The drop zone, E1 reworked: move the pointer over the graph paper; « Zone » at the top of the page",
   [["At rest: hover the zone, drag any file over the window", dropHome()],
    ["A file over the page: the zone lights up", dropHome({ drag: true })]]]);
