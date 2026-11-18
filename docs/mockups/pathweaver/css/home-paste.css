@@ -4,7 +4,7 @@
 .home-drop-zone.is-paste { position: relative; cursor: text; }
 .home-drop-zone.is-paste:is(:focus-within, .is-focus):not(.is-refused) { box-shadow: inset 0 0 0 1.5px var(--accent); }
 .home-paste-field { position: absolute; inset: 0; width: 100%; height: 100%; box-sizing: border-box; padding: 18px 22px; border: none; border-radius: inherit;
-  background: none; color: var(--text); font-family: var(--font-number); font-size: 12.5px; line-height: 1.6; resize: none; outline: none; caret-color: var(--accent); }
+  background: none; color: var(--text); font-family: var(--font-code); font-size: 12.5px; line-height: 1.6; resize: none; outline: none; caret-color: var(--accent); }
 .home-drop-zone.is-refused .home-paste-field { color: var(--weak); height: calc(100% - 44px); }   /* its text, scrolled, never under the reason */
 /* The call, at the centre while the field is empty. */
 .home-paste-hint { display: flex; flex-direction: column; align-items: center; gap: 10px; pointer-events: none; }

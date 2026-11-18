@@ -4,8 +4,7 @@
 // - VARIANTS holds one group of tabs per open decision; the address keeps the choices
 //   (e.g. ?theme=frost), to share them. A group is removed once decided.
 //   A value that combines with others is a list (`select: true` and the CSS `variable` it sets);
-//   a value tuned by eye is a slider (`range`, its `variable` and its `unit`). A `css` function
-//   gives the value of the variable when it isn't the value chosen and its unit (a font).
+//   a value tuned by eye is a slider (`range`, its `variable` and its `unit`).
 // - SECTIONS lists every scenario and state, each a function that returns
 //   [title, [[label, html], …]]: a section script adds its own with addSection(), and the newest
 //   section comes first. Past ten sections, a table of contents under the header links to each.
@@ -14,23 +13,14 @@
 // 2026-11-17, 18 · Frost and its negative 28 · Frost Night (the others are in the history of Git),
 // then 29 · Ember, Frost Night on a neutral grey with amber first.
 const THEMES = {
-  frost: { title: "18 · Frost", text: "Light: the cool light of Aurora at the density of Slate, flat white boxes, one blue (Geist, Geist Mono)." },
-  "frost-night": { title: "28 · Frost Night", text: "Dark, Frost in negative: its density and its flat boxes on a blue black, pale blue lines, one blue (Geist, Geist Mono)." },
-  ember: { title: "29 · Ember", text: "Dark, Frost Night on a very dark neutral grey: the same density and flat boxes, amber first (Geist, Geist Mono)." },
+  frost: { title: "18 · Frost", text: "Light: the cool light of Aurora at the density of Slate, flat white boxes, one blue (Manrope)." },
+  "frost-night": { title: "28 · Frost Night", text: "Dark, Frost in negative: its density and its flat boxes on a blue black, pale blue lines, one blue (Manrope)." },
+  ember: { title: "29 · Ember", text: "Dark, Frost Night on a very dark neutral grey: the same density and flat boxes, amber first (Manrope)." },
 };
 
 
 const VARIANTS = {
   theme: { label: "Style", options: Object.fromEntries(Object.entries(THEMES).map(([key, theme]) => [key, theme.title])), fallback: "frost-night" },
-  // A font per role (2d, js/role-fonts.js): the titles, their weight and their spacing, the text, the
-  // numbers; and whether the links of the band of the site keep Manrope or take the font of the text.
-  fontTitle: { label: "Titles", select: true, options: roleFontOptions(), fallback: "geist", variable: "--font-title", css: roleFontCss },
-  titleWeight: { label: "Title weight", range: { min: 300, max: 900, step: 50 }, variable: "--title-weight", fallback: "600" },
-  titleSpacing: { label: "Title spacing", range: { min: -8, max: 10, step: 1 }, variable: "--title-spacing", fallback: "-2", css: value => `${value / 100}em` },
-  fontText: { label: "Text", select: true, options: roleFontOptions(), fallback: "geist", variable: "--font-text", css: roleFontCss },
-  fontNumber: { label: "Numbers", select: true, options: roleFontOptions(), fallback: "geist-mono", variable: "--font-number", css: roleFontCss },
-  siteLinks: { label: "Site links", options: { manrope: "Manrope", text: "The text font" }, fallback: "manrope", variable: "--site-link-font",
-    css: value => value === "text" ? "var(--font-text)" : '"Manrope", sans-serif' },
   // The second accent (css/accent-2.css): its colour, and what it marks.
   accent2: { label: "Accent 2", select: true, fallback: "amber", options: { amber: "Amber", blue: "Blue", coral: "Coral", mint: "Mint",
     violet: "Violet", magenta: "Magenta", lime: "Lime" } },
@@ -72,18 +62,16 @@ const chosen = Object.fromEntries(Object.entries(VARIANTS).map(([key, variant]) 
 // Escapes a text of the data before it goes into HTML: the data come from files of strangers.
 const escapeHtml = text => String(text).replace(/[&<>"']/g, c => `&#${c.charCodeAt(0)};`);
 
-// The value of a variable, as the slider shows it too.
-const cssValue = (variant, value) => variant.css ? variant.css(value) : value + (variant.unit ?? "");
 function applyVariables() {
   for (const [key, variant] of Object.entries(VARIANTS)) {
-    if (variant.variable) document.documentElement.style.setProperty(variant.variable, cssValue(variant, chosen[key]));
+    if (variant.variable) document.documentElement.style.setProperty(variant.variable, chosen[key] + (variant.unit ?? ""));
   }
 }
 const keepInAddress = () => history.replaceState(null, "", "?" + new URLSearchParams(chosen) + location.hash);
 
 function renderControls() {
   document.getElementById("tabs").innerHTML = Object.entries(VARIANTS).map(([key, variant]) => variant.range
-    ? `<label class="group"><span>${variant.label}</span><input type="range" data-variant="${key}" min="${variant.range.min}" max="${variant.range.max}" step="${variant.range.step}" value="${chosen[key]}"><output>${cssValue(variant, chosen[key])}</output></label>`
+    ? `<label class="group"><span>${variant.label}</span><input type="range" data-variant="${key}" min="${variant.range.min}" max="${variant.range.max}" step="${variant.range.step}" value="${chosen[key]}"><output>${chosen[key]}${variant.unit ?? ""}</output></label>`
     : variant.select
     ? `<label class="group"><span>${variant.label}</span><select data-variant="${key}">${Object.entries(variant.options).map(([value, label]) =>
       `<option value="${value}" ${chosen[key] === value ? "selected" : ""}>${label}</option>`).join("")}</select></label>`
@@ -125,7 +113,7 @@ document.getElementById("tabs").addEventListener("input", event => {
   if (!variant) return;
   chosen[variant] = event.target.value;
   document.documentElement.dataset[variant] = chosen[variant];   // a list may be read by the CSS
-  if (VARIANTS[variant].range) event.target.nextElementSibling.value = cssValue(VARIANTS[variant], chosen[variant]);
+  if (VARIANTS[variant].range) event.target.nextElementSibling.value = chosen[variant] + (VARIANTS[variant].unit ?? "");
   keepInAddress();
   applyVariables();
 });

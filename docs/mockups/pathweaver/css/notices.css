@@ -15,7 +15,7 @@
 .app-notice-text { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 5px; padding: 13px 16px 13px 14px; }
 .app-notice ul { display: flex; flex-direction: column; gap: 4px; margin: 0; padding: 0; list-style: none; }
 .app-notice-reason { color: var(--error); }
-.app-notice code { margin-left: 8px; padding: 1px 6px; background: rgb(0 0 0 / 28%); font-family: var(--font-number); font-size: 10.5px; }
+.app-notice code { margin-left: 8px; padding: 1px 6px; background: rgb(0 0 0 / 28%); font-family: var(--font-code); font-size: 10.5px; }
 .app-notice-note { color: var(--weak); }
 /* The close button (the owner, 2026-11-18: larger): a square of 44 px on the right, centred on the
    height of the notice, its × in the

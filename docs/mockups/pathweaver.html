@@ -8,7 +8,7 @@
   The mock-up of Pathweaver (html-mockups skill), from the wireframes of docs/wireframes/.
   This page only loads the small files of pathweaver/, in order: the styles (the page, the
   tokens of each style and the second accent, then one sheet per block, the texture last),
-  the scripts (the fonts proposed for each role, the page and its controls, the shared helpers, the sample data, one script per
+  the scripts (the page and its controls, the shared helpers, the sample data, one script per
   block), the sections, and the rendering last.
   Plain tags, no modules, so that the files share their constants.
 
@@ -16,15 +16,11 @@
     python3 docs/mockups/serve.py 8796
   then open http://127.0.0.1:8796/docs/mockups/pathweaver.html
 -->
-<!-- The fonts of the styles, all under the SIL Open Font License, from Google Fonts while the style is chosen;
-     the website will serve the chosen ones itself. -->
+<!-- The fonts, under the SIL Open Font License, from Google Fonts in the mock-up; the website serves
+     them itself: Manrope for the text, the titles and the numbers (2d), Archivo for the name (2c). -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500&display=block">
-<!-- The font of the name (2c) and of the title of the home page (2l), under the SIL Open Font License. -->
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@700;800&display=block">
-<!-- The font of the links of the band of the site (2e2, the owner), under the SIL Open Font License. -->
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;600;700&display=block">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400..800&family=Archivo:wght@700;800&display=block">
 <link rel="stylesheet" href="pathweaver/css/page.css">
 <link rel="stylesheet" href="pathweaver/css/tokens.css">
 <link rel="stylesheet" href="pathweaver/css/accent-2.css">
@@ -44,14 +40,12 @@
 <link rel="stylesheet" href="pathweaver/css/home-line.css">
 <link rel="stylesheet" href="pathweaver/css/library.css">
 <link rel="stylesheet" href="pathweaver/css/notices.css">
-<link rel="stylesheet" href="pathweaver/css/fonts.css">
 <link rel="stylesheet" href="pathweaver/css/textures.css">
 </head>
 <body>
 <p class="page-warning" id="file-warning" hidden>Opened as a file: serve the repository root (see the comment at the top of this page) so that every file of the mock-up loads.</p>
 <nav class="page-tabs" id="tabs" aria-label="Styles and variants"></nav>
 <main id="sheet"></main>
-<script src="pathweaver/js/role-fonts.js"></script>
 <script src="pathweaver/js/page.js"></script>
 <script src="pathweaver/js/icons.js"></script>
 <script src="pathweaver/js/data-tree.js"></script>
@@ -78,7 +72,6 @@
 <script src="pathweaver/sections/home-paste.js"></script>
 <script src="pathweaver/sections/library.js"></script>
 <script src="pathweaver/sections/notices.js"></script>
-<script src="pathweaver/sections/fonts.js"></script>
 <script src="pathweaver/js/render.js"></script>
 </body>
 </html>
