@@ -33,6 +33,9 @@ const VARIANTS = {
   size: { label: "Size", range: { min: 6, max: 200, step: 2 }, variable: "--texture-size", unit: "px", fallback: "24" },
   // The width of the windows of the home page (2l): the minimum of specs.md, half a 1920-pixel screen, and a wide
   // window of the owner's screen.
+  // The shape of a notice (2l3): the files refused when a build opens, a damaged share link,
+  // private browsing; the three notices take the shape chosen.
+  notice: { label: "Notice", options: { band: "A · Band under the bands", card: "B · Card at the bottom right", box: "C · Box over the header" }, fallback: "band" },
   homeWidth: { label: "Home width", options: { 900: "900 px", 960: "960 px", 1600: "1,600 px" }, fallback: "960" },
 };
 

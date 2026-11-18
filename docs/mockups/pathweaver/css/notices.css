@@ -1,0 +1,30 @@
+/* The notices (sections/notices.js): the files refused while a build opens, a damaged share link,
+   private browsing. No borders: an error is told by a red shade, the red of the errors (#ef4444,
+   apart from the red of the gems of strength), private browsing by a grey one. */
+.app-window { --error: #ef4444; }
+
+.app-notices { display: flex; flex-direction: column; }
+.app-notice { display: flex; align-items: flex-start; gap: 12px; padding: 12px 10px 12px 16px; font-size: 13.5px; }
+.app-notice.is-error { background: color-mix(in srgb, var(--error) 14%, var(--page)); }
+.app-notice.is-info { background: color-mix(in srgb, var(--text) 8%, var(--page)); }
+.app-notice-icon { flex: none; padding-top: 1px; color: var(--weak); }
+.app-notice.is-error .app-notice-icon { color: var(--error); }
+.app-notice-text { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 5px; }
+.app-notice ul { display: flex; flex-direction: column; gap: 4px; margin: 2px 0 0; padding: 0; list-style: none; }
+.app-notice-file { font-weight: 600; }
+.app-notice-reason { color: var(--error); }
+.app-notice code { margin-left: 8px; padding: 1px 6px; background: rgb(0 0 0 / 28%); font-family: var(--font-number); font-size: 12px; }
+.app-notice-note { color: var(--weak); }
+.app-notice-close { flex: none; display: grid; place-items: center; width: 28px; height: 28px; margin-top: -5px; padding: 0; border: none; background: none; color: var(--weak); cursor: pointer; transition: color .2s; }
+.app-notice-close:hover { color: var(--text); }
+
+/* A · a band under the two bands, the whole width of the window, its notices touching. */
+.app-notices.is-band { flex: none; }
+
+/* B · a card at the bottom right of the window, over the page, its notices stacked; a shadow
+   lifts it off the page. */
+.app-notices.is-card { position: absolute; right: 16px; bottom: 16px; z-index: 5; width: 400px; gap: 8px; }
+.app-notices.is-card .app-notice { box-shadow: 0 10px 30px rgb(0 0 0 / 45%); }
+
+/* C · a box over the header, in the margins of the page. */
+.app-notices.is-box { flex: none; gap: 8px; padding: 12px 14px 0; }

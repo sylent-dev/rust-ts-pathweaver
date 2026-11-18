@@ -1,0 +1,36 @@
+// The notices (2l3, css/notices.css; specs.md, Window layout): the files refused while a build
+// opens, a damaged share link, private browsing. Each stays until it is closed. Their shape is the
+// open decision of the tabs « Notice »: A, a band under the two bands; B, a card at the bottom
+// right; C, a box over the header. The first visit has no bands: there, the zone says what went
+// wrong, and its foot that nothing is kept.
+
+// A notice: `kind` error (the red of the errors) or info (grey: private browsing isn't an error,
+// Pathweaver works the same); its title; the files refused, each its name, its reason and the
+// line of the error when there is one; or a note.
+const noticeFile = ([name, reason, line]) => `<li><span class="app-notice-file">${escapeHtml(name)}</span> <span class="app-notice-reason">${reason}</span>${line ? `<code>${escapeHtml(line)}</code>` : ""}</li>`;
+const notice = ({ kind = "error", title, files = [], note = "" }) => `<div class="app-notice is-${kind}" role="${kind === "error" ? "alert" : "status"}">
+    <span class="app-notice-icon">${icon(16, kind === "error" ? ICONS.warning : ICONS.info)}</span>
+    <div class="app-notice-text"><strong>${title}</strong>${files.length ? `<ul>${files.map(noticeFile).join("")}</ul>` : ""}${note ? `<span class="app-notice-note">${note}</span>` : ""}</div>
+    <button type="button" class="app-notice-close" aria-label="Close" title="Close">${icon(12, ICONS.close)}</button>
+  </div>`;
+// The notices of a window, the errors first, in the shape chosen.
+const notices = list => `<div class="app-notices is-${chosen.notice}">${list.join("")}</div>`;
+
+const NOTICES = {
+  refused: notice({ title: "3 of the 4 files dropped weren't opened", files: [
+    ["passive-tree.png", "is an image, not a build."],
+    ["Ritualist poison.build", "isn't valid JSON at line 12:", '"level": 12,,'],
+    ["Mercenary.build", "has a text where a number goes, in skills › 3 › level."]] }),
+  refusedOne: notice({ title: "1 of the 2 files dropped wasn't opened", files: [["notes.txt", "isn't JSON: it starts with “Act 1”.", ""]] }),
+  link: notice({ title: "That link can't be opened",
+    note: "It was cut: it ends after 1,204 of its characters. Ask for the link again, or for the .build file." }),
+  private: notice({ kind: "info", title: "This browser keeps nothing",
+    note: "Private browsing: the builds you open will be gone once it's closed. Download .build keeps the file of a build." }),
+};
+
+// The page of a build with its notices under the two bands.
+const noticeWindow = list => `<div class="app-window" style="width:960px">${appBar(960)}${notices(list)}${buildHeader()}${levelBand()}${buildTabs()}${overview()}</div>`;
+
+addSection(() => ["Notices · the files refused while a build opens: choose the shape with the tabs « Notice »",
+  [["Four files dropped, one build opened and shown: the notice names the three others and why, until it is closed", noticeWindow([NOTICES.refused])],
+   ["One file refused", noticeWindow([NOTICES.refusedOne])]]]);
