@@ -20,7 +20,8 @@ function changesLink(record, level, open) {
   return `<button type="button" class="lvc-link ${open ? "is-open" : ""}" data-action="changes-toggle" aria-expanded="${open}">${plural(record.count, "change")} at ${level}</button>`;
 }
 
-function changesWindow(record, level, { opening = false } = {}) {
+// `style` places the window under what opened it, when that isn't the right end of the band.
+function changesWindow(record, level, { opening = false, style = "" } = {}) {
   const row = (sign, body) => `<li class="lvc-row ${sign === "−" ? "is-removed" : ""}"><span class="lvc-sign">${sign}</span><span class="lvc-body">${body}</span></li>`;
   const part = (title, rows) => rows.length === 0 ? "" : `<section class="lvc-part"><h3 class="lvc-title">${title}<span>${rows.length}</span></h3><ul>${rows.join("")}</ul></section>`;
   const { skills, supports, passives, gear, notes } = record;
@@ -35,7 +36,7 @@ function changesWindow(record, level, { opening = false } = {}) {
     passives.ascendancy > 0 ? row("+", plural(passives.ascendancy, "ascendancy passive")) : "",
     passives.givenBack > 0 ? row("−", `${plural(passives.givenBack, "passive")} given back`) : "",
   ].filter(Boolean);
-  return `<div class="lvc-window ${opening ? "is-opening" : ""}" role="dialog" aria-label="What changes at ${level}">
+  return `<div class="lvc-window ${opening ? "is-opening" : ""}" style="${style}" role="dialog" aria-label="What changes at ${level}">
     ${part("Skills", [
       ...skills.added.map(skill => row("+", `${gemSquare(skill.colour)}<b>${escapeHtml(skill.name)}</b>${noteMark(skill.note)}${skill.supports.length > 0
         ? `<span class="lvc-with">with ${skill.supports.map(s => `${gemSquare(s.colour)}${escapeHtml(s.name)}${noteMark(s.note)}`).join(", ")}</span>` : ""}`)),
@@ -56,6 +57,13 @@ function changesWindow(record, level, { opening = false } = {}) {
   </div>`;
 }
 
+// A count of the changes at a marker (27): goes to its level and opens its window.
+ACTIONS["level-open"] = element => {
+  STATE.level = Number(element.dataset.level);
+  STATE.changesOpening = !STATE.changesOpen;
+  STATE.changesOpen = true;
+  return true;
+};
 ACTIONS["changes-toggle"] = () => {
   STATE.changesOpen = !STATE.changesOpen;
   STATE.changesOpening = STATE.changesOpen;
