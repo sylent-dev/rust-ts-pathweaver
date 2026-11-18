@@ -13,8 +13,9 @@ const ICONS = {
   warning: '<path d="M8 2.2 14.3 13.5H1.7z"/><path d="M8 6.5v3.2M8 11.6v.1"/>',
   link: '<path d="M6.8 9.2a3 3 0 0 0 4.2 0l2-2a3 3 0 0 0-4.2-4.2l-.9.9"/><path d="M9.2 6.8a3 3 0 0 0-4.2 0l-2 2a3 3 0 0 0 4.2 4.2l.9-.9"/>',
   download: '<path d="M8 2.5v8M4.8 7.5 8 10.7l3.2-3.2M3 13.5h10"/>',
-  file: '<path d="M9.5 1.8H4.2a1 1 0 0 0-1 1v10.4a1 1 0 0 0 1 1h7.6a1 1 0 0 0 1-1V5.1z"/><path d="M9.5 1.8v3.3h3.3"/>',
-  paste: '<rect x="3.2" y="3" width="9.6" height="11" rx="1"/><path d="M6 1.8h4v2.4H6z"/>',
-  drop: '<path d="M8 10.5V2.5M4.8 5.7 8 2.5l3.2 3.2"/><path d="M2.5 10v2.5a1 1 0 0 0 1 1h9a1 1 0 0 0 1-1V10"/>',
+  // The bin of a row of the library (2l2), which asks once, in the row; its lid apart, so that it
+  // can open on hover (css/library.css); its body empty, its outline alone, without the two lines
+  // in it (the owner, 2026-11-18, after a filled one).
+  bin: '<g class="bin-lid"><path d="M2.5 4.5h11M6 4.5V2.8h4v1.7"/></g><path d="M4 4.5l.8 8.7h6.4l.8-8.7"/>',
   arrow: '<path d="M2.5 8h11M9 3.5 13.5 8 9 12.5"/>',
 };

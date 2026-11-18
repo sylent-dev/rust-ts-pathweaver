@@ -37,8 +37,22 @@ OPEN = [
     "fubgun-ice-shot-deadeye-leveling-lvl-31-41.build",
     "maxroll-aer0-ice-shot-amazon.build",
 ]
+# The other builds of the library (2l2): a guide of each kind of source, a guide that starts late,
+# the snapshots of a character, a build without an author, a name in another script.
+LIBRARY = [
+    "ferox-shield-wall-leveling.build",
+    "utkarshbehre-spark-comet.build",
+    "maxroll-cptn-garbage-flameblast-gemling-mapping.build",
+    "poe2-tools-fubgun-ice-shot-campaign.build",
+    "mobalytics-guythatdies-varashta-lvl-01-19.build",
+    "poe-ninja-disciple-of-varashta-lvl-22-65.build",
+    "ggg-titan-warrior-sample.build",
+    "pob-twobyul-deadeye.build",
+    "pobr-summoner-lv98.build",
+]
 # The portraits of the builds shown: the ascendancy id and its class sprite.
-PORTRAITS = {"Sorceress1": "sorceress", "Mercenary3": "mercenary", "Ranger1": "ranger", "Huntress1": "huntress"}
+PORTRAITS = {"Sorceress1": "sorceress", "Sorceress3": "sorceress", "Mercenary3": "mercenary", "Ranger1": "ranger",
+             "Huntress1": "huntress", "Warrior1": "warrior", "Warrior2": "warrior"}
 PORTRAIT_SIZE = 128
 # The portrait of a tab (the owner, 2026-11-17): the largest square inside the disc, centred, made
 # small enough for the 44 px of a tab, twice for the screens of a higher density.
@@ -131,6 +145,32 @@ def gem(entry, names, gems):
     }
 
 
+def level_range(build):
+    """The levels a build covers, from the lowest start to the highest end of its entries; None for a
+    snapshot, whose entries have no levels."""
+    found = []
+
+    def walk(value):
+        if isinstance(value, dict):
+            if value.get("level_interval") is not None:
+                found.append(interval(value))
+            for item in value.values():
+                walk(item)
+        elif isinstance(value, list):
+            for item in value:
+                walk(item)
+
+    walk(build)
+    return [min(low for low, _ in found), max(high for _, high in found)] if found else None
+
+
+def library_row(build, ascendancies):
+    asc = ascendancies.get(build.get("ascendancy"), {})
+    return {"name": build["name"], "author": build.get("author") or "", "ascendancy": asc.get("name", ""),
+            "class": asc.get("class", ""), "portrait": (build.get("ascendancy") or "").lower(),
+            "levels": level_range(build)}
+
+
 def first_line(text):
     lines = [line for line in (text or "").splitlines() if line.strip()]
     return lines[0] if lines else ""
@@ -191,13 +231,15 @@ def main():
     gems = json.loads(fetch(cache, f"{REPOE_URL}/skill_gems.min.json", "skill_gems.min.json").read_text())
     ascendancies = {a["id"]: {"name": a["name"], "class": c["name"]}
                     for c in tree["classes"] for a in c["ascendancies"]}
-    builds = [json.loads((CORPUS / name).read_text(encoding="utf-8-sig")) for name in [SHOWN, *OPEN]]
+    read = lambda name: json.loads((CORPUS / name).read_text(encoding="utf-8-sig"))
+    builds = [read(name) for name in [SHOWN, *OPEN]]
     write_js("data-tree.js", "TREE", tree_data(tree, builds[0]))
     write_js("data-builds.js", "BUILDS", {
         "treeVersion": TREE_TAG,
         "shown": build_data(builds[0], names, gems, ascendancies),
         "open": [{"name": b["name"], "ascendancy": ascendancies.get(b.get("ascendancy"), {}).get("name", ""),
                   "portrait": (b.get("ascendancy") or "").lower()} for b in builds],
+        "library": [library_row(b, ascendancies) for b in [*builds, *map(read, LIBRARY)]],
     })
     for ascendancy, sprite in PORTRAITS.items():
         portrait(cache, ascendancy, sprite)

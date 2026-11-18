@@ -1,4 +1,4 @@
-/* Paste JSON (sections/home-paste.js): the drop zone of E1b become a field, the same size and black;
+/* Paste JSON (sections/home-paste.js): the drop zone of the first visit become a field, the same size and black;
    its line in the accent while the caret is in it, in the red when the text pasted is refused
    (css/home-drop-files.css). */
 .home-drop-zone.is-paste { position: relative; cursor: text; }

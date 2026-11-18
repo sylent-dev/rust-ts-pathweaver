@@ -21,6 +21,6 @@ const pasteZone = (text = "", reason = "") => `
 const pasteHome = (text, reason) => dropHome({ zone: pasteZone(text, reason), field: true, link: dropLink("Drop a file instead"),
   state: `is-paste ${reason ? "is-refused" : "is-focus"}` });
 
-addSection(() => ["E1b · Paste JSON: the zone becomes a field, and a paste opens the build at once",
+addSection(() => ["Home · Paste JSON: the zone becomes a field, and a paste opens the build at once",
   [["After a click on Paste JSON: the field, the caret in it (click it and paste any text)", pasteHome()],
    ["A text that isn't a whole build: it stays, its reason at the foot of the field", pasteHome(PASTED_CUT, "That isn't the JSON of a whole build: it stops at line 7.")]]]);
