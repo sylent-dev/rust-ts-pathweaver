@@ -2,9 +2,11 @@
 
 /* 6 · Giant level. */
 .lv6 { padding-right: 18px; }
-.lv6-now { flex: none; display: flex; flex-direction: column; justify-content: center; width: 124px; height: 100%; padding-left: 20px; }
-.lv6-label { font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: var(--on-band-weak); }
-.lv6-number { font: 800 64px/0.9 var(--brand-font); letter-spacing: -.05em; font-variant-numeric: tabular-nums; }
+/* « Level » over the number, 58 px, the group centred in its box both ways (the owner, 2026-11-18);
+   each trimmed to the height of its capitals and figures, so that the centre is that of their ink. */
+.lv6-now { flex: none; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 7px; width: 124px; height: 100%; }
+.lv6-label { padding-left: .12em; font-size: 11px; line-height: 1; text-box: trim-both cap alphabetic; letter-spacing: .12em; text-transform: uppercase; color: var(--on-band-weak); }
+.lv6-number { font: 800 58px/1 var(--brand-font); text-box: trim-both cap alphabetic; letter-spacing: -.05em; margin-right: .05em; font-variant-numeric: tabular-nums; }
 .lv6-steps { flex: none; display: flex; flex-direction: column; gap: 1px; height: 100%; }
 .lv6-block { flex: 1; flex-direction: row; gap: 8px; width: 70px; justify-content: center; background: var(--band); transition: background .2s; }
 .lv6-block:not(:disabled):hover { background: color-mix(in srgb, var(--on-band) 10%, var(--band)); }
