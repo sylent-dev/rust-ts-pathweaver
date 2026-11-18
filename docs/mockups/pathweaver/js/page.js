@@ -37,6 +37,8 @@ const VARIANTS = {
   // paper, which lines the fluid runs along, and the mark of the brand behind the drop zone.
   homePointer: { label: "Pointer", select: true, fallback: "fluid", options: { fluid: "The fluid on the lines", light: "The light (E1)", both: "Both" } },
   fluidLines: { label: "Fluid lines", select: true, fallback: "main", options: { main: "The main lines (48 px)", every: "Every line (12 px)" } },
+  fluidVolatility: { label: "Volatility", range: { min: 0, max: 100, step: 5 }, unit: "%", fallback: "60" },
+  fluidPersistence: { label: "Persistence", range: { min: 940, max: 995, step: 1 }, fallback: "985" },
   watermark: { label: "Watermark", range: { min: 0, max: 30, step: 1 }, variable: "--home-watermark", unit: "%", fallback: "7" },
   opacity: { label: "Opacity", range: { min: 0, max: 40, step: 1 }, variable: "--texture-opacity", unit: "%", fallback: "23" },
 };
