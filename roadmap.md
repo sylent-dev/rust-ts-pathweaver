@@ -30,8 +30,8 @@ Read only by the steps that need them:
   - [ ] 2i: the passives with the icons and frames of the game (the owner, 2026-11-18, see [docs/game-data.md](docs/game-data.md)); commits: `tools/make-data.py` takes the sheets of icons and frames of the tree export, kept whole with their index; the tree drawn with them, each kind of passive (small, notable, keystone, jewel socket, ascendancy) taken and not taken, on Frost Night; then a stop for the owner.
   - [ ] 2i2: the tree at its real size: lit, faded and dimmed; the ring of what is new; the hover and the zoom, measured in frames per second; the legend, the buttons of the zoom, the switch of the weapon set and the box of the ascendancy.
   - [ ] 2j: the right column, from top to bottom: « New at N »; a row of a skill and the marks of its gems (kind and colour); the inventory, its slots, their hints, the « unknown » mark and the weapon set.
-  - [ ] 2k: the other views of a build; commits: Skills, Tree, Inventory and About at 960 px; 1,920 px with the side panel; the variants of the level band; the boxes of Copy link and Download, and the box of what comes next (the community of version 2), which opens with the burst (the owner, 2026-11-18: the opening 9 · Burst of the menu of « +N ▾ », css/menu-reveal.css at commit 4d866fd), out of the link or out of the middle of the screen, its turn and its flash tuned to the size of the box, a plain fade when the system asks for less motion.
-  - [ ] 2m: Merge and the phone; commits: Merge ready; Merge to fix; the phone pages.
+  - [ ] 2k: the other views of a build; commits: Skills, Tree, Inventory and About at 960 px; 1,920 px with the side panel; the variants of the level band; the box of Download, and the box of what comes next (the community of version 2), which opens with the burst (the owner, 2026-11-18: the opening 9 · Burst of the menu of « +N ▾ », css/menu-reveal.css at commit 4d866fd), out of the link or out of the middle of the screen, its turn and its flash tuned to the size of the box, a plain fade when the system asks for less motion.
+  - [ ] 2m: Merge and the phone; commits: Merge ready; Merge to fix; the phone page.
   - [ ] 2m2: Frost and Ember derived from Frost Night once every part is drawn, rather than checked again at each sub-step (the owner, 2026-11-18); commits: Ember (amber on a neutral grey), checked on every section; Frost, the light one, in a pass of its own (the shadows, the texture, the grey portraits); then a stop for the owner.
   - [ ] 2n: the design system; commits: the tokens in `specs.md` and the mock-up as the single reference; the styles set aside removed and the entry of `design-journal.md`.
 - [ ] **3. Deployment** (Opus 5.5): the static website on Cloudflare, at its domain of `sylent.tools`.
@@ -48,7 +48,6 @@ Read only by the steps that need them:
   - 5c (Opus 5.5): the level (lit, faded, dimmed), the ascendancy, the weapon sets, the hover, the points spent.
 - [ ] **6. Inventory** (Opus 5.5): the slots laid out as in the game, their hints at the level, the uniques with their stats.
 - [ ] **7. Merging a guide** (Opus 5.5): the merging in the core and its checks (overlap, gap, different guides), the screen of the start levels, completing a merged guide; downloading a build, with the help on where the game reads it.
-- [ ] **8. Share link** (Opus 5.5): copying the link, opening it, its length, the damaged links.
-- [ ] **9. Library** (Opus 5.5): the open builds kept in the browser, the home page that lists them, the browser that refuses to keep them.
+- [ ] **8. Library** (Opus 5.5): the open builds kept in the browser, the home page that lists them, the browser that refuses to keep them.
 
 Then version 1.5 (the editor) and version 1.x (French), specified when their turn comes (see [specs.md](specs.md), Versions).
