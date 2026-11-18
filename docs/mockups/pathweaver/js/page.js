@@ -4,8 +4,7 @@
 // - VARIANTS holds one group of tabs per open decision; the address keeps the choices
 //   (e.g. ?theme=frost), to share them. A group is removed once decided.
 //   A value that combines with others is a list (`select: true` and the CSS `variable` it sets);
-//   a value tuned by eye is a slider (`range`, its `variable` and its `unit`); a list whose value
-//   the scripts read draws the page again (`draw: true`).
+//   a value tuned by eye is a slider (`range`, its `variable` and its `unit`).
 // - SECTIONS lists every scenario and state, each a function that returns
 //   [title, [[label, html], …]]: a section script adds its own with addSection(), and the newest
 //   section comes first. Past ten sections, a table of contents under the header links to each.
@@ -34,13 +33,6 @@ const VARIANTS = {
   size: { label: "Size", range: { min: 6, max: 200, step: 2 }, variable: "--texture-size", unit: "px", fallback: "24" },
   // The width of the windows of the home page (2l): the smallest, and a wide window of the owner's screen.
   homeWidth: { label: "Home width", options: { 960: "960 px", 1600: "1,600 px" }, fallback: "960" },
-  // The font, the case, the size and the spacing of the letters of the title of the drop zone of E1b (js/home-line.js).
-  titleFont: { label: "Title font", select: true, fallback: "archivo", options: { archivo: "Archivo condensed 900 (the brand)", "archivo-normal": "Archivo 800 (its normal width)", "archivo-wide": "Archivo wide 800",
-    manrope: "Manrope 800", geist: "Geist 700", space: "Space Grotesk 700", chakra: "Chakra Petch 700", unbounded: "Unbounded 700",
-    shoulders: "Big Shoulders Display 900", bricolage: "Bricolage Grotesque 800", syne: "Syne 800", serif: "Instrument Serif" } },
-  titleCase: { label: "Title case", select: true, draw: true, fallback: "upper", options: { lower: "lowercase", upper: "UPPERCASE", sentence: "Sentence case", capital: "Capital Case" } },
-  titleSize: { label: "Title size", range: { min: 32, max: 96, step: 2 }, variable: "--home-title-size", unit: "px", fallback: "56" },
-  titleSpacing: { label: "Title spacing", range: { min: -0.08, max: 0.2, step: 0.005 }, variable: "--home-title-spacing", unit: "em", fallback: "0" },
   opacity: { label: "Opacity", range: { min: 0, max: 40, step: 1 }, variable: "--texture-opacity", unit: "%", fallback: "23" },
 };
 
@@ -124,7 +116,6 @@ document.getElementById("tabs").addEventListener("input", event => {
   if (VARIANTS[variant].range) event.target.nextElementSibling.value = chosen[variant] + (VARIANTS[variant].unit ?? "");
   keepInAddress();
   applyVariables();
-  if (VARIANTS[variant].draw) renderSheet();
 });
 // The controls of the windows: an element with data-action="name" calls ACTIONS[name](element, event),
 // which returns true when the page must be drawn again.
