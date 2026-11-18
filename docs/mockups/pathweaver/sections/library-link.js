@@ -9,7 +9,7 @@ const libraryWindow = ({ library = false, builds = [] }, page) => `<div class="a
 
 const firstVisit = `<div class="library-page library-first">
   <button type="button" class="library-cta">Add my first build</button>
-  <span>Drop .build files here, or paste JSON · the whole home page is drawn at 2l</span>
+  <span>Drop .build files here, or paste JSON</span>
 </div>`;
 const libraryPage = text => `<div class="library-page">${text}</div>`;
 
@@ -22,7 +22,7 @@ const linkStatesCard = () => `<div class="tab-card">
 </div>`;
 
 addSection(() => ["The way back to the library · My library after the brand; the band of the open builds only while a build is open",
-  [["Nothing open: the band of the site alone, then the home page", libraryWindow({ library: true }, firstVisit)],
-   ["The library, three builds open: no tab is the current one", libraryWindow({ library: true, builds: BUILDS.open.slice(0, 3) }, libraryPage("My library · every build, open or not · drawn at 2l"))],
+  [["Nothing open: the band of the site alone, then the home page (a stand-in, drawn whole at 2l)", libraryWindow({ library: true }, firstVisit)],
+   ["The library, three builds open: no tab is the current one (the library drawn at 2l)", libraryWindow({ library: true, builds: BUILDS.open.slice(0, 3) }, libraryPage("My library · every build, open or not"))],
    ["A build shown: My library a click away", libraryWindow({ builds: BUILDS.open }, libraryPage("The page of a build"))],
    ["My library, its states", linkStatesCard()]]]);
