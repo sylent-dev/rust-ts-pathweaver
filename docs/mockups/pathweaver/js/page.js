@@ -4,7 +4,8 @@
 // - VARIANTS holds one group of tabs per open decision; the address keeps the choices
 //   (e.g. ?theme=frost), to share them. A group is removed once decided.
 //   A value that combines with others is a list (`select: true` and the CSS `variable` it sets);
-//   a value tuned by eye is a slider (`range`, its `variable` and its `unit`).
+//   a value tuned by eye is a slider (`range`, its `variable` and its `unit`); a list whose value
+//   the scripts read draws the page again (`draw: true`).
 // - SECTIONS lists every scenario and state, each a function that returns
 //   [title, [[label, html], …]]: a section script adds its own with addSection(), and the newest
 //   section comes first. Past ten sections, a table of contents under the header links to each.
@@ -33,9 +34,16 @@ const VARIANTS = {
   size: { label: "Size", range: { min: 6, max: 200, step: 2 }, variable: "--texture-size", unit: "px", fallback: "24" },
   // The width of the windows of the home page (2l): the smallest, and a wide window of the owner's screen.
   homeWidth: { label: "Home width", options: { 960: "960 px", 1600: "1,600 px" }, fallback: "960" },
-  // The line that says what Pathweaver does on the drop zone of E1b (js/home-line.js), in nine ways.
-  homeLine: { label: "Line", select: true, fallback: "n1", options: { n1: "N1 · Above the zone", n2: "N2 · A caption on its edge", n3: "N3 · In the band",
-    h1: "H1 · The letters of the brand", h2: "H2 · Over a ruler of the levels", h3: "H3 · A title block", e1: "E1 · Typed", e2: "E2 · Lit by a pulse", e3: "E3 · Notes of a plan" } },
+  // The title of the drop zone of E1b (js/home-line.js): its words, its font, its size; the list
+  // of the words draws the page again (`draw`).
+  homeTitle: { label: "Title", select: true, draw: true, fallback: "t1", options: {
+    t1: "Your build, level by level", t2: "Your path, level by level", t3: "See your build at every level", t4: "Every level of your build, mapped",
+    t5: "Your build, from level 1 to 100", t6: "Know what to take at every level", t7: "Weave your path to level 100",
+    t8: "Plan every level. Play every level.", t9: "From level 1 to 100, one step at a time", t10: "The whole road of your build" } },
+  titleFont: { label: "Title font", select: true, fallback: "manrope", options: { manrope: "Manrope 800", geist: "Geist 700", archivo: "Archivo condensed 900 (the brand)",
+    "archivo-wide": "Archivo wide 800", space: "Space Grotesk 700", chakra: "Chakra Petch 700", unbounded: "Unbounded 700", shoulders: "Big Shoulders Display 900",
+    bricolage: "Bricolage Grotesque 800", syne: "Syne 800", serif: "Instrument Serif" } },
+  titleSize: { label: "Title size", range: { min: 32, max: 96, step: 2 }, variable: "--home-title-size", unit: "px", fallback: "56" },
   opacity: { label: "Opacity", range: { min: 0, max: 40, step: 1 }, variable: "--texture-opacity", unit: "%", fallback: "23" },
 };
 
@@ -119,6 +127,7 @@ document.getElementById("tabs").addEventListener("input", event => {
   if (VARIANTS[variant].range) event.target.nextElementSibling.value = chosen[variant] + (VARIANTS[variant].unit ?? "");
   keepInAddress();
   applyVariables();
+  if (VARIANTS[variant].draw) renderSheet();
 });
 // The controls of the windows: an element with data-action="name" calls ACTIONS[name](element, event),
 // which returns true when the page must be drawn again.
