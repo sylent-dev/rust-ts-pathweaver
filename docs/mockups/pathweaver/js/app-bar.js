@@ -11,8 +11,8 @@ const REPORT_BUG_URL = "https://github.com/sylent-dev/rust-ts-pathweaver/issues/
 const siteBand = () => `<div class="app-site">
     <span class="app-site-brand">${logoMark(24)}<span class="logo-name">Pathweaver</span></span>
     <nav class="app-site-links">
-      <a class="app-site-link" href="${REPORT_BUG_URL}" target="_blank" rel="noopener">Report a bug</a>
-      <a class="app-site-link" href="#" role="button">What's next</a>
+      <a class="app-site-link" href="${REPORT_BUG_URL}" target="_blank" rel="noopener"><span class="app-site-label">Report a bug</span></a>
+      <a class="app-site-link" href="#" role="button"><span class="app-site-label">What's next</span></a>
     </nav>
   </div>`;
 
