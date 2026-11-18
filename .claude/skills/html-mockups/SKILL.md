@@ -13,6 +13,7 @@ Before drawing the options of a design question:
 
 - **Ask the owner for their own idea first**, or draw it alongside: theirs beat the three entries drawn for a bug report (an icon in the title bar rather than a link or a row in the settings).
 - **Look at the real data** the window will show: the 771 items of a list had only 639 images (several shared one icon), which ruled out an icon alone before any option was drawn. For Pathweaver, the corpus of `inputs/builds/`.
+- **Gather a moodboard of real references** before new styles or a logo: read `.claude/skills/moodboards/SKILL.md` (hidden from the model, to cost nothing at each message; the owner runs it with `/moodboards`), whose numbered boards the owner picks from.
 
 Start from `assets/mockup-template.html` (read its comments), copied to `docs/mockups/<name>.html`:
 
