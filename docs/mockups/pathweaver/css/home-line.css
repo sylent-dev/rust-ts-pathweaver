@@ -3,11 +3,14 @@
 .home-drop-stage { position: relative; }
 
 /* The title: the game, small, in the grey of the secondary texts; the words, large, in the
-   condensed capitals of the brand (the owner, 2026-11-18), at the size of « Title size ». */
+   condensed letters of the brand (the owner, 2026-11-18), at the size of « Title size », in the case
+   of « Title case ». */
 .home-title { display: flex; flex-direction: column; align-items: center; gap: 14px; max-width: 860px; margin-bottom: 14px; text-align: center; }
 .home-title-game { color: var(--weak); font-family: var(--font-number); font-size: 12px; letter-spacing: .24em; text-transform: uppercase; }
 .home-title h1 { margin: 0; color: var(--text); font-family: var(--brand-font); font-stretch: 62%; font-weight: 900; font-size: var(--home-title-size, 56px);
   line-height: .92; letter-spacing: .005em; text-transform: uppercase; text-wrap: balance; }
+:root[data-title-case="lower"] .home-title h1 { text-transform: lowercase; line-height: 1; }
+:root[data-title-case="capital"] .home-title h1 { text-transform: none; line-height: 1; }   /* its words written so (js/home-line.js) */
 
 /* The notes of a plan: the three things a build shows, their lines drawn to the zone, their dots
    beating; in white, not in the accent of the links, since they can't be clicked (the owner,

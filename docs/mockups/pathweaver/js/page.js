@@ -34,7 +34,8 @@ const VARIANTS = {
   size: { label: "Size", range: { min: 6, max: 200, step: 2 }, variable: "--texture-size", unit: "px", fallback: "24" },
   // The width of the windows of the home page (2l): the smallest, and a wide window of the owner's screen.
   homeWidth: { label: "Home width", options: { 960: "960 px", 1600: "1,600 px" }, fallback: "960" },
-  // The size of the title of the drop zone of E1b (js/home-line.js).
+  // The size and the case of the title of the drop zone of E1b (js/home-line.js).
+  titleCase: { label: "Title case", select: true, draw: true, fallback: "upper", options: { lower: "lowercase", upper: "UPPERCASE", capital: "Capital Case" } },
   titleSize: { label: "Title size", range: { min: 32, max: 96, step: 2 }, variable: "--home-title-size", unit: "px", fallback: "56" },
   opacity: { label: "Opacity", range: { min: 0, max: 40, step: 1 }, variable: "--texture-opacity", unit: "%", fallback: "23" },
 };
