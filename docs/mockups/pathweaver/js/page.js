@@ -34,9 +34,13 @@ const VARIANTS = {
   size: { label: "Size", range: { min: 6, max: 200, step: 2 }, variable: "--texture-size", unit: "px", fallback: "24" },
   // The width of the windows of the home page (2l): the smallest, and a wide window of the owner's screen.
   homeWidth: { label: "Home width", options: { 960: "960 px", 1600: "1,600 px" }, fallback: "960" },
-  // The size and the case of the title of the drop zone of E1b (js/home-line.js).
+  // The font, the case, the size and the spacing of the letters of the title of the drop zone of E1b (js/home-line.js).
+  titleFont: { label: "Title font", select: true, fallback: "archivo", options: { archivo: "Archivo condensed 900 (the brand)", "archivo-wide": "Archivo wide 800",
+    manrope: "Manrope 800", geist: "Geist 700", space: "Space Grotesk 700", chakra: "Chakra Petch 700", unbounded: "Unbounded 700",
+    shoulders: "Big Shoulders Display 900", bricolage: "Bricolage Grotesque 800", syne: "Syne 800", serif: "Instrument Serif" } },
   titleCase: { label: "Title case", select: true, draw: true, fallback: "upper", options: { lower: "lowercase", upper: "UPPERCASE", capital: "Capital Case" } },
   titleSize: { label: "Title size", range: { min: 32, max: 96, step: 2 }, variable: "--home-title-size", unit: "px", fallback: "56" },
+  titleSpacing: { label: "Title spacing", range: { min: -0.08, max: 0.2, step: 0.005 }, variable: "--home-title-spacing", unit: "em", fallback: "0" },
   opacity: { label: "Opacity", range: { min: 0, max: 40, step: 1 }, variable: "--texture-opacity", unit: "%", fallback: "23" },
 };
 

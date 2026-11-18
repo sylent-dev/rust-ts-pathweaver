@@ -1,9 +1,9 @@
 // What Pathweaver does, on the drop zone of E1b (2l, the owner, 2026-11-18: « il manque juste une
 // phrase »): of nine ways, the owner kept the notes of a plan (E3): the three things a build shows
 // drawn around the zone, their lines reaching it. Above the zone, a title, large (the owner,
-// 2026-11-18: « plus en avant, comme un gros titre »), the game named small over it; its words and its
-// font chosen by the owner (2026-11-18: among ten, the condensed capitals of the brand), its size
-// on « Title size » (css/home-line.css). The notes and the game are in white and grey, never in the accent: the
+// 2026-11-18: « plus en avant, comme un gros titre »), the game named small over it; its words chosen
+// by the owner among ten (2026-11-18); its font (the condensed letters of the brand first), its
+// case, its size and the spacing of its letters on the controls « Title … » (css/home-line.css). The notes and the game are in white and grey, never in the accent: the
 // accent is the colour of the links, and they can't be clicked (the owner, 2026-11-18).
 
 // In capital case, its small word stays small, as English titles keep it (CSS would raise it).

@@ -2,15 +2,25 @@
    things a build shows as notes of a plan around it. */
 .home-drop-stage { position: relative; }
 
-/* The title: the game, small, in the grey of the secondary texts; the words, large, in the
-   condensed letters of the brand (the owner, 2026-11-18), at the size of « Title size », in the case
-   of « Title case ». */
+/* The title: the game, small, in the grey of the secondary texts; the words, large, in the font of
+   « Title font » (the condensed letters of the brand by default, the owner's choice, 2026-11-18), at
+   the size of « Title size », in the case of « Title case », their letters spaced by « Title spacing ». */
 .home-title { display: flex; flex-direction: column; align-items: center; gap: 14px; max-width: 860px; margin-bottom: 14px; text-align: center; }
 .home-title-game { color: var(--weak); font-family: var(--font-number); font-size: 12px; letter-spacing: .24em; text-transform: uppercase; }
-.home-title h1 { margin: 0; color: var(--text); font-family: var(--brand-font); font-stretch: 62%; font-weight: 900; font-size: var(--home-title-size, 56px);
-  line-height: .92; letter-spacing: .005em; text-transform: uppercase; text-wrap: balance; }
+.home-title h1 { margin: 0; color: var(--text); font-family: var(--home-title-family, "Archivo"), sans-serif; font-stretch: 62%; font-weight: 900;
+  font-size: var(--home-title-size, 56px); line-height: .92; letter-spacing: var(--home-title-spacing, 0em); text-transform: uppercase; text-wrap: balance; }
 :root[data-title-case="lower"] .home-title h1 { text-transform: lowercase; line-height: 1; }
 :root[data-title-case="capital"] .home-title h1 { text-transform: none; line-height: 1; }   /* its words written so (js/home-line.js) */
+:root[data-title-font="archivo-wide"] .home-title h1 { font-stretch: 125%; font-weight: 800; }
+:root[data-title-font="manrope"] .home-title h1 { --home-title-family: "Manrope"; font-weight: 800; }
+:root[data-title-font="geist"] .home-title h1 { --home-title-family: "Geist"; font-weight: 700; }
+:root[data-title-font="space"] .home-title h1 { --home-title-family: "Space Grotesk"; font-weight: 700; }
+:root[data-title-font="chakra"] .home-title h1 { --home-title-family: "Chakra Petch"; font-weight: 700; }
+:root[data-title-font="unbounded"] .home-title h1 { --home-title-family: "Unbounded"; font-weight: 700; font-size: calc(var(--home-title-size, 56px) * .8); }
+:root[data-title-font="shoulders"] .home-title h1 { --home-title-family: "Big Shoulders Display"; font-weight: 900; }
+:root[data-title-font="bricolage"] .home-title h1 { --home-title-family: "Bricolage Grotesque"; font-weight: 800; }
+:root[data-title-font="syne"] .home-title h1 { --home-title-family: "Syne"; font-weight: 800; }
+:root[data-title-font="serif"] .home-title h1 { --home-title-family: "Instrument Serif"; font-weight: 400; font-size: calc(var(--home-title-size, 56px) * 1.15); }
 
 /* The notes of a plan: the three things a build shows, their lines drawn to the zone, their dots
    beating; in white, not in the accent of the links, since they can't be clicked (the owner,
