@@ -98,9 +98,8 @@
 
 /* The section of the two bands (sections/bands.js): the page under them, where the menu opens. */
 .bands-page { height: 230px; background: var(--page); }
-.library-page { display: grid; place-items: center; height: 72px; background: var(--page); color: var(--weak); font-size: 12px; }
-.library-first { height: 200px; align-content: center; gap: 12px; }
-.library-cta { height: 44px; padding: 0 22px; border: none; border-radius: 4px; background: var(--on-bar); color: var(--builds-band, var(--band-deep)); font: 600 14px "Manrope", sans-serif; cursor: pointer; }
+/* The stand-ins of the home page in the section of My library (sections/library-link.js). */
+.link-page { display: grid; place-items: center; height: 72px; background: var(--page); color: var(--weak); font-size: 12px; }
 .link-row { display: flex; gap: 16px; }
 .link-states { display: flex; gap: 16px; }
 .link-states > span, .link-strip { width: 560px; flex: none; }

@@ -13,5 +13,7 @@ const ICONS = {
   warning: '<path d="M8 2.2 14.3 13.5H1.7z"/><path d="M8 6.5v3.2M8 11.6v.1"/>',
   link: '<path d="M6.8 9.2a3 3 0 0 0 4.2 0l2-2a3 3 0 0 0-4.2-4.2l-.9.9"/><path d="M9.2 6.8a3 3 0 0 0-4.2 0l-2 2a3 3 0 0 0 4.2 4.2l.9-.9"/>',
   download: '<path d="M8 2.5v8M4.8 7.5 8 10.7l3.2-3.2M3 13.5h10"/>',
+  // The bin of a row of the library (2l2), which asks once, in the row.
+  bin: '<path d="M2.5 4.5h11M6 4.5V2.8h4v1.7M4 4.5l.8 8.7h6.4l.8-8.7M6.6 7v3.8M9.4 7v3.8"/>',
   arrow: '<path d="M2.5 8h11M9 3.5 13.5 8 9 12.5"/>',
 };

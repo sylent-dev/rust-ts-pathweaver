@@ -25,6 +25,24 @@ const homeLinks = (extra = "") => `<nav class="home-links ${extra}">
   <a class="app-site-link" href="#" role="button"><span class="app-site-label">What's next</span></a>
 </nav>`;
 
+// The icon of the zone (the owner, 2026-11-18, no. 10 of the series, « raccord avec le plus
+// d'après »): the corners of a zone around the + of the band of the builds, which leads to the home page, drawn
+// alike (its two strokes, in a box half wider). Square, its corners at a right angle and its ends
+// cut flat (the owner, 2026-11-18: « un truc un peu plus anguleux »), like the + of the band
+// (ICONS.add). Its corners close in toward the +: a little on hover, firmly while a file is over
+// the page (css/home-drop.css).
+const dropMark = size => {
+  // One corner drawn four times, turned around the centre; each moves along its own diagonal.
+  const corners = [0, 90, 180, 270].map(turn =>
+    `<g transform="rotate(${turn} 12 12)"><path class="drop-mark-corner" d="M1.5 6.5v-5h5"/></g>`).join("");
+  return `<svg class="app-icon drop-mark" width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"
+    stroke-linecap="butt" stroke-linejoin="miter" aria-hidden="true">${corners}<path d="M12 6v12M6 12h12"/></svg>`;
+};
+
+// The link beside the zone: Paste JSON, a word alone like the links of the band (the owner,
+// 2026-11-18: without its icon).
+const dropLink = label => `<a class="app-site-link home-drop-paste" href="#" role="button"><span class="app-site-label">${label}</span></a>`;
+
 // The motions stop when the system asks for less motion.
 const lessMotion = () => matchMedia("(prefers-reduced-motion: reduce)").matches;
 
@@ -32,7 +50,7 @@ const lessMotion = () => matchMedia("(prefers-reduced-motion: reduce)").matches;
 // lit while a real file is dragged over it (try with any file of the desktop: the mock-up opens
 // nothing); a window drawn in that state holds it (data-held).
 const sheet = document.getElementById("sheet");
-const dropHost = event => event.target.closest(".home-drop");
+const dropHost = event => event.target.closest(".home-drop, .home-library");
 sheet.addEventListener("pointermove", event => {
   const host = dropHost(event);
   if (!host) return;
