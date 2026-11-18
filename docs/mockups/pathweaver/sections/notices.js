@@ -5,23 +5,24 @@
 // bands: there, the zone says what went wrong, and its foot that nothing is kept.
 
 // A notice: `kind` error (the red of the errors) or info (grey: private browsing isn't an error,
-// Pathweaver works the same); no icon, the shade and the words say it (the owner, 2026-11-18); its
-// title; the files refused, each its name, its reason and the line of the error when there is
-// one; or a note; its close button, a square in the corner.
+// Pathweaver works the same); no icon, the shade and the words say it (the owner, 2026-11-18); the
+// files refused, each its name, its reason and the line of the error when there is one, without a
+// title that would count them (the owner, 2026-11-18: the list says it); or a title and a note;
+// its close button, a square in the corner.
 const noticeFile = ([name, reason, line]) => `<li>${escapeHtml(name)} <span class="app-notice-reason">${reason}</span>${line ? `<code>${escapeHtml(line)}</code>` : ""}</li>`;
-const notice = ({ kind = "error", title, files = [], note = "" }) => `<div class="app-notice is-${kind}" role="${kind === "error" ? "alert" : "status"}">
-    <div class="app-notice-text"><strong>${title}</strong>${files.length ? `<ul>${files.map(noticeFile).join("")}</ul>` : ""}${note ? `<span class="app-notice-note">${note}</span>` : ""}</div>
+const notice = ({ kind = "error", title = "", files = [], note = "" }) => `<div class="app-notice is-${kind}" role="${kind === "error" ? "alert" : "status"}">
+    <div class="app-notice-text">${title ? `<strong>${title}</strong>` : ""}${files.length ? `<ul>${files.map(noticeFile).join("")}</ul>` : ""}${note ? `<span class="app-notice-note">${note}</span>` : ""}</div>
     <button type="button" class="app-notice-close" aria-label="Close" title="Close">${icon(16, ICONS.close)}</button>
   </div>`;
 // The notices of a window, the errors first.
 const notices = list => `<div class="app-notices">${list.join("")}</div>`;
 
 const NOTICES = {
-  refused: notice({ title: "3 of the 4 files dropped weren't opened", files: [
+  refused: notice({ files: [
     ["passive-tree.png", "is an image, not a build."],
     ["Ritualist poison.build", "isn't valid JSON at line 12:", '"level": 12,,'],
     ["Mercenary.build", "has a text where a number goes, in skills › 3 › level."]] }),
-  refusedOne: notice({ title: "1 of the 2 files dropped wasn't opened", files: [["notes.txt", "isn't JSON: it starts with “Act 1”.", ""]] }),
+  refusedOne: notice({ files: [["notes.txt", "isn't JSON: it starts with “Act 1”.", ""]] }),
   link: notice({ title: "That link can't be opened",
     note: "It was cut: it ends after 1,204 of its characters. Ask for the link again, or for the .build file." }),
   // Shown at every visit: a private window forgets everything once closed, its close included.
