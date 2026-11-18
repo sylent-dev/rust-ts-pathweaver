@@ -13,9 +13,9 @@
 // 2026-11-17, 18 · Frost and its negative 28 · Frost Night (the others are in the history of Git),
 // then 29 · Ember, Frost Night on a neutral grey with amber first.
 const THEMES = {
-  frost: { title: "18 · Frost", text: "Light: the cool light of Aurora at the density of Slate, flat white boxes, one blue (Geist, Geist Mono)." },
-  "frost-night": { title: "28 · Frost Night", text: "Dark, Frost in negative: its density and its flat boxes on a blue black, pale blue lines, one blue (Geist, Geist Mono)." },
-  ember: { title: "29 · Ember", text: "Dark, Frost Night on a very dark neutral grey: the same density and flat boxes, amber first (Geist, Geist Mono)." },
+  frost: { title: "18 · Frost", text: "Light: the cool light of Aurora at the density of Slate, flat white boxes, one blue (Manrope)." },
+  "frost-night": { title: "28 · Frost Night", text: "Dark, Frost in negative: its density and its flat boxes on a blue black, pale blue lines, one blue (Manrope)." },
+  ember: { title: "29 · Ember", text: "Dark, Frost Night on a very dark neutral grey: the same density and flat boxes, amber first (Manrope)." },
 };
 
 

@@ -186,7 +186,8 @@ Agreed on the wireframes of [docs/wireframes/pathweaver.excalidraw](docs/wirefra
 ### The style
 
 - **Frost Night is the reference style** (the owner, 2026-11-18): dark, a blue black, one blue. Every setting is tuned on it first; Frost (light) and Ember (amber on a neutral grey) derive from it and are adjusted after, the light one in a pass of its own, since a shadow, a texture or a grey portrait don't carry over as they are.
-- **The graph paper at 3 % everywhere** (the owner, 2026-11-18): behind the blocks, the bands and the tree, and on the home page, the first visit and the library alike; its colour and its size are settled at 2d.
+- **Manrope for every role** (the owner, 2026-11-18, among 85 fonts): the text, the titles (600, spaced -0.02 em) and the numbers, which take its figures of one width so that the levels line up; the name alone in Archivo (see The brand), and the big titles of the home page and of the library with it; the code (a pasted JSON, the line of an error) in the monospace font of the system.
+- **The graph paper at 3 % everywhere** (the owner, 2026-11-18): behind the blocks, the bands and the tree, and on the home page, the first visit and the library alike; its colour and its size are settled at 2d2.
 
 ### The brand
 

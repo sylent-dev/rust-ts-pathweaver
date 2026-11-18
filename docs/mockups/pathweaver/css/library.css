@@ -44,7 +44,7 @@
 .library-name, .library-meta { overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
 .library-name { font-size: 14.5px; font-weight: 600; }
 .library-meta { color: var(--weak); font-size: 12.5px; }
-.library-date { flex: none; width: 124px; white-space: nowrap; color: var(--weak); font-family: var(--font-number); font-size: 12px; text-align: right; }
+.library-date { flex: none; width: 124px; white-space: nowrap; color: var(--weak); font-family: var(--font-number); font-variant-numeric: tabular-nums; font-size: 12px; text-align: right; }
 .library-bin { flex: none; display: grid; place-items: center; width: 56px; height: 56px; margin-left: 16px; padding: 0; border: none; background: none; color: var(--weak); cursor: pointer; transition: color .2s; }
 .library-bin:is(:hover, .is-hover) { color: #ef4444; }
 /* On hover, the lid rises 1 px, level, both its ends alike, with a small overshoot (the owner,
