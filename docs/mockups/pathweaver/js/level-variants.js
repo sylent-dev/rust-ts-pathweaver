@@ -50,18 +50,6 @@ const lvChanges = (context, extra = "") => `<div class="lv-changes ${extra}">
     ${context.lines.map(line => `<span class="lv-change">${line}</span>`).join("")}
   </div>`;
 
-// The chips of what changes at a level (the variants that show them one by one).
-function changeChips(level) {
-  const changes = changesAt(level);
-  return [
-    ...changes.skills.map(skill => ({ text: skill.name, colour: skill.colour })),
-    ...changes.supports.map(support => ({ text: `${support.name}`, colour: support.colour })),
-    ...changes.slots.map(slot => ({ text: `${SLOT_NAMES[slot.id]} hint`, slot: true })),
-    ...(changes.passives > 0 ? [{ text: `+ ${plural(changes.passives, "passive")}`, weak: true }] : []),
-    ...(changes.removed + changes.removedPassives > 0 ? [{ text: `− ${changes.removed + changes.removedPassives} removed`, removed: true }] : []),
-  ];
-}
-
 // The ratio of a click along a dial (js/level-variants-explosive.js): the angle from its centre,
 // from the left (level 1) to the right (level 100) over the top.
 ACTIONS["level-dial"] = (element, event) => {

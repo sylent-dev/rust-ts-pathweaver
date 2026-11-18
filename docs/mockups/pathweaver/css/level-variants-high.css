@@ -17,12 +17,10 @@
 .lv6 .lv2-tick { top: 36px; background: var(--accent); }
 .lv6 .lv2-cursor { top: 28px; background: var(--on-band); }   /* no glow: hard to judge, kitsch at worst (the owner, 2026-11-18) */
 .lv6 .lv-end { top: 52px; }
-.lv6-chips { flex: 1; min-width: 0; display: flex; flex-wrap: wrap; gap: 4px; max-height: 52px; overflow: hidden; }
-.lv-chip { display: inline-flex; align-items: center; gap: 6px; height: 24px; padding: 0 8px; background: var(--band); font-size: 12px; white-space: nowrap; }
-.lv-chip i { width: 7px; height: 7px; }
-.lv-chip i.is-slot { box-shadow: inset 0 0 0 1px var(--on-band); }
-.lv-chip.is-weak { background: none; padding: 0 4px; color: var(--on-band-weak); }
-.lv-chip.is-removed { color: #ef4444; }
+/* « N changes at N » and its window (css/level-changes.css): the window hangs under the band, over
+   the page, its right edge on the margin of the band. */
+.lv6 { overflow: visible; z-index: 4; }
+.lv6-changes { position: relative; flex: 1; align-self: stretch; display: flex; align-items: center; min-width: 0; }
 
 /* 7 · Markers by kind. */
 .lv7 { padding: 0 20px 0 22px; }
