@@ -1,0 +1,13 @@
+/* The variants of the level band (2g): what they share. 84 px, the darker band, the graph paper
+   (css/textures.css); every class prefixed lv-, each variant's with its number (lv1-, lv2-…). */
+.lv { display: flex; align-items: center; height: 84px; background: var(--band-image), var(--band-deep); color: var(--on-band); font-size: 13px; overflow: hidden; }
+.lv .app-weak { color: var(--on-band-weak); }
+:where(.lv) button { padding: 0; border: none; background: none; color: var(--on-band); cursor: pointer; }
+:where(.lv) button:disabled { opacity: .3; cursor: default; }
+.lv-step { flex: none; display: flex; flex-direction: column; align-items: center; gap: 4px; width: 30px; }
+.lv-step .app-number { font-size: 12px; color: var(--on-band-weak); }
+.lv-changes { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 3px; }
+.lv-changes-title { color: var(--on-band-weak); }
+.lv-change { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.lv-track { position: relative; flex: none; cursor: pointer; }
+.lv-end { position: absolute; top: 24px; transform: translateX(-50%); font-size: 11px; color: var(--on-band-weak); }
