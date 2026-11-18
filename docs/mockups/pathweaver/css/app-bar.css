@@ -38,7 +38,8 @@
 .app-builds-more, .app-builds-open { display: inline-flex; align-items: center; justify-content: center; gap: 5px; min-width: 44px; height: 100%; padding: 0 12px; border: none;
   cursor: pointer; font-size: 13px; transition: color .3s, background-color .3s; }
 .app-builds-more, .app-builds-open { background: var(--builds-band, var(--band-deep)); color: var(--accent); }
-.app-builds-more { box-shadow: inset -1px 0 0 color-mix(in srgb, var(--on-bar) 24%, transparent); }
+/* The line between them in the blue too (the owner, 2026-11-18). */
+.app-builds-more { box-shadow: inset -1px 0 0 var(--accent); }
 .app-builds-more:is(:hover, .is-hover, .is-open), .app-builds-open:is(:hover, .is-hover) { color: var(--on-bar); }
 .app-builds-open { padding: 0; }
 .app-builds-open svg { transition: transform .2s cubic-bezier(.34, 1.56, .64, 1); }
