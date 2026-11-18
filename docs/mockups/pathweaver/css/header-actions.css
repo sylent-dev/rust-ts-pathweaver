@@ -1,71 +1,41 @@
-/* The variants of the place of Copy link and Download .build (2f2, sections/header-actions.js).
-   The actions sit on the right of the header; the variants that touch its right end undo its
-   padding. */
-.hx-window { overflow: visible; }
-.hx-window .app-header-actions { align-self: center; margin-top: 0; align-items: center; }
-:is(.hx-n2, .hx-h1, .hx-h3, .hx-x2, .hx-x3) { padding-right: 0; }
-:is(.hx-n2, .hx-h1, .hx-h3, .hx-x3) .app-header-actions { align-self: stretch; gap: 0; }
+/* The thumbnails of the file in the header (2f2, sections/header-actions.js): a button that looks
+   like a file, on the right of the header; the variants at its right end undo its padding. */
+.hx-window .app-header-actions { align-self: center; align-items: center; margin-top: 0; }
+.hx-file { --file-page: var(--on-band); --file-ink: var(--band-deep);
+  display: flex; align-items: center; gap: 10px; padding: 0 14px 0 10px; border: none; background: none; color: var(--text); text-align: left; cursor: pointer;
+  transition: background-color .25s; }
+.hx-file:active { cursor: grabbing; }
+.hx-file-icon { flex: none; display: block; transition: transform .2s cubic-bezier(.34, 1.56, .64, 1); }
+.hx-file:hover .hx-file-icon { transform: translateY(-2px); }   /* a file that can be taken */
+.hx-file-text { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.hx-file-text b { color: var(--accent); font-size: 13px; font-weight: 600; }
+.hx-file-text small { color: var(--weak); font-size: 12px; }
+.hx-file:hover .hx-file-text b { text-decoration: underline; text-underline-offset: 3px; }
 
-/* N1 · two quiet links in the accent, a line drawn under them on hover. */
-.hx-link { display: inline-flex; align-items: center; gap: 6px; margin-left: 14px; color: var(--accent); font-size: 13px; text-decoration: none; }
-.hx-link:hover { text-decoration: underline; text-underline-offset: 4px; }
-
-/* N2 · two blocks the full height, in the shade of the bands, the mirror of the portrait. */
-.hx-block { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 5px; width: 84px; height: 100%; padding: 0; border: none;
-  background: var(--band-deep); color: var(--accent); font-size: 12px; cursor: pointer; transition: background-color .3s, color .3s; }
-.hx-block + .hx-block { margin-left: 1px; }
-.hx-block:hover { background: color-mix(in srgb, var(--on-band) 9%, var(--band-deep)); color: var(--on-band); }
-
-/* N3 · in the line of the author. */
-.hx-inline { color: var(--accent); text-decoration: none; }
-.hx-inline:hover { text-decoration: underline; text-underline-offset: 3px; }
-
-/* H1 · one block, Share, white like the + of the band above, and its menu in the shade of the bands. */
-.hx-h1 { z-index: 6; }   /* its menu over the level band, which comes after it */
-.hx-share-wrap { position: relative; display: flex; align-self: stretch; }
-.hx-share { display: inline-flex; align-items: center; gap: 8px; height: 100%; padding: 0 20px; border: none; background: var(--on-bar); color: var(--band-deep); font-size: 14px; font-weight: 600; cursor: pointer; }
-.hx-share:is(:hover, .is-open) { background: color-mix(in srgb, var(--on-bar) 82%, transparent); }
-.hx-menu { position: absolute; z-index: 5; top: 100%; right: 0; width: 280px; background: var(--band-deep); color: var(--on-bar); box-shadow: 0 8px 18px rgb(0 0 0 / .28); }
-.hx-menu-item { display: flex; align-items: center; gap: 12px; height: 54px; padding: 0 14px; color: var(--accent); cursor: pointer; }
-.hx-menu-item:hover { background: color-mix(in srgb, var(--on-bar) 9%, transparent); }
-.hx-menu-item > span { display: flex; flex-direction: column; }
-.hx-menu-item b { font-weight: 600; font-size: 13px; }
-.hx-menu-item small { color: var(--on-band-weak); font-size: 12px; }
-
-/* H2 · on the current tab, two small icons before its close. */
-.hx-tab-action { display: grid; place-items: center; flex: none; width: 22px; height: 22px; padding: 0; border: none; background: none; color: var(--accent); cursor: pointer; }
-.hx-tab-action:hover { color: var(--on-bar); }
-
-/* H3 · the link first, in the accent; the file a square in the shade of the bands. */
-.hx-primary { display: inline-flex; align-items: center; gap: 8px; height: 100%; padding: 0 22px; border: none; background: var(--accent); color: var(--on-accent); font-size: 14px; font-weight: 600; cursor: pointer; }
-.hx-primary:hover { background: color-mix(in srgb, var(--accent) 85%, white); }
-.hx-square { display: grid; place-items: center; width: 66px; height: 100%; padding: 0; border: none; background: var(--band-deep); color: var(--accent); cursor: pointer; }
-.hx-square:hover { color: var(--on-band); }
-
-/* X1 · the link written out, and the file as a file. */
-.hx-url, .hx-file { display: flex; height: 48px; box-sizing: border-box; border: none; background: rgb(0 0 0 / .35); color: var(--text); cursor: pointer; text-align: left; }
-.hx-url { flex-direction: column; justify-content: center; gap: 3px; width: 250px; padding: 0 10px; }
-.hx-url code { overflow: hidden; white-space: nowrap; text-overflow: clip; font: 12px/1.2 ui-monospace, monospace; color: var(--weak); -webkit-mask-image: linear-gradient(90deg, #000 75%, transparent); mask-image: linear-gradient(90deg, #000 75%, transparent); }
-.hx-url small, .hx-file small { display: inline-flex; align-items: center; gap: 5px; color: var(--accent); font-size: 12px; }
-.hx-file { align-items: center; gap: 10px; width: 230px; margin-left: 8px; padding: 0 10px 0 8px; cursor: grab; }
-.hx-file > span:last-child { display: flex; flex-direction: column; gap: 3px; min-width: 0; }
-.hx-file b { overflow: hidden; white-space: nowrap; text-overflow: ellipsis; font-weight: 500; font-size: 12px; }
-.hx-file-icon { flex: none; display: grid; place-items: end center; width: 26px; height: 32px; padding-bottom: 4px; box-sizing: border-box; background: var(--on-band); color: var(--band-deep); font-size: 8px; font-weight: 700;
-  clip-path: polygon(0 0, 68% 0, 100% 26%, 100% 100%, 0 100%); }
-.hx-url:hover code { color: var(--text); }
-.hx-file:hover b { color: var(--accent); }
-
-/* X2 · a corner turned down, unfolded on hover into the two, over the right of the header. */
-.hx-x2 { position: relative; }
-.hx-corner { position: absolute; top: 0; right: 0; width: 34px; height: 34px; padding: 0; border: none; cursor: pointer;
-  background: linear-gradient(to bottom left, var(--band-deep) 50%, var(--accent) 50%); box-shadow: -2px 2px 5px rgb(0 0 0 / .4); transition: width .25s, height .25s; }
-.hx-corner:hover { width: 44px; height: 44px; }
-.hx-unfold { position: absolute; top: 0; right: 0; bottom: 0; display: flex; background: var(--accent); clip-path: polygon(38px 0, 100% 0, 100% 100%, 0 100%); padding-left: 38px; }
-.hx-unfold button { display: inline-flex; align-items: center; gap: 8px; padding: 0 18px; border: none; background: none; color: var(--on-accent); font-size: 14px; font-weight: 600; cursor: pointer; }
-.hx-unfold button:hover { background: rgb(0 0 0 / .12); }
-
-/* X3 · the end of the header cut at 60°, in the accent, the two split by a slanted line. */
-.hx-cut { display: flex; align-items: stretch; height: 100%; padding-left: 38px; background: var(--accent); clip-path: polygon(38px 0, 100% 0, 100% 100%, 0 100%); }
-.hx-cut button { display: inline-flex; align-items: center; gap: 8px; padding: 0 18px; border: none; background: none; color: var(--on-accent); font-size: 14px; font-weight: 600; cursor: pointer; }
-.hx-cut button:hover { background: rgb(0 0 0 / .12); }
-.hx-cut-line { width: 2px; background: var(--page); transform: skewX(-30deg); }
+/* F1 · on a darker field, as X1. */
+.hx-f1 .hx-file { height: 48px; background: rgb(0 0 0 / .35); }
+.hx-f1 .hx-file:hover { background: rgb(0 0 0 / .5); }
+/* F2 · no field, one on hover. */
+.hx-f2 .hx-file { height: 48px; }
+.hx-f2 .hx-file:hover { background: rgb(0 0 0 / .35); }
+/* F3 · the full height at the right end, in the shade of the bands. */
+.hx-f3 { padding-right: 0; }
+.hx-f3 .app-header-actions { align-self: stretch; }
+.hx-f3 .hx-file { height: 100%; padding: 0 22px 0 18px; background: var(--band-deep); }
+.hx-f3 .hx-file:hover { background: color-mix(in srgb, var(--on-band) 7%, var(--band-deep)); }
+/* F4 · the page in the accent, the words in white and grey. */
+.hx-f4 .hx-file { --file-page: var(--accent); --file-ink: var(--on-accent); height: 48px; }
+.hx-f4 .hx-file-text b { color: var(--text); }
+/* F5 · the file alone, larger; an arrow comes down on it on hover, and « Download » shows. */
+.hx-f5 .hx-file { height: 56px; gap: 8px; }
+.hx-file-drop { position: relative; display: block; }
+.hx-file-arrow { position: absolute; left: 50%; top: 4px; display: grid; place-items: center; width: 20px; height: 20px; margin-left: -10px; background: var(--accent); color: var(--on-accent);
+  opacity: 0; transform: translateY(-8px); transition: opacity .2s, transform .25s cubic-bezier(.34, 1.56, .64, 1); }
+.hx-f5 .hx-file:hover .hx-file-arrow { opacity: 1; transform: none; }
+.hx-f5 .hx-file-text b { max-height: 0; overflow: hidden; opacity: 0; transition: max-height .25s, opacity .2s; }
+.hx-f5 .hx-file:hover .hx-file-text b { max-height: 20px; opacity: 1; text-decoration: none; }
+/* F6 · with its name, as X1 was drawn. */
+.hx-f6 .hx-file { width: 250px; height: 48px; background: rgb(0 0 0 / .35); }
+.hx-f6 .hx-file:hover { background: rgb(0 0 0 / .5); }
+.hx-file-name { overflow: hidden; white-space: nowrap; text-overflow: ellipsis; font-size: 12px; font-weight: 500; }
+.hx-f6 .hx-file-text small { display: inline-flex; align-items: center; gap: 5px; color: var(--accent); }
