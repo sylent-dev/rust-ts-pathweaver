@@ -23,9 +23,9 @@
 
 /* The zone: a block that acts as a button, which chooses the files, and where they are dropped; without a border (the
    owner, 2026-11-18, to see), a black at 50 %, darker than the page (the owner,
-   2026-11-18), darker still on hover, its corners less round (the owner, 2026-11-18). */
+   2026-11-18), darker still on hover, its corners square, like its icon (the owner, 2026-11-18). */
 .home-drop-zone { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px; width: 560px; height: 260px; padding: 0;
-  border: none; border-radius: 10px; background: rgb(0 0 0 / 50%);
+  border: none; border-radius: 0; background: rgb(0 0 0 / 50%);
   color: var(--text); cursor: pointer; transition: background-color .25s, box-shadow .3s, transform .3s cubic-bezier(.34, 1.56, .64, 1); }
 .home-drop-zone > .app-icon { color: var(--accent); transition: transform .3s cubic-bezier(.34, 1.56, .64, 1); }
 .home-drop-zone strong { font-size: 22px; font-weight: 600; letter-spacing: -.01em; }

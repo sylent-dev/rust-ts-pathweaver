@@ -10,5 +10,5 @@
 .home-paste-hint { display: flex; flex-direction: column; align-items: center; gap: 10px; pointer-events: none; }
 .home-paste-field:not(:placeholder-shown) ~ .home-paste-hint { display: none; }
 /* The reason of a refused text, at the foot of the field, over a fade of its black. */
-.home-drop-zone .home-paste-reason { position: absolute; left: 1.5px; right: 1.5px; bottom: 1.5px; padding: 28px 22px 16px; border-radius: 0 0 9px 9px;
+.home-drop-zone .home-paste-reason { position: absolute; left: 1.5px; right: 1.5px; bottom: 1.5px; padding: 28px 22px 16px;
   background: linear-gradient(transparent, rgb(0 0 0 / 85%) 50%); pointer-events: none; }
