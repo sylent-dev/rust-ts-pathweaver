@@ -22,15 +22,15 @@
 .home-drop-main { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 18px; padding: 0 40px 64px; }
 
 /* The zone: a block that acts as a button, which chooses the files, and where they are dropped; without a border (the
-   owner, 2026-11-18, to see), a transparent black, darker than the page (its opacity on
-   « Zone »), darker still on hover, its corners less round (the owner, 2026-11-18). */
+   owner, 2026-11-18, to see), a black at 50 %, darker than the page (the owner,
+   2026-11-18), darker still on hover, its corners less round (the owner, 2026-11-18). */
 .home-drop-zone { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px; width: 560px; height: 260px; padding: 0;
-  border: none; border-radius: 10px; background: rgb(0 0 0 / var(--home-zone-opacity, 50%));
+  border: none; border-radius: 10px; background: rgb(0 0 0 / 50%);
   color: var(--text); cursor: pointer; transition: background-color .25s, box-shadow .3s, transform .3s cubic-bezier(.34, 1.56, .64, 1); }
 .home-drop-zone > .app-icon { color: var(--accent); transition: transform .3s cubic-bezier(.34, 1.56, .64, 1); }
 .home-drop-zone strong { font-size: 22px; font-weight: 600; letter-spacing: -.01em; }
 .home-drop-zone span { color: var(--weak); font-size: 13.5px; }
-.home-drop-zone:is(:hover, .is-hover) { background: rgb(0 0 0 / min(100%, calc(var(--home-zone-opacity, 50%) + 15%))); }
+.home-drop-zone:is(:hover, .is-hover) { background: rgb(0 0 0 / 65%); }
 /* The corners close in toward the + rather than the icon rising (the owner, 2026-11-18): each
    along its diagonal, in units of the icon (24 a side); a little on hover, firmly with a file. */
 .drop-mark-corner { transition: transform .35s cubic-bezier(.34, 1.56, .64, 1); }

@@ -1,28 +1,8 @@
-/* The files dropped on the zone of E1b (sections/home-drop-files.js): the zone filled, its rows,
-   and the zone that refuses a file. The red of what is refused is the red of the gems of strength
-   of Frost Night until the colours are settled (2d). */
+/* The zone of E1b that refuses a file (sections/home-drop-files.js). The red of what is refused
+   is the red of the gems of strength of Frost Night until the colours are settled (2d). */
 .home-drop { --home-error: #f87171; }
 
 /* The zone that refuses: its icon and a thin line in the red; it stays so until the next drop. */
 .home-drop-zone.is-refused { box-shadow: inset 0 0 0 1.5px color-mix(in srgb, var(--home-error) 70%, transparent); }
 .home-drop-zone.is-refused > .app-icon { color: var(--home-error); }
 .home-drop-zone.is-refused > span:last-child { margin-top: -4px; }
-
-/* The zone filled: the rows of the files from the top, then the line to drop more and the button. */
-.home-drop-zone.is-filled { justify-content: flex-start; align-items: stretch; gap: 0; height: auto; min-height: 260px; padding: 12px; box-sizing: border-box; cursor: default; }
-.drop-files { display: flex; flex-direction: column; gap: 4px; }
-.drop-file { display: flex; align-items: center; gap: 12px; height: 52px; padding: 0 8px; border-radius: 8px; background: rgb(255 255 255 / 4%); }
-.drop-file-portrait { flex: none; width: 36px; height: 36px; border-radius: 6px; object-fit: cover; }
-.home-drop-zone .drop-file-mark { flex: none; display: grid; place-items: center; width: 36px; height: 36px; border-radius: 6px; background: color-mix(in srgb, var(--home-error) 14%, transparent); color: var(--home-error); }
-.drop-file-text { flex: 1; display: flex; flex-direction: column; min-width: 0; }
-.drop-file-text > span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.home-drop-zone .drop-file-name { color: var(--text); font-size: 14px; font-weight: 500; }
-.home-drop-zone .drop-file-meta { color: var(--weak); font-size: 12.5px; }
-.home-drop-zone .drop-file.is-refused .drop-file-meta { color: var(--home-error); }
-.drop-file-out { flex: none; display: grid; place-items: center; width: 28px; height: 28px; border: none; border-radius: 6px; background: none; color: var(--weak); cursor: pointer; }
-.drop-file-out:hover { background: rgb(255 255 255 / 8%); color: var(--text); }
-.drop-files-foot { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-top: auto; padding: 16px 4px 0; }
-.home-drop-zone .drop-files-more { display: flex; align-items: center; gap: 8px; color: var(--weak); font-size: 13px; cursor: pointer; }
-.drop-files-more .app-icon { color: var(--accent); }
-.drop-files-open { height: 40px; padding: 0 18px; font-size: 14px; }
-.drop-files-open:disabled { opacity: .4; cursor: default; }
