@@ -33,7 +33,7 @@ Read only by the steps that need them:
   - [ ] 2i: the tree at its real size; commits: lit, faded and dimmed; the ring of what is new; the hover and the zoom, measured in frames per second. The legend, the buttons of the zoom and the box of the ascendancy come with it.
   - [ ] 2j: the motion, chosen by clicking; commits: the hover and the cursor of the level; the tabs and the boxes that open.
   - [ ] 2k: the other views of a build; commits: Skills, Tree, Inventory and About at 960 px; 1,920 px with the side panel; the variants of the level band; the boxes of Copy link and Download, and the box of what comes next (the community of version 2), which opens with the burst (the owner, 2026-11-18: the opening 9 · Burst of the menu of « +N ▾ », css/menu-reveal.css at commit 4d866fd), out of the link or out of the middle of the screen, its turn and its flash tuned to the size of the box, a plain fade when the system asks for less motion.
-  - [ ] 2l: home and opening; commits: the first visit; the library; Paste JSON, the opening errors and the notices.
+  - [ ] 2l: home and opening; commits: the first visit, its call to action « Add my first build » and its drop zone (the owner, 2026-11-18); the library; Paste JSON, the opening errors and the notices.
   - [ ] 2m: Merge and the phone; commits: Merge ready; Merge to fix; the phone pages.
   - [ ] 2n: the design system; commits: the tokens in `specs.md` and the mock-up as the single reference; the styles set aside removed and the entry of `design-journal.md`.
 - [ ] **3. Deployment** (Opus 5.5): the static website on Cloudflare, at its domain of `sylent.tools`.
