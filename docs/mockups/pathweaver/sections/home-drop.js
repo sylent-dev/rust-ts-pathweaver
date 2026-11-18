@@ -30,14 +30,18 @@ const dropLink = label => `<a class="app-site-link home-drop-paste" href="#" rol
 
 const dropHome = ({ drag = false, zone = dropZoneCall(drag), state = "", field = false, link = dropLink("Paste JSON") } = {}) => homeWindow("drop", `
   <div class="home-drop-mark">${logoMark(620)}</div>
-  <div class="home-drop-top">${homeBrand(26)}${homeLinks()}</div>
+  <div class="home-drop-top"><div class="home-drop-brand">${homeBrand(26)}${homeLineBand()}</div>${homeLinks()}</div>
   <div class="home-drop-main">
-    <div class="home-drop-zone ${state}" ${field ? "" : 'role="button" tabindex="0"'}>${zone}</div>
+    ${homeLineAbove()}
+    <div class="home-drop-stage">
+      <div class="home-drop-zone ${state}" ${field ? "" : 'role="button" tabindex="0"'}>${zone}</div>
+      ${homeLineStage()}
+    </div>
     ${link}
   </div>
   <div class="home-drop-sources">From ${SOURCES.map(([name]) => name).join(" · ")} · ${HOME_TEXT.local}</div>`, { band: false })
   .replace('home-drop"', `home-drop${drag ? ' is-drag" data-held="' : ""}" data-home-fluid`);
 
-addSection(() => ["E1b · The drop zone, E1 reworked: move the pointer over the graph paper",
+addSection(() => ["E1b · The drop zone, E1 reworked: move the pointer over the graph paper; « Line » at the top of the page: what Pathweaver does, in nine ways",
   [["At rest: hover the zone, drag any file over the window", dropHome()],
    ["A file over the page: the zone lights up", dropHome({ drag: true })]]]);

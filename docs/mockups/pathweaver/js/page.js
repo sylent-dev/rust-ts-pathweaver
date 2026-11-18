@@ -33,6 +33,9 @@ const VARIANTS = {
   size: { label: "Size", range: { min: 6, max: 200, step: 2 }, variable: "--texture-size", unit: "px", fallback: "24" },
   // The width of the windows of the home page (2l): the smallest, and a wide window of the owner's screen.
   homeWidth: { label: "Home width", options: { 960: "960 px", 1600: "1,600 px" }, fallback: "960" },
+  // The line that says what Pathweaver does on the drop zone of E1b (js/home-line.js), in nine ways.
+  homeLine: { label: "Line", select: true, fallback: "n1", options: { n1: "N1 · Above the zone", n2: "N2 · A caption on its edge", n3: "N3 · In the band",
+    h1: "H1 · The letters of the brand", h2: "H2 · Over a ruler of the levels", h3: "H3 · A title block", e1: "E1 · Typed", e2: "E2 · Lit by a pulse", e3: "E3 · Notes of a plan" } },
   opacity: { label: "Opacity", range: { min: 0, max: 40, step: 1 }, variable: "--texture-opacity", unit: "%", fallback: "23" },
 };
 
