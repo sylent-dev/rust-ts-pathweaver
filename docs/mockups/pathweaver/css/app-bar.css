@@ -44,6 +44,13 @@
 .app-builds-open svg { transition: transform .2s cubic-bezier(.34, 1.56, .64, 1); }
 .app-builds-open:is(:hover, .is-hover) svg { transform: scale(1.3); }
 
+/* The tab of the library (the owner, 2026-11-18, on trial): a square of 44 px pinned at the start
+   of the band, its icon weaker like the text of the other tabs, in the full text when it is the
+   current tab (the home page) or on hover. */
+.app-builds-library { flex: none; display: grid; place-items: center; width: 44px; color: color-mix(in srgb, var(--on-bar) 55%, transparent); cursor: pointer; }
+.app-builds-library:is(:hover, .is-hover) { background: color-mix(in srgb, var(--on-bar) 7%, transparent); color: var(--on-bar); }
+.app-builds-library.is-current { color: var(--on-bar); }
+
 /* The menu (the owner, 2026-11-18): attached under the band, in its shade, square corners, each
    build a tab laid down (a row of 44 px, its portrait square, its name over its ascendancy), then
    Merge… apart. */
@@ -94,6 +101,7 @@
 
 /* The section of the two bands (sections/bands.js): the page under them, where the menu opens. */
 .bands-page { height: 230px; background: var(--page); }
+.library-page { display: grid; place-items: center; height: 72px; background: var(--page); color: var(--weak); font-size: 12px; }
 
 /* The sections of the end of the band (sections/band-end.js). */
 .end-states > span { width: 420px; }

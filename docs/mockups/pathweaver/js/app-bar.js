@@ -27,10 +27,17 @@ const openBuildTab = (build, states = "") => `<div class="app-builds-tab ${state
     <button type="button" class="app-builds-close" aria-label="Close">${icon(12, ICONS.close)}</button>
   </div>`;
 
+// The tab of the library (the owner, 2026-11-18, on trial): pinned at the start of the band, always
+// there, a square of 44 px with an icon, without a close button; the current tab on the home page,
+// so that the band is never empty and the way back to the library always in sight. `states` adds
+// is-current, or is-hover to show a state without the mouse.
+const libraryTab = (states = "") => `<div class="app-builds-library ${states}" role="tab" aria-selected="${states.includes("is-current")}" aria-label="Library" title="Library">${icon(20, ICONS.library)}</div>`;
+
 // The band of the open builds: its tabs full height, side by side, 184 px each, up to 240 when
 // they all fit; those that don't fit go to the menu « +N ▾ », which also holds Merge… and is always
-// there; then + to open files. `menuOpen` shows the menu open, `moreState` and `openState` a state
-// of the two buttons.
+// there, as soon as a build is open; then + to open files. `home` makes the tab of the library the
+// current one (the home page), `menuOpen` shows the menu open, `libraryState`, `moreState` and
+// `openState` a state of the buttons.
 const TAB_WIDTH = 184, TAB_MAX_WIDTH = 240, TAB_GAP = 0;
 STATE.buildsMenu = false;
 
@@ -39,22 +46,23 @@ const menuBuild = build => `<div class="app-builds-menu-item" role="menuitem" ti
   <span class="app-builds-menu-text"><span class="app-builds-menu-name">${escapeHtml(build.name)}</span><span class="app-builds-menu-ascendancy">${escapeHtml(build.ascendancy)}</span></span>
 </div>`;
 
-function buildsBand(width, { builds = BUILDS.open, menuOpen = STATE.buildsMenu,
-  moreState = "", openState = "", action = "toggleBuildsMenu" } = {}) {
-  const room = width - 12 - 110;   // the padding on the right, then « +N ▾ » and +
+function buildsBand(width, { builds = BUILDS.open, home = false, menuOpen = STATE.buildsMenu,
+  libraryState = "", moreState = "", openState = "", action = "toggleBuildsMenu" } = {}) {
+  const room = width - 44 - 12 - 110;   // the tab of the library, the padding on the right, then « +N ▾ » and +
   const fit = Math.max(1, Math.floor((room + TAB_GAP) / (TAB_WIDTH + TAB_GAP)));
   const shown = builds.slice(0, fit);
   const hidden = builds.slice(fit);
-  const tabWidth = hidden.length ? TAB_WIDTH : Math.min(TAB_MAX_WIDTH, Math.floor((room + TAB_GAP) / builds.length) - TAB_GAP);
+  const tabWidth = hidden.length || !builds.length ? TAB_WIDTH : Math.min(TAB_MAX_WIDTH, Math.floor((room + TAB_GAP) / builds.length) - TAB_GAP);
   return `<div class="app-builds" style="--tab-width:${tabWidth}px">
-    <div class="app-builds-tabs" role="tablist">${shown.map((build, index) => openBuildTab(build, index === 0 ? "is-current" : "")).join("")}</div>
-    <span class="app-builds-more-wrap">
+    <div class="app-builds-tabs" role="tablist">${libraryTab(`${home ? "is-current" : ""} ${libraryState}`)}${
+      shown.map((build, index) => openBuildTab(build, index === 0 && !home ? "is-current" : "")).join("")}</div>
+    ${builds.length ? `<span class="app-builds-more-wrap">
       <button type="button" class="app-builds-more ${moreState} ${menuOpen ? "is-open" : ""}" data-action="${action}" aria-expanded="${menuOpen}" aria-label="More builds and Merge">${hidden.length ? `+${hidden.length}` : ""}${icon(12, ICONS.down)}</button>
       ${menuOpen ? `<div class="app-builds-menu" role="menu">${hidden.map(menuBuild).join("")}
         ${hidden.length ? `<div class="app-builds-menu-line"></div>` : ""}
         <div class="app-builds-menu-item app-builds-menu-merge" role="menuitem">Merge…</div>
       </div>` : ""}
-    </span>
+    </span>` : ""}
     <button type="button" class="app-builds-open ${openState}" title="Open files or paste JSON" aria-label="Open files or paste JSON">${icon(14, ICONS.plus)}</button>
   </div>`;
 }

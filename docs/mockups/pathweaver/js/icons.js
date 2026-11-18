@@ -5,6 +5,7 @@ const ICONS = {
   next: '<path d="M5 2.5 11.5 8 5 13.5z" fill="currentColor"/>',
   close: '<path d="M4.5 4.5l7 7M11.5 4.5l-7 7"/>',
   plus: '<path d="M8 3v10M3 8h10"/>',
+  library: '<rect x="2.5" y="3" width="3" height="10.5" rx=".5"/><rect x="6.5" y="3" width="3" height="10.5" rx=".5"/><path d="m10.3 4.4 2.6-.7 2 9.1-2.6.7z"/>',
   minus: '<path d="M3 8h10"/>',
   down: '<path d="M4.5 6.5 8 10l3.5-3.5"/>',
   warning: '<path d="M8 2.2 14.3 13.5H1.7z"/><path d="M8 6.5v3.2M8 11.6v.1"/>',
