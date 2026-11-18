@@ -23,10 +23,11 @@
 
 /* The zone: a block that acts as a button, which chooses the files, and where they are dropped; without a border (the
    owner, 2026-11-18, to see), a black at 50 %, darker than the page (the owner,
-   2026-11-18), darker still on hover, its corners square, like its icon (the owner, 2026-11-18). */
-.home-drop-zone { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px; width: 560px; height: 260px; padding: 0;
+   2026-11-18), darker still on hover, its corners square, like its icon (the owner, 2026-11-18).
+   Narrower below 960 px, so that the notes around it keep at 900 px the margin they have at 960 (2l2). */
+.home-drop-zone { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px; width: min(560px, calc(100cqi - 400px)); height: 260px; padding: 0;
   border: none; border-radius: 0; background: rgb(0 0 0 / 50%);
-  color: var(--text); cursor: pointer; transition: background-color .25s, box-shadow .3s, transform .3s cubic-bezier(.34, 1.56, .64, 1); }
+  color: var(--text); cursor: pointer; transition: background-color .25s, box-shadow .3s; }
 .home-drop-zone > .app-icon { color: var(--accent); transition: transform .3s cubic-bezier(.34, 1.56, .64, 1); }
 .home-drop-zone strong { font-size: 22px; font-weight: 600; letter-spacing: -.01em; }
 .home-drop-zone span { color: var(--weak); font-size: 13.5px; }
@@ -37,7 +38,9 @@
 .home-drop-zone:is(:hover, .is-hover) .drop-mark-corner { transform: translate(1.2px, 1.2px); }
 .home-drop.is-drag .home-drop-zone .drop-mark-corner { transform: translate(2.4px, 2.4px); }
 .home-drop.is-drag .home-drop-zone { background: color-mix(in srgb, var(--accent) 16%, var(--page));
-  box-shadow: 0 0 0 8px color-mix(in srgb, var(--accent) 16%, transparent), 0 0 60px color-mix(in srgb, var(--accent) 45%, transparent); transform: scale(1.03); }
+  box-shadow: 0 0 0 8px color-mix(in srgb, var(--accent) 16%, transparent), 0 0 60px color-mix(in srgb, var(--accent) 45%, transparent); }
+/* The zone grows with its notes, so that their lines still reach its edges (2l2). */
+.home-drop.is-drag .home-drop-stage { transform: scale(1.03); }
 
 /* Paste JSON, a link under the zone, like the links of the band of the site (its line on hover),
    without an icon (the owner, 2026-11-18). */

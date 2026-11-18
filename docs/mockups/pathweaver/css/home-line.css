@@ -1,6 +1,6 @@
 /* What Pathweaver does, on the drop zone of the first visit (js/home-line.js): a title above the zone, the three
    things a build shows as notes of a plan around it. */
-.home-drop-stage { position: relative; }
+.home-drop-stage { position: relative; transition: transform .3s cubic-bezier(.34, 1.56, .64, 1); }
 
 /* The title: the game, small, in the grey of the secondary texts; the words, large, in sentence
    case, in Archivo at its normal width, 42 px, its letters drawn close (the owner, 2026-11-18,
