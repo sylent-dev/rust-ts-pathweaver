@@ -14,22 +14,13 @@ const stoppedAt = ([, high], level) => high === level - 1;
 // The passives of the tree that apply at the level, for a weapon set (0: the shared ones only).
 const passivesAt = (level, set) => TREE.taken.filter(([, low, high, s]) => s === set && appliesAt([low, high], level));
 
-// Every level where a skill, a support or an inventory hint starts or stops, or where passives
-// stop (a respec); a passive that starts makes no marker.
-function markers() {
-  const levels = new Set();
-  const add = ([low, high], withStart = true) => {
-    if (withStart && low > 1) levels.add(low);
-    if (high < MAX_LEVEL) levels.add(high + 1);
-  };
-  for (const skill of SHOWN.skills) {
-    add(skill.levels);
-    for (const support of skill.supports) add(support.levels);
-  }
-  for (const slot of SHOWN.slots) add(slot.levels);
-  for (const [, low, high] of TREE.taken) add([low, high], false);
-  return [...levels].sort((a, b) => a - b);
-}
+// The markers of a build of BUILDS.changes (specs.md, The level): each level where what it holds
+// differs from what it held at the level before, passives aside: a passive that starts makes no
+// marker (a file can add one at every level), passives given back (a respec) make one.
+const PASSIVES_TAKEN = ["taken", "set1", "set2", "ascendancy"];
+const isMarker = record => record.count > PASSIVES_TAKEN.filter(group => record.passives[group] > 0).length;
+const markers = key => Object.entries(BUILDS.changes[key].levels)
+  .filter(([, record]) => isMarker(record)).map(([level]) => Number(level)).sort((a, b) => a - b);
 
 // The skills at the level, each with the supports that apply with it.
 const skillsAt = level => SHOWN.skills

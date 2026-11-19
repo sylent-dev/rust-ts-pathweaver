@@ -26,3 +26,6 @@
 .app-level-marker { position: absolute; top: 36px; width: 1px; height: 12px; background: var(--accent); }
 .app-level-cursor { position: absolute; top: 28px; width: 4px; height: 28px; margin-left: -2px; background: var(--on-band); }
 .app-level-end { position: absolute; top: 52px; transform: translateX(-50%); font-size: 11px; color: var(--on-band-weak); }
+
+/* A snapshot (2g2): its track says why it has no marker, over the line, from its start. */
+.app-level-note { position: absolute; top: 18px; left: 0; font-size: 11px; color: var(--on-band-weak); white-space: nowrap; }
