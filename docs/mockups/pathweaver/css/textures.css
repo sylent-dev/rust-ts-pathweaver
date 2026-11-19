@@ -21,7 +21,7 @@
 .app-header, .app-level, .app-tabs, .app-side { position: relative; }
 .app-site, .app-header, .app-level, .app-tabs, .app-tree, .app-side, .library-page { isolation: isolate; }
 
-:is(.app-site, .app-header, .app-level, .app-tabs, .app-tree, .app-side, .library-page)::before {
+:is(.app-site, .app-header, .app-level, .app-tabs, .tabv, .app-tree, .app-side, .library-page)::before {
   content: ""; position: absolute; inset: 0; z-index: -1; pointer-events: none;
   background: var(--texture-colour); opacity: var(--texture-opacity);
   mask-image: var(--texture); mask-size: var(--texture-size) var(--texture-size);

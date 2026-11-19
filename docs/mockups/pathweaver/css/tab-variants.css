@@ -1,0 +1,107 @@
+/* The twelve variants of the tabs of a build (2h, sections/tab-variants.js), removed once one is
+   chosen. Every row takes the graph paper of the page (css/textures.css: .app-tabs). */
+
+.tabv { position: relative; display: flex; align-items: stretch; isolation: isolate; color: var(--text); }
+.tabv-tab { position: relative; display: flex; align-items: center; gap: 7px; padding: 0 16px; border: none; background: none; color: inherit; cursor: pointer; white-space: nowrap; }
+.tabv-count { color: var(--weak); font-weight: 400; }
+.tabv-page { height: 170px; overflow: hidden; }
+.tabv-page .app-overview { pointer-events: none; }
+
+/* N1: words, as the links of the band of the site. */
+.tabv-n1 { height: 44px; padding-left: 4px; }
+.tabv-n1 .tabv-tab { color: var(--accent); font-family: var(--site-link-font); font-weight: var(--site-link-weight); font-size: 14px; transition: color .3s; }
+.tabv-n1 .tabv-tab::after { content: ""; position: absolute; left: 16px; right: 16px; bottom: 0; height: 2px; background: currentColor;
+  transform: scaleX(0); transform-origin: 100%; transition: transform .3s cubic-bezier(.2, .7, .2, 1); }
+.tabv-n1 .tabv-tab:is(:hover, .is-current) { color: var(--text); }
+.tabv-n1 .tabv-tab:is(:hover, .is-current)::after { transform: scaleX(1); transform-origin: 0; }
+.tabv-n1 .tabv-count { color: inherit; opacity: .6; }
+
+/* N2 and H2: blocks by contrast, in the shade of the level band; the current one in that of the page. */
+:is(.tabv-n2, .tabv-h2) { height: 44px; background: var(--band-deep); }
+:is(.tabv-n2, .tabv-h2) .tabv-tab { padding: 0 20px; color: var(--weak); font-weight: 600; transition: background-color .2s, color .2s; }
+:is(.tabv-n2, .tabv-h2) .tabv-tab:hover { background: var(--band); color: var(--text); }
+:is(.tabv-n2, .tabv-h2) .tabv-tab.is-current { background: var(--page); color: var(--text); }
+.tabv-changed { padding: 1px 6px; border-radius: 3px; background: var(--new-fill); color: var(--accent); font-size: 12px; font-weight: 700; }
+
+/* N3: without counts, a bar of the accent over the current one. */
+.tabv-n3 { height: 40px; padding-left: 4px; }
+.tabv-n3 .tabv-tab { color: var(--weak); font-weight: 600; transition: color .2s; }
+.tabv-n3 .tabv-tab:is(:hover, .is-current) { color: var(--text); }
+.tabv-n3 .tabv-tab.is-current::before { content: ""; position: absolute; left: 0; right: 0; top: 0; height: 3px; background: var(--accent); }
+
+/* H1: the count first, as the level. */
+.tabv-h1 { height: 60px; background: var(--band-deep); }
+.tabv-h1 .tabv-tab { flex-direction: column; justify-content: center; gap: 4px; min-width: 104px; color: var(--weak); transition: background-color .2s, color .2s; }
+.tabv-h1 .tabv-tab:hover { background: var(--band); color: var(--text); }
+.tabv-h1 .tabv-tab.is-current { background: var(--page); color: var(--text); }
+.tabv-big { font: 800 24px/1 "Archivo", sans-serif; letter-spacing: -.04em; }
+.tabv-small { font-size: 10px; line-height: 1; letter-spacing: .12em; text-transform: uppercase; color: var(--weak); }
+
+/* H3: titles. */
+.tabv-h3 { height: 52px; padding-left: 2px; }
+.tabv-h3 .tabv-tab { align-items: center; gap: 3px; font: 800 21px/1 "Archivo", sans-serif; letter-spacing: -.04em; color: var(--text); opacity: .32; transition: opacity .2s; }
+.tabv-h3 .tabv-tab:hover { opacity: .7; }
+.tabv-h3 .tabv-tab.is-current { opacity: 1; }
+.tabv-h3 sup { align-self: flex-start; margin-top: 12px; font: 600 11px/1 var(--font-number); letter-spacing: 0; color: var(--weak); }
+
+/* E1: a rail on the left, the page beside it. */
+.tabv-e1-page { display: flex; }
+.tabv-e1-page .tabv-page { flex: 1; min-width: 0; height: 240px; }
+.tabv-e1 { flex: none; flex-direction: column; width: 132px; background: var(--band-deep); }
+.tabv-e1 .tabv-tab { height: 44px; justify-content: space-between; padding: 0 14px; color: var(--weak); font-weight: 600; transition: background-color .2s, color .2s; }
+.tabv-e1 .tabv-tab:hover { background: var(--band); color: var(--text); }
+.tabv-e1 .tabv-tab.is-current { background: var(--page); color: var(--text); }
+
+/* E2: a pictogram per tab. */
+.tabv-e2 { height: 68px; background: var(--band-deep); }
+.tabv-e2 .tabv-tab { flex-direction: column; justify-content: center; gap: 6px; min-width: 120px; color: var(--weak); font-size: 12px; font-weight: 600; transition: background-color .2s, color .2s; }
+.tabv-e2 .tabv-tab > :first-child { opacity: .45; filter: grayscale(1); transition: opacity .2s, filter .2s; }
+.tabv-e2 .tabv-tab:hover { background: var(--band); color: var(--text); }
+.tabv-e2 .tabv-tab:hover > :first-child { opacity: .75; }
+.tabv-e2 .tabv-tab.is-current { background: var(--page); color: var(--text); }
+.tabv-e2 .tabv-tab.is-current > :first-child { opacity: 1; filter: none; }
+.tabv-e2 .tabv-tab.is-current .tabv-pictogram { color: var(--accent); }
+.tabv-pictogram { width: 28px; height: 28px; }
+.tabv-words { display: flex; gap: 6px; }
+.tabv-gems { display: flex; align-items: center; gap: 3px; }
+.tabv-gems .app-gem-mark { width: 12px; height: 12px; }
+.tabv-e2 .tabv-gems { height: 28px; gap: 2px; }
+.tabv-e2 .tabv-gems .app-gem-mark { width: 16px; height: 16px; }
+
+/* E3: the current tab named large, the others small. */
+.tabv-e3 { height: 52px; align-items: flex-end; padding-left: 4px; }
+.tabv-e3 .tabv-tab { height: 32px; gap: 5px; padding: 0 12px; color: var(--weak); font-size: 12px; font-weight: 600; transition: color .2s, font-size .28s cubic-bezier(.2, .7, .2, 1), height .28s cubic-bezier(.2, .7, .2, 1); }
+.tabv-e3 .tabv-tab:hover { color: var(--text); }
+.tabv-e3 .tabv-tab.is-current { height: 52px; color: var(--text); font: 800 26px/1 "Archivo", sans-serif; letter-spacing: -.04em; }
+.tabv-e3 .tabv-tab.is-current .tabv-count { font: 600 13px/1 var(--font-number); letter-spacing: 0; }
+
+/* F1: a little summary of what a tab holds. */
+.tabv-f1 { height: 48px; background: var(--band-deep); }
+.tabv-f1 .tabv-tab { gap: 10px; padding: 0 20px; color: var(--weak); font-weight: 600; transition: background-color .2s, color .2s; }
+.tabv-f1 .tabv-tab:hover { background: var(--band); color: var(--text); }
+.tabv-f1 .tabv-tab.is-current { background: var(--page); color: var(--text); }
+.tabv-f1 .tabv-tab:not(.is-current) :is(.tabv-gems, .tabv-gauge, .tabv-slots) { opacity: .55; }
+.tabv-gauge { position: relative; width: 56px; height: 4px; background: var(--track); }
+.tabv-gauge span { position: absolute; inset: 0 auto 0 0; background: var(--text); }
+.tabv-slots { display: grid; grid-template-columns: repeat(5, 5px); gap: 2px; }
+.tabv-slots i { width: 5px; height: 5px; background: var(--slot-empty); outline: 1px solid var(--track); outline-offset: -1px; }
+.tabv-slots i.is-hinted { background: var(--text); outline: none; }
+
+/* F2: a dock, its tabs swelling after their distance to the pointer (--swell, 0 to 1). */
+.tabv-f2 { height: 52px; align-items: center; padding-left: 6px; }
+.tabv-f2 .tabv-tab { --swell: 0; height: 40px; padding: 0 12px; color: var(--weak); font-weight: 600; transform-origin: 50% 100%;
+  transform: scale(calc(1 + var(--swell) * .28)); margin: 0 calc(var(--swell) * 12px); transition: transform .12s, margin .12s, color .2s; }
+.tabv-f2 .tabv-tab:hover { color: var(--text); }
+.tabv-f2 .tabv-tab.is-current { color: var(--text); }
+.tabv-f2 .tabv-tab.is-current::after { content: ""; position: absolute; left: 50%; bottom: 0; width: 5px; height: 5px; margin-left: -2.5px; border-radius: 50%; background: var(--accent); }
+
+/* F3: the cursor of the level, laid down. */
+.tabv-f3 { height: 44px; background: var(--band-deep); }
+.tabv-f3 .tabv-tab { color: var(--weak); font-weight: 600; transition: color .2s; }
+.tabv-f3 .tabv-tab:is(:hover, .is-current) { color: var(--text); }
+.tabv-bar { position: absolute; left: 0; bottom: 0; width: 28px; height: 4px; background: #fff; transform: translateX(var(--bar-x, 0)); }
+.tabv-bar.is-sliding { transition: transform .28s cubic-bezier(.3, 1.45, .5, 1); }
+
+@media (prefers-reduced-motion: reduce) {
+  .tabv *, .tabv *::after, .tabv-bar.is-sliding { transition: none !important; }
+}
