@@ -23,35 +23,17 @@ function showTab(tab) {
 }
 ACTIONS["tab-go"] = element => { showTab(element.dataset.tab); return true; };
 
-// The bar under a tab: its left edge, centred on the words of the tab.
-const BAR_WIDTH = 28;
-const barX = tab => tab.offsetLeft + (tab.offsetWidth - BAR_WIDTH) / 2;
-const setBar = (bar, x, width = BAR_WIDTH) => { bar.style.setProperty("--bar-x", `${x}px`); bar.style.setProperty("--bar-width", `${width}px`); };
-const nextFrame = then => requestAnimationFrame(() => requestAnimationFrame(then));
+// The bar under a tab: its left edge, the bar centred on the words of the tab.
+const barX = tab => tab.offsetLeft + (tab.offsetWidth - 28) / 2;
 
-// The bar set under the tab shown before, then moved to the current one, after the motion chosen:
-// 1 · Slide, with the small bounce of the cursor set down; 2 · Ghost, the same, a grey bar left under
-// the tab before, fading; 3 · Stretch, the bar reaching the new tab first, then letting go of the
-// old one. Nothing moves when the system asks for less motion (css/build-tabs.css).
+// The bar set under the tab shown before, then slid to the current one (css/build-tabs.css).
 AFTER_RENDER.push(() => {
   const before = STATE.tabBefore;
   STATE.tabBefore = false;
   for (const row of document.querySelectorAll(".app-tabs")) {
     const bar = row.querySelector(".app-tabs-bar");
-    const to = barX(row.querySelector(`[data-tab="${STATE.tab}"]`));
-    if (!before) { setBar(bar, to); continue; }
-    const from = barX(row.querySelector(`[data-tab="${before}"]`));
-    setBar(bar, from);
-    if (chosen.tabMotion === "ghost") {
-      row.insertAdjacentHTML("beforeend", `<span class="app-tabs-ghost" style="--bar-x:${from}px" aria-hidden="true"></span>`);
-    }
-    nextFrame(() => {
-      bar.classList.add(`is-${chosen.tabMotion}`);
-      row.querySelector(".app-tabs-ghost")?.classList.add("is-fading");
-      if (chosen.tabMotion !== "stretch") { setBar(bar, to); return; }
-      // Reach: the bar spans from the tab before to the new one; then it lets go of the tab before.
-      setBar(bar, Math.min(from, to), Math.abs(to - from) + BAR_WIDTH);
-      setTimeout(() => setBar(bar, to), 160);
-    });
+    const to = `${barX(row.querySelector(`[data-tab="${STATE.tab}"]`))}px`;
+    bar.style.setProperty("--bar-x", before ? `${barX(row.querySelector(`[data-tab="${before}"]`))}px` : to);
+    if (before) requestAnimationFrame(() => requestAnimationFrame(() => { bar.classList.add("is-sliding"); bar.style.setProperty("--bar-x", to); }));
   }
 });
