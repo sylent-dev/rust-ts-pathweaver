@@ -2,10 +2,9 @@
 .app-tree { position: relative; flex: 1; min-width: 0; background: var(--side); border-right: var(--border-width) solid var(--divider); }
 .app-tree-canvas { position: absolute; inset: 0; width: 100%; height: 100%; cursor: grab; touch-action: none; }
 .app-tree-canvas:active { cursor: grabbing; }
-.app-dot { display: inline-block; width: 8px; height: 8px; box-sizing: border-box; border: 1px solid var(--tree-node-line); border-radius: 50%; background: var(--tree-node); }
-.app-dot.is-taken { border-color: var(--tree-taken); background: var(--tree-taken); }
-.app-dot.is-later { border: 1px dashed var(--tree-later); }
-.app-dot.is-new { border-color: var(--tree-taken); background: var(--tree-taken); box-shadow: 0 0 0 2px var(--panel), 0 0 0 3.5px var(--accent); }
+/* The mark of a passive new at the level, in the legend: the ring of the accent around it. */
+.app-dot { display: inline-block; width: 8px; height: 8px; box-sizing: border-box; border-radius: 50%; }
+.app-dot.is-new { border: 1px solid var(--tree-taken); background: var(--tree-taken); box-shadow: 0 0 0 2px var(--band-deep), 0 0 0 3.5px var(--accent); }
 /* The links between the passives taken in white or in a soft amber, on trial against the blue of the
    accent (2i, the control « Links taken »): Frost Night only, Frost and Ember derive from it later. */
 :root[data-theme="frost-night"][data-tree-link="white"] { --tree-edge-taken: #e3eaf5; }

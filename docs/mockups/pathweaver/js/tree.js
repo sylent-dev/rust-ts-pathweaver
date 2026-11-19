@@ -131,18 +131,19 @@ function drawTree(canvas, graph, states, view, { minRadius = 1.5, iconsFromPx = 
     context.shadowColor = on && glow > 0 ? glowColour : "transparent";
   };
 
-  // The links: dimmed, then faded (dashed) between passives taken later, then lit between passives
-  // taken, those of one weapon set alone in its colour, the set away from the switch faint.
+  // The links: dimmed, then faded between passives taken later (solid, the owner, 2026-11-19), then lit
+  // between passives taken, those of one weapon set alone in its colour, the set away from the switch
+  // faint.
   const takenWidth = number("--tree-edge-width", 2);
   const linkLayers = [
-    [0, 3, colour("--tree-edge"), [], 1, 1],
-    [1, 3, colour("--tree-later"), [3, 3], 1, 1],
-    [2, 3, colour("--tree-edge-taken"), [], takenWidth, 1],
-    [2, 1, colour("--tree-set-1"), [], takenWidth, shownSet === 1 ? 1 : 0.35],
-    [2, 2, colour("--tree-set-2"), [], takenWidth, shownSet === 2 ? 1 : 0.35],
+    [0, 3, colour("--tree-edge"), 1, 1],
+    [1, 3, colour("--tree-later"), 1, 1],
+    [2, 3, colour("--tree-edge-taken"), takenWidth, 1],
+    [2, 1, colour("--tree-set-1"), takenWidth, shownSet === 1 ? 1 : 0.35],
+    [2, 2, colour("--tree-set-2"), takenWidth, shownSet === 2 ? 1 : 0.35],
   ];
   const setOf = (a, b) => (sets ? sets[a] & sets[b] || 3 : 3);
-  for (const [layer, set, stroke, dash, lineWidth, alpha] of linkLayers) {
+  for (const [layer, set, stroke, lineWidth, alpha] of linkLayers) {
     context.beginPath();
     for (const [a, b] of graph.edges) {
       const both = Math.min(states[a] === 3 ? 2 : states[a], states[b] === 3 ? 2 : states[b]);
@@ -152,14 +153,12 @@ function drawTree(canvas, graph, states, view, { minRadius = 1.5, iconsFromPx = 
       context.lineTo(bx, by);
     }
     context.strokeStyle = stroke;
-    context.setLineDash(dash);
     context.lineWidth = lineWidth;
     context.globalAlpha = alpha;
     lit(layer === 2);
     context.stroke();
   }
   context.globalAlpha = 1;
-  context.setLineDash([]);
 
   // The passives, by state, so that each state is one path.
   const fills = { none: colour("--tree-node"), later: colour("--tree-node"), taken: colour("--tree-taken"), new: colour("--tree-taken") };
@@ -193,10 +192,8 @@ function drawTree(canvas, graph, states, view, { minRadius = 1.5, iconsFromPx = 
     lit(false);
     context.strokeStyle = strokes[name];
     context.lineWidth = 1;
-    context.setLineDash(name === "later" ? [2, 2] : []);
     context.stroke();
   }
-  context.setLineDash([]);
 
   // What is new at this level: a ring of the accent; how many, the box « New at N » says (2i).
   const fresh = graph.nodes.filter((_, index) => states[index] === 3);

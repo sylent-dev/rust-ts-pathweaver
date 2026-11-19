@@ -1,86 +1,29 @@
-/* The controls over the tree (js/tree-controls.js): the bottom bar T14 · Ghost and the ways to its
-   legend, T22–T32. Only the controls catch the pointer; the tree under them is dragged and zoomed
-   everywhere else. */
+/* The controls over the tree (js/tree-controls.js): the legend at the top, the bottom bar T14 · Ghost.
+   Only the controls catch the pointer; the tree under them is dragged and zoomed everywhere else. */
 .tc { position: absolute; inset: 0; pointer-events: none; font-size: 13px; }
-.tc button { pointer-events: auto; display: inline-flex; align-items: center; justify-content: center; gap: 6px; min-width: 28px; height: 26px; padding: 0 8px; border: none; border-radius: var(--tc-hover-radius, var(--radius)); background: none; color: var(--weak); font: inherit; cursor: pointer; }
-/* On hover, a transparent tile behind the words, its corners set by the slider « Hover radius ». */
+
+/* The buttons, without a box; on hover a transparent tile behind the words, its corners set by the
+   slider « Hover radius ». */
+.tc button { pointer-events: auto; display: inline-flex; align-items: center; justify-content: center; min-width: 28px; height: 26px; padding: 0 8px; border: none; border-radius: var(--tc-hover-radius, var(--radius)); background: none; color: var(--weak); font: inherit; cursor: pointer; }
 .tc button:hover { color: var(--text); background: color-mix(in srgb, var(--text) 8%, transparent); }
 .tc button.tc-zoom { padding: 0; width: 28px; }
-.tc .is-set1 { --set: var(--tree-set-1); }
-.tc .is-set2 { --set: var(--tree-set-2); }
 /* The set shown in its colour, without a line under it (the owner, 2026-11-19). */
-.tc button.tc-set[aria-pressed="true"] { color: var(--set); }
-.tc button.tc-legend-toggle[aria-pressed="true"] { color: var(--accent); }
+.tc button.is-set1[aria-pressed="true"] { color: var(--tree-set-1); }
+.tc button.is-set2[aria-pressed="true"] { color: var(--tree-set-2); }
 .tc-group { display: inline-flex; align-items: center; gap: 4px; }
 .tc-end { margin-left: auto; display: inline-flex; align-items: center; gap: 10px; }
-.tc-card { padding: 8px 10px; border-radius: var(--radius); background: var(--panel); backdrop-filter: blur(6px); box-shadow: 0 8px 24px #0008; }
-.tc kbd { display: inline-grid; place-items: center; min-width: 16px; height: 16px; padding: 0 3px; border: 1px solid var(--control-line); border-radius: 3px; font: 600 10px var(--font-text); }
-.tc button.tc-with-text { padding: 0 8px; }
+
+/* The legend at the top: one line of small words over a short gradient, the mirror of the bar. */
+.tc-shade { position: absolute; left: 0; right: 0; top: 0; display: flex; justify-content: center; padding: 8px 12px 14px; background: linear-gradient(to bottom, color-mix(in srgb, var(--band-deep) 90%, transparent) 0%, transparent 100%); }
+.tc-legend { display: flex; flex-wrap: wrap; justify-content: center; gap: 4px 14px; font-size: 12px; }
+.tc-legend span { display: inline-flex; align-items: center; gap: 6px; white-space: nowrap; }
+.tc-line { display: inline-block; width: 16px; height: 0; border-top: 2px solid var(--tree-edge-taken); }
+.tc-line.is-set1 { border-color: var(--tree-set-1); }
+.tc-line.is-set2 { border-color: var(--tree-set-2); }
 
 /* The bottom bar: no border, a gradient of the shade of the tree, dark at the bottom, clear upward. */
-.tc-bb { position: absolute; left: 0; right: 0; bottom: 0; display: flex; flex-direction: column; align-items: stretch; gap: 8px; padding: 28px 12px 8px; background: linear-gradient(to top, color-mix(in srgb, var(--band-deep) 94%, transparent) 0%, color-mix(in srgb, var(--band-deep) 70%, transparent) 45%, transparent 100%); }
+.tc-bb { position: absolute; left: 0; right: 0; bottom: 0; padding: 28px 12px 8px; background: linear-gradient(to top, color-mix(in srgb, var(--band-deep) 94%, transparent) 0%, color-mix(in srgb, var(--band-deep) 70%, transparent) 45%, transparent 100%); }
 .tc-row { position: relative; display: flex; align-items: center; gap: 14px; }
 .tc-row > * { pointer-events: auto; }
 /* The counts in the middle of the bar, whatever the width of its ends (the owner, 2026-11-19). */
 .tc-counts { position: absolute; left: 50%; transform: translateX(-50%); white-space: nowrap; font-size: 12px; }
-
-/* The legend: a line per kind of link, a dot per state of a passive. */
-.tc-legend { display: flex; flex-wrap: wrap; gap: 4px 12px; font-size: 12px; }
-.tc-legend span { display: inline-flex; align-items: center; gap: 6px; white-space: nowrap; }
-.tc-line { display: inline-block; width: 16px; height: 0; border-top: 2px solid var(--tree-edge-taken); vertical-align: middle; }
-.tc-line.is-set1 { border-color: var(--tree-set-1); }
-.tc-line.is-set2 { border-color: var(--tree-set-2); }
-.tc-line.is-later { border-top: 1px dashed var(--tree-later); }
-.tc-pop { position: absolute; flex-direction: column; gap: 6px; pointer-events: auto; }
-.tc-pop.is-right { right: 12px; bottom: 50px; }
-.tc-pop.is-centred { left: 50%; bottom: 50px; transform: translateX(-50%); }
-.tc-pop.is-top-right { right: 12px; top: 48px; }
-.tc-chevron { display: inline-flex; transition: transform .2s ease; }
-.tc-chevron.is-up { transform: rotate(180deg); }
-[aria-expanded="true"] .tc-chevron { transform: rotate(180deg); }
-[aria-expanded="true"] .tc-chevron.is-up { transform: none; }
-
-/* T23 · Unfolding: the legend on a row of the bar, the gradient taller with it. */
-.tc-bb.is-raised { padding-top: 56px; }
-.tc-unfolded { padding: 0 8px; }
-
-/* T24 · Shade at the top: a tab hanging from the middle of the top edge, the shade pulled down from it. */
-.tc-shade { position: absolute; left: 0; right: 0; top: 0; display: flex; flex-direction: column; align-items: center; }
-.tc-shade.is-open { padding-top: 10px; background: linear-gradient(to bottom, color-mix(in srgb, var(--band-deep) 94%, transparent) 0%, color-mix(in srgb, var(--band-deep) 70%, transparent) 55%, transparent 100%); }
-.tc-shade-legend { justify-content: center; padding: 0 12px 2px; }
-.tc button.tc-hanging { height: 22px; padding: 0 10px; border-radius: 0 0 var(--radius) var(--radius); background: color-mix(in srgb, var(--band-deep) 85%, transparent); font-size: 12px; }
-
-/* T25 · Corner: the « ? » alone at the top right. */
-.tc-corner { position: absolute; top: 12px; right: 12px; }
-.tc button.tc-round { width: 28px; padding: 0; border-radius: 50%; }
-
-/* T26 · The counts open it: a line of words that turns lighter on hover, dotted under it. */
-.tc button.tc-counts-button { height: 24px; padding: 0 8px; color: var(--weak); text-decoration: underline dotted color-mix(in srgb, var(--weak) 60%, transparent); text-underline-offset: 4px; }
-
-/* T27 · Swatches on the bar. */
-.tc-counts .tc-line { width: 10px; margin-right: 1px; }
-.tc-dots { font-size: 16px; line-height: 1; letter-spacing: 1px; }
-
-/* T28 · Drawer: a handle on the right edge, the panel sliding in from it. */
-.tc-drawer { position: absolute; top: 0; bottom: 0; right: 0; display: flex; align-items: center; transform: translateX(170px); transition: transform .25s ease; }
-.tc-drawer.is-open { transform: none; }
-.tc button.tc-handle { width: 22px; min-width: 0; height: 84px; padding: 0; border-radius: var(--radius) 0 0 var(--radius); background: color-mix(in srgb, var(--band-deep) 85%, transparent); }
-.tc-handle-text { writing-mode: vertical-rl; transform: rotate(180deg); font-size: 11px; letter-spacing: .08em; }
-.tc-drawer-panel { align-self: stretch; width: 170px; box-sizing: border-box; padding: 16px 12px; background: color-mix(in srgb, var(--band-deep) 92%, transparent); backdrop-filter: blur(6px); pointer-events: auto; }
-.tc-drawer-legend { flex-direction: column; gap: 10px; }
-
-/* T29 · Peek: the card shows on hover of the button, stays once pinned. */
-.tc-peek { position: relative; display: inline-flex; }
-.tc-peek-card { position: absolute; right: -6px; bottom: 34px; flex-direction: column; gap: 6px; opacity: 0; transform: translateY(4px); transition: opacity .15s ease, transform .15s ease; pointer-events: none; }
-.tc-peek:hover .tc-peek-card, .tc-peek.is-pinned .tc-peek-card { opacity: 1; transform: none; }
-
-/* T30 · Explained: each line of the legend with its sentence. */
-.tc-sheet { display: grid; grid-template-columns: 16px auto 1fr; gap: 6px 10px; align-items: center; font-size: 12px; }
-.tc-sheet-row { display: contents; }
-.tc-sheet b { font-weight: 600; color: var(--text); white-space: nowrap; }
-
-/* T32 · Pill at the top: the swatches alone, spelled out once clicked. */
-.tc-pill { position: absolute; top: 10px; left: 50%; transform: translateX(-50%); }
-.tc .tc-pill-button { height: 26px; gap: 10px; padding: 0 12px; border-radius: 999px; background: color-mix(in srgb, var(--band-deep) 80%, transparent); backdrop-filter: blur(6px); font-size: 12px; }
-.tc .tc-pill-button > span { display: inline-flex; align-items: center; gap: 6px; white-space: nowrap; }
-.tc-pill.is-open .tc-pill-button { color: var(--weak); }
