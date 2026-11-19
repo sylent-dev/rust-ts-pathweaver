@@ -10,3 +10,6 @@
    accent (2i, the control « Links taken »): Frost Night only, Frost and Ember derive from it later. */
 :root[data-theme="frost-night"][data-tree-link="white"] { --tree-edge-taken: #e3eaf5; }
 :root[data-theme="frost-night"][data-tree-link="amber"] { --tree-edge-taken: #f2b45a; }
+/* The Tree tab: the tree alone, the height of the Overview. */
+.app-tree-tab { display: flex; height: 668px; }
+.app-tree-tab .app-tree { border-right: none; }

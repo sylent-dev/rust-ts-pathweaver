@@ -3,4 +3,6 @@
 
 addSection(() => [`The bottom bar of the tree: ${VARIANTS.treeControls.options[chosen.treeControls]} (the tab « Tree controls »)`, [
   ["The Overview · 960 px: the weapon set, the points, the legend behind its button, the zoom", `<div class="app-window" style="width:960px">${levelBand()}${buildTabs()}${overview()}</div>`],
+  ["The Tree tab · 960 px: the tree in the whole window, without the right column", `<div class="app-window" style="width:960px">${levelBand()}${buildTabs("tree")}${treeTab()}</div>`],
+  ["The Tree tab · 1,600 px", `<div class="app-window" style="width:1600px">${levelBand()}${buildTabs("tree")}${treeTab()}</div>`],
 ]]);
