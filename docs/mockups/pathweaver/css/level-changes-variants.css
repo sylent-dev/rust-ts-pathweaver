@@ -141,9 +141,3 @@
 :root[data-change-colour="bar"] :is(.app-wv-1, .app-wv-3) li:is(.is-added, .is-swapped, .is-gone) { box-shadow: inset 2px 0 var(--change); }
 :root:is([data-change-colour="shade"], [data-change-colour="bar"]) .app-wv-3 .app-wv-gutter li:not(.app-wv-skill) { padding-left: 6px; margin-bottom: 1px; }
 :root:is([data-change-colour="shade"], [data-change-colour="bar"]) .app-wv-3 .app-wv-gutter li.app-wv-under { padding-left: 18px; }
-
-/* The attribute of a base (B1 to B4). */
-.app-base-words { font-weight: 400; color: var(--on-band-weak); }
-.app-base-tag { margin-left: 6px; font-size: 10px; font-weight: 700; letter-spacing: .08em; }
-.app-base-chip { margin-left: 6px; padding: 1px 4px; font-size: 9px; font-weight: 700; letter-spacing: .06em; color: var(--band-deep); vertical-align: 1px; }
-.app-base-name { background-clip: text; -webkit-background-clip: text; color: transparent; }

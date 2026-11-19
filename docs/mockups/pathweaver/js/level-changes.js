@@ -27,7 +27,7 @@ function changesWindow(record, level, { opening = false, style = "" } = {}) {
   const slot = id => escapeHtml(SLOT_NAMES[id] ?? id);
   // A note set again with other words: on a gem, the note of its author; on a hint, its text.
   const noteOf = entry => entry.kind === "gear" ? `${slot(entry.on)} · new text` : entry.kind === "support" ? `on ${escapeHtml(entry.on)} · new note` : "new note";
-  const itemName = entry => `${escapeHtml(entry.item || "a hint")}${entry.unique ? ' <span class="app-changes-tag">unique</span>' : ""}`;
+  const itemName = entry => `${escapeHtml(withoutBase(entry.item || "a hint"))}${entry.unique ? ' <span class="app-changes-tag">unique</span>' : ""}`;
   const passiveRows = [
     passives.taken > 0 ? row("+", plural(passives.taken, "passive")) : "",
     passives.set1 > 0 ? row("+", `${plural(passives.set1, "passive")} of weapon set I`) : "",
@@ -49,10 +49,10 @@ function changesWindow(record, level, { opening = false, style = "" } = {}) {
     ${passives.notes > 0 && passiveRows.length > 0 ? `<p class="app-changes-foot">${noteMark(true)}${plural(passives.notes, "passive")} with a note of the author</p>` : ""}
     ${part("Gear", [
       ...gear.added.map(entry => row("+", `<span class="app-changes-slot">${slot(entry.slot)}</span><span class="app-changes-item">${itemName(entry)}</span>`)),
-      ...gear.replaced.map(entry => row("⇄", `<span class="app-changes-slot">${slot(entry.slot)}</span><span class="app-changes-item">${itemName(entry)} <span class="app-changes-on">for ${escapeHtml(entry.before || "a hint")}</span></span>`)),
+      ...gear.replaced.map(entry => row("⇄", `<span class="app-changes-slot">${slot(entry.slot)}</span><span class="app-changes-item">${itemName(entry)} <span class="app-changes-on">for ${escapeHtml(withoutBase(entry.before || "a hint"))}</span></span>`)),
       ...gear.removed.map(entry => row("−", `<span class="app-changes-slot">${slot(entry.slot)}</span><span class="app-changes-item">${itemName(entry)}</span>`)),
     ])}
-    ${part("Notes", notes.map(entry => row(icon(12, ICONS.note), `${escapeHtml(entry.name)} <span class="app-changes-on">${noteOf(entry)}</span>`)))}
+    ${part("Notes", notes.map(entry => row(icon(12, ICONS.note), `${escapeHtml(withoutBase(entry.name))} <span class="app-changes-on">${noteOf(entry)}</span>`)))}
   </div>`;
 }
 

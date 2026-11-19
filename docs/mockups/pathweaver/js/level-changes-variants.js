@@ -12,6 +12,8 @@ const PASSIVE_GROUPS = { taken: "", set1: "of weapon set I", set2: "of weapon se
 function changeList(record) {
   if (!record) return [];
   const { skills, supports, passives, gear, notes } = record;
+  // An item without the base its author wrote after its name, and the one it replaces.
+  const item = entry => ({ ...entry, name: withoutBase(entry.item), before: entry.before && withoutBase(entry.before) });
   return [
     ...skills.added.map(skill => ({ category: "skill", sign: "+", ...skill })),
     ...skills.removed.map(skill => ({ category: "skill", sign: "−", ...skill, supports: [] })),
@@ -20,10 +22,10 @@ function changeList(record) {
     ...Object.entries(PASSIVE_GROUPS).filter(([group]) => passives[group] > 0)
       .map(([group, label]) => ({ category: "passives", sign: "+", count: passives[group], label })),
     ...(passives.givenBack > 0 ? [{ category: "passives", sign: "−", count: passives.givenBack, label: "given back" }] : []),
-    ...gear.added.map(entry => ({ category: "gear", sign: "+", ...entry, name: entry.item })),
-    ...gear.replaced.map(entry => ({ category: "gear", sign: "⇄", ...entry, name: entry.item })),
-    ...gear.removed.map(entry => ({ category: "gear", sign: "−", ...entry, name: entry.item })),
-    ...notes.map(entry => ({ category: "note", sign: "note", ...entry })),
+    ...gear.added.map(entry => ({ category: "gear", sign: "+", ...item(entry) })),
+    ...gear.replaced.map(entry => ({ category: "gear", sign: "⇄", ...item(entry) })),
+    ...gear.removed.map(entry => ({ category: "gear", sign: "−", ...item(entry) })),
+    ...notes.map(entry => ({ category: "note", sign: "note", ...entry, name: entry.kind === "gear" ? withoutBase(entry.name) : entry.name })),
   ];
 }
 const byCategory = list => Object.keys(CHANGE_CATEGORIES)
@@ -31,23 +33,6 @@ const byCategory = list => Object.keys(CHANGE_CATEGORIES)
 
 // The words of a change: its name, and what it hangs on, in grey.
 const slotName = id => escapeHtml(SLOT_NAMES[id] ?? id);
-// The attribute of a base, from « (Dex Base) » at the end of the name of an item (2g3, the owner,
-// 2026-11-19): in the mock-up only, read from the text of the author's hint, which says it in 4 files
-// of 33; the website reads it from the game data of the base. B1 to B4 at the top of the page.
-const BASE_SUFFIX = /\s*\(((?:Str|Dex|Int)(?:\/(?:Str|Dex|Int))?) Base\)$/;
-const BASE_COLOURS = { Str: "var(--gem-str)", Dex: "var(--gem-dex)", Int: "var(--gem-int)" };
-function itemWithBase(text) {
-  const match = BASE_SUFFIX.exec(text);
-  if (!match || chosen.baseMark === "file") return escapeHtml(text);
-  const name = escapeHtml(text.slice(0, match.index));
-  const attributes = match[1].split("/");
-  const each = (render, glue = "") => attributes.map(attribute => render(attribute, BASE_COLOURS[attribute])).join(glue);
-  if (chosen.baseMark === "words") return `${name} <span class="app-base-words">(${each((attribute, colour) => `<span style="color:${colour}">${attribute}</span>`, "/")} Base)</span>`;
-  if (chosen.baseMark === "tag") return `${name}${each((attribute, colour) => `<span class="app-base-tag" style="color:${colour}">${attribute.toUpperCase()}</span>`)}`;
-  if (chosen.baseMark === "chip") return `${name}${each((attribute, colour) => `<span class="app-base-chip" style="background:${colour}">${attribute.toUpperCase()}</span>`)}`;
-  const colours = attributes.map(attribute => BASE_COLOURS[attribute]);
-  return `<span class="app-base-name" style="background-image:linear-gradient(90deg, ${colours[0]}, ${colours.at(-1)})">${name}</span>`;
-}
 // The kind of a change, for its colour (C1 to C4 at the top of the page).
 const CHANGE_KINDS = { "+": "is-added", "⇄": "is-swapped", "−": "is-gone", note: "is-note" };
 const changeClass = change => CHANGE_KINDS[change.sign];
@@ -55,14 +40,14 @@ const uniqueTag = change => change.unique ? ' <span class="app-changes-tag">uniq
 function changeName(change) {
   if (change.category === "passives") return `<b>${plural(change.count, "passive")}</b>${change.label && change.sign === "+" ? ` ${change.label}` : ""}`;
   if (change.category === "skill" || change.category === "support") return `${gemMark(change.colour, change.category)}<b>${escapeHtml(change.name)}</b>${noteMark(change.note)}`;
-  if (change.category === "gear") return `<b>${itemWithBase(change.name || "a hint")}</b>${uniqueTag(change)}`;
-  return `<b>${change.kind === "gear" ? itemWithBase(change.name) : escapeHtml(change.name)}</b>`;
+  if (change.category === "gear") return `<b>${escapeHtml(change.name || "a hint")}</b>${uniqueTag(change)}`;
+  return `<b>${escapeHtml(change.name)}</b>`;
 }
 function changeDetail(change) {
   if (change.category === "skill") return change.supports.length > 0 ? `with ${change.supports.map(s => `${gemMark(s.colour, "support")}${escapeHtml(s.name)}`).join(", ")}` : "";
   if (change.category === "support") return `${change.sign === "−" ? "off" : "on"} ${escapeHtml(change.skill)}`;
   if (change.category === "passives") return change.sign === "−" ? "given back" : "";
-  if (change.category === "gear") return `${slotName(change.slot)}${change.sign === "⇄" ? ` · for ${itemWithBase(change.before || "a hint")}` : ""}`;
+  if (change.category === "gear") return `${slotName(change.slot)}${change.sign === "⇄" ? ` · for ${escapeHtml(change.before || "a hint")}` : ""}`;
   return change.kind === "gear" ? `${slotName(change.on)} · new text` : change.kind === "support" ? `on ${escapeHtml(change.on)} · new note` : "new note";
 }
 const signOf = change => change.sign === "note" ? icon(12, ICONS.note) : change.sign;

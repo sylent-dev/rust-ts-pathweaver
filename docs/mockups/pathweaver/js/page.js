@@ -41,14 +41,14 @@ const VARIANTS = {
   // window, and its size.
   gem: { label: "Gem", select: true, fallback: "g1", options: { ...Object.fromEntries(Array.from({ length: 12 }, (_, index) => [`g${index + 1}`, `G${index + 1}`])), square: "The square of 2g" } },
   // The colours of W1 and W3 (2g3, the owner, 2026-11-19): of a change, green for what comes,
-  // yellow for what is replaced, red for what goes; of a base, the colour of its attribute.
+  // yellow for what is replaced, red for what goes.
   changeColour: { label: "Change colour", select: true, fallback: "signs", options: { none: "None, as before", signs: "C1 · the signs",
     words: "C2 · the words of the line", shade: "C3 · a shade behind the line", bar: "C4 · a bar on the left of the line" } },
-  baseMark: { label: "Base", select: true, fallback: "words", options: { file: "As the file writes it", words: "B1 · (Dex Base) in its colour",
-    tag: "B2 · a tag DEX in its colour", chip: "B3 · a chip DEX on its colour", name: "B4 · the name in its colour" } },
   attrColours: { label: "Attributes", select: true, fallback: "pathweaver", options: { pathweaver: "Pathweaver (teal dexterity)", exile: "Exile Market (green dexterity)" } },
   // The mark of a note of the author (2g3, js/note-marks.js).
-  noteMark: { label: "Note", select: true, fallback: "n1", options: { ...Object.fromEntries(Array.from({ length: 12 }, (_, index) => [`n${index + 1}`, `N${index + 1}`])), page: "The page of 2g" } },
+  noteMark: { label: "Note", select: true, fallback: "n2", options: { ...Object.fromEntries(Array.from({ length: 12 }, (_, index) => [`n${index + 1}`, `N${index + 1}`])), page: "The page of 2g" } },
+  // How far the mark of a note sits under the baseline of its text, tuned by eye (2g3).
+  noteOffset: { label: "Note offset", range: { min: -6, max: 2, step: 0.5 }, variable: "--note-offset", unit: "px", fallback: "-3" },
   gemSize: { label: "Gem size", range: { min: 6, max: 20, step: 1 }, variable: "--gem-mark-size", unit: "px", fallback: "10" },
 };
 
@@ -132,7 +132,7 @@ document.getElementById("tabs").addEventListener("input", event => {
   if (VARIANTS[variant].range) event.target.nextElementSibling.value = chosen[variant] + (VARIANTS[variant].unit ?? "");
   keepInAddress();
   applyVariables();
-  // A list may change what the windows hold (the mark of a gem, the base of an item), not only
+  // A list may change what the windows hold (the mark of a gem), not only
   // their colours: the windows are drawn again.
   if (VARIANTS[variant].select) renderSheet();
 });
