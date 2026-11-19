@@ -37,6 +37,10 @@ const VARIANTS = {
   windowOpens: { label: "Window opens", select: true, fallback: "pop", options: { pop: "O1 · the pop of « +N ▾ » (now)", drop: "O2 · drops and fades in", unfold: "O3 · unfolds from the band" } },
   linesChange: { label: "Lines change", select: true, fallback: "fade", options: { none: "M1 · at once", fade: "M2 · fade in one after the other",
     slide: "M3 · slide in from the side of the arrow", cross: "M4 · a quick fade of the window" } },
+  // The gap between the level band and the window of what changes, and the radius of its corners
+  // (2g4, the owner, 2026-11-19), tuned by eye.
+  windowGap: { label: "Window gap", range: { min: 0, max: 12, step: 1 }, variable: "--changes-gap", unit: "px", fallback: "3" },
+  windowRadius: { label: "Window radius", range: { min: 0, max: 10, step: 1 }, variable: "--changes-radius", unit: "px", fallback: "3" },
   homeWidth: { label: "Home width", options: { 900: "900 px", 960: "960 px", 1600: "1,600 px" }, fallback: "960" },
 };
 

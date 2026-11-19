@@ -7,9 +7,10 @@
 .app-level .app-changes-link:hover, .app-level .app-changes-link.is-open { background: color-mix(in srgb, var(--accent) 22%, var(--band)); color: var(--on-band); }
 .app-changes-none { color: var(--on-band-weak); }
 
-/* The window: attached under the band, in its shade, square corners, its left edge on that of the
-   column of the arrows; it scrolls when a level changes more than it holds. */
-.app-changes-window { position: absolute; top: 100%; left: 124px; z-index: 5; width: 440px; max-height: 460px; overflow-y: auto; padding: 10px 0 12px;
+/* The window: a few pixels under the band, in its shade, its corners a little round (the owner,
+   2026-11-19, « Window gap » and « Window radius »), its left edge on that of the column of the
+   arrows; it scrolls when a level changes more than it holds. */
+.app-changes-window { position: absolute; top: calc(100% + var(--changes-gap, 3px)); left: 124px; border-radius: var(--changes-radius, 3px); z-index: 5; width: 440px; max-height: 460px; overflow-y: auto; padding: 10px 0 12px;
   background: var(--band-image), var(--band-deep); color: var(--on-band); box-shadow: 0 8px 18px rgb(0 0 0 / .28); font-size: 12px; }
 .app-changes-window.is-opening { transform-origin: top left; animation: reveal-pop 280ms cubic-bezier(.34, 1.56, .64, 1) both; }
 .app-changes-head { margin: 2px 16px 6px; font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: var(--on-band-weak); }
