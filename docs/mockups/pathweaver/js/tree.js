@@ -78,8 +78,9 @@ const TREE_ART = Object.fromEntries(["skills", "skills-disabled", "frame"].map(n
   return [name, image];
 }));
 const artReady = () => Object.values(TREE_ART).every(sheet => sheet.complete && sheet.naturalWidth > 0);
-// The icons replace the shapes once the frame of a small passive is this many pixels wide.
-const ICONS_FROM = 12;
+// The icons replace the shapes once the frame of a small passive is this many pixels wide (the
+// slider « Icons from » of the page, 12 px by default).
+const iconsFrom = canvas => Number.parseFloat(token(canvas, "--tree-icons-from")) || 0;
 // The frames of a kind of passive (TREE.sheets.frames), in the tree and in the box of the
 // ascendancy; the class starts keep the shapes of the style.
 const FRAME_OF = { small: "small", attribute: "small", notable: "notable", keystone: "keystone", jewel: "jewel" };
@@ -95,7 +96,7 @@ function drawArt(context, frames, iconIndex, taken, x, y, size) {
   put(TREE_ART.frame, frames[taken ? 1 : 0]);
 }
 
-function drawTree(canvas, graph, states, view, labelNew, minRadius = 1.5, iconsFrom = ICONS_FROM) {
+function drawTree(canvas, graph, states, view, labelNew, minRadius = 1.5, iconsFromPx = iconsFrom(canvas)) {
   const ratio = window.devicePixelRatio || 1;
   const width = canvas.clientWidth, height = canvas.clientHeight;
   canvas.width = Math.round(width * ratio);
@@ -147,7 +148,7 @@ function drawTree(canvas, graph, states, view, labelNew, minRadius = 1.5, iconsF
   const strokes = { none: colour("--tree-node-line"), later: colour("--tree-later"), taken: colour("--tree-taken"), new: colour("--tree-taken") };
   // The pixels of the screen per pixel of the sheets, and whether the icons are drawn at this zoom.
   const size = view.scale / TREE.sheets.scale;
-  const art = artReady() && TREE.sheets.frames.small[0][2] * size >= iconsFrom;
+  const art = artReady() && TREE.sheets.frames.small[0][2] * size >= iconsFromPx;
   const visible = ([x, y], margin) => x > -margin && y > -margin && x < width + margin && y < height + margin;
   const radiusOf = node => {
     const frames = art && frameOf(graph, node);
@@ -253,6 +254,10 @@ function zoomTree(canvas, factor, atX = canvas.clientWidth / 2, atY = canvas.cli
 }
 
 AFTER_RENDER.push(mountTrees);
+// The slider « Icons from » draws the trees again at each step of its move.
+document.getElementById("tabs").addEventListener("input", event => {
+  if (event.target.dataset.variant === "iconsFrom") mountTrees();
+});
 ACTIONS["tree-zoom"] = element => {
   zoomTree(document.querySelector('canvas[data-tree="main"]'), element.dataset.zoom === "in" ? 1.4 : 1 / 1.4);
   return true;
