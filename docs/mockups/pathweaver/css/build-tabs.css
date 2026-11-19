@@ -20,13 +20,3 @@
   .app-tabs-ghost { display: none; }
 }
 
-/* Classic tabs, to compare with F3 (Tabs, js/page.js; the owner, 2026-11-19): boxes 34 px high at
-   the foot of the row, 4 px apart, their top corners rounded by 3 px as the menus and the window of
-   what changes; the others in the shade of the controls, the current one in the shade of the page,
-   joined to it through the line at the foot of the row. No bar. */
-:root[data-tabs-look="classic"] .app-tabs { align-items: flex-end; gap: 4px; padding-left: 12px; border-bottom: 1px solid var(--control-line); }
-:root[data-tabs-look="classic"] .app-tab { height: 34px; margin-bottom: -1px; padding: 0 18px; border: 1px solid var(--control-line); border-radius: 3px 3px 0 0;
-  background: var(--tab); transition: color .2s, background-color .2s; }
-:root[data-tabs-look="classic"] .app-tab:hover { background: var(--control); }
-:root[data-tabs-look="classic"] .app-tab[aria-selected="true"] { background: var(--page); border-bottom-color: var(--page); }
-:root[data-tabs-look="classic"] :is(.app-tabs-bar, .app-tabs-ghost) { display: none; }

@@ -1,6 +1,6 @@
 /* The tree: a canvas with the weapon set and the points over its top, the ascendancy in a box
    at its bottom left, the zoom and the legend at its bottom right. */
-.app-tree { position: relative; flex: 1; min-width: 0; border-right: var(--border-width) solid var(--divider); }
+.app-tree { position: relative; flex: 1; min-width: 0; background: var(--side); border-right: var(--border-width) solid var(--divider); }
 .app-tree-canvas { position: absolute; inset: 0; width: 100%; height: 100%; cursor: grab; touch-action: none; }
 .app-tree-canvas:active { cursor: grabbing; }
 .app-tree-top { position: absolute; top: 10px; left: 12px; right: 12px; display: flex; justify-content: space-between; align-items: center; font-size: 13px; pointer-events: none; }

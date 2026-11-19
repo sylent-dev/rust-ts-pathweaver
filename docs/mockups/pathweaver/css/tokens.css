@@ -163,6 +163,7 @@
   --page-image: radial-gradient(ellipse 80% 40% at 0% 0%, #172644 0%, transparent 70%);
   --bar: #121a29; --on-bar: #e3eaf5;
   --band: #0f1726; --on-band: #e3eaf5; --on-band-weak: #8393ad; --band-deep: #070b12;
+  --side: var(--band-deep);   /* the tree and the side column in the shade of the level band (2h, the owner, 2026-11-19) */
   --panel: #141d2ee6;
   --tab: #172133; --on-tab: #8393ad;
   --control: #1a2539; --control-line: #24304a;
@@ -196,6 +197,7 @@
   --page-image: radial-gradient(ellipse 80% 40% at 0% 0%, #2a2117 0%, transparent 70%);
   --bar: #19191b; --on-bar: #ececee;
   --band: #161618; --on-band: #ececee; --on-band-weak: #8e8e94; --band-deep: #0a0a0b;
+  --side: var(--band-deep);   /* as Frost Night */
   --panel: #1e1e21e6;
   --tab: #212124; --on-tab: #8e8e94;
   --control: #252528; --control-line: #2c2c30;
