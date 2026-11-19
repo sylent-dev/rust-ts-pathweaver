@@ -24,6 +24,9 @@ const VARIANTS = {
   // The width of the windows of the home page (2l): the minimum of specs.md, half a 1920-pixel screen, and a wide
   // window of the owner's screen.
   homeWidth: { label: "Home width", options: { 900: "900 px", 960: "960 px", 1600: "1,600 px" }, fallback: "960" },
+  // The links between the passives taken (2i, the owner, 2026-11-19): the blue of the accent, or the
+  // white of the passives taken; Frost Night only (css/tree.css).
+  treeLink: { label: "Links taken", options: { blue: "Blue", white: "White" }, fallback: "blue" },
 };
 
 // The styles a section shows side by side: the style of the page alone, Frost Night by default, the
