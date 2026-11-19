@@ -1,17 +1,7 @@
-/* The tree: a canvas with the weapon set and the points over its top, the ascendancy in a box
-   at its bottom left, the zoom and the legend at its bottom right. */
+/* The tree: a canvas, the controls over it in css/tree-controls.css. */
 .app-tree { position: relative; flex: 1; min-width: 0; background: var(--side); border-right: var(--border-width) solid var(--divider); }
 .app-tree-canvas { position: absolute; inset: 0; width: 100%; height: 100%; cursor: grab; touch-action: none; }
 .app-tree-canvas:active { cursor: grabbing; }
-.app-tree-top { position: absolute; top: 10px; left: 12px; right: 12px; display: flex; justify-content: space-between; align-items: center; font-size: 13px; pointer-events: none; }
-.app-tree-top .app-switch { pointer-events: auto; }
-.app-ascendancy { position: absolute; left: 10px; bottom: 10px; display: flex; flex-direction: column; gap: 4px; width: 172px; height: 110px; box-sizing: border-box; padding: 6px 8px; border: var(--border-width) solid var(--control-line); border-radius: var(--radius); background: var(--panel); box-shadow: var(--control-shadow); font-size: 13px; }
-.app-ascendancy > span { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.app-ascendancy-canvas { flex: 1; width: 100%; min-height: 0; }
-.app-tree-zoom { position: absolute; right: 12px; bottom: 34px; display: flex; flex-direction: column; gap: 4px; }
-.app-tree-zoom button { display: grid; place-items: center; width: 28px; height: 26px; padding: 0; border: var(--border-width) solid var(--control-line); border-radius: var(--radius); background: var(--control); box-shadow: var(--control-shadow); cursor: pointer; }
-.app-tree-legend { position: absolute; right: 12px; bottom: 8px; display: flex; gap: 12px; padding: 1px 6px; border-radius: var(--radius); background: var(--panel); font-size: 12px; pointer-events: none; }
-.app-tree-legend span { display: inline-flex; align-items: center; gap: 4px; }
 .app-dot { display: inline-block; width: 8px; height: 8px; box-sizing: border-box; border: 1px solid var(--tree-node-line); border-radius: 50%; background: var(--tree-node); }
 .app-dot.is-taken { border-color: var(--tree-taken); background: var(--tree-taken); }
 .app-dot.is-later { border: 1px dashed var(--tree-later); }

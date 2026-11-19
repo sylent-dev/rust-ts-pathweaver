@@ -231,13 +231,7 @@ function drawTree(canvas, graph, states, view, { labelNew = "", minRadius = 1.5,
 // Draws every canvas of the tree on the page, and lets the main one move and zoom.
 function mountTrees() {
   const level = STATE.level;
-  for (const canvas of document.querySelectorAll('canvas[data-tree="main"], canvas[data-tree="ascendancy"]')) {
-    if (canvas.dataset.tree === "ascendancy") {
-      const graph = TREE.ascendancy;
-      const states = treeStates(TREE.ascendancyTaken, graph.nodes.length, level);
-      drawTree(canvas, graph, states, fitView(graph.nodes, graph.nodes.map((_, i) => i), canvas.clientWidth, canvas.clientHeight, 16), { minRadius: 3 });
-      continue;
-    }
+  for (const canvas of document.querySelectorAll('canvas[data-tree="main"]')) {
     const states = treeStates(TREE.taken, TREE.nodes.length, level);
     const sets = setMasks(TREE.taken, TREE.nodes.length);
     const fresh = states.filter(state => state === 3).length;

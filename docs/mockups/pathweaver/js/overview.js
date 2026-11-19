@@ -57,25 +57,12 @@ function inventoryBox(level) {
     }).join("")}</div>`;
 }
 
+// The tree and the controls over it (js/tree-controls.js); the ascendancy moves to the centre of the
+// tree in 2i2.
 function treePanel(level) {
-  const set = STATE.set;
-  const ascendancy = TREE.ascendancyTaken.filter(([, low, high]) => appliesAt([low, high], level)).length;
   return `<div class="app-tree">
     <canvas class="app-tree-canvas" data-tree="main" aria-label="Passive tree"></canvas>
-    <div class="app-tree-top">${weaponSetSwitch("tree-set", set)}
-      <span class="app-number">${plural(passivesAt(level, 0).length, "pt")} · asc. ${ascendancy} / ${ASCENDANCY_POINTS} · I ${passivesAt(level, 1).length} · II ${passivesAt(level, 2).length}</span></div>
-    <div class="app-ascendancy">
-      <span>${escapeHtml(SHOWN.ascendancy)} · <span class="app-number">${ascendancy} / ${ASCENDANCY_POINTS}</span></span>
-      <canvas class="app-ascendancy-canvas" data-tree="ascendancy" aria-label="Ascendancy passives"></canvas>
-    </div>
-    <div class="app-tree-zoom">
-      <button type="button" data-action="tree-zoom" data-zoom="in" aria-label="Zoom in">${icon(14, ICONS.plus)}</button>
-      <button type="button" data-action="tree-zoom" data-zoom="out" aria-label="Zoom out">${icon(14, ICONS.minus)}</button>
-    </div>
-    <div class="app-tree-legend app-weak">
-      <span><i class="app-dot is-taken"></i>taken</span><span><i class="app-dot is-later"></i>taken later</span>
-      <span><i class="app-dot"></i>not taken</span><span><i class="app-dot is-new"></i>new here</span>
-    </div>
+    ${treeControls(level)}
   </div>`;
 }
 
