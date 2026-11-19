@@ -1,7 +1,8 @@
-// The motion of the window of what changes (2g4, the owner, 2026-11-19): how it opens (O1 to O3), and
+// The motion of the window of what changes (2g4, the owner, 2026-11-19): it opens with the pop of
+// « +N ▾ » (O1 of three, the owner, 2026-11-19), css/level-changes.css; and
 // how its lines change when ◀ ▶, the track or the keys move the level while it is open (M1 to M4),
-// the two lists at the top of the page. Nothing moves when the system asks for less motion. The
-// variants go once one of each is kept.
+// the list « Lines change » at the top of the page. Nothing moves when the system asks for less
+// motion. The variants go once one is kept.
 
 // The band of the section of the motion: the build of the page, on a band of its own, so that its
 // window opens alone.

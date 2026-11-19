@@ -7,12 +7,13 @@
 .app-level .app-changes-link:hover, .app-level .app-changes-link.is-open { background: color-mix(in srgb, var(--accent) 22%, var(--band)); color: var(--on-band); }
 .app-changes-none { color: var(--on-band-weak); }
 
-/* The window: a few pixels under the band, in its shade, its corners a little round (the owner,
-   2026-11-19, « Window gap » and « Window radius »), its left edge on that of the column of the
+/* The window: a few pixels under the band, in its shade, its corners a little round (3 px and 3 px, the owner,
+   2026-11-19), its left edge on that of the column of the
    arrows; it scrolls when a level changes more than it holds. */
-.app-changes-window { position: absolute; top: calc(100% + var(--changes-gap, 3px)); left: 124px; border-radius: var(--changes-radius, 3px); z-index: 5; width: 440px; max-height: 460px; overflow-y: auto; padding: 10px 0 12px;
+.app-changes-window { position: absolute; top: calc(100% + 3px); left: 124px; border-radius: 3px; z-index: 5; width: 440px; max-height: 460px; overflow-y: auto; padding: 10px 0 12px;
   background: var(--band-image), var(--band-deep); color: var(--on-band); box-shadow: 0 8px 18px rgb(0 0 0 / .28); font-size: 12px; }
 .app-changes-window.is-opening { transform-origin: top left; animation: reveal-pop 280ms cubic-bezier(.34, 1.56, .64, 1) both; }
+@media (prefers-reduced-motion: reduce) { .app-changes-window.is-opening { animation: none; } }
 .app-changes-head { margin: 2px 16px 6px; font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: var(--on-band-weak); }
 .app-changes-window b { font-weight: 600; }
 
@@ -24,10 +25,15 @@
 .app-changes-lines li:hover { background: color-mix(in srgb, var(--on-band) 8%, transparent); }
 .app-changes-category { flex: none; width: 50px; font-size: 10px; letter-spacing: .08em; text-transform: uppercase; color: var(--on-band-weak); }
 .app-changes-name { min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.app-changes-detail { flex: 0 1 auto; min-width: 0; margin-left: auto; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-size: 11px; color: var(--on-band-weak); }
-.app-changes-leads { display: none; flex: none; margin-left: auto; font-size: 11px; font-weight: 600; color: var(--accent); white-space: nowrap; }
-.app-changes-lines li:hover .app-changes-detail { display: none; }
-.app-changes-lines li:hover .app-changes-leads { display: block; }
+/* The detail and where the line leads share one cell, as wide as the wider of the two, so that the
+   hover only swaps them and nothing beside them moves (the owner, 2026-11-19); where it leads first,
+   never empty, gives the cell its baseline, which an empty detail of a passive doesn't. */
+.app-changes-right { flex: 0 1 auto; min-width: 0; margin-left: auto; display: grid; grid-template-columns: minmax(0, max-content); justify-items: end; font-size: 11px; white-space: nowrap; }
+.app-changes-right > * { grid-area: 1 / 1; max-width: 100%; overflow: hidden; text-overflow: ellipsis; }
+.app-changes-detail { color: var(--on-band-weak); }
+.app-changes-leads { visibility: hidden; font-weight: 600; color: var(--accent); }
+.app-changes-lines li:hover .app-changes-detail { visibility: hidden; }
+.app-changes-lines li:hover .app-changes-leads { visibility: visible; }
 .app-changes-lines .is-gone :is(.app-changes-name, b) { color: var(--on-band-weak); }
 .app-changes-tag { margin-left: 4px; font-size: 11px; color: var(--on-band-weak); }
 

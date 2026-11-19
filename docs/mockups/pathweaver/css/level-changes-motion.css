@@ -1,7 +1,0 @@
-/* How the window of what changes opens (2g4, js/level-changes-motion.js): O1 the pop of « +N ▾ »
-   (css/level-changes.css), O2 a drop, O3 an unfolding from the band. */
-:root[data-window-opens="drop"] .app-changes-window.is-opening { animation: changes-drop 180ms ease-out both; }
-@keyframes changes-drop { from { opacity: 0; transform: translateY(-8px); } }
-:root[data-window-opens="unfold"] .app-changes-window.is-opening { animation: changes-unfold 220ms cubic-bezier(.2, .8, .2, 1) backwards;   /* not kept after: the clip would cut the shadow */ }
-@keyframes changes-unfold { from { clip-path: inset(0 0 100% 0); } to { clip-path: inset(0 0 0 0); } }
-@media (prefers-reduced-motion: reduce) { .app-changes-window.is-opening { animation: none; } }

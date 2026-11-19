@@ -80,8 +80,8 @@ const changeTab = change => change.category === "passives" ? "tree"
 function changesWindow(record, level, { opening = false } = {}) {
   const line = change => `<li class="${CHANGE_KINDS[change.sign]}" data-action="changes-go" data-tab="${changeTab(change)}" title="Show it in ${CHANGE_TABS[changeTab(change)]}">
     <span class="app-changes-sign">${changeSign(change)}</span><span class="app-changes-category">${CHANGE_CATEGORIES[change.category]}</span>
-    <span class="app-changes-name">${changeName(change)}</span><span class="app-changes-detail">${changeDetail(change)}</span>
-    <span class="app-changes-leads">${CHANGE_TABS[changeTab(change)]}</span></li>`;
+    <span class="app-changes-name">${changeName(change)}</span>
+    <span class="app-changes-right"><span class="app-changes-leads">${CHANGE_TABS[changeTab(change)]}</span><span class="app-changes-detail">${changeDetail(change)}</span></span></li>`;
   return `<div class="app-changes-window ${opening ? "is-opening" : ""}" role="dialog" aria-label="What changes at ${level}">
     <p class="app-changes-head">${plural(record.count, "change")} at ${level}</p>
     <ul class="app-changes-lines">${changeList(record).map(line).join("")}</ul>
