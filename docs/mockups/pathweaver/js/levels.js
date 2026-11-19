@@ -48,6 +48,11 @@ function changesAt(level) {
   return { skills, supports, slots, passives, removed, removedPassives };
 }
 
+// The name of an item without the base its author wrote after it, « (Dex Base) » (2g3, the owner,
+// 2026-11-19): the window of what changes says what changes, not what the item is; the gear tab
+// will show the base, read from the game data. « (Resistance Base) », not an attribute, stays.
+const withoutBase = text => text.replace(/\s*\((?:Str|Dex|Int)(?:\/(?:Str|Dex|Int))? Base\)$/, "");
+
 const plural = (count, one, many = one + "s") => `${count} ${count === 1 ? one : many}`;
 
 // The names of the inventory slots: texts of the interface, not game data (docs/game-data.md).

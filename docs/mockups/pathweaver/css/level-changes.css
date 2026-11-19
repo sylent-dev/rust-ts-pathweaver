@@ -7,35 +7,62 @@
 .app-level .app-changes-link:hover, .app-level .app-changes-link.is-open { background: color-mix(in srgb, var(--accent) 22%, var(--band)); color: var(--on-band); }
 .app-changes-none { color: var(--on-band-weak); }
 
-/* The window: attached under the band, in its shade, square corners, its left edge on that of the
-   column of the arrows; it scrolls when a level changes more than it holds. */
-.app-changes-window { position: absolute; top: 100%; left: 124px; z-index: 5; width: 360px; max-height: 420px; overflow-y: auto; padding: 6px 0 10px;
-  background: var(--band-image), var(--band-deep); color: var(--on-band); box-shadow: 0 8px 18px rgb(0 0 0 / .28); font-size: 13px; }
+/* The window: a few pixels under the band, in its shade, its corners a little round (3 px and 3 px, the owner,
+   2026-11-19), its left edge on that of the column of the
+   arrows; it scrolls when a level changes more than it holds. */
+.app-changes-window { position: absolute; top: calc(100% + 3px); left: 124px; border-radius: 3px; z-index: 5; width: 440px; max-height: 460px; overflow-y: auto; padding: 10px 0 12px;
+  background: var(--band-image), var(--band-deep); color: var(--on-band); box-shadow: 0 8px 18px rgb(0 0 0 / .28); font-size: 12px; }
 .app-changes-window.is-opening { transform-origin: top left; animation: reveal-pop 280ms cubic-bezier(.34, 1.56, .64, 1) both; }
-.app-changes-part { padding: 8px 16px 2px; }
-.app-changes-title { display: flex; gap: 8px; margin: 0 0 6px; font-size: 11px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: var(--on-band-weak); }
-.app-changes-title span { color: var(--on-band); opacity: .6; letter-spacing: 0; }
-.app-changes-part ul { margin: 0; padding: 0; list-style: none; }
-.app-changes-row { display: flex; gap: 8px; padding: 3px 0; line-height: 1.35; }
-.app-changes-sign { flex: none; width: 12px; color: var(--on-band-weak); text-align: center; }
-.app-changes-body { min-width: 0; }
-.app-changes-body b { font-weight: 600; }
-.app-changes-row.is-removed .app-changes-body { color: var(--on-band-weak); }
-.app-changes-gem { display: inline-block; width: 7px; height: 7px; margin: 0 6px 1px 0; vertical-align: middle; }
-.app-changes-with { display: block; margin-top: 2px; color: var(--on-band-weak); font-size: 12px; }
-.app-changes-with .app-changes-gem { width: 5px; height: 5px; margin: 0 4px 1px 2px; }
-.app-changes-on { color: var(--on-band-weak); }
-/* A row of the gear: the slot in a column of its own, the item wrapping beside it. */
-.app-changes-body:has(.app-changes-slot) { display: flex; }
-.app-changes-slot { flex: none; width: 64px; margin-right: 6px; color: var(--on-band-weak); }
-.app-changes-item { min-width: 0; }
+@media (prefers-reduced-motion: reduce) { .app-changes-window.is-opening { animation: none; } }
+.app-changes-head { margin: 2px 16px 6px; font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: var(--on-band-weak); }
+.app-changes-window b { font-weight: 600; }
+
+/* A line per change (W1, the owner, 2026-11-19): its sign, its category, its name cut to fit, what it
+   hangs on at the right; the whole line a link, lighter on hover, where it leads in place of its
+   detail (H4). */
+.app-changes-lines { margin: 0; padding: 0; list-style: none; }
+.app-changes-lines li { display: flex; align-items: baseline; gap: 8px; padding: 2px 16px; line-height: 1.4; cursor: pointer; transition: background .15s; }
+.app-changes-lines li:hover { background: color-mix(in srgb, var(--on-band) 8%, transparent); }
+.app-changes-category { flex: none; width: 50px; font-size: 10px; letter-spacing: .08em; text-transform: uppercase; color: var(--on-band-weak); }
+.app-changes-name { min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+/* The detail and where the line leads share one cell, as wide as the wider of the two, so that the
+   hover only swaps them and nothing beside them moves (the owner, 2026-11-19); where it leads first,
+   never empty, gives the cell its baseline, which an empty detail of a passive doesn't. */
+.app-changes-right { flex: 0 1 auto; min-width: 0; margin-left: auto; display: grid; grid-template-columns: minmax(0, max-content); justify-items: end; font-size: 11px; white-space: nowrap; }
+.app-changes-right > * { grid-area: 1 / 1; max-width: 100%; overflow: hidden; text-overflow: ellipsis; }
+.app-changes-detail { color: var(--on-band-weak); }
+.app-changes-leads { visibility: hidden; font-weight: 600; color: var(--accent); }
+.app-changes-lines li:hover .app-changes-detail { visibility: hidden; }
+.app-changes-lines li:hover .app-changes-leads { visibility: visible; }
+.app-changes-lines .is-gone :is(.app-changes-name, b) { color: var(--on-band-weak); }
 .app-changes-tag { margin-left: 4px; font-size: 11px; color: var(--on-band-weak); }
-.app-changes-note { display: inline-flex; margin-left: 5px; vertical-align: -1px; color: var(--on-band-weak); }
-.app-changes-foot { display: flex; align-items: center; gap: 2px; margin: 2px 16px 0 36px; color: var(--on-band-weak); font-size: 12px; }
-.app-changes-foot .app-changes-note { margin: 0 4px 0 0; }
+
+/* The sign, in the colour of the change (C1, the owner, 2026-11-19): green what comes, yellow orange
+   what is replaced, red what goes, in semi-bold so that its colour shows. */
+.app-changes-sign { flex: none; width: 12px; text-align: center; font-weight: 600; color: var(--on-band-weak); }
+.is-added > .app-changes-sign { color: var(--change-added); }
+.is-swapped > .app-changes-sign { color: var(--change-swapped); }
+.is-gone > .app-changes-sign { color: var(--change-gone); }
+
+/* The mark of a note (N2), 2 px under the baseline of the letters beside it (the owner, 2026-11-19):
+   an icon sits on the baseline by its bottom; in the column of the signs, where it is a block, by
+   moving it. */
+.app-changes-note { display: inline-flex; margin-left: 5px; vertical-align: -2px; color: var(--on-band-weak); }
+.app-changes-sign > svg { position: relative; top: 2px; }
 
 /* The section of the window on other builds (sections/level-changes.js): the band of the case, its
    level and « N changes » open, the page under it where the window hangs. */
 .app-changes-case { position: relative; overflow: visible; }
 .app-changes-case-name { margin-left: 26px; }
 .app-changes-case-page { height: 440px; }
+
+/* Its scroll bar (2g3, the owner, 2026-11-19): a thin line in the accent, square ends, on no track;
+   the accent, since it can be dragged. Chromium and Safari draw ::-webkit-scrollbar; Firefox only
+   takes a thin width and the colours. */
+.app-changes-window::-webkit-scrollbar { width: 4px; height: 4px; }
+.app-changes-window::-webkit-scrollbar-track { background: transparent; }
+.app-changes-window::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 0; }
+.app-changes-window::-webkit-scrollbar-button { display: none; }
+@supports not selector(::-webkit-scrollbar) {
+  .app-changes-window { scrollbar-width: thin; scrollbar-color: var(--accent) transparent; }
+}

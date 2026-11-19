@@ -1,0 +1,4 @@
+/* The mark of a gem (2g3, js/gem-marks.js): 10 px, on the letters beside it. */
+/* 1 px above the middle of the lowercase letters, on that of the words, which start with capitals
+   (« Cast on Critical » sat too high beside it, the owner, 2026-11-19). */
+.app-gem-mark { display: inline-block; flex: none; position: relative; top: -1px; width: var(--gem-mark-size); height: var(--gem-mark-size); margin: 0 6px 0 0; vertical-align: middle; }

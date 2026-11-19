@@ -116,6 +116,8 @@ document.getElementById("tabs").addEventListener("input", event => {
   if (VARIANTS[variant].range) event.target.nextElementSibling.value = chosen[variant] + (VARIANTS[variant].unit ?? "");
   keepInAddress();
   applyVariables();
+  // A list may change what the windows hold, not only their colours: the windows are drawn again.
+  if (VARIANTS[variant].select) renderSheet();
 });
 // The controls of the windows: an element with data-action="name" calls ACTIONS[name](element, event),
 // which returns true when the page must be drawn again.

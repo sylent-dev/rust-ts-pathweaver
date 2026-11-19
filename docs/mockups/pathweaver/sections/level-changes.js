@@ -14,7 +14,7 @@ const changesCase = (key, title) => {
   </div>`;
 };
 
-addSection(() => ["The level band: ◀ ▶ and the track change the level, « N changes » between ◀ and ▶ opens the window of what changes, by category; ◀ ▶ and the track keep it open, Esc or a click outside closes it", [
+addSection(() => ["The level band: ◀ ▶ and the track change the level, « N changes » between ◀ and ▶ opens the window of what changes, a line per change; a line leads to the tab of its change, ◀ ▶ and the track keep the window open, Esc or a click outside closes it", [
   [`The page of a build · level ${STATE.level}: click « N changes »`,
     `<div class="app-window" style="width:960px">${buildHeader()}${levelBand({ window: true })}${buildTabs()}${overview()}</div>`],
   ["A respec: 42 passives given back, gear replaced", changesCase("respec", "a respec")],

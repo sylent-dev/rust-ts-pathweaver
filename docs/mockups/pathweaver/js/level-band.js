@@ -64,7 +64,7 @@ function levelBand({ key = "shown", window = false, focusShown = false } = {}) {
   </div>`;
 }
 
-const bandOf = element => element.closest("[data-band]")?.dataset.band;
+const bandOf = element => element.closest(".app-level[data-band]")?.dataset.band;
 // The marker before or after a level, if any.
 function markerBeside(key, level, direction) {
   const all = markers(key);
@@ -207,7 +207,7 @@ AFTER_RENDER.push(() => {
   const still = matchMedia("(prefers-reduced-motion: reduce)").matches;
   for (const [key, from] of Object.entries(STATE.slides)) {
     if (still) break;
-    for (const cursor of document.querySelectorAll(`[data-band="${key}"] .app-level-cursor`)) {
+    for (const cursor of document.querySelectorAll(`.app-level[data-band="${key}"] .app-level-cursor`)) {
       cursor.animate([{ left: `${levelX(from, bandRange(key))}px` }, { left: cursor.style.left }],
         { duration: 280, easing: "cubic-bezier(.2, .8, .2, 1)" });
     }
