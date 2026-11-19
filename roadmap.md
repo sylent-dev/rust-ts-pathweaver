@@ -33,6 +33,7 @@ Read only by the steps that need them:
   - [ ] 2n: the design system; commits: the tokens in `specs.md` and the mock-up as the single reference; the styles set aside removed and the entry of `design-journal.md`.
 - [ ] **3. Deployment** (Opus 5.5): the static website on Cloudflare, at its domain of `sylent.tools`.
 - [ ] **4. Skills** (Opus 5.5), with what every part uses, likely split into sub-steps at its start:
+  - first, on Fable 5.2 (the owner, 2026-11-19): the shared state and the events of the interface, which the others build on: the level shared by the band, the tabs and the tree; the window of what changes and the menus, one open at a time; the keys anywhere on the page; the drag of the cursor; several builds open (the rule of [docs/backlog.md](docs/backlog.md), Method and skills, written into `docs/technical-choices.md` then);
   - opening several builds (drop, **Choose files**, pasted JSON), the list of open builds, the errors of a file;
   - the header of a build, with `link` as a field of `Build`;
   - the game data: the conversion script (RePoE), the files of the website per version and language, the lookup of an id;
