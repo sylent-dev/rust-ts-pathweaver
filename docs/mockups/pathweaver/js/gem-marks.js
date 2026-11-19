@@ -31,7 +31,7 @@ const GEM_MARKS = {
   square: { title: "The square of 2g", skill: '<rect x="2" y="2" width="12" height="12" fill="currentColor"/>', support: '<rect x="4" y="4" width="8" height="8" fill="currentColor"/>' },
   g1: { title: "G1 · Normal · a hexagon, a support hollow", skill: hex(7.5), support: hex(6.4, OUTLINE(2.2)) },
   g2: { title: "G2 · Normal · flat on top, a support smaller", skill: hex(7.5, undefined, true), support: hex(5.2, undefined, true) },
-  g3: { title: "G3 · Normal · a cut facet, a support a rhombus", skill: hex(7.5) + shape("8,0.5 14.5,4.25 8,8 1.5,4.25", 'fill="#fff" fill-opacity=".35"'), support: shape("8,1.5 14,8 8,14.5 2,8") },
+  g3: { title: "G3 · Normal · a cut facet, a support a square on its tip", skill: hex(7.5) + shape("8,0.5 14.5,4.25 8,8 1.5,4.25", 'fill="#fff" fill-opacity=".35"'), support: shape("8,2 14,8 8,14 2,8") },
   g4: { title: "G4 · High · a brilliant cut in six facets, a support set in a ring", skill: hexFacets(7.5).map((points, index) => shape(points, `fill="currentColor" fill-opacity="${[1, .72, .86, .6, .8, .92][index]}"`)).join(""),
     support: hex(4.6) + hex(7, OUTLINE(1.2) + ' stroke-opacity=".55"') },
   g5: { title: "G5 · High · a socket and its stone, a support the stone alone", skill: hex(6.8, OUTLINE(1.6) + ' fill="currentColor" fill-opacity=".18"') + hex(3.4), support: hex(4.4) },
