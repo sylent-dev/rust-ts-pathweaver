@@ -6,8 +6,9 @@ const SEVEN_BUILDS = [...BUILDS.open,
   { name: "Ice Shot Amazon", ascendancy: "Amazon", portrait: "huntress1" },
   { name: "lvl 42-60 - 0.5 Ice Shot Deadeye Levelin", ascendancy: "Deadeye", portrait: "ranger1" }];
 
+// The menu shown as it is, open or not: « +N ▾ » does nothing here.
 const bandsWindow = (width, menuOpen) => `<div class="app-window" style="width:${width}px">
-  ${siteBand()}${buildsBand(width, { builds: SEVEN_BUILDS, menuOpen })}<div class="bands-page"></div>
+  ${siteBand()}${buildsBand(width, { builds: SEVEN_BUILDS, menuOpen, action: "" })}<div class="bands-page"></div>
 </div>`;
 
 addSection(() => ["The two bands · the site above, the open builds below: seven builds, at 960 px with the menu « +N ▾ » open, at 1,600 px where every tab fits and grows",

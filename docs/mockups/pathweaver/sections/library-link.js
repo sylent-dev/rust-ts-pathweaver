@@ -3,8 +3,9 @@
 // itself (the first visit, the library) is drawn in its own sections (sections/home-drop.js,
 // sections/library.js): here, only stand-ins. In the style of the page, at 960 px.
 
+// « +N ▾ » does nothing in these stand-ins, too short for its menu.
 const libraryWindow = ({ library = false, builds = [] }, page) => `<div class="app-window" style="width:960px">
-  ${siteBand({ library })}${builds.length ? buildsBand(960, { builds, current: library ? -1 : 0, menuOpen: false }) : ""}${page}
+  ${siteBand({ library })}${builds.length ? buildsBand(960, { builds, current: library ? -1 : 0, menuOpen: false, action: "" }) : ""}${page}
 </div>`;
 
 const libraryPage = text => `<div class="link-page">${text}</div>`;

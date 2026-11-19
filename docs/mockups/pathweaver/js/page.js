@@ -51,6 +51,11 @@ const STATE = {};
 const ACTIONS = {};
 // Called after each drawing, to draw what HTML can't (the canvas of the tree).
 const AFTER_RENDER = [];
+// The page draws a component many times (the level band, the band of the open builds): each drawing
+// takes the next number of its kind, the same from one drawing of the page to the next, so that a
+// menu or a window opens in the one clicked and not in all of them.
+const INSTANCES = {};
+const nextInstance = kind => (INSTANCES[kind] = (INSTANCES[kind] ?? -1) + 1);
 
 const params = new URLSearchParams(location.search);
 const accepts = (variant, value) => variant.range
@@ -80,6 +85,7 @@ function renderControls() {
 }
 
 function renderSheet() {
+  for (const kind of Object.keys(INSTANCES)) delete INSTANCES[kind];
   const theme = THEMES[chosen.theme];
   const sections = SECTIONS.map(section => section());
   const contents = sections.length > 10

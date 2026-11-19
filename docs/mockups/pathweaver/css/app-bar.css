@@ -2,7 +2,8 @@
    the band, in the colour of the frame of the logo; the graph paper behind it (css/textures.css)
    and no shadow under it (the owner, 2026-11-18). */
 /* The two bands over everything under them, the level band (z-index 4) included, so that the menu
-   of « +N ▾ » hangs over the track; the band of the site over that of the open builds. */
+   of « +N ▾ » hangs over the track; the band of the site over that of the open builds; a band whose
+   menu is open over everything, the windows of the mock-up under it included. */
 .app-site { position: relative; z-index: 7; display: flex; align-items: center; height: 44px; padding-left: 14px; background: var(--bar-image), var(--site-band, var(--bar)); color: var(--on-bar); }
 .app-site-nav, .app-site-links { display: flex; height: 100%; }
 .app-site-links { margin-left: auto; }
@@ -23,6 +24,7 @@
 /* The band of the open builds: 44 px, their tabs of 184 px, up to 240 when they all fit; the same
    light shadow under it as under the band of the site. */
 .app-builds { position: relative; z-index: 6; display: flex; align-items: flex-end; height: 44px; padding: 0 12px 0 0; background: var(--bar-image), var(--builds-band, var(--band-deep)); color: var(--on-bar); box-shadow: var(--band-shadow); }
+.app-builds:has(.app-builds-menu) { z-index: 8; }
 .app-site-brand { display: flex; align-items: center; gap: var(--brand-gap); flex: none; padding-right: 12px; }
 .app-site-brand .logo-mark { width: var(--brand-mark-size); height: var(--brand-mark-size); }
 .app-site-brand .logo-name { position: relative; top: var(--brand-name-offset); font-size: var(--brand-size); }

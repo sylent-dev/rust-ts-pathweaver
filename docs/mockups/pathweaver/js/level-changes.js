@@ -9,6 +9,7 @@
 // per change, a summary: its sign, its category, its name, what it hangs on at the right. The +,
 // the − and the ⇄ in the colours of a change; each line leads to the tab that shows its change.
 
+// The number of the level band whose window is open (nextInstance), or false.
 STATE.changesOpen = false;
 
 // A note of the author (N2 of twelve marks, the owner, 2026-11-19): a filled speech bubble, simple
@@ -88,12 +89,13 @@ function changesWindow(record, level, { opening = false } = {}) {
   </div>`;
 }
 
-// STATE.changesOpen: the key of the band whose window is open, or false.
+// « N changes » opens the window of its own band, and closes the menu of « +N ▾ »: one at a time.
 ACTIONS["changes-toggle"] = element => {
-  const key = element.closest(".app-level[data-band]")?.dataset.band;
-  if (key === undefined) return false;
-  STATE.changesOpen = STATE.changesOpen === key ? false : key;
+  const instance = element.closest(".app-level[data-instance]")?.dataset.instance;
+  if (instance === undefined) return false;
+  STATE.changesOpen = STATE.changesOpen === Number(instance) ? false : Number(instance);
   STATE.changesOpening = STATE.changesOpen !== false;
+  STATE.buildsMenu = false;
   return true;
 };
 // A line shows its tab and closes the window, which would hide it; the tree stays on the Overview,
@@ -109,13 +111,13 @@ AFTER_RENDER.push(() => { STATE.changesOpening = false; });
 
 // Esc, or a click outside the band and the window, closes it.
 document.addEventListener("keydown", event => {
-  if (event.key === "Escape" && STATE.changesOpen) {
+  if (event.key === "Escape" && STATE.changesOpen !== false) {
     STATE.changesOpen = false;
     renderSheet();
   }
 });
 document.addEventListener("click", event => {
-  if (!STATE.changesOpen || event.target.closest(".app-level, .app-changes-window")) return;
+  if (STATE.changesOpen === false || event.target.closest(".app-level, .app-changes-window")) return;
   STATE.changesOpen = false;
   renderSheet();
 });
