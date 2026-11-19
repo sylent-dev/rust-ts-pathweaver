@@ -48,7 +48,7 @@ function drawKinds(canvas) {
 // The tree of the build shown, centred on the notable taken at the level nearest the middle of the
 // build.
 function drawSample(canvas) {
-  const states = treeStates(TREE.taken, TREE.nodes.length, STATE.level, STATE.set ?? 1);
+  const states = treeStates(TREE.taken, TREE.nodes.length, STATE.level);
   const fit = fitView(TREE.nodes, TREE.taken.map(([i]) => i), canvas.clientWidth, canvas.clientHeight, 40);
   let view = fit;
   if (canvas.dataset.zoom !== "build") {
@@ -57,7 +57,7 @@ function drawSample(canvas) {
     const middle = notables.reduce((best, i) => (distance(i) < distance(best) ? i : best), notables[0]);
     view = { x: TREE.nodes[middle][0], y: TREE.nodes[middle][1], scale: Number(canvas.dataset.zoom) * TREE.sheets.scale };
   }
-  drawTree(canvas, TREE, states, view, "", 1.5, canvas.dataset.icons === "on" ? 0 : Infinity);
+  drawTree(canvas, TREE, states, view, { iconsFromPx: canvas.dataset.icons === "on" ? 0 : Infinity, sets: setMasks(TREE.taken, TREE.nodes.length), shownSet: STATE.set });
 }
 
 AFTER_RENDER.push(() => {

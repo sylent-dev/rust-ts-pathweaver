@@ -26,7 +26,16 @@ const VARIANTS = {
   homeWidth: { label: "Home width", options: { 900: "900 px", 960: "960 px", 1600: "1,600 px" }, fallback: "960" },
   // The links between the passives taken (2i, the owner, 2026-11-19): the blue of the accent, the
   // white of the passives taken, or a soft amber; Frost Night only (css/tree.css).
-  treeLink: { label: "Links taken", options: { blue: "Blue", white: "White", amber: "Amber" }, fallback: "blue" },
+  treeLink: { label: "Links taken", options: { blue: "Blue", white: "White", amber: "Amber" }, fallback: "white" },
+  // The links of the passives of one weapon set alone (2i, the owner, 2026-11-19): red for the first and
+  // green for the second, as the game draws them (Path of Building, PassiveTreeView.lua); first the
+  // fall and the rise of Exile Market, then the strength and the dexterity of its gems, then others.
+  set1: { label: "Set I", select: true, variable: "--tree-set-1", fallback: "#e66a5c", options: {
+    "#e66a5c": "Exile Market fall", "#e0473f": "Exile Market strength", "#f87171": "Light red",
+    "#ef4444": "Vivid red", "#c0504d": "Brick", "#d97066": "Soft coral" } },
+  set2: { label: "Set II", select: true, variable: "--tree-set-2", fallback: "#5fcf80", options: {
+    "#5fcf80": "Exile Market rise", "#3fbf4f": "Exile Market dexterity", "#86efac": "Light mint",
+    "#22c55e": "Vivid green", "#4d9e6a": "Moss", "#7cc79a": "Soft sage" } },
   // The width of the frame of a small passive from which the icons replace the shapes (2i, the owner,
   // 2026-11-19), tuned by eye on the tree of the Overview: 2 px (the owner); 0: always the icons.
   iconsFrom: { label: "Icons from", range: { min: 0, max: 20, step: 1 }, variable: "--tree-icons-from", unit: "px", fallback: "2" },

@@ -4,7 +4,9 @@
 // others dimmed, and those taken at this very level ringed with the accent (specs.md, Passive tree).
 // Every colour is a token of the style, read from the CSS. Close enough, the passives are drawn with
 // the icons and frames of the game (2i, docs/game-data.md), greyed when not taken; further out, as
-// the shapes of the style.
+// the shapes of the style. The two weapon sets are drawn together, the links of the passives of one
+// set alone in its colour, the set of the switch strong and the other faint (2i, the owner,
+// 2026-11-19).
 
 STATE.set = 1;
 // The view of the tree: its centre in the coordinates of the game, and the pixels per unit.
@@ -14,15 +16,22 @@ STATE.treeView = null;
 const NODE_RADIUS = { small: 26, notable: 40, keystone: 58, jewel: 38, attribute: 26, start: 52 };
 const NODE_STATES = ["none", "later", "taken", "new"];
 
-// The state of every passive at the level, for the weapon set shown.
-function treeStates(taken, count, level, set) {
+// The state of every passive at the level, whatever its weapon set.
+function treeStates(taken, count, level) {
   const states = new Uint8Array(count);
-  for (const [index, low, high, s] of taken) {
-    if (s !== 0 && s !== undefined && s !== set) continue;
+  for (const [index, low, high] of taken) {
     const state = low === level ? 3 : appliesAt([low, high], level) ? 2 : low > level ? 1 : 0;
     states[index] = Math.max(states[index], state);
   }
   return states;
+}
+
+// The weapon sets of every passive, as bits: 1 the first, 2 the second, 3 both (a passive of both
+// sets, or one taken twice).
+function setMasks(taken, count) {
+  const sets = new Uint8Array(count);
+  for (const [index, , , s] of taken) sets[index] |= s === 1 || s === 2 ? s : 3;
+  return sets;
 }
 
 // Fits the passives of the build (every set, every level) in the canvas.
@@ -96,7 +105,9 @@ function drawArt(context, frames, iconIndex, taken, x, y, size) {
   put(TREE_ART.frame, frames[taken ? 1 : 0]);
 }
 
-function drawTree(canvas, graph, states, view, labelNew, minRadius = 1.5, iconsFromPx = iconsFrom(canvas)) {
+// Options: the label of what is new at the level, the smallest radius of a shape, the frame from which
+// the icons show, the weapon sets of the passives (setMasks) and the set of the switch.
+function drawTree(canvas, graph, states, view, { labelNew = "", minRadius = 1.5, iconsFromPx = iconsFrom(canvas), sets = null, shownSet = 1 } = {}) {
   const ratio = window.devicePixelRatio || 1;
   const width = canvas.clientWidth, height = canvas.clientHeight;
   canvas.width = Math.round(width * ratio);
@@ -120,17 +131,22 @@ function drawTree(canvas, graph, states, view, labelNew, minRadius = 1.5, iconsF
     context.shadowColor = on && glow > 0 ? glowColour : "transparent";
   };
 
-  // The links: dimmed, then faded (dashed) between passives taken later, then lit between passives taken.
+  // The links: dimmed, then faded (dashed) between passives taken later, then lit between passives
+  // taken, those of one weapon set alone in its colour, the set away from the switch faint.
+  const takenWidth = number("--tree-edge-width", 2);
   const linkLayers = [
-    [colour("--tree-edge"), [], 1],
-    [colour("--tree-later"), [3, 3], 1],
-    [colour("--tree-edge-taken"), [], number("--tree-edge-width", 2)],
+    [0, 3, colour("--tree-edge"), [], 1, 1],
+    [1, 3, colour("--tree-later"), [3, 3], 1, 1],
+    [2, 3, colour("--tree-edge-taken"), [], takenWidth, 1],
+    [2, 1, colour("--tree-set-1"), [], takenWidth, shownSet === 1 ? 1 : 0.35],
+    [2, 2, colour("--tree-set-2"), [], takenWidth, shownSet === 2 ? 1 : 0.35],
   ];
-  for (const [layer, [stroke, dash, lineWidth]] of linkLayers.entries()) {
+  const setOf = (a, b) => (sets ? sets[a] & sets[b] || 3 : 3);
+  for (const [layer, set, stroke, dash, lineWidth, alpha] of linkLayers) {
     context.beginPath();
     for (const [a, b] of graph.edges) {
       const both = Math.min(states[a] === 3 ? 2 : states[a], states[b] === 3 ? 2 : states[b]);
-      if (both !== layer) continue;
+      if (both !== layer || (layer === 2 && setOf(a, b) !== set)) continue;
       const [ax, ay] = screen(graph.nodes[a]), [bx, by] = screen(graph.nodes[b]);
       context.moveTo(ax, ay);
       context.lineTo(bx, by);
@@ -138,9 +154,11 @@ function drawTree(canvas, graph, states, view, labelNew, minRadius = 1.5, iconsF
     context.strokeStyle = stroke;
     context.setLineDash(dash);
     context.lineWidth = lineWidth;
+    context.globalAlpha = alpha;
     lit(layer === 2);
     context.stroke();
   }
+  context.globalAlpha = 1;
   context.setLineDash([]);
 
   // The passives, by state, so that each state is one path.
@@ -216,14 +234,15 @@ function mountTrees() {
   for (const canvas of document.querySelectorAll('canvas[data-tree="main"], canvas[data-tree="ascendancy"]')) {
     if (canvas.dataset.tree === "ascendancy") {
       const graph = TREE.ascendancy;
-      const states = treeStates(TREE.ascendancyTaken.map(([i, low, high]) => [i, low, high, 0]), graph.nodes.length, level, 0);
-      drawTree(canvas, graph, states, fitView(graph.nodes, graph.nodes.map((_, i) => i), canvas.clientWidth, canvas.clientHeight, 16), "", 3);
+      const states = treeStates(TREE.ascendancyTaken, graph.nodes.length, level);
+      drawTree(canvas, graph, states, fitView(graph.nodes, graph.nodes.map((_, i) => i), canvas.clientWidth, canvas.clientHeight, 16), { minRadius: 3 });
       continue;
     }
-    const states = treeStates(TREE.taken, TREE.nodes.length, level, STATE.set);
-    const fresh = TREE.taken.filter(([, low, , s]) => low === level && (s === 0 || s === STATE.set)).length;
+    const states = treeStates(TREE.taken, TREE.nodes.length, level);
+    const sets = setMasks(TREE.taken, TREE.nodes.length);
+    const fresh = states.filter(state => state === 3).length;
     STATE.treeView ??= fitView(TREE.nodes, TREE.taken.map(([i]) => i), canvas.clientWidth, canvas.clientHeight, 80);
-    const draw = () => drawTree(canvas, TREE, states, STATE.treeView, fresh > 0 ? `+${fresh} new at ${level}` : "");
+    const draw = () => drawTree(canvas, TREE, states, STATE.treeView, { labelNew: fresh > 0 ? `+${fresh} new at ${level}` : "", sets, shownSet: STATE.set });
     draw();
     canvas.onwheel = event => {
       event.preventDefault();
