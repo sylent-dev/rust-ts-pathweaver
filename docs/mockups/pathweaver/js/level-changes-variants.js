@@ -54,12 +54,16 @@ const signOf = change => change.sign === "note" ? icon(12, ICONS.note) : change.
 const isGone = change => change.sign === "−";
 const nothingHere = level => `<p class="app-wv-nothing">Nothing changes at ${level}.</p>`;
 
+// Where a click on a row leads (the owner, 2026-11-19): the tab that shows the change.
+const leadsTo = change => change.category === "passives" ? "Tree"
+  : change.category === "gear" || (change.category === "note" && change.kind === "gear") ? "Inventory" : "Skills";
+
 // W1 · normal: one line each, a tag for its category, as dense as the list can be.
 function changesW1(list, level, record) {
   return `<p class="app-wv-head">${plural(record?.count ?? 0, "change")} at ${level}</p>
-    <ul class="app-wv-lines">${list.map(change => `<li class="${changeClass(change)}"><span class="app-wv-sign">${signOf(change)}</span>
+    <ul class="app-wv-lines app-wv-links">${list.map(change => `<li class="${changeClass(change)}" title="Show it in ${leadsTo(change)}"><span class="app-wv-sign">${signOf(change)}</span>
       <span class="app-wv-tag">${CHANGE_CATEGORIES[change.category].replace(/s$/, "")}</span><span class="app-wv-name">${changeName(change)}</span>
-      <span class="app-wv-detail">${change.category === "skill" ? "" : changeDetail(change)}</span></li>`).join("") || nothingHere(level)}</ul>`;
+      <span class="app-wv-detail">${change.category === "skill" ? "" : changeDetail(change)}</span><span class="app-wv-leads">${leadsTo(change)} →</span></li>`).join("") || nothingHere(level)}</ul>`;
 }
 
 // W2 · normal: what comes, what is replaced, what goes, one under the other: the title says the sign.

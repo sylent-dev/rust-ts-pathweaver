@@ -141,3 +141,14 @@
 :root[data-change-colour="bar"] :is(.app-wv-1, .app-wv-3) li:is(.is-added, .is-swapped, .is-gone) { box-shadow: inset 2px 0 var(--change); }
 :root:is([data-change-colour="shade"], [data-change-colour="bar"]) .app-wv-3 .app-wv-gutter li:not(.app-wv-skill) { padding-left: 6px; margin-bottom: 1px; }
 :root:is([data-change-colour="shade"], [data-change-colour="bar"]) .app-wv-3 .app-wv-gutter li.app-wv-under { padding-left: 18px; }
+
+/* The rows of W1, each a link to the tab of its change (2g3, the owner, 2026-11-19), and their hover
+   (H1 to H4): no box, the whole row lighter, as the rows of the library. */
+.app-wv-links li { cursor: pointer; transition: background .15s; }
+.app-wv-leads { display: none; flex: none; margin-left: auto; font-size: 11px; font-weight: 600; color: var(--accent); white-space: nowrap; }
+:root[data-row-hover="shade"] .app-wv-links li:hover { background: color-mix(in srgb, var(--on-band) 8%, transparent); }
+:root[data-row-hover="accent"] .app-wv-links li:hover { background: color-mix(in srgb, var(--accent) 14%, transparent); }
+:root[data-row-hover="bar"] .app-wv-links li:hover { background: color-mix(in srgb, var(--on-band) 8%, transparent); box-shadow: inset 2px 0 var(--accent); }
+:root[data-row-hover="leads"] .app-wv-links li:hover { background: color-mix(in srgb, var(--on-band) 8%, transparent); }
+:root[data-row-hover="leads"] .app-wv-links li:hover .app-wv-detail { display: none; }
+:root[data-row-hover="leads"] .app-wv-links li:hover .app-wv-leads { display: block; }

@@ -37,3 +37,14 @@
 .app-changes-case { position: relative; overflow: visible; }
 .app-changes-case-name { margin-left: 26px; }
 .app-changes-case-page { height: 440px; }
+
+/* Its scroll bar (2g3, the owner, 2026-11-19): a thin line in the accent, square ends, on no track;
+   the accent, since it can be dragged. Chromium and Safari draw ::-webkit-scrollbar; Firefox only
+   takes a thin width and the colours. */
+.app-changes-window::-webkit-scrollbar { width: 4px; height: 4px; }
+.app-changes-window::-webkit-scrollbar-track { background: transparent; }
+.app-changes-window::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 0; }
+.app-changes-window::-webkit-scrollbar-button { display: none; }
+@supports not selector(::-webkit-scrollbar) {
+  .app-changes-window { scrollbar-width: thin; scrollbar-color: var(--accent) transparent; }
+}
