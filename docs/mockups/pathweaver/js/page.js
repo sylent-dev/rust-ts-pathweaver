@@ -52,7 +52,7 @@ const VARIANTS = {
   rowHover: { label: "Row hover", select: true, fallback: "plain", options: { plain: "H4 · where it leads, no mark",
     chevron: "H5 · where it leads, a chevron", double: "H6 · where it leads, a double chevron" } },
   // How far the mark of a note sits under the baseline of its text, tuned by eye (2g3).
-  noteOffset: { label: "Note offset", range: { min: -6, max: 2, step: 0.5 }, variable: "--note-offset", unit: "px", fallback: "-3" },
+  noteOffset: { label: "Note offset", range: { min: -6, max: 2, step: 0.5 }, variable: "--note-offset", unit: "px", fallback: "-2" },
   gemSize: { label: "Gem size", range: { min: 6, max: 20, step: 1 }, variable: "--gem-mark-size", unit: "px", fallback: "10" },
 };
 
