@@ -9,8 +9,9 @@ From the repository root. Reads:
 - the names, kinds and colours of the gems (RePoE, base_items and skill_gems);
 - the builds of the corpus, in inputs/builds/ (local only, never committed).
 
-Writes js/data-tree.js, js/data-builds.js, img/portraits/*.webp (the discs) and
-img/portraits-square/*.webp (the square inside each disc, for the tabs) next to this folder. The
+Writes js/data-tree.js, js/data-builds.js, img/portraits/*.webp (the discs),
+img/portraits-square/*.webp (the square inside each disc, for the tabs) and img/tree/*.webp (the sheets
+of the icons and frames of the passives, kept whole, 2i) next to this folder. The
 downloads are kept in the cache folder (a temporary one by default) so that a second run is fast.
 The mock-up only: the website converts the game data with its own script, at step 4.
 """
@@ -73,6 +74,23 @@ PORTRAIT_SIZE = 128
 SQUARE_SIZE = 88
 # The kinds of passives, in the order the mock-up reads them.
 KINDS = ["small", "notable", "keystone", "jewel", "attribute", "start"]
+# The sheets of the passives (2i, docs/game-data.md): the icons in colour and greyed, at the same
+# places in both sheets, and the frames; drawn at half the scale of the game (their meta.scale).
+ICON_SHEETS = ["skills", "skills-disabled"]
+FRAME_SHEET = "frame"
+# The prefix of the icon of a kind of passive in the sheets (an attribute is a small passive).
+ICON_PREFIX = {"small": "normal", "attribute": "normal", "notable": "notable", "keystone": "keystone",
+               "jewel": "normal"}
+# The frames drawn, by kind of passive: not taken, then taken (the other states are 2i2's).
+FRAMES = {
+    "small": ["PSSkillFrame", "PSSkillFrameActive"],
+    "notable": ["NotableFrameUnallocated", "NotableFrameAllocated"],
+    "keystone": ["KeystoneFrameUnallocated", "KeystoneFrameAllocated"],
+    "jewel": ["JewelFrameUnallocated", "JewelFrameAllocated"],
+    "ascendancySmall": ["AscendancyFrameNormalUnallocated", "AscendancyFrameNormalAllocated"],
+    "ascendancyNotable": ["AscendancyFrameNotableUnallocated", "AscendancyFrameNotableAllocated"],
+    "ascendancyStart": ["AscendancyStartNode", "AscendancyStartNode"],
+}
 
 
 def fetch(cache, url, name):
@@ -103,25 +121,64 @@ def interval(entry):
     return [max(value[0], 1), value[1]]
 
 
-def tree_data(tree, shown):
+def icon_of(node, icons):
+    """The place of the icon of a passive in the sheets, or -1 when it has none (the class starts, the
+    jewel sockets and some ascendancy passives)."""
+    prefix = ICON_PREFIX.get(KINDS[kind_of(node)])
+    if not prefix or node.get("isJewelSocket"):
+        return -1
+    return icons.get(f"{prefix}Active:{node.get('icon', '')}", -1)
+
+
+def sheets(cache):
+    """Copies the sheets of the passives whole, and returns the place of each icon and of each frame
+    drawn, with the scale of the sheets."""
+    target = OUT / "img" / "tree"
+    target.mkdir(exist_ok=True)
+    index = {}
+    for name in [*ICON_SHEETS, FRAME_SHEET]:
+        index[name] = json.loads(fetch(cache, f"{TREE_URL}/assets/{name}.json", f"{name}.json").read_text())
+        image = fetch(cache, f"{TREE_URL}/assets/{name}.webp", f"{name}.webp")
+        (target / f"{name}.webp").write_bytes(image.read_bytes())
+    scales = {float(sheet["meta"]["scale"]) for sheet in index.values()}
+    if len(scales) != 1:
+        raise SystemExit(f"the sheets of the passives have several scales: {scales}")
+    places = lambda sheet: {key: [f["frame"][axis] for axis in "xywh"] for key, f in sheet["frames"].items()}
+    icons, disabled = places(index["skills"]), places(index["skills-disabled"])
+    for key, place in icons.items():
+        if disabled.get(key.replace("Active:", "Inactive:")) != place:
+            raise SystemExit(f"the greyed icon of {key} isn't at the same place as in colour")
+    frames = places(index[FRAME_SHEET])
+    return {
+        "scale": scales.pop(),
+        "icons": list(icons.items()),
+        "frames": {kind: [frames[f"frame:{name}"] for name in names] for kind, names in FRAMES.items()},
+    }
+
+
+def tree_data(tree, shown, sheet):
+    icons = {key: i for i, (key, _) in enumerate(sheet["icons"])}
     nodes, index, ascendancy = [], {}, []
     asc_id = shown.get("ascendancy")
     for key, node in tree["nodes"].items():
-        if "x" not in node:
+        # The masteries are only the art at the centre of a group, never taken nor linked (Path of
+        # Building reads them as « isOnlyImage »): their art waits in docs/backlog.md.
+        if "x" not in node or node.get("isMastery"):
             continue
         if node.get("ascendancyId"):
             if node["ascendancyId"] == asc_id:
                 ascendancy.append((key, node))
             continue
         index[key] = len(nodes)
-        nodes.append([round(node["x"]), round(node["y"]), kind_of(node)])
+        nodes.append([round(node["x"]), round(node["y"]), kind_of(node), icon_of(node, icons)])
     edges = [[index[str(e["from"])], index[str(e["to"])]] for e in tree["edges"]
              if str(e["from"]) in index and str(e["to"]) in index]
     # The ascendancy, drawn in its own box: positions relative to its start.
     start = next((n for _, n in ascendancy if n.get("isAscendancyStart")), None)
     asc_index = {key: i for i, (key, _) in enumerate(ascendancy)}
     asc_nodes = [[round(n["x"] - start["x"]), round(n["y"] - start["y"]),
-                  KINDS.index("start") if n.get("isAscendancyStart") else kind_of(n)] for _, n in ascendancy]
+                  KINDS.index("start") if n.get("isAscendancyStart") else kind_of(n), icon_of(n, icons)]
+                 for _, n in ascendancy]
     asc_edges = [[asc_index[str(e["from"])], asc_index[str(e["to"])]] for e in tree["edges"]
                  if str(e["from"]) in asc_index and str(e["to"]) in asc_index]
     by_id = {node["id"]: key for key, node in tree["nodes"].items() if "id" in node}
@@ -137,6 +194,8 @@ def tree_data(tree, shown):
             unknown.append(passive["id"])
     return {
         "kinds": KINDS,
+        "sheets": {"scale": sheet["scale"], "icons": [place for _, place in sheet["icons"]],
+                   "frames": sheet["frames"]},
         "nodes": nodes,
         "edges": edges,
         "ascendancy": {"nodes": asc_nodes, "edges": asc_edges},
@@ -353,7 +412,7 @@ def main():
                     for c in tree["classes"] for a in c["ascendancies"]}
     read = lambda name: json.loads((CORPUS / name).read_text(encoding="utf-8-sig"))
     builds = [read(name) for name in [SHOWN, *OPEN]]
-    write_js("data-tree.js", "TREE", tree_data(tree, builds[0]))
+    write_js("data-tree.js", "TREE", tree_data(tree, builds[0], sheets(cache)))
     write_js("data-builds.js", "BUILDS", {
         "treeVersion": TREE_TAG,
         "shown": build_data(builds[0], names, gems, ascendancies),

@@ -10,9 +10,10 @@ STATE.tabBefore = false;
 
 const BUILD_TABS = { overview: "Overview", skills: "Skills", tree: "Tree", inventory: "Inventory", about: "About" };
 
-function buildTabs() {
+// `shown`: the tab of a window that always shows the same one (the Tree tab of 2i).
+function buildTabs(shown = STATE.tab) {
   return `<div class="app-tabs" role="tablist">${Object.entries(BUILD_TABS).map(([key, label]) =>
-    `<button type="button" role="tab" class="app-tab" aria-selected="${STATE.tab === key}" data-action="tab-go" data-tab="${key}">${label}</button>`).join("")}<span class="app-tabs-bar" aria-hidden="true"></span></div>`;
+    `<button type="button" role="tab" class="app-tab" aria-selected="${shown === key}" data-action="tab-go" data-tab="${key}">${label}</button>`).join("")}<span class="app-tabs-bar" aria-hidden="true"></span></div>`;
 }
 
 // Shows a tab: a click on it, or on a line of the window of what changes.
@@ -32,7 +33,7 @@ AFTER_RENDER.push(() => {
   STATE.tabBefore = false;
   for (const row of document.querySelectorAll(".app-tabs")) {
     const bar = row.querySelector(".app-tabs-bar");
-    const to = `${barX(row.querySelector(`[data-tab="${STATE.tab}"]`))}px`;
+    const to = `${barX(row.querySelector('[aria-selected="true"]'))}px`;
     bar.style.setProperty("--bar-x", before ? `${barX(row.querySelector(`[data-tab="${before}"]`))}px` : to);
     if (before) requestAnimationFrame(() => requestAnimationFrame(() => { bar.classList.add("is-sliding"); bar.style.setProperty("--bar-x", to); }));
   }

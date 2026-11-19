@@ -1,0 +1,34 @@
+/* The controls over the tree (js/tree-controls.js): the legend at the top, the bottom bar T14 · Ghost.
+   Only the controls catch the pointer; the tree under them is dragged and zoomed everywhere else. */
+.tc { position: absolute; inset: 0; pointer-events: none; font-size: 13px; }
+
+/* The buttons, without a box; on hover a transparent tile behind the words, its corners rounded by
+   2 px (the owner, 2026-11-19). */
+.tc button { pointer-events: auto; display: inline-flex; align-items: center; justify-content: center; min-width: 28px; height: 26px; padding: 0 8px; border: none; border-radius: 2px; background: none; color: var(--weak); font: inherit; cursor: pointer; }
+.tc button:hover { color: var(--text); background: color-mix(in srgb, var(--text) 8%, transparent); }
+.tc button.tc-zoom { padding: 0; width: 28px; }
+/* The set shown in its colour, without a line under it (the owner, 2026-11-19). */
+.tc button.is-set1[aria-pressed="true"] { color: var(--tree-set-1); }
+.tc button.is-set2[aria-pressed="true"] { color: var(--tree-set-2); }
+.tc-group { display: inline-flex; align-items: center; gap: 4px; }
+.tc-end { margin-left: auto; display: inline-flex; align-items: center; gap: 10px; }
+
+/* The legend at the top: one line of small words over a short gradient, the mirror of the bar. */
+.tc-shade { position: absolute; left: 0; right: 0; top: 0; display: flex; justify-content: center; padding: 8px 12px 14px; background: linear-gradient(to bottom, color-mix(in srgb, var(--band-deep) 90%, transparent) 0%, transparent 100%); }
+.tc-legend { display: flex; flex-wrap: wrap; justify-content: center; gap: 4px 14px; font-size: 12px; }
+/* Each mark on the middle of the lowercase letters beside it (vertical-align: middle), not on the box of
+   the line. */
+.tc-legend span { white-space: nowrap; }
+.tc-legend i { display: inline-block; margin-right: 6px; vertical-align: middle; }
+.tc-line { width: 16px; height: 0; border-top: 2px solid var(--tree-edge-taken); }
+/* The ring of what is new is drawn outside its dot: room for it on both sides. */
+.tc-legend .app-dot.is-new { margin: 0 10px 0 4px; }
+.tc-line.is-set1 { border-color: var(--tree-set-1); }
+.tc-line.is-set2 { border-color: var(--tree-set-2); }
+
+/* The bottom bar: no border, a gradient of the shade of the tree, dark at the bottom, clear upward. */
+.tc-bb { position: absolute; left: 0; right: 0; bottom: 0; padding: 28px 12px 8px; background: linear-gradient(to top, color-mix(in srgb, var(--band-deep) 94%, transparent) 0%, color-mix(in srgb, var(--band-deep) 70%, transparent) 45%, transparent 100%); }
+.tc-row { position: relative; display: flex; align-items: center; gap: 14px; }
+.tc-row > * { pointer-events: auto; }
+/* The counts in the middle of the bar, whatever the width of its ends (the owner, 2026-11-19). */
+.tc-counts { position: absolute; left: 50%; transform: translateX(-50%); white-space: nowrap; font-size: 12px; }
