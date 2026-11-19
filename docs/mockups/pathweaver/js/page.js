@@ -33,9 +33,6 @@ const VARIANTS = {
   size: { label: "Size", range: { min: 6, max: 200, step: 2 }, variable: "--texture-size", unit: "px", fallback: "24" },
   // The width of the windows of the home page (2l): the minimum of specs.md, half a 1920-pixel screen, and a wide
   // window of the owner's screen.
-  // How the lines of the window of what changes change with the level (2g4, js/level-changes-motion.js).
-  linesChange: { label: "Lines change", select: true, fallback: "fade", options: { none: "M1 · at once", fade: "M2 · fade in one after the other",
-    slide: "M3 · slide in from the side of the arrow", cross: "M4 · a quick fade of the window" } },
   homeWidth: { label: "Home width", options: { 900: "900 px", 960: "960 px", 1600: "1,600 px" }, fallback: "960" },
 };
 
