@@ -31,18 +31,38 @@ const byCategory = list => Object.keys(CHANGE_CATEGORIES)
 
 // The words of a change: its name, and what it hangs on, in grey.
 const slotName = id => escapeHtml(SLOT_NAMES[id] ?? id);
+// The attribute of a base, from « (Dex Base) » at the end of the name of an item (2g3, the owner,
+// 2026-11-19): in the mock-up only, read from the text of the author's hint, which says it in 4 files
+// of 33; the website reads it from the game data of the base. B1 to B4 at the top of the page.
+const BASE_SUFFIX = /\s*\(((?:Str|Dex|Int)(?:\/(?:Str|Dex|Int))?) Base\)$/;
+const BASE_COLOURS = { Str: "var(--gem-str)", Dex: "var(--gem-dex)", Int: "var(--gem-int)" };
+function itemWithBase(text) {
+  const match = BASE_SUFFIX.exec(text);
+  if (!match || chosen.baseMark === "file") return escapeHtml(text);
+  const name = escapeHtml(text.slice(0, match.index));
+  const attributes = match[1].split("/");
+  const each = (render, glue = "") => attributes.map(attribute => render(attribute, BASE_COLOURS[attribute])).join(glue);
+  if (chosen.baseMark === "words") return `${name} <span class="app-base-words">(${each((attribute, colour) => `<span style="color:${colour}">${attribute}</span>`, "/")} Base)</span>`;
+  if (chosen.baseMark === "tag") return `${name}${each((attribute, colour) => `<span class="app-base-tag" style="color:${colour}">${attribute.toUpperCase()}</span>`)}`;
+  if (chosen.baseMark === "chip") return `${name}${each((attribute, colour) => `<span class="app-base-chip" style="background:${colour}">${attribute.toUpperCase()}</span>`)}`;
+  const colours = attributes.map(attribute => BASE_COLOURS[attribute]);
+  return `<span class="app-base-name" style="background-image:linear-gradient(90deg, ${colours[0]}, ${colours.at(-1)})">${name}</span>`;
+}
+// The kind of a change, for its colour (C1 to C4 at the top of the page).
+const CHANGE_KINDS = { "+": "is-added", "⇄": "is-swapped", "−": "is-gone", note: "is-note" };
+const changeClass = change => CHANGE_KINDS[change.sign];
 const uniqueTag = change => change.unique ? ' <span class="app-changes-tag">unique</span>' : "";
 function changeName(change) {
   if (change.category === "passives") return `<b>${plural(change.count, "passive")}</b>${change.label && change.sign === "+" ? ` ${change.label}` : ""}`;
   if (change.category === "skill" || change.category === "support") return `${gemMark(change.colour, change.category)}<b>${escapeHtml(change.name)}</b>${noteMark(change.note)}`;
-  if (change.category === "gear") return `<b>${escapeHtml(change.name || "a hint")}</b>${uniqueTag(change)}`;
-  return `<b>${escapeHtml(change.name)}</b>`;
+  if (change.category === "gear") return `<b>${itemWithBase(change.name || "a hint")}</b>${uniqueTag(change)}`;
+  return `<b>${change.kind === "gear" ? itemWithBase(change.name) : escapeHtml(change.name)}</b>`;
 }
 function changeDetail(change) {
   if (change.category === "skill") return change.supports.length > 0 ? `with ${change.supports.map(s => `${gemMark(s.colour, "support")}${escapeHtml(s.name)}`).join(", ")}` : "";
   if (change.category === "support") return `${change.sign === "−" ? "off" : "on"} ${escapeHtml(change.skill)}`;
   if (change.category === "passives") return change.sign === "−" ? "given back" : "";
-  if (change.category === "gear") return `${slotName(change.slot)}${change.sign === "⇄" ? ` · for ${escapeHtml(change.before || "a hint")}` : ""}`;
+  if (change.category === "gear") return `${slotName(change.slot)}${change.sign === "⇄" ? ` · for ${itemWithBase(change.before || "a hint")}` : ""}`;
   return change.kind === "gear" ? `${slotName(change.on)} · new text` : change.kind === "support" ? `on ${escapeHtml(change.on)} · new note` : "new note";
 }
 const signOf = change => change.sign === "note" ? icon(12, ICONS.note) : change.sign;
@@ -52,7 +72,7 @@ const nothingHere = level => `<p class="app-wv-nothing">Nothing changes at ${lev
 // W1 · normal: one line each, a tag for its category, as dense as the list can be.
 function changesW1(list, level, record) {
   return `<p class="app-wv-head">${plural(record?.count ?? 0, "change")} at ${level}</p>
-    <ul class="app-wv-lines">${list.map(change => `<li class="${isGone(change) ? "is-gone" : ""}"><span class="app-wv-sign">${signOf(change)}</span>
+    <ul class="app-wv-lines">${list.map(change => `<li class="${changeClass(change)}"><span class="app-wv-sign">${signOf(change)}</span>
       <span class="app-wv-tag">${CHANGE_CATEGORIES[change.category].replace(/s$/, "")}</span><span class="app-wv-name">${changeName(change)}</span>
       <span class="app-wv-detail">${change.category === "skill" ? "" : changeDetail(change)}</span></li>`).join("") || nothingHere(level)}</ul>`;
 }
@@ -71,10 +91,10 @@ function changesW2(list, level) {
 
 // W3 · normal: the category in a column on the left; the supports under the skill they join.
 function changesW3(list, level) {
-  const rows = changes => changes.map(change => `<li class="${isGone(change) ? "is-gone" : ""}"><span class="app-wv-sign">${signOf(change)}</span><span>${changeName(change)} <span class="app-wv-detail">${changeDetail(change)}</span></span></li>`).join("");
+  const rows = changes => changes.map(change => `<li class="${changeClass(change)}"><span class="app-wv-sign">${signOf(change)}</span><span>${changeName(change)} <span class="app-wv-detail">${changeDetail(change)}</span></span></li>`).join("");
   const supportsBySkill = changes => Object.entries(Object.groupBy(changes, change => change.skill)).map(([skill, supports]) =>
     `<li class="app-wv-skill"><span class="app-wv-sign"></span><span>${escapeHtml(skill)}</span></li>${supports.map(change =>
-      `<li class="app-wv-under ${isGone(change) ? "is-gone" : ""}"><span class="app-wv-sign">${change.sign}</span><span>${gemMark(change.colour, "support")}${escapeHtml(change.name)}${noteMark(change.note)}</span></li>`).join("")}`).join("");
+      `<li class="app-wv-under ${changeClass(change)}"><span class="app-wv-sign">${change.sign}</span><span>${gemMark(change.colour, "support")}${escapeHtml(change.name)}${noteMark(change.note)}</span></li>`).join("")}`).join("");
   return list.length === 0 ? nothingHere(level) : `<dl class="app-wv-gutter">${byCategory(list).map(([category, changes]) =>
     `<dt>${CHANGE_CATEGORIES[category]}<span>${changes.length}</span></dt><dd><ul>${category === "support" ? supportsBySkill(changes) : rows(changes)}</ul></dd>`).join("")}</dl>`;
 }

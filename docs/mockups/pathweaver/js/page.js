@@ -40,6 +40,13 @@ const VARIANTS = {
   // The mark of a gem (2g3, js/gem-marks.js): twelve marks and the square of 2g, applied to every
   // window, and its size.
   gem: { label: "Gem", select: true, fallback: "g1", options: { ...Object.fromEntries(Array.from({ length: 12 }, (_, index) => [`g${index + 1}`, `G${index + 1}`])), square: "The square of 2g" } },
+  // The colours of W1 and W3 (2g3, the owner, 2026-11-19): of a change, green for what comes,
+  // yellow for what is replaced, red for what goes; of a base, the colour of its attribute.
+  changeColour: { label: "Change colour", select: true, fallback: "signs", options: { none: "None, as before", signs: "C1 · the signs",
+    words: "C2 · the words of the line", shade: "C3 · a shade behind the line", bar: "C4 · a bar on the left of the line" } },
+  baseMark: { label: "Base", select: true, fallback: "words", options: { file: "As the file writes it", words: "B1 · (Dex Base) in its colour",
+    tag: "B2 · a tag DEX in its colour", chip: "B3 · a chip DEX on its colour", name: "B4 · the name in its colour" } },
+  attrColours: { label: "Attributes", select: true, fallback: "pathweaver", options: { pathweaver: "Pathweaver (teal dexterity)", exile: "Exile Market (green dexterity)" } },
   gemSize: { label: "Gem size", range: { min: 6, max: 20, step: 1 }, variable: "--gem-mark-size", unit: "px", fallback: "10" },
 };
 

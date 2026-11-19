@@ -122,3 +122,28 @@
 .app-wv-12 .app-wv-lines { flex: 1; min-width: 0; }
 .app-wv-12 .app-wv-lines li { padding: 2px 0; }
 .app-wv-12 .app-wv-doll-rest { margin-top: 12px; padding-top: 8px; border-top: 1px solid var(--divider); }
+
+/* The colours of W1 and W3 (2g3, the owner, 2026-11-19): of a change (C1 to C4), green for what comes,
+   yellow orange for what is replaced, red for what goes: the rise, the warning and the fall of Exile
+   Market (the owner, 2026-11-19), tuned together on a blue night close to Frost Night; tokens of their
+   own once kept. */
+:root { --change-added: #5fcf80; --change-swapped: #f0b85a; --change-gone: #e66a5c; }
+/* The colours of the attributes, of the gems and of the bases: those of Pathweaver (tokens.css), or
+   those of Exile Market, a true green for dexterity as in the game, apart from the rise and the fall. */
+:root[data-attr-colours="exile"] { --gem-str: #e0473f; --gem-dex: #3fbf4f; --gem-int: #5aa7f0; }
+:is(.app-wv-1, .app-wv-3) li.is-added { --change: var(--change-added); }
+:is(.app-wv-1, .app-wv-3) li.is-swapped { --change: var(--change-swapped); }
+:is(.app-wv-1, .app-wv-3) li.is-gone { --change: var(--change-gone); }
+:root[data-change-colour="signs"] :is(.app-wv-1, .app-wv-3) li .app-wv-sign { color: var(--change, var(--on-band-weak)); }
+:root[data-change-colour="words"] :is(.app-wv-1, .app-wv-3) li:is(.is-added, .is-swapped, .is-gone) :is(.app-wv-sign, b, .app-wv-name) { color: var(--change); }
+:root[data-change-colour="words"] :is(.app-wv-1, .app-wv-3) li:is(.is-added, .is-swapped, .is-gone) .app-wv-detail { color: color-mix(in srgb, var(--change) 55%, var(--on-band-weak)); }
+:root[data-change-colour="shade"] :is(.app-wv-1, .app-wv-3) li:is(.is-added, .is-swapped, .is-gone) { background: color-mix(in srgb, var(--change) 13%, transparent); }
+:root[data-change-colour="bar"] :is(.app-wv-1, .app-wv-3) li:is(.is-added, .is-swapped, .is-gone) { box-shadow: inset 2px 0 var(--change); }
+:root:is([data-change-colour="shade"], [data-change-colour="bar"]) .app-wv-3 .app-wv-gutter li:not(.app-wv-skill) { padding-left: 6px; margin-bottom: 1px; }
+:root:is([data-change-colour="shade"], [data-change-colour="bar"]) .app-wv-3 .app-wv-gutter li.app-wv-under { padding-left: 18px; }
+
+/* The attribute of a base (B1 to B4). */
+.app-base-words { font-weight: 400; color: var(--on-band-weak); }
+.app-base-tag { margin-left: 6px; font-size: 10px; font-weight: 700; letter-spacing: .08em; }
+.app-base-chip { margin-left: 6px; padding: 1px 4px; font-size: 9px; font-weight: 700; letter-spacing: .06em; color: var(--band-deep); vertical-align: 1px; }
+.app-base-name { background-clip: text; -webkit-background-clip: text; color: transparent; }
