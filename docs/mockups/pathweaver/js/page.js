@@ -37,13 +37,11 @@ const VARIANTS = {
   set2: { label: "Set II", select: true, variable: "--tree-set-2", fallback: "#22c55e", options: {
     "#5fcf80": "Exile Market rise", "#3fbf4f": "Exile Market dexterity", "#86efac": "Light mint",
     "#22c55e": "Vivid green", "#4d9e6a": "Moss", "#7cc79a": "Soft sage" } },
-  // The controls over the tree (2i, js/tree-controls.js): twelve variants, three at each of four
-  // temperatures, normal, high, explosive and free (the owner, 2026-11-19).
+  // The controls over the tree (2i, js/tree-controls.js): of twelve variants, the owner kept T2, the
+  // bottom bar (2026-11-19), varied as discreet as can be.
   treeControls: { label: "Tree controls", options: {
-    t1: "T1 · Corners", t2: "T2 · Bottom bar", t3: "T3 · Toolbar",
-    t4: "T4 · Capsule", t5: "T5 · Legend that picks", t6: "T6 · Rail",
-    t7: "T7 · HUD", t8: "T8 · Compass", t9: "T9 · Map margins",
-    t10: "T10 · On hover", t11: "T11 · Chips", t12: "T12 · Minimap" }, fallback: "t1" },
+    t2: "T2 · Bottom bar", t13: "T13 · Gradient", t14: "T14 · Ghost", t15: "T15 · Counts in the sets",
+    t16: "T16 · Centred", t17: "T17 · Tabs", t18: "T18 · Frosted", t19: "T19 · Quiet", t20: "T20 · Unfolding" }, fallback: "t13" },
   // The width of the frame of a small passive from which the icons replace the shapes (2i, the owner,
   // 2026-11-19), tuned by eye on the tree of the Overview: 2 px (the owner); 0: always the icons.
   iconsFrom: { label: "Icons from", range: { min: 0, max: 20, step: 1 }, variable: "--tree-icons-from", unit: "px", fallback: "2" },

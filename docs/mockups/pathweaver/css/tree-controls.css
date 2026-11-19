@@ -1,153 +1,72 @@
-/* The controls over the tree (js/tree-controls.js): twelve variants, T1 to T12. Only the controls
-   catch the pointer; the tree under them is dragged and zoomed everywhere else. */
+/* The controls over the tree (js/tree-controls.js): the bottom bar, T2 as kept and its variants T13–T20.
+   Only the controls catch the pointer; the tree under them is dragged and zoomed everywhere else. */
 .tc { position: absolute; inset: 0; pointer-events: none; font-size: 13px; }
-.tc button, .tc label, .tc canvas { pointer-events: auto; }
-.tc button { display: inline-grid; place-items: center; min-width: 28px; height: 26px; padding: 0 8px; border: var(--border-width) solid var(--control-line); border-radius: var(--radius); background: var(--control); color: var(--text); font: inherit; cursor: pointer; }
+.tc button { pointer-events: auto; display: inline-flex; align-items: center; justify-content: center; gap: 6px; min-width: 28px; height: 26px; padding: 0 8px; border: var(--border-width) solid var(--control-line); border-radius: var(--radius); background: var(--control); color: var(--text); font: inherit; cursor: pointer; }
 .tc button.tc-zoom { padding: 0; width: 28px; }
 .tc button[aria-pressed="true"] { background: var(--fill-strong); border-color: var(--fill-strong); color: var(--on-fill-strong); }
-.tc button.is-set1[aria-pressed="true"] { background: var(--tree-set-1); border-color: var(--tree-set-1); }
+.tc button.is-set1[aria-pressed="true"] { background: var(--tree-set-1); border-color: var(--tree-set-1); color: #fff; }
 .tc button.is-set2[aria-pressed="true"] { background: var(--tree-set-2); border-color: var(--tree-set-2); color: #06140b; }
 .tc .is-set1 { --set: var(--tree-set-1); }
 .tc .is-set2 { --set: var(--tree-set-2); }
-.tc i.is-set1, .tc span.is-set1 { color: var(--tree-set-1); font-style: normal; }
-.tc i.is-set2, .tc span.is-set2 { color: var(--tree-set-2); font-style: normal; }
-.tc-glass { padding: 3px 8px; border-radius: var(--radius); background: var(--panel); backdrop-filter: blur(6px); }
-.tc-card { padding: 8px 10px; border: var(--border-width) solid var(--control-line); border-radius: var(--radius); background: var(--panel); backdrop-filter: blur(6px); box-shadow: 0 8px 24px #0008; }
-.tc-sep { width: 1px; height: 18px; background: var(--control-line); }
-.tc-caps { text-transform: uppercase; letter-spacing: .12em; font-size: 11px; font-weight: 600; }
+.tc-group { display: inline-flex; align-items: center; gap: 4px; }
+.tc-end { margin-left: auto; display: inline-flex; align-items: center; gap: 10px; }
+.tc-card { padding: 8px 10px; border-radius: var(--radius); background: var(--panel); backdrop-filter: blur(6px); box-shadow: 0 8px 24px #0008; }
 
 /* The legend: a line per kind of link, a dot per state of a passive. */
 .tc-legend { display: flex; flex-wrap: wrap; gap: 4px 12px; font-size: 12px; }
-.tc-legend span, .tc-t9-top span, .tc-t11-legend span, .tc-t7-legend span { display: inline-flex; align-items: center; gap: 5px; white-space: nowrap; }
+.tc-legend span { display: inline-flex; align-items: center; gap: 6px; white-space: nowrap; }
 .tc-line { display: inline-block; width: 16px; height: 0; border-top: 2px solid var(--tree-edge-taken); }
 .tc-line.is-set1 { border-color: var(--tree-set-1); }
 .tc-line.is-set2 { border-color: var(--tree-set-2); }
 .tc-line.is-later { border-top: 1px dashed var(--tree-later); }
-.tc-card.tc-legend { flex-direction: column; gap: 6px; }
+.tc-pop { position: absolute; right: 12px; bottom: 50px; flex-direction: column; gap: 6px; }
+.tc-pop.is-centred { right: auto; left: 50%; transform: translateX(-50%); }
 
-/* T1 · Corners: the set and the points at the top, the zoom at the bottom right, the legend at the bottom left. */
-.tc-t1-top { position: absolute; top: 10px; left: 12px; right: 12px; display: flex; justify-content: space-between; align-items: center; }
-.tc-t1-zoom { position: absolute; right: 12px; bottom: 12px; display: flex; flex-direction: column; gap: 4px; }
-.tc-t1-legend { position: absolute; left: 12px; bottom: 12px; }
-
-/* T2 · Bottom bar: everything on one strip along the bottom, the top of the tree left free. */
+/* T2 · Bottom bar, as kept: a strip with its border, the legend inline. */
 .tc-t2-bar { position: absolute; left: 0; right: 0; bottom: 0; display: flex; align-items: center; gap: 12px; height: 38px; padding: 0 10px; background: color-mix(in srgb, var(--band-deep) 88%, transparent); border-top: 1px solid var(--divider); }
-.tc-t2-bar .tc-legend { flex: 1; flex-wrap: nowrap; gap: 10px; }
-.tc-t2-zoom { display: flex; gap: 4px; }
+.tc-t2-legend { flex: 1; flex-wrap: nowrap; gap: 10px; }
 
-/* T3 · Toolbar: a bar docked at the top of the tree, the legend behind a button. */
-.tc-t3-bar { position: absolute; left: 0; right: 0; top: 0; display: flex; align-items: center; gap: 12px; height: 40px; padding: 0 10px; background: var(--band-deep); border-bottom: 1px solid var(--divider); }
-.tc-t3-bar b { font-weight: 700; }
-.tc-segment { display: inline-flex; }
-.tc-segment button:first-child { border-radius: var(--radius) 0 0 var(--radius); }
-.tc-segment button:last-child { border-radius: 0 var(--radius) var(--radius) 0; margin-left: -1px; }
-.tc-t3-end { margin-left: auto; display: flex; gap: 4px; }
-.tc-t3-legend { position: absolute; top: 46px; right: 10px; }
+/* The bar of the variants: no border, a gradient of the shade of the tree, dark at the bottom. */
+.tc-bb { position: absolute; left: 0; right: 0; bottom: 0; display: flex; align-items: center; gap: 14px; padding: 28px 12px 8px; background: linear-gradient(to top, color-mix(in srgb, var(--band-deep) 94%, transparent) 0%, color-mix(in srgb, var(--band-deep) 70%, transparent) 45%, transparent 100%); }
+.tc-bb > *, .tc-bb .tc-row > * { pointer-events: auto; }
 
-/* T4 · Capsule: one floating pill at the bottom centre, as on a map; the points lead at the top left. */
-.tc-t4-points { position: absolute; top: 10px; left: 14px; display: grid; grid-template-columns: auto auto; align-items: baseline; column-gap: 6px; }
-.tc-big { font-family: var(--brand-font); font-weight: 800; font-size: 34px; line-height: 1; }
-.tc-t4-unit { color: var(--weak); }
-.tc-t4-sub { grid-column: 1 / -1; font-size: 12px; color: var(--weak); }
-.tc-t4-capsule { position: absolute; left: 50%; bottom: 14px; transform: translateX(-50%); display: flex; align-items: center; gap: 4px; padding: 4px; border-radius: 999px; background: var(--panel); backdrop-filter: blur(8px); box-shadow: 0 8px 24px #0009; }
-.tc-t4-capsule button { border-radius: 999px; border-color: transparent; background: transparent; }
-.tc-t4-capsule .tc-legend-toggle { padding: 0; width: 28px; }
-.tc-t4-legend { position: absolute; left: 50%; bottom: 56px; transform: translateX(-50%); flex-direction: row; }
+/* A ghost button: no box, the colour of the words alone; the set shown in its colour, underlined. */
+.tc button.tc-ghost { border: none; background: none; color: var(--weak); }
+.tc button.tc-ghost:hover { color: var(--text); background: color-mix(in srgb, var(--text) 8%, transparent); }
+.tc button.tc-ghost[aria-pressed="true"] { background: none; color: var(--text); }
+.tc button.tc-set.tc-ghost[aria-pressed="true"] { color: var(--set); box-shadow: inset 0 -2px 0 var(--set); border-radius: 0; }
+.tc button.tc-legend-toggle.tc-ghost[aria-pressed="true"] { color: var(--accent); }
 
-/* T5 · Legend that picks: the legend is the control, its rows of the sets choose the set shown strong. */
-.tc-t5-card { position: absolute; left: 12px; bottom: 12px; display: flex; flex-direction: column; gap: 2px; width: 190px; }
-.tc-t5-title { margin-bottom: 4px; font-weight: 600; font-size: 12px; }
-.tc .tc-t5-row { display: flex; align-items: center; justify-content: flex-start; gap: 8px; height: 24px; padding: 0 6px; border: none; border-radius: 6px; background: none; font-size: 12px; text-align: left; }
-.tc .tc-t5-row b { margin-left: auto; font-weight: 600; }
-.tc button.tc-t5-row:hover { background: var(--control); }
-.tc button.tc-t5-row[aria-pressed="true"] { background: color-mix(in srgb, var(--set) 22%, transparent); color: var(--text); box-shadow: inset 2px 0 0 var(--set); }
-.tc-t5-zoom { position: absolute; right: 12px; bottom: 12px; display: flex; gap: 4px; }
+/* T15 · Counts in the sets: each set with its line and its points; the shared ones first, not a button. */
+.tc-shared { display: inline-flex; align-items: center; gap: 6px; padding: 0 8px; color: var(--weak); }
+.tc-bb-t15 .tc-set b { font-weight: 700; }
+.tc button.tc-round { width: 24px; min-width: 0; height: 24px; padding: 0; border-radius: 50%; box-shadow: inset 0 0 0 1px var(--control-line); }
 
-/* T6 · Rail: a slim column of buttons along the left edge, the counts quiet at the top right. */
-.tc-t6-rail { position: absolute; left: 0; top: 0; bottom: 0; display: flex; flex-direction: column; align-items: center; gap: 4px; width: 40px; padding-top: 10px; background: color-mix(in srgb, var(--band-deep) 80%, transparent); border-right: 1px solid var(--divider); }
-.tc-t6-rail .tc-sep { width: 18px; height: 1px; margin: 4px 0; }
-.tc-t6-rail button { padding: 0; width: 28px; }
-.tc-t6-count { position: absolute; top: 10px; right: 12px; font-size: 12px; }
-.tc-t6-legend { position: absolute; left: 48px; top: 190px; }
+/* T16 · Centred: one short line in the middle. */
+.tc-bb-t16 { justify-content: center; }
+.tc-centred { display: inline-flex; align-items: center; gap: 4px; }
+.tc-centred > .app-number { padding: 0 6px; }
+.tc-dot { width: 3px; height: 3px; margin: 0 6px; border-radius: 50%; background: var(--weak); opacity: .6; }
 
-/* T7 · HUD: the corners of a screen of a game, big numbers, gauges for the sets, the zoom as a track. */
-.tc-t7-corner { position: absolute; width: 18px; height: 18px; border: 0 solid var(--accent); opacity: .7; }
-.tc-t7-corner.is-tl { top: 8px; left: 8px; border-width: 2px 0 0 2px; }
-.tc-t7-corner.is-tr { top: 8px; right: 8px; border-width: 2px 2px 0 0; }
-.tc-t7-corner.is-bl { bottom: 8px; left: 8px; border-width: 0 0 2px 2px; }
-.tc-t7-corner.is-br { bottom: 8px; right: 8px; border-width: 0 2px 2px 0; }
-.tc-t7-points { position: absolute; top: 16px; left: 22px; display: flex; flex-direction: column; line-height: 1; }
-.tc-huge { font-family: var(--brand-font); font-weight: 800; font-size: 46px; letter-spacing: -.03em; }
-.tc-t7-points .tc-caps { color: var(--weak); margin-top: 2px; }
-.tc-t7-gauges { position: absolute; top: 18px; right: 24px; display: flex; flex-direction: column; gap: 6px; width: 150px; }
-.tc .tc-t7-gauge { display: grid; grid-template-columns: 22px 1fr 24px; align-items: center; gap: 6px; height: 22px; padding: 0 6px; border: none; border-radius: 4px; background: #0006; opacity: .55; }
-.tc .tc-t7-gauge[aria-pressed="true"] { background: #0009; color: var(--text); opacity: 1; }
-.tc-t7-gauge i { justify-self: stretch; height: 6px; border-radius: 3px; background: linear-gradient(90deg, var(--set) var(--fill), #ffffff18 var(--fill)); }
-.tc-t7-gauge .tc-caps { color: var(--set); }
-.tc-t7-ascendancy { position: absolute; left: 22px; bottom: 20px; display: flex; align-items: center; gap: 5px; }
-.tc-t7-ascendancy .tc-caps { margin-right: 4px; color: var(--weak); }
-.tc-t7-ascendancy i { width: 8px; height: 8px; transform: rotate(45deg); border: 1px solid var(--weak); }
-.tc-t7-ascendancy i.is-taken { background: var(--accent); border-color: var(--accent); }
-.tc-t7-zoom { position: absolute; right: 20px; bottom: 20px; display: flex; flex-direction: column; align-items: center; gap: 6px; }
-.tc-t7-zoom button { border: none; background: #0008; }
-.tc-t7-track { position: relative; width: 2px; height: 90px; background: var(--control-line); }
-.tc-zoom-knob { position: absolute; left: 50%; bottom: calc(var(--place, .5) * 100%); width: 12px; height: 4px; border-radius: 2px; background: var(--accent); transform: translate(-50%, 50%); }
-.tc-t7-legend { position: absolute; left: 50%; bottom: 20px; transform: translateX(-50%); display: flex; gap: 14px; }
+/* T17 · Tabs: the sets as the tabs of a build, a bar of their colour under the one shown. */
+.tc button.tc-tab { height: 30px; padding: 0 10px; border: none; border-radius: 0; background: none; color: var(--weak); box-shadow: inset 0 -2px 0 transparent; }
+.tc button.tc-tab b { font-weight: 700; color: var(--weak); }
+.tc button.tc-tab:hover { color: var(--text); }
+.tc button.tc-tab[aria-pressed="true"] { background: none; color: var(--text); box-shadow: inset 0 -2px 0 var(--set); }
+.tc button.tc-tab[aria-pressed="true"] b { color: var(--set); }
+.tc-zoom-level { min-width: 34px; text-align: center; font-size: 12px; }
 
-/* T8 · Compass: one round control, the zoom north and south, the sets west and east, the points at its heart. */
-.tc-t8-compass { position: absolute; right: 16px; bottom: 16px; width: 112px; height: 112px; border-radius: 50%; background: var(--panel); backdrop-filter: blur(8px); box-shadow: 0 0 0 1px var(--control-line), 0 10px 30px #000a; }
-.tc-t8-centre { position: absolute; inset: 34px; display: grid; place-content: center; text-align: center; border-radius: 50%; background: var(--band-deep); line-height: 1; }
-.tc-t8-centre b { font-family: var(--brand-font); font-size: 18px; }
-.tc-t8-centre span { font-size: 10px; color: var(--weak); }
-.tc .tc-t8-n, .tc .tc-t8-s, .tc .tc-t8-w, .tc .tc-t8-e { position: absolute; min-width: 0; width: 30px; height: 30px; padding: 0; border: none; border-radius: 50%; background: none; font-size: 16px; line-height: 1; }
-.tc .tc-t8-n { top: 3px; left: 41px; }
-.tc .tc-t8-s { bottom: 3px; left: 41px; }
-.tc .tc-t8-w { left: 3px; top: 41px; color: var(--tree-set-1); font-weight: 700; font-size: 13px; }
-.tc .tc-t8-e { right: 3px; top: 41px; color: var(--tree-set-2); font-weight: 700; font-size: 13px; }
-.tc-t8-w small, .tc-t8-e small { display: block; font-size: 9px; font-weight: 500; }
-.tc .tc-t8-w[aria-pressed="true"], .tc .tc-t8-e[aria-pressed="true"] { background: color-mix(in srgb, var(--set) 25%, transparent); color: var(--text); }
-.tc-t8-ascendancy { position: absolute; right: 36px; bottom: 134px; font-size: 12px; }
-.tc-t8-legend { position: absolute; left: 12px; bottom: 12px; flex-direction: column; gap: 4px; padding: 6px 10px; }
+/* T18 · Frosted: the tree under the gradient blurred too, the blur fading upward with it. */
+.tc-bb-t18::before { content: ""; position: absolute; inset: 0; z-index: -1; backdrop-filter: blur(6px); -webkit-mask-image: linear-gradient(to top, #000 30%, transparent); mask-image: linear-gradient(to top, #000 30%, transparent); pointer-events: none; }
+.tc-bb-t18 { isolation: isolate; }
 
-/* T9 · Map margins: a printed map, a thin frame, the legend and the counts written along its edges. */
-.tc-t9-frame { position: absolute; inset: 26px; border: 1px solid color-mix(in srgb, var(--text) 18%, transparent); }
-.tc-t9-top { position: absolute; top: 6px; left: 0; right: 0; display: flex; justify-content: center; gap: 16px; font-size: 10px; }
-.tc-t9-left { position: absolute; left: 4px; top: 50%; display: flex; align-items: center; gap: 6px; transform: translate(-50%, -50%) rotate(-90deg) translateY(50%); transform-origin: center; font-size: 10px; margin-left: 9px; }
-.tc-t9-left button { height: 18px; min-width: 22px; padding: 0 4px; font-size: 10px; transform: rotate(90deg); }
-.tc-t9-bottom { position: absolute; bottom: 6px; left: 0; right: 0; text-align: center; font-size: 10px; }
-.tc-t9-right { position: absolute; right: 2px; top: 50%; transform: translateY(-50%); display: flex; flex-direction: column; align-items: center; gap: 4px; }
-.tc-t9-right button { min-width: 0; width: 22px; height: 22px; padding: 0; border: none; background: none; }
-.tc-t9-scale { position: relative; width: 6px; height: 120px; background: repeating-linear-gradient(0deg, var(--weak) 0 1px, transparent 1px 12px); }
-.tc-t9-scale .tc-zoom-knob { width: 14px; height: 3px; }
+/* T19 · Quiet: the bar faint until the pointer comes near it. */
+.tc-bb-t19 { pointer-events: auto; opacity: .35; transition: opacity .2s ease; }
+.tc-bb-t19:hover, .tc-bb-t19:focus-within { opacity: 1; }
 
-/* T10 · On hover: the tree bare until the pointer comes over it, then everything fades in; keys for the rest. */
-.tc-t10-layer { position: absolute; inset: 0; opacity: 0; transition: opacity .18s ease; }
-.app-tree:hover .tc-t10-layer, .tc-t10-layer:focus-within { opacity: 1; }
-.tc-t10-top { position: absolute; top: 0; left: 0; right: 0; display: flex; align-items: center; gap: 12px; padding: 8px 10px; background: linear-gradient(var(--band-deep), transparent); }
-.tc-t10-zoom { margin-left: auto; display: flex; gap: 4px; }
-.tc-t10-legend { position: absolute; left: 12px; bottom: 12px; }
-.tc-t10-keys { position: absolute; right: 12px; bottom: 10px; font-size: 11px; transition: opacity .18s ease; }
-.app-tree:hover .tc-t10-keys { opacity: 0; }
-.tc-t10-keys kbd { display: inline-block; min-width: 14px; margin: 0 1px; padding: 0 3px; border: 1px solid var(--control-line); border-radius: 3px; font: 600 10px var(--font-text); text-align: center; }
-
-/* T11 · Chips: the sets as filters (both, the shared alone, one set), their counts inside; the zoom a slider. */
-.tc-t11-chips { position: absolute; top: 10px; left: 50%; transform: translateX(-50%); display: flex; gap: 6px; white-space: nowrap; }
-.tc .tc-chip { display: inline-flex; align-items: center; height: 26px; padding: 0 10px; border-radius: 999px; background: var(--panel); backdrop-filter: blur(6px); }
-.tc .tc-chip b { margin-left: 4px; font-weight: 700; }
-.tc .tc-chip.is-set1 b { color: var(--tree-set-1); }
-.tc .tc-chip.is-set2 b { color: var(--tree-set-2); }
-.tc .tc-chip[aria-pressed="true"] b { color: inherit; }
-.tc .tc-chip.is-set0[aria-pressed="true"], .tc .tc-chip.is-set3[aria-pressed="true"] { background: var(--text); border-color: var(--text); color: var(--page); }
-.tc-chip.is-static { display: inline-grid; place-items: center; padding: 0 10px; border-radius: 999px; color: var(--weak); background: var(--panel); }
-.tc-t11-zoom { position: absolute; left: 50%; bottom: 14px; transform: translateX(-50%); display: flex; align-items: center; gap: 8px; padding: 4px 12px; border-radius: 999px; background: var(--panel); color: var(--weak); }
-.tc-t11-zoom input { width: 180px; accent-color: var(--accent); }
-.tc-t11-legend { position: absolute; left: 12px; bottom: 16px; display: flex; gap: 12px; font-size: 12px; }
-
-/* T12 · Minimap: the whole tree small at the bottom right, the view a frame of the accent. */
-.tc-t12-top { position: absolute; top: 10px; left: 12px; right: 12px; display: flex; align-items: center; gap: 10px; }
-.tc-t12-top .tc-legend-toggle { margin-left: auto; border-radius: 50%; padding: 0; width: 26px; }
-.tc-t12-legend { position: absolute; top: 44px; right: 12px; }
-.tc-t12-map { position: absolute; right: 12px; bottom: 12px; display: flex; flex-direction: column; gap: 4px; padding: 6px; border-radius: var(--radius); background: var(--panel); box-shadow: 0 8px 24px #0008; }
-.tc-minimap { width: 160px; height: 120px; }
-.tc-t12-zoom { display: flex; justify-content: flex-end; gap: 4px; }
-.tc-t12-zoom button { height: 22px; min-width: 0; width: 24px; padding: 0; }
+/* T20 · Unfolding: the legend on a row above the controls, the gradient taller with it. */
+.tc-bb-t20 { flex-direction: column; align-items: stretch; gap: 8px; }
+.tc-bb-t20.is-open { padding-top: 56px; }
+.tc-row { display: flex; align-items: center; gap: 14px; }
+.tc-t20-legend { padding: 0 8px; }
+.tc button.tc-with-text { padding: 0 8px; }

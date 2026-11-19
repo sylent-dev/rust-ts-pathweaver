@@ -106,8 +106,7 @@ function drawArt(context, frames, iconIndex, taken, x, y, size) {
 }
 
 // Options: the smallest radius of a shape, the frame from which
-// the icons show, the weapon sets of the passives (setMasks) and the set shown strong: 1 or 2, 0 for
-// both, 3 for neither (the passives shared alone).
+// the icons show, the weapon sets of the passives (setMasks) and the set shown strong.
 function drawTree(canvas, graph, states, view, { minRadius = 1.5, iconsFromPx = iconsFrom(canvas), sets = null, shownSet = 1 } = {}) {
   const ratio = window.devicePixelRatio || 1;
   const width = canvas.clientWidth, height = canvas.clientHeight;
@@ -139,8 +138,8 @@ function drawTree(canvas, graph, states, view, { minRadius = 1.5, iconsFromPx = 
     [0, 3, colour("--tree-edge"), [], 1, 1],
     [1, 3, colour("--tree-later"), [3, 3], 1, 1],
     [2, 3, colour("--tree-edge-taken"), [], takenWidth, 1],
-    [2, 1, colour("--tree-set-1"), [], takenWidth, shownSet === 0 || shownSet === 1 ? 1 : 0.35],
-    [2, 2, colour("--tree-set-2"), [], takenWidth, shownSet === 0 || shownSet === 2 ? 1 : 0.35],
+    [2, 1, colour("--tree-set-1"), [], takenWidth, shownSet === 1 ? 1 : 0.35],
+    [2, 2, colour("--tree-set-2"), [], takenWidth, shownSet === 2 ? 1 : 0.35],
   ];
   const setOf = (a, b) => (sets ? sets[a] & sets[b] || 3 : 3);
   for (const [layer, set, stroke, dash, lineWidth, alpha] of linkLayers) {
@@ -223,7 +222,10 @@ function mountTrees() {
   for (const canvas of document.querySelectorAll('canvas[data-tree="main"]')) {
     const states = treeStates(TREE.taken, TREE.nodes.length, level);
     const sets = setMasks(TREE.taken, TREE.nodes.length);
-    STATE.treeView ??= fitView(TREE.nodes, TREE.taken.map(([i]) => i), canvas.clientWidth, canvas.clientHeight, 80);
+    if (!STATE.treeView) {
+      STATE.treeView = fitView(TREE.nodes, TREE.taken.map(([i]) => i), canvas.clientWidth, canvas.clientHeight, 80);
+      STATE.treeFit = STATE.treeView.scale;
+    }
     const draw = () => {
       drawTree(canvas, TREE, states, STATE.treeView, { sets, shownSet: STATE.set });
       for (const after of TREE_DRAWN) after(canvas);
@@ -248,12 +250,10 @@ function mountTrees() {
   }
 }
 
-// Called after each drawing of the main tree, moved or zoomed: what follows its view (a minimap, the
-// knob of a zoom).
+// Called after each drawing of the main tree, moved or zoomed: what follows its view (how close it is).
 const TREE_DRAWN = [];
-// The bounds of the zoom, in pixels per unit of the game, and where a scale sits between them (0 to 1).
+// The bounds of the zoom, in pixels per unit of the game.
 const ZOOM_RANGE = [0.005, 0.5];
-const zoomPlace = scale => Math.log(scale / ZOOM_RANGE[0]) / Math.log(ZOOM_RANGE[1] / ZOOM_RANGE[0]);
 
 // Zooms around a point of the canvas, which stays under the pointer.
 function zoomTree(canvas, factor, atX = canvas.clientWidth / 2, atY = canvas.clientHeight / 2) {
