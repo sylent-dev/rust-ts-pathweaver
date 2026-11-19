@@ -16,6 +16,7 @@
 .app-dot.is-taken { border-color: var(--tree-taken); background: var(--tree-taken); }
 .app-dot.is-later { border: 1px dashed var(--tree-later); }
 .app-dot.is-new { border-color: var(--tree-taken); background: var(--tree-taken); box-shadow: 0 0 0 2px var(--panel), 0 0 0 3.5px var(--accent); }
-/* The links between the passives taken in white, on trial against the blue of the accent (2i, the
-   control « Links taken »): Frost Night only, Frost and Ember derive from it later. */
+/* The links between the passives taken in white or in a soft amber, on trial against the blue of the
+   accent (2i, the control « Links taken »): Frost Night only, Frost and Ember derive from it later. */
 :root[data-theme="frost-night"][data-tree-link="white"] { --tree-edge-taken: #e3eaf5; }
+:root[data-theme="frost-night"][data-tree-link="amber"] { --tree-edge-taken: #f2b45a; }

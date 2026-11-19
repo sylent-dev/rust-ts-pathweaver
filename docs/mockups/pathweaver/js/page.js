@@ -24,9 +24,9 @@ const VARIANTS = {
   // The width of the windows of the home page (2l): the minimum of specs.md, half a 1920-pixel screen, and a wide
   // window of the owner's screen.
   homeWidth: { label: "Home width", options: { 900: "900 px", 960: "960 px", 1600: "1,600 px" }, fallback: "960" },
-  // The links between the passives taken (2i, the owner, 2026-11-19): the blue of the accent, or the
-  // white of the passives taken; Frost Night only (css/tree.css).
-  treeLink: { label: "Links taken", options: { blue: "Blue", white: "White" }, fallback: "blue" },
+  // The links between the passives taken (2i, the owner, 2026-11-19): the blue of the accent, the
+  // white of the passives taken, or a soft amber; Frost Night only (css/tree.css).
+  treeLink: { label: "Links taken", options: { blue: "Blue", white: "White", amber: "Amber" }, fallback: "blue" },
   // The width of the frame of a small passive from which the icons replace the shapes (2i, the owner,
   // 2026-11-19), tuned by eye on the tree of the Overview: 2 px (the owner); 0: always the icons.
   iconsFrom: { label: "Icons from", range: { min: 0, max: 20, step: 1 }, variable: "--tree-icons-from", unit: "px", fallback: "2" },
