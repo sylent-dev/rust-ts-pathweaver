@@ -99,10 +99,11 @@ ACTIONS["changes-toggle"] = element => {
   return true;
 };
 // A line shows its tab and closes the window, which would hide it; the tree stays on the Overview,
-// which shows it already. The mock-up only marks the tab: the views of the tabs come with 2h and 2k.
+// which shows it already. The mock-up only marks the tab, its bar sliding to it: the views of the
+// tabs come with 2k.
 ACTIONS["changes-go"] = element => {
   const tab = element.dataset.tab;
-  if (!(tab === "tree" && STATE.tab === "overview")) STATE.tab = tab;
+  if (!(tab === "tree" && STATE.tab === "overview")) showTab(tab);
   STATE.changesOpen = false;
   return true;
 };

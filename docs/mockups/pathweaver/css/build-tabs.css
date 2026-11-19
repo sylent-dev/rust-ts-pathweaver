@@ -1,5 +1,21 @@
-/* The tabs of a build: 38 px, under the level band, the full height of their band, square (2026-11-17);
-   their look is drawn at 2h. */
-.app-tabs { display: flex; align-items: stretch; gap: 6px; height: 38px; padding: 0 16px; border-bottom: var(--border-width) solid var(--divider); }
-.app-tab { margin-bottom: calc(-1 * var(--border-width)); padding: 0 14px; border: var(--border-width) solid var(--control-line); border-radius: 0; background: var(--tab); color: var(--on-tab); cursor: pointer; font-size: 14px; }
-.app-tab[aria-selected="true"] { background: var(--page); color: var(--text); border-bottom-color: var(--page); }
+/* The tabs of a build (2h, the owner, 2026-11-19: F3 of twelve variants): 44 px under the level
+   band, on the light shade of the page and its graph paper (css/textures.css), without counts;
+   words in Manrope 600, grey, the current one and the hover in the colour of the text; under the
+   current one, the cursor of the level laid down, a white bar of 28 × 4 px, without glow. */
+.app-tabs { position: relative; display: flex; align-items: stretch; height: 44px; padding: 0 0 0 4px; }
+.app-tab { padding: 0 16px; border: none; background: none; color: var(--weak); cursor: pointer; font-size: 14px; font-weight: 600; transition: color .2s; }
+.app-tab:is(:hover, [aria-selected="true"]) { color: var(--text); }
+.app-tabs-bar, .app-tabs-ghost { position: absolute; left: 0; bottom: 0; width: var(--bar-width, 28px); height: 4px; transform: translateX(var(--bar-x, 0)); pointer-events: none; }
+.app-tabs-bar { background: #fff; }
+
+/* Its motion (Tab motion, js/page.js): 1 · Slide in 0.28 s with the small bounce of the cursor set
+   down (css/level-band.css); 2 · Ghost, the same, and a grey bar left under the tab before, fading
+   in 0.4 s; 3 · Stretch, the bar reaching the new tab, then letting go of the old one, 0.16 s each. */
+.app-tabs-bar:is(.is-slide, .is-ghost) { transition: transform .28s cubic-bezier(.3, 1.45, .5, 1); }
+.app-tabs-ghost { background: var(--weak); opacity: .6; }
+.app-tabs-ghost.is-fading { opacity: 0; transition: opacity .4s ease-out; }
+.app-tabs-bar.is-stretch { transition: transform .16s cubic-bezier(.2, .7, .2, 1), width .16s cubic-bezier(.2, .7, .2, 1); }
+@media (prefers-reduced-motion: reduce) {
+  .app-tabs-bar, .app-tabs-ghost { transition: none !important; }
+  .app-tabs-ghost { display: none; }
+}
