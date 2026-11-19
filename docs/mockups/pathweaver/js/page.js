@@ -37,11 +37,14 @@ const VARIANTS = {
   set2: { label: "Set II", select: true, variable: "--tree-set-2", fallback: "#22c55e", options: {
     "#5fcf80": "Exile Market rise", "#3fbf4f": "Exile Market dexterity", "#86efac": "Light mint",
     "#22c55e": "Vivid green", "#4d9e6a": "Moss", "#7cc79a": "Soft sage" } },
-  // The controls over the tree (2i, js/tree-controls.js): of twelve variants, the owner kept T2, the
-  // bottom bar (2026-11-19), varied as discreet as can be; of its variants, T14, T18, T19 and T20, and
-  // T21 that mixes them.
-  treeControls: { label: "Tree controls", options: {
-    t14: "T14 · Ghost", t18: "T18 · Frosted", t19: "T19 · Quiet", t20: "T20 · Unfolding", t21: "T21 · The four" }, fallback: "t21" },
+  // The way to the legend of the tree (2i, js/tree-controls.js), its bottom bar T14 · Ghost (the owner,
+  // 2026-11-19): eleven variants, as many as came.
+  legendWay: { label: "Legend", options: {
+    t22: "T22 · Card", t23: "T23 · Unfolding", t24: "T24 · Shade at the top", t25: "T25 · Corner",
+    t26: "T26 · The counts open it", t27: "T27 · Swatches on the bar", t28: "T28 · Drawer", t29: "T29 · Peek",
+    t30: "T30 · Explained", t31: "T31 · A key", t32: "T32 · Pill at the top" }, fallback: "t22" },
+  // The corners of the tile a button of the bar of the tree shows on hover (the owner, 2026-11-19).
+  hoverRadius: { label: "Hover radius", range: { min: 0, max: 14, step: 1 }, variable: "--tc-hover-radius", unit: "px", fallback: "8" },
   // The width of the frame of a small passive from which the icons replace the shapes (2i, the owner,
   // 2026-11-19), tuned by eye on the tree of the Overview: 2 px (the owner); 0: always the icons.
   iconsFrom: { label: "Icons from", range: { min: 0, max: 20, step: 1 }, variable: "--tree-icons-from", unit: "px", fallback: "2" },
