@@ -222,14 +222,8 @@ function mountTrees() {
   for (const canvas of document.querySelectorAll('canvas[data-tree="main"]')) {
     const states = treeStates(TREE.taken, TREE.nodes.length, level);
     const sets = setMasks(TREE.taken, TREE.nodes.length);
-    if (!STATE.treeView) {
-      STATE.treeView = fitView(TREE.nodes, TREE.taken.map(([i]) => i), canvas.clientWidth, canvas.clientHeight, 80);
-      STATE.treeFit = STATE.treeView.scale;
-    }
-    const draw = () => {
-      drawTree(canvas, TREE, states, STATE.treeView, { sets, shownSet: STATE.set });
-      for (const after of TREE_DRAWN) after(canvas);
-    };
+    STATE.treeView ??= fitView(TREE.nodes, TREE.taken.map(([i]) => i), canvas.clientWidth, canvas.clientHeight, 80);
+    const draw = () => drawTree(canvas, TREE, states, STATE.treeView, { sets, shownSet: STATE.set });
     draw();
     canvas.onwheel = event => {
       event.preventDefault();
@@ -250,8 +244,6 @@ function mountTrees() {
   }
 }
 
-// Called after each drawing of the main tree, moved or zoomed: what follows its view (how close it is).
-const TREE_DRAWN = [];
 // The bounds of the zoom, in pixels per unit of the game.
 const ZOOM_RANGE = [0.005, 0.5];
 

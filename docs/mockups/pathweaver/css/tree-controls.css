@@ -1,4 +1,4 @@
-/* The controls over the tree (js/tree-controls.js): the bottom bar, T2 as kept and its variants T13–T20.
+/* The controls over the tree (js/tree-controls.js): the bottom bar and its variants T14, T18–T21.
    Only the controls catch the pointer; the tree under them is dragged and zoomed everywhere else. */
 .tc { position: absolute; inset: 0; pointer-events: none; font-size: 13px; }
 .tc button { pointer-events: auto; display: inline-flex; align-items: center; justify-content: center; gap: 6px; min-width: 28px; height: 26px; padding: 0 8px; border: var(--border-width) solid var(--control-line); border-radius: var(--radius); background: var(--control); color: var(--text); font: inherit; cursor: pointer; }
@@ -20,11 +20,6 @@
 .tc-line.is-set2 { border-color: var(--tree-set-2); }
 .tc-line.is-later { border-top: 1px dashed var(--tree-later); }
 .tc-pop { position: absolute; right: 12px; bottom: 50px; flex-direction: column; gap: 6px; }
-.tc-pop.is-centred { right: auto; left: 50%; transform: translateX(-50%); }
-
-/* T2 · Bottom bar, as kept: a strip with its border, the legend inline. */
-.tc-t2-bar { position: absolute; left: 0; right: 0; bottom: 0; display: flex; align-items: center; gap: 12px; height: 38px; padding: 0 10px; background: color-mix(in srgb, var(--band-deep) 88%, transparent); border-top: 1px solid var(--divider); }
-.tc-t2-legend { flex: 1; flex-wrap: nowrap; gap: 10px; }
 
 /* The bar of the variants: no border, a gradient of the shade of the tree, dark at the bottom. */
 .tc-bb { position: absolute; left: 0; right: 0; bottom: 0; display: flex; align-items: center; gap: 14px; padding: 28px 12px 8px; background: linear-gradient(to top, color-mix(in srgb, var(--band-deep) 94%, transparent) 0%, color-mix(in srgb, var(--band-deep) 70%, transparent) 45%, transparent 100%); }
@@ -37,36 +32,20 @@
 .tc button.tc-set.tc-ghost[aria-pressed="true"] { color: var(--set); box-shadow: inset 0 -2px 0 var(--set); border-radius: 0; }
 .tc button.tc-legend-toggle.tc-ghost[aria-pressed="true"] { color: var(--accent); }
 
-/* T15 · Counts in the sets: each set with its line and its points; the shared ones first, not a button. */
-.tc-shared { display: inline-flex; align-items: center; gap: 6px; padding: 0 8px; color: var(--weak); }
-.tc-bb-t15 .tc-set b { font-weight: 700; }
-.tc button.tc-round { width: 24px; min-width: 0; height: 24px; padding: 0; border-radius: 50%; box-shadow: inset 0 0 0 1px var(--control-line); }
+/* The counts in the middle of the bar, whatever the width of its ends (the owner, 2026-11-19). */
+.tc-counts { position: absolute; left: 50%; transform: translateX(-50%); white-space: nowrap; font-size: 12px; }
+.tc-row { position: relative; display: flex; align-items: center; gap: 14px; }
 
-/* T16 · Centred: one short line in the middle. */
-.tc-bb-t16 { justify-content: center; }
-.tc-centred { display: inline-flex; align-items: center; gap: 4px; }
-.tc-centred > .app-number { padding: 0 6px; }
-.tc-dot { width: 3px; height: 3px; margin: 0 6px; border-radius: 50%; background: var(--weak); opacity: .6; }
+/* Frosted (T18, T21): the tree under the gradient blurred too, the blur fading upward with it. */
+.tc-bb.is-frosted { isolation: isolate; }
+.tc-bb.is-frosted::before { content: ""; position: absolute; inset: 0; z-index: -1; backdrop-filter: blur(6px); -webkit-mask-image: linear-gradient(to top, #000 30%, transparent); mask-image: linear-gradient(to top, #000 30%, transparent); pointer-events: none; }
 
-/* T17 · Tabs: the sets as the tabs of a build, a bar of their colour under the one shown. */
-.tc button.tc-tab { height: 30px; padding: 0 10px; border: none; border-radius: 0; background: none; color: var(--weak); box-shadow: inset 0 -2px 0 transparent; }
-.tc button.tc-tab b { font-weight: 700; color: var(--weak); }
-.tc button.tc-tab:hover { color: var(--text); }
-.tc button.tc-tab[aria-pressed="true"] { background: none; color: var(--text); box-shadow: inset 0 -2px 0 var(--set); }
-.tc button.tc-tab[aria-pressed="true"] b { color: var(--set); }
-.tc-zoom-level { min-width: 34px; text-align: center; font-size: 12px; }
+/* Quiet (T19, T21): the bar faint until the pointer comes near it, whole while its legend is open. */
+.tc-bb.is-quiet { pointer-events: auto; opacity: .35; transition: opacity .2s ease; }
+.tc-bb.is-quiet:hover, .tc-bb.is-quiet:focus-within, .tc-bb.is-quiet.is-open { opacity: 1; }
 
-/* T18 · Frosted: the tree under the gradient blurred too, the blur fading upward with it. */
-.tc-bb-t18::before { content: ""; position: absolute; inset: 0; z-index: -1; backdrop-filter: blur(6px); -webkit-mask-image: linear-gradient(to top, #000 30%, transparent); mask-image: linear-gradient(to top, #000 30%, transparent); pointer-events: none; }
-.tc-bb-t18 { isolation: isolate; }
-
-/* T19 · Quiet: the bar faint until the pointer comes near it. */
-.tc-bb-t19 { pointer-events: auto; opacity: .35; transition: opacity .2s ease; }
-.tc-bb-t19:hover, .tc-bb-t19:focus-within { opacity: 1; }
-
-/* T20 · Unfolding: the legend on a row above the controls, the gradient taller with it. */
-.tc-bb-t20 { flex-direction: column; align-items: stretch; gap: 8px; }
-.tc-bb-t20.is-open { padding-top: 56px; }
-.tc-row { display: flex; align-items: center; gap: 14px; }
-.tc-t20-legend { padding: 0 8px; }
+/* Unfolding (T20, T21): the legend on a row above the controls, the gradient taller with it. */
+.tc-bb.is-unfolding { flex-direction: column; align-items: stretch; gap: 8px; }
+.tc-bb.is-unfolding.is-open { padding-top: 56px; }
+.tc-unfolded { padding: 0 8px; }
 .tc button.tc-with-text { padding: 0 8px; }

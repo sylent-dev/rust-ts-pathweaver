@@ -1,7 +1,7 @@
 // The controls over the tree: the weapon set shown strong, the points, the legend and the zoom (2i,
 // the owner, 2026-11-19). Of twelve variants (T1–T12), the owner kept T2, the bottom bar, as discreet
-// as can be: no border, a gradient dark at the bottom to clear upward, the legend behind a button.
-// T13–T20 vary it; the tab « Tree controls » of the page picks one.
+// as can be: no border, a gradient dark at the bottom to clear upward, the legend behind a button;
+// the tab « Tree controls » of the page picks one of its variants.
 
 STATE.treeLegend = false;
 
@@ -15,8 +15,7 @@ function treeCounts(level) {
   };
 }
 
-const ascendancyCount = c => `asc. ${c.ascendancy}/${ASCENDANCY_POINTS}`;
-const allCounts = c => `${c.shared} pts · I ${c.one} · II ${c.two} · ${ascendancyCount(c)}`;
+const allCounts = c => `${c.shared} points · I ${c.one} · II ${c.two} · Ascendancy ${c.ascendancy}/${ASCENDANCY_POINTS}`;
 const setButton = (set, label, extra = "") =>
   `<button type="button" class="tc-set is-set${set} ${extra}" data-action="tree-set" data-set="${set}" aria-pressed="${STATE.set === set}">${label}</button>`;
 const ZOOM_ICONS = { in: ICONS.plus, out: ICONS.minus, fit: '<path d="M3 6V3h3M10 3h3v3M13 10v3h-3M6 13H3v-3"/>' };
@@ -37,58 +36,32 @@ const legend = (extra = "") => `<div class="tc-legend app-weak ${extra}">${LEGEN
 // The legend opened by its button: a card over the right end of the bar.
 const legendCard = (extra = "") => (STATE.treeLegend ? legend(`tc-card tc-pop ${extra}`) : "");
 
-// The bottom bar: a gradient of the shade of the tree, dark at the bottom, clear at its top.
-const bar = (variant, body, after = legendCard()) => `<div class="tc-bb tc-bb-${variant}">${body}</div>${after}`;
-// The bar of most variants: the sets on the left, the counts, the legend and the zoom on the right.
-const ghostBar = (variant, c) => bar(variant, `
+// The bottom bar: a gradient of the shade of the tree, dark at the bottom, clear at its top; the sets on
+// the left, the counts in the middle (the owner, 2026-11-19), the legend and the zoom on the right.
+const barRow = c => `
   <span class="tc-group">${setButton(1, "Set I", "tc-ghost")}${setButton(2, "Set II", "tc-ghost")}</span>
-  <span class="app-number app-weak">${allCounts(c)}</span>
+  <span class="tc-counts app-number app-weak">${allCounts(c)}</span>`;
+const bar = (variant, body, after = legendCard()) => `<div class="tc-bb ${variant}">${body}</div>${after}`;
+const ghostBar = (variant, c) => bar(variant, `${barRow(c)}
   <span class="tc-end">${legendButton(LEGEND_ICON, "tc-ghost")}${zoomButtons("tc-ghost")}</span>`);
+// The legend unfolding in the bar: a row above the controls, the bar raised with it.
+const unfoldingBar = (variant, c) => bar(`${variant} is-unfolding ${STATE.treeLegend ? "is-open" : ""}`, `
+  ${STATE.treeLegend ? legend("tc-unfolded") : ""}
+  <span class="tc-row">${barRow(c)}
+    <span class="tc-end">${legendButton(`${LEGEND_ICON}<span>${STATE.treeLegend ? "Hide" : "Legend"}</span>`, "tc-ghost tc-with-text")}${zoomButtons("tc-ghost")}</span></span>`, "");
 
+// Of T13–T20, the owner kept T14, T18, T19 and T20 (2026-11-19); T21 mixes the four.
 const VARIANT_HTML = {
-  // T2 as the owner kept it, for comparison: a strip with its border, the legend inline.
-  t2: c => `
-    <div class="tc-t2-bar">
-      <span class="app-switch">${setButton(1, "Set I")}${setButton(2, "Set II")}</span>
-      <div class="tc-legend app-weak tc-t2-legend">${LEGEND.filter(([, label]) => label !== "not taken").map(([swatch, label]) =>
-        `<span>${swatch}${label.replace("taken later", "later").replace("new at this level", "new")}</span>`).join("")}</div>
-      <span class="app-number">${c.shared} · I ${c.one} · II ${c.two} · ${ascendancyCount(c)}</span>
-      <span class="tc-group">${zoomButton("out")}${zoomButton("in")}</span>
-    </div>`,
-  // T13 · Gradient: T2 without its border, on a gradient, the legend behind a button.
-  t13: c => bar("t13", `
-    <span class="app-switch">${setButton(1, "Set I")}${setButton(2, "Set II")}</span>
-    <span class="app-number app-weak">${allCounts(c)}</span>
-    <span class="tc-end">${legendButton("Legend")}${zoomButtons()}</span>`),
   // T14 · Ghost: no box at all, words and icons on the gradient; the set shown in its colour, underlined.
-  t14: c => ghostBar("t14", c),
-  // T15 · Counts in the sets: each set says its points, the shared ones beside them.
-  t15: c => bar("t15", `
-    <span class="tc-group"><span class="tc-shared app-number"><i class="tc-line"></i>${c.shared}</span>
-      ${setButton(1, `<i class="tc-line is-set1"></i>I <b class="app-number">${c.one}</b>`, "tc-ghost")}${setButton(2, `<i class="tc-line is-set2"></i>II <b class="app-number">${c.two}</b>`, "tc-ghost")}</span>
-    <span class="app-number app-weak">${ascendancyCount(c)}</span>
-    <span class="tc-end">${legendButton("?", "tc-ghost tc-round")}${zoomButtons("tc-ghost")}</span>`),
-  // T16 · Centred: one short line in the middle, its parts parted by dots, nothing at the corners.
-  t16: c => bar("t16", `
-    <span class="tc-centred">${setButton(1, "I", "tc-ghost")}${setButton(2, "II", "tc-ghost")}<i class="tc-dot"></i>
-      <span class="app-number app-weak">${allCounts(c)}</span><i class="tc-dot"></i>
-      ${zoomButton("out", "tc-ghost")}${zoomButton("in", "tc-ghost")}${zoomButton("fit", "tc-ghost")}<i class="tc-dot"></i>${legendButton(LEGEND_ICON, "tc-ghost")}</span>`,
-    legendCard("is-centred")),
-  // T17 · Tabs: the sets as the tabs of a build, a line of their colour under the one shown; the zoom says how close.
-  t17: c => bar("t17", `
-    <span class="tc-group">${setButton(1, `Set I <b class="app-number">${c.one}</b>`, "tc-tab")}${setButton(2, `Set II <b class="app-number">${c.two}</b>`, "tc-tab")}</span>
-    <span class="app-number app-weak">${c.shared} shared · ${ascendancyCount(c)}</span>
-    <span class="tc-end">${legendButton("Legend", "tc-ghost")}<span class="tc-group">${zoomButton("out", "tc-ghost")}<span class="tc-zoom-level app-number app-weak"></span>${zoomButton("in", "tc-ghost")}</span></span>`),
+  t14: c => ghostBar("", c),
   // T18 · Frosted: the gradient blurs the tree under it too, fading upward.
-  t18: c => ghostBar("t18", c),
+  t18: c => ghostBar("is-frosted", c),
   // T19 · Quiet: the bar faint until the pointer comes near it, then whole.
-  t19: c => ghostBar("t19", c),
+  t19: c => ghostBar("is-quiet", c),
   // T20 · Unfolding: the button of the legend raises the bar, the legend on a row above the controls.
-  t20: c => bar(`t20 ${STATE.treeLegend ? "is-open" : ""}`, `
-    ${STATE.treeLegend ? legend("tc-t20-legend") : ""}
-    <span class="tc-row"><span class="tc-group">${setButton(1, "Set I", "tc-ghost")}${setButton(2, "Set II", "tc-ghost")}</span>
-      <span class="app-number app-weak">${allCounts(c)}</span>
-      <span class="tc-end">${legendButton(`${LEGEND_ICON}<span>${STATE.treeLegend ? "Hide" : "Legend"}</span>`, "tc-ghost tc-with-text")}${zoomButtons("tc-ghost")}</span></span>`, ""),
+  t20: c => unfoldingBar("", c),
+  // T21 · The four: ghost, frosted, quiet until the pointer comes, the legend unfolding.
+  t21: c => unfoldingBar("is-frosted is-quiet", c),
 };
 
 function treeControls(level) {
@@ -100,9 +73,3 @@ ACTIONS["tree-legend"] = () => {
   STATE.treeLegend = !STATE.treeLegend;
   return true;
 };
-
-// How close the tree is (T17): its scale against the one that fits the build.
-TREE_DRAWN.push(main => {
-  const level = main.parentElement.querySelector(".tc-zoom-level");
-  if (level) level.textContent = `×${(STATE.treeView.scale / STATE.treeFit).toFixed(1)}`;
-});
