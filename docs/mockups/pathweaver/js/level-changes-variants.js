@@ -58,12 +58,17 @@ const nothingHere = level => `<p class="app-wv-nothing">Nothing changes at ${lev
 const leadsTo = change => change.category === "passives" ? "Tree"
   : change.category === "gear" || (change.category === "note" && change.kind === "gear") ? "Inventory" : "Skills";
 
+// The mark after where a row leads (H5, H6): drawn, not a character of the font.
+ICONS.chevron = '<path d="M6 3.5 10.5 8 6 12.5"/>';
+ICONS.chevrons = '<path d="M3.5 3.5 8 8l-4.5 4.5M8.5 3.5 13 8l-4.5 4.5"/>';
+const LEADS_MARKS = { chevron: icon(10, ICONS.chevron), double: icon(10, ICONS.chevrons) };
+
 // W1 · normal: one line each, a tag for its category, as dense as the list can be.
 function changesW1(list, level, record) {
   return `<p class="app-wv-head">${plural(record?.count ?? 0, "change")} at ${level}</p>
     <ul class="app-wv-lines app-wv-links">${list.map(change => `<li class="${changeClass(change)}" title="Show it in ${leadsTo(change)}"><span class="app-wv-sign">${signOf(change)}</span>
       <span class="app-wv-tag">${CHANGE_CATEGORIES[change.category].replace(/s$/, "")}</span><span class="app-wv-name">${changeName(change)}</span>
-      <span class="app-wv-detail">${change.category === "skill" ? "" : changeDetail(change)}</span><span class="app-wv-leads">${leadsTo(change)} →</span></li>`).join("") || nothingHere(level)}</ul>`;
+      <span class="app-wv-detail">${change.category === "skill" ? "" : changeDetail(change)}</span><span class="app-wv-leads">${leadsTo(change)}${LEADS_MARKS[chosen.rowHover] ?? ""}</span></li>`).join("") || nothingHere(level)}</ul>`;
 }
 
 // W2 · normal: what comes, what is replaced, what goes, one under the other: the title says the sign.

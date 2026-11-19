@@ -47,9 +47,10 @@ const VARIANTS = {
   attrColours: { label: "Attributes", select: true, fallback: "pathweaver", options: { pathweaver: "Pathweaver (teal dexterity)", exile: "Exile Market (green dexterity)" } },
   // The mark of a note of the author (2g3, js/note-marks.js).
   noteMark: { label: "Note", select: true, fallback: "n2", options: { ...Object.fromEntries(Array.from({ length: 12 }, (_, index) => [`n${index + 1}`, `N${index + 1}`])), page: "The page of 2g" } },
-  // The hover of a row of W1, which leads to the tab of its change (2g3, the owner, 2026-11-19).
-  rowHover: { label: "Row hover", select: true, fallback: "shade", options: { shade: "H1 · a lighter shade", accent: "H2 · a shade of the accent",
-    bar: "H3 · a shade and a bar of the accent", leads: "H4 · a shade and where it leads" } },
+  // The hover of a row of W1, which leads to the tab of its change (2g3, the owner, 2026-11-19): H4
+  // kept, a shade and where it leads in place of its detail, the arrow « → » set aside.
+  rowHover: { label: "Row hover", select: true, fallback: "plain", options: { plain: "H4 · where it leads, no mark",
+    chevron: "H5 · where it leads, a chevron", double: "H6 · where it leads, a double chevron" } },
   // How far the mark of a note sits under the baseline of its text, tuned by eye (2g3).
   noteOffset: { label: "Note offset", range: { min: -6, max: 2, step: 0.5 }, variable: "--note-offset", unit: "px", fallback: "-3" },
   gemSize: { label: "Gem size", range: { min: 6, max: 20, step: 1 }, variable: "--gem-mark-size", unit: "px", fallback: "10" },

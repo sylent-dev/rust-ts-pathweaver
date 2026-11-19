@@ -143,12 +143,11 @@
 :root:is([data-change-colour="shade"], [data-change-colour="bar"]) .app-wv-3 .app-wv-gutter li.app-wv-under { padding-left: 18px; }
 
 /* The rows of W1, each a link to the tab of its change (2g3, the owner, 2026-11-19), and their hover
-   (H1 to H4): no box, the whole row lighter, as the rows of the library. */
+   (H4, kept, the owner, 2026-11-19): the whole row lighter, as the rows of the library, and where it
+   leads in place of its detail, with or without a chevron (H5, H6). */
 .app-wv-links li { cursor: pointer; transition: background .15s; }
-.app-wv-leads { display: none; flex: none; margin-left: auto; font-size: 11px; font-weight: 600; color: var(--accent); white-space: nowrap; }
-:root[data-row-hover="shade"] .app-wv-links li:hover { background: color-mix(in srgb, var(--on-band) 8%, transparent); }
-:root[data-row-hover="accent"] .app-wv-links li:hover { background: color-mix(in srgb, var(--accent) 14%, transparent); }
-:root[data-row-hover="bar"] .app-wv-links li:hover { background: color-mix(in srgb, var(--on-band) 8%, transparent); box-shadow: inset 2px 0 var(--accent); }
-:root[data-row-hover="leads"] .app-wv-links li:hover { background: color-mix(in srgb, var(--on-band) 8%, transparent); }
-:root[data-row-hover="leads"] .app-wv-links li:hover .app-wv-detail { display: none; }
-:root[data-row-hover="leads"] .app-wv-links li:hover .app-wv-leads { display: block; }
+.app-wv-leads { display: none; flex: none; align-items: center; gap: 3px; margin-left: auto; font-size: 11px; font-weight: 600; color: var(--accent); white-space: nowrap; }
+.app-wv-leads .app-icon { position: relative; top: .5px; }
+.app-wv-links li:hover { background: color-mix(in srgb, var(--on-band) 8%, transparent); }
+.app-wv-links li:hover .app-wv-detail { display: none; }
+.app-wv-links li:hover .app-wv-leads { display: flex; }
