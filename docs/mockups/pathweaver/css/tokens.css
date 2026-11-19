@@ -151,9 +151,6 @@
   --tree-node: #ffffff; --tree-node-line: #b4c3db;
   --tree-taken: #0f1b33; --tree-later: #9fb2d1;
   --tree-shape-keystone: diamond;
-  /* The candidates for the second accent (css/accent-2.css), and the text on it. */
-  --a2-amber: #d97706; --a2-blue: #0284c7; --a2-coral: #e8553a; --a2-mint: #0d9488; --a2-violet: #7c3aed; --a2-magenta: #db2777; --a2-lime: #65a30d;
-  --on-accent-2: #ffffff;
 }
 
 /* 28 · Frost Night (Frost in negative, dark): the density and the flat boxes of Frost on a blue
@@ -187,9 +184,6 @@
   --tree-node: #0c111b; --tree-node-line: #2a3a5c;
   --tree-taken: #e3eaf5; --tree-later: #4b5f86;
   --tree-shape-keystone: diamond;
-  /* The candidates for the second accent (css/accent-2.css), and the text on it. */
-  --a2-amber: #fbbf24; --a2-blue: #38bdf8; --a2-coral: #ff8a6b; --a2-mint: #2dd4bf; --a2-violet: #a78bfa; --a2-magenta: #f472b6; --a2-lime: #a3e635;
-  --on-accent-2: #0c111b;
 }
 
 /* 29 · Ember (Frost Night on a neutral grey, dark): the density and the flat boxes of Frost on a
@@ -221,7 +215,4 @@
   --tree-node: #131314; --tree-node-line: #3a3a3f;
   --tree-taken: #ececee; --tree-later: #5c5c63;
   --tree-shape-keystone: diamond;
-  /* The candidates for the second accent; amber is already the first, so it stays amber. */
-  --a2-amber: #fbbf24; --a2-blue: #60a5fa; --a2-coral: #ff8a6b; --a2-mint: #2dd4bf; --a2-violet: #a78bfa; --a2-magenta: #f472b6; --a2-lime: #a3e635;
-  --on-accent-2: #131314;
 }
