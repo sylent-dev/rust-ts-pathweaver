@@ -73,7 +73,7 @@ PORTRAIT_SIZE = 128
 # small enough for the 44 px of a tab, twice for the screens of a higher density.
 SQUARE_SIZE = 88
 # The kinds of passives, in the order the mock-up reads them.
-KINDS = ["small", "notable", "keystone", "jewel", "attribute", "start", "mastery"]
+KINDS = ["small", "notable", "keystone", "jewel", "attribute", "start"]
 # The sheets of the passives (2i, docs/game-data.md): the icons in colour and greyed, at the same
 # places in both sheets, and the frames; drawn at half the scale of the game (their meta.scale).
 ICON_SHEETS = ["skills", "skills-disabled"]
@@ -104,7 +104,7 @@ def fetch(cache, url, name):
 def kind_of(node):
     if node.get("classStartIndex") is not None:
         return KINDS.index("start")
-    for flag, kind in (("isMastery", "mastery"), ("isKeystone", "keystone"), ("isJewelSocket", "jewel"), ("isNotable", "notable"),
+    for flag, kind in (("isKeystone", "keystone"), ("isJewelSocket", "jewel"), ("isNotable", "notable"),
                        ("isGenericAttribute", "attribute")):
         if node.get(flag):
             return KINDS.index(kind)
@@ -122,8 +122,8 @@ def interval(entry):
 
 
 def icon_of(node, icons):
-    """The place of the icon of a passive in the sheets, or -1 when it has none (the masteries, the
-    class starts, the jewel sockets and some ascendancy passives)."""
+    """The place of the icon of a passive in the sheets, or -1 when it has none (the class starts, the
+    jewel sockets and some ascendancy passives)."""
     prefix = ICON_PREFIX.get(KINDS[kind_of(node)])
     if not prefix or node.get("isJewelSocket"):
         return -1
@@ -161,7 +161,9 @@ def tree_data(tree, shown, sheet):
     nodes, index, ascendancy = [], {}, []
     asc_id = shown.get("ascendancy")
     for key, node in tree["nodes"].items():
-        if "x" not in node:
+        # The masteries are only the art at the centre of a group, never taken nor linked (Path of
+        # Building reads them as « isOnlyImage »): their art waits in docs/backlog.md.
+        if "x" not in node or node.get("isMastery"):
             continue
         if node.get("ascendancyId"):
             if node["ascendancyId"] == asc_id:

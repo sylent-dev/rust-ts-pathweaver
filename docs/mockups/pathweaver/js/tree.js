@@ -1,5 +1,5 @@
 // The passive tree, drawn in a canvas as the application will (docs/technical-choices.md):
-// the 4,483 passives of the tree of the game at their real positions, moved with the mouse and
+// the 4,115 passives of the tree of the game at their real positions, moved with the mouse and
 // zoomed with the wheel. At the level: the passives taken are lit, those taken later faded, the
 // others dimmed, and those taken at this very level ringed with the accent (specs.md, Passive tree).
 // Every colour is a token of the style, read from the CSS. Close enough, the passives are drawn with
@@ -11,7 +11,7 @@ STATE.set = 1;
 STATE.treeView = null;
 
 // The radius of each kind of passive (TREE.kinds), in units of the game.
-const NODE_RADIUS = { small: 26, notable: 40, keystone: 58, jewel: 38, attribute: 26, start: 52, mastery: 26 };
+const NODE_RADIUS = { small: 26, notable: 40, keystone: 58, jewel: 38, attribute: 26, start: 52 };
 const NODE_STATES = ["none", "later", "taken", "new"];
 
 // The state of every passive at the level, for the weapon set shown.
@@ -64,7 +64,7 @@ function polygon(context, x, y, r, sides, turn) {
 function shapeOf(canvas) {
   const read = kind => SHAPES[token(canvas, `--tree-shape-${kind}`)] ?? SHAPES.circle;
   const small = read("small"), notable = read("notable"), keystone = read("keystone"), jewel = read("jewel");
-  return { small, attribute: small, mastery: small, notable, start: notable, keystone, jewel };
+  return { small, attribute: small, notable, start: notable, keystone, jewel };
 }
 
 // The sheets of the icons and frames, kept whole (tools/make-data.py): the page is drawn again once
@@ -81,7 +81,7 @@ const artReady = () => Object.values(TREE_ART).every(sheet => sheet.complete && 
 // The icons replace the shapes once the frame of a small passive is this many pixels wide.
 const ICONS_FROM = 12;
 // The frames of a kind of passive (TREE.sheets.frames), in the tree and in the box of the
-// ascendancy; the masteries and the class starts keep the shapes of the style.
+// ascendancy; the class starts keep the shapes of the style.
 const FRAME_OF = { small: "small", attribute: "small", notable: "notable", keystone: "keystone", jewel: "jewel" };
 const ASCENDANCY_FRAME_OF = { small: "ascendancySmall", attribute: "ascendancySmall", notable: "ascendancyNotable", start: "ascendancyStart" };
 const frameOf = (graph, node) => TREE.sheets.frames[(graph === TREE.ascendancy ? ASCENDANCY_FRAME_OF : FRAME_OF)[TREE.kinds[node[2]]]];
