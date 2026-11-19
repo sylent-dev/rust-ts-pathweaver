@@ -23,6 +23,8 @@ const VARIANTS = {
   theme: { label: "Style", options: Object.fromEntries(Object.entries(THEMES).map(([key, theme]) => [key, theme.title])), fallback: "frost-night" },
   // The motion of the bar of the tabs of a build (2h, css/build-tabs.css), and the shadow under the
   // level band, its blur tuned by eye.
+  // Classic tabs beside F3, to compare (the owner, 2026-11-19).
+  tabsLook: { label: "Tabs", options: { f3: "F3 · The cursor laid down", classic: "Classic" }, fallback: "f3" },
   tabMotion: { label: "Tab motion", options: { slide: "1 · Slide", ghost: "2 · Ghost", stretch: "3 · Stretch" }, fallback: "slide" },
   levelShadow: { label: "Level shadow", range: { min: 0, max: 24, step: 1 }, variable: "--level-shadow-blur", unit: "px", fallback: "6" },
   // The width of the windows of the home page (2l): the minimum of specs.md, half a 1920-pixel screen, and a wide
