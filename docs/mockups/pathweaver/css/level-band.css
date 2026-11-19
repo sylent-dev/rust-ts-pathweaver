@@ -33,6 +33,12 @@
 .app-level-cursor.is-dragged { cursor: grabbing; transform: scaleY(1.25); }
 .app-level-cursor.is-landing { animation: level-land .26s cubic-bezier(.3, 1.6, .5, 1); }
 @keyframes level-land { from { transform: scaleY(1.25); } to { transform: none; } }
+/* The trail of the dragged cursor, on trial (Trail): grey, faint, the height of the cursor, fading
+   away from it; T2 shrinks back to the cursor once it stops. */
+.app-level-trail { position: absolute; top: 28px; height: 28px; pointer-events: none;
+  background: linear-gradient(to right, transparent, color-mix(in srgb, var(--on-band) 22%, transparent)); }
+.app-level-trail[data-towards="left"] { background: linear-gradient(to left, transparent, color-mix(in srgb, var(--on-band) 22%, transparent)); }
+.app-level-trail.is-fading { transition: left .3s ease-out, width .3s ease-out; }
 .app-level.is-dragging .app-level-steps { opacity: .35; }
 .app-level-ghost { position: absolute; top: 28px; width: 4px; height: 28px; margin-left: -2px; background: var(--on-band-weak); opacity: .45; }
 @media (prefers-reduced-motion: reduce) { .app-level-cursor.is-landing { animation: none; } }

@@ -98,6 +98,14 @@ document.addEventListener("click", event => {
   if (performance.now() - droppedAt < 100) event.stopPropagation();
 }, true);
 
+// The trail of the dragged cursor (Trail, on trial): a grey band from `from` to the cursor at `to`,
+// fading towards `from`; T1 holds it from the ghost, T2 only behind the last steps.
+function drawTrail(trail, from, to) {
+  trail.style.left = `${Math.min(from, to)}px`;
+  trail.style.width = `${Math.abs(to - from)}px`;
+  trail.dataset.towards = to < from ? "left" : "right";
+}
+
 document.getElementById("sheet").addEventListener("pointerdown", event => {
   const cursor = event.target.closest(".app-level-cursor");
   const key = cursor && bandOf(cursor);
@@ -106,14 +114,28 @@ document.getElementById("sheet").addEventListener("pointerdown", event => {
   const track = cursor.parentElement;
   const number = cursor.closest(".app-level").querySelector(".app-level-number");
   let level = bandLevel(key);
-  cursor.insertAdjacentHTML("beforebegin", `<span class="app-level-ghost" style="left:${cursor.style.left}"></span>`);
+  cursor.insertAdjacentHTML("beforebegin", `<span class="app-level-ghost" style="left:${cursor.style.left}"></span><span class="app-level-trail"></span>`);
+  const trail = cursor.previousElementSibling;
+  const startX = levelX(level, bandRange(key));
+  let lastX = startX;
+  let fading;
   cursor.classList.add("is-dragged");
   cursor.closest(".app-level").classList.add("is-dragging");
   cursor.setPointerCapture(event.pointerId);
   const move = moved => {
     level = levelAt(track, key, moved.clientX);
-    cursor.style.left = `${levelX(level, bandRange(key))}px`;
+    const x = levelX(level, bandRange(key));
+    cursor.style.left = `${x}px`;
     number.textContent = level;
+    if (chosen.levelTrail === "span") drawTrail(trail, startX, x);
+    if (chosen.levelTrail === "tail" && x !== lastX) {
+      // The tail as long as the last step was fast, shrinking back to the cursor once it stops.
+      trail.classList.remove("is-fading");
+      drawTrail(trail, x - Math.sign(x - lastX) * Math.min(72, Math.abs(x - lastX) * 3), x);
+      clearTimeout(fading);
+      fading = setTimeout(() => { trail.classList.add("is-fading"); drawTrail(trail, x, x); }, 40);
+    }
+    lastX = x;
   };
   const drop = () => {
     cursor.removeEventListener("pointermove", move);
