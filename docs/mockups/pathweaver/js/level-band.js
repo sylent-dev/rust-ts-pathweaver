@@ -51,7 +51,7 @@ function levelBand({ key = "shown", window = false, focusShown = false } = {}) {
   const snapshot = isSnapshot(key);
   return `<div class="app-level" data-band="${key}">
     <div class="app-level-now"><span class="app-level-label">Level</span><span class="app-level-number">${level}</span></div>
-    ${levelSteps(all.filter(marker => marker < level).at(-1), all.find(marker => marker > level), record, open, snapshot)}
+    ${levelSteps(markerBeside(key, level, "previous"), markerBeside(key, level, "next"), record, open, snapshot)}
     <div class="app-level-track" data-action="level-track" style="width:${LEVEL_TRACK_WIDTH}px">
       <span class="app-level-line"></span>
       ${snapshot ? '<span class="app-level-note">A snapshot: the same at every level</span>' : ""}
@@ -65,11 +65,17 @@ function levelBand({ key = "shown", window = false, focusShown = false } = {}) {
 }
 
 const bandOf = element => element.closest("[data-band]")?.dataset.band;
+// The marker before or after a level, if any.
+function markerBeside(key, level, direction) {
+  const all = markers(key);
+  return direction === "previous" ? all.filter(marker => marker < level).at(-1) : all.find(marker => marker > level);
+}
 
 ACTIONS["level-go"] = element => {
   const key = bandOf(element);
   if (element.dataset.level === "" || key === undefined) return false;
   setBandLevel(key, Number(element.dataset.level));
+  STATE.focusCursor = cursorIndexIn(element);
   return true;
 };
 // The level under the pointer on the track of a band.
@@ -83,6 +89,7 @@ ACTIONS["level-track"] = (element, event) => {
   const key = bandOf(element);
   if (key === undefined) return false;
   setBandLevel(key, levelAt(element, key, event.clientX));
+  STATE.focusCursor = cursorIndexIn(element);
   return true;
 };
 
@@ -142,6 +149,7 @@ document.getElementById("sheet").addEventListener("pointerdown", event => {
     droppedAt = performance.now();
     setBandLevel(key, level, { slide: false });
     STATE.landing = key;
+    STATE.focusCursor = cursorIndexIn(cursor);
     renderSheet();
   };
   cursor.addEventListener("pointermove", move);
@@ -149,22 +157,47 @@ document.getElementById("sheet").addEventListener("pointerdown", event => {
   cursor.addEventListener("pointercancel", drop, { once: true });
 });
 
-// The keyboard (2g2): Tab reaches the cursor, ← and → go to the marker before and after, as ◀ and
-// ▶ do (specs.md, The level). The page draws again, and the cursor drawn in the place of the one
-// that had the focus takes it back.
-document.getElementById("sheet").addEventListener("keydown", event => {
-  const cursor = event.target.closest?.(".app-level-cursor");
-  const key = cursor && bandOf(cursor);
-  if (!key || (event.key !== "ArrowLeft" && event.key !== "ArrowRight")) return;
+// The keyboard (2g2, the owner, 2026-11-19): ← and → go to the marker before and after, as ◀ and ▶
+// do (specs.md, The level), anywhere on the page but in a field, without aiming at the cursor first.
+// The mock-up holds several bands: the arrows move the one that has the focus, or else the last one
+// hovered or touched. A click on the cursor, the track or ◀ ▶ gives the cursor the focus, without
+// its look in the accent, kept for Tab: the page draws again, and the cursor drawn in the place of
+// the one that had the focus takes it back.
+const allCursors = () => [...document.querySelectorAll(".app-level-cursor")];
+const cursorIndexIn = element => allCursors().indexOf(element.closest(".app-level")?.querySelector(".app-level-cursor"));
+let activeCursor = 0;
+let tabbed = false;
+STATE.focusCursor = -1;
+
+document.addEventListener("keydown", event => { if (event.key === "Tab") tabbed = true; }, true);
+document.addEventListener("pointerdown", () => { tabbed = false; }, true);
+document.addEventListener("focusin", event => {
+  if (event.target.matches?.(".app-level-cursor")) event.target.classList.toggle("is-tabbed", tabbed);
+});
+for (const type of ["pointerover", "pointerdown"]) {
+  document.getElementById("sheet").addEventListener(type, event => {
+    const index = cursorIndexIn(event.target);
+    if (index >= 0) activeCursor = index;
+  });
+}
+AFTER_RENDER.push(() => {
+  allCursors()[STATE.focusCursor]?.focus({ preventScroll: true });
+  STATE.focusCursor = -1;
+});
+
+document.addEventListener("keydown", event => {
+  if ((event.key !== "ArrowLeft" && event.key !== "ArrowRight") || event.altKey || event.ctrlKey || event.metaKey || event.shiftKey) return;
+  if (event.target.closest?.("input, textarea, select, [contenteditable]")) return;
+  const focused = allCursors().indexOf(document.activeElement);
+  const index = focused >= 0 ? focused : activeCursor;
+  const key = allCursors()[index] && bandOf(allCursors()[index]);
+  if (!key) return;
   event.preventDefault();
-  const level = bandLevel(key);
-  const all = markers(key);
-  const target = event.key === "ArrowLeft" ? all.filter(marker => marker < level).at(-1) : all.find(marker => marker > level);
+  const target = markerBeside(key, bandLevel(key), event.key === "ArrowLeft" ? "previous" : "next");
   if (target === undefined) return;
-  const index = [...document.querySelectorAll(".app-level-cursor")].indexOf(cursor);
   setBandLevel(key, target);
+  STATE.focusCursor = focused;
   renderSheet();
-  document.querySelectorAll(".app-level-cursor")[index]?.focus({ preventScroll: true });
 });
 
 // The cursor slides smoothly to its new level on ◀ ▶, a click on the track and the keys (2g2): the

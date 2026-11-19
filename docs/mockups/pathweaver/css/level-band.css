@@ -48,6 +48,7 @@
 .app-level-note { position: absolute; top: 18px; left: 0; font-size: 11px; color: var(--on-band-weak); white-space: nowrap; }
 
 /* The focus of the keyboard on the cursor (2g2, F2 of three looks, the owner, 2026-11-19): the cursor
-   itself in the accent, 6 px wide; a ring framed it heavily, bars on its sides read as markers. */
+   itself in the accent, 6 px wide; a ring framed it heavily, bars on its sides read as markers.
+   Reached with Tab only: the focus a click gives it keeps it white (js/level-band.js). */
 .app-level-cursor:focus { outline: none; }
-.app-level-cursor:is(:focus-visible, .is-focus-shown) { width: 6px; margin-left: -3px; background: var(--accent); }
+.app-level-cursor:is(.is-tabbed:focus, .is-focus-shown) { width: 6px; margin-left: -3px; background: var(--accent); }
