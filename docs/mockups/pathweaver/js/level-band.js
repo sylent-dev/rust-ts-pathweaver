@@ -87,7 +87,8 @@ ACTIONS["level-track"] = (element, event) => {
 };
 
 // Dragging the cursor (2g2): its ghost stays grey where it was, the cursor follows the pointer from
-// level to level, lifted, and the level counts in its box; ◀ ▶ and « N changes », still those of
+// level to level, lifted, a short grey tail behind it (T2 of two trails, the owner, 2026-11-19), and
+// the level counts in its box; ◀ ▶ and « N changes », still those of
 // the level left, fade; the page draws again once it is set down, the cursor landing with a small
 // motion.
 STATE.landing = false;
@@ -98,8 +99,9 @@ document.addEventListener("click", event => {
   if (performance.now() - droppedAt < 100) event.stopPropagation();
 }, true);
 
-// The trail of the dragged cursor (Trail, on trial): a grey band from `from` to the cursor at `to`,
-// fading towards `from`; T1 holds it from the ghost, T2 only behind the last steps.
+// The tail of the dragged cursor: a grey band from `from` to the cursor at `to`, fading towards
+// `from`. A band held from the ghost (T1) veiled the markers it crossed and said again where the
+// cursor came from, which the ghost says.
 function drawTrail(trail, from, to) {
   trail.style.left = `${Math.min(from, to)}px`;
   trail.style.width = `${Math.abs(to - from)}px`;
@@ -116,8 +118,7 @@ document.getElementById("sheet").addEventListener("pointerdown", event => {
   let level = bandLevel(key);
   cursor.insertAdjacentHTML("beforebegin", `<span class="app-level-ghost" style="left:${cursor.style.left}"></span><span class="app-level-trail"></span>`);
   const trail = cursor.previousElementSibling;
-  const startX = levelX(level, bandRange(key));
-  let lastX = startX;
+  let lastX = levelX(level, bandRange(key));
   let fading;
   cursor.classList.add("is-dragged");
   cursor.closest(".app-level").classList.add("is-dragging");
@@ -127,8 +128,7 @@ document.getElementById("sheet").addEventListener("pointerdown", event => {
     const x = levelX(level, bandRange(key));
     cursor.style.left = `${x}px`;
     number.textContent = level;
-    if (chosen.levelTrail === "span") drawTrail(trail, startX, x);
-    if (chosen.levelTrail === "tail" && x !== lastX) {
+    if (x !== lastX) {
       // The tail as long as the last step was fast, shrinking back to the cursor once it stops.
       trail.classList.remove("is-fading");
       drawTrail(trail, x - Math.sign(x - lastX) * Math.min(72, Math.abs(x - lastX) * 3), x);

@@ -33,8 +33,6 @@ const VARIANTS = {
   size: { label: "Size", range: { min: 6, max: 200, step: 2 }, variable: "--texture-size", unit: "px", fallback: "24" },
   // The width of the windows of the home page (2l): the minimum of specs.md, half a 1920-pixel screen, and a wide
   // window of the owner's screen.
-  // A grey trail behind the dragged cursor of the level band, on trial (2g2, the owner, 2026-11-19).
-  levelTrail: { label: "Trail", options: { none: "None", span: "T1 · Span", tail: "T2 · Tail" }, fallback: "tail" },
   homeWidth: { label: "Home width", options: { 900: "900 px", 960: "960 px", 1600: "1,600 px" }, fallback: "960" },
 };
 
