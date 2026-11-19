@@ -79,7 +79,7 @@ const TREE_ART = Object.fromEntries(["skills", "skills-disabled", "frame"].map(n
 }));
 const artReady = () => Object.values(TREE_ART).every(sheet => sheet.complete && sheet.naturalWidth > 0);
 // The icons replace the shapes once the frame of a small passive is this many pixels wide (the
-// slider « Icons from » of the page, 12 px by default).
+// slider « Icons from » of the page, 3 px by default).
 const iconsFrom = canvas => Number.parseFloat(token(canvas, "--tree-icons-from")) || 0;
 // The frames of a kind of passive (TREE.sheets.frames), in the tree and in the box of the
 // ascendancy; the class starts keep the shapes of the style.

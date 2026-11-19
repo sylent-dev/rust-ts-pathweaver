@@ -28,8 +28,8 @@ const VARIANTS = {
   // white of the passives taken; Frost Night only (css/tree.css).
   treeLink: { label: "Links taken", options: { blue: "Blue", white: "White" }, fallback: "blue" },
   // The width of the frame of a small passive from which the icons replace the shapes (2i, the owner,
-  // 2026-11-19), tuned by eye on the tree of the Overview; 0: always the icons.
-  iconsFrom: { label: "Icons from", range: { min: 0, max: 20, step: 1 }, variable: "--tree-icons-from", unit: "px", fallback: "12" },
+  // 2026-11-19), tuned by eye on the tree of the Overview: 3 px (the owner); 0: always the icons.
+  iconsFrom: { label: "Icons from", range: { min: 0, max: 20, step: 1 }, variable: "--tree-icons-from", unit: "px", fallback: "3" },
 };
 
 // The styles a section shows side by side: the style of the page alone, Frost Night by default, the
