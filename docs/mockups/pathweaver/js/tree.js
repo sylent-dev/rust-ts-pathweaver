@@ -105,10 +105,10 @@ function drawArt(context, frames, iconIndex, taken, x, y, size) {
   put(TREE_ART.frame, frames[taken ? 1 : 0]);
 }
 
-// Options: the label of what is new at the level, the smallest radius of a shape, the frame from which
+// Options: the smallest radius of a shape, the frame from which
 // the icons show, the weapon sets of the passives (setMasks) and the set shown strong: 1 or 2, 0 for
 // both, 3 for neither (the passives shared alone).
-function drawTree(canvas, graph, states, view, { labelNew = "", minRadius = 1.5, iconsFromPx = iconsFrom(canvas), sets = null, shownSet = 1 } = {}) {
+function drawTree(canvas, graph, states, view, { minRadius = 1.5, iconsFromPx = iconsFrom(canvas), sets = null, shownSet = 1 } = {}) {
   const ratio = window.devicePixelRatio || 1;
   const width = canvas.clientWidth, height = canvas.clientHeight;
   canvas.width = Math.round(width * ratio);
@@ -199,7 +199,7 @@ function drawTree(canvas, graph, states, view, { labelNew = "", minRadius = 1.5,
   }
   context.setLineDash([]);
 
-  // What is new at this level: a ring of the accent, and how many beside them.
+  // What is new at this level: a ring of the accent; how many, the box « New at N » says (2i).
   const fresh = graph.nodes.filter((_, index) => states[index] === 3);
   if (fresh.length === 0) return;
   context.strokeStyle = colour("--accent");
@@ -215,18 +215,6 @@ function drawTree(canvas, graph, states, view, { labelNew = "", minRadius = 1.5,
   }
   context.stroke();
   lit(false);
-  if (labelNew) {
-    const right = Math.max(...fresh.map(node => screen(node)[0]));
-    const middle = fresh.reduce((sum, node) => sum + screen(node)[1], 0) / fresh.length;
-    context.font = `600 13px ${colour("--font-text")}`;
-    context.textBaseline = "middle";
-    // A halo of the page, so that the links under the text don't cross it.
-    context.lineWidth = 4;
-    context.strokeStyle = colour("--page");
-    context.strokeText(labelNew, right + 14, middle);
-    context.fillStyle = colour("--accent");
-    context.fillText(labelNew, right + 14, middle);
-  }
 }
 
 // Draws every canvas of the tree on the page, and lets the main one move and zoom.
@@ -235,10 +223,9 @@ function mountTrees() {
   for (const canvas of document.querySelectorAll('canvas[data-tree="main"]')) {
     const states = treeStates(TREE.taken, TREE.nodes.length, level);
     const sets = setMasks(TREE.taken, TREE.nodes.length);
-    const fresh = states.filter(state => state === 3).length;
     STATE.treeView ??= fitView(TREE.nodes, TREE.taken.map(([i]) => i), canvas.clientWidth, canvas.clientHeight, 80);
     const draw = () => {
-      drawTree(canvas, TREE, states, STATE.treeView, { labelNew: fresh > 0 ? `+${fresh} new at ${level}` : "", sets, shownSet: STATE.set });
+      drawTree(canvas, TREE, states, STATE.treeView, { sets, shownSet: STATE.set });
       for (const after of TREE_DRAWN) after(canvas);
     };
     draw();
