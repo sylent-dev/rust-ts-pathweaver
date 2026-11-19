@@ -90,7 +90,7 @@ function changesWindow(record, level, { opening = false } = {}) {
 
 // STATE.changesOpen: the key of the band whose window is open, or false.
 ACTIONS["changes-toggle"] = element => {
-  const key = element.closest("[data-band]")?.dataset.band;
+  const key = element.closest(".app-level[data-band]")?.dataset.band;
   if (key === undefined) return false;
   STATE.changesOpen = STATE.changesOpen === key ? false : key;
   STATE.changesOpening = STATE.changesOpen !== false;
