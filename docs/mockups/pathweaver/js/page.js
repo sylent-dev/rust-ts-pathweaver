@@ -47,6 +47,8 @@ const VARIANTS = {
   baseMark: { label: "Base", select: true, fallback: "words", options: { file: "As the file writes it", words: "B1 · (Dex Base) in its colour",
     tag: "B2 · a tag DEX in its colour", chip: "B3 · a chip DEX on its colour", name: "B4 · the name in its colour" } },
   attrColours: { label: "Attributes", select: true, fallback: "pathweaver", options: { pathweaver: "Pathweaver (teal dexterity)", exile: "Exile Market (green dexterity)" } },
+  // The mark of a note of the author (2g3, js/note-marks.js).
+  noteMark: { label: "Note", select: true, fallback: "n1", options: { ...Object.fromEntries(Array.from({ length: 12 }, (_, index) => [`n${index + 1}`, `N${index + 1}`])), page: "The page of 2g" } },
   gemSize: { label: "Gem size", range: { min: 6, max: 20, step: 1 }, variable: "--gem-mark-size", unit: "px", fallback: "10" },
 };
 

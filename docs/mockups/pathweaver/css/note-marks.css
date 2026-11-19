@@ -1,0 +1,6 @@
+/* The board of a mark of a note (2g3, sections/note-marks.js), on that of the gems (css/gem-marks.css). */
+.app-note-board { width: 420px; }
+.app-note-sizes { grid-template-columns: 58px repeat(3, auto); justify-items: start; }
+.app-note-rows { padding-top: 10px; border-top: 1px solid var(--divider); }
+.app-note-rows li { padding: 2px 0; }
+.app-note-rows .app-wv-sign { color: var(--on-band-weak); }
