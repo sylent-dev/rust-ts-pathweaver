@@ -1,24 +1,19 @@
 /* The texture behind the blocks (2026-11-17): graph paper behind every block, the tree and the row
-   of the tabs included, decided by the owner. Its colour and its size are still tuned
-   (VARIANTS in page.js); its opacity is decided. The pattern is a mask: its lines take the colour of the layer. The other
+   of the tabs included, decided by the owner; in pale blue, a tile of 24 px (the owner, 2026-11-19:
+   the values seen since 2f), at 3 %. The pattern is a mask: its lines take the colour of the layer. The other
    patterns and a second layer, shifted, turned, drifting and faded, were tried and set aside
    (docs/backlog.md). */
 
 :root {
   /* Graph paper: a line every tile, and a fainter one every quarter. */
   --texture: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40' preserveAspectRatio='none'%3E%3Cpath d='M0 0H40M0 40H40M0 0V40M40 0V40' fill='none' stroke='black' vector-effect='non-scaling-stroke'/%3E%3Cpath d='M0 10H40M0 20H40M0 30H40M10 0V40M20 0V40M30 0V40' fill='none' stroke='black' stroke-opacity='.4' vector-effect='non-scaling-stroke'/%3E%3C/svg%3E");
-  /* The colours the layer can take: the text of its block (a grey), a pale blue, the accent. */
-  --texture-text: currentColor;
-  --texture-blue: #7aa7f0;
-  --texture-accent: var(--accent);
+  /* The colour of its lines, a pale blue (set aside: the grey of the text, the accent), and its tile. */
+  --texture-colour: #7aa7f0;
+  --texture-size: 24px;
   /* Its opacity, 3 % everywhere, the home page included (the owner, 2026-11-18, on Frost Night;
      23 % behind the blocks and 16 % on the first visit before). */
   --texture-opacity: 3%;
 }
-
-:root[data-colour="text"] { --texture-colour: var(--texture-text); }
-:root[data-colour="blue"] { --texture-colour: var(--texture-blue); }
-:root[data-colour="accent"] { --texture-colour: var(--texture-accent); }
 
 /* The blocks that take the texture: a layer under their content, in their own stacking context. */
 /* The band of the site takes it too (the owner, 2026-11-18), not the band of the open builds; and the

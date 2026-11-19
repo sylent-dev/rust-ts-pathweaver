@@ -42,14 +42,15 @@ const levelSteps = (previous, next, record, open, snapshot = false) =>
 
 // `focusShown` draws the cursor as it looks with the focus, without taking it (the section of the
 // focus, sections/level-band.js).
-function levelBand({ key = "shown", window = false, focusShown = false } = {}) {
+function levelBand({ key = "shown", focusShown = false } = {}) {
+  const instance = nextInstance("level-band");
   const level = bandLevel(key);
   const range = bandRange(key);
   const all = markers(key);
   const record = changesHere(key, level);
-  const open = window && STATE.changesOpen === key && record !== undefined;
+  const open = STATE.changesOpen === instance && record !== undefined;
   const snapshot = isSnapshot(key);
-  return `<div class="app-level" data-band="${key}">
+  return `<div class="app-level" data-band="${key}" data-instance="${instance}">
     <div class="app-level-now"><span class="app-level-label">Level</span><span class="app-level-number">${level}</span></div>
     ${levelSteps(markerBeside(key, level, "previous"), markerBeside(key, level, "next"), record, open, snapshot)}
     <div class="app-level-track" data-action="level-track" style="width:${LEVEL_TRACK_WIDTH}px">

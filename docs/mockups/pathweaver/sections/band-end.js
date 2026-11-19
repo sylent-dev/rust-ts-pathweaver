@@ -9,7 +9,7 @@ const END_STATES = [["At rest", {}], ["Hover on « +N ▾ »", { moreState: "is-
 const endCard = () => `<div class="tab-card">
   <div class="tab-states end-states">${END_STATES.map(([label]) => `<span>${label}</span>`).join("")}</div>
   ${shownStyles().map(style => `<div class="end-row" data-sample-theme="${style}" title="${THEMES[style].title}">${END_STATES.map(([, states]) =>
-    `<div class="tab-strip end-strip">${buildsBand(420, { builds: SEVEN_BUILDS, menuOpen: false, ...states })}<div class="tab-strip-page"></div></div>`).join("")}</div>`).join("")}
+    `<div class="tab-strip end-strip">${buildsBand(420, { builds: SEVEN_BUILDS, menuOpen: false, action: "", ...states })}<div class="tab-strip-page"></div></div>`).join("")}</div>`).join("")}
 </div>`;
 
 // The menu of this section opens and closes on its own, open at first: a click on « +N ▾ » plays

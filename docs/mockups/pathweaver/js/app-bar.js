@@ -41,6 +41,7 @@ const openBuildTab = (build, states = "") => `<div class="app-builds-tab ${state
 // open. `current` is the index of the build shown (-1 on the library), `menuOpen` shows the menu
 // open, `moreState` and `openState` a state of the two buttons.
 const TAB_WIDTH = 184, TAB_MAX_WIDTH = 240, TAB_GAP = 0;
+// The number of the band of the open builds whose menu is open (nextInstance), or false.
 STATE.buildsMenu = false;
 
 const menuBuild = build => `<div class="app-builds-menu-item" role="menuitem" title="${escapeHtml(build.name)} · ${escapeHtml(build.ascendancy)}">
@@ -48,14 +49,17 @@ const menuBuild = build => `<div class="app-builds-menu-item" role="menuitem" ti
   <span class="app-builds-menu-text"><span class="app-builds-menu-name">${escapeHtml(build.name)}</span><span class="app-builds-menu-ascendancy">${escapeHtml(build.ascendancy)}</span></span>
 </div>`;
 
-function buildsBand(width, { builds = BUILDS.open, current = 0, menuOpen = STATE.buildsMenu,
+// A section that shows the menu on its own passes `menuOpen` and its `action`.
+function buildsBand(width, { builds = BUILDS.open, current = 0, menuOpen,
   moreState = "", openState = "", action = "toggleBuildsMenu" } = {}) {
+  const instance = nextInstance("builds-band");
+  menuOpen ??= STATE.buildsMenu === instance;
   const room = width - 12 - 110;   // the padding on the right, then « +N ▾ » and +
   const fit = Math.max(1, Math.floor((room + TAB_GAP) / (TAB_WIDTH + TAB_GAP)));
   const shown = builds.slice(0, fit);
   const hidden = builds.slice(fit);
   const tabWidth = hidden.length ? TAB_WIDTH : Math.min(TAB_MAX_WIDTH, Math.floor((room + TAB_GAP) / builds.length) - TAB_GAP);
-  return `<div class="app-builds" style="--tab-width:${tabWidth}px">
+  return `<div class="app-builds" data-instance="${instance}" style="--tab-width:${tabWidth}px">
     <div class="app-builds-tabs" role="tablist">${shown.map((build, index) => openBuildTab(build, index === current ? "is-current" : "")).join("")}</div>
     <span class="app-builds-more-wrap">
       <button type="button" class="app-builds-more ${moreState} ${menuOpen ? "is-open" : ""}" data-action="${action}" aria-expanded="${menuOpen}" aria-label="More builds and Merge">${hidden.length ? `+${hidden.length}` : ""}${icon(12, ICONS.down)}</button>
@@ -67,11 +71,27 @@ function buildsBand(width, { builds = BUILDS.open, current = 0, menuOpen = STATE
     <button type="button" class="app-builds-open ${openState}" title="Open .build files" aria-label="Open .build files">${icon(14, ICONS.add)}</button>
   </div>`;
 }
-ACTIONS.toggleBuildsMenu = () => {
-  STATE.buildsMenu = !STATE.buildsMenu;
+// « +N ▾ » opens the menu of its own band, and closes the window of what changes: one at a time.
+ACTIONS.toggleBuildsMenu = element => {
+  const instance = Number(element.closest(".app-builds").dataset.instance);
+  STATE.buildsMenu = STATE.buildsMenu === instance ? false : instance;
+  STATE.changesOpen = false;
   return true;
 };
+// Esc, or a click outside the menu and its button, closes it.
+document.addEventListener("keydown", event => {
+  if (event.key === "Escape" && STATE.buildsMenu !== false) {
+    STATE.buildsMenu = false;
+    renderSheet();
+  }
+});
+document.addEventListener("click", event => {
+  if (STATE.buildsMenu === false || event.target.closest(".app-builds-more-wrap")) return;
+  STATE.buildsMenu = false;
+  renderSheet();
+});
 
-// The two bands, the app bar: the band of the open builds only while one is open.
-const appBar = (width, { library = false, builds = BUILDS.open } = {}) =>
-  siteBand({ library }) + (builds.length ? buildsBand(width, { builds, current: library ? -1 : 0 }) : "");
+// The two bands, the app bar: the band of the open builds only while one is open. `menu: false`
+// makes « +N ▾ » do nothing, in a window too short for its menu, which it would cut.
+const appBar = (width, { library = false, builds = BUILDS.open, menu = true } = {}) =>
+  siteBand({ library }) + (builds.length ? buildsBand(width, { builds, current: library ? -1 : 0, ...(menu ? {} : { menuOpen: false, action: "" }) }) : "");

@@ -2,7 +2,7 @@
 // that covers part of the levels, its track from its lowest level to its highest, each band at its
 // own level and its own window of what changes.
 
-const bandCase = key => `<div class="app-window app-changes-case" style="width:960px">${levelBand({ key, window: true })}<div class="app-changes-case-page"></div></div>`;
+const bandCase = (key, options = {}) => `<div class="app-window app-changes-case" style="width:960px">${levelBand({ key, ...options })}<div class="app-changes-case-page"></div></div>`;
 
 addSection(() => ["The cases of the level band: a snapshot, a guide of part of the levels, a level without change", [
   [`A snapshot · ${escapeHtml(BUILDS.changes.snapshot.name)}: no marker, no « N changes »`, bandCase("snapshot")],
@@ -12,5 +12,5 @@ addSection(() => ["The cases of the level band: a snapshot, a guide of part of t
 // The focus of the cursor (2g2): a band of the page as it looks once Tab has reached its cursor, in
 // the accent (F2 of three looks, the owner, 2026-11-19); on every band, Tab and ← → work for real.
 addSection(() => ["The focus of the cursor: Tab reaches it, ← → go from marker to marker, the cursor slides", [
-  ["The cursor with the focus, in the accent", `<div class="app-window" style="width:960px">${levelBand({ focusShown: true })}</div>`],
+  ["The cursor with the focus, in the accent", bandCase("shown", { focusShown: true })],
 ]]);
