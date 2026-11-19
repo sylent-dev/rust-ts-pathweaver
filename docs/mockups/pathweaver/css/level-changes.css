@@ -21,9 +21,7 @@
 .app-changes-body { min-width: 0; }
 .app-changes-body b { font-weight: 600; }
 .app-changes-row.is-removed .app-changes-body { color: var(--on-band-weak); }
-.app-changes-gem { display: inline-block; width: 7px; height: 7px; margin: 0 6px 1px 0; vertical-align: middle; }
 .app-changes-with { display: block; margin-top: 2px; color: var(--on-band-weak); font-size: 12px; }
-.app-changes-with .app-changes-gem { width: 5px; height: 5px; margin: 0 4px 1px 2px; }
 .app-changes-on { color: var(--on-band-weak); }
 /* A row of the gear: the slot in a column of its own, the item wrapping beside it. */
 .app-changes-body:has(.app-changes-slot) { display: flex; }

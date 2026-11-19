@@ -34,12 +34,12 @@ const slotName = id => escapeHtml(SLOT_NAMES[id] ?? id);
 const uniqueTag = change => change.unique ? ' <span class="app-changes-tag">unique</span>' : "";
 function changeName(change) {
   if (change.category === "passives") return `<b>${plural(change.count, "passive")}</b>${change.label && change.sign === "+" ? ` ${change.label}` : ""}`;
-  if (change.category === "skill" || change.category === "support") return `${gemSquare(change.colour)}<b>${escapeHtml(change.name)}</b>${noteMark(change.note)}`;
+  if (change.category === "skill" || change.category === "support") return `${gemMark(change.colour, change.category)}<b>${escapeHtml(change.name)}</b>${noteMark(change.note)}`;
   if (change.category === "gear") return `<b>${escapeHtml(change.name || "a hint")}</b>${uniqueTag(change)}`;
   return `<b>${escapeHtml(change.name)}</b>`;
 }
 function changeDetail(change) {
-  if (change.category === "skill") return change.supports.length > 0 ? `with ${change.supports.map(s => `${gemSquare(s.colour)}${escapeHtml(s.name)}`).join(", ")}` : "";
+  if (change.category === "skill") return change.supports.length > 0 ? `with ${change.supports.map(s => `${gemMark(s.colour, "support")}${escapeHtml(s.name)}`).join(", ")}` : "";
   if (change.category === "support") return `${change.sign === "−" ? "off" : "on"} ${escapeHtml(change.skill)}`;
   if (change.category === "passives") return change.sign === "−" ? "given back" : "";
   if (change.category === "gear") return `${slotName(change.slot)}${change.sign === "⇄" ? ` · for ${escapeHtml(change.before || "a hint")}` : ""}`;
@@ -74,7 +74,7 @@ function changesW3(list, level) {
   const rows = changes => changes.map(change => `<li class="${isGone(change) ? "is-gone" : ""}"><span class="app-wv-sign">${signOf(change)}</span><span>${changeName(change)} <span class="app-wv-detail">${changeDetail(change)}</span></span></li>`).join("");
   const supportsBySkill = changes => Object.entries(Object.groupBy(changes, change => change.skill)).map(([skill, supports]) =>
     `<li class="app-wv-skill"><span class="app-wv-sign"></span><span>${escapeHtml(skill)}</span></li>${supports.map(change =>
-      `<li class="app-wv-under ${isGone(change) ? "is-gone" : ""}"><span class="app-wv-sign">${change.sign}</span><span>${gemSquare(change.colour)}${escapeHtml(change.name)}${noteMark(change.note)}</span></li>`).join("")}`).join("");
+      `<li class="app-wv-under ${isGone(change) ? "is-gone" : ""}"><span class="app-wv-sign">${change.sign}</span><span>${gemMark(change.colour, "support")}${escapeHtml(change.name)}${noteMark(change.note)}</span></li>`).join("")}`).join("");
   return list.length === 0 ? nothingHere(level) : `<dl class="app-wv-gutter">${byCategory(list).map(([category, changes]) =>
     `<dt>${CHANGE_CATEGORIES[category]}<span>${changes.length}</span></dt><dd><ul>${category === "support" ? supportsBySkill(changes) : rows(changes)}</ul></dd>`).join("")}</dl>`;
 }
@@ -158,7 +158,7 @@ function changesW10(list, level) {
   const passives = list.filter(change => change.category === "passives");
   const taken = passives.filter(change => change.sign === "+");
   const sentences = [
-    ...pick("skill", "+").map(skill => `${gemSquare(skill.colour)}<b>${escapeHtml(skill.name)}</b> comes${skill.supports.length > 0 ? `, with ${names(skill.supports)}` : ""}.`),
+    ...pick("skill", "+").map(skill => `${gemMark(skill.colour)}<b>${escapeHtml(skill.name)}</b> comes${skill.supports.length > 0 ? `, with ${names(skill.supports)}` : ""}.`),
     pick("skill", "−").length > 0 ? `${names(pick("skill", "−"))} ${pick("skill", "−").length === 1 ? "goes" : "go"}.` : "",
     ...Object.entries(Object.groupBy(pick("support", "+"), change => change.skill)).map(([skill, supports]) => `<b>${escapeHtml(skill)}</b> takes ${names(supports)}.`),
     ...Object.entries(Object.groupBy(pick("support", "−"), change => change.skill)).map(([skill, supports]) => `<b>${escapeHtml(skill)}</b> drops ${names(supports)}.`),

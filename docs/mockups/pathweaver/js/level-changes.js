@@ -10,9 +10,6 @@ STATE.changesOpen = false;
 // A note of the author on an entry: a mark, not a change of its own.
 ICONS.note = '<path d="M3.5 2.5h9v11h-9z"/><path d="M5.8 5.5h4.4M5.8 8h4.4M5.8 10.5h2.4"/>';
 const noteMark = has => has ? `<span class="app-changes-note" title="The author left a note">${icon(12, ICONS.note)}</span>` : "";
-const GEM_COLOURS = { r: "var(--gem-str)", g: "var(--gem-dex)", b: "var(--gem-int)" };
-const gemColour = colour => GEM_COLOURS[colour] ?? "var(--gem-none)";
-const gemSquare = colour => `<i class="app-changes-gem" style="background:${gemColour(colour)}"></i>`;
 
 // « N changes », the block between ◀ and ▶, or « 0 changes » in grey when there is none, the block
 // kept so that ◀ and ▶ never move; no chevron, since it opens a window, not a menu (the owner,
@@ -40,13 +37,13 @@ function changesWindow(record, level, { opening = false, style = "" } = {}) {
   ].filter(Boolean);
   return `<div class="app-changes-window ${opening ? "is-opening" : ""}" style="${style}" role="dialog" aria-label="What changes at ${level}">
     ${part("Skills", [
-      ...skills.added.map(skill => row("+", `${gemSquare(skill.colour)}<b>${escapeHtml(skill.name)}</b>${noteMark(skill.note)}${skill.supports.length > 0
-        ? `<span class="app-changes-with">with ${skill.supports.map(s => `${gemSquare(s.colour)}${escapeHtml(s.name)}${noteMark(s.note)}`).join(", ")}</span>` : ""}`)),
-      ...skills.removed.map(skill => row("−", `${gemSquare(skill.colour)}${escapeHtml(skill.name)}`)),
+      ...skills.added.map(skill => row("+", `${gemMark(skill.colour)}<b>${escapeHtml(skill.name)}</b>${noteMark(skill.note)}${skill.supports.length > 0
+        ? `<span class="app-changes-with">with ${skill.supports.map(s => `${gemMark(s.colour, "support")}${escapeHtml(s.name)}${noteMark(s.note)}`).join(", ")}</span>` : ""}`)),
+      ...skills.removed.map(skill => row("−", `${gemMark(skill.colour)}${escapeHtml(skill.name)}`)),
     ])}
     ${part("Supports", [
-      ...supports.added.map(s => row("+", `${gemSquare(s.colour)}${escapeHtml(s.name)}${noteMark(s.note)} <span class="app-changes-on">on ${escapeHtml(s.skill)}</span>`)),
-      ...supports.removed.map(s => row("−", `${gemSquare(s.colour)}${escapeHtml(s.name)} <span class="app-changes-on">off ${escapeHtml(s.skill)}</span>`)),
+      ...supports.added.map(s => row("+", `${gemMark(s.colour, "support")}${escapeHtml(s.name)}${noteMark(s.note)} <span class="app-changes-on">on ${escapeHtml(s.skill)}</span>`)),
+      ...supports.removed.map(s => row("−", `${gemMark(s.colour, "support")}${escapeHtml(s.name)} <span class="app-changes-on">off ${escapeHtml(s.skill)}</span>`)),
     ])}
     ${part("Passives", passiveRows)}
     ${passives.notes > 0 && passiveRows.length > 0 ? `<p class="app-changes-foot">${noteMark(true)}${plural(passives.notes, "passive")} with a note of the author</p>` : ""}

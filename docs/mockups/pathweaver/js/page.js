@@ -37,6 +37,10 @@ const VARIANTS = {
   // The case the twelve layouts of the window of what changes show (2g3): a respec, the swap of a
   // leveling build to its end, the build of the page at its level.
   changesCase: { label: "Case", options: { respec: "A respec", swap: "The swap to the end", shown: "The build of the page" }, fallback: "respec" },
+  // The mark of a gem (2g3, js/gem-marks.js): twelve marks and the square of 2g, applied to every
+  // window, and its size.
+  gem: { label: "Gem", select: true, fallback: "g1", options: { ...Object.fromEntries(Array.from({ length: 12 }, (_, index) => [`g${index + 1}`, `G${index + 1}`])), square: "The square of 2g" } },
+  gemSize: { label: "Gem size", range: { min: 6, max: 20, step: 1 }, variable: "--gem-mark-size", unit: "px", fallback: "10" },
 };
 
 // The styles a section shows side by side: the style of the page alone, Frost Night by default, the
