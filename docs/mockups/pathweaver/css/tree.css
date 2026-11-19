@@ -5,10 +5,6 @@
 /* The mark of a passive new at the level, in the legend: the ring of the accent around it. */
 .app-dot { display: inline-block; width: 8px; height: 8px; box-sizing: border-box; border-radius: 50%; }
 .app-dot.is-new { border: 1px solid var(--tree-taken); background: var(--tree-taken); box-shadow: 0 0 0 2px var(--band-deep), 0 0 0 3.5px var(--accent); }
-/* The links between the passives taken in white or in a soft amber, on trial against the blue of the
-   accent (2i, the control « Links taken »): Frost Night only, Frost and Ember derive from it later. */
-:root[data-theme="frost-night"][data-tree-link="white"] { --tree-edge-taken: #e3eaf5; }
-:root[data-theme="frost-night"][data-tree-link="amber"] { --tree-edge-taken: #f2b45a; }
 /* The Tree tab: the tree alone, the height of the Overview. */
 .app-tree-tab { display: flex; height: 668px; }
 .app-tree-tab .app-tree { border-right: none; }
