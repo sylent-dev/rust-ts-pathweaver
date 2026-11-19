@@ -10,12 +10,15 @@
 
 STATE.level = 59;
 STATE.bandLevels = {};
+STATE.slides = {};
 const LEVEL_TRACK_WIDTH = 708;
 
 const bandRange = key => BUILDS.changes[key].range ?? [1, MAX_LEVEL];
 const isSnapshot = key => BUILDS.changes[key].range === null;
 const bandLevel = key => (key === "shown" ? STATE.level : STATE.bandLevels[key] ?? bandRange(key)[1]);
-function setBandLevel(key, level) {
+// `slide`: the cursor slides from the level it leaves (2g2); a dragged one is already there.
+function setBandLevel(key, level, { slide = true } = {}) {
+  if (slide && level !== bandLevel(key)) STATE.slides[key] = bandLevel(key);
   if (key === "shown") STATE.level = level;
   else STATE.bandLevels[key] = level;
 }
@@ -115,7 +118,7 @@ document.getElementById("sheet").addEventListener("pointerdown", event => {
   const drop = () => {
     cursor.removeEventListener("pointermove", move);
     droppedAt = performance.now();
-    setBandLevel(key, level);
+    setBandLevel(key, level, { slide: false });
     STATE.landing = key;
     renderSheet();
   };
@@ -140,4 +143,19 @@ document.getElementById("sheet").addEventListener("keydown", event => {
   setBandLevel(key, target);
   renderSheet();
   document.querySelectorAll(".app-level-cursor")[index]?.focus({ preventScroll: true });
+});
+
+// The cursor slides smoothly to its new level on ◀ ▶, a click on the track and the keys (2g2): the
+// page draws it there at once, and the motion runs from the level it left; nothing moves when the
+// system asks for less motion.
+AFTER_RENDER.push(() => {
+  const still = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  for (const [key, from] of Object.entries(STATE.slides)) {
+    if (still) break;
+    for (const cursor of document.querySelectorAll(`[data-band="${key}"] .app-level-cursor`)) {
+      cursor.animate([{ left: `${levelX(from, bandRange(key))}px` }, { left: cursor.style.left }],
+        { duration: 280, easing: "cubic-bezier(.2, .8, .2, 1)" });
+    }
+  }
+  STATE.slides = {};
 });
