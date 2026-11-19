@@ -25,6 +25,17 @@
 .app-level-line { position: absolute; top: 41px; left: 0; right: 0; height: 2px; background: var(--track); }
 .app-level-marker { position: absolute; top: 36px; width: 1px; height: 12px; background: var(--accent); }
 .app-level-cursor { position: absolute; top: 28px; width: 4px; height: 28px; margin-left: -2px; background: var(--on-band); }
+
+/* Dragging it (2g2): a hand over it, a wider grip than its 4 px; lifted while dragged, its ghost
+   grey where it was; set down, it settles back to its height. */
+.app-level-cursor { cursor: grab; touch-action: none; transform-origin: 50% 50%; }
+.app-level-cursor::before { content: ""; position: absolute; inset: -6px -8px; }
+.app-level-cursor.is-dragged { cursor: grabbing; transform: scaleY(1.25); }
+.app-level-cursor.is-landing { animation: level-land .26s cubic-bezier(.3, 1.6, .5, 1); }
+@keyframes level-land { from { transform: scaleY(1.25); } to { transform: none; } }
+.app-level.is-dragging .app-level-steps { opacity: .35; }
+.app-level-ghost { position: absolute; top: 28px; width: 4px; height: 28px; margin-left: -2px; background: var(--on-band-weak); opacity: .45; }
+@media (prefers-reduced-motion: reduce) { .app-level-cursor.is-landing { animation: none; } }
 .app-level-end { position: absolute; top: 52px; transform: translateX(-50%); font-size: 11px; color: var(--on-band-weak); }
 
 /* A snapshot (2g2): its track says why it has no marker, over the line, from its start. */

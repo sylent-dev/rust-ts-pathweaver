@@ -51,7 +51,7 @@ function levelBand({ key = "shown", window = false } = {}) {
       <span class="app-level-line"></span>
       ${snapshot ? '<span class="app-level-note">A snapshot: the same at every level</span>' : ""}
       ${all.map(marker => `<span class="app-level-marker" style="left:${levelX(marker, range)}px" title="${markerTitle(key, marker)}"></span>`).join("")}
-      <span class="app-level-cursor" style="left:${levelX(level, range)}px"></span>
+      <span class="app-level-cursor ${STATE.landing === key ? "is-landing" : ""}" style="left:${levelX(level, range)}px"></span>
       <span class="app-level-end app-number" style="left:0">${range[0]}</span><span class="app-level-end app-number" style="left:${LEVEL_TRACK_WIDTH}px">${range[1]}</span>
     </div>
     ${open ? changesWindow(record, level, { opening: STATE.changesOpening }) : ""}
@@ -66,12 +66,57 @@ ACTIONS["level-go"] = element => {
   setBandLevel(key, Number(element.dataset.level));
   return true;
 };
+// The level under the pointer on the track of a band.
+function levelAt(track, key, clientX) {
+  const [low, high] = bandRange(key);
+  const box = track.getBoundingClientRect();
+  const ratio = Math.min(1, Math.max(0, (clientX - box.left) / box.width));
+  return Math.round(low + ratio * (high - low));
+}
 ACTIONS["level-track"] = (element, event) => {
   const key = bandOf(element);
   if (key === undefined) return false;
-  const [low, high] = bandRange(key);
-  const box = element.getBoundingClientRect();
-  const ratio = Math.min(1, Math.max(0, (event.clientX - box.left) / box.width));
-  setBandLevel(key, Math.round(low + ratio * (high - low)));
+  setBandLevel(key, levelAt(element, key, event.clientX));
   return true;
 };
+
+// Dragging the cursor (2g2): its ghost stays grey where it was, the cursor follows the pointer from
+// level to level, lifted, and the level counts in its box; ◀ ▶ and « N changes », still those of
+// the level left, fade; the page draws again once it is set down, the cursor landing with a small
+// motion.
+STATE.landing = false;
+AFTER_RENDER.push(() => { STATE.landing = false; });
+// The click that ends a drag isn't a click on the track.
+let droppedAt = -Infinity;
+document.addEventListener("click", event => {
+  if (performance.now() - droppedAt < 100) event.stopPropagation();
+}, true);
+
+document.getElementById("sheet").addEventListener("pointerdown", event => {
+  const cursor = event.target.closest(".app-level-cursor");
+  const key = cursor && bandOf(cursor);
+  if (!key || event.button !== 0) return;
+  event.preventDefault();
+  const track = cursor.parentElement;
+  const number = cursor.closest(".app-level").querySelector(".app-level-number");
+  let level = bandLevel(key);
+  cursor.insertAdjacentHTML("beforebegin", `<span class="app-level-ghost" style="left:${cursor.style.left}"></span>`);
+  cursor.classList.add("is-dragged");
+  cursor.closest(".app-level").classList.add("is-dragging");
+  cursor.setPointerCapture(event.pointerId);
+  const move = moved => {
+    level = levelAt(track, key, moved.clientX);
+    cursor.style.left = `${levelX(level, bandRange(key))}px`;
+    number.textContent = level;
+  };
+  const drop = () => {
+    cursor.removeEventListener("pointermove", move);
+    droppedAt = performance.now();
+    setBandLevel(key, level);
+    STATE.landing = key;
+    renderSheet();
+  };
+  cursor.addEventListener("pointermove", move);
+  cursor.addEventListener("pointerup", drop, { once: true });
+  cursor.addEventListener("pointercancel", drop, { once: true });
+});
