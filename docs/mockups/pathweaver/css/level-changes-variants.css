@@ -147,8 +147,8 @@
    leads in place of its detail, with or without a chevron (H5, H6). */
 .app-wv-links li { cursor: pointer; transition: background .15s; }
 .app-wv-leads { display: none; flex: none; align-items: center; gap: 3px; margin-left: auto; font-size: 11px; font-weight: 600; color: var(--accent); white-space: nowrap; }
-/* The chevrons on the middle of the lowercase letters of where the row leads, on a whole pixel. */
-.app-wv-leads .app-icon { position: relative; top: 1px; }
+/* The chevrons on the middle of the letters of where the row leads, tuned by eye (« Chevron offset »). */
+.app-wv-leads .app-icon { position: relative; top: var(--chevron-offset, 1px); }
 .app-wv-links li:hover { background: color-mix(in srgb, var(--on-band) 8%, transparent); }
 .app-wv-links li:hover .app-wv-detail { display: none; }
 .app-wv-links li:hover .app-wv-leads { display: flex; }

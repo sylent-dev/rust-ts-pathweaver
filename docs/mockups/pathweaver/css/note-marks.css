@@ -6,7 +6,7 @@
 .app-note-rows .app-wv-sign { color: var(--on-band-weak); }
 
 /* The mark of a note on the middle of the letters beside it (the owner, 2026-11-19: N2 sat too high):
-   an icon sits on the baseline by its bottom, so it goes down by « Note offset », tuned by eye; in the
-   column of the signs, where the icon is a block, by moving it. */
-.app-wv-sign > svg { position: relative; top: calc(var(--note-offset, -2px) * -1); }
-.app-changes-note { vertical-align: var(--note-offset, -2px); }
+   an icon sits on the baseline by its bottom, so it goes down by 2 px, tuned by the owner (2026-11-19); in
+   the column of the signs, where the icon is a block, by moving it. */
+.app-wv-sign > svg { position: relative; top: 2px; }
+.app-changes-note { vertical-align: -2px; }

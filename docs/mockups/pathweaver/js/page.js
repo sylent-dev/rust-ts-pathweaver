@@ -51,8 +51,8 @@ const VARIANTS = {
   // kept, a shade and where it leads in place of its detail, the arrow « → » set aside.
   rowHover: { label: "Row hover", select: true, fallback: "plain", options: { plain: "H4 · where it leads, no mark",
     chevron: "H5 · where it leads, a chevron", double: "H6 · where it leads, a double chevron" } },
-  // How far the mark of a note sits under the baseline of its text, tuned by eye (2g3).
-  noteOffset: { label: "Note offset", range: { min: -6, max: 2, step: 0.5 }, variable: "--note-offset", unit: "px", fallback: "-2" },
+  // How far the chevrons of where a row leads sit under the middle of its text, tuned by eye (2g3).
+  chevronOffset: { label: "Chevron offset", range: { min: -2, max: 3, step: 0.5 }, variable: "--chevron-offset", unit: "px", fallback: "1" },
   gemSize: { label: "Gem size", range: { min: 6, max: 20, step: 1 }, variable: "--gem-mark-size", unit: "px", fallback: "10" },
 };
 
