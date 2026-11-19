@@ -39,6 +39,8 @@ const VARIANTS = {
     "#22c55e": "Vivid green", "#4d9e6a": "Moss", "#7cc79a": "Soft sage" } },
   // The corners of the tile a button of the bar of the tree shows on hover (the owner, 2026-11-19).
   hoverRadius: { label: "Hover radius", range: { min: 0, max: 14, step: 1 }, variable: "--tc-hover-radius", unit: "px", fallback: "8" },
+  // The marks of the legend of the tree against the middle of the lowercase letters (the owner, 2026-11-19).
+  legendOffset: { label: "Legend offset", range: { min: -2, max: 2, step: 0.5 }, variable: "--tc-legend-offset", unit: "px", fallback: "0" },
   // The width of the frame of a small passive from which the icons replace the shapes (2i, the owner,
   // 2026-11-19), tuned by eye on the tree of the Overview: 2 px (the owner); 0: always the icons.
   iconsFrom: { label: "Icons from", range: { min: 0, max: 20, step: 1 }, variable: "--tree-icons-from", unit: "px", fallback: "2" },

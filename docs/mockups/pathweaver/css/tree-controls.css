@@ -16,8 +16,13 @@
 /* The legend at the top: one line of small words over a short gradient, the mirror of the bar. */
 .tc-shade { position: absolute; left: 0; right: 0; top: 0; display: flex; justify-content: center; padding: 8px 12px 14px; background: linear-gradient(to bottom, color-mix(in srgb, var(--band-deep) 90%, transparent) 0%, transparent 100%); }
 .tc-legend { display: flex; flex-wrap: wrap; justify-content: center; gap: 4px 14px; font-size: 12px; }
-.tc-legend span { display: inline-flex; align-items: center; gap: 6px; white-space: nowrap; }
-.tc-line { display: inline-block; width: 16px; height: 0; border-top: 2px solid var(--tree-edge-taken); }
+/* Each mark on the middle of the lowercase letters beside it (vertical-align: middle), not on the box of
+   the line, moved by the slider « Legend offset » to be tuned by eye. */
+.tc-legend span { white-space: nowrap; }
+.tc-legend i { display: inline-block; margin-right: 6px; vertical-align: middle; transform: translateY(var(--tc-legend-offset, 0px)); }
+.tc-line { width: 16px; height: 0; border-top: 2px solid var(--tree-edge-taken); }
+/* The ring of what is new is drawn outside its dot: room for it on both sides. */
+.tc-legend .app-dot.is-new { margin: 0 10px 0 4px; }
 .tc-line.is-set1 { border-color: var(--tree-set-1); }
 .tc-line.is-set2 { border-color: var(--tree-set-2); }
 
