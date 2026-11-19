@@ -57,6 +57,13 @@ CHANGE_CASES = {
     "respec": ("maxroll-aer0-ice-shot-amazon.build", 65),
     "swap": ("utkarshbehre-spark-comet.build", 71),
 }
+# The cases of the level band (2g2): a snapshot of a character, the same at every level; a guide that
+# covers part of the levels, its track from its lowest to its highest level (65–100: the only one of the
+# corpus; the files of Mobalytics named « lvl 15-32 » say 1–100 in their entries).
+BAND_CASES = {
+    "snapshot": "pobr-summoner-lv98.build",
+    "partial": "maxroll-cptn-garbage-flameblast-gemling-mapping.build",
+}
 # The portraits of the builds shown: the ascendancy id and its class sprite.
 PORTRAITS = {"Sorceress1": "sorceress", "Sorceress3": "sorceress", "Mercenary3": "mercenary", "Ranger1": "ranger",
              "Huntress1": "huntress", "Warrior1": "warrior", "Warrior2": "warrior"}
@@ -297,7 +304,15 @@ def changes_at(build, level, tree, names, gems):
 
 def changes_of(build, levels, tree, names, gems):
     found = {level: changes_at(build, level, tree, names, gems) for level in levels}
-    return {"name": build["name"], "levels": {level: value for level, value in found.items() if value}}
+    return {"name": build["name"], "range": level_range(build),
+            "levels": {level: value for level, value in found.items() if value}}
+
+
+def band_of(build, tree, names, gems):
+    """What changes at every level of a build, from the one after its lowest to its highest (2g2):
+    at its lowest level, nothing came before it to compare with; a snapshot has none."""
+    low, high = level_range(build) or (1, 1)
+    return changes_of(build, range(low + 1, high + 1), tree, names, gems)
 
 
 def portrait(cache, ascendancy, sprite):
@@ -345,10 +360,12 @@ def main():
         "open": [{"name": b["name"], "ascendancy": ascendancies.get(b.get("ascendancy"), {}).get("name", ""),
                   "portrait": (b.get("ascendancy") or "").lower()} for b in builds],
         "library": [library_row(b, ascendancies) for b in [*builds, *map(read, LIBRARY)]],
-        # What changes at a level, by category (2g): the build shown at every level, and two cases
-        # of the corpus a band must hold, a respec and the swap of a leveling build to its end.
+        # What changes at a level, by category (2g): the build shown and the cases of the band (2g2) at
+        # every level, and two cases of the corpus a window must hold, a respec and the swap of a
+        # leveling build to its end.
         "changes": {
-            "shown": changes_of(builds[0], range(1, 101), tree, names, gems),
+            "shown": band_of(builds[0], tree, names, gems),
+            **{key: band_of(read(name), tree, names, gems) for key, name in BAND_CASES.items()},
             **{key: changes_of(read(name), [level], tree, names, gems) for key, (name, level) in CHANGE_CASES.items()},
         },
     })

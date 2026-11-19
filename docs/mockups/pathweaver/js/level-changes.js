@@ -59,9 +59,12 @@ function changesWindow(record, level, { opening = false, style = "" } = {}) {
   </div>`;
 }
 
-ACTIONS["changes-toggle"] = () => {
-  STATE.changesOpen = !STATE.changesOpen;
-  STATE.changesOpening = STATE.changesOpen;
+// STATE.changesOpen: the key of the band whose window is open, or false.
+ACTIONS["changes-toggle"] = element => {
+  const key = element.closest("[data-band]")?.dataset.band;
+  if (key === undefined) return false;
+  STATE.changesOpen = STATE.changesOpen === key ? false : key;
+  STATE.changesOpening = STATE.changesOpen !== false;
   return true;
 };
 // The window grows out of its link when it opens, not each time the level moves under it.
