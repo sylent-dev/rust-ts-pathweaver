@@ -37,7 +37,9 @@ const levelStep = (direction, target) => `<button type="button" class="app-level
 const levelSteps = (previous, next, record, open, snapshot = false) =>
   `<div class="app-level-steps">${levelStep("previous", previous)}${snapshot ? "" : changesLink(record, open)}${levelStep("next", next)}</div>`;
 
-function levelBand({ key = "shown", window = false } = {}) {
+// `focusShown` draws the cursor as it looks with the focus, without taking it (the section of the
+// focus, sections/level-band.js).
+function levelBand({ key = "shown", window = false, focusShown = false } = {}) {
   const level = bandLevel(key);
   const range = bandRange(key);
   const all = markers(key);
@@ -51,7 +53,8 @@ function levelBand({ key = "shown", window = false } = {}) {
       <span class="app-level-line"></span>
       ${snapshot ? '<span class="app-level-note">A snapshot: the same at every level</span>' : ""}
       ${all.map(marker => `<span class="app-level-marker" style="left:${levelX(marker, range)}px" title="${markerTitle(key, marker)}"></span>`).join("")}
-      <span class="app-level-cursor ${STATE.landing === key ? "is-landing" : ""}" style="left:${levelX(level, range)}px"></span>
+      <span class="app-level-cursor ${STATE.landing === key ? "is-landing" : ""} ${focusShown ? "is-focus-shown" : ""}" style="left:${levelX(level, range)}px"
+        role="slider" tabindex="0" aria-label="Level" aria-valuemin="${range[0]}" aria-valuemax="${range[1]}" aria-valuenow="${level}"></span>
       <span class="app-level-end app-number" style="left:0">${range[0]}</span><span class="app-level-end app-number" style="left:${LEVEL_TRACK_WIDTH}px">${range[1]}</span>
     </div>
     ${open ? changesWindow(record, level, { opening: STATE.changesOpening }) : ""}
@@ -119,4 +122,22 @@ document.getElementById("sheet").addEventListener("pointerdown", event => {
   cursor.addEventListener("pointermove", move);
   cursor.addEventListener("pointerup", drop, { once: true });
   cursor.addEventListener("pointercancel", drop, { once: true });
+});
+
+// The keyboard (2g2): Tab reaches the cursor, ← and → go to the marker before and after, as ◀ and
+// ▶ do (specs.md, The level). The page draws again, and the cursor drawn in the place of the one
+// that had the focus takes it back.
+document.getElementById("sheet").addEventListener("keydown", event => {
+  const cursor = event.target.closest?.(".app-level-cursor");
+  const key = cursor && bandOf(cursor);
+  if (!key || (event.key !== "ArrowLeft" && event.key !== "ArrowRight")) return;
+  event.preventDefault();
+  const level = bandLevel(key);
+  const all = markers(key);
+  const target = event.key === "ArrowLeft" ? all.filter(marker => marker < level).at(-1) : all.find(marker => marker > level);
+  if (target === undefined) return;
+  const index = [...document.querySelectorAll(".app-level-cursor")].indexOf(cursor);
+  setBandLevel(key, target);
+  renderSheet();
+  document.querySelectorAll(".app-level-cursor")[index]?.focus({ preventScroll: true });
 });

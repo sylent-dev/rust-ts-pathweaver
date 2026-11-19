@@ -33,6 +33,8 @@ const VARIANTS = {
   size: { label: "Size", range: { min: 6, max: 200, step: 2 }, variable: "--texture-size", unit: "px", fallback: "24" },
   // The width of the windows of the home page (2l): the minimum of specs.md, half a 1920-pixel screen, and a wide
   // window of the owner's screen.
+  // The look of the cursor of the level band when it has the focus of the keyboard (2g2).
+  levelFocus: { label: "Cursor focus", options: { ring: "F1 · Ring", accent: "F2 · Accent", brackets: "F3 · Brackets" }, fallback: "ring" },
   homeWidth: { label: "Home width", options: { 900: "900 px", 960: "960 px", 1600: "1,600 px" }, fallback: "960" },
 };
 

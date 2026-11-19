@@ -40,3 +40,10 @@
 
 /* A snapshot (2g2): its track says why it has no marker, over the line, from its start. */
 .app-level-note { position: absolute; top: 18px; left: 0; font-size: 11px; color: var(--on-band-weak); white-space: nowrap; }
+
+/* The focus of the keyboard on the cursor (2g2), three looks to choose (Cursor focus): F1 a ring in
+   the accent; F2 the cursor itself in the accent, wider; F3 two thin bars of the accent on its sides. */
+.app-level-cursor:focus { outline: none; }
+:root[data-level-focus="ring"] .app-level-cursor:is(:focus-visible, .is-focus-shown) { outline: 2px solid var(--accent); outline-offset: 3px; }
+:root[data-level-focus="accent"] .app-level-cursor:is(:focus-visible, .is-focus-shown) { width: 6px; margin-left: -3px; background: var(--accent); }
+:root[data-level-focus="brackets"] .app-level-cursor:is(:focus-visible, .is-focus-shown) { box-shadow: -6px 0 0 -1px var(--accent), 6px 0 0 -1px var(--accent); }
