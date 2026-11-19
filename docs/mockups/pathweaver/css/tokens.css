@@ -94,6 +94,12 @@
   --gem-int: #ced4da;
   --gem-none: #ced4da;
   --gem-size: 11px;
+  --gem-mark-size: 10px;   /* the mark of a gem beside a text of 12 px (2g3, the owner, 2026-11-19) */
+  /* The colours of a change (2g3, the owner, 2026-11-19): what comes, what is replaced, what goes;
+     the rise, the warning and the fall of Exile Market, tuned together on a blue night. */
+  --change-added: #5fcf80;
+  --change-swapped: #f0b85a;
+  --change-gone: #e66a5c;
   --gem-radius: 50%;
   --gem-rotate: 0deg;
   --gem-clip: none;
@@ -172,7 +178,9 @@
   --new-fill: #60a5fa24;
   --track: #2a3a5c; --track-width: 2px; --marker: #4b5f86;
   --slot-empty: #111a2a; --slot-fill: #1c2840; --slot-radius: 8px;
-  --gem-str: #f87171; --gem-dex: #2dd4bf; --gem-int: #60a5fa; --gem-none: #8393ad;
+  /* The attributes as in the game, those of Exile Market (2g3, the owner, 2026-11-19): a true green
+     for dexterity, apart from the green of what comes. */
+  --gem-str: #e0473f; --gem-dex: #3fbf4f; --gem-int: #5aa7f0; --gem-none: #8393ad;
   --gem-size: 9px; --gem-radius: 2px; --gem-line: none;
   --tree-background: transparent;
   --tree-edge: #18223a; --tree-edge-taken: #60a5fa; --tree-edge-width: 1.8;

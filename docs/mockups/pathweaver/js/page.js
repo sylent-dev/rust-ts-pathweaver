@@ -34,26 +34,6 @@ const VARIANTS = {
   // The width of the windows of the home page (2l): the minimum of specs.md, half a 1920-pixel screen, and a wide
   // window of the owner's screen.
   homeWidth: { label: "Home width", options: { 900: "900 px", 960: "960 px", 1600: "1,600 px" }, fallback: "960" },
-  // The case the twelve layouts of the window of what changes show (2g3): a respec, the swap of a
-  // leveling build to its end, the build of the page at its level.
-  changesCase: { label: "Case", options: { respec: "A respec", swap: "The swap to the end", shown: "The build of the page" }, fallback: "respec" },
-  // The mark of a gem (2g3, js/gem-marks.js): twelve marks and the square of 2g, applied to every
-  // window, and its size.
-  gem: { label: "Gem", select: true, fallback: "g1", options: { ...Object.fromEntries(Array.from({ length: 12 }, (_, index) => [`g${index + 1}`, `G${index + 1}`])), square: "The square of 2g" } },
-  // The colours of W1 and W3 (2g3, the owner, 2026-11-19): of a change, green for what comes,
-  // yellow for what is replaced, red for what goes.
-  changeColour: { label: "Change colour", select: true, fallback: "signs", options: { none: "None, as before", signs: "C1 · the signs",
-    words: "C2 · the words of the line", shade: "C3 · a shade behind the line", bar: "C4 · a bar on the left of the line" } },
-  attrColours: { label: "Attributes", select: true, fallback: "pathweaver", options: { pathweaver: "Pathweaver (teal dexterity)", exile: "Exile Market (green dexterity)" } },
-  // The mark of a note of the author (2g3, js/note-marks.js).
-  noteMark: { label: "Note", select: true, fallback: "n2", options: { ...Object.fromEntries(Array.from({ length: 12 }, (_, index) => [`n${index + 1}`, `N${index + 1}`])), page: "The page of 2g" } },
-  // The hover of a row of W1, which leads to the tab of its change (2g3, the owner, 2026-11-19): H4
-  // kept, a shade and where it leads in place of its detail, the arrow « → » set aside.
-  rowHover: { label: "Row hover", select: true, fallback: "plain", options: { plain: "H4 · where it leads, no mark",
-    chevron: "H5 · where it leads, a chevron", double: "H6 · where it leads, a double chevron" } },
-  // How far the chevrons of where a row leads sit under the middle of its text, tuned by eye (2g3).
-  chevronOffset: { label: "Chevron offset", range: { min: -2, max: 3, step: 0.5 }, variable: "--chevron-offset", unit: "px", fallback: "1" },
-  gemSize: { label: "Gem size", range: { min: 6, max: 20, step: 1 }, variable: "--gem-mark-size", unit: "px", fallback: "10" },
 };
 
 // The styles a section shows side by side: the style of the page alone, Frost Night by default, the
@@ -136,8 +116,7 @@ document.getElementById("tabs").addEventListener("input", event => {
   if (VARIANTS[variant].range) event.target.nextElementSibling.value = chosen[variant] + (VARIANTS[variant].unit ?? "");
   keepInAddress();
   applyVariables();
-  // A list may change what the windows hold (the mark of a gem), not only
-  // their colours: the windows are drawn again.
+  // A list may change what the windows hold, not only their colours: the windows are drawn again.
   if (VARIANTS[variant].select) renderSheet();
 });
 // The controls of the windows: an element with data-action="name" calls ACTIONS[name](element, event),

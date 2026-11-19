@@ -1,15 +1,2 @@
-/* The mark of a gem (2g3, js/gem-marks.js): its size set by the slider « Gem size », centred on the
-   lowercase letters beside it. */
-.app-gem-mark { display: inline-block; flex: none; width: var(--gem-mark-size, 10px); height: var(--gem-mark-size, 10px); margin: 0 6px 2px 0; vertical-align: middle; overflow: visible; }
-.app-gem-mark.is-glowing { filter: drop-shadow(0 0 2px currentColor); }
-
-/* The board of a mark (sections/gem-marks.js): a skill and a support in the four colours at five
-   sizes, then rows of a window. */
-.app-gem-board { width: 460px; padding: 14px 16px 16px; background: var(--band-image), var(--band-deep); color: var(--on-band); font-size: 13px; }
-.app-gem-sizes { display: grid; grid-template-columns: 58px repeat(5, auto); align-items: center; gap: 10px 12px; margin-bottom: 14px; }
-.app-gem-sizes span { font-size: 11px; color: var(--on-band-weak); }
-.app-gem-cell { display: flex; align-items: center; gap: 3px; }
-.app-gem-cell .app-gem-mark { margin: 0; }
-.app-gem-rows { margin: 0; padding: 10px 0 0; list-style: none; border-top: 1px solid var(--divider); }
-.app-gem-rows li { display: flex; gap: 8px; padding: 3px 0; line-height: 1.35; }
-.app-gem-rows .app-wv-detail { color: var(--on-band-weak); }
+/* The mark of a gem (2g3, js/gem-marks.js): 10 px, centred on the lowercase letters beside it. */
+.app-gem-mark { display: inline-block; flex: none; width: var(--gem-mark-size); height: var(--gem-mark-size); margin: 0 6px 1px 0; vertical-align: middle; }
