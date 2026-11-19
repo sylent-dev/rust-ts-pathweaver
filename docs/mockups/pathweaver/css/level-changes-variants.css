@@ -1,0 +1,124 @@
+/* Twelve layouts of the window of what changes (2g3, js/level-changes-variants.js), on the window of
+   css/level-changes.css; removed once one is kept (2g4). */
+
+.app-wv-case { position: relative; overflow: visible; }
+.app-wv-page { height: 480px; }
+.app-wv { width: 400px; max-height: 460px; padding: 10px 0 12px; }
+.app-wv button { font: inherit; }
+.app-wv ul { margin: 0; padding: 0; list-style: none; }
+.app-wv b { font-weight: 600; }
+.app-wv .app-wv-detail { color: var(--on-band-weak); }
+.app-wv .is-gone, .app-wv .is-gone b { color: var(--on-band-weak); }
+.app-wv-nothing { margin: 6px 16px; color: var(--on-band-weak); }
+.app-wv-sign { flex: none; width: 12px; text-align: center; color: var(--on-band-weak); }
+
+/* A line per change (W1, W5, W12): the name cut to fit, what it hangs on at the right. */
+.app-wv-lines li { display: flex; align-items: baseline; gap: 8px; padding: 2px 16px; font-size: 12px; line-height: 1.4; }
+.app-wv-lines .app-wv-name { min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.app-wv-lines .app-wv-detail { flex: 0 1 auto; min-width: 0; margin-left: auto; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-size: 11px; }
+
+/* W1: one line each, a tag for its category. */
+.app-wv-1 { width: 440px; }
+.app-wv-head { margin: 2px 16px 6px; font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: var(--on-band-weak); }
+.app-wv-tag { flex: none; width: 50px; font-size: 10px; letter-spacing: .08em; text-transform: uppercase; color: var(--on-band-weak); }
+
+/* W2: comes, replaced, goes, one under the other. */
+.app-wv-2 { width: 380px; }
+.app-wv-block { padding: 8px 16px 4px; }
+.app-wv-block li { padding: 3px 0; line-height: 1.35; }
+
+/* W3: the category in a column on the left. */
+.app-wv-3 { width: 440px; }
+.app-wv-gutter { display: grid; grid-template-columns: 92px 1fr; row-gap: 12px; margin: 4px 0 0; padding: 0 16px; }
+.app-wv-gutter dt { display: flex; gap: 6px; padding-top: 4px; font-size: 11px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: var(--on-band-weak); }
+.app-wv-gutter dt span { color: var(--on-band); opacity: .6; letter-spacing: 0; }
+.app-wv-gutter dd { margin: 0; }
+.app-wv-gutter li { display: flex; gap: 8px; padding: 3px 0; line-height: 1.35; }
+.app-wv-gutter li.app-wv-skill { padding-top: 6px; font-size: 12px; color: var(--on-band-weak); }
+.app-wv-gutter li.app-wv-skill:first-child { padding-top: 3px; }
+.app-wv-gutter li.app-wv-under { padding-left: 12px; }
+
+/* W4: two columns, what comes and what goes. */
+.app-wv-4 { width: 600px; padding: 10px 16px 12px; }
+.app-wv-pair { display: grid; grid-template-columns: 1fr 20px 1fr; gap: 6px; padding: 3px 0; line-height: 1.35; }
+.app-wv-columns { margin-bottom: 2px; padding-bottom: 6px; border-bottom: 1px solid var(--divider); font-size: 11px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; }
+.app-wv-4 .app-changes-title { margin: 10px 0 2px; }
+.app-wv-swap { text-align: center; color: var(--on-band-weak); }
+.app-wv-cell.is-before b { font-weight: 400; color: var(--on-band-weak); }
+.app-wv-cell .app-wv-detail { display: block; font-size: 11px; }
+.app-wv-4 .app-changes-foot { margin: 10px 0 0; }
+
+/* W5: a line of counts per category, a click opens its list. */
+.app-wv-5 { width: 440px; padding: 0 0 10px; }
+.app-wv-counts { display: flex; gap: 1px; margin-bottom: 8px; }
+.app-wv .app-wv-count { flex: 1; display: flex; flex-direction: column; align-items: flex-start; gap: 6px; padding: 12px 14px 10px; background: var(--band); text-align: left; transition: background .2s; }
+.app-wv .app-wv-count:hover, .app-wv .app-wv-count.is-open { background: color-mix(in srgb, var(--on-band) 10%, var(--band)); }
+.app-wv .app-wv-count.is-open { box-shadow: inset 0 -2px var(--accent); }
+.app-wv-figures { display: flex; gap: 7px; font: 800 20px/1 var(--brand-font); letter-spacing: -.03em; font-variant-numeric: tabular-nums; }
+.app-wv-label { font-size: 10px; letter-spacing: .1em; text-transform: uppercase; color: var(--on-band-weak); }
+
+/* W6: its own ◀ ▶ at its top. */
+.app-wv-6 { width: 380px; padding-top: 0; }
+.app-wv-nav { display: flex; height: 44px; margin-bottom: 4px; background: var(--band); }
+.app-wv .app-wv-step { display: flex; align-items: center; gap: 6px; padding: 0 14px; font-size: 12px; color: var(--on-band-weak); transition: background .2s; }
+.app-wv .app-wv-step:not(:disabled):hover { background: color-mix(in srgb, var(--on-band) 10%, var(--band)); }
+.app-wv-here { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; font-size: 11px; color: var(--on-band-weak); }
+.app-wv-here b { font-size: 13px; color: var(--on-band); }
+.app-wv-6 .app-wv-detail { font-size: 12px; }
+
+/* W7: a tile per category, its big count over its list. */
+.app-wv-7 { width: 600px; padding: 0; }
+.app-wv-tiles { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; }
+.app-wv-tile { padding: 14px 16px 12px; background: var(--band); }
+.app-wv-big { display: flex; gap: 10px; margin: 0 0 8px; font: 800 34px/1 var(--brand-font); letter-spacing: -.05em; font-variant-numeric: tabular-nums; }
+.app-wv-tile li { padding: 2px 0; font-size: 12px; line-height: 1.35; }
+
+/* W8: a diff. */
+.app-wv-8 { width: 460px; font-size: 12px; }
+.app-wv-hunk { margin: 8px 16px 2px; font: 11px var(--font-code); color: var(--on-band-weak); }
+.app-wv-diff li { display: flex; align-items: baseline; gap: 8px; padding: 2px 16px; line-height: 1.4; }
+.app-wv-diff .app-wv-sign { font-family: var(--font-code); }
+.app-wv-diff-plus { background: color-mix(in srgb, var(--on-band) 7%, transparent); }
+.app-wv-diff-minus, .app-wv-diff-minus b { color: var(--on-band-weak); }
+.app-wv-diff-minus .app-wv-name { text-decoration: line-through; }
+.app-wv-diff .app-wv-detail { margin-left: auto; white-space: nowrap; font-size: 11px; }
+
+/* W9: a drawer the width of the band, the categories side by side. */
+.app-wv-9 { left: 0; width: 960px; max-height: 320px; padding: 0; }
+.app-wv-drawer { display: flex; }
+.app-wv-drawer-head { flex: none; display: flex; flex-direction: column; align-items: center; gap: 2px; width: 124px; margin: 0; padding-top: 14px; font-size: 11px; color: var(--on-band-weak); }
+.app-wv-drawer-head b { font-size: 13px; color: var(--on-band); }
+.app-wv-drawer section { flex: 1; min-width: 0; padding: 12px 14px; border-left: 1px solid var(--divider); }
+.app-wv-drawer li { display: flex; gap: 6px; padding: 2px 0; font-size: 12px; line-height: 1.35; }
+.app-wv-drawer .app-wv-detail { display: block; font-size: 11px; }
+
+/* W10: in sentences. */
+.app-wv-10 { width: 400px; padding: 12px 18px 14px; font-size: 14px; line-height: 1.55; color: var(--on-band-weak); }
+.app-wv-kicker { margin: 0 0 8px; font-size: 11px; letter-spacing: .12em; text-transform: uppercase; }
+.app-wv-sentence { margin: 0 0 8px; }
+.app-wv-10 b { color: var(--on-band); }
+
+/* W11: a receipt, the colours of the band inverted, its foot torn. */
+.app-wv-11 { width: 340px; padding: 16px 18px 24px; background: var(--on-band); color: var(--band-deep); font: 12px/1.5 var(--font-code);
+  mask: conic-gradient(from -45deg at bottom, #0000, #000 1deg 89deg, #0000 90deg) 50% / 12px 100%; }
+.app-wv-11 .is-gone { opacity: .55; text-decoration: line-through; }
+.app-wv-11 .is-gone, .app-wv-11 .is-gone b { color: inherit; }
+.app-wv-receipt-head { margin: 0 0 8px; text-align: center; font-weight: 700; letter-spacing: .2em; }
+.app-wv-receipt-rule { margin: 10px 0 4px; padding-top: 6px; border-top: 1px dashed; letter-spacing: .15em; opacity: .7; }
+.app-wv-11 li, .app-wv-receipt-total { display: flex; align-items: baseline; gap: 6px; }
+.app-wv-11 li i, .app-wv-receipt-total i { flex: 1; min-width: 12px; border-bottom: 1px dotted; opacity: .5; }
+.app-wv-11 li > span:first-child { min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.app-wv-11 li > span:last-child { flex: none; }
+.app-wv-receipt-total { margin: 10px 0 0; padding-top: 8px; border-top: 1px dashed; font-weight: 700; }
+
+/* W12: the gear on the slots of a character. */
+.app-wv-12 { width: 620px; padding: 14px 16px; }
+.app-wv-doll-row { display: flex; gap: 16px; }
+.app-wv-doll { flex: none; display: grid; grid-template-columns: repeat(5, 48px); grid-template-rows: repeat(4, 48px); gap: 3px;
+  grid-template-areas: "wpn trk helm . off" "wpn rng1 body amu off" "glo rng2 body . boo" "wpn2 fla belt cha off2"; }
+.app-wv-slot { position: relative; display: flex; align-items: flex-end; justify-content: center; padding-bottom: 4px; background: var(--band); font-size: 9px; color: var(--on-band-weak); }
+.app-wv-slot.is-changed { background: color-mix(in srgb, var(--on-band) 16%, var(--band)); color: var(--on-band); }
+.app-wv-slot b { position: absolute; top: 6px; left: 0; right: 0; text-align: center; font-size: 14px; }
+.app-wv-12 .app-wv-lines { flex: 1; min-width: 0; }
+.app-wv-12 .app-wv-lines li { padding: 2px 0; }
+.app-wv-12 .app-wv-doll-rest { margin-top: 12px; padding-top: 8px; border-top: 1px solid var(--divider); }
