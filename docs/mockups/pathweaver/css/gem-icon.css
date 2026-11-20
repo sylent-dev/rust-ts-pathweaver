@@ -68,4 +68,6 @@
 
 /* The section of the mock-up (sections/gem-icon.js): the cards drawn in place, three per way. */
 .gi-cards { display: flex; flex-direction: column; gap: 22px; width: 340px; padding: 22px 18px; background: var(--page); }
-.app-gem-hover.is-static { position: relative; z-index: auto; transition: none; }
+/* Visible by itself, not by is-shown, which the hover scripts take off every card of the page (a turn of the
+   wheel hides the cards over the tree, js/tree-hover.js). */
+.app-gem-hover.is-static { position: relative; z-index: auto; opacity: 1; visibility: visible; transition: none; }

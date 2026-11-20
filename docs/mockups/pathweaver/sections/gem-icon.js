@@ -13,7 +13,7 @@ const GEM_ICON_WAYS = {
 // A card drawn in place, as it shows on hover.
 function staticGemCard(gem, level, way) {
   const [first, second = first] = gemColoursOf(gem);
-  return `<div class="app-hover app-gem-hover is-shown is-static" data-icon="${way}" style="--gem:${first};--gem-2:${second}">${gemHoverHtml(gem, level)}</div>`;
+  return `<div class="app-hover app-gem-hover is-static" data-icon="${way}" style="--gem:${first};--gem-2:${second}">${gemHoverHtml(gem, level)}</div>`;
 }
 
 addSection(() => {
