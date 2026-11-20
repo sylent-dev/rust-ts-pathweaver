@@ -6,61 +6,29 @@
 // too: the names of the supports written out would add about 40 lines; the Skills tab lists them (2k).
 // The skill a spirit gem triggers (Comet under Cast on Critical) is a skill, indented under it.
 //
-// What is new at the level: a skill that starts says « new » after its name; a support that comes onto
-// a skill already there has a mark that stays (the list « New support », three to choose) and a flash
-// when the level changes (flashNewGems): the flash alone is missed by whoever opens the build at its
-// level or looks at the tree while it plays (the owner, 2026-11-20, the underline of N2 set aside).
+// What is new at the level (the owner, 2026-11-20): no mark in the row, which « New at N » just above
+// already says in words; a flash of the new gems when the level changes (flashNewGems), and the gem
+// of a line of « New at N » lit in the row while the pointer is on that line (litFromNewAt). The
+// underline of N2, a halo, « new » and « +N » were set aside.
 
-// Two open decisions, a list each in the header of the mock-up (they apply at once).
-const SKILL_CHOICES = {
-  newSupport: {
-    label: "New support",
-    options: { word: "A · « new » after the name", halo: "B · a halo of the accent", count: "C · « +N » before the marks" },
-    fallback: "word",
-  },
-  spiritMark: {
-    label: "Spirit gem",
-    options: { ring: "The hexagon in a ring", hollow: "The hexagon hollow", core: "Hollow, a core in it", double: "Two hexagons" },
-    fallback: "ring",
-  },
-};
-for (const [key, choice] of Object.entries(SKILL_CHOICES)) {
-  VARIANTS[key] = { ...choice, select: true };
-  chosen[key] = accepts(VARIANTS[key], params.get(key)) ? params.get(key) : choice.fallback;
-}
-
-// The four marks of the spirit gem, a gem that stays on while it reserves spirit.
-Object.assign(GEM_SHAPES, {
-  "spirit-hollow": '<polygon points="8,1.6 13.5,4.8 13.5,11.2 8,14.4 2.5,11.2 2.5,4.8" fill="none" stroke="currentColor" stroke-width="2.2"/>',
-  "spirit-core": '<polygon points="8,1.6 13.5,4.8 13.5,11.2 8,14.4 2.5,11.2 2.5,4.8" fill="none" stroke="currentColor" stroke-width="1.8"/><circle cx="8" cy="8" r="2.4" fill="currentColor"/>',
-  "spirit-ring": '<circle cx="8" cy="8" r="7.1" fill="none" stroke="currentColor" stroke-width="1.4"/><polygon points="8,3.6 11.8,5.8 11.8,10.2 8,12.4 4.2,10.2 4.2,5.8" fill="currentColor"/>',
-  "spirit-double": '<polygon points="8,0.8 14.2,4.4 14.2,11.6 8,15.2 1.8,11.6 1.8,4.4" fill="none" stroke="currentColor" stroke-width="1.3"/><polygon points="8,4.4 11.1,6.2 11.1,9.8 8,11.6 4.9,9.8 4.9,6.2" fill="currentColor"/>',
-});
-
-// The mark of a gem of a row: a support a square on its tip, a skill a hexagon, a spirit gem its own.
-const skillMark = gem => gemMark(gem.colour, gem.kind === "support" ? "support" : gem.kind === "spirit" ? `spirit-${chosen.spiritMark}` : "skill");
-const NEW_WORD = '<span class="app-accent app-skill-new">new</span>';
+// The mark of a gem of a row, in a span that the flash and the light of « New at N » find.
+const skillMark = gem => `<span class="app-skill-gem ${gem.isNew ? "is-new" : ""}" data-gem="${escapeHtml(gem.name)}" title="${escapeHtml(gem.name)}">${gemMark(gem)}</span>`;
 
 // A skill at the level: whether it starts there, its supports (each new when it comes onto the skill
 // at this level), and the skills it triggers apart.
 function skillRow(skill, level) {
   const isNew = startsAt(skill.levels, level);
   const gems = skill.supports.map(gem => ({ ...gem, isNew: !isNew && startsAt(gem.levels, level) }));
-  const supports = gems.filter(gem => gem.kind === "support");
-  return { ...skill, isNew, supports, triggered: gems.filter(gem => gem.kind !== "support"), newSupports: supports.filter(gem => gem.isNew).length };
+  return { ...skill, isNew, supports: gems.filter(gem => gem.kind === "support"), triggered: gems.filter(gem => gem.kind !== "support") };
 }
 
-// The head of a row: its mark, its name, the note of its author, « new ». A gem that starts at the
-// level flashes (is-new) when the level changes.
-const skillHead = (gem, wordToo = false) => `<span class="app-skill-gem ${gem.isNew ? "is-new" : ""}">${skillMark(gem)}</span><span class="app-skill-name">${escapeHtml(gem.name)}</span>${noteMark(Boolean(gem.note))}${gem.isNew || wordToo ? NEW_WORD : ""}`;
-
+// A row: the mark of the skill, its name, the note of its author, the marks of its supports at the
+// right; the skills it triggers under it, each a row that belongs to it (data-skill).
 function skillLine(row) {
-  const choice = chosen.newSupport;
-  const marks = row.supports.map(gem => `<span class="app-skill-support ${gem.isNew ? `is-new ${choice === "halo" ? "is-halo" : ""}` : ""}" title="${escapeHtml(gem.name)}${gem.isNew ? " · new" : ""}">${skillMark(gem)}</span>`).join("");
-  const count = choice === "count" && row.newSupports > 0 ? `<b class="app-accent app-skill-count">+${row.newSupports}</b>` : "";
+  const skill = escapeHtml(row.name);
   const triggered = row.triggered.map(gem =>
-    `<li class="app-skill is-triggered"><span class="app-weak app-skill-hook" aria-hidden="true">↳</span>${skillHead(gem)}</li>`).join("");
-  return `<li class="app-skill">${skillHead(row, choice === "word" && row.newSupports > 0)}<span class="app-skill-supports">${count}${marks}</span></li>${triggered}`;
+    `<li class="app-skill is-triggered" data-skill="${skill}"><span class="app-weak app-skill-hook" aria-hidden="true">↳</span>${skillMark(gem)}<span class="app-skill-name">${escapeHtml(gem.name)}</span>${noteMark(Boolean(gem.note))}</li>`).join("");
+  return `<li class="app-skill" data-skill="${skill}">${skillMark(row)}<span class="app-skill-name">${skill}</span>${noteMark(Boolean(row.note))}<span class="app-skill-supports">${row.supports.map(skillMark).join("")}</span></li>${triggered}`;
 }
 
 function skillList(level) {
@@ -83,3 +51,15 @@ function flashNewGems(list, index) {
   }
 }
 AFTER_RENDER.push(() => document.querySelectorAll(".app-skills").forEach(flashNewGems));
+
+// The gem of a line of « New at N » lit in the rows of its column while the pointer is on the line:
+// the words above, the gem below, read as one.
+function litFromNewAt(event) {
+  const line = event.target.closest?.(".app-new-lines li[data-gem]");
+  if (!line) return;
+  const lit = event.type === "mouseover";
+  const selector = `.app-skill[data-skill="${CSS.escape(line.dataset.on)}"] [data-gem="${CSS.escape(line.dataset.gem)}"]`;
+  line.closest(".app-side")?.querySelectorAll(selector).forEach(gem => gem.classList.toggle("is-lit", lit));
+}
+document.addEventListener("mouseover", litFromNewAt);
+document.addEventListener("mouseout", litFromNewAt);

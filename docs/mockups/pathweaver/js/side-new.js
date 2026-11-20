@@ -10,7 +10,11 @@ const NEW_LINES = 6;
 
 // A line of the window (W1) without its category: its sign, its name, what it hangs on at the right,
 // a link to the tab that shows it.
-const newLine = change => `<li class="${CHANGE_KINDS[change.sign]}" data-action="changes-go" data-tab="${changeTab(change)}" title="Show it in ${CHANGE_TABS[changeTab(change)]}">
+// A gem that comes carries its name and the skill it comes onto, so that its row lights it
+// (litFromNewAt, js/side-skills.js).
+const newLineGem = change => change.sign === "+" && (change.category === "skill" || change.category === "support")
+  ? ` data-gem="${escapeHtml(change.name)}" data-on="${escapeHtml(change.skill ?? change.name)}"` : "";
+const newLine = change => `<li class="${CHANGE_KINDS[change.sign]}"${newLineGem(change)} data-action="changes-go" data-tab="${changeTab(change)}" title="Show it in ${CHANGE_TABS[changeTab(change)]}">
   <span class="app-changes-sign">${changeSign(change)}</span>
   <span class="app-changes-name">${changeName(change)}</span>
   <span class="app-changes-right"><span class="app-changes-leads">${CHANGE_TABS[changeTab(change)]}</span><span class="app-changes-detail">${changeDetail(change)}</span></span></li>`;

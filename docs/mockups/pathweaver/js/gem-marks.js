@@ -11,5 +11,31 @@ const GEM_SHAPES = {
   support: '<polygon points="8,2 14,8 8,14 2,8" fill="currentColor"/>',
 };
 
-// The mark of a gem, `kind` « skill » or « support ».
-const gemMark = (colour, kind = "skill") => `<svg class="app-gem-mark" viewBox="0 0 16 16" style="color:${gemColour(colour)}" aria-hidden="true">${GEM_SHAPES[kind]}</svg>`;
+// The shape says the kind of a gem, its colour what it is (the owner, 2026-11-20): a spirit gem is a
+// skill, a hexagon, in a teal of its own rather than the colour of its attribute; a lineage support is
+// a support, a square on its tip, in a grey of its own. Two open decisions, a list each in the header
+// of the mock-up (2j2), which apply at once.
+const GEM_CHOICES = {
+  spiritColour: {
+    label: "Spirit gem", variable: "--gem-spirit",
+    options: { "#5eead4": "Pale teal", "#2dd4bf": "Bright teal", "#14b8a6": "Deep teal", "#22c3c9": "Teal towards cyan", "#46c7a8": "Teal towards green" },
+    fallback: "#2dd4bf",
+  },
+  lineageColour: {
+    label: "Lineage support",
+    options: { attribute: "The colour of its attribute", "#d4d9e1": "Silver", "#a3abb8": "Mid grey", "#c2b8a3": "Warm grey" },
+    fallback: "#d4d9e1",
+  },
+};
+for (const [key, choice] of Object.entries(GEM_CHOICES)) {
+  VARIANTS[key] = { ...choice, select: true };
+  chosen[key] = accepts(VARIANTS[key], params.get(key)) ? params.get(key) : choice.fallback;
+}
+
+// The colour of a gem of the build (BUILDS: its colour, its kind, whether it is a lineage support).
+const gemColourOf = gem => gem.kind === "spirit" ? "var(--gem-spirit)"
+  : gem.lineage && chosen.lineageColour !== "attribute" ? chosen.lineageColour : gemColour(gem.colour);
+
+// The mark of a gem: a hexagon for a skill (a spirit gem, or the skill a spirit gem triggers, which
+// the file lists among its supports), a square on its tip for a support.
+const gemMark = gem => `<svg class="app-gem-mark" viewBox="0 0 16 16" style="color:${gemColourOf(gem)}" aria-hidden="true">${GEM_SHAPES[gem.kind === "support" ? "support" : "skill"]}</svg>`;

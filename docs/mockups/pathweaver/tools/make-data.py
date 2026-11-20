@@ -282,6 +282,8 @@ def gem(entry, names, gems):
         "colour": info.get("color", "w"),
         "levels": interval(entry),
         "known": entry["id"] in names,
+        # A lineage support (2j2: its colour in the list « Lineage support » of the mock-up).
+        "lineage": bool(info.get("is_lineage")),
         # The note of the author on the gem, its markup kept (2j2: its mark in the row, its text in
         # the hover), or "".
         "note": (entry.get("additional_text") or "").strip(),
@@ -397,7 +399,9 @@ def changes_at(build, level, tree, names, gems):
     ascendancy = {node["id"] for node in tree["nodes"].values() if node.get("ascendancyId") and "id" in node}
     skills, notes, gear, passives = state_at(build, level, ascendancy)
     old_skills, old_notes, old_gear, old_passives = state_at(build, level - 1, ascendancy) if level > 1 else ({}, {}, {}, {})
-    named = lambda gem_id, note="": dict(name=gem({"id": gem_id}, names, gems)["name"], colour=gem({"id": gem_id}, names, gems)["colour"], note=bool(note))
+    def named(gem_id, note=""):
+        found = gem({"id": gem_id}, names, gems)
+        return dict(name=found["name"], colour=found["colour"], kind=found["kind"], lineage=found["lineage"], note=bool(note))
     # The passives taken at the level: (weapon set, of the ascendancy, with a note) of each.
     taken = [(key[1], asc, has_note) for key, (asc, has_note) in passives.items() if key not in old_passives]
     groups = {
