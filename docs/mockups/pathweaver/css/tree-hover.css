@@ -1,0 +1,16 @@
+/* The hover of a passive (2i3, js/tree-hover.js): a card in the shade of the window of what changes, its
+   corners rounded by 3 px; the name, the kind, the stats, the state at the level, then the hint of the
+   author under a line. Three places to choose: A follows the pointer, B beside the passive, C a panel
+   fixed under the legend. */
+.app-hover { position: absolute; z-index: 4; width: max-content; max-width: 320px; padding: 9px 12px 10px; border-radius: 3px; pointer-events: none;
+  border: 1px solid color-mix(in srgb, var(--on-band) 14%, transparent);
+  background: var(--band-image), var(--band-deep); color: var(--on-band); box-shadow: 0 8px 18px rgb(0 0 0 / .28); font-size: 12px; line-height: 1.4; }
+.app-hover[hidden] { display: none; }
+.app-hover[data-variant="c"] { top: 40px; right: 12px; left: auto; width: 300px; max-width: none; }
+.app-hover-head { display: flex; align-items: baseline; justify-content: space-between; gap: 14px; }
+.app-hover-head strong { font-size: 14px; font-weight: 600; }
+.app-hover-head .app-weak, .app-hover-state { color: var(--on-band-weak); font-size: 11px; }
+.app-hover-stats { margin: 6px 0 0; padding: 0; list-style: none; }
+.app-hover-stats li + li { margin-top: 3px; }
+.app-hover-state { margin-top: 6px; }
+.app-hover-hint { margin-top: 8px; padding-top: 7px; border-top: 1px solid color-mix(in srgb, var(--on-band) 14%, transparent); }

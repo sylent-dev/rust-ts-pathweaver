@@ -24,6 +24,9 @@ const VARIANTS = {
   // The width of the windows of the home page (2l): the minimum of specs.md, half a 1920-pixel screen, and a wide
   // window of the owner's screen.
   homeWidth: { label: "Home width", options: { 900: "900 px", 960: "960 px", 1600: "1,600 px" }, fallback: "960" },
+  // The hover of a passive (2i3): a card that follows the pointer, a card beside the passive, a panel fixed
+  // under the legend.
+  hover: { label: "Passive hover", options: { a: "A · follows", b: "B · beside", c: "C · panel" }, fallback: "a" },
 };
 
 // The styles a section shows side by side: the style of the page alone, Frost Night by default, the

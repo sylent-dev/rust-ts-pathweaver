@@ -187,26 +187,53 @@ def ascendancy_place(tree):
     return places
 
 
-def ascendancy_graph(tree, asc_id, build, icons):
+class Texts:
+    """The texts of the hover (2i3), each written once: the names and stats of the passives repeat (4,782
+    passives, 1,930 names), so the data hold the index of each in this list."""
+
+    def __init__(self):
+        self.list, self.index = [], {}
+
+    def __call__(self, text):
+        if text not in self.index:
+            self.index[text] = len(self.list)
+            self.list.append(text)
+        return self.index[text]
+
+
+def info_of(node, texts):
+    """What the hover shows of a passive from the game data (2i3): its name and its stats."""
+    return [texts(node.get("name", "")), [texts(stat) for stat in node.get("stats", [])]]
+
+
+def hint_of(entry, texts):
+    """The hint of the author on an entry, its markup kept (the hover reads it), or -1."""
+    text = entry.get("additional_text")
+    return texts(text) if isinstance(text, str) and text.strip() else -1
+
+
+def ascendancy_graph(tree, asc_id, build, icons, texts):
     """The passives of an ascendancy at the centre of the tree (2i2), its links, and those the build
-    takes, with their levels."""
+    takes, with their levels and the hints of the author (no weapon set: 0)."""
     place = ascendancy_place(tree)[asc_id]
     members = [(key, n) for key, n in tree["nodes"].items() if n.get("ascendancyId") == asc_id and "x" in n]
     index = {key: i for i, (key, _) in enumerate(members)}
     nodes = [[round(x), round(y), KINDS.index("start") if n.get("isAscendancyStart") else kind_of(n), icon_of(n, icons)]
              for (_, n), (x, y) in zip(members, (place(n) for _, n in members))]
+    info = [info_of(n, texts) for _, n in members]
     edges = [[index[str(e["from"])], index[str(e["to"])]] for e in tree["edges"]
              if str(e["from"]) in index and str(e["to"]) in index]
     by_id = {node["id"]: key for key, node in tree["nodes"].items() if "id" in node}
     # A passive may be written as its id alone (53 of the corpus): from level 1 to 100.
     passives = [p if isinstance(p, dict) else {"id": p} for p in build.get("passives", [])]
-    taken = [[index[by_id[p["id"]]], *interval(p)] for p in passives if by_id.get(p["id"]) in index]
-    return {"nodes": nodes, "edges": edges, "taken": taken}
+    taken = [[index[by_id[p["id"]]], *interval(p), 0, hint_of(p, texts)] for p in passives if by_id.get(p["id"]) in index]
+    return {"nodes": nodes, "edges": edges, "info": info, "taken": taken}
 
 
 def tree_data(tree, shown, sheet):
     icons = {key: i for i, (key, _) in enumerate(sheet["icons"])}
-    nodes, index = [], {}
+    texts = Texts()
+    nodes, info, index = [], [], {}
     for key, node in tree["nodes"].items():
         # The masteries are only the art at the centre of a group, never taken nor linked (Path of
         # Building reads them as « isOnlyImage »): their art waits in docs/backlog.md.
@@ -214,9 +241,10 @@ def tree_data(tree, shown, sheet):
             continue
         index[key] = len(nodes)
         nodes.append([round(node["x"]), round(node["y"]), kind_of(node), icon_of(node, icons)])
+        info.append(info_of(node, texts))
     edges = [[index[str(e["from"])], index[str(e["to"])]] for e in tree["edges"]
              if str(e["from"]) in index and str(e["to"]) in index]
-    ascendancy = ascendancy_graph(tree, shown.get("ascendancy"), shown, icons)
+    ascendancy = ascendancy_graph(tree, shown.get("ascendancy"), shown, icons, texts)
     by_id = {node["id"]: key for key, node in tree["nodes"].items() if "id" in node}
     asc_ids = {node["id"] for node in tree["nodes"].values() if node.get("ascendancyId") and "id" in node}
     taken, unknown = [], []
@@ -224,7 +252,7 @@ def tree_data(tree, shown, sheet):
         key = by_id.get(passive["id"])
         low, high = interval(passive)
         if key in index:
-            taken.append([index[key], low, high, passive.get("weapon_set", 0)])
+            taken.append([index[key], low, high, passive.get("weapon_set", 0), hint_of(passive, texts)])
         elif passive["id"] not in asc_ids:
             unknown.append(passive["id"])
     return {
@@ -233,7 +261,11 @@ def tree_data(tree, shown, sheet):
                    "frames": sheet["frames"]},
         "nodes": nodes,
         "edges": edges,
-        "ascendancy": {"nodes": ascendancy["nodes"], "edges": ascendancy["edges"]},
+        "ascendancy": {"nodes": ascendancy["nodes"], "edges": ascendancy["edges"], "info": ascendancy["info"]},
+        # The hover (2i3): the name and stats of each passive, as indices of `texts`; each entry taken
+        # ends with the hint of its author, an index of `texts` or -1.
+        "info": info,
+        "texts": texts.list,
         "taken": taken,
         "ascendancyTaken": ascendancy["taken"],
         "unknown": unknown,

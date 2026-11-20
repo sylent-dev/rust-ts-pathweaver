@@ -268,18 +268,20 @@ function mountTrees() {
   for (const canvas of document.querySelectorAll('canvas[data-tree="main"]')) {
     STATE.treeViews[canvas.dataset.view] ??= fitView(points, canvas.clientWidth, canvas.clientHeight, 80);
     const meter = canvas.parentElement.querySelector(".app-fps");
-    const draw = () => {
-      const start = performance.now();
-      drawBuildTree(canvas, viewOf(canvas), level, STATE.set);
-      if (meter) countFrame(meter, performance.now() - start);
-    };
+    const draw = () => drawBuildTree(canvas, viewOf(canvas), level, STATE.set);
     draw();
-    // A move or a turn of the wheel asks for a drawing; the screen draws at most one per frame.
+    // A move or a turn of the wheel asks for a drawing; the screen draws at most one per frame. Only these
+    // drawings are counted, not those of the page drawn again.
     let asked = false;
     const ask = () => {
       if (asked) return;
       asked = true;
-      requestAnimationFrame(() => { asked = false; draw(); });
+      requestAnimationFrame(() => {
+        asked = false;
+        const start = performance.now();
+        draw();
+        if (meter) countFrame(meter, performance.now() - start);
+      });
     };
     canvas.onwheel = event => {
       event.preventDefault();
@@ -302,8 +304,8 @@ function mountTrees() {
 }
 
 // The counter of frames per second (2i3): the drawings of the last second while the tree moves, and the
-// time the script takes to draw once, the mean of the last 30 (the browser paints after it). Written into its element at once, without drawing the
-// page again.
+// time the script takes to draw once, the mean of the last 30 (the browser paints after it). Written into
+// its element at once, without drawing the page again.
 const FRAMES = { times: [], costs: [] };
 function countFrame(meter, cost) {
   const now = performance.now();

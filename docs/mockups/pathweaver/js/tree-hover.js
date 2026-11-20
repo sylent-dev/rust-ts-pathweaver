@@ -1,0 +1,158 @@
+// The hover of a passive (2i3, specs.md, Passive tree): its name and its stats from the game data, its
+// state at the level, then the hint of the author with the markup of the game. Three variants to
+// choose (VARIANTS.hover): A a card that follows the pointer, B a card beside the passive, C a panel
+// fixed under the legend.
+
+// The markup of the game in the author's texts (specs.md, The author's texts): `<tag>{text}`, nested;
+// a tag is a font (b, i, u, and r, s, m, l, whose look is decided at step 4), a named colour or
+// rgb(r, g, b). A tag it doesn't know, or a brace left open, stays plain text. Every text is escaped:
+// the hints come from files of strangers.
+const MARKUP_FONTS = { b: "font-weight:700", i: "font-style:italic", u: "text-decoration:underline", r: "", s: "", m: "", l: "" };
+const MARKUP_COLOURS = {
+  white: "#ffffff", grey: "#8c8c8c", gray: "#8c8c8c", black: "#000000", red: "#e05050", green: "#5fc35f",
+  blue: "#6c8cff", yellow: "#e6d25a", orange: "#e8913c", gold: "#c8a65a", purple: "#a86ce0", cyan: "#4fd2d2", magenta: "#d24fd2",
+};
+function styleOfTag(tag) {
+  const name = tag.trim().toLowerCase();
+  if (name in MARKUP_FONTS) return MARKUP_FONTS[name];
+  if (name in MARKUP_COLOURS) return `color:${MARKUP_COLOURS[name]}`;
+  const rgb = /^rgb\(\s*(\d{1,3})\s*,\s*(\d{1,3})\s*,\s*(\d{1,3})\s*\)$/.exec(name);
+  return rgb && rgb.slice(1).every(n => Number(n) <= 255) ? `color:rgb(${rgb.slice(1).join(",")})` : null;
+}
+
+// Reads the text from `at` up to a closing brace (`inBraces`) or its end; returns [html, where it stopped].
+function readMarkup(text, at, inBraces) {
+  let html = "", plain = "";
+  const flush = () => { html += escapeHtml(plain).replace(/\r?\n/g, "<br>"); plain = ""; };
+  while (at < text.length) {
+    const char = text[at];
+    if (char === "}" && inBraces) break;
+    const tag = char === "<" ? /^<([^<>{}]*)>\{/.exec(text.slice(at)) : null;
+    const style = tag && styleOfTag(tag[1]);
+    if (style === null || style === undefined) {
+      plain += char;
+      at += 1;
+      continue;
+    }
+    const [inner, end] = readMarkup(text, at + tag[0].length, true);
+    if (text[end] !== "}") {   // a brace left open: the tag stays as written
+      plain += char;
+      at += 1;
+      continue;
+    }
+    flush();
+    html += `<span style="${style}">${inner}</span>`;
+    at = end + 1;
+  }
+  flush();
+  return [html, at];
+}
+const markupHtml = text => readMarkup(text, 0, false)[0];
+
+// The passives near a point, found through a grid of cells of 400 units, built once per graph.
+const HOVER_CELL = 400;
+const GRIDS = new Map();
+function gridOf(graph) {
+  if (!GRIDS.has(graph)) {
+    const grid = new Map();
+    for (const [index, [x, y]] of graph.nodes.entries()) {
+      const key = `${Math.floor(x / HOVER_CELL)},${Math.floor(y / HOVER_CELL)}`;
+      grid.set(key, [...(grid.get(key) ?? []), index]);
+    }
+    GRIDS.set(graph, grid);
+  }
+  return GRIDS.get(graph);
+}
+
+// The passive under a point of the game, within its radius or 8 pixels of the screen: the ascendancy
+// first, drawn over the tree. Returns { graph, index } or null.
+function passiveAt(gameX, gameY, scale) {
+  for (const graph of [TREE.ascendancy, TREE]) {
+    const grid = gridOf(graph);
+    const [cx, cy] = [Math.floor(gameX / HOVER_CELL), Math.floor(gameY / HOVER_CELL)];
+    let best = null;
+    for (let dx = -1; dx <= 1; dx++) for (let dy = -1; dy <= 1; dy++) {
+      for (const index of grid.get(`${cx + dx},${cy + dy}`) ?? []) {
+        const [x, y, kind] = graph.nodes[index];
+        const distance = Math.hypot(x - gameX, y - gameY);
+        if (distance <= Math.max(NODE_RADIUS[TREE.kinds[kind]], 8 / scale) && (!best || distance < best.distance)) best = { graph, index, distance };
+      }
+    }
+    if (best) return best;
+  }
+  return null;
+}
+
+const KIND_NAMES = { small: "Passive", notable: "Notable", keystone: "Keystone", jewel: "Jewel socket", attribute: "Attribute", start: "Class start" };
+const SET_NAMES = { 1: "set I", 2: "set II" };
+
+// The entry of the build for a passive at the level: the one that applies, else the next to come.
+function entryAt(graph, index, level) {
+  const entries = (graph === TREE ? TREE.taken : TREE.ascendancyTaken).filter(([i]) => i === index);
+  return entries.find(([, low, high]) => appliesAt([low, high], level))
+    ?? entries.filter(([, low]) => low > level).sort((a, b) => a[1] - b[1])[0] ?? null;
+}
+
+// A stat of the game names its keywords between brackets, `[Spell]` or `[Critical|Critical Hit]`: the
+// words after the bar are those shown.
+const statHtml = stat => escapeHtml(stat.replace(/\[(?:[^\]|]*\|)?([^\]]*)\]/g, "$1")).replace(/\r?\n/g, "<br>");
+
+function hoverHtml(graph, index, level) {
+  const [name, stats] = graph.info[index];
+  const kind = TREE.kinds[graph.nodes[index][2]];
+  const entry = entryAt(graph, index, level);
+  const state = !entry ? "Not taken"
+    : appliesAt([entry[1], entry[2]], level) ? `Taken at ${entry[1]}` : `Taken later, at ${entry[1]}`;
+  const set = entry && SET_NAMES[entry[3]] ? ` · ${SET_NAMES[entry[3]]}` : "";
+  const hint = entry && entry[4] >= 0 ? `<div class="app-hover-hint">${markupHtml(TREE.texts[entry[4]])}</div>` : "";
+  return `<div class="app-hover-head"><strong>${escapeHtml(TREE.texts[name])}</strong><span class="app-weak">${graph === TREE ? KIND_NAMES[kind] : `Ascendancy · ${KIND_NAMES[kind]}`}</span></div>
+    ${stats.length ? `<ul class="app-hover-stats">${stats.map(stat => `<li>${statHtml(TREE.texts[stat])}</li>`).join("")}</ul>` : ""}
+    <div class="app-hover-state app-weak">${state}${set}</div>${hint}`;
+}
+
+// Places the card of the variant: A beside the pointer, B beside the passive, on the side with more
+// room, C fixed by its CSS.
+function placeHover(card, panel, pointer, passive, radius) {
+  const [width, height] = [panel.clientWidth, panel.clientHeight];
+  const [w, h] = [card.offsetWidth, card.offsetHeight];
+  const clampY = y => Math.max(8, Math.min(height - h - 8, y));
+  if (chosen.hover === "a") {
+    const x = pointer[0] + 18 + w > width - 8 ? pointer[0] - 18 - w : pointer[0] + 18;
+    card.style.left = `${x}px`;
+    card.style.top = `${clampY(pointer[1] + 18 + h > height - 8 ? pointer[1] - 18 - h : pointer[1] + 18)}px`;
+  } else if (chosen.hover === "b") {
+    const right = passive[0] < width / 2;
+    card.style.left = `${right ? passive[0] + radius + 12 : passive[0] - radius - 12 - w}px`;
+    card.style.top = `${clampY(passive[1] - h / 2)}px`;
+  } else {
+    card.style.left = card.style.top = "";
+  }
+}
+
+function mountHover() {
+  for (const canvas of document.querySelectorAll('canvas[data-tree="main"]')) {
+    const panel = canvas.parentElement, card = panel.querySelector(".app-hover");
+    const hide = () => { card.hidden = true; };
+    canvas.onmousemove = event => {
+      const view = viewOf(canvas);
+      if (event.buttons !== 0 || !view) return hide();
+      const [width, height] = [canvas.clientWidth, canvas.clientHeight];
+      const gameX = (event.offsetX - width / 2) / view.scale + view.x, gameY = (event.offsetY - height / 2) / view.scale + view.y;
+      const found = passiveAt(gameX, gameY, view.scale);
+      canvas.style.cursor = found ? "pointer" : "";
+      if (!found) return hide();
+      const [x, y, kind] = found.graph.nodes[found.index];
+      card.innerHTML = hoverHtml(found.graph, found.index, STATE.level);
+      card.dataset.variant = chosen.hover;
+      card.hidden = false;
+      const passive = [(x - view.x) * view.scale + width / 2, (y - view.y) * view.scale + height / 2];
+      placeHover(card, panel, [event.offsetX, event.offsetY], passive, NODE_RADIUS[TREE.kinds[kind]] * view.scale);
+    };
+    canvas.onmouseleave = hide;
+  }
+}
+AFTER_RENDER.push(mountHover);
+// A turn of the wheel moves the tree under the card: it goes.
+document.addEventListener("wheel", () => {
+  for (const card of document.querySelectorAll(".app-hover")) card.hidden = true;
+}, { capture: true, passive: true });
