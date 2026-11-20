@@ -1,0 +1,4 @@
+/* « New at N », the box at the top of the right column (js/side-new.js). */
+.app-new { display: flex; flex-direction: column; gap: 3px; padding: 7px 10px 9px; border: var(--border-width) solid var(--accent); border-radius: var(--radius); background: var(--new-fill); box-shadow: var(--accent-glow); font-size: 13px; }
+.app-new.is-empty { box-shadow: none; background: var(--fill); }
+.app-new-line { text-indent: -.8em; padding-left: .8em; }   /* a long line wraps under its text, not under its + */

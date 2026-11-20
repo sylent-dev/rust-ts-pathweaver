@@ -1,24 +1,4 @@
-/* The Overview tab: the tree on the left, a column of 330 px on the right. */
+/* The Overview tab: the tree on the left, a column of 330 px on the right (css/side-*.css). */
 .app-overview { display: flex; height: 668px; }
 .app-side { flex: none; width: 330px; box-sizing: border-box; padding: 12px 12px 12px 14px; overflow: hidden; background: var(--side); }
-.app-new { display: flex; flex-direction: column; gap: 3px; padding: 7px 10px 9px; border: var(--border-width) solid var(--accent); border-radius: var(--radius); background: var(--new-fill); box-shadow: var(--accent-glow); font-size: 13px; }
-.app-new.is-empty { box-shadow: none; background: var(--fill); }
-.app-new-line { text-indent: -.8em; padding-left: .8em; }   /* a long line wraps under its text, not under its + */
-.app-side-title { margin: 16px 0 8px 4px; font-size: 15px; }
-.app-skills { margin: 0; padding: 0 0 0 4px; list-style: none; }
-.app-skill { display: flex; align-items: center; gap: 8px; height: 22px; font-size: 13px; }
-/* The mark of a gem: its colour says its attribute, a hollow mark a spirit gem. */
-.app-gem { flex: none; width: var(--gem-size); height: var(--gem-size); box-sizing: border-box; margin: 0 2px; border: var(--gem-line); border-radius: var(--gem-radius); clip-path: var(--gem-clip); transform: rotate(var(--gem-rotate)); background: var(--gem-none); box-shadow: var(--gem-glow); }
-.app-gem { color: var(--gem-none); }   /* the glow (--gem-glow) takes the colour of the gem */
-.app-gem.is-r { background: var(--gem-str); color: var(--gem-str); }
-.app-gem.is-g { background: var(--gem-dex); color: var(--gem-dex); }
-.app-gem.is-b { background: var(--gem-int); color: var(--gem-int); }
-.app-gem.is-spirit { background: none; border: 2px solid currentColor; clip-path: none; }
-.app-skill-name { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.app-skill-new { font-size: 12px; }
-.app-skill-supports { margin-left: auto; font-size: 12px; white-space: nowrap; }
-.app-side .app-switch { margin-left: 4px; }
-.app-inventory { position: relative; width: 216px; height: 216px; margin: 10px 0 0 4px; }
-.app-slot { position: absolute; display: grid; place-items: center; box-sizing: border-box; border-radius: var(--slot-radius); background: var(--slot-empty); color: var(--weak); font-size: 10px; }
-.app-slot.is-hinted { background: var(--slot-fill); color: var(--text); }
-.app-slot.is-hinted::after { content: ""; position: absolute; top: 4px; right: 4px; width: 5px; height: 5px; border-radius: 50%; background: var(--accent-soft); }
+.app-side-title { margin: 16px 0 8px 4px; font-size: 15px; }   /* the titles of the column: Skills, Inventory */
