@@ -1,0 +1,104 @@
+/* The twelve variants of the overflow of the right column (2j4, js/side-overflow.js). The parts of the
+   column, .ov-new, .ov-skills and .ov-inventory, are blocks: their titles keep their margins. */
+.app-side.ov { position: relative; }
+.ov .is-folded { display: none !important; }
+.ov-n2.is-open .app-skill.is-folded { display: flex !important; }
+.ov-more { display: flex; align-items: center; min-height: 22px; }
+.ov-more .app-new-more { margin: 0 0 0 18px; }
+.ov-more-words { cursor: default; }
+
+/* The scroll bar of the window of « N changes »: a line of 4 px in the accent, square, on no track. */
+.ov-n1, .ov-n2.is-open, .ov-h1, .ov-n3 .ov-scroll { overflow-y: auto; scrollbar-width: thin; scrollbar-color: var(--accent) transparent; }
+:is(.ov-n1, .ov-n2.is-open, .ov-h1, .ov-n3 .ov-scroll)::-webkit-scrollbar { width: 4px; }
+:is(.ov-n1, .ov-n2.is-open, .ov-h1, .ov-n3 .ov-scroll)::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 0; }
+:is(.ov-n1, .ov-n2.is-open, .ov-h1, .ov-n3 .ov-scroll)::-webkit-scrollbar-track { background: transparent; }
+/* The shade at the bottom while more is below. */
+.has-more { mask-image: linear-gradient(to bottom, #000 calc(100% - 36px), transparent); }
+
+/* N3 · the inventory pinned at the bottom, the rest scrolling above it. */
+.ov-n3, .ov-f1 { display: flex; flex-direction: column; padding: 0; }
+.ov-n3 .ov-scroll, .ov-f1 .ov-scroll { flex: 1; min-height: 0; padding: 12px 12px 4px 14px; }
+.ov-n3 > .ov-inventory { flex: none; padding: 0 12px 12px 14px; border-top: 1px solid color-mix(in srgb, var(--text) 8%, transparent); }
+
+/* H1 · titles that fold their part, a chevron after them, the count of what is folded. */
+.ov-fold-title { cursor: pointer; user-select: none; }
+.ov-fold-title::after { content: "▾"; display: inline-block; margin-left: 6px; color: var(--weak); font-size: 11px; transition: transform 120ms ease-out; }
+.ov-fold-title:hover::after { color: var(--text); }
+.ov-part.is-folded > .app-side-title::after, .ov-part.is-folded .app-inventory-head .app-side-title::after { transform: rotate(-90deg); }
+.ov-h1 .ov-part.is-folded { display: block !important; }
+.ov-h1 .ov-part.is-folded > :not(.app-side-title, .app-inventory-head) { display: none; }
+.ov-h1 .ov-part.is-folded .ov-fold-title[data-count]::before { content: attr(data-count); order: 2; }
+.ov-h1 .ov-part.is-folded > .app-side-title[data-count] { display: flex; align-items: baseline; gap: 6px; }
+.ov-h1 .ov-part.is-folded > .app-side-title[data-count]::before { color: var(--weak); font-size: 12px; font-weight: 600; }
+
+/* H2 · « New at N » in one line of counts. */
+.ov-counts { display: none; margin: 0 0 0 4px; color: var(--on-band-weak); font-size: 12px; }
+.ov-counts .app-new-more { display: inline; margin: 0 0 0 6px; }
+.ov-h2.is-compact .ov-counts { display: block; }
+.ov-h2.is-compact .app-new { display: none; }
+
+/* H3 · the inventory at 24 px a cell. */
+.ov-h3.is-small .ov-inventory .app-inventory { zoom: .75; }
+
+/* E1 · Skills and Inventory as two tabs, in the words of the titles. */
+.ov-tabs { display: flex; align-items: baseline; gap: 16px; margin: 16px 0 8px 4px; }
+.ov-tabs > button { padding: 0; border: 0; background: none; color: var(--weak); font-size: 15px; cursor: pointer; }
+.ov-tabs > button:hover { color: var(--text); }
+.ov-tabs > button[aria-pressed="true"] { color: var(--text); box-shadow: 0 2px 0 var(--accent); }
+.ov-tabs .app-number { margin-left: 3px; color: var(--weak); font-size: 12px; }
+.ov-tabs .app-inventory-sets { margin-left: auto; }
+.ov-e1 .ov-skills > .app-side-title, .ov-e1 .ov-inventory .app-inventory-head { display: none; }
+.ov-e1 .ov-inventory .app-inventory { margin-top: 10px; }
+
+/* E2 · the inventory a drawer at the bottom: a bar of thumbnails, the drawing rising over the skills. */
+.ov-e2 { display: flex; flex-direction: column; }
+.ov-e2 > .ov-skills { flex: 1; min-height: 0; overflow: hidden; }
+.ov-drawer { position: relative; flex: none; margin: 0 -12px -12px -14px; padding: 0 12px 12px 14px; background: var(--side-column);
+  border-top: 1px solid color-mix(in srgb, var(--text) 8%, transparent); }
+.ov-drawer .app-side-title { margin-top: 10px; }
+.ov-drawer-doll { position: absolute; left: 0; right: 0; bottom: 100%; padding: 4px 12px 10px 14px; background: var(--side-column);
+  box-shadow: 0 -10px 18px rgb(0 0 0 / .35); clip-path: inset(-30px 0 0 0); transform: translateY(12px); opacity: 0; visibility: hidden;
+  transition: opacity 160ms ease-out, transform 160ms ease-out, visibility 0s 160ms; }
+.ov-drawer-doll .app-inventory-head { display: none; }
+.ov-drawer:hover .ov-drawer-doll { transform: none; opacity: 1; visibility: visible; transition: opacity 160ms ease-out, transform 160ms ease-out, visibility 0s; }
+@media (prefers-reduced-motion: reduce) { .ov-drawer-doll, .ov-drawer:hover .ov-drawer-doll { transition: none; transform: none; } }
+
+/* E2, E3 · the thumbnails: a box per hinted slot, its card on hover. */
+.app-inventory.ov-thumbs { position: static; display: flex; flex-wrap: wrap; gap: 4px; margin: 6px 0 0 5px; }
+.ov-thumbs .app-slot { position: relative; width: 32px; height: 32px; }
+.ov-e3 .ov-thumbs .app-slot { width: 40px; height: 40px; }
+
+/* F1 · the rail of the three parts, at the right edge, the part in view lit. */
+.ov-f1 .ov-scroll { overflow-y: auto; scrollbar-width: none; }
+.ov-f1 .ov-scroll::-webkit-scrollbar { display: none; }
+.ov-rail { position: absolute; top: 12px; right: 3px; bottom: 12px; width: 6px; }
+.ov-rail-part { position: absolute; left: 0; width: 100%; padding: 0; border: 0; border-top: 2px solid var(--side-column); background: color-mix(in srgb, var(--weak) 40%, transparent); cursor: pointer; transition: background 120ms ease-out; }
+.ov-rail-part.is-seen { background: var(--accent); }
+.ov-rail-part:hover { background: var(--text); }
+
+/* F2 · the fan of the marks of the skills folded, spread into a card of their rows on hover. */
+.ov-f2 .ov-more { position: relative; }
+.ov-fan { display: inline-flex; margin-left: 2px; }
+.ov-fan .app-skill-gem { margin-left: -4px; transform: rotate(-10deg); transition: margin 160ms ease-out, transform 160ms ease-out; }
+.ov-fan .app-skill-gem:nth-child(even) { transform: rotate(10deg) translateY(1px); }
+.ov-fan .app-skill-gem:first-child { margin-left: 0; }
+.ov-f2 .ov-more:hover .ov-fan .app-skill-gem { margin-left: 3px; transform: none; }
+.ov-f2 .ov-more .app-new-more { margin-left: 8px; }
+.ov-fan-card { left: -4px; top: 100%; width: 290px; max-width: none; padding: 6px 8px; background: var(--band-image), var(--band-deep); pointer-events: auto; }
+.ov-f2 .ov-more:hover .ov-fan-card { opacity: 1; visibility: visible; transition: opacity 120ms ease-out, visibility 0s; }
+.ov-fan-card .app-skills { padding: 0; }
+
+/* F3 · the rows packed, swelling under the pointer like a dock; room left at the bottom for the swell. */
+.ov-f3 { padding-bottom: 26px; }
+.ov-f3 .ov-skills .app-skill { min-height: 15px; font-size: 12px; line-height: 15px; }
+.ov-f3.is-settled .ov-skills .app-skill { transition: min-height 120ms ease-out, font-size 120ms ease-out; }
+.ov-f3 .ov-skills .app-skill:hover { min-height: 24px; font-size: 13.5px; }
+.ov-f3 .ov-skills .app-skill:has(+ .app-skill:hover), .ov-f3 .ov-skills .app-skill:hover + .app-skill { min-height: 19px; font-size: 12.5px; }
+@media (prefers-reduced-motion: reduce) { .ov-f3.is-settled .ov-skills .app-skill { transition: none; } }
+
+/* The section of the mock-up (sections/column-overflow.js): a column alone at its real height; a row
+   of the page per temperature. */
+.app-overview.ov-alone { width: 330px; }
+.page-slot:has(> .ov-break) { flex-basis: 100%; height: 0; margin-bottom: -24px; }
+.page-slot:has(> .ov-break) > span { display: none; }
+.page-slot:has(.ov-alone) > span { width: 330px; min-height: 48px; }

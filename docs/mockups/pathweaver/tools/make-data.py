@@ -71,11 +71,15 @@ LIBRARY = [
 # The items of the case of the other slots of the inventory (2j3), beyond those of the build shown:
 # charms in Trinket1, as Maxroll writes them (7 entries of the corpus), and in an id the game doesn't know.
 SAMPLE_ITEMS = ["Thawing Charm", "Golden Charm"]
+# The case of the overflow of the right column (2j4): the most skills of the corpus at a level, 14 at
+# 53, where seven of them come at once, with « New at N » full.
+CROWDED = "utkarshbehre-spark-comet.build"
 # The cases of « N changes at N » (2g): a respec, 42 passives given back at 65; the swap of a
 # leveling build to its end, 82 changes at 71.
 CHANGE_CASES = {
     "respec": ("maxroll-aer0-ice-shot-amazon.build", 65),
     "swap": ("utkarshbehre-spark-comet.build", 71),
+    "crowded": (CROWDED, 53),
 }
 # The cases of the level band (2g2): a snapshot of a character, the same at every level; a guide that
 # covers part of the levels, its track from its lowest to its highest level (65–100: the only one of the
@@ -612,6 +616,8 @@ def main():
     write_js("data-builds.js", "BUILDS", {
         "treeVersion": TREE_TAG,
         "shown": build_data(builds[0], names, gems, ascendancies, skills, tags),
+        # The skills of the case of the overflow of the right column (2j4), beside the build shown.
+        "crowded": {"skills": build_data(read(CROWDED), names, gems, ascendancies, skills, tags)["skills"]},
         "items": item_art(cache, names, uniques,
                           [*map(item_name, builds[0].get("inventory_slots", [])), *SAMPLE_ITEMS],
                           classes, pob_uniques(cache)),

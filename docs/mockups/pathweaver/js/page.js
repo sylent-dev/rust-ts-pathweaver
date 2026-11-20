@@ -24,6 +24,8 @@ const VARIANTS = {
   // The width of the windows of the home page (2l): the minimum of specs.md, half a 1920-pixel screen, and a wide
   // window of the owner's screen.
   homeWidth: { label: "Home width", options: { 900: "900 px", 960: "960 px", 1600: "1,600 px" }, fallback: "960" },
+  // What gives way when the right column of the Overview overflows (2j4, js/side-overflow.js).
+  overflow: { label: "Overflow", options: Object.fromEntries(["n1", "n2", "n3", "h1", "h2", "h3", "e1", "e2", "e3", "f1", "f2", "f3"].map(key => [key, key.toUpperCase()])), fallback: "n1" },
 };
 
 // The styles a section shows side by side: the style of the page alone, Frost Night by default, the

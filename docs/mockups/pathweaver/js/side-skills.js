@@ -35,9 +35,11 @@ function skillLine(row) {
   return `<li class="app-skill" data-skill="${skill}">${skillMark(row)}${skillName(row)}${noteMark(Boolean(row.note))}<span class="app-skill-supports">${row.supports.map(skillMark).join("")}</span></li>${triggered}`;
 }
 
-function skillList(level) {
-  const rows = skillsAt(level).map(skill => skillRow(skill, level));
-  return `<h2 class="app-side-title app-title">Skills</h2><ul class="app-skills" data-level="${level}">${rows.map(skillLine).join("")}</ul>`;
+// The skills at a level, of the build shown or of a case of the mock-up that names its own (`source`,
+// a key of SKILL_SOURCES, js/gem-hover.js, which the card of a gem reads too).
+function skillList(level, source) {
+  const rows = (source ? SKILL_SOURCES[source] : skillsAt)(level).map(skill => skillRow(skill, level));
+  return `<h2 class="app-side-title app-title">Skills</h2><ul class="app-skills" data-level="${level}"${source ? ` data-source="${source}"` : ""}>${rows.map(skillLine).join("")}</ul>`;
 }
 
 // The flash of what is new, in the language of the title of « New at N » (M3, 2j): when the level of

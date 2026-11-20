@@ -20,8 +20,8 @@ const newLine = change => `<li class="${CHANGE_KINDS[change.sign]}"${newLineGem(
   <span class="app-changes-name">${changeName(change)}</span>
   <span class="app-changes-right"><span class="app-changes-detail">${changeDetail(change)}</span></span></li>`;
 
-function newAtBox(level) {
-  const record = BUILDS.changes.shown.levels[level];
+// What is new at the level of the build shown, or of a case of the mock-up (`record`, a level of BUILDS.changes).
+function newAtBox(level, record = BUILDS.changes.shown.levels[level]) {
   const list = record ? changeList(record) : [];
   if (list.length === 0) return `<h2 class="app-side-title app-title app-new-title is-empty">Nothing new at ${level}</h2>`;
   const more = list.length > NEW_LINES
