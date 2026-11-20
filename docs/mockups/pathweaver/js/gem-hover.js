@@ -75,7 +75,7 @@ function showGemHover(element) {
   if (!gem) return;
   gemCard.innerHTML = gemHoverHtml(gem, Number(element.closest("[data-level]").dataset.level));
   titleIfCut(gemCard);
-  if (element.closest(".app-st:not(.st-h1) , .st-h1-detail")) return showGemBeside(element);
+  if (element.closest(".app-st")) return showGemBeside(element);
   const support = Boolean(element.closest(".app-skill-supports"));
   // Opaque over rows: above a support, or beside a row of the Skills tab, which has no tree beside it.
   gemCard.classList.toggle("is-over-rows", support || !element.closest(".app-side"));
@@ -92,7 +92,7 @@ function showGemHover(element) {
     gemCard.style.top = `${Math.max(8, Math.min(innerHeight - h - 8, row.top + row.height / 2 - h / 2))}px`;
   }
 }
-// In the Skills tab (2k, while its variants are compared): just right of the gem, over what is beside it,
+// In the Skills tab (2k): just right of the gem, over what is beside it,
 // opaque; left of it when there is no room on the right.
 function showGemBeside(element) {
   gemCard.classList.add("is-over-rows", "is-shown");
