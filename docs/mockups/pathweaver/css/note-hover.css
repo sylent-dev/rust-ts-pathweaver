@@ -1,7 +1,8 @@
 /* The card of a note of the author (2j5, js/note-hover.js): the card of a gem (css/gem-hover.css), its
-   head naming what carries the note, the place in grey, then the note right under it, as the subtitle of
-   every card; a group of passives, a short list. */
+   head naming what carries the note, the place in grey, then the note under it, the gap between them
+   tuned by eye (--note-gap, the slider « Note gap » of the page); a group of passives, a short list. */
 .app-note-hover { max-width: 320px; }
+.app-hover.app-note-hover:not(.is-support) > .app-hover-head + * { margin-top: var(--note-gap, 0px); }
 .app-note-place { color: var(--on-band-weak); font-weight: 400; }
 /* A note of a group of passives: the name of its passive a small head over it, in the colour of the
    text, a size above the words of the note; a line between two notes. */
