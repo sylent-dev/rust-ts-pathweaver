@@ -50,14 +50,14 @@ function gemHoverHtml(gem, level) {
   if (gem.known === false) return unknownGemHtml(gem, level);
   const comes = levelsWords(gem, level);
   const tags = gem.tags.filter(tag => tag !== "Support" && tag !== "Lineage");
-  const body = `<div class="app-hover-head"><strong>${escapeHtml(gem.name)}</strong><span class="app-weak">${gemKindName(gem)}</span></div>
+  const icon = gem.icon ? `<img class="gi-inline" src="pathweaver/img/skills/${gem.icon}" alt="">` : "";
+  const body = `<div class="app-hover-head"><strong>${icon}${escapeHtml(gem.name)}</strong><span class="app-weak">${gemKindName(gem)}</span></div>
     ${tags.length ? `<div class="app-gem-tags">${tags.map(escapeHtml).join(" · ")}</div>` : ""}
     ${gem.text ? `<p class="app-gem-text">${escapeHtml(gem.text)}</p>` : ""}
     <div class="app-hover-state">${comes}</div>
     ${gem.note ? `<div class="app-hover-hint">${markupHtml(gem.note)}</div>` : ""}`;
-  // The icon of a skill (2k, the owner, 2026-11-20): I5, in the hexagon of the mark, and its places on the
-  // left edge (VARIANTS.gemIcon, css/gem-icon.css): the same HTML for all, the art apart from the body;
-  // a support has none.
+  // The icon of a skill (2k, the owner, 2026-11-20), fourteen ways to place it (VARIANTS.gemIcon,
+  // css/gem-icon.css): the same HTML for all, the art apart from the body; a support has none.
   return gem.icon
     ? `<div class="gi-art"><img src="pathweaver/img/skills/${gem.icon}" alt=""></div><div class="gi-body">${body}</div>`
     : body;
