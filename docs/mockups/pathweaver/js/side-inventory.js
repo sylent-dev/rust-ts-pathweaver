@@ -70,7 +70,7 @@ function inventoryBox(level, hints = slotsAt(level, STATE.inventorySet)) {
   return `<div class="app-inventory-head"><h2 class="app-side-title app-title">Inventory</h2>${inventorySetSwitch()}</div>
     <div class="app-inventory" style="width:${px(216)};height:${px(216)}">${slots}</div>
     ${others.length ? `<ul class="app-inventory-others">${others.map(hint => [hint, hintItem(hint)]).map(([hint, item]) =>
-      `<li ${hintAttributes(hint, item, level)}><span class="app-item-thumb">${item.art ? itemArt(item) : item.unknown ? UNKNOWN_MARK : ""}</span><span class="app-inventory-slot">${escapeHtml(item.slot)}</span><span class="app-inventory-name ${item.unknown ? "is-unknown" : ""}">${escapeHtml(item.name)}</span>${item.unknown ? '<span class="app-unknown-word">unknown</span>' : ""}</li>`).join("")}</ul>` : ""}`;
+      `<li ${hintAttributes(hint, item, level)}><span class="app-item-thumb">${item.art ? itemArt(item) : item.unknown ? UNKNOWN_MARK : ""}</span><span class="app-inventory-slot">${escapeHtml(item.slot)}</span><span class="app-inventory-name">${escapeHtml(item.name)}</span>${item.unknown ? '<span class="app-unknown-word">unknown</span>' : ""}</li>`).join("")}</ul>` : ""}`;
 }
 
 ACTIONS["inventory-set"] = element => {
