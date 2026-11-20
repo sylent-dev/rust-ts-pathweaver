@@ -108,19 +108,20 @@ function drawArt(context, frames, iconIndex, taken, x, y, size) {
 
 // The portrait under the ascendancy (tools/make-data.py), the build shown only: the tree is drawn
 // again once it has loaded. Its radius, in units of the game, keeps it inside the frames of the class
-// starts (1,443 units from the centre, their frames about 50 units wide).
+// starts (1,443 units from the centre, their frames about 50 units wide); in colour at 20 %, so that it
+// says the ascendancy without competing with the passives (2i2, the owner, 2026-11-20).
 const PORTRAIT = new Image();
 PORTRAIT.onload = () => mountTrees();
 PORTRAIT.src = `pathweaver/img/portraits-large/${BUILDS.shown.portrait}.webp`;
 const PORTRAIT_RADIUS = 1380;
+const PORTRAIT_OPACITY = 0.2;
 
-// Draws the portrait at the centre of the tree, faded (--tree-portrait-opacity), in colour or in grey.
-function drawPortrait(canvas, context, screen, scale) {
+// Draws the portrait at the centre of the tree, faded.
+function drawPortrait(context, screen, scale) {
   if (!PORTRAIT.complete || PORTRAIT.naturalWidth === 0) return;
   const [x, y] = screen([0, 0]), radius = PORTRAIT_RADIUS * scale;
   context.save();
-  context.globalAlpha = (Number.parseFloat(token(canvas, "--tree-portrait-opacity")) || 0) / 100;
-  if (chosen.portraitInk === "grey") context.filter = "grayscale(1)";
+  context.globalAlpha = PORTRAIT_OPACITY;
   context.drawImage(PORTRAIT, x - radius, y - radius, radius * 2, radius * 2);
   context.restore();
 }
@@ -148,7 +149,7 @@ function drawTree(canvas, graph, states, view, { minRadius = 1.5, iconsFromPx = 
       context.fillStyle = background;
       context.fillRect(0, 0, width, height);
     }
-    under?.(canvas, context, screen, view.scale);
+    under?.(context, screen, view.scale);
   }
   const lit = on => {
     context.shadowBlur = on ? glow : 0;
@@ -289,10 +290,6 @@ function zoomTree(canvas, factor, atX = canvas.clientWidth / 2, atY = canvas.cli
 }
 
 AFTER_RENDER.push(mountTrees);
-// The opacity of the portrait is a slider: the canvases follow it as it moves.
-document.getElementById("tabs").addEventListener("input", event => {
-  if (event.target.dataset.variant === "portraitOpacity") mountTrees();
-});
 ACTIONS["tree-zoom"] = element => {
   zoomTree(document.querySelector('canvas[data-tree="main"]'), element.dataset.zoom === "in" ? 1.4 : 1 / 1.4);
   return true;
