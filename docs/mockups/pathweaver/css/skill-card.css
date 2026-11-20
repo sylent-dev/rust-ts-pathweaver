@@ -1,6 +1,6 @@
 /* The card of a skill (2k, js/gem-hover.js, skillCardHtml; the owner, 2026-11-20, on the wireframe
    docs/wireframes/gem-card.excalidraw): three parts told by their shades, on the graph paper of the
-   blocks. The head and the body in the deep shade of the bands (the owner, 2026-11-20: the head light
+   blocks, but the head. The head and the body in the deep shade of the bands (the owner, 2026-11-20: the head light
    at first), without a light (the owner, 2026-11-20: the light of the page from its top left removed):
    the icon of the skill square in its corner, its name and its tags beside it; the body: the description and the levels; the note of the author in a shade of its own, without
    a light (the owner, 2026-11-20: the light from the bottom right removed). Over the tree the parts are
@@ -19,7 +19,9 @@
 :root[data-note-shade="s3"] .is-skill-card { --sc-note: color-mix(in srgb, var(--band), var(--band-deep)); }
 :root[data-note-shade="s4"] .is-skill-card { --sc-note: var(--band-deep); }
 
-.sc-head { display: flex; align-items: flex-start; background: color-mix(in srgb, var(--sc-head) var(--sc-alpha), transparent); }
+/* The head over the graph paper (the owner, 2026-11-20: the texture on the body and the note only): its
+   shade covers the layer of the texture beneath it. */
+.sc-head { position: relative; z-index: 2; display: flex; align-items: flex-start; background: color-mix(in srgb, var(--sc-head) var(--sc-alpha), transparent); }
 .sc-body { padding: 9px 12px 10px; background: color-mix(in srgb, var(--sc-body) var(--sc-alpha), transparent); }
 .sc-body .app-gem-text { margin: 0; }
 .sc-note { padding: 9px 12px 10px; background: color-mix(in srgb, var(--sc-note) var(--sc-alpha), transparent); }
@@ -29,7 +31,7 @@
 .sc-title strong { display: block; font-size: 14px; font-weight: 600; }
 .sc-title .app-gem-tags { margin-top: 0; }
 
-/* The graph paper of the blocks over the whole card (css/textures.css): over the shades of its parts,
+/* The graph paper of the blocks over the body and the note (css/textures.css): over their shades,
    which would hide it beneath them; at 3 %, it doesn't touch the reading of the words. */
 .is-skill-card::after { content: ""; position: absolute; inset: 0; z-index: 1; pointer-events: none;
   background: var(--texture-colour); opacity: var(--texture-opacity);
