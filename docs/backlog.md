@@ -30,6 +30,10 @@ Set aside at the wireframes (2026-11-16, see `docs/wireframes/archive.excalidraw
 - **The art behind the groups of the passive tree** (noted 2026-11-18, with the icons of the passives at 2h2): `mastery-effect-active.webp` and `mastery-effect-disabled.webp` of the tree export, 640 KB, the large drawings of the 365 masteries; once the tree with its icons has been seen.
 
 
+## Inventory
+
+- **Prefix or suffix, for each line of a hint** (an idea of the owner, 2026-11-20 at step 2j3; after the release of 1.0, whose modifiers may change; depends on: the inventory of step 6): the `.build` file doesn't say it (a hint has seven fields; 3 hints of 326 say « prefix » in their own words), but RePoE's `mods.json` gives each modifier its kind (2,767 prefixes, 2,458 suffixes), its text with its ranges (« +(10-19) to maximum Life ») and the kinds of items it can roll on: each line of the author (« +41 to maximum Life ») read against the modifiers of its base. A rule that reads the data: measured first on the 555 numbered lines of the corpus (a value out of every range, a craft or a corruption; a modifier of two lines; a line that isn't a stat; a free text), then its display drawn in the mock-up (a mark P or S, or two groups, as the game shows them with Alt). Craft of Exile isn't needed: it reads the same game data.
+
 ## Merging a guide
 
 - **Offer to merge the files of a guide** (an idea of Claude Code, taken by the owner on 2026-11-18 at step 2e2; for step 7, which it depends on): when several open builds share their `link` and their ascendancy, a line under the band of the open builds offers « 3 builds of the same guide · Merge », which opens the merging screen with them ticked. Merge… stays in the menu « +N ▾ », where it is hidden for a feature that sets Pathweaver apart.

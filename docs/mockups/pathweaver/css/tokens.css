@@ -84,8 +84,10 @@
   --marker: #868e96;
   --cursor-radius: 50%;
   /* The inventory. */
-  --slot-empty: #f1f3f5;   /* an empty slot, a hinted one (--slot-fill) */
-  --slot-fill: #e9ecef;
+  /* The box of a slot of the inventory (2j3, B4 at a strength of 25 %, the owner, 2026-11-20): darker
+     than the column with a transparency, and a line of 1 px of the text with a transparency. */
+  --slot-box: rgb(0 0 0 / 17.5%);
+  --slot-line: color-mix(in srgb, var(--text) 7.5%, transparent);
   /* The gems: a colour per attribute (strength, dexterity, intelligence, none) and a shape. */
   --gem-str: #ced4da;
   --gem-spirit: #ced4da;   /* a spirit gem, a teal of its own (2j2) */
@@ -140,7 +142,6 @@
   --text: #0f1b33; --weak: #5c6c88;
   --accent: #2563eb; --accent-soft: #2563eb; --on-accent: #ffffff;
   --track: #c1cfe6; --track-width: 2px; --marker: #8fa2c4;
-  --slot-empty: #cad6e7; --slot-fill: #f4f7fc;
   --gem-str: #e5484d; --gem-dex: #12a594; --gem-int: #2563eb; --gem-none: #8fa2c4; --gem-spirit: #0d9488; --gem-lineage: #8a7f6a;
   --tree-background: transparent;
   --tree-edge: #dce4f0; --tree-edge-taken: #2563eb; --tree-edge-width: 1.8;
@@ -171,7 +172,6 @@
   --text: #e3eaf5; --weak: #8393ad;
   --accent: #60a5fa; --accent-soft: #60a5fa; --on-accent: #0c111b;
   --track: #2a3a5c; --track-width: 2px; --marker: #4b5f86;
-  --slot-empty: #111a2a; --slot-fill: #1c2840;
   /* The attributes as in the game, those of Exile Market (2g3, the owner, 2026-11-19): a true green
      for dexterity, apart from the green of what comes. */
   --gem-str: #e0473f; --gem-dex: #3fbf4f; --gem-int: #5aa7f0; --gem-none: #8393ad; --gem-spirit: #2dd4bf; --gem-lineage: #c2b8a3;   /* bright teal, warm grey (the owner, 2026-11-20) */
@@ -204,7 +204,6 @@
   --text: #ececee; --weak: #8e8e94;
   --accent: #f59e0b; --accent-soft: #f59e0b; --on-accent: #131314;
   --track: #3a3a3f; --track-width: 2px; --marker: #5c5c63;
-  --slot-empty: #18181a; --slot-fill: #27272a;
   --gem-str: #f87171; --gem-dex: #2dd4bf; --gem-int: #60a5fa; --gem-none: #8e8e94; --gem-spirit: #2dd4bf; --gem-lineage: #c2b8a3;
   --tree-background: transparent;
   --tree-edge: #222225; --tree-edge-taken: #f59e0b; --tree-edge-width: 1.8;

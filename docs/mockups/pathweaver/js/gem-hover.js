@@ -17,19 +17,19 @@ function gemOfRow(element) {
     ? skill : skill.supports.find(gem => gem.name === element.dataset.gem);
 }
 
-// The levels of a gem, the word « level » written out (the owner, 2026-11-20: « From 23 », 23 what?):
+// The levels of a gem, or of a hint of the inventory (js/slot-hover.js), the word « level » written out (the owner, 2026-11-20: « From 23 », 23 what?):
 // « New at level 59 » in the word of « New at N », « From level 23 », « From the start », and where it
 // stops when before 100 (« From level 15 to 64 », « New at level 59, until 70 »): a guide of leveling
 // replaces its gems.
-function gemLevels(gem, level) {
-  const [low, high] = gem.levels;
+function levelsWords(entry, level) {
+  const [low, high] = entry.levels;
   const from = low === level ? `New at level ${level}` : low > 1 ? `From level ${low}` : "From the start";
   if (high >= MAX_LEVEL) return from;
   return low > 1 && low !== level ? `${from} to ${high}` : `${from}, until ${high}`;
 }
 
 function gemHoverHtml(gem, level) {
-  const comes = gemLevels(gem, level);
+  const comes = levelsWords(gem, level);
   const tags = gem.tags.filter(tag => tag !== "Support" && tag !== "Lineage");
   return `<div class="app-hover-head"><strong>${escapeHtml(gem.name)}</strong><span class="app-weak">${gemKindName(gem)}</span></div>
     ${tags.length ? `<div class="app-gem-tags">${tags.map(escapeHtml).join(" · ")}</div>` : ""}

@@ -24,10 +24,6 @@ const VARIANTS = {
   // The width of the windows of the home page (2l): the minimum of specs.md, half a 1920-pixel screen, and a wide
   // window of the owner's screen.
   homeWidth: { label: "Home width", options: { 900: "900 px", 960: "960 px", 1600: "1,600 px" }, fallback: "960" },
-  // The boxes of the inventory (2j3, N2): their look, and their strength from 0 to 100, read by
-  // css/side-inventory.css (the owner, 2026-11-20: darker or lighter with a transparency).
-  invBox: { label: "Inventory boxes", options: { dark: "B1 · Darker", light: "B2 · Lighter", line: "B3 · A line", "dark-line": "B4 · Darker and a line", "light-line": "B5 · Lighter and a line", glow: "B6 · A light from the middle", solid: "B7 · Solid, as before" }, fallback: "dark" },
-  invBoxStrength: { label: "Strength", range: { min: 0, max: 100, step: 1 }, variable: "--inv-box-strength", unit: "", fallback: "50" },
 };
 
 // The styles a section shows side by side: the style of the page alone, Frost Night by default, the

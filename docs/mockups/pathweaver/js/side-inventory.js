@@ -5,7 +5,8 @@
 // tools/make-data.py), square corners on every box; an empty slot its name in the weak grey. A hint
 // that names no item of the game data (a free text of its author, « Any Belt ») has no image: its
 // words stand in for it. The slots the drawing has no place for (Trinket1, Flask2, an unknown id) in a
-// short list under it. The look of the boxes is open (VARIANTS.invBox and invBoxStrength).
+// short list under it. Each box darker than the column with a line (B4 at 25 %, css/side-inventory.css).
+// A hinted slot, or a line of the list, shows the card of its item under the pointer (js/slot-hover.js).
 
 STATE.inventorySet = 1;
 
@@ -33,6 +34,9 @@ function hintItem(hint) {
 }
 
 const itemArt = item => item.art ? `<img class="app-item-art" src="pathweaver/img/items/${item.art}" alt="">` : "";
+// What the card of a hinted slot reads (js/slot-hover.js): its item, its slot, its levels, the note of
+// its author, at the level shown.
+const hintAttributes = (hint, item, level) => `data-item="${escapeHtml(item.name)}" data-slot="${escapeHtml(item.slot)}" data-levels="${hint.levels}" data-level="${level}" data-note="${escapeHtml(hint.note ?? "")}"${item.unknown ? " data-unknown" : ""}`;
 const UNKNOWN_MARK = '<span class="app-unknown" title="Not in the game data of 0.5.2">?</span>';
 
 // What a slot holds: the image; the words of a free text or of an unknown id (a mark alone in a small
@@ -58,14 +62,15 @@ function inventoryBox(level, hints = slotsAt(level, STATE.inventorySet)) {
     const hint = hints.find(slot => slot.id === id && (cell === undefined || slot.x === cell));
     const item = hint && hintItem(hint);
     const state = item ? `is-hinted${item.unknown ? " is-unknown" : ""}${item.art ? "" : " is-text"}` : "is-empty";
-    const title = item ? `${item.slot}: ${item.name}${item.unknown ? " · unknown" : ""}` : `${INVENTORY_NAMES[id]}: nothing`;
-    return `<div class="app-slot ${state}" style="left:${px(x)};top:${px(y)};width:${px(w)};height:${px(h)}" title="${escapeHtml(title)}">${slotInner(item, id, w < 48)}</div>`;
+    // An empty slot says which it is in its title (a small one shows no name); a hinted one has its card.
+    const about = item ? hintAttributes(hint, item, level) : `title="${escapeHtml(INVENTORY_NAMES[id])}: nothing"`;
+    return `<div class="app-slot ${state}" style="left:${px(x)};top:${px(y)};width:${px(w)};height:${px(h)}" ${about}>${slotInner(item, id, w < 48)}</div>`;
   }).join("");
-  const others = hints.filter(hint => !inLayout(hint.id)).map(hintItem);
+  const others = hints.filter(hint => !inLayout(hint.id));
   return `<div class="app-inventory-head"><h2 class="app-side-title app-title">Inventory</h2>${inventorySetSwitch()}</div>
     <div class="app-inventory" style="width:${px(216)};height:${px(216)}">${slots}</div>
-    ${others.length ? `<ul class="app-inventory-others">${others.map(item =>
-      `<li><span class="app-item-thumb">${item.art ? itemArt(item) : item.unknown ? UNKNOWN_MARK : ""}</span><span class="app-inventory-slot">${escapeHtml(item.slot)}</span><span class="app-inventory-name ${item.unknown ? "is-unknown" : ""}">${escapeHtml(item.name)}</span>${item.unknown ? '<span class="app-unknown-word">unknown</span>' : ""}</li>`).join("")}</ul>` : ""}`;
+    ${others.length ? `<ul class="app-inventory-others">${others.map(hint => [hint, hintItem(hint)]).map(([hint, item]) =>
+      `<li ${hintAttributes(hint, item, level)}><span class="app-item-thumb">${item.art ? itemArt(item) : item.unknown ? UNKNOWN_MARK : ""}</span><span class="app-inventory-slot">${escapeHtml(item.slot)}</span><span class="app-inventory-name ${item.unknown ? "is-unknown" : ""}">${escapeHtml(item.name)}</span>${item.unknown ? '<span class="app-unknown-word">unknown</span>' : ""}</li>`).join("")}</ul>` : ""}`;
 }
 
 ACTIONS["inventory-set"] = element => {
