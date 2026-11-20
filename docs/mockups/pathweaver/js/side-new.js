@@ -22,47 +22,23 @@ function newAtBox(level) {
   const more = list.length > NEW_LINES
     ? `<button type="button" class="app-new-more" title="Opens the window of « N changes »">and ${list.length - NEW_LINES} more</button>` : "";
   return `<h2 class="app-side-title app-title app-new-title">New at ${level}</h2>
-    <div class="app-new" data-level="${level}"><ul class="app-changes-lines app-new-lines">${list.slice(0, NEW_LINES).map(newLine).join("")}</ul>${more}</div>`;
+    <div class="app-new"><ul class="app-changes-lines app-new-lines">${list.slice(0, NEW_LINES).map(newLine).join("")}</ul>${more}</div>`;
 }
 
-// Its motion when the level changes, three to choose (2j), against M0, the lines replaced at once as
-// in the window: the column is beside the band, where the eye isn't, so the motion draws it there.
-// The page draws the column again at once; the motion runs from what it showed before. A dragged
-// cursor changes the level once set down: the motions never pile up. None when the system asks
-// for less motion.
-const NEW_MOTIONS = {
-  M0: { title: "M0 · At once", text: "The lines replaced at once, as in the window of « N changes »." },
-  M1: { title: "M1 · A fade", text: "The lines before fade out in 80 ms, then the new ones fade in, in 150 ms." },
-  M2: { title: "M2 · A rise, one line after the other", text: "The new lines rise by 4 px as they appear, 30 ms apart, each in 180 ms." },
-  M3: { title: "M3 · A flash of the title", text: "The lines at once; « New at N » lights up to white and back to the accent, in 400 ms." },
-};
-const newShownBefore = new Map();
-function playNewMotion(column, index) {
-  const block = column.querySelector(".app-new");
+// Its motion when the level changes (M3 of three, the owner, 2026-11-20: a fade, and a rise of the
+// lines one after the other, set aside): the lines replaced at once, as in the window, and the title
+// lighting up to white, the white of the cursor of the level, and back to the accent in 400 ms. The
+// column is beside the band, where the eye isn't: the flash draws it there, and nothing of the
+// column moves. Only when something is new; a dragged cursor changes the level once set down, so the
+// flashes never pile up; none when the system asks for less motion.
+const newLevelBefore = new Map();
+function flashNewTitle(column, index) {
   const title = column.querySelector(".app-new-title");
-  const level = title.textContent;
-  const before = newShownBefore.get(index);
-  newShownBefore.set(index, { level, html: block?.innerHTML ?? "" });
-  if (!before || before.level === level || lessMotion()) return;
-  const motion = column.dataset.motion;
-  if (motion === "M1") {
-    // The lines before laid over the new ones, which wait under them; to nothing new, they just go.
-    const lines = [...(block?.children ?? [])];
-    if (block && before.html) {
-      const ghost = document.createElement("div");
-      ghost.className = "app-new-ghost";
-      ghost.innerHTML = before.html;
-      block.prepend(ghost);
-      ghost.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 80, easing: "ease-out", fill: "forwards" }).finished.then(() => ghost.remove());
-    }
-    for (const line of lines) line.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 150, delay: before.html ? 80 : 0, easing: "ease-out", fill: "backwards" });
-  } else if (motion === "M2") {
-    [...(block?.querySelectorAll("li, .app-new-more") ?? [])].forEach((line, order) =>
-      line.animate([{ opacity: 0, transform: "translateY(4px)" }, { opacity: 1, transform: "none" }],
-        { duration: 180, delay: order * 30, easing: "cubic-bezier(.2, .8, .2, 1)", fill: "backwards" }));
-  } else if (motion === "M3") {
-    title.animate([{ color: "#ffffff", textShadow: "0 0 10px color-mix(in srgb, var(--accent) 80%, transparent)" }, { color: getComputedStyle(title).color, textShadow: "none" }],
-      { duration: 400, easing: "ease-out" });
-  }
+  if (!title) return;
+  const before = newLevelBefore.get(index);
+  newLevelBefore.set(index, title.textContent);
+  if (before === undefined || before === title.textContent || title.classList.contains("is-empty") || lessMotion()) return;
+  title.animate([{ color: "#ffffff", textShadow: "0 0 10px color-mix(in srgb, var(--accent) 80%, transparent)" }, { color: getComputedStyle(title).color, textShadow: "none" }],
+    { duration: 400, easing: "ease-out" });
 }
-AFTER_RENDER.push(() => document.querySelectorAll(".app-side[data-motion]").forEach(playNewMotion));
+AFTER_RENDER.push(() => document.querySelectorAll(".app-side").forEach(flashNewTitle));

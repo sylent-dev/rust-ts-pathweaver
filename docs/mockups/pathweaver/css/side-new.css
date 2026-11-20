@@ -2,18 +2,8 @@
    nothing changes, the lines of the window under it. */
 .app-new-title { margin-top: 0; color: var(--accent); }
 .app-new-title.is-empty { color: var(--weak); }
-.app-new { position: relative; }
 .app-side .app-new-lines { margin: 0 -10px 0 -6px; font-size: 12px; }
 .app-side .app-new-lines li { padding: 1px 10px; }
 .app-side .app-new-lines b { font-weight: 600; }
 .app-new-more { display: block; margin: 4px 0 0 14px; padding: 0; border: 0; background: none; color: var(--accent); font-size: 12px; font-weight: 600; cursor: pointer; }
 .app-new-more:hover { color: var(--text); }
-/* The lines before, over the new ones while they fade out (M1). */
-.app-new-ghost { position: absolute; top: 0; left: 0; right: 0; z-index: 1; pointer-events: none; background: var(--side); }
-
-/* The section of the motions (sections/side-new.js), removed once one is kept. */
-.page-slot:has(> .app-new-band) { flex-basis: 100%; }
-.app-new-band { overflow: visible; }
-.app-new-case { overflow: visible; background: none; box-shadow: none; }
-.app-new-case-text { min-height: 36px; margin: 0 0 8px; color: #adb5bd; font-size: 12px; line-height: 1.4; }
-.app-new-case-column { height: 668px; box-shadow: var(--window-shadow); }
