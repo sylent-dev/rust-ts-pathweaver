@@ -88,6 +88,10 @@
      than the column with a transparency, and a line of 1 px of the text with a transparency. */
   --slot-box: rgb(0 0 0 / 17.5%);
   --slot-line: color-mix(in srgb, var(--text) 7.5%, transparent);
+  /* The sticky note « ? » of an id the game data don't know, on an item or a gem (2j3b, F3, the owner,
+     2026-11-20): the same in every style. */
+  --unknown-note: #ffe066;
+  --unknown-ink: #4a3b00;
   /* The gems: a colour per attribute (strength, dexterity, intelligence, none) and a shape. */
   --gem-str: #ced4da;
   --gem-spirit: #ced4da;   /* a spirit gem, a teal of its own (2j2) */

@@ -1,6 +1,6 @@
 // The mark of an id the game data don't know (2j3b, the owner, 2026-11-20): F3 of twelve variants on
-// the items, a yellow sticky note « ? » (css/side-inventory.css), and from E4 an amber « ? » in place of
-// the mark of a gem (css/side-skills.css); the others in the history of Git. On a case: two rows of
+// the items, a yellow sticky note « ? » (css/side-inventory.css), and the same note, smaller, in place
+// of the mark of a gem (css/side-skills.css); the others in the history of Git. On a case: two rows of
 // skills (an unknown support on a known skill, an unknown skill), then the inventory with an unknown
 // unique in a large slot (Helm1) and a small one (Ring2), and an unknown slot in the list (Trinket2).
 

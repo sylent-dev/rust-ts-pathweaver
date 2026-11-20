@@ -3,8 +3,7 @@
 /* An id the game data don't know (2j3b, F3 of twelve variants, the owner, 2026-11-20): a yellow sticky
    note « ? », a little turned, pinned on its slot (alone in a small one, at the corner of a large one
    that writes its name), on its thumbnail in the list, « unknown » in its yellow; the item's words as
-   any other. The amber « ? » of a gem is in css/side-skills.css. */
-:root { --unknown: var(--change-swapped); --unknown-note: #ffe066; --unknown-ink: #4a3b00; }
+   any other (--unknown-note, --unknown-ink, css/tokens.css). The note of a gem is in css/side-skills.css. */
 .app-inventory-head { display: flex; align-items: baseline; justify-content: space-between; }
 .app-inventory-sets { display: inline-flex; gap: 2px; }
 .app-inventory-sets button { height: 24px; padding: 0 7px; border: none; border-radius: 0; background: none; color: var(--weak); font-size: 12px; cursor: pointer; }
