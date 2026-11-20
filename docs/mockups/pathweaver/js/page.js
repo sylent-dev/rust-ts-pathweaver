@@ -30,9 +30,6 @@ const VARIANTS = {
   cardIconSize: { label: "Icon size", range: { min: 28, max: 52, step: 1 }, variable: "--sc-icon-size", unit: "px", fallback: "35" },
   cardIconSide: { label: "Icon side", options: { left: "Left", right: "Right" }, fallback: "left" },
   cardIcon: { label: "Card icon", options: { i17: "I17", i18: "I18", i19: "I19", i20: "I20", i21: "I21" }, fallback: "i17" },
-  // The strength of the graph paper on the note of a skill card (the owner, 2026-11-20), 3 % as the blocks
-  // of the page by default.
-  noteGrid: { label: "Note grid", range: { min: 0, max: 30, step: 1 }, variable: "--sc-note-texture", unit: "%", fallback: "3" },
   // The Skills tab (2k): twelve variants, three at each of four temperatures (js/skills-tab.js).
   skillsTab: { label: "Skills tab", options: Object.fromEntries(["n1", "n2", "n3", "h1", "h2", "h3", "e1", "e2", "e3", "f1", "f2", "f3"].map(id => [id, id.toUpperCase()])), fallback: "n1" },
 };

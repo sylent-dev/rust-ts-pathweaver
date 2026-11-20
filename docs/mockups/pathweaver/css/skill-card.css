@@ -1,43 +1,33 @@
 /* The card of a skill (2k, js/gem-hover.js, skillCardHtml; the owner, 2026-11-20, on the wireframe
-   docs/wireframes/gem-card.excalidraw): three parts, without a light.
+   docs/wireframes/gem-card.excalidraw): three parts, without a light, without the graph paper.
    - The head as high as the icon, in the deep shade of the bands: the icon of the skill square in its
      corner, its name beside it, its tags under the name on one line, cut by an ellipsis.
    - The body, a step darker than the head (D4 of twelve ways to tell them apart): the description and
      the levels.
-   - The note of the author, in the darker shade of the body, on the graph paper of the blocks, which
-     tells it from the description (the owner, 2026-11-20).
+   - The note of the author, in the shade of the head.
    Over the tree the parts are see-through at 10 %, as the card of a passive; opaque over rows. The card
    of a support is untouched.
    Set aside by the owner (2026-11-20): the head light, the light of the page from its top left, the light
    from the bottom right on the note, the tags on two lines in the head (18 skills of 37: the head higher
-   than the icon) and in the body, the graph paper of the blocks on the whole card, then on the body and
-   the note; between the head and the body, a thin line (under the card or the text only, alone or with
-   a lighter head), a lighter head, a band of the light shade, a line in the colours of the gem, a line
-   of light, the head tinted by the colours of its gem (one, a blend or two halves); the note in a light
-   shade (that of the bands, a step lighter, or between the two).
+   than the icon) and in the body; the graph paper of the blocks on the whole card, then on the body and
+   the note, then on the note alone; between the head and the body, a thin line (under the card or the
+   text only, alone or with a lighter head), a lighter head, a band of the light shade, a line in the
+   colours of the gem, a line of light, the head tinted by the colours of its gem (one, a blend or two
+   halves); the note in a light shade (that of the bands, a step lighter, or between the two) and in the
+   darker shade of the body.
 
-   Open: the strength of the graph paper on the note (« Note grid »); the side of the icon (« Icon
-   side », left or right); its size (« Icon size »); the icon, five ways (« Card icon », I17–I21, the
-   sixteen of before are in the history of Git). */
+   Open: the side of the icon (« Icon side », left or right); its size (« Icon size »); the icon, five
+   ways (« Card icon », I17–I21, the sixteen of before are in the history of Git). */
 .app-gem-hover.is-skill-card { --sc-alpha: 90%; --sc-icon: var(--sc-icon-size, 35px); width: 320px; max-width: none; padding: 0; overflow: hidden; background: none; }
 .app-gem-hover.is-skill-card.is-over-rows, .app-gem-hover.is-skill-card.is-static { --sc-alpha: 100%; }
 
-/* The shades of the parts: the head in the deep shade of the bands; the body and the note a step darker. */
-.is-skill-card { --sc-head: var(--band-deep); --sc-body: color-mix(in srgb, var(--band-deep), #000 60%); --sc-note: var(--sc-body); }
+/* The shades of the parts: the head and the note in the deep shade of the bands; the body a step darker. */
+.is-skill-card { --sc-head: var(--band-deep); --sc-body: color-mix(in srgb, var(--band-deep), #000 60%); --sc-note: var(--sc-head); }
 
 .sc-head { display: flex; min-height: var(--sc-icon); background: color-mix(in srgb, var(--sc-head) var(--sc-alpha), transparent); }
 .sc-body { padding: 9px 12px 10px; background: color-mix(in srgb, var(--sc-body) var(--sc-alpha), transparent); }
 .sc-body .app-gem-text { margin: 0; }
 .sc-note { padding: 9px 12px 10px; background: color-mix(in srgb, var(--sc-note) var(--sc-alpha), transparent); }
-/* The graph paper of the blocks on the note only (the owner, 2026-11-20: in the shade of the body, it tells
-   the note from the description; css/textures.css), under its words; its strength tuned by eye with
-   « Note grid » (VARIANTS.noteGrid, 0 to 30 %; 3 % as the blocks of the page by default). */
-.sc-note { position: relative; isolation: isolate; }
-.sc-note::before { content: ""; position: absolute; inset: 0; z-index: -1; pointer-events: none;
-  background: var(--texture-colour); opacity: var(--sc-note-texture, var(--texture-opacity));
-  mask-image: var(--texture); mask-size: var(--texture-size) var(--texture-size);
-  mask-position: calc(var(--texture-size) / 8) calc(var(--texture-size) / 8); }
-
 /* The name beside the icon, in the middle of the head, the tags under it on one line: the ellipsis cuts
    them, a native tooltip shows them whole (js/gem-hover.js, titleIfCut). Only the cards drawn in place
    of the section take the pointer for it: the card on hover lets it through (css/tree-hover.css). */
