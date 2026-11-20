@@ -1,4 +1,4 @@
 /* The Overview tab: the tree on the left, a column of 330 px on the right (css/side-*.css). */
 .app-overview { display: flex; height: 668px; }
-.app-side { flex: none; width: 330px; box-sizing: border-box; padding: 12px 12px 12px 14px; overflow: hidden; background: var(--side); }
+.app-side { flex: none; width: 330px; box-sizing: border-box; padding: 12px 12px 12px 14px; overflow: hidden; background: var(--side-column); }
 .app-side-title { margin: 16px 0 8px 4px; font-size: 15px; }   /* the titles of the column: Skills, Inventory */

@@ -1,13 +1,20 @@
-/* The skills of the right column (js/side-skills.js). */
+/* The skills of the right column (js/side-skills.js): N2, the supports as their marks at the right. */
 .app-skills { margin: 0; padding: 0 0 0 4px; list-style: none; }
-.app-skill { display: flex; align-items: center; gap: 8px; height: 22px; font-size: 13px; }
-/* The mark of a gem: its colour says its attribute, a hollow mark a spirit gem. */
-.app-gem { flex: none; width: var(--gem-size); height: var(--gem-size); box-sizing: border-box; margin: 0 2px; border: var(--gem-line); border-radius: var(--gem-radius); clip-path: var(--gem-clip); transform: rotate(var(--gem-rotate)); background: var(--gem-none); box-shadow: var(--gem-glow); }
-.app-gem { color: var(--gem-none); }   /* the glow (--gem-glow) takes the colour of the gem */
-.app-gem.is-r { background: var(--gem-str); color: var(--gem-str); }
-.app-gem.is-g { background: var(--gem-dex); color: var(--gem-dex); }
-.app-gem.is-b { background: var(--gem-int); color: var(--gem-int); }
-.app-gem.is-spirit { background: none; border: 2px solid currentColor; clip-path: none; }
+.app-skill { display: flex; align-items: center; min-height: 22px; font-size: 13px; }
+.app-skill-gem { display: inline-flex; }
+.app-skill-gem .app-gem-mark { margin: 0; }
+.app-skill > .app-skill-gem { margin-right: 8px; }
 .app-skill-name { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.app-skill-new { font-size: 12px; }
-.app-skill-supports { margin-left: auto; font-size: 12px; white-space: nowrap; }
+.app-skill .app-changes-note { margin-left: 5px; vertical-align: 0; }
+.app-skill-supports { display: inline-flex; align-items: center; gap: 4px; margin-left: auto; padding-left: 8px; }
+/* The skill a spirit gem triggers, indented under it. */
+.app-skill.is-triggered { padding-left: 4px; font-size: 12.5px; }
+.app-skill-hook { margin-right: 5px; font-size: 12px; }
+
+/* The gem of a line of « New at N » under the pointer, lit in its row (js/side-skills.js). */
+.app-skill-gem .app-gem-mark { transition: transform 120ms ease-out, filter 120ms ease-out; }
+.app-skill-gem.is-lit .app-gem-mark { transform: scale(1.5); filter: drop-shadow(0 0 3px var(--accent)) brightness(1.3); }
+
+/* The section of the mock-up (sections/skill-rows.js): the tree left out at 65 and 85. */
+.app-sr-tree { display: grid; flex: 1; place-items: center; font-size: 12px; }
+.app-overview.app-sr-short { height: auto; min-height: 420px; }

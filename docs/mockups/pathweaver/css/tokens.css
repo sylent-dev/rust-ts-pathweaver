@@ -53,6 +53,7 @@
   --on-band-weak: #868e96;
   --band-deep: #dee2e6;   /* the band without its lines (css/level-band.css): a shade darker than the page */
   --side: transparent;
+  --side-column: var(--side);   /* the right column of the Overview, a shade darker than the tree (2j2) */
   --panel: #ffffff;
   /* Controls. */
   --tab: #e9ecef;
@@ -88,21 +89,17 @@
   --slot-radius: 0;
   /* The gems: a colour per attribute (strength, dexterity, intelligence, none) and a shape. */
   --gem-str: #ced4da;
+  --gem-spirit: #ced4da;   /* a spirit gem, a teal of its own (2j2) */
+  --gem-lineage: #ced4da;   /* a lineage support, a warm grey of its own (2j2) */
   --gem-dex: #ced4da;
   --gem-int: #ced4da;
   --gem-none: #ced4da;
-  --gem-size: 11px;
   --gem-mark-size: 10px;   /* the mark of a gem beside a text of 12 px (2g3, the owner, 2026-11-19) */
   /* The colours of a change (2g3, the owner, 2026-11-19): what comes, what is replaced, what goes;
      the rise, the warning and the fall of Exile Market, tuned together on a blue night. */
   --change-added: #5fcf80;
   --change-swapped: #f0b85a;
   --change-gone: #e66a5c;
-  --gem-radius: 50%;
-  --gem-rotate: 0deg;
-  --gem-clip: none;
-  --gem-line: 1px solid #1e1e1e;
-  --gem-glow: none;
   /* The tree, read by the canvas: colours, the width of the links taken, a glow (blur in pixels)
      on what is taken, and a shape per kind (circle, square, diamond, hex, star). */
   --tree-background: #ffffff;
@@ -145,8 +142,7 @@
   --accent: #2563eb; --accent-soft: #2563eb; --on-accent: #ffffff;
   --track: #c1cfe6; --track-width: 2px; --marker: #8fa2c4;
   --slot-empty: #cad6e7; --slot-fill: #f4f7fc; --slot-radius: 8px;
-  --gem-str: #e5484d; --gem-dex: #12a594; --gem-int: #2563eb; --gem-none: #8fa2c4;
-  --gem-size: 9px; --gem-radius: 2px; --gem-line: none;
+  --gem-str: #e5484d; --gem-dex: #12a594; --gem-int: #2563eb; --gem-none: #8fa2c4; --gem-spirit: #0d9488; --gem-lineage: #8a7f6a;
   --tree-background: transparent;
   --tree-edge: #dce4f0; --tree-edge-taken: #2563eb; --tree-edge-width: 1.8;
   --tree-node: #ffffff; --tree-node-line: #b4c3db;
@@ -165,6 +161,7 @@
   --bar: #121a29; --on-bar: #e3eaf5;
   --band: #0f1726; --on-band: #e3eaf5; --on-band-weak: #8393ad; --band-deep: #070b12;
   --side: var(--band-deep);   /* the tree and the side column in the shade of the level band (2h, the owner, 2026-11-19) */
+  --side-column: #04070b;   /* a shade darker than the tree, not read as part of it (the owner, 2026-11-20) */
   --panel: #141d2ee6;
   --tab: #172133; --on-tab: #8393ad;
   --control: #1a2539; --control-line: #24304a;
@@ -178,8 +175,7 @@
   --slot-empty: #111a2a; --slot-fill: #1c2840; --slot-radius: 8px;
   /* The attributes as in the game, those of Exile Market (2g3, the owner, 2026-11-19): a true green
      for dexterity, apart from the green of what comes. */
-  --gem-str: #e0473f; --gem-dex: #3fbf4f; --gem-int: #5aa7f0; --gem-none: #8393ad;
-  --gem-size: 9px; --gem-radius: 2px; --gem-line: none;
+  --gem-str: #e0473f; --gem-dex: #3fbf4f; --gem-int: #5aa7f0; --gem-none: #8393ad; --gem-spirit: #2dd4bf; --gem-lineage: #c2b8a3;   /* bright teal, warm grey (the owner, 2026-11-20) */
   --tree-background: transparent;
   --tree-edge: #18223a; --tree-edge-taken: #e3eaf5; --tree-edge-width: 1.8;   /* the links taken in white (2i, the owner, 2026-11-19) */
   --tree-node: #0c111b; --tree-node-line: #2a3a5c;
@@ -198,6 +194,7 @@
   --bar: #19191b; --on-bar: #ececee;
   --band: #161618; --on-band: #ececee; --on-band-weak: #8e8e94; --band-deep: #0a0a0b;
   --side: var(--band-deep);   /* as Frost Night */
+  --side-column: #060607;
   --panel: #1e1e21e6;
   --tab: #212124; --on-tab: #8e8e94;
   --control: #252528; --control-line: #2c2c30;
@@ -209,8 +206,7 @@
   --accent: #f59e0b; --accent-soft: #f59e0b; --on-accent: #131314;
   --track: #3a3a3f; --track-width: 2px; --marker: #5c5c63;
   --slot-empty: #18181a; --slot-fill: #27272a; --slot-radius: 8px;
-  --gem-str: #f87171; --gem-dex: #2dd4bf; --gem-int: #60a5fa; --gem-none: #8e8e94;
-  --gem-size: 9px; --gem-radius: 2px; --gem-line: none;
+  --gem-str: #f87171; --gem-dex: #2dd4bf; --gem-int: #60a5fa; --gem-none: #8e8e94; --gem-spirit: #2dd4bf; --gem-lineage: #c2b8a3;
   --tree-background: transparent;
   --tree-edge: #222225; --tree-edge-taken: #f59e0b; --tree-edge-width: 1.8;
   --tree-node: #131314; --tree-node-line: #3a3a3f;

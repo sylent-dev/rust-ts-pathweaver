@@ -6,7 +6,8 @@ From the repository root. Reads:
 
 - the passive tree and the class portraits exported by Grinding Gear Games
   (grindinggear/poe2-skilltree-export, tag TREE_TAG);
-- the names, kinds and colours of the gems (RePoE, base_items and skill_gems);
+- the names, kinds, colours, tags and descriptions of the gems (RePoE, base_items, skill_gems,
+  skills and gem_tags);
 - the builds of the corpus, in inputs/builds/ (local only, never committed).
 
 Writes js/data-tree.js, js/data-builds.js, img/portraits/*.webp (the discs),
@@ -272,6 +273,25 @@ def tree_data(tree, shown, sheet):
     }
 
 
+def game_words(text):
+    """The words of a text of the game data without its links: `[Ref|Words]` gives Words, `[Words]` Words."""
+    return re.sub(r"\[([^\]|]*)\|([^\]]*)\]|\[([^\]]*)\]", lambda m: m.group(2) if m.group(1) is not None else m.group(3), text or "")
+
+
+def described(entry, gems, skills, tags):
+    """What the hover of a gem shows from the game data (2j2): its tags as the game names them (those
+    it doesn't show left out), and its description: the text of a support, or that of the skill a
+    skill gem grants."""
+    info = gems.get(entry["id"], {})
+    shown = [game_words(tags[tag]) for tag in info.get("tags", []) if tags.get(tag)]
+    if info.get("gem_type") == "support":
+        text = info.get("support_text", "")
+    else:
+        granted = (info.get("grants_skills") or [""])[0]
+        text = skills.get(granted, {}).get("active_skill", {}).get("description", "")
+    return {"tags": shown, "text": game_words(text)}
+
+
 def gem(entry, names, gems):
     info = gems.get(entry["id"], {})
     base = names.get(entry["id"], {})
@@ -282,6 +302,11 @@ def gem(entry, names, gems):
         "colour": info.get("color", "w"),
         "levels": interval(entry),
         "known": entry["id"] in names,
+        # A lineage support (2j2: its colour in the list « Lineage support » of the mock-up).
+        "lineage": bool(info.get("is_lineage")),
+        # The note of the author on the gem, its markup kept (2j2: its mark in the row, its text in
+        # the hover), or "".
+        "note": (entry.get("additional_text") or "").strip(),
     }
 
 
@@ -316,8 +341,9 @@ def first_line(text):
     return lines[0] if lines else ""
 
 
-def build_data(build, names, gems, ascendancies):
+def build_data(build, names, gems, ascendancies, skills, tags):
     asc = ascendancies.get(build.get("ascendancy"), {})
+    hover = lambda entry: described(entry, gems, skills, tags)
     return {
         "name": build["name"],
         "author": build.get("author", ""),
@@ -325,8 +351,8 @@ def build_data(build, names, gems, ascendancies):
         "ascendancy": asc.get("name", build.get("ascendancy", "")),
         "class": asc.get("class", ""),
         "portrait": (build.get("ascendancy") or "").lower(),
-        "skills": [dict(gem(skill, names, gems),
-                        supports=[gem(s, names, gems) for s in skill.get("support_skills", [])])
+        "skills": [dict(gem(skill, names, gems), **hover(skill),
+                        supports=[dict(gem(s, names, gems), **hover(s)) for s in skill.get("support_skills", [])])
                    for skill in build.get("skills", [])],
         "slots": [{"id": slot["inventory_id"], "x": slot.get("slot_x", 0), "y": slot.get("slot_y", 0),
                    "levels": interval(slot), "unique": slot.get("unique_name", ""),
@@ -394,7 +420,9 @@ def changes_at(build, level, tree, names, gems):
     ascendancy = {node["id"] for node in tree["nodes"].values() if node.get("ascendancyId") and "id" in node}
     skills, notes, gear, passives = state_at(build, level, ascendancy)
     old_skills, old_notes, old_gear, old_passives = state_at(build, level - 1, ascendancy) if level > 1 else ({}, {}, {}, {})
-    named = lambda gem_id, note="": dict(name=gem({"id": gem_id}, names, gems)["name"], colour=gem({"id": gem_id}, names, gems)["colour"], note=bool(note))
+    def named(gem_id, note=""):
+        found = gem({"id": gem_id}, names, gems)
+        return dict(name=found["name"], colour=found["colour"], kind=found["kind"], lineage=found["lineage"], note=bool(note))
     # The passives taken at the level: (weapon set, of the ascendancy, with a note) of each.
     taken = [(key[1], asc, has_note) for key, (asc, has_note) in passives.items() if key not in old_passives]
     groups = {
@@ -481,6 +509,8 @@ def main():
     tree = json.loads(fetch(cache, f"{TREE_URL}/data.json", "data.json").read_text(encoding="utf-8"))
     names = json.loads(fetch(cache, f"{REPOE_URL}/base_items.min.json", "base_items.min.json").read_text())
     gems = json.loads(fetch(cache, f"{REPOE_URL}/skill_gems.min.json", "skill_gems.min.json").read_text())
+    skills = json.loads(fetch(cache, f"{REPOE_URL}/skills.min.json", "skills.min.json").read_text())
+    tags = json.loads(fetch(cache, f"{REPOE_URL}/gem_tags.min.json", "gem_tags.min.json").read_text())
     ascendancies = {a["id"]: {"name": a["name"], "class": c["name"]}
                     for c in tree["classes"] for a in c["ascendancies"]}
     read = lambda name: json.loads((CORPUS / name).read_text(encoding="utf-8-sig"))
@@ -488,7 +518,7 @@ def main():
     write_js("data-tree.js", "TREE", tree_data(tree, builds[0], sheets(cache)))
     write_js("data-builds.js", "BUILDS", {
         "treeVersion": TREE_TAG,
-        "shown": build_data(builds[0], names, gems, ascendancies),
+        "shown": build_data(builds[0], names, gems, ascendancies, skills, tags),
         "open": [{"name": b["name"], "ascendancy": ascendancies.get(b.get("ascendancy"), {}).get("name", ""),
                   "portrait": (b.get("ascendancy") or "").lower()} for b in builds],
         "library": [library_row(b, ascendancies) for b in [*builds, *map(read, LIBRARY)]],

@@ -11,5 +11,14 @@ const GEM_SHAPES = {
   support: '<polygon points="8,2 14,8 8,14 2,8" fill="currentColor"/>',
 };
 
-// The mark of a gem, `kind` « skill » or « support ».
-const gemMark = (colour, kind = "skill") => `<svg class="app-gem-mark" viewBox="0 0 16 16" style="color:${gemColour(colour)}" aria-hidden="true">${GEM_SHAPES[kind]}</svg>`;
+// The shape says the kind of a gem, its colour what it is (the owner, 2026-11-20): a spirit gem is a
+// skill, a hexagon, in a teal of its own rather than the colour of its attribute (--gem-spirit, the
+// bright teal of five); a lineage support is a support, a square on its tip, in a warm grey of its own
+// (--gem-lineage, of silver, a mid grey and the colour of its attribute), apart from the cool grey of
+// the gems without an attribute (--gem-none). The colour of a gem of the build (BUILDS: its colour,
+// its kind, whether it is a lineage support):
+const gemColourOf = gem => gem.kind === "spirit" ? "var(--gem-spirit)" : gem.lineage ? "var(--gem-lineage)" : gemColour(gem.colour);
+
+// The mark of a gem: a hexagon for a skill (a spirit gem, or the skill a spirit gem triggers, which
+// the file lists among its supports), a square on its tip for a support.
+const gemMark = gem => `<svg class="app-gem-mark" viewBox="0 0 16 16" style="color:${gemColourOf(gem)}" aria-hidden="true">${GEM_SHAPES[gem.kind === "support" ? "support" : "skill"]}</svg>`;

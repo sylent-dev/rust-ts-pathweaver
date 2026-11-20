@@ -102,7 +102,7 @@ function hoverHtml(graph, index, level) {
   const kind = TREE.kinds[graph.nodes[index][2]];
   const entry = entryAt(graph, index, level);
   const state = !entry ? "Not taken"
-    : appliesAt([entry[1], entry[2]], level) ? `Taken at ${entry[1]}` : `Taken later, at ${entry[1]}`;
+    : appliesAt([entry[1], entry[2]], level) ? `Taken at level ${entry[1]}` : `Taken later, at level ${entry[1]}`;
   const set = entry && SET_NAMES[entry[3]] ? ` · ${SET_NAMES[entry[3]]}` : "";
   const hint = entry && entry[4] >= 0 ? `<div class="app-hover-hint">${markupHtml(TREE.texts[entry[4]])}</div>` : "";
   return `<div class="app-hover-head"><strong>${escapeHtml(TREE.texts[name])}</strong><span class="app-weak">${graph === TREE ? KIND_NAMES[kind] : `Ascendancy · ${KIND_NAMES[kind]}`}</span></div>
