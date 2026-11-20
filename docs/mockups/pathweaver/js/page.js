@@ -24,8 +24,8 @@ const VARIANTS = {
   // The width of the windows of the home page (2l): the minimum of specs.md, half a 1920-pixel screen, and a wide
   // window of the owner's screen.
   homeWidth: { label: "Home width", options: { 900: "900 px", 960: "960 px", 1600: "1,600 px" }, fallback: "960" },
-  // The Skills tab (2k): H1 and N3, kept of twelve variants, and six variants of N3, K1–K6 (js/skills-tab.js).
-  skillsTab: { label: "Skills tab", options: { h1: "H1", n3: "N3", k1: "K1", k2: "K2", k3: "K3", k4: "K4", k5: "K5", k6: "K6" }, fallback: "k1" },
+  // The Skills tab (2k): H1 and N3, kept of twelve variants, and K3 and K6, kept of six variants of N3 (js/skills-tab.js).
+  skillsTab: { label: "Skills tab", options: { h1: "H1", n3: "N3", k3: "K3", k6: "K6" }, fallback: "k3" },
 };
 
 // The styles a section shows side by side: the style of the page alone, Frost Night by default, the

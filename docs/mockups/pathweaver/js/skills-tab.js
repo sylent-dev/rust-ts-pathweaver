@@ -30,9 +30,10 @@ const stSupport = (gem, skill) => `<li class="st-support" ${stSkillAttributes(sk
 const stTriggered = skill => skill.triggered.map(gem =>
   `<div class="st-triggered" ${stSkillAttributes(skill, true)}><span class="app-weak st-hook" aria-hidden="true">↳</span>${stGem(gem)}${stNote(gem)}</div>`).join("");
 
-// Six variants of N3 (the owner, 2026-11-21: « the line, and so much information that the skills don't
-// stand out from their supports when there are many »): no line, the icon of the skill as its badge
-// (js/hover-card.js), never on a support; K1 to K6.
+// Variants of N3 (the owner, 2026-11-21: « the line, and so much information that the skills don't stand
+// out from their supports when there are many »): no line, the icon of the skill as its badge, never on
+// a support; K3 and K6 kept of six (a badge before the name, a badge beside the block, the supports in
+// words, two sizes apart, set aside; in the history of Git).
 // The badge of a skill: its icon, the mark of its gem when the data give none; its card on hover.
 const stBadge = gem => gem.icon
   ? `<span class="st-badge" data-gem="${escapeHtml(gem.name)}"><img src="pathweaver/img/skills/${gem.icon}" alt=""></span>`
@@ -40,18 +41,14 @@ const stBadge = gem => gem.icon
 // A skill and what it holds, in the classes of a variant: its head (its badge, its name, « new », its
 // note), its supports, the skills it triggers, each with its badge.
 const stName = gem => `<span class="st-name st-skill" data-gem="${escapeHtml(gem.name)}">${escapeHtml(gem.name)}</span>${stNew(gem)}`;
-function stBlock(skill, className, supportsHtml = gems => `<ul class="st-supports">${gems.map(gem => stSupport(gem, skill)).join("")}</ul>`) {
+function stBlock(skill) {
   const triggered = skill.triggered.map(gem =>
     `<div class="st-head st-triggered" ${stSkillAttributes(skill, true)}><span class="app-weak st-hook" aria-hidden="true">↳</span>${stBadge(gem)}${stName(gem)}${stNote(gem)}</div>`).join("");
-  return `<div class="st-block ${className}">
+  return `<div class="st-block">
     <div class="st-head" ${stSkillAttributes(skill)}>${stBadge(skill)}${stName(skill)}${stNote(skill)}</div>
-    ${skill.supports.length ? supportsHtml(skill.supports) : ""}${triggered}
+    ${skill.supports.length ? `<ul class="st-supports">${skill.supports.map(gem => stSupport(gem, skill)).join("")}</ul>` : ""}${triggered}
   </div>`;
 }
-// The supports as words that flow, one after the other (K4).
-const stSupportWords = skill => gems => `<p class="st-words">${gems.map(gem =>
-  `<span class="st-word" ${stSkillAttributes(skill)}>${skillMark(gem)}<span class="st-name" data-gem="${escapeHtml(gem.name)}">${escapeHtml(gem.name)}</span>${stNew(gem)}${stNote(gem, skill)}</span>`).join("")}</p>`;
-
 const SKILLS_TAB_VARIANTS = {
   h1: {
     title: "H1 · A list and its detail",
@@ -67,35 +64,19 @@ const SKILLS_TAB_VARIANTS = {
         <div class="st-h1-detail" ${stSkillAttributes(skill)}>${detail(skill)}<h3 class="st-h1-title app-title">Supports</h3>${skill.supports.map(detail).join("")}${skill.triggered.map(detail).join("")}</div>`);
     },
   },
-  k1: {
-    title: "K1 · A badge before the name",
-    text: "N3 without its line: the icon of the skill, 22 px, in place of its mark, its name a size above; the supports indented under it, as before.",
-    draw: (rows, level, source) => stList(level, source, "st-n3 st-k1", rows.map(skill => stBlock(skill, "")).join("")),
-  },
-  k2: {
-    title: "K2 · The badge beside the whole block",
-    text: "The icon of the skill, 36 px, at the left of its block, its name and its supports beside it: the badges make a column that the eye goes down.",
-    draw: (rows, level, source) => stList(level, source, "st-n3 st-k2", rows.map(skill => stBlock(skill, "")).join("")),
-  },
+
+
   k3: {
     title: "K3 · The skill on a band",
     text: "The head of the skill on a band of the deep shade, its badge at the right as on its card; the supports under it on the page.",
-    draw: (rows, level, source) => stList(level, source, "st-n3 st-k3", rows.map(skill => stBlock(skill, "")).join("")),
+    draw: (rows, level, source) => stList(level, source, "st-n3 st-k3", rows.map(stBlock).join("")),
   },
-  k4: {
-    title: "K4 · The supports in words",
-    text: "The badge and the name of the skill; its supports under it as words that flow, in grey, a size below: one line or two in place of one per support.",
-    draw: (rows, level, source) => stList(level, source, "st-n3 st-k4", rows.map(skill => stBlock(skill, "", stSupportWords(skill))).join("")),
-  },
-  k5: {
-    title: "K5 · Two sizes apart",
-    text: "The skill large, 15 px, its badge 26 px, space above it; the supports small and grey, 12 px: the contrast of the sizes alone.",
-    draw: (rows, level, source) => stList(level, source, "st-n3 st-k5", rows.map(skill => stBlock(skill, "")).join("")),
-  },
+
+
   k6: {
     title: "K6 · A small card per skill",
     text: "In the construction of the cards on hover: the head in the deep shade, the name and the badge at the right; the supports in the darker body.",
-    draw: (rows, level, source) => stList(level, source, "st-n3 st-k6", rows.map(skill => stBlock(skill, "")).join("")),
+    draw: (rows, level, source) => stList(level, source, "st-n3 st-k6", rows.map(stBlock).join("")),
   },
   n3: {
     title: "N3 · An outline",
