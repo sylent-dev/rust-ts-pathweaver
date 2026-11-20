@@ -9,7 +9,7 @@
 // the same card (the browser sends the pointer there first).
 
 const ITEM_MISSING = {
-  unknown: "Not in the game data of 0.5.2",
+  unknown: NOT_IN_GAME_DATA,
   stats: "Its stats are not in the data yet",
 };
 
@@ -24,7 +24,7 @@ function slotHoverHtml(element) {
     ${item?.unique ? `<div class="app-item-base">${escapeHtml(item.base ?? "")}</div>` : ""}
     ${item?.implicits?.length ? `<div class="app-item-implicits">${lines(item.implicits)}</div>` : ""}
     ${lines(item?.stats)}
-    ${missing ? `<p class="app-item-missing">${missing}</p>` : ""}
+    ${missing ? `<p class="app-hover-missing">${missing}</p>` : ""}
     <div class="app-hover-state">${item ? `${slot} · ` : ""}${levelsWords({ levels: element.dataset.levels.split(",").map(Number) }, Number(element.dataset.level))}</div>
     ${note ? `<div class="app-hover-hint">${markupHtml(note.replace(/^\d+\.\s+/gm, ""))}</div>` : ""}`;
 }

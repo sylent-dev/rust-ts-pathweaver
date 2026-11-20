@@ -5,7 +5,7 @@ Ideas, polish and edge cases found along the way that the current step doesn't n
 ## Reading the files
 
 - **A `null` field is dropped on writing.** `"author": null` (one file of the corpus) is read as no author and not written back; keep it as it was read, as the other fields.
-- **A gem in the wrong folder.** An id such as `Metadata/Items/Gems/SkillGemShieldWall` that exists in the other folder (`Gem/`) could show « did you mean… » in the warnings, once the editor can fix it.
+- **A gem in the wrong folder.** An id such as `Metadata/Items/Gems/SkillGemShieldWall` that exists in the other folder (`Gem/`) could show « did you mean… » in the warnings, once the editor can fix it. After 1.0, which will rename gems, the card of an unknown gem could also offer the nearest known one (« Did you mean Frost Bomb? », the owner's idea of 2026-11-20 at 2j3b): a rule that reads the data, measured on the corpus first.
 - **The meaning of a single-number `level_interval`.** Read as « from that level to 100 » until checked in the game.
 
 ## The level band

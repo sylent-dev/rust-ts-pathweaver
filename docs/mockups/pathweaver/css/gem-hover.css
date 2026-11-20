@@ -6,4 +6,6 @@
 .app-gem-hover.is-over-rows { background: var(--band-image), var(--band-deep); }
 .app-gem-tags { margin-top: 3px; color: var(--on-band-weak); font-size: 11px; }
 .app-gem-text { margin: 6px 0 0; }
+/* The whole id of a gem the game data don't know (2j3b), to look for it. */
+.app-gem-id { display: block; margin-top: 5px; color: var(--on-band-weak); font-family: var(--font-code); font-size: 11px; overflow-wrap: anywhere; }
 .app-skill-name { cursor: default; }

@@ -46,4 +46,3 @@
 .app-slot-hover .is-unique { color: var(--unique); }
 .app-item-base { margin-top: 2px; color: var(--on-band-weak); font-size: 11px; }
 .app-item-implicits { padding-bottom: 5px; border-bottom: 1px solid color-mix(in srgb, var(--on-band) 14%, transparent); }
-.app-item-missing { margin: 6px 0 0; color: var(--on-band-weak); }

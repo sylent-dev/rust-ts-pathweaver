@@ -37,7 +37,7 @@ const itemArt = item => item.art ? `<img class="app-item-art" src="pathweaver/im
 // What the card of a hinted slot reads (js/slot-hover.js): its item, its slot, its levels, the note of
 // its author, at the level shown.
 const hintAttributes = (hint, item, level) => `data-item="${escapeHtml(item.name)}" data-slot="${escapeHtml(item.slot)}" data-levels="${hint.levels}" data-level="${level}" data-note="${escapeHtml(hint.note ?? "")}"${item.unknown ? " data-unknown" : ""}`;
-const UNKNOWN_MARK = '<span class="app-unknown" title="Not in the game data of 0.5.2">?</span>';
+const UNKNOWN_MARK = `<span class="app-unknown" title="${NOT_IN_GAME_DATA}">?</span>`;
 
 // What a slot holds: the image; the words of a free text or of an unknown id (a mark alone in a small
 // slot); the name of the slot, weak, when it is empty and large enough.

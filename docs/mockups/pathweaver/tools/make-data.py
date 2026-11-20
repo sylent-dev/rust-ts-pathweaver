@@ -308,16 +308,20 @@ def described(entry, gems, skills, tags):
     return {"tags": shown, "text": game_words(text)}
 
 
-def gem(entry, names, gems):
+def gem(entry, names, gems, among_supports=False):
+    """A gem of the build. One the game data don't know takes its kind from its place in the file (a
+    support among the supports of a skill), and keeps its whole id for its card (2j3b)."""
     info = gems.get(entry["id"], {})
     base = names.get(entry["id"], {})
-    kind = info.get("gem_type", "support" if "support_gem" in base.get("tags", []) else "active")
+    known = entry["id"] in names
+    kind = info.get("gem_type", "support" if "support_gem" in base.get("tags", []) or (among_supports and not known) else "active")
     return {
         "name": base.get("name", entry["id"].rsplit("/", 1)[-1]),
         "kind": kind,
         "colour": info.get("color", "w"),
         "levels": interval(entry),
-        "known": entry["id"] in names,
+        "known": known,
+        **({} if known else {"id": entry["id"]}),
         # A lineage support (2j2: its colour in the list « Lineage support » of the mock-up).
         "lineage": bool(info.get("is_lineage")),
         # The note of the author on the gem, its markup kept (2j2: its mark in the row, its text in
@@ -368,7 +372,7 @@ def build_data(build, names, gems, ascendancies, skills, tags):
         "class": asc.get("class", ""),
         "portrait": (build.get("ascendancy") or "").lower(),
         "skills": [dict(gem(skill, names, gems), **hover(skill),
-                        supports=[dict(gem(s, names, gems), **hover(s)) for s in skill.get("support_skills", [])])
+                        supports=[dict(gem(s, names, gems, among_supports=True), **hover(s)) for s in skill.get("support_skills", [])])
                    for skill in build.get("skills", [])],
         "slots": [{"id": slot["inventory_id"], "x": slot.get("slot_x", 0), "y": slot.get("slot_y", 0),
                    "levels": interval(slot), "unique": slot.get("unique_name", ""),

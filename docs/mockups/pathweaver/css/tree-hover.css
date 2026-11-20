@@ -17,3 +17,5 @@
 .app-hover-stats li + li { margin-top: 3px; }
 .app-hover-state { margin-top: 6px; }
 .app-hover-hint { margin-top: 8px; padding-top: 7px; border-top: 1px solid color-mix(in srgb, var(--on-band) 14%, transparent); }
+/* What a card says of an id the game data don't know (2j3b): in the weak grey, upright. */
+.app-hover-missing { margin: 6px 0 0; color: var(--on-band-weak); }
