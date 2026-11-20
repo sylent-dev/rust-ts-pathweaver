@@ -24,6 +24,8 @@ const VARIANTS = {
   // The width of the windows of the home page (2l): the minimum of specs.md, half a 1920-pixel screen, and a wide
   // window of the owner's screen.
   homeWidth: { label: "Home width", options: { 900: "900 px", 960: "960 px", 1600: "1,600 px" }, fallback: "960" },
+  // How the drawing of the inventory unrolls above its bar (2j4, css/side-overflow.css).
+  drawerMotion: { label: "Unroll", options: { wipe: "1 · Wipe", blind: "2 · Blind", feather: "3 · Feather", flap: "4 · Flap", spring: "5 · Spring", cascade: "6 · Cascade", scan: "7 · Scan" }, fallback: "wipe" },
 };
 
 // The styles a section shows side by side: the style of the page alone, Frost Night by default, the

@@ -60,6 +60,11 @@ function foldSkills(column) {
 function settleColumn(column) {
   const drawer = column.querySelector(".ov-drawer");
   column.style.setProperty("--bar", `${drawer.offsetHeight - drawer.querySelector(".ov-drawer-bar").offsetTop}px`);
+  // 6 · Cascade: each slot of the drawing waits by its height above the bar, the lowest first.
+  const doll = drawer.querySelector(".ov-drawer-doll"), box = doll.getBoundingClientRect();
+  for (const slot of doll.querySelectorAll(".app-slot, .app-inventory-others li")) {
+    slot.style.setProperty("--rise", ((box.bottom - slot.getBoundingClientRect().bottom) / box.height).toFixed(2));
+  }
   foldSkills(column);
 }
 AFTER_RENDER.push(() => document.querySelectorAll(".app-side.ov").forEach(settleColumn));
