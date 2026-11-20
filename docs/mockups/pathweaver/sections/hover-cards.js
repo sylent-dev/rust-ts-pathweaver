@@ -6,7 +6,7 @@
 // - supports, their icon, a disc, cut to a square: Pinpoint Critical, and Arbiter's Ignition, a lineage
 //   support;
 // - notes of the author: of Spark, and of Comet, the skill Cast on Critical triggers;
-// - passives: a notable with a note of the author, and a notable of the ascendancy;
+// - passives, without art: a notable with a note of the author, and a notable of the ascendancy;
 // - slots: a unique with its stats, a base, and a unique the game data don't know;
 // - a gem the game data don't know.
 // The cards on hover in the windows of the page are the same (the tree, the right column, the Skills tab).

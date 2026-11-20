@@ -3,7 +3,7 @@
    a passive and of a slot of the inventory. Three parts, without a light, without the graph paper.
    - The head, 48 px high, in the deep shade of the bands: the title, the subtitle right under it on one
      line (the same gap on every card), cut by an ellipsis; the art at the right, a square of 48 px
-     (the icon of a skill, of a support or of a passive; none for a note or an item).
+     (the icon of a skill or of a support; none for a note, a passive or an item).
    - The body, a step darker than the head (D4 of twelve ways to tell them apart).
    - The note of the author, in the shade of the head.
    Over the tree the parts are see-through at 10 %, as the card of a passive was; opaque over rows.
@@ -18,7 +18,8 @@
    further right than the body), framed, edged or fading in the colours of the gem, with the mark of its
    row in its corner, of 52, 35 (no room above and under the title and its subtitle, 35 px high) or 42
    px; the disc of a support as it is (it didn't go with the square of a skill), no icon for a support;
-   the image of an item (a staff, two cells by four, doesn't fit a square). */
+   the image of an item (a staff, two cells by four, doesn't fit a square); the icon of a passive (it is
+   right beside the card, on the tree; 2026-11-21). */
 .app-hover.is-hover-card { --hc-alpha: 90%; --hc-art: 48px; width: 320px; max-width: none; padding: 0; overflow: hidden; background: none; }
 .app-hover.is-hover-card.is-over-rows, .app-hover.is-hover-card.is-static { --hc-alpha: 100%; }
 
@@ -34,7 +35,6 @@
 .hc-sub[title] { cursor: default; }
 .hc-art { position: relative; flex: none; width: var(--hc-art); height: var(--hc-art); overflow: hidden; }
 .hc-art img { position: absolute; inset: 0; display: block; width: 100%; height: 100%; object-fit: cover; }
-.hc-art .hc-sprite { position: absolute; inset: 0; background-repeat: no-repeat; }
 /* The art of an id the game data don't know: the yellow sticky note « ? » of an item (css/side-inventory.css),
    in the middle of the box. */
 .hc-art .app-unknown { position: absolute; top: 50%; left: 50%; translate: -50% -50%; }

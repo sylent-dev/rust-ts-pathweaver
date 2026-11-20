@@ -99,12 +99,12 @@ function entryAt(graph, index, level) {
 const statHtml = stat => escapeHtml(stat.replace(/\[(?:[^\]|]*\|)?([^\]]*)\]/g, "$1")).replace(/\r?\n/g, "<br>");
 
 // The card of a passive (2i3; 2k, the owner, 2026-11-20: the construction of every card on hover,
-// js/hover-card.js): its name, its kind as its subtitle, its icon at the right, in colour, a disc cut to a
-// square; its stats, its state at the level and its weapon set; the hint of the author.
+// js/hover-card.js): its name, its kind as its subtitle, without art (the owner, 2026-11-21: its icon is
+// right beside the card, on the tree); its stats, its state at the level and its weapon set; the hint of
+// the author.
 function hoverHtml(graph, index, level) {
   const [name, stats] = graph.info[index];
-  const [, , kindIndex, icon] = graph.nodes[index];
-  const kind = TREE.kinds[kindIndex];
+  const kind = TREE.kinds[graph.nodes[index][2]];
   const entry = entryAt(graph, index, level);
   const state = !entry ? "Not taken"
     : appliesAt([entry[1], entry[2]], level) ? `Taken at level ${entry[1]}` : `Taken later, at level ${entry[1]}`;
@@ -112,7 +112,6 @@ function hoverHtml(graph, index, level) {
   return hoverCardHtml({
     title: escapeHtml(TREE.texts[name]),
     subtitle: graph === TREE ? KIND_NAMES[kind] : `Ascendancy · ${KIND_NAMES[kind]}`,
-    art: TREE.sheets.icons[icon] ? hoverArtSprite(TREE_ART.skills, TREE.sheets.icons[icon]) : "",
     body: `${stats.length ? `<ul class="app-hover-stats">${stats.map(stat => `<li>${statHtml(TREE.texts[stat])}</li>`).join("")}</ul>` : ""}
       <div class="app-hover-state">${state}${set}</div>`,
     note: entry && entry[4] >= 0 ? markupHtml(TREE.texts[entry[4]]) : "",
