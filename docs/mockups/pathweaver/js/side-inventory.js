@@ -20,7 +20,7 @@ function inventoryBox(level) {
   const set = STATE.inventorySet;
   const slots = slotsAt(level, set);
   const hinted = (id, cell) => slots.some(slot => slot.id === id && (cell === undefined || slot.x === cell));
-  return `<h2 class="app-side-title app-title">Inventory · ${plural(slotsAt(level).length, "hint")}</h2>
+  return `<h2 class="app-side-title app-title">Inventory</h2>
     ${weaponSetSwitch("inventory-set", set)}
     <div class="app-inventory">${INVENTORY_LAYOUT.map(([base, x, y, width, height, cell]) => {
       const id = base === "Weapon" || base === "Offhand" ? `${base}${set}` : base;

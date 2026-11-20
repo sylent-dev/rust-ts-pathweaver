@@ -35,7 +35,7 @@ function skillLine(row) {
 
 function skillList(level) {
   const rows = skillsAt(level).map(skill => skillRow(skill, level));
-  return `<h2 class="app-side-title app-title">Skills · ${rows.length}</h2><ul class="app-skills" data-level="${level}">${rows.map(skillLine).join("")}</ul>`;
+  return `<h2 class="app-side-title app-title">Skills</h2><ul class="app-skills" data-level="${level}">${rows.map(skillLine).join("")}</ul>`;
 }
 
 // The flash of what is new, in the language of the title of « New at N » (M3, 2j): when the level of
