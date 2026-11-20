@@ -108,8 +108,8 @@ function drawArt(context, frames, iconIndex, taken, x, y, size) {
 
 // The portraits under the ascendancy (tools/make-data.py), by ascendancy id: the tree is drawn again
 // once one has loaded. Their radius, in units of the game, keeps them inside the frames of the class
-// starts (1,443 units from the centre, their frames about 50 units wide); in colour, faded by the slider
-// « Portrait opacity » (2i2, the owner, 2026-11-20).
+// starts (1,443 units from the centre, their frames about 50 units wide); in colour, at 40 % (2i2, the
+// owner, 2026-11-20).
 const PORTRAITS = {};
 function portraitOf(id) {
   if (!PORTRAITS[id]) {
@@ -120,13 +120,14 @@ function portraitOf(id) {
   return PORTRAITS[id];
 }
 const PORTRAIT_RADIUS = 1380;
+const PORTRAIT_OPACITY = 0.4;
 
 // Draws a portrait at the centre of the tree, faded.
-function drawPortrait(canvas, context, screen, scale, portrait) {
+function drawPortrait(context, screen, scale, portrait) {
   if (!portrait.complete || portrait.naturalWidth === 0) return;
   const [x, y] = screen([0, 0]), radius = PORTRAIT_RADIUS * scale;
   context.save();
-  context.globalAlpha = (Number.parseFloat(token(canvas, "--tree-portrait-opacity")) || 0) / 100;
+  context.globalAlpha = PORTRAIT_OPACITY;
   context.drawImage(portrait, x - radius, y - radius, radius * 2, radius * 2);
   context.restore();
 }
@@ -243,23 +244,21 @@ function drawTree(canvas, graph, states, view, { minRadius = 1.5, iconsFromPx = 
   lit(false);
 }
 
-// Draws the tree of the build at a level: the portrait, the tree, then the ascendancy over them; `compared`
-// draws instead one of the ascendancies the opacity of the portrait is compared on (TREE.compared).
-function drawBuildTree(canvas, view, level, shownSet, compared = null) {
+// Draws the tree of the build at a level: the portrait, the tree, then the ascendancy over them.
+function drawBuildTree(canvas, view, level, shownSet) {
   const states = treeStates(TREE.taken, TREE.nodes.length, level);
-  const portrait = portraitOf((compared ?? BUILDS.shown.portrait).toLowerCase());
-  const under = (context, screen, scale) => drawPortrait(canvas, context, screen, scale, portrait);
+  const portrait = portraitOf(BUILDS.shown.portrait);
+  const under = (context, screen, scale) => drawPortrait(context, screen, scale, portrait);
   drawTree(canvas, TREE, states, view, { sets: setMasks(TREE.taken, TREE.nodes.length), shownSet, under });
-  const ascendancy = compared ? TREE.compared[compared] : TREE.ascendancy;
-  const taken = compared ? ascendancy.taken : TREE.ascendancyTaken;
-  drawTree(canvas, ascendancy, treeStates(taken, ascendancy.nodes.length, level), view, { clear: false });
+  const ascendancy = TREE.ascendancy;
+  drawTree(canvas, ascendancy, treeStates(TREE.ascendancyTaken, ascendancy.nodes.length, level), view, { clear: false });
 }
 
 // Draws every canvas of the tree on the page, and lets the main one move and zoom; a canvas with a
 // data-scale is a fixed view of the centre of the tree, at its data-level.
 function mountTrees() {
   for (const canvas of document.querySelectorAll('canvas[data-tree="centre"]')) {
-    drawBuildTree(canvas, { x: 0, y: 0, scale: Number(canvas.dataset.scale) }, Number(canvas.dataset.level), STATE.set, canvas.dataset.ascendancy);
+    drawBuildTree(canvas, { x: 0, y: 0, scale: Number(canvas.dataset.scale) }, Number(canvas.dataset.level), STATE.set);
   }
   const level = STATE.level;
   for (const canvas of document.querySelectorAll('canvas[data-tree="main"]')) {
@@ -299,10 +298,6 @@ function zoomTree(canvas, factor, atX = canvas.clientWidth / 2, atY = canvas.cli
 }
 
 AFTER_RENDER.push(mountTrees);
-// The opacity of the portrait is a slider: the canvases follow it as it moves.
-document.getElementById("tabs").addEventListener("input", event => {
-  if (event.target.dataset.variant === "portraitOpacity") mountTrees();
-});
 ACTIONS["tree-zoom"] = element => {
   zoomTree(document.querySelector('canvas[data-tree="main"]'), element.dataset.zoom === "in" ? 1.4 : 1 / 1.4);
   return true;

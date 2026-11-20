@@ -81,10 +81,6 @@ LARGE_PORTRAIT_SIZE = 300
 # of the class starts, every ascendancy shrunk alike so that the largest (Monk3, 1,490 units from the
 # centre of its box) fits with room for its passives.
 ASCENDANCY_SCALE = 0.85
-# The opacity of the portrait compared on three ascendancies (2i2, the owner, 2026-11-20): the build shown
-# (Sorceress1, the brightest portrait), then a bright and warm one and the darkest with passives in the
-# corpus, each with the ascendancy passives of a build of the corpus.
-COMPARED = {"Mercenary3": "mobalytics-fubgun-flameblast-endgame.build", "Warrior1": "ggg-titan-warrior-sample.build"}
 ASCENDANCY_MARGIN = 100
 # The kinds of passives, in the order the mock-up reads them.
 KINDS = ["small", "notable", "keystone", "jewel", "attribute", "start"]
@@ -208,7 +204,7 @@ def ascendancy_graph(tree, asc_id, build, icons):
     return {"nodes": nodes, "edges": edges, "taken": taken}
 
 
-def tree_data(tree, shown, sheet, compared):
+def tree_data(tree, shown, sheet):
     icons = {key: i for i, (key, _) in enumerate(sheet["icons"])}
     nodes, index = [], {}
     for key, node in tree["nodes"].items():
@@ -240,8 +236,6 @@ def tree_data(tree, shown, sheet, compared):
         "ascendancy": {"nodes": ascendancy["nodes"], "edges": ascendancy["edges"]},
         "taken": taken,
         "ascendancyTaken": ascendancy["taken"],
-        # The ascendancies the opacity of the portrait is compared on (2i2).
-        "compared": {asc_id: ascendancy_graph(tree, asc_id, build, icons) for asc_id, build in compared.items()},
         "unknown": unknown,
     }
 
@@ -459,8 +453,7 @@ def main():
                     for c in tree["classes"] for a in c["ascendancies"]}
     read = lambda name: json.loads((CORPUS / name).read_text(encoding="utf-8-sig"))
     builds = [read(name) for name in [SHOWN, *OPEN]]
-    compared = {asc_id: read(name) for asc_id, name in COMPARED.items()}
-    write_js("data-tree.js", "TREE", tree_data(tree, builds[0], sheets(cache), compared))
+    write_js("data-tree.js", "TREE", tree_data(tree, builds[0], sheets(cache)))
     write_js("data-builds.js", "BUILDS", {
         "treeVersion": TREE_TAG,
         "shown": build_data(builds[0], names, gems, ascendancies),
@@ -477,7 +470,7 @@ def main():
         },
     })
     for ascendancy, sprite in PORTRAITS.items():
-        portrait(cache, ascendancy, sprite, large=ascendancy == builds[0].get("ascendancy") or ascendancy in COMPARED)
+        portrait(cache, ascendancy, sprite, large=ascendancy == builds[0].get("ascendancy"))
 
 
 main()
