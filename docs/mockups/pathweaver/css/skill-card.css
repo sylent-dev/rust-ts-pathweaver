@@ -9,7 +9,7 @@
    Open: the icon, five ways (« Card icon », I17–I21, the sixteen of before are in the history of Git);
    the shade of the note, four (« Note shade », S1–S4: the light shade of the bands, a step lighter,
    between the two shades, the deep shade of the rest of the card). */
-.app-gem-hover.is-skill-card { --sc-alpha: 90%; --sc-icon: 35px; width: 320px; max-width: none; padding: 0; overflow: hidden; isolation: isolate; background: none; }
+.app-gem-hover.is-skill-card { --sc-alpha: 90%; --sc-icon: 52px; width: 320px; max-width: none; padding: 0; overflow: hidden; isolation: isolate; background: none; }
 .app-gem-hover.is-skill-card.is-over-rows, .app-gem-hover.is-skill-card.is-static { --sc-alpha: 100%; }
 
 /* The shades of the parts: the head and the body in the deep shade of the bands; the note, S1, in their
@@ -21,7 +21,7 @@
 
 /* The head over the graph paper (the owner, 2026-11-20: the texture on the body and the note only): its
    shade covers the layer of the texture beneath it. */
-.sc-head { position: relative; z-index: 2; display: flex; align-items: flex-start; background: color-mix(in srgb, var(--sc-head) var(--sc-alpha), transparent); }
+.sc-head { position: relative; z-index: 2; display: flex; min-height: var(--sc-icon); background: color-mix(in srgb, var(--sc-head) var(--sc-alpha), transparent); }
 .sc-body { padding: 9px 12px 10px; background: color-mix(in srgb, var(--sc-body) var(--sc-alpha), transparent); }
 .sc-body .app-gem-text { margin: 0; }
 .sc-note { padding: 9px 12px 10px; background: color-mix(in srgb, var(--sc-note) var(--sc-alpha), transparent); }
@@ -38,9 +38,9 @@
   mask-image: var(--texture); mask-size: var(--texture-size) var(--texture-size);
   mask-position: calc(var(--texture-size) / 8) calc(var(--texture-size) / 8); }
 
-/* The icon: square, 35 px (the owner, 2026-11-20: 52 px, the full height of the head, divided by 1.5), in
-   the top left corner of the head. */
-.sc-icon { position: relative; flex: none; width: var(--sc-icon); height: var(--sc-icon); }
+/* The icon: 52 px wide, in the top left corner, the full height of the head (the owner, 2026-11-20: 35 px,
+   tried, left a gap under it in the head). */
+.sc-icon { position: relative; flex: none; width: var(--sc-icon); align-self: stretch; min-height: var(--sc-icon); }
 .sc-icon img { position: absolute; inset: 0; display: block; width: 100%; height: 100%; object-fit: cover; }
 .sc-icon .app-gem-mark { display: none; }
 /* I17 · Bare, as the portrait of a build. */
