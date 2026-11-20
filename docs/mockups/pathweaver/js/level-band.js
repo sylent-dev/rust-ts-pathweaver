@@ -205,9 +205,8 @@ document.addEventListener("keydown", event => {
 // page draws it there at once, and the motion runs from the level it left; nothing moves when the
 // system asks for less motion.
 AFTER_RENDER.push(() => {
-  const still = matchMedia("(prefers-reduced-motion: reduce)").matches;
   for (const [key, from] of Object.entries(STATE.slides)) {
-    if (still) break;
+    if (lessMotion()) break;
     for (const cursor of document.querySelectorAll(`.app-level[data-band="${key}"] .app-level-cursor`)) {
       cursor.animate([{ left: `${levelX(from, bandRange(key))}px` }, { left: cursor.style.left }],
         { duration: 280, easing: "cubic-bezier(.2, .8, .2, 1)" });

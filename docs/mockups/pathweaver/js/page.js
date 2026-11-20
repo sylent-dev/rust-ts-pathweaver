@@ -24,6 +24,8 @@ const VARIANTS = {
   // The width of the windows of the home page (2l): the minimum of specs.md, half a 1920-pixel screen, and a wide
   // window of the owner's screen.
   homeWidth: { label: "Home width", options: { 900: "900 px", 960: "960 px", 1600: "1,600 px" }, fallback: "960" },
+  // The motion of the switch of the weapon set over the tree (2i4, js/tree-motion.js).
+  setMotion: { label: "Set switch", options: { s1: "S1 · Fade", s2: "S2 · Wave", s3: "S3 · Flash" }, fallback: "s1" },
 };
 
 // The styles a section shows side by side: the style of the page alone, Frost Night by default, the
@@ -46,6 +48,9 @@ const AFTER_RENDER = [];
 // menu or a window opens in the one clicked and not in all of them.
 const INSTANCES = {};
 const nextInstance = kind => (INSTANCES[kind] = (INSTANCES[kind] ?? -1) + 1);
+
+// The motions stop when the system asks for less motion.
+const lessMotion = () => matchMedia("(prefers-reduced-motion: reduce)").matches;
 
 const params = new URLSearchParams(location.search);
 const accepts = (variant, value) => variant.range

@@ -131,9 +131,10 @@ function drawPortrait(context, screen, scale, portrait) {
 }
 
 // Options: the smallest radius of a shape, the frame from which the icons show, the weapon sets of the
-// passives (setMasks) and the set shown strong; `clear` false draws over what the canvas holds (the
-// ascendancy over the tree), `under` draws before the links (the portrait).
-function drawTree(canvas, graph, states, view, { minRadius = 1.5, iconsFromPx = ICONS_FROM, sets = null, shownSet = 1, clear = true, under = null } = {}) {
+// passives (setMasks) and the look of the links of each set (js/tree-motion.js); `clear` false draws
+// over what the canvas holds (the ascendancy over the tree), `under` draws before the links (the
+// portrait).
+function drawTree(canvas, graph, states, view, { minRadius = 1.5, iconsFromPx = ICONS_FROM, sets = null, look = restingLook(1), clear = true, under = null } = {}) {
   const width = canvas.clientWidth, height = canvas.clientHeight;
   const context = canvas.getContext("2d");
   const colour = name => token(canvas, name);
@@ -162,24 +163,29 @@ function drawTree(canvas, graph, states, view, { minRadius = 1.5, iconsFromPx = 
 
   // The links: dimmed, then faded between passives taken later (solid, the owner, 2026-11-19), then lit
   // between passives taken, those of one weapon set alone in its colour, the set away from the switch
-  // faint.
+  // faint; while a wave runs (js/tree-motion.js), the part it has reached drawn strong over its set.
   const takenWidth = number("--tree-edge-width", 2);
+  const setLayer = set => [2, set, colour(`--tree-set-${set}`), takenWidth * look[set].width, look[set].alpha, null];
   const linkLayers = [
-    [0, 3, colour("--tree-edge"), 1, 1],
-    [1, 3, colour("--tree-later"), 1, 1],
-    [2, 3, colour("--tree-edge-taken"), takenWidth, 1],
-    [2, 1, colour("--tree-set-1"), takenWidth, shownSet === 1 ? 1 : 0.35],
-    [2, 2, colour("--tree-set-2"), takenWidth, shownSet === 2 ? 1 : 0.35],
+    [0, 3, colour("--tree-edge"), 1, 1, null],
+    [1, 3, colour("--tree-later"), 1, 1, null],
+    [2, 3, colour("--tree-edge-taken"), takenWidth, 1, null],
+    setLayer(1),
+    setLayer(2),
+    ...(look.wave ? [[2, look.wave.set, colour(`--tree-set-${look.wave.set}`), takenWidth, 1, look.wave]] : []),
   ];
   const setOf = (a, b) => (sets ? sets[a] & sets[b] || 3 : 3);
-  for (const [layer, set, stroke, lineWidth, alpha] of linkLayers) {
+  for (const [layer, set, stroke, lineWidth, alpha, wave] of linkLayers) {
     context.beginPath();
     for (const [a, b] of graph.edges) {
       const both = Math.min(states[a] === 3 ? 2 : states[a], states[b] === 3 ? 2 : states[b]);
       if (both !== layer || (layer === 2 && setOf(a, b) !== set)) continue;
-      const [ax, ay] = screen(graph.nodes[a]), [bx, by] = screen(graph.nodes[b]);
+      const part = wave ? reachedPart(wave, a, b) : [a, b, 1];
+      if (!part) continue;
+      const [from, to, fraction] = part;
+      const [ax, ay] = screen(graph.nodes[from]), [bx, by] = screen(graph.nodes[to]);
       context.moveTo(ax, ay);
-      context.lineTo(bx, by);
+      context.lineTo(ax + (bx - ax) * fraction, ay + (by - ay) * fraction);
     }
     context.strokeStyle = stroke;
     context.lineWidth = lineWidth;
@@ -242,12 +248,14 @@ function drawTree(canvas, graph, states, view, { minRadius = 1.5, iconsFromPx = 
   lit(false);
 }
 
-// Draws the tree of the build at a level: the portrait, the tree, then the ascendancy over them.
-function drawBuildTree(canvas, view, level, shownSet) {
+// Draws the tree of the build at a level: the portrait, the tree, then the ascendancy over them; `look`
+// is the look of the links of each set (js/tree-motion.js).
+function drawBuildTree(canvas, view, level, look) {
   const states = treeStates(TREE.taken, TREE.nodes.length, level);
+  const sets = setMasks(TREE.taken, TREE.nodes.length);
   const portrait = portraitOf(BUILDS.shown.portrait);
   const under = (context, screen, scale) => drawPortrait(context, screen, scale, portrait);
-  drawTree(canvas, TREE, states, view, { sets: setMasks(TREE.taken, TREE.nodes.length), shownSet, under });
+  drawTree(canvas, TREE, states, view, { sets, look: look.wave ? withDepths(look, states, sets) : look, under });
   const ascendancy = TREE.ascendancy;
   drawTree(canvas, ascendancy, treeStates(TREE.ascendancyTaken, ascendancy.nodes.length, level), view, { clear: false });
 }
@@ -256,50 +264,68 @@ function drawBuildTree(canvas, view, level, shownSet) {
 // Tree tab at 1,600 px), fitted to its canvas the first time it is drawn.
 STATE.treeViews = {};
 const viewOf = canvas => STATE.treeViews[canvas.dataset.view];
+// Every passive of the build (every set, every level, the ascendancy too), which the view fits.
+const buildPoints = () => [...TREE.taken.map(([i]) => TREE.nodes[i]), ...TREE.ascendancyTaken.map(([i]) => TREE.ascendancy.nodes[i])];
+const fittedView = canvas => fitView(buildPoints(), canvas.clientWidth, canvas.clientHeight, 80);
 
 // Draws every canvas of the tree on the page, and lets the main ones move and zoom; a canvas with a
 // data-scale is a fixed view of the centre of the tree, at its data-level.
 function mountTrees() {
-  for (const canvas of document.querySelectorAll('canvas[data-tree="centre"]')) {
-    drawBuildTree(canvas, { x: 0, y: 0, scale: Number(canvas.dataset.scale) }, Number(canvas.dataset.level), STATE.set);
-  }
-  const level = STATE.level;
-  const points = [...TREE.taken.map(([i]) => TREE.nodes[i]), ...TREE.ascendancyTaken.map(([i]) => TREE.ascendancy.nodes[i])];
-  for (const canvas of document.querySelectorAll('canvas[data-tree="main"]')) {
-    STATE.treeViews[canvas.dataset.view] ??= fitView(points, canvas.clientWidth, canvas.clientHeight, 80);
-    const meter = canvas.parentElement.querySelector(".app-fps");
-    const draw = () => drawBuildTree(canvas, viewOf(canvas), level, STATE.set);
-    draw();
-    // A move or a turn of the wheel asks for a drawing; the screen draws at most one per frame. Only these
-    // drawings are counted, not those of the page drawn again.
-    let asked = false;
-    const ask = () => {
-      if (asked) return;
-      asked = true;
-      requestAnimationFrame(() => {
-        asked = false;
-        const start = performance.now();
-        draw();
-        if (meter) countFrame(meter, performance.now() - start);
-      });
-    };
+  drawCentreTrees();
+  for (const canvas of mainTrees()) {
+    STATE.treeViews[canvas.dataset.view] ??= fittedView(canvas);
+    drawMainTree(canvas, performance.now());
     canvas.onwheel = event => {
       event.preventDefault();
-      zoomTree(canvas, event.deltaY < 0 ? 1.2 : 1 / 1.2, event.offsetX, event.offsetY);
-      ask();
+      zoomTree(canvas, event.deltaY < 0 ? 1.2 : 1 / 1.2, "wheel", event.offsetX, event.offsetY);
     };
     canvas.onpointerdown = event => {
       canvas.setPointerCapture(event.pointerId);
+      stopZoom(canvas);
       let [lastX, lastY] = [event.clientX, event.clientY];
       canvas.onpointermove = move => {
         const view = viewOf(canvas);
         view.x -= (move.clientX - lastX) / view.scale;
         view.y -= (move.clientY - lastY) / view.scale;
         [lastX, lastY] = [move.clientX, move.clientY];
-        ask();
+        askDrawing(canvas);
       };
       canvas.onpointerup = () => { canvas.onpointermove = null; };
     };
+  }
+}
+
+const mainTrees = () => document.querySelectorAll('canvas[data-tree="main"]');
+function drawCentreTrees() {
+  for (const canvas of document.querySelectorAll('canvas[data-tree="centre"]')) {
+    drawBuildTree(canvas, { x: 0, y: 0, scale: Number(canvas.dataset.scale) }, Number(canvas.dataset.level), restingLook(STATE.set));
+  }
+}
+
+// Draws a main tree at a moment, its zoom and the switch of its set where their motion is.
+function drawMainTree(canvas, now) {
+  moveZoom(canvas, now);
+  drawBuildTree(canvas, viewOf(canvas), STATE.level, setLookAt(now));
+}
+
+// A move, a turn of the wheel or a motion asks for a drawing; the screen draws at most one per frame,
+// and again at the next while a motion of that tree runs. Only these drawings are counted, not those of
+// the page drawn again.
+const ASKED = new Set();
+function askDrawing(canvas) {
+  if (ASKED.size === 0) requestAnimationFrame(drawAsked);
+  ASKED.add(canvas);
+}
+function drawAsked(now) {
+  const canvases = [...ASKED];
+  ASKED.clear();
+  for (const canvas of canvases) {
+    if (!canvas.isConnected) continue;
+    const start = performance.now();
+    drawMainTree(canvas, now);
+    const meter = canvas.parentElement.querySelector(".app-fps");
+    if (meter) countFrame(meter, performance.now() - start);
+    if (moving(canvas, now)) askDrawing(canvas);
   }
 }
 
@@ -315,30 +341,19 @@ function countFrame(meter, cost) {
   meter.textContent = `${FRAMES.times.length} fps · script ${mean.toFixed(1)} ms`;
 }
 
-// The bounds of the zoom, in pixels per unit of the game.
-const ZOOM_RANGE = [0.005, 0.5];
-
-// Zooms around a point of the canvas, which stays under the pointer.
-function zoomTree(canvas, factor, atX = canvas.clientWidth / 2, atY = canvas.clientHeight / 2) {
-  const view = viewOf(canvas);
-  const [dx, dy] = [atX - canvas.clientWidth / 2, atY - canvas.clientHeight / 2];
-  view.x += dx / view.scale - dx / (view.scale * factor);
-  view.y += dy / view.scale - dy / (view.scale * factor);
-  view.scale = Math.min(ZOOM_RANGE[1], Math.max(ZOOM_RANGE[0], view.scale * factor));
-}
-
 AFTER_RENDER.push(mountTrees);
-// The controls act on the tree of their own window.
+// The controls act on the tree of their own window; the zoom and the set move without drawing the page
+// again, so that their motion runs (js/tree-motion.js).
 const canvasOf = element => element.closest(".app-tree").querySelector('canvas[data-tree="main"]');
 ACTIONS["tree-zoom"] = element => {
-  zoomTree(canvasOf(element), element.dataset.zoom === "in" ? 1.4 : 1 / 1.4);
-  return true;
+  zoomTree(canvasOf(element), element.dataset.zoom === "in" ? 1.4 : 1 / 1.4, "button");
+  return false;
 };
 ACTIONS["tree-fit"] = element => {
-  delete STATE.treeViews[canvasOf(element).dataset.view];
-  return true;
+  fitTree(canvasOf(element));
+  return false;
 };
 ACTIONS["tree-set"] = element => {
-  STATE.set = Number(element.dataset.set);
-  return true;
+  switchSet(Number(element.dataset.set));
+  return false;
 };

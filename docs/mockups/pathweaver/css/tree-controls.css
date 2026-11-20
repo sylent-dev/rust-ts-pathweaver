@@ -10,6 +10,9 @@
 /* The set shown in its colour, without a line under it (the owner, 2026-11-19). */
 .tc button.is-set1[aria-pressed="true"] { color: var(--tree-set-1); }
 .tc button.is-set2[aria-pressed="true"] { color: var(--tree-set-2); }
+/* Its colour moves with the switch of the set (2i4), at once when the system asks for less motion. */
+.tc button.tc-set { transition: color 120ms ease-out; }
+@media (prefers-reduced-motion: reduce) { .tc button.tc-set { transition: none; } }
 .tc-group { display: inline-flex; align-items: center; gap: 4px; }
 .tc-end { margin-left: auto; display: inline-flex; align-items: center; gap: 10px; }
 
