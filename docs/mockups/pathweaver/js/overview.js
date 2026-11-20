@@ -12,6 +12,15 @@ function treePanel(level, { view = "page", fps = false } = {}) {
   </div>`;
 }
 
+// The shade of the column, darker than the tree so that the two aren't read as one (the owner,
+// 2026-11-20, to try): an open decision, a list in the header of the mock-up, which applies at once.
+VARIANTS.sideShade = {
+  label: "Side column", select: true, variable: "--side-column",
+  options: { "var(--side)": "As the tree (now)", "#04070b": "A shade darker", "#020305": "Darker", "#000000": "Black" },
+  fallback: "#020305",
+};
+chosen.sideShade = accepts(VARIANTS.sideShade, params.get("sideShade")) ? params.get("sideShade") : VARIANTS.sideShade.fallback;
+
 function overview() {
   const level = STATE.level;
   return `<div class="app-overview">
