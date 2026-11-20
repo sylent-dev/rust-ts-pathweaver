@@ -10,13 +10,15 @@ From the repository root. Reads:
 - the builds of the corpus, in inputs/builds/ (local only, never committed).
 
 Writes js/data-tree.js, js/data-builds.js, img/portraits/*.webp (the discs),
-img/portraits-square/*.webp (the square inside each disc, for the tabs) and img/tree/*.webp (the sheets
-of the icons and frames of the passives, kept whole, 2i) next to this folder. The
+img/portraits-square/*.webp (the square inside each disc, for the tabs), img/portraits-large/*.webp (the
+portrait under the ascendancy at the centre of the tree, 2i2) and img/tree/*.webp (the sheets of the icons
+and frames of the passives, kept whole, 2i) next to this folder. The
 downloads are kept in the cache folder (a temporary one by default) so that a second run is fast.
 The mock-up only: the website converts the game data with its own script, at step 4.
 """
 
 import json
+import math
 import re
 import subprocess
 import sys
@@ -72,6 +74,14 @@ PORTRAIT_SIZE = 128
 # The portrait of a tab (the owner, 2026-11-17): the largest square inside the disc, centred, made
 # small enough for the 44 px of a tab, twice for the screens of a higher density.
 SQUARE_SIZE = 88
+# The portrait under the ascendancy, at the centre of the tree (2i2, the owner, 2026-11-19): large and
+# faded, the build shown only.
+LARGE_PORTRAIT_SIZE = 300
+# The ascendancy at the centre of the tree (2i2, the owner, 2026-11-19): in the empty disc inside the ring
+# of the class starts, every ascendancy shrunk alike so that the largest (Monk3, 1,490 units from the
+# centre of its box) fits with room for its passives.
+ASCENDANCY_SCALE = 0.85
+ASCENDANCY_MARGIN = 100
 # The kinds of passives, in the order the mock-up reads them.
 KINDS = ["small", "notable", "keystone", "jewel", "attribute", "start"]
 # The sheets of the passives (2i, docs/game-data.md): the icons in colour and greyed, at the same
@@ -156,6 +166,27 @@ def sheets(cache):
     }
 
 
+def ascendancy_place(tree):
+    """For every ascendancy, the function that moves one of its passives to the centre of the tree:
+    the centre of its box on the centre of the tree, shrunk by ASCENDANCY_SCALE. Checks that the largest
+    fits inside the ring of the class starts, with ASCENDANCY_MARGIN units to spare."""
+    members = {}
+    for node in tree["nodes"].values():
+        if node.get("ascendancyId") and "x" in node:
+            members.setdefault(node["ascendancyId"], []).append(node)
+    ring = min(math.hypot(n["x"], n["y"]) for n in tree["nodes"].values()
+               if n.get("classStartIndex") is not None and "x" in n)
+    places = {}
+    for asc_id, nodes in members.items():
+        cx = (min(n["x"] for n in nodes) + max(n["x"] for n in nodes)) / 2
+        cy = (min(n["y"] for n in nodes) + max(n["y"] for n in nodes)) / 2
+        reach = max(math.hypot(n["x"] - cx, n["y"] - cy) for n in nodes) * ASCENDANCY_SCALE
+        if reach + ASCENDANCY_MARGIN > ring:
+            raise SystemExit(f"{asc_id} doesn't fit inside the ring of the class starts ({reach:.0f} of {ring:.0f} units)")
+        places[asc_id] = lambda n, cx=cx, cy=cy: ((n["x"] - cx) * ASCENDANCY_SCALE, (n["y"] - cy) * ASCENDANCY_SCALE)
+    return places
+
+
 def tree_data(tree, shown, sheet):
     icons = {key: i for i, (key, _) in enumerate(sheet["icons"])}
     nodes, index, ascendancy = [], {}, []
@@ -173,12 +204,11 @@ def tree_data(tree, shown, sheet):
         nodes.append([round(node["x"]), round(node["y"]), kind_of(node), icon_of(node, icons)])
     edges = [[index[str(e["from"])], index[str(e["to"])]] for e in tree["edges"]
              if str(e["from"]) in index and str(e["to"]) in index]
-    # The ascendancy, drawn in its own box: positions relative to its start.
-    start = next((n for _, n in ascendancy if n.get("isAscendancyStart")), None)
+    # The ascendancy, at the centre of the tree (2i2): the centre of its box on the centre of the tree.
+    place = ascendancy_place(tree)[asc_id]
     asc_index = {key: i for i, (key, _) in enumerate(ascendancy)}
-    asc_nodes = [[round(n["x"] - start["x"]), round(n["y"] - start["y"]),
-                  KINDS.index("start") if n.get("isAscendancyStart") else kind_of(n), icon_of(n, icons)]
-                 for _, n in ascendancy]
+    asc_nodes = [[round(x), round(y), KINDS.index("start") if n.get("isAscendancyStart") else kind_of(n),
+                  icon_of(n, icons)] for (_, n), (x, y) in zip(ascendancy, map(place, (n for _, n in ascendancy)))]
     asc_edges = [[asc_index[str(e["from"])], asc_index[str(e["to"])]] for e in tree["edges"]
                  if str(e["from"]) in asc_index and str(e["to"]) in asc_index]
     by_id = {node["id"]: key for key, node in tree["nodes"].items() if "id" in node}
@@ -374,9 +404,9 @@ def band_of(build, tree, names, gems):
     return changes_of(build, range(low + 1, high + 1), tree, names, gems)
 
 
-def portrait(cache, ascendancy, sprite):
+def portrait(cache, ascendancy, sprite, large=False):
     """Cuts the round portrait of an ascendancy from the sprite of its class, and the square inside
-    it, made small."""
+    it, made small; the large one too for the build shown, under its ascendancy on the tree."""
     frames = json.loads(fetch(cache, f"{TREE_URL}/assets/background-{sprite}.json",
                               f"background-{sprite}.json").read_text())["frames"]
     image = fetch(cache, f"{TREE_URL}/assets/background-{sprite}.webp", f"background-{sprite}.webp")
@@ -393,6 +423,12 @@ def portrait(cache, ascendancy, sprite):
     subprocess.run(["magick", str(image), "-crop", f"{side}x{side}+{frame['x'] + inset}+{frame['y'] + inset}",
                     "+repage", "-resize", f"{SQUARE_SIZE}x{SQUARE_SIZE}", "-quality", "82", str(square)],
                    check=True)
+    if large:
+        target = OUT / "img" / "portraits-large" / f"{ascendancy.lower()}.webp"
+        target.parent.mkdir(exist_ok=True)
+        subprocess.run(["magick", str(image), "-crop", f"{frame['w']}x{frame['h']}+{frame['x']}+{frame['y']}",
+                        "+repage", "-resize", f"{LARGE_PORTRAIT_SIZE}x{LARGE_PORTRAIT_SIZE}", "-quality", "82",
+                        str(target)], check=True)
 
 
 def write_js(name, constant, value):
@@ -429,7 +465,7 @@ def main():
         },
     })
     for ascendancy, sprite in PORTRAITS.items():
-        portrait(cache, ascendancy, sprite)
+        portrait(cache, ascendancy, sprite, large=ascendancy == builds[0].get("ascendancy"))
 
 
 main()
