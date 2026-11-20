@@ -1,12 +1,15 @@
-/* The hover of a passive (2i3, js/tree-hover.js): a card in the shade of the window of what changes, its
-   corners rounded by 3 px; the name, the kind, the stats, the state at the level, then the hint of the
-   author under a line. Three places to choose: A follows the pointer, B beside the passive, C a panel
-   fixed under the legend. */
+/* The hover of a passive (2i3, js/tree-hover.js, the owner, 2026-11-20): a card beside the passive, in
+   the shade of the window of what changes, without a border, its background see-through at 10 %, its
+   corners rounded by 3 px, fading in and out lightly (120 ms, at once when the system asks for less motion); the
+   name, the kind, the stats, the state at the level, then the hint of the author under a line. */
 .app-hover { position: absolute; z-index: 4; width: max-content; max-width: 320px; padding: 9px 12px 10px; border-radius: 3px; pointer-events: none;
-  border: 1px solid color-mix(in srgb, var(--on-band) 14%, transparent);
-  background: var(--band-image), var(--band-deep); color: var(--on-band); box-shadow: 0 8px 18px rgb(0 0 0 / .28); font-size: 12px; line-height: 1.4; }
-.app-hover[hidden] { display: none; }
-.app-hover[data-variant="c"] { top: 40px; right: 12px; left: auto; width: 300px; max-width: none; }
+  background: var(--band-image), color-mix(in srgb, var(--band-deep) 90%, transparent);
+  color: var(--on-band); box-shadow: 0 8px 18px rgb(0 0 0 / .28); font-size: 12px; line-height: 1.4;
+  opacity: 0; visibility: hidden; transition: opacity 120ms ease-out, visibility 0s 120ms; }
+/* Shown, it fades in; hidden, it fades out, then leaves (visibility, once the fade is over). From one
+   passive straight to the next, it stays. */
+.app-hover.is-shown { opacity: 1; visibility: visible; transition: opacity 120ms ease-out, visibility 0s; }
+@media (prefers-reduced-motion: reduce) { .app-hover, .app-hover.is-shown { transition: none; } }
 .app-hover-head { display: flex; align-items: baseline; justify-content: space-between; gap: 14px; }
 .app-hover-head strong { font-size: 14px; font-weight: 600; }
 .app-hover-head .app-weak, .app-hover-state { color: var(--on-band-weak); font-size: 11px; }

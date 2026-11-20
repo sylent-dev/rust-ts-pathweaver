@@ -1,7 +1,7 @@
 // The hover of a passive (2i3, specs.md, Passive tree): its name and its stats from the game data, its
-// state at the level, then the hint of the author with the markup of the game. Three variants to
-// choose (VARIANTS.hover): A a card that follows the pointer, B a card beside the passive, C a panel
-// fixed under the legend.
+// state at the level, then the hint of the author with the markup of the game; a card beside the
+// passive (B of three, the owner, 2026-11-20: a card that follows the pointer and a panel fixed under
+// the legend set aside), its background see-through at 10 %, fading in and out (css/tree-hover.css).
 
 // The markup of the game in the author's texts (specs.md, The author's texts): `<tag>{text}`, nested;
 // a tag is a font (b, i, u, and r, s, m, l, whose look is decided at step 4), a named colour or
@@ -110,29 +110,21 @@ function hoverHtml(graph, index, level) {
     <div class="app-hover-state app-weak">${state}${set}</div>${hint}`;
 }
 
-// Places the card of the variant: A beside the pointer, B beside the passive, on the side with more
-// room, C fixed by its CSS.
-function placeHover(card, panel, pointer, passive, radius) {
+// Places the card beside the passive, on the side of the tree with more room, centred on it but kept
+// inside the tree.
+function placeHover(card, panel, passive, radius) {
   const [width, height] = [panel.clientWidth, panel.clientHeight];
   const [w, h] = [card.offsetWidth, card.offsetHeight];
-  const clampY = y => Math.max(8, Math.min(height - h - 8, y));
-  if (chosen.hover === "a") {
-    const x = pointer[0] + 18 + w > width - 8 ? pointer[0] - 18 - w : pointer[0] + 18;
-    card.style.left = `${x}px`;
-    card.style.top = `${clampY(pointer[1] + 18 + h > height - 8 ? pointer[1] - 18 - h : pointer[1] + 18)}px`;
-  } else if (chosen.hover === "b") {
-    const right = passive[0] < width / 2;
-    card.style.left = `${right ? passive[0] + radius + 12 : passive[0] - radius - 12 - w}px`;
-    card.style.top = `${clampY(passive[1] - h / 2)}px`;
-  } else {
-    card.style.left = card.style.top = "";
-  }
+  const right = passive[0] < width / 2;
+  card.style.left = `${right ? passive[0] + radius + 12 : passive[0] - radius - 12 - w}px`;
+  card.style.top = `${Math.max(8, Math.min(height - h - 8, passive[1] - h / 2))}px`;
 }
 
 function mountHover() {
   for (const canvas of document.querySelectorAll('canvas[data-tree="main"]')) {
     const panel = canvas.parentElement, card = panel.querySelector(".app-hover");
-    const hide = () => { card.hidden = true; };
+    // Hidden, the card keeps its words and its place while it fades out.
+    const hide = () => card.classList.remove("is-shown");
     canvas.onmousemove = event => {
       const view = viewOf(canvas);
       if (event.buttons !== 0 || !view) return hide();
@@ -143,10 +135,9 @@ function mountHover() {
       if (!found) return hide();
       const [x, y, kind] = found.graph.nodes[found.index];
       card.innerHTML = hoverHtml(found.graph, found.index, STATE.level);
-      card.dataset.variant = chosen.hover;
-      card.hidden = false;
+      card.classList.add("is-shown");
       const passive = [(x - view.x) * view.scale + width / 2, (y - view.y) * view.scale + height / 2];
-      placeHover(card, panel, [event.offsetX, event.offsetY], passive, NODE_RADIUS[TREE.kinds[kind]] * view.scale);
+      placeHover(card, panel, passive, NODE_RADIUS[TREE.kinds[kind]] * view.scale);
     };
     canvas.onmouseleave = hide;
   }
@@ -154,5 +145,5 @@ function mountHover() {
 AFTER_RENDER.push(mountHover);
 // A turn of the wheel moves the tree under the card: it goes.
 document.addEventListener("wheel", () => {
-  for (const card of document.querySelectorAll(".app-hover")) card.hidden = true;
+  for (const card of document.querySelectorAll(".app-hover")) card.classList.remove("is-shown");
 }, { capture: true, passive: true });
