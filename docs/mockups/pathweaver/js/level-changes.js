@@ -28,6 +28,8 @@ function changesLink(record, open) {
 // The changes of a level as one list, in the order of the categories, each with its sign.
 const CHANGE_CATEGORIES = { skill: "Skill", support: "Support", passives: "Passive", gear: "Gear", note: "Note" };
 const PASSIVE_GROUPS = { taken: "", set1: "of weapon set I", set2: "of weapon set II", ascendancy: "of the ascendancy" };
+// Where a passive of a group hangs, the place of the card of its note (js/note-hover.js).
+const PASSIVE_PLACES = { taken: "", set1: "Weapon set I", set2: "Weapon set II", ascendancy: "Ascendancy" };
 
 function changeList(record) {
   const { skills, supports, passives, gear, notes } = record;
@@ -40,7 +42,7 @@ function changeList(record) {
     ...supports.added.map(support => ({ category: "support", sign: "+", ...support })),
     ...supports.removed.map(support => ({ category: "support", sign: "−", ...support })),
     // Each group carries the notes of its passives, with the name of each (2j5).
-    ...taken.map(([group, label]) => ({ category: "passives", sign: "+", count: passives[group], label, notes: passives.notes[group] ?? [] })),
+    ...taken.map(([group, label]) => ({ category: "passives", sign: "+", count: passives[group], label, place: PASSIVE_PLACES[group], notes: passives.notes[group] ?? [] })),
     ...(passives.givenBack > 0 ? [{ category: "passives", sign: "−", count: passives.givenBack, label: "" }] : []),
     ...gear.added.map(entry => ({ category: "gear", sign: "+", ...item(entry) })),
     ...gear.replaced.map(entry => ({ category: "gear", sign: "⇄", ...item(entry) })),
@@ -54,7 +56,7 @@ const slotName = id => escapeHtml(SLOT_NAMES[id] ?? id);
 function changeName(change) {
   if (change.category === "passives") {
     const [count, label] = [plural(change.count, "passive"), change.label ? ` ${change.label}` : ""];
-    return `<b>${count}</b>${label}${noteMark({ head: count + label, list: change.notes })}`;
+    return `<b>${count}</b>${label}${noteMark({ place: change.place, head: count + label, list: change.notes })}`;
   }
   if (change.category === "skill" || change.category === "support") return `${gemMark(change)}<b>${escapeHtml(change.name)}</b>${
     noteMark({ place: change.category === "support" ? change.skill : "", head: change.name, text: change.note })}`;

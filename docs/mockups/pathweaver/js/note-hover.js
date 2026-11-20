@@ -3,8 +3,10 @@
 // changes », the rows of the skills. In the language of the card of a gem (css/gem-hover.css), fixed on
 // the page: its head names what carries it, the place first in grey when it hangs on one (« Body ·
 // Wyrmscale Coat », « Spark · Efficiency II »), then the note with the markup of the game (markupHtml,
-// js/tree-hover.js). A group of passives lists its notes with the name of each, three, then « and N
-// more notes ».
+// js/tree-hover.js). A group of passives with one note is the card of that passive (« Weapon set II ·
+// Exposure Effect »); with more, it lists them, the name of each a small head over its note, three,
+// then « and N more notes » (the owner, 2026-11-20: the name in grey over a note the author wrote in
+// grey read as the note).
 
 const NOTE_LIST = 3;
 
@@ -13,6 +15,7 @@ const NOTE_LIST = 3;
 // when there is no note.
 function noteMark(note) {
   if (!note || !(note.text || note.list?.length)) return "";
+  if (note.list?.length === 1) note = { place: note.place, head: note.list[0].name, text: note.list[0].note };
   const data = [["place", note.place], ["head", note.head], ["text", note.text], ["list", note.list && JSON.stringify(note.list)]]
     .filter(([, value]) => value).map(([key, value]) => ` data-note-${key}="${escapeHtml(value)}"`).join("");
   return `<span class="app-changes-note" aria-label="A note of the author"${data}>${icon(12, ICONS.note)}</span>`;
@@ -27,7 +30,7 @@ const retoldMark = change => noteMark({
 function noteHoverHtml(mark) {
   const { notePlace: place, noteHead: head, noteText: text, noteList: list } = mark.dataset;
   const notes = list ? JSON.parse(list) : [];
-  const title = `<div class="app-hover-head"><strong>${place ? `<span class="app-note-place">${escapeHtml(place)} · </span>` : ""}${escapeHtml(head)}</strong>
+  const title = `<div class="app-hover-head"><strong>${place && !list ? `<span class="app-note-place">${escapeHtml(place)} · </span>` : ""}${escapeHtml(head)}</strong>
     <span class="app-weak">${notes.length > 1 ? `${notes.length} notes of the author` : "Note of the author"}</span></div>`;
   if (!list) return `${title}<div class="app-note-text">${markupHtml(text)}</div>`;
   const more = notes.length - NOTE_LIST;

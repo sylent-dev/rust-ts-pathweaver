@@ -3,11 +3,11 @@
    every card; a group of passives, a short list. */
 .app-note-hover { max-width: 320px; }
 .app-note-place { color: var(--on-band-weak); font-weight: 400; }
-/* A note of a group of passives: the name of its passive small and grey over it, so that the bold of
-   the author's markup stays theirs; a line between two notes. */
+/* A note of a group of passives: the name of its passive a small head over it, in the colour of the
+   text, a size above the words of the note; a line between two notes. */
 .app-note-list { margin: 0; padding: 0; list-style: none; }
 .app-note-list li + li { margin-top: 7px; padding-top: 6px; border-top: 1px solid color-mix(in srgb, var(--on-band) 14%, transparent); }
-.app-note-passive { display: block; color: var(--on-band-weak); font-size: 11px; }
+.app-note-passive { display: block; margin-bottom: 1px; color: var(--on-band); font-size: 13px; font-weight: 600; }
 .app-note-more { margin: 6px 0 0; color: var(--on-band-weak); font-size: 11px; }
 
 /* The mark answers the pointer: a little lighter, and a target wider than its 12 px. */
