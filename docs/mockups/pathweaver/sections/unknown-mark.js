@@ -15,10 +15,6 @@ function unknownSkillsAt() {
   ];
 }
 SKILL_SOURCES.unknownSample = unknownSkillsAt;
-function unknownSkills(level) {
-  const rows = unknownSkillsAt().map(skill => skillRow(skill, level));
-  return `<h2 class="app-side-title app-title">Skills</h2><ul class="app-skills" data-level="${level}" data-source="unknownSample">${rows.map(skillLine).join("")}</ul>`;
-}
 function unknownHints(level) {
   return [...sampleHints(level).filter(hint => hint.id !== "Helm1"),
     { id: "Helm1", x: 0, y: 0, levels: [1, 100], unique: "Crown of Embers", base: "", note: "", unknown: true }];
@@ -26,5 +22,5 @@ function unknownHints(level) {
 
 addSection(() => ["The mark of what the game data don't know: a sticky note on an item or a gem, and their cards", [
   ["An unknown support and an unknown skill, an unknown unique in a large and a small slot, an unknown slot in the list; the cards on hover",
-    `<div class="app-window" style="width:330px"><aside class="app-side app-inventory-alone">${unknownSkills(STATE.level)}${inventoryBox(STATE.level, unknownHints(STATE.level))}</aside></div>`],
+    `<div class="app-window" style="width:330px"><aside class="app-side app-inventory-alone">${skillList(STATE.level, "unknownSample")}${inventoryBox(STATE.level, unknownHints(STATE.level))}</aside></div>`],
 ]]);

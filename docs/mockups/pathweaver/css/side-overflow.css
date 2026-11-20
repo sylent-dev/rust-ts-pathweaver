@@ -1,0 +1,52 @@
+/* The overflow of the right column (2j4, js/side-overflow.js): E2, the inventory a drawer at the bottom
+   of the column. The column a column of flex boxes: « New at N », then the skills in the room left
+   above the bar of the drawer. */
+.app-side.ov { display: flex; flex-direction: column; padding-bottom: var(--bar); }
+.ov-new { flex: none; }
+.ov-skills { flex: 1; min-height: 0; overflow: hidden; }
+.ov .is-folded { display: none; }
+.ov-more { display: flex; align-items: center; min-height: 22px; }
+.ov-more .app-new-more { margin: 0 0 0 18px; }
+
+/* The links of the column to the tabs of the build (js/side-overflow.js, sideLink): in the colour of
+   their words, the accent and a line of 2 px drawing itself from the left on hover, as the links of
+   the band of the site; « and N more » in the accent, the colour of the text on hover. */
+.app-side-link { padding: 0; border: 0; background: none; color: inherit; font: inherit; letter-spacing: inherit; cursor: pointer; }
+.app-side-link-words { position: relative; }
+.app-side-link-words::after { content: ""; position: absolute; left: 0; right: 0; bottom: -3px; height: 2px; background: currentColor;
+  transform: scaleX(0); transform-origin: 100%; transition: transform .3s cubic-bezier(.2, .7, .2, 1); }
+.app-side-link:hover { color: var(--accent); }
+.app-side-link:hover .app-side-link-words::after { transform: scaleX(1); transform-origin: 0; }
+@media (prefers-reduced-motion: reduce) { .app-side-link-words::after { transition: none; } }
+
+/* The drawer (the owner, 2026-11-20): the bar always at the bottom, which never moves; the drawing
+   unrolls upward above it, on the same block: no line above it, the light shade of the header of a
+   build, the page and its graph paper (css/textures.css), its light from the right, anchored at the
+   bottom right so that the bar keeps it. The block is as tall as the drawing and the bar, cut to the bar
+   while closed (--bar, the height of the bar, js/side-overflow.js): its background never moves. It
+   opens once the pointer has stayed 200 ms on it, its edge in 180 ms, and closes at once when it leaves;
+   at once both ways when the system asks for less motion. */
+.ov-drawer { position: absolute; left: 0; right: 0; bottom: 0; padding: 0 12px 12px 14px;
+  background: radial-gradient(ellipse 330px 220px at 100% 100%, var(--page-glow) 0%, transparent 70%), var(--page);
+  clip-path: inset(calc(100% - var(--bar)) 0 0 0); transition: clip-path 180ms ease-out; }
+.ov-drawer:hover { clip-path: inset(0); transition-delay: 200ms; }
+@media (prefers-reduced-motion: reduce) { .ov-drawer, .ov-drawer:hover { transition-duration: 0s; } }
+/* How the drawing unrolls (2 · Blind of seven, the owner, 2026-11-20: a wipe over the drawing still, a
+   spring, a soft edge, a flap, a cascade of the slots and a line of the accent set aside): the drawing
+   rises from behind the bar with the edge, like a roller blind, in 180 ms, without going past its place;
+   at once when the system asks for less motion. */
+.ov-drawer-doll { overflow: hidden; }
+.ov-drawer-doll > * { transform: translateY(100%); transition: transform 180ms ease-out; }
+.ov-drawer:hover .ov-drawer-doll > * { transform: none; transition-delay: 200ms; }
+@media (prefers-reduced-motion: reduce) { .ov-drawer-doll > * { transition-duration: 0s !important; } }
+.ov-drawer-doll .app-inventory-head { display: none; }
+.ov-drawer-doll .app-inventory { margin-top: 14px; }
+.ov-drawer-bar { padding-top: 10px; }
+.ov-drawer-bar .app-side-title { margin-top: 0; }
+
+/* The thumbnails of the bar: a box per hinted slot, its card on hover. */
+.app-inventory.ov-thumbs { position: static; display: flex; flex-wrap: wrap; gap: 4px; margin: 6px 0 0 5px; }
+.ov-thumbs .app-slot { position: relative; width: 32px; height: 32px; }
+
+/* The section of the mock-up (sections/column-overflow.js): a column alone at its real height. */
+.app-overview.ov-alone { width: 330px; }

@@ -1,5 +1,6 @@
 // The Overview tab: the tree, and beside it the right column: what is new at the level (js/side-new.js),
-// the skills (js/side-skills.js) and the inventory (js/side-inventory.js).
+// the skills (js/side-skills.js) and the inventory (js/side-inventory.js), a drawer when they don't fit
+// (js/side-overflow.js, 2j4).
 
 // The tree and the controls over it (js/tree-controls.js). `view` names the view of the tree the window
 // keeps (js/tree.js, STATE.treeViews); `fps` shows the counter of frames per second (2i3).
@@ -16,6 +17,6 @@ function overview() {
   const level = STATE.level;
   return `<div class="app-overview">
     ${treePanel(level)}
-    <aside class="app-side">${newAtBox(level)}${skillList(level)}${inventoryBox(level)}</aside>
+    ${sideColumn(level)}
   </div>`;
 }

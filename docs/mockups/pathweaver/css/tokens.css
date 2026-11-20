@@ -134,7 +134,8 @@
   --title-weight: 600;
   --title-spacing: -.02em;
   --page: #eef2f8;
-  --page-image: radial-gradient(ellipse 80% 40% at 0% 0%, #dbe7ff 0%, transparent 70%);
+  --page-glow: #dbe7ff;   /* the light of the page, from its top left; from the right on the drawer of the inventory (2j4) */
+  --page-image: radial-gradient(ellipse 80% 40% at 0% 0%, var(--page-glow) 0%, transparent 70%);
   --bar: #e2e9f4; --on-bar: #0f1b33;
   --band: #f8fbff; --on-band: #0f1b33; --on-band-weak: #5c6c88; --band-deep: #d9e2ef;
   --panel: #ffffffd9;
@@ -162,7 +163,8 @@
   --title-weight: 600;
   --title-spacing: -.02em;
   --page: #0c111b;
-  --page-image: radial-gradient(ellipse 80% 40% at 0% 0%, #172644 0%, transparent 70%);
+  --page-glow: #172644;   /* the light of the page, from its top left; from the right on the drawer of the inventory (2j4) */
+  --page-image: radial-gradient(ellipse 80% 40% at 0% 0%, var(--page-glow) 0%, transparent 70%);
   --bar: #121a29; --on-bar: #e3eaf5;
   --band: #0f1726; --on-band: #e3eaf5; --on-band-weak: #8393ad; --band-deep: #070b12;
   --side: var(--band-deep);   /* the tree and the side column in the shade of the level band (2h, the owner, 2026-11-19) */
@@ -194,7 +196,8 @@
   --title-weight: 600;
   --title-spacing: -.02em;
   --page: #131314;
-  --page-image: radial-gradient(ellipse 80% 40% at 0% 0%, #2a2117 0%, transparent 70%);
+  --page-glow: #2a2117;   /* the light of the page, from its top left; from the right on the drawer of the inventory (2j4) */
+  --page-image: radial-gradient(ellipse 80% 40% at 0% 0%, var(--page-glow) 0%, transparent 70%);
   --bar: #19191b; --on-bar: #ececee;
   --band: #161618; --on-band: #ececee; --on-band-weak: #8e8e94; --band-deep: #0a0a0b;
   --side: var(--band-deep);   /* as Frost Night */
