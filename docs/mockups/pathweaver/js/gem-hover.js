@@ -59,17 +59,27 @@ function gemHoverHtml(gem, level) {
 
 // The card of a skill, a gem with an icon (2k, the owner, 2026-11-20, on the wireframe
 // docs/wireframes/gem-card.excalidraw; its look and what was set aside in css/skill-card.css): its head,
-// the icon of the skill square in its corner and its name beside it, as high as the icon; its body, the
-// tags, the description and the levels; the note of its author. No kind (« Skill gem ») for now. The card
+// the icon of the skill square in its corner, its name beside it and its tags under the name, on one
+// line, cut by an ellipsis, all of them in a native tooltip when they are cut (titleIfCut); its body, the
+// description and the levels; the note of its author. No kind (« Skill gem ») for now. The card
 // of a support stays as it was, until this one is done.
+// The tags of a skill card cut by their ellipsis show whole in a native tooltip (the owner, 2026-11-20);
+// none when they fit.
+function titleIfCut(root) {
+  for (const tags of root.querySelectorAll(".sc-tags")) {
+    if (tags.scrollWidth > tags.clientWidth) tags.title = tags.textContent;
+    else tags.removeAttribute("title");
+  }
+}
+AFTER_RENDER.push(() => titleIfCut(document.getElementById("sheet")));
+
 function skillCardHtml(gem, level) {
   const tags = gem.tags.filter(tag => tag !== "Support" && tag !== "Lineage");
   return `<div class="sc-head">
       <span class="sc-icon"><img src="pathweaver/img/skills/${gem.icon}" alt="">${gemMark(gem)}</span>
-      <div class="sc-title"><strong>${escapeHtml(gem.name)}</strong></div>
+      <div class="sc-title"><strong>${escapeHtml(gem.name)}</strong>${tags.length ? `<div class="app-gem-tags sc-tags">${tags.map(escapeHtml).join(" · ")}</div>` : ""}</div>
     </div>
     <div class="sc-body">
-      ${tags.length ? `<div class="app-gem-tags">${tags.map(escapeHtml).join(" · ")}</div>` : ""}
       ${gem.text ? `<p class="app-gem-text">${escapeHtml(gem.text)}</p>` : ""}
       <div class="app-hover-state">${levelsWords(gem, level)}</div>
     </div>
@@ -92,6 +102,7 @@ function showGemHover(element) {
   gemCard.innerHTML = gemHoverHtml(gem, Number(element.closest("[data-level]").dataset.level));
   // The card of a skill (css/skill-card.css), and the colours of the gem, which its icon shows in some variants.
   gemCard.classList.toggle("is-skill-card", Boolean(gem.icon));
+  titleIfCut(gemCard);
   const [first, second = first] = gemColoursOf(gem);
   gemCard.style.setProperty("--gem", first);
   gemCard.style.setProperty("--gem-2", second);
