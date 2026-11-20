@@ -1,6 +1,6 @@
 // The hover of a gem (2j2, specs.md, Skills): its name and its kind, its tags and its description from
 // the game data, the levels it applies at, then the note of its author with the markup of the game
-// (markupHtml, js/tree-hover.js); in the language of the card of a passive (B, 2i3): beside the gem,
+// (markupHtml, js/tree-hover.js); in the language of the card of a passive (B, 2i3): above the gem,
 // without a border, see-through at 10 %, fading in and out in 120 ms (css/tree-hover.css). On the mark
 // of a gem, and on the name of a skill in its row.
 
@@ -38,9 +38,11 @@ function gemHoverHtml(gem, level) {
     ${gem.note ? `<div class="app-hover-hint">${markupHtml(gem.note)}</div>` : ""}`;
 }
 
-// One card for the page, fixed, so that the narrow column doesn't cut it: just left of the column,
-// over the tree, rather than over the rows it would hide; the column is always at the right of the
-// window, the tree beside it. Centred on the gem, kept inside the height of the window.
+// One card for the page, fixed, so that the narrow column doesn't cut it: just above the gem, where
+// the eye is (the owner, 2026-11-20: left of the column, it was 300 px from a mark at the right of a
+// row), never over its own row, so that the pointer goes from one support to the next; its right edge
+// on the mark, or its left edge on the name of a skill, reaching over the column and the tree; under
+// the row when there is no room above. It doesn't follow the pointer.
 const gemCard = document.createElement("div");
 gemCard.className = "app-hover app-gem-hover";
 document.body.append(gemCard);
@@ -49,11 +51,11 @@ function showGemHover(element) {
   if (!gem) return;
   gemCard.innerHTML = gemHoverHtml(gem, Number(element.closest(".app-skills").dataset.level));
   gemCard.classList.add("is-shown");
-  const box = element.getBoundingClientRect(), [w, h] = [gemCard.offsetWidth, gemCard.offsetHeight];
-  const column = element.closest(".app-side")?.getBoundingClientRect() ?? box;
-  const left = column.left - w - 8;
-  gemCard.style.left = `${left}px`;
-  gemCard.style.top = `${Math.max(8, Math.min(innerHeight - h - 8, box.top + box.height / 2 - h / 2))}px`;
+  const box = element.getBoundingClientRect(), row = element.closest(".app-skill").getBoundingClientRect();
+  const [w, h] = [gemCard.offsetWidth, gemCard.offsetHeight];
+  const left = element.classList.contains("app-skill-name") ? box.left : box.right - w;
+  gemCard.style.left = `${Math.max(8, Math.min(innerWidth - w - 8, left))}px`;
+  gemCard.style.top = `${row.top - h - 6 >= 8 ? row.top - h - 6 : row.bottom + 6}px`;
 }
 document.addEventListener("mouseover", event => {
   const element = event.target.closest?.(".app-skills [data-gem]");
