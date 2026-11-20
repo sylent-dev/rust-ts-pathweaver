@@ -1,7 +1,8 @@
 // The hover of a passive (2i3, specs.md, Passive tree): its name and its stats from the game data, its
 // state at the level, then the hint of the author with the markup of the game; a card beside the
 // passive (B of three, the owner, 2026-11-20: a card that follows the pointer and a panel fixed under
-// the legend set aside), its background see-through at 10 %, fading in and out (css/tree-hover.css).
+// the legend set aside), see-through at 10 %, fading in and out (css/tree-hover.css), in the
+// construction of every card on hover (js/hover-card.js).
 
 // The markup of the game in the author's texts (specs.md, The author's texts): `<tag>{text}`, nested;
 // a tag is a font (b, i, u, and r, s, m, l, whose look is decided at step 4), a named colour or
@@ -97,17 +98,25 @@ function entryAt(graph, index, level) {
 // words after the bar are those shown.
 const statHtml = stat => escapeHtml(stat.replace(/\[(?:[^\]|]*\|)?([^\]]*)\]/g, "$1")).replace(/\r?\n/g, "<br>");
 
+// The card of a passive (2i3; 2k, the owner, 2026-11-20: the construction of every card on hover,
+// js/hover-card.js): its name, its kind as its subtitle, its icon at the right, in colour, a disc cut to a
+// square; its stats, its state at the level and its weapon set; the hint of the author.
 function hoverHtml(graph, index, level) {
   const [name, stats] = graph.info[index];
-  const kind = TREE.kinds[graph.nodes[index][2]];
+  const [, , kindIndex, icon] = graph.nodes[index];
+  const kind = TREE.kinds[kindIndex];
   const entry = entryAt(graph, index, level);
   const state = !entry ? "Not taken"
     : appliesAt([entry[1], entry[2]], level) ? `Taken at level ${entry[1]}` : `Taken later, at level ${entry[1]}`;
   const set = entry && SET_NAMES[entry[3]] ? ` · ${SET_NAMES[entry[3]]}` : "";
-  const hint = entry && entry[4] >= 0 ? `<div class="app-hover-hint">${markupHtml(TREE.texts[entry[4]])}</div>` : "";
-  return `<div class="app-hover-head"><strong>${escapeHtml(TREE.texts[name])}</strong><span class="app-weak">${graph === TREE ? KIND_NAMES[kind] : `Ascendancy · ${KIND_NAMES[kind]}`}</span></div>
-    ${stats.length ? `<ul class="app-hover-stats">${stats.map(stat => `<li>${statHtml(TREE.texts[stat])}</li>`).join("")}</ul>` : ""}
-    <div class="app-hover-state app-weak">${state}${set}</div>${hint}`;
+  return hoverCardHtml({
+    title: escapeHtml(TREE.texts[name]),
+    subtitle: graph === TREE ? KIND_NAMES[kind] : `Ascendancy · ${KIND_NAMES[kind]}`,
+    art: TREE.sheets.icons[icon] ? hoverArtSprite(TREE_ART.skills, TREE.sheets.icons[icon]) : "",
+    body: `${stats.length ? `<ul class="app-hover-stats">${stats.map(stat => `<li>${statHtml(TREE.texts[stat])}</li>`).join("")}</ul>` : ""}
+      <div class="app-hover-state">${state}${set}</div>`,
+    note: entry && entry[4] >= 0 ? markupHtml(TREE.texts[entry[4]]) : "",
+  });
 }
 
 // Places the card beside the passive, on the side of the tree with more room, centred on it but kept
@@ -135,6 +144,7 @@ function mountHover() {
       if (!found) return hide();
       const [x, y, kind] = found.graph.nodes[found.index];
       card.innerHTML = hoverHtml(found.graph, found.index, STATE.level);
+      titleIfCut(card);
       card.classList.add("is-shown");
       const passive = [(x - view.x) * view.scale + width / 2, (y - view.y) * view.scale + height / 2];
       placeHover(card, panel, passive, NODE_RADIUS[TREE.kinds[kind]] * view.scale);

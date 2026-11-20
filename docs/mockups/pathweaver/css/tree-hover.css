@@ -1,7 +1,7 @@
-/* The hover of a passive (2i3, js/tree-hover.js, the owner, 2026-11-20): a card beside the passive, in
-   the shade of the window of what changes, without a border, its background see-through at 10 %, its
-   corners rounded by 3 px, fading in and out lightly (120 ms, at once when the system asks for less motion); the
-   name, the kind, the stats, the state at the level, then the hint of the author under a line. */
+/* The cards on hover (2i3, the owner, 2026-11-20): the card of a passive beside it, and the cards of the
+   gems, notes and slots fixed on the page (css/gem-hover.css), all in the construction of css/hover-card.css;
+   without a border, see-through at 10 % over the tree, their corners rounded by 3 px, fading in and out
+   lightly (120 ms, at once when the system asks for less motion). */
 .app-hover { position: absolute; z-index: 4; width: max-content; max-width: 320px; padding: 9px 12px 10px; border-radius: 3px; pointer-events: none;
   background: var(--band-image), color-mix(in srgb, var(--band-deep) 90%, transparent);
   color: var(--on-band); box-shadow: 0 8px 18px rgb(0 0 0 / .28); font-size: 12px; line-height: 1.4;
@@ -10,17 +10,10 @@
    passive straight to the next, it stays. */
 .app-hover.is-shown { opacity: 1; visibility: visible; transition: opacity 120ms ease-out, visibility 0s; }
 @media (prefers-reduced-motion: reduce) { .app-hover, .app-hover.is-shown { transition: none; } }
-.app-hover-head { display: flex; align-items: baseline; justify-content: space-between; gap: 14px; }
-/* The gap between the title of a card and its subtitle (the base of a unique, the state of an item, the
-   tags of a skill gem): none, the subtitle right under the title, on every card but a support's, which
-   has no subtitle (the owner, 2026-11-20, of 0 to 12 px). */
-.app-hover:not(.is-support) > .app-hover-head + * { margin-top: 0; }
-.app-hover-head strong { font-size: 14px; font-weight: 600; }
-.app-hover-head .app-weak, .app-hover-state { color: var(--on-band-weak); font-size: 11px; }
+/* What the body of a card holds: stats one per line, the state at the level in the weak grey. */
 .app-hover-stats { margin: 6px 0 0; padding: 0; list-style: none; }
 .app-hover-stats li + li { margin-top: 3px; }
-.app-hover-state { margin-top: 6px; }
-.app-hover-hint { margin-top: 8px; padding-top: 7px; border-top: 1px solid color-mix(in srgb, var(--on-band) 14%, transparent); }
+.app-hover-state { margin-top: 6px; color: var(--on-band-weak); font-size: 11px; }
 /* What a card says of what the data lack (2j3b): in the weak grey, upright; of an id the game data don't
    know, in the yellow of its sticky note (--unknown-text, css/tokens.css; the owner, 2026-11-20: red
    would read as « gone », as in the window of what changes, and amber is close to the gold of the

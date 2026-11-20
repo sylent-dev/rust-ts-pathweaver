@@ -39,10 +39,10 @@
 .app-inventory-alone { height: auto; padding-bottom: 16px; }
 .app-inventory-alone .app-side-title { margin-top: 0; }
 
-/* The card of a slot (js/slot-hover.js): the card of a gem beside the column; the name of a unique in
-   its gold, its base under it, its implicits above its stats under a line, as in the game. */
+/* The card of a slot (js/slot-hover.js), in the construction of every card on hover (css/hover-card.css),
+   beside the column; the name of a unique in its gold, its implicits above its stats under a line, as in
+   the game. */
 :root { --unique: #d6a15e; }
 .app-slot.is-hinted, .app-inventory-others li[data-item] { cursor: default; }
 .app-slot-hover .is-unique { color: var(--unique); }
-.app-item-base { margin-top: 2px; color: var(--on-band-weak); font-size: 11px; }
 .app-item-implicits { padding-bottom: 5px; border-bottom: 1px solid color-mix(in srgb, var(--on-band) 14%, transparent); }
