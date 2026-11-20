@@ -28,8 +28,8 @@ function gemHoverHtml(gem, level) {
 }
 
 // One card for the page, fixed, so that the narrow column doesn't cut it: just left of the column,
-// over the tree, rather than over the rows it would hide; centred on the gem, kept inside the window
-// of the browser.
+// over the tree, rather than over the rows it would hide; the column is always at the right of the
+// window, the tree beside it. Centred on the gem, kept inside the height of the window.
 const gemCard = document.createElement("div");
 gemCard.className = "app-hover app-gem-hover";
 document.body.append(gemCard);
@@ -40,7 +40,7 @@ function showGemHover(element) {
   gemCard.classList.add("is-shown");
   const box = element.getBoundingClientRect(), [w, h] = [gemCard.offsetWidth, gemCard.offsetHeight];
   const column = element.closest(".app-side")?.getBoundingClientRect() ?? box;
-  const left = column.left - w - 8 >= 8 ? column.left - w - 8 : column.right + 8;
+  const left = column.left - w - 8;
   gemCard.style.left = `${left}px`;
   gemCard.style.top = `${Math.max(8, Math.min(innerHeight - h - 8, box.top + box.height / 2 - h / 2))}px`;
 }
