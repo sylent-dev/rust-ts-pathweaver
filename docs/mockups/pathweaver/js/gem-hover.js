@@ -59,9 +59,8 @@ function gemHoverHtml(gem, level) {
 
 // The card of a skill, a gem with an icon (2k, the owner, 2026-11-20, on the wireframe
 // docs/wireframes/gem-card.excalidraw; css/skill-card.css), on the graph paper of the blocks. Its head,
-// as the header of a build: the icon of the skill square in its corner, the full height of the head,
-// its name and its tags beside it, the light of the page from the top left; its body: its description
-// and its levels, in the same deep shade; the note of its author in a shade of its own. No kind (« Skill gem ») for now (the owner, 2026-11-20). The card of
+// the icon of the skill square in its corner, its name and its tags beside it; its body: its
+// description and its levels, in the same deep shade; the note of its author in a shade of its own. No kind (« Skill gem ») for now (the owner, 2026-11-20). The card of
 // a support stays as it was, until this one is done.
 function skillCardHtml(gem, level) {
   const tags = gem.tags.filter(tag => tag !== "Support" && tag !== "Lineage");
