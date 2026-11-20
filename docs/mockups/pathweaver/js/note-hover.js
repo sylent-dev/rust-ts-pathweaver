@@ -3,8 +3,8 @@
 // changes », the rows of the skills. In the language of the card of a gem (css/gem-hover.css), fixed on
 // the page: its head names what carries it, the place first in grey when it hangs on one (« Body ·
 // Wyrmscale Coat », « Spark · Efficiency II »), then the note with the markup of the game (markupHtml,
-// js/tree-hover.js). A group of passives with one note is the card of that passive (« Weapon set II ·
-// Exposure Effect »); with more, it lists them, the name of each a small head over its note, three,
+// js/tree-hover.js). A group of passives with one note is the card of that passive (« Set II · Exposure
+// Effect »); with more, it lists them, the name of each a small head over its note, three,
 // then « and N more notes » (the owner, 2026-11-20: the name in grey over a note the author wrote in
 // grey read as the note).
 

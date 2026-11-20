@@ -27,9 +27,11 @@ function changesLink(record, open) {
 
 // The changes of a level as one list, in the order of the categories, each with its sign.
 const CHANGE_CATEGORIES = { skill: "Skill", support: "Support", passives: "Passive", gear: "Gear", note: "Note" };
-const PASSIVE_GROUPS = { taken: "", set1: "of weapon set I", set2: "of weapon set II", ascendancy: "of the ascendancy" };
+// The weapon sets as the page names them everywhere, the legend and the switches included: « set I »,
+// « set II », the Roman numerals kept (the owner, 2026-11-20).
+const PASSIVE_GROUPS = { taken: "", set1: "of set I", set2: "of set II", ascendancy: "of the ascendancy" };
 // Where a passive of a group hangs, the place of the card of its note (js/note-hover.js).
-const PASSIVE_PLACES = { taken: "", set1: "Weapon set I", set2: "Weapon set II", ascendancy: "Ascendancy" };
+const PASSIVE_PLACES = { taken: "", set1: "Set I", set2: "Set II", ascendancy: "Ascendancy" };
 
 function changeList(record) {
   const { skills, supports, passives, gear, notes } = record;
