@@ -45,9 +45,6 @@ const dropMark = size => {
 // 2026-11-18: without its icon).
 const dropLink = label => `<a class="app-site-link home-drop-paste" href="#" role="button"><span class="app-site-label">${label}</span></a>`;
 
-// The motions stop when the system asks for less motion.
-const lessMotion = () => matchMedia("(prefers-reduced-motion: reduce)").matches;
-
 // The page is where the files are dropped: the grid lit around the pointer, and the whole window
 // lit while a real file is dragged over it (try with any file of the desktop: the mock-up opens
 // nothing); a window drawn in that state holds it (data-held).

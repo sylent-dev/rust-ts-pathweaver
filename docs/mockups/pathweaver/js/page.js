@@ -47,6 +47,9 @@ const AFTER_RENDER = [];
 const INSTANCES = {};
 const nextInstance = kind => (INSTANCES[kind] = (INSTANCES[kind] ?? -1) + 1);
 
+// The motions stop when the system asks for less motion.
+const lessMotion = () => matchMedia("(prefers-reduced-motion: reduce)").matches;
+
 const params = new URLSearchParams(location.search);
 const accepts = (variant, value) => variant.range
   ? value !== null && Number(value) >= variant.range.min && Number(value) <= variant.range.max
