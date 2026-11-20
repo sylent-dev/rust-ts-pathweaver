@@ -28,23 +28,26 @@ const retoldMark = change => noteMark({
   head: change.name, text: change.kind === "gear" ? withoutNumbers(change.note) : change.note,
 });
 
+// The card in the construction of the card of a gem (2k, the owner, 2026-11-20; css/skill-card.css):
+// its head, what carries the note and, under it, « Note of the author » as its subtitle; its body a step
+// darker, the note; no icon.
 function noteHoverHtml(mark) {
   const { notePlace: place, noteSet: set, noteHead: head, noteText: text, noteList: list } = mark.dataset;
   const notes = list ? JSON.parse(list) : [];
-  const title = `<div class="app-hover-head"><strong>${place && !list ? `<span class="app-note-place"><span${set ? ` class="is-set${set}"` : ""}>${escapeHtml(place)}</span> · </span>` : ""}${escapeHtml(head)}</strong>
-    <span class="app-weak">${notes.length > 1 ? `${notes.length} notes of the author` : "Note of the author"}</span></div>`;
-  if (!list) return `${title}<div class="app-note-text">${markupHtml(text)}</div>`;
+  const title = `<div class="sc-head"><div class="sc-title"><strong>${place && !list ? `<span class="app-note-place"><span${set ? ` class="is-set${set}"` : ""}>${escapeHtml(place)}</span> · </span>` : ""}${escapeHtml(head)}</strong>
+    <div class="app-gem-tags">${notes.length > 1 ? `${notes.length} notes of the author` : "Note of the author"}</div></div></div>`;
+  if (!list) return `${title}<div class="sc-body app-note-text">${markupHtml(text)}</div>`;
   const more = notes.length - NOTE_LIST;
-  return `${title}<ul class="app-note-list">${notes.slice(0, NOTE_LIST).map(entry =>
+  return `${title}<div class="sc-body"><ul class="app-note-list">${notes.slice(0, NOTE_LIST).map(entry =>
     `<li><span class="app-note-passive">${escapeHtml(entry.name)}</span>${markupHtml(entry.note)}</li>`).join("")}</ul>
-    ${more > 0 ? `<p class="app-note-more">and ${plural(more, "more note", "more notes")}</p>` : ""}`;
+    ${more > 0 ? `<p class="app-note-more">and ${plural(more, "more note", "more notes")}</p>` : ""}</div>`;
 }
 
 // One card for the page, as the card of a gem: in the right column, just left of the column, over the
 // tree, centred on the mark (right of it when the window has no room on its left); in the window of
 // « N changes », just right of the window, over the tree (left of it when there is no room).
 const noteCard = document.createElement("div");
-noteCard.className = "app-hover app-gem-hover app-note-hover";
+noteCard.className = "app-hover app-gem-hover app-note-hover is-skill-card";
 document.body.append(noteCard);
 function showNoteHover(mark) {
   noteCard.innerHTML = noteHoverHtml(mark);

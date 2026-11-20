@@ -15,7 +15,7 @@
    colours of the gem, a line of light, the head tinted by the colours of its gem (one, a blend or two
    halves); the note in a light shade (that of the bands, a step lighter, or between the two) and in the
    darker shade of the body. */
-.app-gem-hover.is-skill-card { --sc-alpha: 90%; --sc-icon: var(--sc-icon-size, 42px); width: 320px; max-width: none; padding: 0; overflow: hidden; background: none; }
+.app-gem-hover.is-skill-card { --sc-alpha: 90%; --sc-icon: 48px; width: 320px; max-width: none; padding: 0; overflow: hidden; background: none; }
 .app-gem-hover.is-skill-card.is-over-rows, .app-gem-hover.is-skill-card.is-static { --sc-alpha: 100%; }
 
 /* The shades of the parts: the head and the note in the deep shade of the bands; the body a step darker. */
@@ -35,10 +35,10 @@
 .app-gem-hover.is-static { pointer-events: auto; }
 
 /* The icon on the right of the head (the owner, 2026-11-20, of left and right): the name and the tags
-   start where the body starts, 12 px from the edge. A square of 42 px (the owner, 2026-11-20: 52 px, then
-   35, which left no room above and under the name and its tags, 35 px high; tuned with « Icon size »),
-   bare, as the portrait of a build (I17 of five: framed, edged or fading in the colours of the gem, or
-   with the mark of its row in its corner, set aside). */
+   start where the body starts, 12 px from the edge. A square of 48 px (the owner, 2026-11-20: 52 px,
+   35, which left no room above and under the name and its tags, 35 px high, then 42), bare, as the
+   portrait of a build (I17 of five: framed, edged or fading in the colours of the gem, or with the mark
+   of its row in its corner, set aside). */
 .sc-head { flex-direction: row-reverse; }
 .sc-title { flex: 1; }
 .sc-icon { position: relative; flex: none; width: var(--sc-icon); height: var(--sc-icon); }
