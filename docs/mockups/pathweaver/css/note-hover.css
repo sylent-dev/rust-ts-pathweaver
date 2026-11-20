@@ -1,8 +1,8 @@
 /* The card of a note of the author (2j5, js/note-hover.js): the card of a gem (css/gem-hover.css), its
-   head naming what carries the note, the place in grey, then the note under it, the gap between them
-   tuned by eye (--note-gap, the slider « Note gap » of the page); a group of passives, a short list. */
+   head naming what carries the note, the place in grey, then the note 4 px under it (the owner,
+   2026-11-20, of 0 to 12 px: a note is no subtitle); a group of passives, a short list. */
 .app-note-hover { max-width: 320px; }
-.app-hover.app-note-hover:not(.is-support) > .app-hover-head + * { margin-top: var(--note-gap, 0px); }
+.app-hover.app-note-hover:not(.is-support) > .app-hover-head + * { margin-top: 4px; }
 .app-note-place { color: var(--on-band-weak); font-weight: 400; }
 /* The weapon set of a passive in its colour on the tree (--tree-set-1, --tree-set-2). */
 .app-note-place .is-set1 { color: var(--tree-set-1); }

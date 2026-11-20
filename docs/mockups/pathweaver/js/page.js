@@ -24,9 +24,6 @@ const VARIANTS = {
   // The width of the windows of the home page (2l): the minimum of specs.md, half a 1920-pixel screen, and a wide
   // window of the owner's screen.
   homeWidth: { label: "Home width", options: { 900: "900 px", 960: "960 px", 1600: "1,600 px" }, fallback: "960" },
-  // The gap between the head of the card of a note and the note (2j5, the owner, 2026-11-20): none, as
-  // the subtitle of every card, to some air.
-  noteGap: { label: "Note gap", range: { min: 0, max: 12, step: 1 }, variable: "--note-gap", unit: "px", fallback: "0" },
 };
 
 // The styles a section shows side by side: the style of the page alone, Frost Night by default, the
