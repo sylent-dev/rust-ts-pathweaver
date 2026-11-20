@@ -282,6 +282,9 @@ def gem(entry, names, gems):
         "colour": info.get("color", "w"),
         "levels": interval(entry),
         "known": entry["id"] in names,
+        # The note of the author on the gem, its markup kept (2j2: its mark in the row, its text in
+        # the hover), or "".
+        "note": (entry.get("additional_text") or "").strip(),
     }
 
 
