@@ -3,8 +3,7 @@
 // author in the shade of the head. Drawn in place on four skills: Spark, of intelligence, with a note of
 // its author; Cast on Critical, a spirit gem new at 59, with a note; Herald of Ice, of dexterity and
 // intelligence, without a note; Orb of Storms, its nine tags cut by the ellipsis; then two supports,
-// Pinpoint Critical and a lineage support, with their icon, a disc, cut to a square, or without
-// (« Support icon »); then the card of a note of the author, in the same construction, two. The
+// Pinpoint Critical and a lineage support, their icon, a disc, cut to a square; then the card of a note of the author, in the same construction, two. The
 // card on hover in the windows of the page is the same (the Skills tab, the rows of the Overview).
 
 // A card drawn in place, as it shows on hover.
@@ -24,7 +23,7 @@ addSection(() => {
   const cast = skillsAt(59).find(skill => skill.name === "Cast on Critical");
   const herald = SKILL_SOURCES.dexterity(70).find(skill => skill.name === "Herald of Ice");
   const orb = skillsAt(59).find(skill => skill.name === "Orb of Storms");
-  return ["The card of a skill: its head in the deep shade with the icon in its right corner, its body a step darker, the note of its author in the shade of the head; a support the same, with or without its icon (« Support icon »)", [
+  return ["The card of a skill: its head in the deep shade with the icon in its right corner, its body a step darker, the note of its author in the shade of the head; a support the same, its icon cut to a square", [
     ["Spark, with a note of its author", `<div class="sc-cards">${staticGemCard(spark, 59)}</div>`],
     ["Cast on Critical, a spirit gem new at 59", `<div class="sc-cards">${staticGemCard(cast, 59)}</div>`],
     ["Herald of Ice, of two attributes, without a note", `<div class="sc-cards">${staticGemCard(herald, 70)}</div>`],

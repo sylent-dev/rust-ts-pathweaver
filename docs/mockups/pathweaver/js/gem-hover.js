@@ -70,10 +70,9 @@ AFTER_RENDER.push(() => titleIfCut(document.getElementById("sheet")));
 // The card of a skill, a gem with an icon (2k, the owner, 2026-11-20, on the wireframe
 // docs/wireframes/gem-card.excalidraw; its look and what was set aside in css/skill-card.css): its head,
 // its name, its tags under it on one line, cut by an ellipsis, all of them in a native tooltip when they
-// are cut (titleIfCut), and the icon of the gem in its right corner, a square for a skill, a disc for a
-// support; its body, the description and the levels; the note of its author. No kind (« Skill gem »)
-// for now. A support takes the same card (the owner, 2026-11-20), with or without its icon while
-// compared (VARIANTS.supportIcon).
+// are cut (titleIfCut), and the icon of the gem in its right corner, a square (a support's disc cut to a
+// square); its body, the description and the levels; the note of its author. No kind (« Skill gem »)
+// for now. A support takes the same card (the owner, 2026-11-20).
 function skillCardHtml(gem, level) {
   const tags = gem.tags.filter(tag => tag !== "Support" && tag !== "Lineage");
   return `<div class="sc-head">
