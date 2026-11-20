@@ -70,9 +70,10 @@ AFTER_RENDER.push(() => titleIfCut(document.getElementById("sheet")));
 // The card of a skill, a gem with an icon (2k, the owner, 2026-11-20, on the wireframe
 // docs/wireframes/gem-card.excalidraw; its look and what was set aside in css/skill-card.css): its head,
 // its name, its tags under it on one line, cut by an ellipsis, all of them in a native tooltip when they
-// are cut (titleIfCut), and the icon of the skill square in its right corner; its body, the description
-// and the levels; the note of its author. No kind (« Skill gem ») for now. The card of a support stays as
-// it was, until this one is done.
+// are cut (titleIfCut), and the icon of the gem in its right corner, a square for a skill, a disc for a
+// support; its body, the description and the levels; the note of its author. No kind (« Skill gem »)
+// for now. A support takes the same card (the owner, 2026-11-20), with or without its icon while
+// compared (VARIANTS.supportIcon).
 function skillCardHtml(gem, level) {
   const tags = gem.tags.filter(tag => tag !== "Support" && tag !== "Lineage");
   return `<div class="sc-head">
@@ -100,8 +101,9 @@ function showGemHover(element) {
   const gem = gemOfRow(element);
   if (!gem) return;
   gemCard.innerHTML = gemHoverHtml(gem, Number(element.closest("[data-level]").dataset.level));
-  // The card of a skill (css/skill-card.css).
+  // The card of a gem with an icon (css/skill-card.css), a support's too (is-support-card).
   gemCard.classList.toggle("is-skill-card", Boolean(gem.icon));
+  gemCard.classList.toggle("is-support-card", Boolean(gem.icon) && gem.kind === "support");
   titleIfCut(gemCard);
   if (element.closest(".app-st:not(.st-h1) , .st-h1-detail")) return showGemBeside(element);
   const support = Boolean(element.closest(".app-skill-supports"));

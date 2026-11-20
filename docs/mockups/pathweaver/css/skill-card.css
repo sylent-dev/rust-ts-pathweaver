@@ -5,8 +5,8 @@
    - The body, a step darker than the head (D4 of twelve ways to tell them apart): the description and
      the levels.
    - The note of the author, in the shade of the head.
-   Over the tree the parts are see-through at 10 %, as the card of a passive; opaque over rows. The card
-   of a support is untouched.
+   Over the tree the parts are see-through at 10 %, as the card of a passive; opaque over rows. A support
+   takes the same card, its icon a disc.
    Set aside by the owner (2026-11-20): the head light, the light of the page from its top left, the light
    from the bottom right on the note, the tags on two lines in the head (18 skills of 37: the head higher
    than the icon) and in the body; the graph paper of the blocks on the whole card, then on the body and
@@ -42,6 +42,11 @@
 .sc-title { flex: 1; }
 .sc-icon { position: relative; flex: none; width: var(--sc-icon); height: var(--sc-icon); }
 .sc-icon img { position: absolute; inset: 0; display: block; width: 100%; height: 100%; object-fit: cover; }
+
+/* A support (2k, the owner, 2026-11-20): the same card, its icon a disc as the game draws it (its corners
+   see-through); without it while compared (« Support icon »), the name and the tags the full width. */
+:root[data-support-icon="without"] .is-support-card .sc-icon { display: none; }
+:root[data-support-icon="without"] .is-support-card .sc-head { min-height: 0; padding: 6px 0; }
 
 /* The section of the mock-up (sections/skill-card.js): the cards drawn in place. */
 .sc-cards { display: flex; flex-direction: column; gap: 22px; padding: 22px 18px; background: var(--page); }
