@@ -50,7 +50,6 @@
 .st-k3 .st-head:not(.st-triggered) .st-badge { order: 9; width: 30px; height: 30px; margin-left: auto; }
 .st-k3 .st-head:not(.st-triggered) .st-skill { font-size: 13.5px; }
 .st-k3 .st-supports { margin-top: 3px; padding-left: 12px; }
-.st-k3 .st-triggered .st-badge { width: 18px; height: 18px; }
 
 /* K6 · A small card per skill, in the construction of the cards on hover (css/hover-card.css): the head in
    the deep shade with the name and the badge at the right, the supports in the darker body. */
@@ -59,4 +58,3 @@
 .st-k6 .st-head:not(.st-triggered) .st-badge { order: 9; width: 32px; height: 32px; margin-left: auto; border-radius: 0; }
 .st-k6 .st-supports { padding: 5px 10px 6px 12px; }
 .st-k6 .st-triggered { padding: 0 10px 6px; }
-.st-k6 .st-triggered .st-badge { width: 18px; height: 18px; }
