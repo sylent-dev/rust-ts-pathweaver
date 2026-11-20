@@ -19,7 +19,7 @@ Writes js/data-tree.js, js/data-builds.js, img/portraits/*.webp (the discs),
 img/portraits-square/*.webp (the square inside each disc, for the tabs), img/portraits-large/*.webp (the
 portrait under the ascendancy at the centre of the tree, 2i2) and img/tree/*.webp (the sheets of the icons
 and frames of the passives, kept whole, 2i), img/items/*.webp (the images of the items, 2j3) and img/skills/*.webp
-(the icons of the skills, 2k) next to this folder. The downloads are kept in the cache folder (a temporary one by default) so that a second run is fast.
+(the icons of the gems, 2k) next to this folder. The downloads are kept in the cache folder (a temporary one by default) so that a second run is fast.
 The mock-up only: the website converts the game data with its own script, at step 4.
 """
 
@@ -335,22 +335,33 @@ def gem_colour(info):
 
 
 def icon_file(info):
-    """The file of the icon of a skill gem in img/skills/ (« sorceressspark.webp »), or "" when the game
-    data give none."""
+    """The file of the icon of a gem in img/skills/, named after its path under SkillIcons/ (« 4k-
+    sorceressspark.webp », « support-4k-acrimonysupport.webp »: a skill and a support may share the name
+    of their file), or "" when the game data give none."""
     dds = info.get("icon_dds_file") or ""
-    return re.sub(r"[^a-z0-9]+", "-", dds.rsplit("/", 1)[-1].removesuffix(".dds").lower()) + ".webp" if dds else ""
+    return re.sub(r"[^a-z0-9]+", "-", dds.split("SkillIcons/", 1)[-1].removesuffix(".dds").lower()) + ".webp" if dds else ""
 
 
 def skill_icons(cache, gems, skill_lists):
-    """The icons of the skills of the builds shown (2k, the owner, 2026-11-20: on the card of a skill):
-    RePoE serves the art of the game beside its data, the icon of a skill at the path `icon_dds_file`
-    of skill_gems.json gives (Art/2DArt/SkillIcons/4k/…, 88 × 88 pixels, 2 to 3 KB)."""
+    """The icons of the gems of the builds shown (2k, the owner, 2026-11-20: on the card of a gem):
+    RePoE serves the art of the game beside its data, the icon of a gem at the path `icon_dds_file` of
+    skill_gems.json gives (Art/2DArt/SkillIcons/4k/… for a skill, a square, and SkillIcons/Support/4k/…
+    for a support, a disc; 88 × 88 pixels, 2 to 3 KB). 637 supports of 642 have one. An icon RePoE
+    doesn't serve leaves its gem without one: its card shows no icon."""
     paths = {icon_file(info): info["icon_dds_file"].removesuffix(".dds") for info in gems.values() if info.get("icon_dds_file")}
-    wanted = {gem["icon"] for skills in skill_lists for skill in skills for gem in [skill, *skill["supports"]] if gem.get("icon")}
+    entries = [gem for skills in skill_lists for skill in skills for gem in [skill, *skill["supports"]] if gem.get("icon")]
     folder = OUT / "img" / "skills"
     folder.mkdir(exist_ok=True)
-    for file in sorted(wanted):
-        (folder / file).write_bytes(fetch(cache, f"{REPOE_URL}/{paths[file]}.webp", file).read_bytes())
+    missing = set()
+    for file in sorted({gem["icon"] for gem in entries}):
+        try:
+            (folder / file).write_bytes(fetch(cache, f"{REPOE_URL}/{paths[file]}.webp", file).read_bytes())
+        except urllib.error.HTTPError as error:
+            print(f"no icon for {paths[file]}: {error}", file=sys.stderr)
+            missing.add(file)
+    for gem in entries:
+        if gem["icon"] in missing:
+            gem["icon"] = ""
 
 
 def gem(entry, names, gems, among_supports=False):
@@ -366,9 +377,9 @@ def gem(entry, names, gems, among_supports=False):
         "colour": gem_colour(info),
         "levels": interval(entry),
         "known": known,
-        # The icon of the skill a skill gem grants (2k: on its card), the name of its file in img/skills/,
-        # from the path the game data give (skill_icons downloads it); none for a support.
-        "icon": icon_file(info) if kind != "support" else "",
+        # The icon of a gem (2k: on its card), the name of its file in img/skills/, from the path the game
+        # data give (skill_icons downloads it): a square for a skill, a disc for a support.
+        "icon": icon_file(info),
         # A lineage support (2j2: its colour in the list « Lineage support » of the mock-up).
         "lineage": bool(info.get("is_lineage")),
         # The note of the author on the gem, its markup kept (2j2: its mark in the row, its text in
