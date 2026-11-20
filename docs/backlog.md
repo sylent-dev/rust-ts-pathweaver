@@ -20,6 +20,7 @@ Set aside at the wireframes (2026-11-16, see `docs/wireframes/archive.excalidraw
 - **The order of allocation**: number the passives on the tree (1, 2, 3…) for leveling, as Maxroll does and as some authors write in their hints.
 - **Search in the tree**: light the passives whose name or stats match a text (« life », « crit »), as Path of Building does.
 - **The passives as a list**, beside the canvas: for screen readers, and to copy them.
+- **The 22 passives `isBlighted` of the tree export** (noted 2026-11-20 at step 2i2; depends on: 5a, the data of the tree): no link reaches them; five are the « Sinister Jewel Sockets » in a column left of the centre, the others notables (Bastion of Light, Kaom's Blessing…). The mock-up draws them as they are; before 5a, read how the game and Path of Building treat them, and decide whether the tree shows them.
 - **The weapon set of a new passive, in the editor** (a rule, noted on 2026-11-19 at step 2i; depends on: the editor of version 1.5): a control of three visible modes, **Shared · I · II**, says where the next passive goes, never a « no set selected » that would mean shared without saying it. Path of Building has the same three modes (`allocMode` 0, 1 and 2 in `PassiveTreeView.lua`, changed with the wheel). In version 1, the same control only picks what is shown strong, with « Both » besides.
 
 ## Images
