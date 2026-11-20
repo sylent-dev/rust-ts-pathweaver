@@ -13,23 +13,11 @@ const GEM_SHAPES = {
 
 // The shape says the kind of a gem, its colour what it is (the owner, 2026-11-20): a spirit gem is a
 // skill, a hexagon, in a teal of its own rather than the colour of its attribute (--gem-spirit, the
-// bright teal of five); a lineage support is a support, a square on its tip, in a grey of its own,
-// still open: a list in the header of the mock-up (2j2), which applies at once.
-const GEM_CHOICES = {
-  lineageColour: {
-    label: "Lineage support",
-    options: { attribute: "The colour of its attribute", "#d4d9e1": "Silver", "#a3abb8": "Mid grey", "#c2b8a3": "Warm grey" },
-    fallback: "#d4d9e1",
-  },
-};
-for (const [key, choice] of Object.entries(GEM_CHOICES)) {
-  VARIANTS[key] = { ...choice, select: true };
-  chosen[key] = accepts(VARIANTS[key], params.get(key)) ? params.get(key) : choice.fallback;
-}
-
-// The colour of a gem of the build (BUILDS: its colour, its kind, whether it is a lineage support).
-const gemColourOf = gem => gem.kind === "spirit" ? "var(--gem-spirit)"
-  : gem.lineage && chosen.lineageColour !== "attribute" ? chosen.lineageColour : gemColour(gem.colour);
+// bright teal of five); a lineage support is a support, a square on its tip, in a warm grey of its own
+// (--gem-lineage, of silver, a mid grey and the colour of its attribute), apart from the cool grey of
+// the gems without an attribute (--gem-none). The colour of a gem of the build (BUILDS: its colour,
+// its kind, whether it is a lineage support):
+const gemColourOf = gem => gem.kind === "spirit" ? "var(--gem-spirit)" : gem.lineage ? "var(--gem-lineage)" : gemColour(gem.colour);
 
 // The mark of a gem: a hexagon for a skill (a spirit gem, or the skill a spirit gem triggers, which
 // the file lists among its supports), a square on its tip for a support.
