@@ -4,6 +4,9 @@
 .app-skill-gem { display: inline-flex; }
 .app-skill-gem .app-gem-mark { margin: 0; }
 .app-skill > .app-skill-gem { margin-right: 8px; }
+/* The mark of a skill a quarter of a pixel down against its name (the owner, 2026-11-20, on their
+   screen; css/gem-marks.css sets -1px), to tune again on the website at every zoom (docs/backlog.md). */
+.app-skill > .app-skill-gem .app-gem-mark { top: 0.25px; }
 .app-skill-name { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .app-skill .app-changes-note { margin-left: 5px; vertical-align: 0; }
 .app-skill-supports { display: inline-flex; align-items: center; gap: 4px; margin-left: auto; padding-left: 8px; }
