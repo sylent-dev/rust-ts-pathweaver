@@ -32,8 +32,8 @@ const VARIANTS = {
   // The side of the icon of a skill card: on the left, or on the right, the name and the tags then aligned
   // with the body (the owner, 2026-11-20).
   cardIconSide: { label: "Icon side", options: { left: "Left", right: "Right" }, fallback: "left" },
-  // What tells the head of a skill card from its body (the owner, 2026-11-20): D0, nothing, then nine ways.
-  headEdge: { label: "Head edge", options: Object.fromEntries(Array.from({ length: 10 }, (_, index) => [`d${index}`, `D${index}`])), fallback: "d1" },
+  // What tells the head of a skill card from its body (the owner, 2026-11-20): D0, nothing, then eleven ways.
+  headEdge: { label: "Head edge", options: Object.fromEntries(Array.from({ length: 12 }, (_, index) => [`d${index}`, `D${index}`])), fallback: "d1" },
   cardIcon: { label: "Card icon", options: { i17: "I17", i18: "I18", i19: "I19", i20: "I20", i21: "I21" }, fallback: "i17" },
   noteShade: { label: "Note shade", options: { s1: "S1", s2: "S2", s3: "S3", s4: "S4" }, fallback: "s1" },
   skillsTab: { label: "Skills tab", options: Object.fromEntries(["n1", "n2", "n3", "h1", "h2", "h3", "e1", "e2", "e3", "f1", "f2", "f3"].map(id => [id, id.toUpperCase()])), fallback: "n1" },
