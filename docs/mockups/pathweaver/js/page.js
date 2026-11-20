@@ -24,8 +24,9 @@ const VARIANTS = {
   // The width of the windows of the home page (2l): the minimum of specs.md, half a 1920-pixel screen, and a wide
   // window of the owner's screen.
   homeWidth: { label: "Home width", options: { 900: "900 px", 960: "960 px", 1600: "1,600 px" }, fallback: "960" },
-  // The card of a support (2k): the card of a skill, with its icon, a disc, or without (css/skill-card.css).
-  supportIcon: { label: "Support icon", options: { with: "With", without: "Without" }, fallback: "with" },
+  // The card of a support (2k): the card of a skill, with its icon, a disc, cut to a square, or without
+  // (css/skill-card.css).
+  supportIcon: { label: "Support icon", options: { with: "Disc", square: "Square", without: "Without" }, fallback: "square" },
   // The Skills tab (2k): H1 and N3, kept of twelve variants (js/skills-tab.js).
   skillsTab: { label: "Skills tab", options: { h1: "H1", n3: "N3" }, fallback: "h1" },
 };
