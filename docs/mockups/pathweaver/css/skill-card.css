@@ -2,29 +2,26 @@
    docs/wireframes/gem-card.excalidraw): three parts, without a light, without the graph paper.
    - The head as high as the icon, in the deep shade of the bands: the icon of the skill square in its
      corner, its name beside it, its tags under the name on one line, cut by an ellipsis.
-   - The body, in the same deep shade: the description and the levels.
-   - The note of the author, in a shade of its own.
+   - The body, a step darker than the head (D4 of twelve ways to tell them apart): the description and
+     the levels.
+   - The note of the author, in the darker shade of the body (the owner, 2026-11-20).
    Over the tree the parts are see-through at 10 %, as the card of a passive; opaque over rows. The card
    of a support is untouched.
    Set aside by the owner (2026-11-20): the head light, the light of the page from its top left, the light
    from the bottom right on the note, the tags on two lines in the head (18 skills of 37: the head higher
    than the icon) and in the body, the graph paper of the blocks (on the whole card, then on the body and
-   the note).
+   the note); between the head and the body, a thin line (under the card or the text only, alone or with
+   a lighter head), a lighter head, a band of the light shade, a line in the colours of the gem, a line
+   of light, the head tinted by the colours of its gem (one, a blend or two halves); the note in a light
+   shade (that of the bands, a step lighter, or between the two).
 
-   Open: what tells the head from the body (« Head edge », D0–D11); the side of the icon (« Icon side »,
-   left or right); its size (« Icon size »); the icon, five
-   ways (« Card icon », I17–I21, the sixteen of before are in the history of Git); the shade of the note,
-   four (« Note shade », S1–S4: the light shade of the bands, a step lighter, between the two shades, the
-   deep shade of the rest of the card). */
+   Open: the side of the icon (« Icon side », left or right); its size (« Icon size »); the icon, five
+   ways (« Card icon », I17–I21, the sixteen of before are in the history of Git). */
 .app-gem-hover.is-skill-card { --sc-alpha: 90%; --sc-icon: var(--sc-icon-size, 35px); width: 320px; max-width: none; padding: 0; overflow: hidden; background: none; }
 .app-gem-hover.is-skill-card.is-over-rows, .app-gem-hover.is-skill-card.is-static { --sc-alpha: 100%; }
 
-/* The shades of the parts: the head and the body in the deep shade of the bands; the note, S1, in their
-   light shade. */
-.is-skill-card { --sc-head: var(--band-deep); --sc-body: var(--band-deep); --sc-note: var(--band); }
-:root[data-note-shade="s2"] .is-skill-card { --sc-note: color-mix(in srgb, var(--band), var(--on-band) 6%); }
-:root[data-note-shade="s3"] .is-skill-card { --sc-note: color-mix(in srgb, var(--band), var(--band-deep)); }
-:root[data-note-shade="s4"] .is-skill-card { --sc-note: var(--band-deep); }
+/* The shades of the parts: the head in the deep shade of the bands; the body and the note a step darker. */
+.is-skill-card { --sc-head: var(--band-deep); --sc-body: color-mix(in srgb, var(--band-deep), #000 60%); --sc-note: var(--sc-body); }
 
 .sc-head { display: flex; min-height: var(--sc-icon); background: color-mix(in srgb, var(--sc-head) var(--sc-alpha), transparent); }
 .sc-body { padding: 9px 12px 10px; background: color-mix(in srgb, var(--sc-body) var(--sc-alpha), transparent); }
@@ -38,39 +35,6 @@
 .sc-title strong { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 14px; font-weight: 600; }
 .sc-tags { margin: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .app-gem-hover.is-static .sc-tags[title] { pointer-events: auto; cursor: default; }
-
-/* What tells the head from the body (« Head edge », the owner, 2026-11-20: without the graph paper, the
-   two read as one block). D0 · Nothing, as before. */
-.sc-head { position: relative; z-index: 1; }
-/* The lines lie just under the head, over the top of the body, never on the tags. */
-.sc-head::after { content: ""; position: absolute; left: 0; right: 0; bottom: -1px; height: 1px; }
-/* D1 · A thin line under the head, the full width of the card, under the icon too. */
-:root[data-head-edge="d1"] .sc-head::after, :root[data-head-edge="d9"] .sc-head::after { background: var(--divider); }
-/* D2 · A thin line under the text only, from the edge of the card's text to the icon. */
-:root[data-head-edge="d2"] .sc-head::after { left: calc(var(--sc-icon) + 11px); right: 12px; background: var(--divider); }
-:root[data-head-edge="d2"][data-card-icon-side="right"] .sc-head::after { left: 12px; right: calc(var(--sc-icon) + 11px); }
-/* D3 · The head a step lighter than the body. */
-:root[data-head-edge="d3"] .is-skill-card { --sc-head: color-mix(in srgb, var(--band-deep), var(--band) 70%); }
-/* D4 · The body a step darker than the head. */
-:root[data-head-edge="d4"] .is-skill-card { --sc-body: color-mix(in srgb, var(--band-deep), #000 60%); }
-/* D5 · A band of 3 px in the light shade of the bands between them. */
-:root[data-head-edge="d5"] .sc-head::after { bottom: -3px; height: 3px; background: var(--band); }
-:root[data-head-edge="d5"] .sc-body { margin-top: 3px; }
-/* D6 · A line of 2 px in the colours of the gem, its two halves for two attributes. */
-:root[data-head-edge="d6"] .sc-head::after { bottom: -2px; height: 2px; background: linear-gradient(90deg, var(--gem) 50%, var(--gem-2) 50%); }
-/* D7 · A line of light fading at both ends (a shadow, tried first, didn't show on the deep shade). */
-:root[data-head-edge="d7"] .sc-head::after { background: linear-gradient(90deg, transparent, color-mix(in srgb, var(--on-band) 30%, transparent) 50%, transparent); }
-/* D8 · The head tinted by the colour of its gem. */
-:root[data-head-edge="d8"] .is-skill-card { --sc-head: color-mix(in srgb, var(--band-deep), var(--gem) 12%); }
-/* D10 and D11 · D8 with both colours of a gem of two attributes (the owner, 2026-11-20: D8 took the first
-   only): a blend from one to the other across the head (D10), or its two halves as on its mark (D11); a
-   gem of one colour as D8. */
-.is-skill-card { --sc-tint-1: color-mix(in srgb, color-mix(in srgb, var(--band-deep), var(--gem) 12%) var(--sc-alpha), transparent);
-  --sc-tint-2: color-mix(in srgb, color-mix(in srgb, var(--band-deep), var(--gem-2) 12%) var(--sc-alpha), transparent); }
-:root[data-head-edge="d10"] .sc-head { background: linear-gradient(90deg, var(--sc-tint-1), var(--sc-tint-2)); }
-:root[data-head-edge="d11"] .sc-head { background: linear-gradient(90deg, var(--sc-tint-1) 50%, var(--sc-tint-2) 50%); }
-/* D9 · The head lighter and a thin line under it: D3 and D1 together. */
-:root[data-head-edge="d9"] .is-skill-card { --sc-head: color-mix(in srgb, var(--band-deep), var(--band) 70%); }
 
 /* On the right (« Icon side »): the name and the tags start where the body starts, 12 px from the edge. */
 :root[data-card-icon-side="right"] .sc-head { flex-direction: row-reverse; }

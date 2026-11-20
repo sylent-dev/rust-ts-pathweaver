@@ -24,18 +24,13 @@ const VARIANTS = {
   // The width of the windows of the home page (2l): the minimum of specs.md, half a 1920-pixel screen, and a wide
   // window of the owner's screen.
   homeWidth: { label: "Home width", options: { 900: "900 px", 960: "960 px", 1600: "1,600 px" }, fallback: "960" },
-  // The Skills tab (2k): twelve variants, three at each of four temperatures (js/skills-tab.js).
-  // The card of a skill (2k, css/skill-card.css): its icon in the corner of its head, five ways (I17–I21,
-  // after the sixteen of before); the shade of the note of its author, four (S1–S4).
-  // The size of the icon of a skill card, now that the head holds only the name (the owner, 2026-11-20).
+  // The card of a skill (2k, css/skill-card.css): the size of its icon, now that the head holds only the
+  // name; its side, on the left, or on the right, the name and the tags then aligned with the body; its
+  // look, five ways (I17–I21, after the sixteen of before) (the owner, 2026-11-20).
   cardIconSize: { label: "Icon size", range: { min: 28, max: 52, step: 1 }, variable: "--sc-icon-size", unit: "px", fallback: "35" },
-  // The side of the icon of a skill card: on the left, or on the right, the name and the tags then aligned
-  // with the body (the owner, 2026-11-20).
   cardIconSide: { label: "Icon side", options: { left: "Left", right: "Right" }, fallback: "left" },
-  // What tells the head of a skill card from its body (the owner, 2026-11-20): D0, nothing, then eleven ways.
-  headEdge: { label: "Head edge", options: Object.fromEntries(Array.from({ length: 12 }, (_, index) => [`d${index}`, `D${index}`])), fallback: "d1" },
   cardIcon: { label: "Card icon", options: { i17: "I17", i18: "I18", i19: "I19", i20: "I20", i21: "I21" }, fallback: "i17" },
-  noteShade: { label: "Note shade", options: { s1: "S1", s2: "S2", s3: "S3", s4: "S4" }, fallback: "s1" },
+  // The Skills tab (2k): twelve variants, three at each of four temperatures (js/skills-tab.js).
   skillsTab: { label: "Skills tab", options: Object.fromEntries(["n1", "n2", "n3", "h1", "h2", "h3", "e1", "e2", "e3", "f1", "f2", "f3"].map(id => [id, id.toUpperCase()])), fallback: "n1" },
 };
 
