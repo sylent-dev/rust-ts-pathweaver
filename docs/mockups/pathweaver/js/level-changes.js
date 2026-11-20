@@ -39,8 +39,8 @@ function changeList(record) {
     ...skills.removed.map(skill => ({ category: "skill", sign: "−", ...skill, supports: [] })),
     ...supports.added.map(support => ({ category: "support", sign: "+", ...support })),
     ...supports.removed.map(support => ({ category: "support", sign: "−", ...support })),
-    // The notes of the passives taken mark their first group.
-    ...taken.map(([group, label], index) => ({ category: "passives", sign: "+", count: passives[group], label, notes: index === 0 ? passives.notes : 0 })),
+    // Each group carries the notes of its passives, with the name of each (2j5).
+    ...taken.map(([group, label]) => ({ category: "passives", sign: "+", count: passives[group], label, notes: passives.notes[group] ?? [] })),
     ...(passives.givenBack > 0 ? [{ category: "passives", sign: "−", count: passives.givenBack, label: "" }] : []),
     ...gear.added.map(entry => ({ category: "gear", sign: "+", ...item(entry) })),
     ...gear.replaced.map(entry => ({ category: "gear", sign: "⇄", ...item(entry) })),
@@ -53,7 +53,7 @@ function changeList(record) {
 const slotName = id => escapeHtml(SLOT_NAMES[id] ?? id);
 function changeName(change) {
   if (change.category === "passives") return `<b>${plural(change.count, "passive")}</b>${change.label ? ` ${change.label}` : ""}${
-    noteMark(change.notes > 0, `${plural(change.notes, "passive")} with a note of the author`)}`;
+    noteMark(change.notes?.length > 0, `${plural(change.notes?.length ?? 0, "passive")} with a note of the author`)}`;
   if (change.category === "skill" || change.category === "support") return `${gemMark(change)}<b>${escapeHtml(change.name)}</b>${noteMark(change.note)}`;
   if (change.category === "gear") return `<b>${escapeHtml(change.name || "a hint")}</b>${change.unique ? ' <span class="app-changes-tag">unique</span>' : ""}`;
   return `<b>${escapeHtml(change.name)}</b>`;
