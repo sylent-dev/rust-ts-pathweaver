@@ -10,13 +10,23 @@
 .app-site-link { display: flex; align-items: center; height: 100%; padding: 0 16px; color: var(--accent); text-decoration: none; transition: color .3s;
   font-family: var(--site-link-font); font-weight: var(--site-link-weight); font-size: var(--site-link-size); }
 /* On hover, the words turn from blue to the colour of the text of the band, and a line of 2 px in
-   that colour draws itself under them from the left, and leaves to the right (after sylent.art,
-   the owner, 2026-11-18). */
+   that colour sweeps under them (after sylent.art, the owner, 2026-11-18): it draws itself from the
+   left, rests a moment, and leaves by its left end, so that it never stays, in 500 ms (the owner,
+   2026-11-20). Its origin moves to the right while it is whole, where the move doesn't show.
+   The same sweep under the links of the right column (css/side-overflow.css); none when the system
+   asks for less motion, the colour saying the hover alone. */
+@keyframes link-sweep {
+  0% { transform: scaleX(0); transform-origin: 0; animation-timing-function: cubic-bezier(.2, .7, .2, 1); }
+  40% { transform: scaleX(1); transform-origin: 0; }
+  60% { transform: scaleX(1); transform-origin: 100%; animation-timing-function: cubic-bezier(.5, 0, .75, .3); }
+  100% { transform: scaleX(0); transform-origin: 100%; }
+}
 .app-site-link:is(:hover, .is-hover) { color: var(--on-bar); }
 .app-site-label { position: relative; line-height: 1; }
 .app-site-label::after { content: ""; position: absolute; left: 0; right: 0; bottom: -8px; height: 2px; background: currentColor;
-  transform: scaleX(0); transform-origin: 100%; transition: transform .3s cubic-bezier(.2, .7, .2, 1); }
-.app-site-link:is(:hover, .is-hover) .app-site-label::after { transform: scaleX(1); transform-origin: 0; }
+  transform: scaleX(0); transform-origin: 0; }
+.app-site-link:hover .app-site-label::after { animation: link-sweep 500ms both; }
+@media (prefers-reduced-motion: reduce) { .app-site-link:hover .app-site-label::after { animation: none; } }
 /* The page shown (My library on the library): white, without its line, which stays the answer to
    the hover only (the owner, 2026-11-18). */
 .app-site-link.is-current { color: var(--on-bar); }
