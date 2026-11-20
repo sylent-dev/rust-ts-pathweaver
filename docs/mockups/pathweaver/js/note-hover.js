@@ -28,26 +28,32 @@ const retoldMark = change => noteMark({
   head: change.name, text: change.kind === "gear" ? withoutNumbers(change.note) : change.note,
 });
 
+// The card in the construction of every card on hover (2k, the owner, 2026-11-20; js/hover-card.js):
+// its title, what carries the note, its subtitle « Note of the author »; its body, the note; no art.
 function noteHoverHtml(mark) {
   const { notePlace: place, noteSet: set, noteHead: head, noteText: text, noteList: list } = mark.dataset;
   const notes = list ? JSON.parse(list) : [];
-  const title = `<div class="app-hover-head"><strong>${place && !list ? `<span class="app-note-place"><span${set ? ` class="is-set${set}"` : ""}>${escapeHtml(place)}</span> · </span>` : ""}${escapeHtml(head)}</strong>
-    <span class="app-weak">${notes.length > 1 ? `${notes.length} notes of the author` : "Note of the author"}</span></div>`;
-  if (!list) return `${title}<div class="app-note-text">${markupHtml(text)}</div>`;
+  const title = `${place && !list ? `<span class="app-note-place"><span${set ? ` class="is-set${set}"` : ""}>${escapeHtml(place)}</span> · </span>` : ""}${escapeHtml(head)}`;
+  const subtitle = notes.length > 1 ? `${notes.length} notes of the author` : "Note of the author";
+  if (!list) return hoverCardHtml({ title, subtitle, body: markupHtml(text) });
   const more = notes.length - NOTE_LIST;
-  return `${title}<ul class="app-note-list">${notes.slice(0, NOTE_LIST).map(entry =>
-    `<li><span class="app-note-passive">${escapeHtml(entry.name)}</span>${markupHtml(entry.note)}</li>`).join("")}</ul>
-    ${more > 0 ? `<p class="app-note-more">and ${plural(more, "more note", "more notes")}</p>` : ""}`;
+  return hoverCardHtml({
+    title, subtitle,
+    body: `<ul class="app-note-list">${notes.slice(0, NOTE_LIST).map(entry =>
+      `<li><span class="app-note-passive">${escapeHtml(entry.name)}</span>${markupHtml(entry.note)}</li>`).join("")}</ul>
+      ${more > 0 ? `<p class="app-note-more">and ${plural(more, "more note", "more notes")}</p>` : ""}`,
+  });
 }
 
 // One card for the page, as the card of a gem: in the right column, just left of the column, over the
 // tree, centred on the mark (right of it when the window has no room on its left); in the window of
 // « N changes », just right of the window, over the tree (left of it when there is no room).
 const noteCard = document.createElement("div");
-noteCard.className = "app-hover app-gem-hover app-note-hover";
+noteCard.className = "app-hover app-gem-hover app-note-hover is-hover-card";
 document.body.append(noteCard);
 function showNoteHover(mark) {
   noteCard.innerHTML = noteHoverHtml(mark);
+  titleIfCut(noteCard);
   // Beside the window of « N changes », opaque as the window, over what the page shows there.
   noteCard.classList.toggle("is-over-rows", !mark.closest(".app-side"));
   noteCard.classList.add("is-shown");
@@ -59,9 +65,4 @@ function showNoteHover(mark) {
   noteCard.style.left = `${onLeft ? left : right}px`;
   noteCard.style.top = `${Math.max(8, Math.min(innerHeight - h - 8, box.top + box.height / 2 - h / 2))}px`;
 }
-document.addEventListener("mouseover", event => {
-  const mark = event.target.closest?.(".app-changes-note[data-note-head]");
-  if (mark) showNoteHover(mark);
-  else noteCard.classList.remove("is-shown");
-});
-document.addEventListener("scroll", () => noteCard.classList.remove("is-shown"), { capture: true, passive: true });
+openOnHover(noteCard, ".app-changes-note[data-note-head]", showNoteHover);

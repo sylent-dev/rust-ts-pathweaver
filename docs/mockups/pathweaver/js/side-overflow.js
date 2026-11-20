@@ -9,9 +9,7 @@
 
 // The case of the worst overflow (tools/make-data.py, CROWDED): the 14 skills of a build of the corpus
 // at 53, where 20 things are new, beside the inventory of the build shown.
-SKILL_SOURCES.crowded = level => BUILDS.crowded.skills
-  .filter(skill => appliesAt(skill.levels, level))
-  .map(skill => ({ ...skill, supports: skill.supports.filter(support => appliesAt(support.levels, level)) }));
+SKILL_SOURCES.crowded = level => skillsOf(BUILDS.crowded.skills, level);
 
 // A link of the column to a tab of the build (the owner, 2026-11-20): the title Skills, and « and N more skills »
 // under the skills folded; not the title of the bar, whose hover unrolls the drawing, nor a link under

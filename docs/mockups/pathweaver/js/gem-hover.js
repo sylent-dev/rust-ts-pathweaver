@@ -11,14 +11,16 @@ const gemKindName = gem => gem.lineage ? "Lineage support" : GEM_KIND_NAMES[gem.
 
 // The gem a mark or a name stands for: the skill of its row at the level of its list, or one of the
 // gems under it (a support, or the skill a spirit gem triggers). A list of a case of the mock-up names
-// its own skills (data-source, a key of SKILL_SOURCES); the others are the build shown.
+// its own skills (data-source, a key of SKILL_SOURCES); the others are the build shown. In the right
+// column a row is an .app-skill of an .app-skills; in the Skills tab (js/skills-tab.js), the nearest
+// element that names its skill (data-skill) and its level (data-level).
 const SKILL_SOURCES = { shown: skillsAt };
 function gemOfRow(element) {
-  const row = element.closest(".app-skill"), list = element.closest(".app-skills");
+  const row = element.closest("[data-skill]"), list = element.closest("[data-level]");
   const skills = SKILL_SOURCES[list.dataset.source ?? "shown"] ?? skillsAt;
   const skill = skills(Number(list.dataset.level)).find(entry => entry.name === row.dataset.skill);
   if (!skill) return undefined;
-  return skill.name === element.dataset.gem && !row.classList.contains("is-triggered")
+  return skill.name === element.dataset.gem && !row.classList.contains("is-triggered") && !row.hasAttribute("data-triggered")
     ? skill : skill.supports.find(gem => gem.name === element.dataset.gem);
 }
 
@@ -33,26 +35,29 @@ function levelsWords(entry, level) {
   return low > 1 && low !== level ? `${from} to ${high}` : `${from}, until ${high}`;
 }
 
-// The card of a gem the game data don't know (2j3b, the owner, 2026-11-20: « we'd like to know why »,
-// then « no need to be too explicit »): its name, the end of its id, and its kind, from its place in
-// the file; « Not in the game data of 0.5.2 » in the colour of the unknown; its levels and the note of
-// its author.
-function unknownGemHtml(gem, level) {
-  return `<div class="app-hover-head"><strong>${escapeHtml(gem.name)}</strong><span class="app-weak">${gemKindName(gem)}</span></div>
-    <p class="app-hover-missing is-unknown">${NOT_IN_GAME_DATA}</p>
-    <div class="app-hover-state">${levelsWords(gem, level)}</div>
-    ${gem.note ? `<div class="app-hover-hint">${markupHtml(gem.note)}</div>` : ""}`;
-}
-
+// The card of a gem (2j2; 2k, the owner, 2026-11-20: the construction of every card on hover,
+// js/hover-card.js): its name, its tags as the game names them under it, without its kind for now, and
+// its icon at the right, a square (the disc of a support cut to a square); its description from the game
+// data and its levels; the note of its author with the markup of the game (markupHtml, js/tree-hover.js).
+// A gem the game data don't know (2j3b, the owner, 2026-11-20: « we'd like to know why », then « no need
+// to be too explicit »): its name, the end of its id, its kind from its place in the file as its
+// subtitle, the yellow sticky note of the unknown as its art, « Not in the game data of 0.5.2 » in the
+// colour of the unknown.
 function gemHoverHtml(gem, level) {
-  if (gem.known === false) return unknownGemHtml(gem, level);
-  const comes = levelsWords(gem, level);
+  const note = gem.note ? markupHtml(gem.note) : "";
+  const levels = `<div class="app-hover-state">${levelsWords(gem, level)}</div>`;
+  if (gem.known === false) {
+    return hoverCardHtml({
+      title: escapeHtml(gem.name), subtitle: gemKindName(gem), art: '<span class="app-unknown">?</span>', note,
+      body: `<p class="app-hover-missing is-unknown">${NOT_IN_GAME_DATA}</p>${levels}`,
+    });
+  }
   const tags = gem.tags.filter(tag => tag !== "Support" && tag !== "Lineage");
-  return `<div class="app-hover-head"><strong>${escapeHtml(gem.name)}</strong><span class="app-weak">${gemKindName(gem)}</span></div>
-    ${tags.length ? `<div class="app-gem-tags">${tags.map(escapeHtml).join(" · ")}</div>` : ""}
-    ${gem.text ? `<p class="app-gem-text">${escapeHtml(gem.text)}</p>` : ""}
-    <div class="app-hover-state">${comes}</div>
-    ${gem.note ? `<div class="app-hover-hint">${markupHtml(gem.note)}</div>` : ""}`;
+  return hoverCardHtml({
+    title: escapeHtml(gem.name), subtitle: tags.map(escapeHtml).join(" · "), note,
+    art: gem.icon ? hoverArtImage(`pathweaver/img/skills/${gem.icon}`, gem.kind === "support") : "",
+    body: `${gem.text ? `<p class="app-gem-text">${escapeHtml(gem.text)}</p>` : ""}${levels}`,
+  });
 }
 
 // One card for the page, fixed, so that the narrow column doesn't cut it, never following the pointer
@@ -63,15 +68,17 @@ function gemHoverHtml(gem, level) {
 // - a skill, its mark or its name at the left of the column: just left of the column, over the tree,
 //   centred on the row, see-through as the card of a passive.
 const gemCard = document.createElement("div");
-gemCard.className = "app-hover app-gem-hover";
+gemCard.className = "app-hover app-gem-hover is-hover-card";
 document.body.append(gemCard);
 function showGemHover(element) {
   const gem = gemOfRow(element);
   if (!gem) return;
-  gemCard.innerHTML = gemHoverHtml(gem, Number(element.closest(".app-skills").dataset.level));
+  gemCard.innerHTML = gemHoverHtml(gem, Number(element.closest("[data-level]").dataset.level));
+  titleIfCut(gemCard);
+  if (element.closest(".app-st")) return showGemBeside(element);
   const support = Boolean(element.closest(".app-skill-supports"));
-  gemCard.classList.toggle("is-over-rows", support);
-  gemCard.classList.toggle("is-support", support);
+  // Opaque over rows: above a support, or beside a row of the Skills tab, which has no tree beside it.
+  gemCard.classList.toggle("is-over-rows", support || !element.closest(".app-side"));
   gemCard.classList.add("is-shown");
   const box = element.getBoundingClientRect(), row = element.closest(".app-skill").getBoundingClientRect();
   const [w, h] = [gemCard.offsetWidth, gemCard.offsetHeight];
@@ -85,9 +92,13 @@ function showGemHover(element) {
     gemCard.style.top = `${Math.max(8, Math.min(innerHeight - h - 8, row.top + row.height / 2 - h / 2))}px`;
   }
 }
-document.addEventListener("mouseover", event => {
-  const element = event.target.closest?.(".app-skills [data-gem]");
-  if (element) showGemHover(element);
-  else gemCard.classList.remove("is-shown");
-});
-document.addEventListener("scroll", () => gemCard.classList.remove("is-shown"), { capture: true, passive: true });
+// In the Skills tab (2k): just right of the gem, over what is beside it,
+// opaque; left of it when there is no room on the right.
+function showGemBeside(element) {
+  gemCard.classList.add("is-over-rows", "is-shown");
+  const box = element.getBoundingClientRect();
+  const [w, h] = [gemCard.offsetWidth, gemCard.offsetHeight];
+  gemCard.style.left = `${box.right + 12 + w <= innerWidth - 8 ? box.right + 12 : Math.max(8, box.left - w - 12)}px`;
+  gemCard.style.top = `${Math.max(8, Math.min(innerHeight - h - 8, box.top + box.height / 2 - h / 2))}px`;
+}
+openOnHover(gemCard, ".app-skills [data-gem], .app-st [data-gem]", showGemHover);

@@ -18,8 +18,8 @@ From the repository root. Reads:
 Writes js/data-tree.js, js/data-builds.js, img/portraits/*.webp (the discs),
 img/portraits-square/*.webp (the square inside each disc, for the tabs), img/portraits-large/*.webp (the
 portrait under the ascendancy at the centre of the tree, 2i2) and img/tree/*.webp (the sheets of the icons
-and frames of the passives, kept whole, 2i) and img/items/*.webp (the images of the items, 2j3) next to this folder. The
-downloads are kept in the cache folder (a temporary one by default) so that a second run is fast.
+and frames of the passives, kept whole, 2i), img/items/*.webp (the images of the items, 2j3) and img/skills/*.webp
+(the icons of the gems, 2k) next to this folder. The downloads are kept in the cache folder (a temporary one by default) so that a second run is fast.
 The mock-up only: the website converts the game data with its own script, at step 4.
 """
 
@@ -74,6 +74,13 @@ SAMPLE_ITEMS = ["Thawing Charm", "Golden Charm"]
 # The case of the overflow of the right column (2j4): the most skills of the corpus at a level, 14 at
 # 53, where seven of them come at once, with « New at N » full.
 CROWDED = "utkarshbehre-spark-comet.build"
+# The cases of the gems shared between two attributes (2kb): an Amazon of dexterity with Freezing Mark,
+# Ghost Dance and Herald of Ice (dexterity and intelligence); a Mercenary of strength and intelligence
+# with its grenades (strength and dexterity) and Pounce (strength and intelligence).
+ATTRIBUTE_CASES = {
+    "dexterity": "maxroll-aer0-ice-shot-amazon.build",
+    "grenades": "mobalytics-fubgun-flameblast-lvl-15-32.build",
+}
 # The cases of « N changes at N » (2g): a respec, 42 passives given back at 65; the swap of a
 # leveling build to its end, 82 changes at 71.
 CHANGE_CASES = {
@@ -312,6 +319,51 @@ def described(entry, gems, skills, tags):
     return {"tags": shown, "text": game_words(text)}
 
 
+# The letters of the attributes, in the order of the game: strength, dexterity, intelligence.
+ATTRIBUTES = {"strength": "r", "dexterity": "g", "intelligence": "b"}
+
+
+def gem_colour(info):
+    """The colour of a gem: the letter of its attribute (RePoE), or two letters for a gem shared half
+    and half between two attributes (2kb: 114 gems, « w » in RePoE as a gem without an attribute;
+    23 builds of the corpus hold one). A gem that leans to one attribute (25/75) keeps its letter."""
+    weights = info.get("requirement_weights", {})
+    shared = [letter for attribute, letter in ATTRIBUTES.items() if weights.get(attribute, 0) > 0]
+    if info.get("color") == "w" and len(shared) == 2 and len({weights[a] for a in ATTRIBUTES if weights.get(a, 0) > 0}) == 1:
+        return "".join(shared)
+    return info.get("color", "w")
+
+
+def icon_file(info):
+    """The file of the icon of a gem in img/skills/, named after its path under SkillIcons/ (« 4k-
+    sorceressspark.webp », « support-4k-acrimonysupport.webp »: a skill and a support may share the name
+    of their file), or "" when the game data give none."""
+    dds = info.get("icon_dds_file") or ""
+    return re.sub(r"[^a-z0-9]+", "-", dds.split("SkillIcons/", 1)[-1].removesuffix(".dds").lower()) + ".webp" if dds else ""
+
+
+def skill_icons(cache, gems, skill_lists):
+    """The icons of the gems of the builds shown (2k, the owner, 2026-11-20: on the card of a gem):
+    RePoE serves the art of the game beside its data, the icon of a gem at the path `icon_dds_file` of
+    skill_gems.json gives (Art/2DArt/SkillIcons/4k/… for a skill, a square, and SkillIcons/Support/4k/…
+    for a support, a disc; 88 × 88 pixels, 2 to 3 KB). 637 supports of 642 have one. An icon RePoE
+    doesn't serve leaves its gem without one: its card shows no icon."""
+    paths = {icon_file(info): info["icon_dds_file"].removesuffix(".dds") for info in gems.values() if info.get("icon_dds_file")}
+    entries = [gem for skills in skill_lists for skill in skills for gem in [skill, *skill["supports"]] if gem.get("icon")]
+    folder = OUT / "img" / "skills"
+    folder.mkdir(exist_ok=True)
+    missing = set()
+    for file in sorted({gem["icon"] for gem in entries}):
+        try:
+            (folder / file).write_bytes(fetch(cache, f"{REPOE_URL}/{paths[file]}.webp", file).read_bytes())
+        except urllib.error.HTTPError as error:
+            print(f"no icon for {paths[file]}: {error}", file=sys.stderr)
+            missing.add(file)
+    for gem in entries:
+        if gem["icon"] in missing:
+            gem["icon"] = ""
+
+
 def gem(entry, names, gems, among_supports=False):
     """A gem of the build. One the game data don't know takes its kind from its place in the file (a
     support among the supports of a skill, 2j3b)."""
@@ -322,9 +374,12 @@ def gem(entry, names, gems, among_supports=False):
     return {
         "name": base.get("name", entry["id"].rsplit("/", 1)[-1]),
         "kind": kind,
-        "colour": info.get("color", "w"),
+        "colour": gem_colour(info),
         "levels": interval(entry),
         "known": known,
+        # The icon of a gem (2k: on its card), the name of its file in img/skills/, from the path the game
+        # data give (skill_icons downloads it): a square for a skill, a disc for a support.
+        "icon": icon_file(info),
         # A lineage support (2j2: its colour in the list « Lineage support » of the mock-up).
         "lineage": bool(info.get("is_lineage")),
         # The note of the author on the gem, its markup kept (2j2: its mark in the row, its text in
@@ -617,11 +672,18 @@ def main():
     read = lambda name: json.loads((CORPUS / name).read_text(encoding="utf-8-sig"))
     builds = [read(name) for name in [SHOWN, *OPEN]]
     write_js("data-tree.js", "TREE", tree_data(tree, builds[0], sheets(cache)))
+    shown = build_data(builds[0], names, gems, ascendancies, skills, tags)
+    # The skills of the case of the overflow of the right column (2j4), beside the build shown.
+    crowded = build_data(read(CROWDED), names, gems, ascendancies, skills, tags)["skills"]
+    # The skills of the cases of the gems of two attributes (2kb).
+    attributes = {key: build_data(read(name), names, gems, ascendancies, skills, tags)["skills"]
+                  for key, name in ATTRIBUTE_CASES.items()}
+    skill_icons(cache, gems, [shown["skills"], crowded, *attributes.values()])
     write_js("data-builds.js", "BUILDS", {
         "treeVersion": TREE_TAG,
-        "shown": build_data(builds[0], names, gems, ascendancies, skills, tags),
-        # The skills of the case of the overflow of the right column (2j4), beside the build shown.
-        "crowded": {"skills": build_data(read(CROWDED), names, gems, ascendancies, skills, tags)["skills"]},
+        "shown": shown,
+        "crowded": {"skills": crowded},
+        "attributes": attributes,
         "items": item_art(cache, names, uniques,
                           [*map(item_name, builds[0].get("inventory_slots", [])), *SAMPLE_ITEMS],
                           classes, pob_uniques(cache)),

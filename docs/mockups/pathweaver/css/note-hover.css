@@ -1,8 +1,8 @@
-/* The card of a note of the author (2j5, js/note-hover.js): the card of a gem (css/gem-hover.css), its
-   head naming what carries the note, the place in grey, then the note 4 px under it (the owner,
-   2026-11-20, of 0 to 12 px: a note is no subtitle); a group of passives, a short list. */
-.app-note-hover { max-width: 320px; }
-.app-hover.app-note-hover:not(.is-support) > .app-hover-head + * { margin-top: 4px; }
+/* The card of a note of the author (2j5, js/note-hover.js), in the construction of every card on hover
+   (2k, css/hover-card.css), without art: its title naming what carries the note, the place in grey,
+   « Note of the author » as its subtitle; its body, the note; a group of passives, a short list. Set
+   aside (the owner, 2026-11-20): « Note of the author » at the right of the head, the note 4 px under
+   it. */
 .app-note-place { color: var(--on-band-weak); font-weight: 400; }
 /* The weapon set of a passive in its colour on the tree (--tree-set-1, --tree-set-2). */
 .app-note-place .is-set1 { color: var(--tree-set-1); }

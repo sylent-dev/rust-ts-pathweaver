@@ -8,7 +8,7 @@ function treePanel(level, { view = "page", fps = false } = {}) {
   return `<div class="app-tree">
     <canvas class="app-tree-canvas" data-tree="main" data-view="${view}" aria-label="Passive tree"></canvas>
     ${treeControls(level)}
-    <div class="app-hover"></div>
+    <div class="app-hover is-hover-card"></div>
     ${fps ? '<output class="app-fps app-number">Drag or zoom the tree</output>' : ""}
   </div>`;
 }

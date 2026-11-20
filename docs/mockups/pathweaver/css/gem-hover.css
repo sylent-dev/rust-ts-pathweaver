@@ -1,9 +1,7 @@
-/* The hover of a gem (2j2, js/gem-hover.js): the card of a passive (css/tree-hover.css), fixed on the
-   page so that the column doesn't cut it; its tags, then its description. */
-.app-gem-hover { position: fixed; z-index: 20; max-width: 300px; font-family: var(--font-text); }
-/* Above a support it lies over the rows of the column: opaque, or their words read through its own;
-   beside the column, over the tree, see-through at 10 % as the card of a passive. */
-.app-gem-hover.is-over-rows { background: var(--band-image), var(--band-deep); }
-.app-gem-tags { margin-top: 3px; color: var(--on-band-weak); font-size: 11px; }
+/* The cards fixed on the page (2j2, the owner, 2026-11-20): of a gem (js/gem-hover.js), a note
+   (js/note-hover.js) and a slot (js/slot-hover.js), in the construction of css/hover-card.css, fixed so
+   that the narrow column doesn't cut them; opaque over rows (is-over-rows), see-through at 10 % over the
+   tree as the card of a passive. */
+.app-gem-hover { position: fixed; z-index: 20; font-family: var(--font-text); }
 .app-gem-text { margin: 6px 0 0; }
 .app-skill-name { cursor: default; }
