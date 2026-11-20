@@ -1,18 +1,21 @@
 /* The card of a skill (2k, js/gem-hover.js, skillCardHtml; the owner, 2026-11-20, on the wireframe
    docs/wireframes/gem-card.excalidraw): three parts told by their shades, on the graph paper of the
-   blocks. The head light, with the light of the page from its top left, as the header of a build: the
+   blocks. The head and the body in the deep shade of the bands (the owner, 2026-11-20: the head light
+   at first), the head with the light of the page from its top left, as the header of a build: the
    icon of the skill square in its corner, the full height of the head, its name and its tags beside
-   it; the body a shade darker: the description and the levels; the note of the author light again,
-   the light from the bottom right, as on the drawer of the inventory. Over the tree the parts are
+   it; the body: the description and the levels; the note of the author in a shade of its own, without
+   a light (the owner, 2026-11-20: the light from the bottom right removed). Over the tree the parts are
    see-through at 10 %, as the card of a passive; opaque over rows. The card of a support is untouched.
 
    Open: the icon, five ways (« Card icon », I17–I21, the sixteen of before are in the history of Git);
-   the shade of the note, four (« Note shade », S1–S4). */
+   the shade of the note, four (« Note shade », S1–S4: the light shade of the bands, a step lighter,
+   between the two shades, the deep shade of the rest of the card). */
 .app-gem-hover.is-skill-card { --sc-alpha: 90%; --sc-icon: 52px; width: 320px; max-width: none; padding: 0; overflow: hidden; isolation: isolate; background: none; }
 .app-gem-hover.is-skill-card.is-over-rows, .app-gem-hover.is-skill-card.is-static { --sc-alpha: 100%; }
 
-/* The shades of the parts: the head and the note in the shade of the bands, the body in their deep shade. */
-.is-skill-card { --sc-head: var(--band); --sc-body: var(--band-deep); --sc-note: var(--sc-head); }
+/* The shades of the parts: the head and the body in the deep shade of the bands; the note, S1, in their
+   light shade. */
+.is-skill-card { --sc-head: var(--band-deep); --sc-body: var(--band-deep); --sc-note: var(--band); }
 :root[data-note-shade="s2"] .is-skill-card { --sc-note: color-mix(in srgb, var(--band), var(--on-band) 6%); }
 :root[data-note-shade="s3"] .is-skill-card { --sc-note: color-mix(in srgb, var(--band), var(--band-deep)); }
 :root[data-note-shade="s4"] .is-skill-card { --sc-note: var(--band-deep); }
@@ -21,8 +24,7 @@
   background: radial-gradient(ellipse 260px 130px at 0% 0%, var(--page-glow) 0%, transparent 70%), color-mix(in srgb, var(--sc-head) var(--sc-alpha), transparent); }
 .sc-body { padding: 9px 12px 10px; background: color-mix(in srgb, var(--sc-body) var(--sc-alpha), transparent); }
 .sc-body .app-gem-text { margin: 0; }
-.sc-note { padding: 9px 12px 10px;
-  background: radial-gradient(ellipse 300px 140px at 100% 100%, var(--page-glow) 0%, transparent 70%), color-mix(in srgb, var(--sc-note) var(--sc-alpha), transparent); }
+.sc-note { padding: 9px 12px 10px; background: color-mix(in srgb, var(--sc-note) var(--sc-alpha), transparent); }
 
 /* The title beside the icon: the name, the tags right under it. */
 .sc-title { align-self: center; min-width: 0; padding: 7px 12px 7px 11px; }
