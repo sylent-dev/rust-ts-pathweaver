@@ -1,5 +1,5 @@
 // The hover of a gem (2j2, specs.md, Skills): its name and its kind, its tags and its description from
-// the game data, the level it comes at, then the note of its author with the markup of the game
+// the game data, the levels it applies at, then the note of its author with the markup of the game
 // (markupHtml, js/tree-hover.js); in the language of the card of a passive (B, 2i3): beside the gem,
 // without a border, see-through at 10 %, fading in and out in 120 ms (css/tree-hover.css). On the mark
 // of a gem, and on the name of a skill in its row.
@@ -17,8 +17,19 @@ function gemOfRow(element) {
     ? skill : skill.supports.find(gem => gem.name === element.dataset.gem);
 }
 
+// The levels of a gem, the word « level » written out (the owner, 2026-11-20: « From 23 », 23 what?):
+// « New at level 59 » in the word of « New at N », « From level 23 », « From the start », and where it
+// stops when before 100 (« From level 15 to 64 », « New at level 59, until 70 »): a guide of leveling
+// replaces its gems.
+function gemLevels(gem, level) {
+  const [low, high] = gem.levels;
+  const from = low === level ? `New at level ${level}` : low > 1 ? `From level ${low}` : "From the start";
+  if (high >= MAX_LEVEL) return from;
+  return low > 1 && low !== level ? `${from} to ${high}` : `${from}, until ${high}`;
+}
+
 function gemHoverHtml(gem, level) {
-  const comes = gem.levels[0] === level ? `Comes at ${level}` : gem.levels[0] > 1 ? `From ${gem.levels[0]}` : "From the start";
+  const comes = gemLevels(gem, level);
   const tags = gem.tags.filter(tag => tag !== "Support" && tag !== "Lineage");
   return `<div class="app-hover-head"><strong>${escapeHtml(gem.name)}</strong><span class="app-weak">${gemKindName(gem)}</span></div>
     ${tags.length ? `<div class="app-gem-tags">${tags.map(escapeHtml).join(" · ")}</div>` : ""}
