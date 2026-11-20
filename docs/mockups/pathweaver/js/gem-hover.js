@@ -131,9 +131,15 @@ function showGemBeside(element) {
   gemCard.style.left = `${box.right + 12 + w <= innerWidth - 8 ? box.right + 12 : Math.max(8, box.left - w - 12)}px`;
   gemCard.style.top = `${Math.max(8, Math.min(innerHeight - h - 8, box.top + box.height / 2 - h / 2))}px`;
 }
+// The card stays open while the pointer is on it (2k, the owner, 2026-11-20: the native tooltip of its
+// cut tags, which the pointer couldn't reach): leaving a gem, the pointer has 200 ms to reach the card
+// across the gap between them; leaving the card, it closes as it would leaving the gem.
+let gemCardClosing;
 document.addEventListener("mouseover", event => {
+  clearTimeout(gemCardClosing);
+  if (gemCard.contains(event.target)) return;
   const element = event.target.closest?.(".app-skills [data-gem], .app-st [data-gem]");
   if (element) showGemHover(element);
-  else gemCard.classList.remove("is-shown");
+  else if (gemCard.classList.contains("is-shown")) gemCardClosing = setTimeout(() => gemCard.classList.remove("is-shown"), 200);
 });
 document.addEventListener("scroll", () => gemCard.classList.remove("is-shown"), { capture: true, passive: true });

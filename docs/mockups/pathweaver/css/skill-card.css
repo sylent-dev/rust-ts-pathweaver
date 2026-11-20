@@ -26,12 +26,13 @@
 .sc-body .app-gem-text { margin: 0; }
 .sc-note { padding: 9px 12px 10px; background: color-mix(in srgb, var(--sc-note) var(--sc-alpha), transparent); }
 /* The name beside the icon, in the middle of the head, the tags under it on one line: the ellipsis cuts
-   them, a native tooltip shows them whole (js/gem-hover.js, titleIfCut). Only the cards drawn in place
-   of the section take the pointer for it: the card on hover lets it through (css/tree-hover.css). */
+   them, a native tooltip shows them whole (js/gem-hover.js, titleIfCut); the card on hover stays open
+   while the pointer is on it (css/gem-hover.css), the cards drawn in place of the section take it too. */
 .sc-title { align-self: center; min-width: 0; padding: 0 11px 0 12px; }
 .sc-title strong { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 14px; font-weight: 600; }
 .sc-tags { margin: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.app-gem-hover.is-static .sc-tags[title] { pointer-events: auto; cursor: default; }
+.app-gem-hover .sc-tags[title] { cursor: default; }
+.app-gem-hover.is-static { pointer-events: auto; }
 
 /* The icon on the right of the head (the owner, 2026-11-20, of left and right): the name and the tags
    start where the body starts, 12 px from the edge. A square of 35 px (52 px divided by 1.5, the owner,
