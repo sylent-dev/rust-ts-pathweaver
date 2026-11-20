@@ -13,9 +13,9 @@
 STATE.changesOpen = false;
 
 // A note of the author (N2 of twelve marks, the owner, 2026-11-19): a filled speech bubble, simple
-// enough to read at 12 px; on an entry, a mark rather than a change of its own.
+// enough to read at 12 px; on an entry, a mark rather than a change of its own, its card on hover
+// (noteMark, js/note-hover.js).
 ICONS.note = '<path d="M2 3h12v8.2H7.2L3.4 14.2V11.2H2z" fill="currentColor" stroke="none"/>';
-const noteMark = (has, title = "The author left a note") => has ? `<span class="app-changes-note" title="${title}">${icon(12, ICONS.note)}</span>` : "";
 
 // « N changes », the block between ◀ and ▶, or « 0 changes » in grey when there is none, the block
 // kept so that ◀ and ▶ never move; no chevron, since it opens a window, not a menu (the owner,
@@ -27,7 +27,13 @@ function changesLink(record, open) {
 
 // The changes of a level as one list, in the order of the categories, each with its sign.
 const CHANGE_CATEGORIES = { skill: "Skill", support: "Support", passives: "Passive", gear: "Gear", note: "Note" };
-const PASSIVE_GROUPS = { taken: "", set1: "of weapon set I", set2: "of weapon set II", ascendancy: "of the ascendancy" };
+// The weapon sets as the page names them everywhere, the legend and the switches included: « set I »,
+// « set II », the Roman numerals kept (the owner, 2026-11-20).
+const PASSIVE_GROUPS = { taken: "", set1: "of set I", set2: "of set II", ascendancy: "of the ascendancy" };
+// Where a passive of a group hangs, the place of the card of its note (js/note-hover.js), and its
+// weapon set, whose colour the place takes there.
+const PASSIVE_PLACES = { taken: "", set1: "Set I", set2: "Set II", ascendancy: "Ascendancy" };
+const PASSIVE_SETS = { set1: 1, set2: 2 };
 
 function changeList(record) {
   const { skills, supports, passives, gear, notes } = record;
@@ -39,8 +45,8 @@ function changeList(record) {
     ...skills.removed.map(skill => ({ category: "skill", sign: "−", ...skill, supports: [] })),
     ...supports.added.map(support => ({ category: "support", sign: "+", ...support })),
     ...supports.removed.map(support => ({ category: "support", sign: "−", ...support })),
-    // The notes of the passives taken mark their first group.
-    ...taken.map(([group, label], index) => ({ category: "passives", sign: "+", count: passives[group], label, notes: index === 0 ? passives.notes : 0 })),
+    // Each group carries the notes of its passives, with the name of each (2j5).
+    ...taken.map(([group, label]) => ({ category: "passives", sign: "+", count: passives[group], label, place: PASSIVE_PLACES[group], set: PASSIVE_SETS[group], notes: passives.notes[group] ?? [] })),
     ...(passives.givenBack > 0 ? [{ category: "passives", sign: "−", count: passives.givenBack, label: "" }] : []),
     ...gear.added.map(entry => ({ category: "gear", sign: "+", ...item(entry) })),
     ...gear.replaced.map(entry => ({ category: "gear", sign: "⇄", ...item(entry) })),
@@ -52,9 +58,12 @@ function changeList(record) {
 // The words of a change: its name, and what it hangs on, in grey at the right.
 const slotName = id => escapeHtml(SLOT_NAMES[id] ?? id);
 function changeName(change) {
-  if (change.category === "passives") return `<b>${plural(change.count, "passive")}</b>${change.label ? ` ${change.label}` : ""}${
-    noteMark(change.notes > 0, `${plural(change.notes, "passive")} with a note of the author`)}`;
-  if (change.category === "skill" || change.category === "support") return `${gemMark(change)}<b>${escapeHtml(change.name)}</b>${noteMark(change.note)}`;
+  if (change.category === "passives") {
+    const [count, label] = [plural(change.count, "passive"), change.label ? ` ${change.label}` : ""];
+    return `<b>${count}</b>${label}${noteMark({ place: change.place, set: change.set, head: count + label, list: change.notes })}`;
+  }
+  if (change.category === "skill" || change.category === "support") return `${gemMark(change)}<b>${escapeHtml(change.name)}</b>${
+    noteMark({ place: change.category === "support" ? change.skill : "", head: change.name, text: change.note })}`;
   if (change.category === "gear") return `<b>${escapeHtml(change.name || "a hint")}</b>${change.unique ? ' <span class="app-changes-tag">unique</span>' : ""}`;
   return `<b>${escapeHtml(change.name)}</b>`;
 }
@@ -67,7 +76,7 @@ function changeDetail(change) {
   return change.kind === "gear" ? `${slotName(change.on)} · new text` : change.kind === "support" ? `on ${escapeHtml(change.on)} · new note` : "new note";
 }
 const CHANGE_KINDS = { "+": "is-added", "⇄": "is-swapped", "−": "is-gone", note: "is-note" };
-const changeSign = change => change.sign === "note" ? icon(12, ICONS.note) : change.sign;
+const changeSign = change => change.sign === "note" ? retoldMark(change) : change.sign;
 
 // Where a click on a line leads (the owner, 2026-11-19): the tab that shows its change, the hint of
 // a note in Inventory, the gem of a note in Skills; the passives in the tree, which the Overview

@@ -8,6 +8,10 @@
 // On a hinted slot of the drawing, and on a line of the list under it; a tap on a touch screen gives
 // the same card (the browser sends the pointer there first).
 
+// The text of a hint without the numbers at the start of its lines, behind the tags of the markup
+// that open a line too (« <s>{1. Adds… »), here and in the card of a note set again (js/note-hover.js).
+const withoutNumbers = text => text.replace(/^((?:<[^<>{}]*>\{)*)\d+\.\s+/gm, "$1");
+
 const ITEM_MISSING = {
   unknown: NOT_IN_GAME_DATA,
   stats: "Its stats are not in the data yet",
@@ -26,7 +30,7 @@ function slotHoverHtml(element) {
     ${lines(item?.stats)}
     ${missing ? `<p class="app-hover-missing${unknown ? " is-unknown" : ""}">${missing}</p>` : ""}
     <div class="app-hover-state">${item ? `${slot} · ` : ""}${levelsWords({ levels: element.dataset.levels.split(",").map(Number) }, Number(element.dataset.level))}</div>
-    ${note ? `<div class="app-hover-hint">${markupHtml(note.replace(/^\d+\.\s+/gm, ""))}</div>` : ""}`;
+    ${note ? `<div class="app-hover-hint">${markupHtml(withoutNumbers(note))}</div>` : ""}`;
 }
 
 const slotCard = document.createElement("div");

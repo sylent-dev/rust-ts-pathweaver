@@ -465,7 +465,7 @@ def state_at(build, level, ascendancy):
     """What a build holds at a level, as its file says: its skills (id → note, and support id →
     note), its gear (slot id → the items of its hints, each with its text; a list, since the three
     charms share Charm1, whatever their place) and its passives ((id, weapon set) → of the
-    ascendancy, with a note)."""
+    ascendancy, its note)."""
     applies = lambda entry: isinstance(entry, dict) and interval(entry)[0] <= level <= interval(entry)[1]
     text = lambda entry: (entry.get("additional_text") or "").strip()
     skills, notes = {}, {}
@@ -478,7 +478,7 @@ def state_at(build, level, ascendancy):
     for slot in filter(applies, build.get("inventory_slots", [])):
         name = plain(slot.get("unique_name") or first_line(slot.get("additional_text")))
         gear.setdefault(slot["inventory_id"], []).append((name, bool(slot.get("unique_name")), text(slot)))
-    passives = {(p["id"], p.get("weapon_set", 0)): (p["id"] in ascendancy, bool(text(p)))
+    passives = {(p["id"], p.get("weapon_set", 0)): (p["id"] in ascendancy, text(p))
                 for p in filter(applies, build.get("passives", []))}
     return skills, notes, gear, passives
 
@@ -500,8 +500,10 @@ def gear_changes(gear, old_gear):
         added += [item(c) for c in coming[pairs:]]
         removed += [item(g) for g in going[pairs:]]
         old_texts = {entry[:2]: entry[2] for entry in old_gear.get(slot, [])}
-        retold += [dict(name=entry[0], kind="gear", on=slot) for entry in gear.get(slot, [])
-                   if entry[:2] in old_texts and old_texts[entry[:2]] != entry[2]]
+        # Its new text as the card of its slot reads it (slot_note): after the line that names its
+        # base, unless it names a unique (2j5).
+        retold += [dict(name=entry[0], kind="gear", on=slot, note=entry[2] if entry[1] else entry[2].partition("\n")[2].strip())
+                   for entry in gear.get(slot, []) if entry[:2] in old_texts and old_texts[entry[:2]] != entry[2]]
     return {"added": added, "replaced": replaced, "removed": removed}, retold
 
 
@@ -511,22 +513,24 @@ def changes_at(build, level, tree, names, gems):
     starts again the same at the next level (the same id, the same place, the same note) changes
     nothing: 70 of the 81 supports « added » at 71 by a build of the corpus; one that comes back with
     another note of its author is a change of its note. A gem, a hint or a note counts as one change,
-    each group of passives as one; a new skill brings its supports with it."""
+    each group of passives as one; a new skill brings its supports with it. A note carries its text,
+    its markup kept, for the card of its mark (2j5)."""
     ascendancy = {node["id"] for node in tree["nodes"].values() if node.get("ascendancyId") and "id" in node}
+    passive_names = {node["id"]: node.get("name", node["id"]) for node in tree["nodes"].values() if "id" in node}
     skills, notes, gear, passives = state_at(build, level, ascendancy)
     old_skills, old_notes, old_gear, old_passives = state_at(build, level - 1, ascendancy) if level > 1 else ({}, {}, {}, {})
     def named(gem_id, note=""):
         found = gem({"id": gem_id}, names, gems)
-        return dict(name=found["name"], colour=found["colour"], kind=found["kind"], lineage=found["lineage"], note=bool(note))
-    # The passives taken at the level: (weapon set, of the ascendancy, with a note) of each.
-    taken = [(key[1], asc, has_note) for key, (asc, has_note) in passives.items() if key not in old_passives]
+        return dict(name=found["name"], colour=found["colour"], kind=found["kind"], lineage=found["lineage"], note=note)
+    # The passives taken at the level, each in its group: of the ascendancy, of a weapon set, or taken.
+    group_of = lambda weapon_set, asc: "ascendancy" if asc else {1: "set1", 2: "set2"}.get(weapon_set, "taken")
+    taken = [(group_of(key[1], asc), key[0], note) for key, (asc, note) in passives.items() if key not in old_passives]
     groups = {
-        "taken": sum(1 for weapon_set, asc, _ in taken if not asc and not weapon_set),
-        "set1": sum(1 for weapon_set, asc, _ in taken if not asc and weapon_set == 1),
-        "set2": sum(1 for weapon_set, asc, _ in taken if not asc and weapon_set == 2),
-        "ascendancy": sum(1 for _, asc, _ in taken if asc),
+        **{group: sum(1 for g, _, _ in taken if g == group) for group in ("taken", "set1", "set2", "ascendancy")},
         "givenBack": sum(1 for key in old_passives if key not in passives),
-        "notes": sum(1 for _, _, has_note in taken if has_note),
+        # The notes of each group, with the name of the passive that carries each, in the order of the file.
+        "notes": {group: [dict(name=passive_names.get(i, i), note=note) for g, i, note in taken if g == group and note]
+                  for group in ("taken", "set1", "set2", "ascendancy") if any(g == group and note for g, _, note in taken)},
     }
     kept = [i for i in skills if i in old_skills]
     gear_record, gear_notes = gear_changes(gear, old_gear)
@@ -541,8 +545,8 @@ def changes_at(build, level, tree, names, gems):
         },
         "passives": groups,
         "gear": gear_record,
-        "notes": [dict(name=named(i)["name"], kind="skill") for i in kept if notes[i] != old_notes[i]]
-                 + [dict(name=named(s)["name"], kind="support", on=named(i)["name"]) for i in kept for s in skills[i]
+        "notes": [dict(name=named(i)["name"], kind="skill", note=notes[i]) for i in kept if notes[i] != old_notes[i]]
+                 + [dict(name=named(s)["name"], kind="support", on=named(i)["name"], note=skills[i][s]) for i in kept for s in skills[i]
                     if s in old_skills[i] and skills[i][s] != old_skills[i][s]]
                  + gear_notes,
     }

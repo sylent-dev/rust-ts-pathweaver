@@ -9,15 +9,15 @@
 .ov-more .app-new-more { margin: 0 0 0 18px; }
 
 /* The links of the column to the tabs of the build (js/side-overflow.js, sideLink): in the colour of
-   their words, the accent and a line of 2 px drawing itself from the left on hover, as the links of
-   the band of the site; « and N more » in the accent, the colour of the text on hover. */
+   their words, the accent and the sweep of a line of 2 px on hover, as the links of the band of the
+   site (link-sweep, css/app-bar.css); « and N more » in the accent, the colour of the text on hover. */
 .app-side-link { padding: 0; border: 0; background: none; color: inherit; font: inherit; letter-spacing: inherit; cursor: pointer; }
 .app-side-link-words { position: relative; }
 .app-side-link-words::after { content: ""; position: absolute; left: 0; right: 0; bottom: -3px; height: 2px; background: currentColor;
-  transform: scaleX(0); transform-origin: 100%; transition: transform .3s cubic-bezier(.2, .7, .2, 1); }
+  transform: scaleX(0); transform-origin: 0; }
 .app-side-link:hover { color: var(--accent); }
-.app-side-link:hover .app-side-link-words::after { transform: scaleX(1); transform-origin: 0; }
-@media (prefers-reduced-motion: reduce) { .app-side-link-words::after { transition: none; } }
+.app-side-link:hover .app-side-link-words::after { animation: link-sweep 500ms both; }
+@media (prefers-reduced-motion: reduce) { .app-side-link:hover .app-side-link-words::after { animation: none; } }
 
 /* The drawer (the owner, 2026-11-20): the bar always at the bottom, which never moves; the drawing
    unrolls upward above it, on the same block: no line above it, the light shade of the header of a
