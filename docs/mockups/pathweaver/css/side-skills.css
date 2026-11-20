@@ -13,11 +13,12 @@
 
 /* A gem the game data don't know (2j3b, from E4 of the variants, the owner, 2026-11-20): an amber « ? »
    in place of its mark, in the box of the mark so that the row doesn't move, a skill's larger than a
-   support's, half a pixel up to sit on the middle of the words; its name as any other. */
+   support's; raised so that its ink sits where the capitals of the name sit, and a support's on the middle of
+   the mark beside it (measured at four times the scale, 2026-11-20); its name as any other. */
 .app-skill-gem.is-unknown .app-gem-mark { display: none; }
 .app-skill-gem.is-unknown::before { content: "?"; display: inline-grid; place-items: center; width: var(--gem-mark-size); height: var(--gem-mark-size);
-  color: var(--unknown); font-size: 13px; font-weight: 800; line-height: 1; transform: translateY(-0.5px); }
-.app-skill-supports .app-skill-gem.is-unknown::before { font-size: 10px; }
+  color: var(--unknown); font-size: 13px; font-weight: 800; line-height: 1; transform: translateY(-1.75px); }
+.app-skill-supports .app-skill-gem.is-unknown::before { font-size: 10px; transform: translateY(-1.5px); }
 
 /* The gem of a line of « New at N » under the pointer, lit in its row (js/side-skills.js). */
 .app-skill-gem .app-gem-mark { transition: transform 120ms ease-out, filter 120ms ease-out; }
