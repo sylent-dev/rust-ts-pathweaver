@@ -1,15 +1,19 @@
 /* The card of a skill (2k, js/gem-hover.js, skillCardHtml; the owner, 2026-11-20, on the wireframe
-   docs/wireframes/gem-card.excalidraw): three parts told by their shades, on the graph paper of the
-   blocks, but the head. The head and the body in the deep shade of the bands (the owner, 2026-11-20: the head light
-   at first), without a light (the owner, 2026-11-20: the light of the page from its top left removed):
-   the icon of the skill square in its corner, its name and its tags beside it; the body: the description and the levels; the note of the author in a shade of its own, without
-   a light (the owner, 2026-11-20: the light from the bottom right removed). Over the tree the parts are
-   see-through at 10 %, as the card of a passive; opaque over rows. The card of a support is untouched.
+   docs/wireframes/gem-card.excalidraw): three parts, without a light.
+   - The head as high as the icon, in the deep shade of the bands, without the graph paper: the icon of the skill
+     square in its corner and its name beside it.
+   - The body, in the same deep shade, on the graph paper of the blocks: the tags, the description and
+     the levels.
+   - The note of the author, in a shade of its own, on the graph paper.
+   Set aside by the owner (2026-11-20): the head light, the light of the page from its top left, the light
+   from the bottom right on the note, the tags in the head (on two lines for 18 skills of 37, they made the
+   head higher than the icon), an icon of 35 px. Over the tree the parts are see-through at 10 %, as the
+   card of a passive; opaque over rows. The card of a support is untouched.
 
-   Open: the icon, five ways (« Card icon », I17–I21, the sixteen of before are in the history of Git);
+   Open: the size of the icon (« Icon size »); the icon, five ways (« Card icon », I17–I21, the sixteen of before are in the history of Git);
    the shade of the note, four (« Note shade », S1–S4: the light shade of the bands, a step lighter,
    between the two shades, the deep shade of the rest of the card). */
-.app-gem-hover.is-skill-card { --sc-alpha: 90%; --sc-icon: 52px; width: 320px; max-width: none; padding: 0; overflow: hidden; isolation: isolate; background: none; }
+.app-gem-hover.is-skill-card { --sc-alpha: 90%; --sc-icon: var(--sc-icon-size, 35px); width: 320px; max-width: none; padding: 0; overflow: hidden; isolation: isolate; background: none; }
 .app-gem-hover.is-skill-card.is-over-rows, .app-gem-hover.is-skill-card.is-static { --sc-alpha: 100%; }
 
 /* The shades of the parts: the head and the body in the deep shade of the bands; the note, S1, in their
@@ -21,15 +25,15 @@
 
 /* The head over the graph paper (the owner, 2026-11-20: the texture on the body and the note only): its
    shade covers the layer of the texture beneath it. */
-.sc-head { position: relative; z-index: 2; display: flex; min-height: var(--sc-icon); background: color-mix(in srgb, var(--sc-head) var(--sc-alpha), transparent); }
+.sc-head { position: relative; z-index: 2; display: flex; height: var(--sc-icon); background: color-mix(in srgb, var(--sc-head) var(--sc-alpha), transparent); }
 .sc-body { padding: 9px 12px 10px; background: color-mix(in srgb, var(--sc-body) var(--sc-alpha), transparent); }
 .sc-body .app-gem-text { margin: 0; }
 .sc-note { padding: 9px 12px 10px; background: color-mix(in srgb, var(--sc-note) var(--sc-alpha), transparent); }
 
-/* The title beside the icon: the name, the tags right under it. */
-.sc-title { align-self: center; min-width: 0; padding: 7px 12px 7px 11px; }
-.sc-title strong { display: block; font-size: 14px; font-weight: 600; }
-.sc-title .app-gem-tags { margin-top: 0; }
+/* The name beside the icon, in the middle of the head; the tags open the body. */
+.sc-title { align-self: center; min-width: 0; padding: 0 12px 0 11px; }
+.sc-title strong { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 14px; font-weight: 600; }
+.sc-body .app-gem-tags { margin: 0 0 5px; }
 
 /* The graph paper of the blocks over the body and the note (css/textures.css): over their shades,
    which would hide it beneath them; at 3 %, it doesn't touch the reading of the words. */
@@ -38,9 +42,9 @@
   mask-image: var(--texture); mask-size: var(--texture-size) var(--texture-size);
   mask-position: calc(var(--texture-size) / 8) calc(var(--texture-size) / 8); }
 
-/* The icon: 52 px wide, in the top left corner, the full height of the head (the owner, 2026-11-20: 35 px,
-   tried, left a gap under it in the head). */
-.sc-icon { position: relative; flex: none; width: var(--sc-icon); align-self: stretch; min-height: var(--sc-icon); }
+/* The icon: a square in the top left corner, the full height of the head; its size tuned by eye with
+   « Icon size » (VARIANTS.cardIconSize, 28 to 52 px). */
+.sc-icon { position: relative; flex: none; width: var(--sc-icon); height: var(--sc-icon); }
 .sc-icon img { position: absolute; inset: 0; display: block; width: 100%; height: 100%; object-fit: cover; }
 .sc-icon .app-gem-mark { display: none; }
 /* I17 · Bare, as the portrait of a build. */

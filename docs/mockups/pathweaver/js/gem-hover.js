@@ -58,17 +58,18 @@ function gemHoverHtml(gem, level) {
 }
 
 // The card of a skill, a gem with an icon (2k, the owner, 2026-11-20, on the wireframe
-// docs/wireframes/gem-card.excalidraw; css/skill-card.css), on the graph paper of the blocks. Its head,
-// the icon of the skill square in its corner, its name and its tags beside it; its body: its
-// description and its levels, in the same deep shade; the note of its author in a shade of its own. No kind (« Skill gem ») for now (the owner, 2026-11-20). The card of
-// a support stays as it was, until this one is done.
+// docs/wireframes/gem-card.excalidraw; its look and what was set aside in css/skill-card.css): its head,
+// the icon of the skill square in its corner and its name beside it, as high as the icon; its body, the
+// tags, the description and the levels; the note of its author. No kind (« Skill gem ») for now. The card
+// of a support stays as it was, until this one is done.
 function skillCardHtml(gem, level) {
   const tags = gem.tags.filter(tag => tag !== "Support" && tag !== "Lineage");
   return `<div class="sc-head">
       <span class="sc-icon"><img src="pathweaver/img/skills/${gem.icon}" alt="">${gemMark(gem)}</span>
-      <div class="sc-title"><strong>${escapeHtml(gem.name)}</strong>${tags.length ? `<div class="app-gem-tags">${tags.map(escapeHtml).join(" · ")}</div>` : ""}</div>
+      <div class="sc-title"><strong>${escapeHtml(gem.name)}</strong></div>
     </div>
     <div class="sc-body">
+      ${tags.length ? `<div class="app-gem-tags">${tags.map(escapeHtml).join(" · ")}</div>` : ""}
       ${gem.text ? `<p class="app-gem-text">${escapeHtml(gem.text)}</p>` : ""}
       <div class="app-hover-state">${levelsWords(gem, level)}</div>
     </div>
