@@ -10,9 +10,10 @@
    than the icon) and in the body. Over the tree the parts are see-through at 10 %, as the
    card of a passive; opaque over rows. The card of a support is untouched.
 
-   Open: the size of the icon (« Icon size »); the icon, five ways (« Card icon », I17–I21, the sixteen of before are in the history of Git);
-   the shade of the note, four (« Note shade », S1–S4: the light shade of the bands, a step lighter,
-   between the two shades, the deep shade of the rest of the card). */
+   Open: the side of the icon (« Icon side », left or right); its size (« Icon size »); the icon, five
+   ways (« Card icon », I17–I21, the sixteen of before are in the history of Git); the shade of the note,
+   four (« Note shade », S1–S4: the light shade of the bands, a step lighter, between the two shades, the
+   deep shade of the rest of the card). */
 .app-gem-hover.is-skill-card { --sc-alpha: 90%; --sc-icon: var(--sc-icon-size, 35px); width: 320px; max-width: none; padding: 0; overflow: hidden; isolation: isolate; background: none; }
 .app-gem-hover.is-skill-card.is-over-rows, .app-gem-hover.is-skill-card.is-static { --sc-alpha: 100%; }
 
@@ -44,6 +45,10 @@
   background: var(--texture-colour); opacity: var(--texture-opacity);
   mask-image: var(--texture); mask-size: var(--texture-size) var(--texture-size);
   mask-position: calc(var(--texture-size) / 8) calc(var(--texture-size) / 8); }
+
+/* On the right (« Icon side »): the name and the tags start where the body starts, 12 px from the edge. */
+:root[data-card-icon-side="right"] .sc-head { flex-direction: row-reverse; }
+:root[data-card-icon-side="right"] .sc-title { flex: 1; padding: 0 11px 0 12px; }
 
 /* The icon: a square in the top left corner, the full height of the head; its size tuned by eye with
    « Icon size » (VARIANTS.cardIconSize, 28 to 52 px). */

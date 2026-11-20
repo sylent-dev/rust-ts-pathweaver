@@ -29,6 +29,9 @@ const VARIANTS = {
   // after the sixteen of before); the shade of the note of its author, four (S1–S4).
   // The size of the icon of a skill card, now that the head holds only the name (the owner, 2026-11-20).
   cardIconSize: { label: "Icon size", range: { min: 28, max: 52, step: 1 }, variable: "--sc-icon-size", unit: "px", fallback: "35" },
+  // The side of the icon of a skill card: on the left, or on the right, the name and the tags then aligned
+  // with the body (the owner, 2026-11-20).
+  cardIconSide: { label: "Icon side", options: { left: "Left", right: "Right" }, fallback: "left" },
   cardIcon: { label: "Card icon", options: { i17: "I17", i18: "I18", i19: "I19", i20: "I20", i21: "I21" }, fallback: "i17" },
   noteShade: { label: "Note shade", options: { s1: "S1", s2: "S2", s3: "S3", s4: "S4" }, fallback: "s1" },
   skillsTab: { label: "Skills tab", options: Object.fromEntries(["n1", "n2", "n3", "h1", "h2", "h3", "e1", "e2", "e3", "f1", "f2", "f3"].map(id => [id, id.toUpperCase()])), fallback: "n1" },
