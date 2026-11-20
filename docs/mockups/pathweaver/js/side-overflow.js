@@ -13,6 +13,12 @@ SKILL_SOURCES.crowded = level => BUILDS.crowded.skills
   .filter(skill => appliesAt(skill.levels, level))
   .map(skill => ({ ...skill, supports: skill.supports.filter(support => appliesAt(support.levels, level)) }));
 
+// A link of the column to a tab of the build (the owner, 2026-11-20): the title Skills, « and N more »
+// under the skills folded, « Open the Inventory tab » in the drawing unrolled; not the title of the bar,
+// whose hover unrolls the drawing. In the colour of its words, the accent and a line on hover.
+const sideLink = (tab, words, className = "app-side-link") =>
+  `<button type="button" class="${className}" data-action="tab-go" data-tab="${tab}"><span class="app-side-link-words">${words}</span></button>`;
+
 // The bar of the drawer: a box per hinted slot, its card on hover as in the drawing.
 function inventoryThumbs(level, hints) {
   return `<div class="app-inventory ov-thumbs">${hints.map(hint => [hint, hintItem(hint)]).map(([hint, item]) =>
@@ -26,7 +32,7 @@ function sideColumn(level, { record = BUILDS.changes.shown.levels[level], source
     <div class="ov-new">${newAtBox(level, record)}</div>
     <div class="ov-skills">${skillList(level, source)}</div>
     <div class="ov-drawer">
-      <div class="ov-drawer-doll">${inventoryBox(level, hints)}</div>
+      <div class="ov-drawer-doll">${inventoryBox(level, hints)}${sideLink("inventory", "Open the Inventory tab", "app-side-link ov-drawer-tab")}</div>
       <div class="ov-drawer-bar"><div class="app-inventory-head"><h2 class="app-side-title app-title">Inventory</h2>${inventorySetSwitch()}</div>${inventoryThumbs(level, hints)}</div>
     </div>
   </aside>`;
@@ -35,7 +41,7 @@ function sideColumn(level, { record = BUILDS.changes.shown.levels[level], source
 const overflows = box => box.scrollHeight > box.clientHeight;
 
 // The skills folded to the room left above the bar: the last skills hidden one at a time, a skill with
-// the rows it triggers, until they fit, then « and N more » in their place.
+// the rows it triggers, until they fit, then « and N more » in their place, which leads to the Skills tab.
 function foldSkills(column) {
   const box = column.querySelector(".ov-skills"), list = box.querySelector(".app-skills");
   if (!list || !overflows(box)) return;
@@ -51,7 +57,7 @@ function foldSkills(column) {
   while (overflows(box) && hidden < groups.length - 1) {
     hidden += 1;
     for (const row of groups[groups.length - hidden]) row.classList.add("is-folded");
-    more.innerHTML = `<span class="app-new-more ov-more-words" title="In the Skills tab">and ${hidden} more</span>`;
+    more.innerHTML = sideLink("skills", `and ${hidden} more`, "app-new-more");
   }
 }
 

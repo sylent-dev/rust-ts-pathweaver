@@ -36,10 +36,11 @@ function skillLine(row) {
 }
 
 // The skills at a level, of the build shown or of a case of the mock-up that names its own (`source`,
-// a key of SKILL_SOURCES, js/gem-hover.js, which the card of a gem reads too).
+// a key of SKILL_SOURCES, js/gem-hover.js, which the card of a gem reads too). Its title leads to the
+// Skills tab (sideLink, js/side-overflow.js).
 function skillList(level, source) {
   const rows = (source ? SKILL_SOURCES[source] : skillsAt)(level).map(skill => skillRow(skill, level));
-  return `<h2 class="app-side-title app-title">Skills</h2><ul class="app-skills" data-level="${level}"${source ? ` data-source="${source}"` : ""}>${rows.map(skillLine).join("")}</ul>`;
+  return `<h2 class="app-side-title app-title">${sideLink("skills", "Skills")}</h2><ul class="app-skills" data-level="${level}"${source ? ` data-source="${source}"` : ""}>${rows.map(skillLine).join("")}</ul>`;
 }
 
 // The flash of what is new, in the language of the title of « New at N » (M3, 2j): when the level of
