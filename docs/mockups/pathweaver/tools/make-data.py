@@ -74,6 +74,13 @@ SAMPLE_ITEMS = ["Thawing Charm", "Golden Charm"]
 # The case of the overflow of the right column (2j4): the most skills of the corpus at a level, 14 at
 # 53, where seven of them come at once, with « New at N » full.
 CROWDED = "utkarshbehre-spark-comet.build"
+# The cases of the gems shared between two attributes (2kb): an Amazon of dexterity with Freezing Mark,
+# Ghost Dance and Herald of Ice (dexterity and intelligence); a Mercenary of strength and intelligence
+# with its grenades (strength and dexterity) and Pounce (strength and intelligence).
+ATTRIBUTE_CASES = {
+    "dexterity": "maxroll-aer0-ice-shot-amazon.build",
+    "grenades": "mobalytics-fubgun-flameblast-lvl-15-32.build",
+}
 # The cases of « N changes at N » (2g): a respec, 42 passives given back at 65; the swap of a
 # leveling build to its end, 82 changes at 71.
 CHANGE_CASES = {
@@ -312,6 +319,21 @@ def described(entry, gems, skills, tags):
     return {"tags": shown, "text": game_words(text)}
 
 
+# The letters of the attributes, in the order of the game: strength, dexterity, intelligence.
+ATTRIBUTES = {"strength": "r", "dexterity": "g", "intelligence": "b"}
+
+
+def gem_colour(info):
+    """The colour of a gem: the letter of its attribute (RePoE), or two letters for a gem shared half
+    and half between two attributes (2kb: 114 gems, « w » in RePoE as a gem without an attribute;
+    23 builds of the corpus hold one). A gem that leans to one attribute (25/75) keeps its letter."""
+    weights = info.get("requirement_weights", {})
+    shared = [letter for attribute, letter in ATTRIBUTES.items() if weights.get(attribute, 0) > 0]
+    if info.get("color") == "w" and len(shared) == 2 and len({weights[a] for a in ATTRIBUTES if weights.get(a, 0) > 0}) == 1:
+        return "".join(shared)
+    return info.get("color", "w")
+
+
 def gem(entry, names, gems, among_supports=False):
     """A gem of the build. One the game data don't know takes its kind from its place in the file (a
     support among the supports of a skill, 2j3b)."""
@@ -322,7 +344,7 @@ def gem(entry, names, gems, among_supports=False):
     return {
         "name": base.get("name", entry["id"].rsplit("/", 1)[-1]),
         "kind": kind,
-        "colour": info.get("color", "w"),
+        "colour": gem_colour(info),
         "levels": interval(entry),
         "known": known,
         # A lineage support (2j2: its colour in the list « Lineage support » of the mock-up).
@@ -622,6 +644,9 @@ def main():
         "shown": build_data(builds[0], names, gems, ascendancies, skills, tags),
         # The skills of the case of the overflow of the right column (2j4), beside the build shown.
         "crowded": {"skills": build_data(read(CROWDED), names, gems, ascendancies, skills, tags)["skills"]},
+        # The skills of the cases of the gems of two attributes (2kb).
+        "attributes": {key: build_data(read(name), names, gems, ascendancies, skills, tags)["skills"]
+                       for key, name in ATTRIBUTE_CASES.items()},
         "items": item_art(cache, names, uniques,
                           [*map(item_name, builds[0].get("inventory_slots", [])), *SAMPLE_ITEMS],
                           classes, pob_uniques(cache)),
