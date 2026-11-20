@@ -1,13 +1,23 @@
-/* The skills of the right column (js/side-skills.js). */
+/* The skills of the right column (js/side-skills.js): N2, the supports as their marks at the right. */
 .app-skills { margin: 0; padding: 0 0 0 4px; list-style: none; }
-.app-skill { display: flex; align-items: center; gap: 8px; height: 22px; font-size: 13px; }
-/* The mark of a gem: its colour says its attribute, a hollow mark a spirit gem. */
-.app-gem { flex: none; width: var(--gem-size); height: var(--gem-size); box-sizing: border-box; margin: 0 2px; border: var(--gem-line); border-radius: var(--gem-radius); clip-path: var(--gem-clip); transform: rotate(var(--gem-rotate)); background: var(--gem-none); box-shadow: var(--gem-glow); }
-.app-gem { color: var(--gem-none); }   /* the glow (--gem-glow) takes the colour of the gem */
-.app-gem.is-r { background: var(--gem-str); color: var(--gem-str); }
-.app-gem.is-g { background: var(--gem-dex); color: var(--gem-dex); }
-.app-gem.is-b { background: var(--gem-int); color: var(--gem-int); }
-.app-gem.is-spirit { background: none; border: 2px solid currentColor; clip-path: none; }
+.app-skill { display: flex; align-items: center; min-height: 22px; font-size: 13px; }
+.app-skill-gem { display: inline-flex; margin-right: 8px; }
+.app-skill-gem .app-gem-mark, .app-skill-support .app-gem-mark { margin: 0; }
 .app-skill-name { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.app-skill-new { font-size: 12px; }
-.app-skill-supports { margin-left: auto; font-size: 12px; white-space: nowrap; }
+.app-skill .app-changes-note { margin-left: 5px; vertical-align: 0; }
+.app-skill-new { margin-left: 6px; font-size: 12px; }
+.app-skill-supports { display: inline-flex; align-items: center; gap: 4px; margin-left: auto; padding-left: 8px; }
+/* The skill a spirit gem triggers, indented under it. */
+.app-skill.is-triggered { padding-left: 4px; font-size: 12.5px; }
+.app-skill-hook { margin-right: 5px; font-size: 12px; }
+
+/* A support that comes at the level (the list « New support »): B a halo of the accent around its
+   mark, C « +N » before the marks; A says « new » after the name (js/side-skills.js). */
+.app-skill-support { display: inline-flex; }
+.app-skill-support.is-halo { border-radius: 50%; box-shadow: 0 0 0 1.5px var(--accent), 0 0 6px 1px color-mix(in srgb, var(--accent) 60%, transparent); }
+.app-skill-count { margin-right: 2px; font-size: 12px; font-weight: 600; }
+
+/* The section of the mock-up (sections/skill-rows.js). */
+.page-slot:has(> .app-sr-band) { flex-basis: 100%; }
+.app-sr-band { overflow: visible; }
+.app-sr-column { height: 668px; }

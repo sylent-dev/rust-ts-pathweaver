@@ -91,18 +91,12 @@
   --gem-dex: #ced4da;
   --gem-int: #ced4da;
   --gem-none: #ced4da;
-  --gem-size: 11px;
   --gem-mark-size: 10px;   /* the mark of a gem beside a text of 12 px (2g3, the owner, 2026-11-19) */
   /* The colours of a change (2g3, the owner, 2026-11-19): what comes, what is replaced, what goes;
      the rise, the warning and the fall of Exile Market, tuned together on a blue night. */
   --change-added: #5fcf80;
   --change-swapped: #f0b85a;
   --change-gone: #e66a5c;
-  --gem-radius: 50%;
-  --gem-rotate: 0deg;
-  --gem-clip: none;
-  --gem-line: 1px solid #1e1e1e;
-  --gem-glow: none;
   /* The tree, read by the canvas: colours, the width of the links taken, a glow (blur in pixels)
      on what is taken, and a shape per kind (circle, square, diamond, hex, star). */
   --tree-background: #ffffff;
@@ -146,7 +140,6 @@
   --track: #c1cfe6; --track-width: 2px; --marker: #8fa2c4;
   --slot-empty: #cad6e7; --slot-fill: #f4f7fc; --slot-radius: 8px;
   --gem-str: #e5484d; --gem-dex: #12a594; --gem-int: #2563eb; --gem-none: #8fa2c4;
-  --gem-size: 9px; --gem-radius: 2px; --gem-line: none;
   --tree-background: transparent;
   --tree-edge: #dce4f0; --tree-edge-taken: #2563eb; --tree-edge-width: 1.8;
   --tree-node: #ffffff; --tree-node-line: #b4c3db;
@@ -179,7 +172,6 @@
   /* The attributes as in the game, those of Exile Market (2g3, the owner, 2026-11-19): a true green
      for dexterity, apart from the green of what comes. */
   --gem-str: #e0473f; --gem-dex: #3fbf4f; --gem-int: #5aa7f0; --gem-none: #8393ad;
-  --gem-size: 9px; --gem-radius: 2px; --gem-line: none;
   --tree-background: transparent;
   --tree-edge: #18223a; --tree-edge-taken: #e3eaf5; --tree-edge-width: 1.8;   /* the links taken in white (2i, the owner, 2026-11-19) */
   --tree-node: #0c111b; --tree-node-line: #2a3a5c;
@@ -210,7 +202,6 @@
   --track: #3a3a3f; --track-width: 2px; --marker: #5c5c63;
   --slot-empty: #18181a; --slot-fill: #27272a; --slot-radius: 8px;
   --gem-str: #f87171; --gem-dex: #2dd4bf; --gem-int: #60a5fa; --gem-none: #8e8e94;
-  --gem-size: 9px; --gem-radius: 2px; --gem-line: none;
   --tree-background: transparent;
   --tree-edge: #222225; --tree-edge-taken: #f59e0b; --tree-edge-width: 1.8;
   --tree-node: #131314; --tree-node-line: #3a3a3f;
