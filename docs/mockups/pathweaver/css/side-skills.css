@@ -4,12 +4,27 @@
 .app-skill-gem { display: inline-flex; }
 .app-skill-gem .app-gem-mark { margin: 0; }
 .app-skill > .app-skill-gem { margin-right: 8px; }
+/* The mark of a skill a quarter of a pixel down against its name (the owner, 2026-11-20, on their
+   screen; css/gem-marks.css sets -1px), to tune again on the website at every zoom (docs/backlog.md). */
+.app-skill > .app-skill-gem .app-gem-mark { top: 0.25px; }
 .app-skill-name { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .app-skill .app-changes-note { margin-left: 5px; vertical-align: 0; }
 .app-skill-supports { display: inline-flex; align-items: center; gap: 4px; margin-left: auto; padding-left: 8px; }
 /* The skill a spirit gem triggers, indented under it. */
 .app-skill.is-triggered { padding-left: 4px; font-size: 12.5px; }
 .app-skill-hook { margin-right: 5px; font-size: 12px; }
+
+/* A gem the game data don't know (2j3b, the owner, 2026-11-20): the yellow sticky note « ? » of an item
+   (css/side-inventory.css), smaller, in place of its mark; a skill's 12 px over the 10 px box of the
+   mark (a pixel out on each side, so that the row doesn't move), a support's 10 px; a skill's half a pixel
+   down against its name, a support's 2 px up against the marks beside it (tuned by the owner on their
+   screen, 2026-11-20); its name as any other. A « ? » alone in amber, a « ? » inside a hollow shape,
+   the note straight and the hollow shape in yellow, set aside. */
+.app-skill-gem.is-unknown .app-gem-mark { display: none; }
+.app-skill-gem.is-unknown::before { content: "?"; display: inline-grid; place-items: center; width: 12px; height: 12px; margin: 0 -1px;
+  background: var(--unknown-note); color: var(--unknown-ink); font-size: 9px; font-weight: 800; line-height: 1;
+  transform: translateY(0.5px) rotate(-8deg); box-shadow: 1px 1px 2px rgb(0 0 0 / 45%); }
+.app-skill-supports .app-skill-gem.is-unknown::before { width: 10px; height: 10px; margin: 0; font-size: 8px; transform: translateY(-2px) rotate(-8deg); }
 
 /* The gem of a line of « New at N » under the pointer, lit in its row (js/side-skills.js). */
 .app-skill-gem .app-gem-mark { transition: transform 120ms ease-out, filter 120ms ease-out; }

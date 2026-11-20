@@ -12,8 +12,10 @@
 // underline of N2, a halo, « new » and « +N » were set aside.
 
 // The mark of a gem of a row, in a span that the flash and the light of « New at N » find.
-// Its name and its description on hover (js/gem-hover.js).
-const skillMark = gem => `<span class="app-skill-gem ${gem.isNew ? "is-new" : ""}" data-gem="${escapeHtml(gem.name)}">${gemMark(gem)}</span>`;
+// Its name and its description on hover (js/gem-hover.js). The mark of a gem the game data don't know
+// is-unknown, an amber « ? » (css/side-skills.css, 2j3b); its name the end of its id.
+const unknownClass = gem => gem.known === false ? " is-unknown" : "";
+const skillMark = gem => `<span class="app-skill-gem${gem.isNew ? " is-new" : ""}${unknownClass(gem)}" data-gem="${escapeHtml(gem.name)}">${gemMark(gem)}</span>`;
 const skillName = gem => `<span class="app-skill-name" data-gem="${escapeHtml(gem.name)}">${escapeHtml(gem.name)}</span>`;
 
 // A skill at the level: whether it starts there, its supports (each new when it comes onto the skill

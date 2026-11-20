@@ -1,6 +1,48 @@
-/* The inventory of the right column (js/side-inventory.js). */
-.app-side .app-switch { margin-left: 4px; }
-.app-inventory { position: relative; width: 216px; height: 216px; margin: 10px 0 0 4px; }
-.app-slot { position: absolute; display: grid; place-items: center; box-sizing: border-box; border-radius: var(--slot-radius); background: var(--slot-empty); color: var(--weak); font-size: 10px; }
-.app-slot.is-hinted { background: var(--slot-fill); color: var(--text); }
-.app-slot.is-hinted::after { content: ""; position: absolute; top: 4px; right: 4px; width: 5px; height: 5px; border-radius: 50%; background: var(--accent-soft); }
+/* The inventory of the right column (js/side-inventory.js): N2, square corners on every box (the
+   owner, 2026-11-20). */
+/* An id the game data don't know (2j3b, F3 of twelve variants, the owner, 2026-11-20): a yellow sticky
+   note « ? », a little turned, pinned on its slot (alone in a small one, at the corner of a large one
+   that writes its name), on its thumbnail in the list, « unknown » in its yellow; the item's words as
+   any other (--unknown-note, --unknown-ink, css/tokens.css). The note of a gem is in css/side-skills.css. */
+.app-inventory-head { display: flex; align-items: baseline; justify-content: space-between; }
+.app-inventory-sets { display: inline-flex; gap: 2px; }
+.app-inventory-sets button { height: 24px; padding: 0 7px; border: none; border-radius: 0; background: none; color: var(--weak); font-size: 12px; cursor: pointer; }
+.app-inventory-sets button:hover { color: var(--text); background: color-mix(in srgb, var(--text) 8%, transparent); }
+.app-inventory-sets .is-set1[aria-pressed="true"] { color: var(--tree-set-1); }
+.app-inventory-sets .is-set2[aria-pressed="true"] { color: var(--tree-set-2); }
+
+/* The slots 5 px right, the edge of the weapon under the « I » of the title (the owner, 2026-11-20, by eye). */
+.app-inventory { position: relative; margin-top: 6px; margin-left: 5px; }
+.app-slot { position: absolute; display: grid; place-items: center; box-sizing: border-box; padding: 2px; overflow: hidden; border-radius: 0; }
+/* The image fills its box, inside its padding, at its own proportions. */
+.app-item-art { display: block; width: 100%; height: 100%; min-height: 0; object-fit: contain; }
+.app-slot-empty { color: var(--weak); font-size: 10px; opacity: .7; }
+.app-slot-text { padding: 2px 3px; font-size: 10px; line-height: 1.2; text-align: center; overflow-wrap: anywhere; }
+.app-slot.is-unknown { overflow: visible; }
+.app-slot.is-unknown .app-unknown:not(:only-child) { position: absolute; top: -3px; right: -2px; }
+.app-unknown { display: inline-grid; place-items: center; width: 14px; height: 14px; background: var(--unknown-note); color: var(--unknown-ink);
+  font-size: 10px; font-weight: 800; transform: rotate(-8deg); box-shadow: 1px 2px 3px rgb(0 0 0 / 45%); }
+
+/* The box of a slot, and of a thumbnail under the drawing: B4 at 25 % (the owner, 2026-11-20, of seven
+   looks: darker, lighter, a line, darker and a line, lighter and a line, a light from the middle, solid). */
+.app-slot, .app-item-thumb { background: var(--slot-box); box-shadow: inset 0 0 0 1px var(--slot-line); }
+
+/* The slots the drawing has no place for, under it. */
+.app-inventory-others { margin: 10px 0 0; padding: 0; list-style: none; font-size: 12.5px; }
+.app-inventory-others li { display: flex; align-items: center; gap: 8px; min-height: 24px; }
+.app-item-thumb { flex: none; display: inline-grid; place-items: center; width: 20px; height: 20px; box-sizing: border-box; padding: 1px; }
+.app-inventory-slot { flex: none; width: 58px; color: var(--on-band-weak); font-size: 10px; letter-spacing: .08em; text-transform: uppercase; }
+.app-inventory-name { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.app-unknown-word { margin-left: 6px; color: var(--unknown-note); font-size: 10px; letter-spacing: .08em; text-transform: uppercase; }
+
+/* The section of the mock-up (sections/inventory.js): the inventory alone, at its height. */
+.app-inventory-alone { height: auto; padding-bottom: 16px; }
+.app-inventory-alone .app-side-title { margin-top: 0; }
+
+/* The card of a slot (js/slot-hover.js): the card of a gem beside the column; the name of a unique in
+   its gold, its base under it, its implicits above its stats under a line, as in the game. */
+:root { --unique: #d6a15e; }
+.app-slot.is-hinted, .app-inventory-others li[data-item] { cursor: default; }
+.app-slot-hover .is-unique { color: var(--unique); }
+.app-item-base { margin-top: 2px; color: var(--on-band-weak); font-size: 11px; }
+.app-item-implicits { padding-bottom: 5px; border-bottom: 1px solid color-mix(in srgb, var(--on-band) 14%, transparent); }

@@ -8,12 +8,17 @@ From the repository root. Reads:
   (grindinggear/poe2-skilltree-export, tag TREE_TAG);
 - the names, kinds, colours, tags and descriptions of the gems (RePoE, base_items, skill_gems,
   skills and gem_tags);
+- the images of the items the hints of the inventory name (RePoE, base_items and uniques, which give
+  the path of their art in the files of the game, `Art/2DItems/…`, and serve it as WebP beside the data),
+  and the words of their kinds (item_classes: « Staff »; a unique gives its kind in its own entry);
+- the stats of the uniques (Path of Building for Path of Exile 2, src/Data/Uniques/*.lua at POB_COMMIT,
+  MIT, docs/game-data.md): the files of the game don't say which stats a unique has;
 - the builds of the corpus, in inputs/builds/ (local only, never committed).
 
 Writes js/data-tree.js, js/data-builds.js, img/portraits/*.webp (the discs),
 img/portraits-square/*.webp (the square inside each disc, for the tabs), img/portraits-large/*.webp (the
 portrait under the ascendancy at the centre of the tree, 2i2) and img/tree/*.webp (the sheets of the icons
-and frames of the passives, kept whole, 2i) next to this folder. The
+and frames of the passives, kept whole, 2i) and img/items/*.webp (the images of the items, 2j3) next to this folder. The
 downloads are kept in the cache folder (a temporary one by default) so that a second run is fast.
 The mock-up only: the website converts the game data with its own script, at step 4.
 """
@@ -30,6 +35,14 @@ from pathlib import Path
 TREE_TAG = "0.5.2"
 TREE_URL = f"https://raw.githubusercontent.com/grindinggear/poe2-skilltree-export/{TREE_TAG}"
 REPOE_URL = "https://repoe-fork.github.io/poe2"
+POB_COMMIT = "601768bd105869618c3d6581b883e5d7aeec91b2"
+POB_URL = f"https://raw.githubusercontent.com/PathOfBuildingCommunity/PathOfBuilding-PoE2/{POB_COMMIT}/src/Data/Uniques"
+POB_FILES = ["amulet", "axe", "belt", "body", "boots", "bow", "claw", "crossbow", "dagger", "fishing", "flail",
+             "flask", "focus", "gloves", "helmet", "incursionlimb", "jewel", "mace", "quiver", "ring", "sceptre",
+             "shield", "soulcore", "spear", "staff", "sword", "talisman", "tincture", "traptool", "wand"]
+# The lines of a unique in Path of Building that its tooltip in the game doesn't show.
+POB_META = ("League:", "Source:", "Variant:", "Version:", "Implicits:", "Requires", "LevelReq:", "Sockets:",
+            "Has Alt Variant", "Selected Variant", "Selected Alt Variant")
 ROOT = Path(__file__).resolve().parents[4]
 OUT = Path(__file__).resolve().parents[1]
 CORPUS = ROOT / "inputs" / "builds"
@@ -55,6 +68,9 @@ LIBRARY = [
     "pob-twobyul-deadeye.build",
     "pobr-summoner-lv98.build",
 ]
+# The items of the case of the other slots of the inventory (2j3), beyond those of the build shown:
+# charms in Trinket1, as Maxroll writes them (7 entries of the corpus), and in an id the game doesn't know.
+SAMPLE_ITEMS = ["Thawing Charm", "Golden Charm"]
 # The cases of « N changes at N » (2g): a respec, 42 passives given back at 65; the swap of a
 # leveling build to its end, 82 changes at 71.
 CHANGE_CASES = {
@@ -292,16 +308,19 @@ def described(entry, gems, skills, tags):
     return {"tags": shown, "text": game_words(text)}
 
 
-def gem(entry, names, gems):
+def gem(entry, names, gems, among_supports=False):
+    """A gem of the build. One the game data don't know takes its kind from its place in the file (a
+    support among the supports of a skill, 2j3b)."""
     info = gems.get(entry["id"], {})
     base = names.get(entry["id"], {})
-    kind = info.get("gem_type", "support" if "support_gem" in base.get("tags", []) else "active")
+    known = entry["id"] in names
+    kind = info.get("gem_type", "support" if "support_gem" in base.get("tags", []) or (among_supports and not known) else "active")
     return {
         "name": base.get("name", entry["id"].rsplit("/", 1)[-1]),
         "kind": kind,
         "colour": info.get("color", "w"),
         "levels": interval(entry),
-        "known": entry["id"] in names,
+        "known": known,
         # A lineage support (2j2: its colour in the list « Lineage support » of the mock-up).
         "lineage": bool(info.get("is_lineage")),
         # The note of the author on the gem, its markup kept (2j2: its mark in the row, its text in
@@ -352,13 +371,85 @@ def build_data(build, names, gems, ascendancies, skills, tags):
         "class": asc.get("class", ""),
         "portrait": (build.get("ascendancy") or "").lower(),
         "skills": [dict(gem(skill, names, gems), **hover(skill),
-                        supports=[dict(gem(s, names, gems), **hover(s)) for s in skill.get("support_skills", [])])
+                        supports=[dict(gem(s, names, gems, among_supports=True), **hover(s)) for s in skill.get("support_skills", [])])
                    for skill in build.get("skills", [])],
         "slots": [{"id": slot["inventory_id"], "x": slot.get("slot_x", 0), "y": slot.get("slot_y", 0),
                    "levels": interval(slot), "unique": slot.get("unique_name", ""),
-                   "base": "" if slot.get("unique_name") else first_line(slot.get("additional_text"))}
+                   "base": "" if slot.get("unique_name") else plain(first_line(slot.get("additional_text"))),
+                   # The rest of the author's text, its markup kept (2j3: in the card of the slot): after
+                   # the first line, which names the base, unless the hint names a unique.
+                   "note": slot_note(slot)}
                   for slot in build.get("inventory_slots", [])],
     }
+
+
+def item_name(slot):
+    """The item a hint names: its unique, or the first line of its text without the base its author
+    wrote after it (« Sacramental Robe (Int Base) »), as js/levels.js reads it (withoutBase)."""
+    name = slot.get("unique_name") or plain(first_line(slot.get("additional_text")))
+    return re.sub(r"\s*\((?:Str|Dex|Int)(?:/(?:Str|Dex|Int))? Base\)$", "", name)
+
+
+def slot_note(slot):
+    text = (slot.get("additional_text") or "").strip()
+    return text if slot.get("unique_name") else text.partition("\n")[2].strip()
+
+
+def pob_uniques(cache):
+    """The stats of the uniques, as their tooltips in the game show them, from Path of Building:
+    {name: {"base", "implicits", "stats"}}. A block of its files is the name, the base, then lines of its
+    own (POB_META) and the stats, each maybe behind `{variant:1,2}` (or `{version:…}`), `{tags:…}`; the
+    first `Implicits: N` stats are the implicits. The current variant is the last one listed. The mock-up
+    only: a unique whose variant is chosen by the player (« Has Alt Variant ») shows all of them, which
+    the script of step 4 will read better."""
+    found = {}
+    for file in POB_FILES:
+        text = fetch(cache, f"{POB_URL}/{file}.lua", f"pob-{file}.lua").read_text(encoding="utf-8")
+        for block in re.findall(r"\[\[(.*?)\]\]", text, re.S):
+            lines = [line.strip() for line in block.splitlines() if line.strip()]
+            if len(lines) < 2:
+                continue
+            current = str(sum(line.startswith(("Variant:", "Version:")) for line in lines))
+            implicits = next((int(line.split(":")[1]) for line in lines if line.startswith("Implicits:")), 0)
+            mods = []
+            for line in lines[2:]:
+                if line.startswith(POB_META):
+                    continue
+                prefixes = re.match(r"(?:\{[^}]*\})*", line).group(0)
+                chosen = re.findall(r"\{(?:variant|version):([\d,]+)\}", prefixes)
+                mods.append((line[len(prefixes):], not chosen or current in chosen[0].split(",")))
+            shown = [mod for mod, kept in mods[implicits:] if kept]
+            found.setdefault(lines[0], {"base": lines[1], "implicits": [mod for mod, kept in mods[:implicits] if kept],
+                                        "stats": shown})
+    return found
+
+
+def item_art(cache, names, uniques, items, classes, stats):
+    """What the inventory shows of each item a hint names (2j3): {name: {"art": file, "w": cells wide,
+    "h": cells high, "kind": its kind in one word, "unique": bool}}, and for a unique its base, implicits
+    and stats when Path of Building has them. The image from RePoE, which serves the art of the game as
+    WebP at the path the game data give; a name the game data don't know (a free text of the author:
+    « Any Belt ») has nothing."""
+    known = {}
+    for entry in [*(u for u in uniques.values() if not u.get("is_alternate_art")), *names.values()]:
+        if entry.get("name") and entry.get("visual_identity") and entry.get("release_state") != "unreleased":
+            known.setdefault(entry["name"], entry)
+    art = {}
+    folder = OUT / "img" / "items"
+    folder.mkdir(exist_ok=True)
+    for name in sorted(set(items)):
+        entry = known.get(name)
+        if not entry:
+            continue
+        dds = entry["visual_identity"]["dds_file"].removesuffix(".dds")
+        file = re.sub(r"[^a-z0-9]+", "-", dds.removeprefix("Art/2DItems/").lower()) + ".webp"
+        (folder / file).write_bytes(fetch(cache, f"{REPOE_URL}/{dds}.webp", file).read_bytes())
+        cls = entry.get("item_class", "")
+        art[name] = {"art": file, "w": entry.get("inventory_width", 1), "h": entry.get("inventory_height", 1),
+                     "kind": game_words(classes[cls]["category"]) if cls in classes else cls,
+                     "unique": entry in uniques.values(),
+                     **(stats.get(name, {}) if entry in uniques.values() else {})}
+    return art
 
 
 def plain(text):
@@ -511,6 +602,8 @@ def main():
     gems = json.loads(fetch(cache, f"{REPOE_URL}/skill_gems.min.json", "skill_gems.min.json").read_text())
     skills = json.loads(fetch(cache, f"{REPOE_URL}/skills.min.json", "skills.min.json").read_text())
     tags = json.loads(fetch(cache, f"{REPOE_URL}/gem_tags.min.json", "gem_tags.min.json").read_text())
+    uniques = json.loads(fetch(cache, f"{REPOE_URL}/uniques.min.json", "uniques.min.json").read_text())
+    classes = json.loads(fetch(cache, f"{REPOE_URL}/item_classes.min.json", "item_classes.min.json").read_text())
     ascendancies = {a["id"]: {"name": a["name"], "class": c["name"]}
                     for c in tree["classes"] for a in c["ascendancies"]}
     read = lambda name: json.loads((CORPUS / name).read_text(encoding="utf-8-sig"))
@@ -519,6 +612,9 @@ def main():
     write_js("data-builds.js", "BUILDS", {
         "treeVersion": TREE_TAG,
         "shown": build_data(builds[0], names, gems, ascendancies, skills, tags),
+        "items": item_art(cache, names, uniques,
+                          [*map(item_name, builds[0].get("inventory_slots", [])), *SAMPLE_ITEMS],
+                          classes, pob_uniques(cache)),
         "open": [{"name": b["name"], "ascendancy": ascendancies.get(b.get("ascendancy"), {}).get("name", ""),
                   "portrait": (b.get("ascendancy") or "").lower()} for b in builds],
         "library": [library_row(b, ascendancies) for b in [*builds, *map(read, LIBRARY)]],
