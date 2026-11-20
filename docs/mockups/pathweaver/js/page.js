@@ -24,12 +24,6 @@ const VARIANTS = {
   // The width of the windows of the home page (2l): the minimum of specs.md, half a 1920-pixel screen, and a wide
   // window of the owner's screen.
   homeWidth: { label: "Home width", options: { 900: "900 px", 960: "960 px", 1600: "1,600 px" }, fallback: "960" },
-  // The card of a skill (2k, css/skill-card.css): the size of its icon, now that the head holds only the
-  // name; its side, on the left, or on the right, the name and the tags then aligned with the body; its
-  // look, five ways (I17–I21, after the sixteen of before) (the owner, 2026-11-20).
-  cardIconSize: { label: "Icon size", range: { min: 28, max: 52, step: 1 }, variable: "--sc-icon-size", unit: "px", fallback: "35" },
-  cardIconSide: { label: "Icon side", options: { left: "Left", right: "Right" }, fallback: "left" },
-  cardIcon: { label: "Card icon", options: { i17: "I17", i18: "I18", i19: "I19", i20: "I20", i21: "I21" }, fallback: "i17" },
   // The Skills tab (2k): twelve variants, three at each of four temperatures (js/skills-tab.js).
   skillsTab: { label: "Skills tab", options: Object.fromEntries(["n1", "n2", "n3", "h1", "h2", "h3", "e1", "e2", "e3", "f1", "f2", "f3"].map(id => [id, id.toUpperCase()])), fallback: "n1" },
 };

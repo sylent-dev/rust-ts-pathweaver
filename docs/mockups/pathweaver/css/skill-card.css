@@ -1,7 +1,7 @@
 /* The card of a skill (2k, js/gem-hover.js, skillCardHtml; the owner, 2026-11-20, on the wireframe
    docs/wireframes/gem-card.excalidraw): three parts, without a light, without the graph paper.
    - The head as high as the icon, in the deep shade of the bands: the icon of the skill square in its
-     corner, its name beside it, its tags under the name on one line, cut by an ellipsis.
+     right corner, its name, its tags under the name on one line, cut by an ellipsis.
    - The body, a step darker than the head (D4 of twelve ways to tell them apart): the description and
      the levels.
    - The note of the author, in the shade of the head.
@@ -14,11 +14,8 @@
    text only, alone or with a lighter head), a lighter head, a band of the light shade, a line in the
    colours of the gem, a line of light, the head tinted by the colours of its gem (one, a blend or two
    halves); the note in a light shade (that of the bands, a step lighter, or between the two) and in the
-   darker shade of the body.
-
-   Open: the side of the icon (« Icon side », left or right); its size (« Icon size »); the icon, five
-   ways (« Card icon », I17–I21, the sixteen of before are in the history of Git). */
-.app-gem-hover.is-skill-card { --sc-alpha: 90%; --sc-icon: var(--sc-icon-size, 35px); width: 320px; max-width: none; padding: 0; overflow: hidden; background: none; }
+   darker shade of the body. */
+.app-gem-hover.is-skill-card { --sc-alpha: 90%; --sc-icon: 35px; width: 320px; max-width: none; padding: 0; overflow: hidden; background: none; }
 .app-gem-hover.is-skill-card.is-over-rows, .app-gem-hover.is-skill-card.is-static { --sc-alpha: 100%; }
 
 /* The shades of the parts: the head and the note in the deep shade of the bands; the body a step darker. */
@@ -31,30 +28,19 @@
 /* The name beside the icon, in the middle of the head, the tags under it on one line: the ellipsis cuts
    them, a native tooltip shows them whole (js/gem-hover.js, titleIfCut). Only the cards drawn in place
    of the section take the pointer for it: the card on hover lets it through (css/tree-hover.css). */
-.sc-title { align-self: center; min-width: 0; padding: 0 12px 0 11px; }
+.sc-title { align-self: center; min-width: 0; padding: 0 11px 0 12px; }
 .sc-title strong { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 14px; font-weight: 600; }
 .sc-tags { margin: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .app-gem-hover.is-static .sc-tags[title] { pointer-events: auto; cursor: default; }
 
-/* On the right (« Icon side »): the name and the tags start where the body starts, 12 px from the edge. */
-:root[data-card-icon-side="right"] .sc-head { flex-direction: row-reverse; }
-:root[data-card-icon-side="right"] .sc-title { flex: 1; padding: 0 11px 0 12px; }
-
-/* The icon: a square in the top left corner, the full height of the head; its size tuned by eye with
-   « Icon size » (VARIANTS.cardIconSize, 28 to 52 px). */
+/* The icon on the right of the head (the owner, 2026-11-20, of left and right): the name and the tags
+   start where the body starts, 12 px from the edge. A square of 35 px (52 px divided by 1.5, the owner,
+   2026-11-20), bare, as the portrait of a build (I17 of five: framed, edged or fading in the colours of
+   the gem, or with the mark of its row in its corner, set aside). */
+.sc-head { flex-direction: row-reverse; }
+.sc-title { flex: 1; }
 .sc-icon { position: relative; flex: none; width: var(--sc-icon); height: var(--sc-icon); }
 .sc-icon img { position: absolute; inset: 0; display: block; width: 100%; height: 100%; object-fit: cover; }
-.sc-icon .app-gem-mark { display: none; }
-/* I17 · Bare, as the portrait of a build. */
-/* I18 · Framed inside by the colours of the gem, its two halves for two attributes. */
-:root[data-card-icon="i18"] .sc-icon::after { content: ""; position: absolute; inset: 0; border: 2px solid; border-image: linear-gradient(90deg, var(--gem) 50%, var(--gem-2) 50%) 1; }
-/* I19 · An edge of 3 px on its right in the colours of the gem, between the icon and the name. */
-:root[data-card-icon="i19"] .sc-icon { border-right: 3px solid; border-image: linear-gradient(var(--gem) 50%, var(--gem-2) 50%) 1; }
-/* I20 · Fading into the head on its right. */
-:root[data-card-icon="i20"] .sc-icon { width: calc(var(--sc-icon) + 14px); }
-:root[data-card-icon="i20"] .sc-icon img { -webkit-mask-image: linear-gradient(to right, #000 60%, transparent); mask-image: linear-gradient(to right, #000 60%, transparent); }
-/* I21 · The mark of the gem of its row in its bottom right corner, so that the card and the row read as one. */
-:root[data-card-icon="i21"] .sc-icon .app-gem-mark { display: block; position: absolute; right: 3px; bottom: 3px; width: 12px; height: 12px; filter: drop-shadow(0 0 2px rgb(0 0 0 / .8)); }
 
 /* The section of the mock-up (sections/skill-card.js): the cards drawn in place. */
 .sc-cards { display: flex; flex-direction: column; gap: 22px; padding: 22px 18px; background: var(--page); }
