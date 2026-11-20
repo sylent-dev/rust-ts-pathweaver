@@ -10,8 +10,6 @@
 // starts, over its portrait large and faded (2i2, the owner, 2026-11-19).
 
 STATE.set = 1;
-// The view of the tree: its centre in the coordinates of the game, and the pixels per unit.
-STATE.treeView = null;
 
 // The radius of each kind of passive (TREE.kinds), in units of the game.
 const NODE_RADIUS = { small: 26, notable: 40, keystone: 58, jewel: 38, attribute: 26, start: 52 };
@@ -108,8 +106,8 @@ function drawArt(context, frames, iconIndex, taken, x, y, size) {
 
 // The portraits under the ascendancy (tools/make-data.py), by ascendancy id: the tree is drawn again
 // once one has loaded. Their radius, in units of the game, keeps them inside the frames of the class
-// starts (1,443 units from the centre, their frames about 50 units wide); in colour, faded by the slider
-// « Portrait opacity » (2i2, the owner, 2026-11-20).
+// starts (1,443 units from the centre, their frames about 50 units wide); in colour, at 40 % (2i2, the
+// owner, 2026-11-20).
 const PORTRAITS = {};
 function portraitOf(id) {
   if (!PORTRAITS[id]) {
@@ -120,13 +118,14 @@ function portraitOf(id) {
   return PORTRAITS[id];
 }
 const PORTRAIT_RADIUS = 1380;
+const PORTRAIT_OPACITY = 0.4;
 
 // Draws a portrait at the centre of the tree, faded.
-function drawPortrait(canvas, context, screen, scale, portrait) {
+function drawPortrait(context, screen, scale, portrait) {
   if (!portrait.complete || portrait.naturalWidth === 0) return;
   const [x, y] = screen([0, 0]), radius = PORTRAIT_RADIUS * scale;
   context.save();
-  context.globalAlpha = (Number.parseFloat(token(canvas, "--tree-portrait-opacity")) || 0) / 100;
+  context.globalAlpha = PORTRAIT_OPACITY;
   context.drawImage(portrait, x - radius, y - radius, radius * 2, radius * 2);
   context.restore();
 }
@@ -243,47 +242,77 @@ function drawTree(canvas, graph, states, view, { minRadius = 1.5, iconsFromPx = 
   lit(false);
 }
 
-// Draws the tree of the build at a level: the portrait, the tree, then the ascendancy over them; `compared`
-// draws instead one of the ascendancies the opacity of the portrait is compared on (TREE.compared).
-function drawBuildTree(canvas, view, level, shownSet, compared = null) {
+// Draws the tree of the build at a level: the portrait, the tree, then the ascendancy over them.
+function drawBuildTree(canvas, view, level, shownSet) {
   const states = treeStates(TREE.taken, TREE.nodes.length, level);
-  const portrait = portraitOf((compared ?? BUILDS.shown.portrait).toLowerCase());
-  const under = (context, screen, scale) => drawPortrait(canvas, context, screen, scale, portrait);
+  const portrait = portraitOf(BUILDS.shown.portrait);
+  const under = (context, screen, scale) => drawPortrait(context, screen, scale, portrait);
   drawTree(canvas, TREE, states, view, { sets: setMasks(TREE.taken, TREE.nodes.length), shownSet, under });
-  const ascendancy = compared ? TREE.compared[compared] : TREE.ascendancy;
-  const taken = compared ? ascendancy.taken : TREE.ascendancyTaken;
-  drawTree(canvas, ascendancy, treeStates(taken, ascendancy.nodes.length, level), view, { clear: false });
+  const ascendancy = TREE.ascendancy;
+  drawTree(canvas, ascendancy, treeStates(TREE.ascendancyTaken, ascendancy.nodes.length, level), view, { clear: false });
 }
 
-// Draws every canvas of the tree on the page, and lets the main one move and zoom; a canvas with a
+// The views of the main trees, by their data-view: each window keeps its own (the page at 960 px, the
+// Tree tab at 1,600 px), fitted to its canvas the first time it is drawn.
+STATE.treeViews = {};
+const viewOf = canvas => STATE.treeViews[canvas.dataset.view];
+
+// Draws every canvas of the tree on the page, and lets the main ones move and zoom; a canvas with a
 // data-scale is a fixed view of the centre of the tree, at its data-level.
 function mountTrees() {
   for (const canvas of document.querySelectorAll('canvas[data-tree="centre"]')) {
-    drawBuildTree(canvas, { x: 0, y: 0, scale: Number(canvas.dataset.scale) }, Number(canvas.dataset.level), STATE.set, canvas.dataset.ascendancy);
+    drawBuildTree(canvas, { x: 0, y: 0, scale: Number(canvas.dataset.scale) }, Number(canvas.dataset.level), STATE.set);
   }
   const level = STATE.level;
+  const points = [...TREE.taken.map(([i]) => TREE.nodes[i]), ...TREE.ascendancyTaken.map(([i]) => TREE.ascendancy.nodes[i])];
   for (const canvas of document.querySelectorAll('canvas[data-tree="main"]')) {
-    const points = [...TREE.taken.map(([i]) => TREE.nodes[i]), ...TREE.ascendancyTaken.map(([i]) => TREE.ascendancy.nodes[i])];
-    STATE.treeView ??= fitView(points, canvas.clientWidth, canvas.clientHeight, 80);
-    const draw = () => drawBuildTree(canvas, STATE.treeView, level, STATE.set);
+    STATE.treeViews[canvas.dataset.view] ??= fitView(points, canvas.clientWidth, canvas.clientHeight, 80);
+    const meter = canvas.parentElement.querySelector(".app-fps");
+    const draw = () => drawBuildTree(canvas, viewOf(canvas), level, STATE.set);
     draw();
+    // A move or a turn of the wheel asks for a drawing; the screen draws at most one per frame. Only these
+    // drawings are counted, not those of the page drawn again.
+    let asked = false;
+    const ask = () => {
+      if (asked) return;
+      asked = true;
+      requestAnimationFrame(() => {
+        asked = false;
+        const start = performance.now();
+        draw();
+        if (meter) countFrame(meter, performance.now() - start);
+      });
+    };
     canvas.onwheel = event => {
       event.preventDefault();
       zoomTree(canvas, event.deltaY < 0 ? 1.2 : 1 / 1.2, event.offsetX, event.offsetY);
-      draw();
+      ask();
     };
     canvas.onpointerdown = event => {
       canvas.setPointerCapture(event.pointerId);
       let [lastX, lastY] = [event.clientX, event.clientY];
       canvas.onpointermove = move => {
-        STATE.treeView.x -= (move.clientX - lastX) / STATE.treeView.scale;
-        STATE.treeView.y -= (move.clientY - lastY) / STATE.treeView.scale;
+        const view = viewOf(canvas);
+        view.x -= (move.clientX - lastX) / view.scale;
+        view.y -= (move.clientY - lastY) / view.scale;
         [lastX, lastY] = [move.clientX, move.clientY];
-        draw();
+        ask();
       };
       canvas.onpointerup = () => { canvas.onpointermove = null; };
     };
   }
+}
+
+// The counter of frames per second (2i3): the drawings of the last second while the tree moves, and the
+// time the script takes to draw once, the mean of the last 30 (the browser paints after it). Written into
+// its element at once, without drawing the page again.
+const FRAMES = { times: [], costs: [] };
+function countFrame(meter, cost) {
+  const now = performance.now();
+  FRAMES.times = [...FRAMES.times.filter(time => now - time < 1000), now];
+  FRAMES.costs = [...FRAMES.costs.slice(-29), cost];
+  const mean = FRAMES.costs.reduce((sum, c) => sum + c, 0) / FRAMES.costs.length;
+  meter.textContent = `${FRAMES.times.length} fps · script ${mean.toFixed(1)} ms`;
 }
 
 // The bounds of the zoom, in pixels per unit of the game.
@@ -291,7 +320,7 @@ const ZOOM_RANGE = [0.005, 0.5];
 
 // Zooms around a point of the canvas, which stays under the pointer.
 function zoomTree(canvas, factor, atX = canvas.clientWidth / 2, atY = canvas.clientHeight / 2) {
-  const view = STATE.treeView;
+  const view = viewOf(canvas);
   const [dx, dy] = [atX - canvas.clientWidth / 2, atY - canvas.clientHeight / 2];
   view.x += dx / view.scale - dx / (view.scale * factor);
   view.y += dy / view.scale - dy / (view.scale * factor);
@@ -299,16 +328,14 @@ function zoomTree(canvas, factor, atX = canvas.clientWidth / 2, atY = canvas.cli
 }
 
 AFTER_RENDER.push(mountTrees);
-// The opacity of the portrait is a slider: the canvases follow it as it moves.
-document.getElementById("tabs").addEventListener("input", event => {
-  if (event.target.dataset.variant === "portraitOpacity") mountTrees();
-});
+// The controls act on the tree of their own window.
+const canvasOf = element => element.closest(".app-tree").querySelector('canvas[data-tree="main"]');
 ACTIONS["tree-zoom"] = element => {
-  zoomTree(document.querySelector('canvas[data-tree="main"]'), element.dataset.zoom === "in" ? 1.4 : 1 / 1.4);
+  zoomTree(canvasOf(element), element.dataset.zoom === "in" ? 1.4 : 1 / 1.4);
   return true;
 };
-ACTIONS["tree-fit"] = () => {
-  STATE.treeView = null;
+ACTIONS["tree-fit"] = element => {
+  delete STATE.treeViews[canvasOf(element).dataset.view];
   return true;
 };
 ACTIONS["tree-set"] = element => {
