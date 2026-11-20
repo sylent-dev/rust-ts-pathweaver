@@ -2,13 +2,10 @@
 // « the only one that avoids scrolling, and it keeps a use to the Inventory tab »; the others in the
 // history of Git). The inventory is a drawer at the bottom of the column: a bar with its title, the
 // switch of the weapon set and a thumbnail per hinted slot, which never moves; the drawing unrolls
-// upward from it over the skills.
-// The skills take the room left (14 at the worst case of the corpus); past it, the last ones fold under
-// « and N more ». Its styles are in css/side-overflow.css.
-//
-// Two decisions open, each a control at the top of the page (js/page.js, VARIANTS): when the drawer
-// shows (always, or only when the column would overflow, the drawing in place otherwise), and what
-// opens it (the pointer at once, the pointer held a moment, a click).
+// upward from it over the skills when the pointer stays 200 ms on the bar. The drawer always, even when
+// the drawing would fit (the owner, 2026-11-20: the main lines of the layout stay the same, so as not to
+// lose the user). The skills take the room left (14 at the worst case of the corpus); past it, the last
+// ones fold under « and N more ». Its styles are in css/side-overflow.css.
 
 // The case of the worst overflow (tools/make-data.py, CROWDED): the 14 skills of a build of the corpus
 // at 53, where 20 things are new, beside the inventory of the build shown.
@@ -23,13 +20,11 @@ function inventoryThumbs(level, hints) {
 }
 
 // The right column at a level: of the build shown, or of a case (`record` its changes, `source` its
-// skills, `hints` its inventory). Both the drawing in place and the drawer are drawn; once the column
-// is measured, one of them goes (settleColumn).
+// skills, `hints` its inventory). The drawing comes before the bar, so that it unrolls above it.
 function sideColumn(level, { record = BUILDS.changes.shown.levels[level], source, hints = slotsAt(level, STATE.inventorySet) } = {}) {
-  return `<aside class="app-side ov" data-drawer="${chosen.drawerWhen}" data-open="${chosen.drawerOpen}">
+  return `<aside class="app-side ov">
     <div class="ov-new">${newAtBox(level, record)}</div>
     <div class="ov-skills">${skillList(level, source)}</div>
-    <div class="ov-inventory">${inventoryBox(level, hints)}</div>
     <div class="ov-drawer">
       <div class="ov-drawer-doll">${inventoryBox(level, hints)}</div>
       <div class="ov-drawer-bar"><div class="app-inventory-head"><h2 class="app-side-title app-title">Inventory</h2>${inventorySetSwitch()}</div>${inventoryThumbs(level, hints)}</div>
@@ -39,8 +34,8 @@ function sideColumn(level, { record = BUILDS.changes.shown.levels[level], source
 
 const overflows = box => box.scrollHeight > box.clientHeight;
 
-// The skills folded to the room left above the drawer: the last skills hidden one at a time, a skill
-// with the rows it triggers, until they fit, then « and N more » in their place.
+// The skills folded to the room left above the bar: the last skills hidden one at a time, a skill with
+// the rows it triggers, until they fit, then « and N more » in their place.
 function foldSkills(column) {
   const box = column.querySelector(".ov-skills"), list = box.querySelector(".app-skills");
   if (!list || !overflows(box)) return;
@@ -60,25 +55,11 @@ function foldSkills(column) {
   }
 }
 
-// Once drawn: the drawing in place when it fits and the drawer shows only then, the drawer otherwise.
+// Once drawn: the drawer cut to the height of its bar (--bar), which the skills leave free, then the
+// skills folded to the room left.
 function settleColumn(column) {
-  column.classList.add("is-whole");
-  const fits = column.dataset.drawer === "crowded" && !overflows(column);
-  if (fits) return;
-  column.classList.replace("is-whole", "is-drawer");
   const drawer = column.querySelector(".ov-drawer");
   column.style.setProperty("--bar", `${drawer.offsetHeight - drawer.querySelector(".ov-drawer-bar").offsetTop}px`);
   foldSkills(column);
 }
 AFTER_RENDER.push(() => document.querySelectorAll(".app-side.ov").forEach(settleColumn));
-
-// A click on the bar opens the drawer, when a click opens it; a click on the bar again, or outside the
-// drawer, or Esc, closes it.
-document.addEventListener("click", event => {
-  const drawer = event.target.closest?.('.ov[data-open="click"] .ov-drawer');
-  for (const open of document.querySelectorAll(".ov-drawer.is-open")) if (open !== drawer) open.classList.remove("is-open");
-  if (drawer && event.target.closest(".ov-drawer-bar") && !event.target.closest("button")) drawer.classList.toggle("is-open");
-});
-document.addEventListener("keydown", event => {
-  if (event.key === "Escape") document.querySelectorAll(".ov-drawer.is-open").forEach(drawer => drawer.classList.remove("is-open"));
-});

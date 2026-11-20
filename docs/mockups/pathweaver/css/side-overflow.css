@@ -1,35 +1,30 @@
 /* The overflow of the right column (2j4, js/side-overflow.js): E2, the inventory a drawer at the bottom
-   of the column. The column a column of flex boxes: « New at N », the skills in the room left, the
-   drawer. */
-.app-side.ov { display: flex; flex-direction: column; }
-.ov > * { flex: none; }
-.ov .is-folded { display: none !important; }
+   of the column. The column a column of flex boxes: « New at N », then the skills in the room left
+   above the bar of the drawer. */
+.app-side.ov { display: flex; flex-direction: column; padding-bottom: var(--bar); }
+.ov-new { flex: none; }
+.ov-skills { flex: 1; min-height: 0; overflow: hidden; }
+.ov .is-folded { display: none; }
 .ov-more { display: flex; align-items: center; min-height: 22px; }
 .ov-more .app-new-more { margin: 0 0 0 18px; }
 .ov-more-words { cursor: default; }
-
-/* The drawing in place, when it fits and the drawer shows only then; the drawer otherwise. */
-.ov.is-whole .ov-drawer, .ov.is-drawer > .ov-inventory { display: none; }
-.ov.is-drawer > .ov-skills { flex: 1; min-height: 0; overflow: hidden; }
 
 /* The drawer (the owner, 2026-11-20): the bar always at the bottom, which never moves; the drawing
    unrolls upward above it, on the same block: no line above it, the light shade of the header of a
    build, the page and its graph paper (css/textures.css), its light from the right, anchored at the
    bottom right so that the bar keeps it. The block is as tall as the drawing and the bar, cut to the bar
-   while closed (--bar, the height of the bar, js/side-overflow.js): its background never moves. */
-.ov.is-drawer { padding-bottom: var(--bar); }
+   while closed (--bar, the height of the bar, js/side-overflow.js): its background never moves. It
+   opens once the pointer has stayed 200 ms on it, in 180 ms, and closes at once when it leaves; at
+   once both ways when the system asks for less motion. */
 .ov-drawer { position: absolute; left: 0; right: 0; bottom: 0; padding: 0 12px 12px 14px;
   background: radial-gradient(ellipse 330px 220px at 100% 100%, var(--page-glow) 0%, transparent 70%), var(--page);
   clip-path: inset(calc(100% - var(--bar)) 0 0 0); transition: clip-path 180ms ease-out; }
+.ov-drawer:hover { clip-path: inset(0); transition-delay: 200ms; }
+@media (prefers-reduced-motion: reduce) { .ov-drawer, .ov-drawer:hover { transition-duration: 0s; } }
 .ov-drawer-doll .app-inventory-head { display: none; }
 .ov-drawer-doll .app-inventory { margin-top: 14px; }
 .ov-drawer-bar { padding-top: 10px; }
 .ov-drawer-bar .app-side-title { margin-top: 0; }
-.ov[data-open="hover"] .ov-drawer:hover, .ov[data-open="held"] .ov-drawer:hover, .ov-drawer.is-open { clip-path: inset(0); }
-/* Held: it opens once the pointer has stayed 200 ms, and closes at once. */
-.ov[data-open="held"] .ov-drawer:hover { transition-delay: 200ms; }
-.ov[data-open="click"] .ov-drawer-bar { cursor: pointer; }
-@media (prefers-reduced-motion: reduce) { .ov-drawer { transition: none !important; } }
 
 /* The thumbnails of the bar: a box per hinted slot, its card on hover. */
 .app-inventory.ov-thumbs { position: static; display: flex; flex-wrap: wrap; gap: 4px; margin: 6px 0 0 5px; }
