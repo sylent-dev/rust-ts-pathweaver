@@ -5,7 +5,7 @@
 // upward from it over the skills when the pointer stays 200 ms on the bar. The drawer always, even when
 // the drawing would fit (the owner, 2026-11-20: the main lines of the layout stay the same, so as not to
 // lose the user). The skills take the room left (14 at the worst case of the corpus); past it, the last
-// ones fold under « and N more ». Its styles are in css/side-overflow.css.
+// ones fold under « and N more skills ». Its styles are in css/side-overflow.css.
 
 // The case of the worst overflow (tools/make-data.py, CROWDED): the 14 skills of a build of the corpus
 // at 53, where 20 things are new, beside the inventory of the build shown.
@@ -13,7 +13,7 @@ SKILL_SOURCES.crowded = level => BUILDS.crowded.skills
   .filter(skill => appliesAt(skill.levels, level))
   .map(skill => ({ ...skill, supports: skill.supports.filter(support => appliesAt(support.levels, level)) }));
 
-// A link of the column to a tab of the build (the owner, 2026-11-20): the title Skills, and « and N more »
+// A link of the column to a tab of the build (the owner, 2026-11-20): the title Skills, and « and N more skills »
 // under the skills folded; not the title of the bar, whose hover unrolls the drawing, nor a link under
 // the drawing (tried, removed by the owner). In the colour of its words, the accent and a line on hover.
 const sideLink = (tab, words, className = "app-side-link") =>
@@ -41,7 +41,7 @@ function sideColumn(level, { record = BUILDS.changes.shown.levels[level], source
 const overflows = box => box.scrollHeight > box.clientHeight;
 
 // The skills folded to the room left above the bar: the last skills hidden one at a time, a skill with
-// the rows it triggers, until they fit, then « and N more » in their place, which leads to the Skills tab.
+// the rows it triggers, until they fit, then « and N more skills » in their place, which leads to the Skills tab.
 function foldSkills(column) {
   const box = column.querySelector(".ov-skills"), list = box.querySelector(".app-skills");
   if (!list || !overflows(box)) return;
@@ -57,7 +57,7 @@ function foldSkills(column) {
   while (overflows(box) && hidden < groups.length - 1) {
     hidden += 1;
     for (const row of groups[groups.length - hidden]) row.classList.add("is-folded");
-    more.innerHTML = sideLink("skills", `and ${hidden} more`, "app-new-more");
+    more.innerHTML = sideLink("skills", `and ${plural(hidden, "more skill", "more skills")}`, "app-new-more");
   }
 }
 

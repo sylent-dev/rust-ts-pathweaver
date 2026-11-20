@@ -3,8 +3,8 @@
 // N2 of twelve variants (2j, the owner, 2026-11-20; the others in the history of Git): no box, a
 // title like Skills and Inventory, the lines of the window of « N changes » under it without their
 // category, which the mark of a gem, « passives » and the slot at the right already say; a box
-// weighed down a column that holds the skills and the inventory too. Six lines, then « and N more »,
-// which opens the window.
+// weighed down a column that holds the skills and the inventory too. Six lines, then « and N more
+// changes » (2j4: told from « and N more skills »), which opens the window.
 
 const NEW_LINES = 6;
 
@@ -25,12 +25,12 @@ function newAtBox(level, record = BUILDS.changes.shown.levels[level]) {
   const list = record ? changeList(record) : [];
   if (list.length === 0) return `<h2 class="app-side-title app-title app-new-title is-empty">Nothing new at ${level}</h2>`;
   const more = list.length > NEW_LINES
-    ? `<button type="button" class="app-new-more" data-action="new-more" title="Opens the window of « N changes »">and ${list.length - NEW_LINES} more</button>` : "";
+    ? `<button type="button" class="app-new-more" data-action="new-more" title="Opens the window of « N changes »">and ${plural(list.length - NEW_LINES, "more change", "more changes")}</button>` : "";
   return `<h2 class="app-side-title app-title app-new-title">New at ${level}</h2>
     <div class="app-new"><ul class="app-changes-lines app-new-lines">${list.slice(0, NEW_LINES).map(newLine).join("")}</ul>${more}</div>`;
 }
 
-// « and N more » opens the window of « N changes » of the band of its page.
+// « and N more changes » opens the window of « N changes » of the band of its page.
 ACTIONS["new-more"] = element => {
   const instance = element.closest(".app-window")?.querySelector(".app-level[data-instance]")?.dataset.instance;
   if (instance === undefined) return false;
