@@ -24,6 +24,9 @@ const VARIANTS = {
   // The width of the windows of the home page (2l): the minimum of specs.md, half a 1920-pixel screen, and a wide
   // window of the owner's screen.
   homeWidth: { label: "Home width", options: { 900: "900 px", 960: "960 px", 1600: "1,600 px" }, fallback: "960" },
+  // The tag of a skill new at the level in K3 and K6 (2k, the owner, 2026-11-21): on the left edge of its
+  // block at the height of its title (T1), or on its top edge above the start of its title (T2).
+  newTag: { label: "New tag", options: { t1: "T1", t2: "T2" }, fallback: "t1" },
   // The Skills tab (2k): H1 and N3, kept of twelve variants, and K3 and K6, kept of six variants of N3 (js/skills-tab.js).
   skillsTab: { label: "Skills tab", options: { h1: "H1", n3: "N3", k3: "K3", k6: "K6" }, fallback: "k3" },
 };

@@ -12,7 +12,8 @@
 .st-gem .app-gem-mark { flex: none; }
 .st-name { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .st-skill { font-weight: 700; }
-.st-new { margin-left: 2px; color: var(--accent); font-size: 11px; font-weight: 700; }
+/* « NEW » in capitals (the owner, 2026-11-21). */
+.st-new { margin-left: 2px; color: var(--accent); font-size: 10px; font-weight: 800; letter-spacing: .04em; text-transform: uppercase; }
 .st-head { display: flex; align-items: center; gap: 5px; min-height: 22px; }
 .st-support { display: flex; align-items: center; gap: 5px; min-height: 21px; font-size: 12.5px; }
 .st-triggered { display: flex; align-items: center; gap: 5px; min-height: 22px; margin-top: 2px; }
@@ -58,3 +59,16 @@
 .st-k6 .st-head:not(.st-triggered) .st-badge { order: 9; width: 32px; height: 32px; margin-left: auto; border-radius: 0; }
 .st-k6 .st-supports { padding: 5px 10px 6px 12px; }
 .st-k6 .st-triggered { padding: 0 10px 6px; }
+
+/* A skill new at the level (the owner, 2026-11-21): a tag on the edge of its block in place of « NEW »
+   beside its name, in the accent; its supports keep theirs. On the left edge at the height of the title
+   (T1), or on the top edge above the start of the title (T2, « New tag »). --st-head: the height of the
+   head of the skill, --st-title: where its title starts. */
+.st-k3 { --st-head: 30px; --st-title: 8px; }
+.st-k6 { --st-head: 32px; --st-title: 10px; }
+.st-block.is-new { position: relative; }
+.st-new-tag { position: absolute; z-index: 1; padding: 0 5px; border-radius: 2px; background: var(--accent); color: var(--on-accent);
+  font-size: 9.5px; font-weight: 800; letter-spacing: .05em; line-height: 15px; text-transform: uppercase; pointer-events: none; }
+:root[data-new-tag="t1"] .st-new-tag { left: 0; top: calc(var(--st-head) / 2); transform: translate(-50%, -50%); }
+:root[data-new-tag="t2"] .st-new-tag { left: var(--st-title); top: 0; transform: translateY(-50%); }
+:root[data-new-tag="t1"] .st-k3 .st-block.is-new > .st-head, :root[data-new-tag="t1"] .st-k6 .st-block.is-new > .st-head { padding-left: calc(var(--st-title) + 16px); }

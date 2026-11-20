@@ -38,15 +38,16 @@ const stTriggered = skill => skill.triggered.map(gem =>
 const stBadge = gem => gem.icon
   ? `<span class="st-badge" data-gem="${escapeHtml(gem.name)}"><img src="pathweaver/img/skills/${gem.icon}" alt=""></span>`
   : skillMark(gem);
-// A skill and what it holds: its head (its badge, its name, « new », its note), its supports, the skills
+// A skill and what it holds: its head (its badge, its name, its note), and when it is new at the level a
+// tag on the edge of its block in place of « new » (the owner, 2026-11-21); its supports, the skills
 // it triggers with their mark, without a badge (the owner, 2026-11-21: a skill placed as the support of
 // another, as Comet under Cast on Critical, shows no icon).
-const stName = gem => `<span class="st-name st-skill" data-gem="${escapeHtml(gem.name)}">${escapeHtml(gem.name)}</span>${stNew(gem)}`;
+const stName = (gem, withNew = true) => `<span class="st-name st-skill" data-gem="${escapeHtml(gem.name)}">${escapeHtml(gem.name)}</span>${withNew ? stNew(gem) : ""}`;
 function stBlock(skill) {
   const triggered = skill.triggered.map(gem =>
     `<div class="st-head st-triggered" ${stSkillAttributes(skill, true)}><span class="app-weak st-hook" aria-hidden="true">↳</span>${skillMark(gem)}${stName(gem)}${stNote(gem)}</div>`).join("");
-  return `<div class="st-block">
-    <div class="st-head" ${stSkillAttributes(skill)}>${stBadge(skill)}${stName(skill)}${stNote(skill)}</div>
+  return `<div class="st-block${skill.isNew ? " is-new" : ""}">${skill.isNew ? '<span class="st-new-tag">New</span>' : ""}
+    <div class="st-head" ${stSkillAttributes(skill)}>${stBadge(skill)}${stName(skill, false)}${stNote(skill)}</div>
     ${skill.supports.length ? `<ul class="st-supports">${skill.supports.map(gem => stSupport(gem, skill)).join("")}</ul>` : ""}${triggered}
   </div>`;
 }
