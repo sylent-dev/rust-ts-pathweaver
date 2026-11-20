@@ -1,0 +1,6 @@
+/* The hover of a gem (2j2, js/gem-hover.js): the card of a passive (css/tree-hover.css), fixed on the
+   page so that the column doesn't cut it; its tags, then its description. */
+.app-gem-hover { position: fixed; z-index: 20; max-width: 300px; font-family: var(--font-text); }
+.app-gem-tags { margin-top: 3px; color: var(--on-band-weak); font-size: 11px; }
+.app-gem-text { margin: 6px 0 0; }
+.app-skill-name { cursor: default; }

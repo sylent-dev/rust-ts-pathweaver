@@ -2,7 +2,7 @@
 //
 // N2 of twelve variants (2j2, the owner, 2026-11-20; the others in the history of Git): the mark of the
 // skill, its name, the note of its author, and its supports as their marks at the right, in the order
-// of the file, each named on hover. The column is 330 px wide and holds « New at N » and the inventory
+// of the file, each with its card on hover (js/gem-hover.js). The column is 330 px wide and holds « New at N » and the inventory
 // too: the names of the supports written out would add about 40 lines; the Skills tab lists them (2k).
 // The skill a spirit gem triggers (Comet under Cast on Critical) is a skill, indented under it.
 //
@@ -12,7 +12,9 @@
 // underline of N2, a halo, « new » and « +N » were set aside.
 
 // The mark of a gem of a row, in a span that the flash and the light of « New at N » find.
-const skillMark = gem => `<span class="app-skill-gem ${gem.isNew ? "is-new" : ""}" data-gem="${escapeHtml(gem.name)}" title="${escapeHtml(gem.name)}">${gemMark(gem)}</span>`;
+// Its name and its description on hover (js/gem-hover.js).
+const skillMark = gem => `<span class="app-skill-gem ${gem.isNew ? "is-new" : ""}" data-gem="${escapeHtml(gem.name)}">${gemMark(gem)}</span>`;
+const skillName = gem => `<span class="app-skill-name" data-gem="${escapeHtml(gem.name)}">${escapeHtml(gem.name)}</span>`;
 
 // A skill at the level: whether it starts there, its supports (each new when it comes onto the skill
 // at this level), and the skills it triggers apart.
@@ -27,8 +29,8 @@ function skillRow(skill, level) {
 function skillLine(row) {
   const skill = escapeHtml(row.name);
   const triggered = row.triggered.map(gem =>
-    `<li class="app-skill is-triggered" data-skill="${skill}"><span class="app-weak app-skill-hook" aria-hidden="true">↳</span>${skillMark(gem)}<span class="app-skill-name">${escapeHtml(gem.name)}</span>${noteMark(Boolean(gem.note))}</li>`).join("");
-  return `<li class="app-skill" data-skill="${skill}">${skillMark(row)}<span class="app-skill-name">${skill}</span>${noteMark(Boolean(row.note))}<span class="app-skill-supports">${row.supports.map(skillMark).join("")}</span></li>${triggered}`;
+    `<li class="app-skill is-triggered" data-skill="${skill}"><span class="app-weak app-skill-hook" aria-hidden="true">↳</span>${skillMark(gem)}${skillName(gem)}${noteMark(Boolean(gem.note))}</li>`).join("");
+  return `<li class="app-skill" data-skill="${skill}">${skillMark(row)}${skillName(row)}${noteMark(Boolean(row.note))}<span class="app-skill-supports">${row.supports.map(skillMark).join("")}</span></li>${triggered}`;
 }
 
 function skillList(level) {
@@ -58,7 +60,7 @@ function litFromNewAt(event) {
   const line = event.target.closest?.(".app-new-lines li[data-gem]");
   if (!line) return;
   const lit = event.type === "mouseover";
-  const selector = `.app-skill[data-skill="${CSS.escape(line.dataset.on)}"] [data-gem="${CSS.escape(line.dataset.gem)}"]`;
+  const selector = `.app-skill[data-skill="${CSS.escape(line.dataset.on)}"] .app-skill-gem[data-gem="${CSS.escape(line.dataset.gem)}"]`;
   line.closest(".app-side")?.querySelectorAll(selector).forEach(gem => gem.classList.toggle("is-lit", lit));
 }
 document.addEventListener("mouseover", litFromNewAt);
