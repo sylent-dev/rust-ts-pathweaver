@@ -30,8 +30,10 @@ const CHANGE_CATEGORIES = { skill: "Skill", support: "Support", passives: "Passi
 // The weapon sets as the page names them everywhere, the legend and the switches included: « set I »,
 // « set II », the Roman numerals kept (the owner, 2026-11-20).
 const PASSIVE_GROUPS = { taken: "", set1: "of set I", set2: "of set II", ascendancy: "of the ascendancy" };
-// Where a passive of a group hangs, the place of the card of its note (js/note-hover.js).
+// Where a passive of a group hangs, the place of the card of its note (js/note-hover.js), and its
+// weapon set, whose colour the place takes there.
 const PASSIVE_PLACES = { taken: "", set1: "Set I", set2: "Set II", ascendancy: "Ascendancy" };
+const PASSIVE_SETS = { set1: 1, set2: 2 };
 
 function changeList(record) {
   const { skills, supports, passives, gear, notes } = record;
@@ -44,7 +46,7 @@ function changeList(record) {
     ...supports.added.map(support => ({ category: "support", sign: "+", ...support })),
     ...supports.removed.map(support => ({ category: "support", sign: "−", ...support })),
     // Each group carries the notes of its passives, with the name of each (2j5).
-    ...taken.map(([group, label]) => ({ category: "passives", sign: "+", count: passives[group], label, place: PASSIVE_PLACES[group], notes: passives.notes[group] ?? [] })),
+    ...taken.map(([group, label]) => ({ category: "passives", sign: "+", count: passives[group], label, place: PASSIVE_PLACES[group], set: PASSIVE_SETS[group], notes: passives.notes[group] ?? [] })),
     ...(passives.givenBack > 0 ? [{ category: "passives", sign: "−", count: passives.givenBack, label: "" }] : []),
     ...gear.added.map(entry => ({ category: "gear", sign: "+", ...item(entry) })),
     ...gear.replaced.map(entry => ({ category: "gear", sign: "⇄", ...item(entry) })),
@@ -58,7 +60,7 @@ const slotName = id => escapeHtml(SLOT_NAMES[id] ?? id);
 function changeName(change) {
   if (change.category === "passives") {
     const [count, label] = [plural(change.count, "passive"), change.label ? ` ${change.label}` : ""];
-    return `<b>${count}</b>${label}${noteMark({ place: change.place, head: count + label, list: change.notes })}`;
+    return `<b>${count}</b>${label}${noteMark({ place: change.place, set: change.set, head: count + label, list: change.notes })}`;
   }
   if (change.category === "skill" || change.category === "support") return `${gemMark(change)}<b>${escapeHtml(change.name)}</b>${
     noteMark({ place: change.category === "support" ? change.skill : "", head: change.name, text: change.note })}`;

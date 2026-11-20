@@ -4,6 +4,9 @@
 .app-note-hover { max-width: 320px; }
 .app-hover.app-note-hover:not(.is-support) > .app-hover-head + * { margin-top: var(--note-gap, 0px); }
 .app-note-place { color: var(--on-band-weak); font-weight: 400; }
+/* The weapon set of a passive in its colour on the tree (--tree-set-1, --tree-set-2). */
+.app-note-place .is-set1 { color: var(--tree-set-1); }
+.app-note-place .is-set2 { color: var(--tree-set-2); }
 /* A note of a group of passives: the name of its passive a small head over it, in the colour of the
    text, a size above the words of the note; a line between two notes. */
 .app-note-list { margin: 0; padding: 0; list-style: none; }
