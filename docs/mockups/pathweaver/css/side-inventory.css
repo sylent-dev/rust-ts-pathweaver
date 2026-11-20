@@ -11,7 +11,8 @@
 .app-inventory-sets .is-set1[aria-pressed="true"] { color: var(--tree-set-1); }
 .app-inventory-sets .is-set2[aria-pressed="true"] { color: var(--tree-set-2); }
 
-.app-inventory { position: relative; margin-top: 6px; }
+/* The slots 5 px right, the edge of the weapon under the « I » of the title (the owner, 2026-11-20, by eye). */
+.app-inventory { position: relative; margin-top: 6px; margin-left: 5px; }
 .app-slot { position: absolute; display: grid; place-items: center; box-sizing: border-box; padding: 2px; overflow: hidden; border-radius: 0; }
 /* The image fills its box, inside its padding, at its own proportions. */
 .app-item-art { display: block; width: 100%; height: 100%; min-height: 0; object-fit: contain; }
