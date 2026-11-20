@@ -3,8 +3,9 @@
 // author in the shade of the head. Drawn in place on four skills: Spark, of intelligence, with a note of
 // its author; Cast on Critical, a spirit gem new at 59, with a note; Herald of Ice, of dexterity and
 // intelligence, without a note; Orb of Storms, its nine tags cut by the ellipsis; then two supports,
-// Pinpoint Critical and a lineage support, their icon, a disc, cut to a square; then the card of a note of the author, in the same construction, two. The
-// card on hover in the windows of the page is the same (the Skills tab, the rows of the Overview).
+// Pinpoint Critical and a lineage support, their icon, a disc, cut to a square; then two cards of a note
+// of the author, in the same construction. The card on hover in the windows of the page is the same
+// (the Skills tab, the rows of the Overview).
 
 // A card drawn in place, as it shows on hover.
 const staticGemCard = (gem, level) =>
