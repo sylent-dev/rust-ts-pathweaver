@@ -8,12 +8,14 @@ From the repository root. Reads:
   (grindinggear/poe2-skilltree-export, tag TREE_TAG);
 - the names, kinds, colours, tags and descriptions of the gems (RePoE, base_items, skill_gems,
   skills and gem_tags);
+- the images of the items the hints of the inventory name (RePoE, base_items and uniques, which give
+  the path of their art in the files of the game, `Art/2DItems/…`, and serve it as WebP beside the data);
 - the builds of the corpus, in inputs/builds/ (local only, never committed).
 
 Writes js/data-tree.js, js/data-builds.js, img/portraits/*.webp (the discs),
 img/portraits-square/*.webp (the square inside each disc, for the tabs), img/portraits-large/*.webp (the
 portrait under the ascendancy at the centre of the tree, 2i2) and img/tree/*.webp (the sheets of the icons
-and frames of the passives, kept whole, 2i) next to this folder. The
+and frames of the passives, kept whole, 2i) and img/items/*.webp (the images of the items, 2j3) next to this folder. The
 downloads are kept in the cache folder (a temporary one by default) so that a second run is fast.
 The mock-up only: the website converts the game data with its own script, at step 4.
 """
@@ -55,6 +57,9 @@ LIBRARY = [
     "pob-twobyul-deadeye.build",
     "pobr-summoner-lv98.build",
 ]
+# The items of the case of the other slots of the inventory (2j3), beyond those of the build shown:
+# charms in Trinket1, as Maxroll writes them (7 entries of the corpus), and in an id the game doesn't know.
+SAMPLE_ITEMS = ["Thawing Charm", "Golden Charm"]
 # The cases of « N changes at N » (2g): a respec, 42 passives given back at 65; the swap of a
 # leveling build to its end, 82 changes at 71.
 CHANGE_CASES = {
@@ -356,9 +361,38 @@ def build_data(build, names, gems, ascendancies, skills, tags):
                    for skill in build.get("skills", [])],
         "slots": [{"id": slot["inventory_id"], "x": slot.get("slot_x", 0), "y": slot.get("slot_y", 0),
                    "levels": interval(slot), "unique": slot.get("unique_name", ""),
-                   "base": "" if slot.get("unique_name") else first_line(slot.get("additional_text"))}
+                   "base": "" if slot.get("unique_name") else plain(first_line(slot.get("additional_text")))}
                   for slot in build.get("inventory_slots", [])],
     }
+
+
+def item_name(slot):
+    """The item a hint names: its unique, or the first line of its text without the base its author
+    wrote after it (« Sacramental Robe (Int Base) »), as js/levels.js reads it (withoutBase)."""
+    name = slot.get("unique_name") or plain(first_line(slot.get("additional_text")))
+    return re.sub(r"\s*\((?:Str|Dex|Int)(?:/(?:Str|Dex|Int))? Base\)$", "", name)
+
+
+def item_art(cache, names, uniques, items):
+    """The image of each item a hint names (2j3): {name: {"art": file, "w": cells wide, "h": cells high}},
+    from RePoE, which serves the art of the game as WebP at the path the game data give; a name the game
+    data don't know (a free text of the author: « Any Belt ») has none."""
+    known = {}
+    for entry in [*(u for u in uniques.values() if not u.get("is_alternate_art")), *names.values()]:
+        if entry.get("name") and entry.get("visual_identity") and entry.get("release_state") != "unreleased":
+            known.setdefault(entry["name"], entry)
+    art = {}
+    folder = OUT / "img" / "items"
+    folder.mkdir(exist_ok=True)
+    for name in sorted(set(items)):
+        entry = known.get(name)
+        if not entry:
+            continue
+        dds = entry["visual_identity"]["dds_file"].removesuffix(".dds")
+        file = re.sub(r"[^a-z0-9]+", "-", dds.removeprefix("Art/2DItems/").lower()) + ".webp"
+        (folder / file).write_bytes(fetch(cache, f"{REPOE_URL}/{dds}.webp", file).read_bytes())
+        art[name] = {"art": file, "w": entry.get("inventory_width", 1), "h": entry.get("inventory_height", 1)}
+    return art
 
 
 def plain(text):
@@ -511,6 +545,7 @@ def main():
     gems = json.loads(fetch(cache, f"{REPOE_URL}/skill_gems.min.json", "skill_gems.min.json").read_text())
     skills = json.loads(fetch(cache, f"{REPOE_URL}/skills.min.json", "skills.min.json").read_text())
     tags = json.loads(fetch(cache, f"{REPOE_URL}/gem_tags.min.json", "gem_tags.min.json").read_text())
+    uniques = json.loads(fetch(cache, f"{REPOE_URL}/uniques.min.json", "uniques.min.json").read_text())
     ascendancies = {a["id"]: {"name": a["name"], "class": c["name"]}
                     for c in tree["classes"] for a in c["ascendancies"]}
     read = lambda name: json.loads((CORPUS / name).read_text(encoding="utf-8-sig"))
@@ -519,6 +554,8 @@ def main():
     write_js("data-builds.js", "BUILDS", {
         "treeVersion": TREE_TAG,
         "shown": build_data(builds[0], names, gems, ascendancies, skills, tags),
+        "items": item_art(cache, names, uniques,
+                          [*map(item_name, builds[0].get("inventory_slots", [])), *SAMPLE_ITEMS]),
         "open": [{"name": b["name"], "ascendancy": ascendancies.get(b.get("ascendancy"), {}).get("name", ""),
                   "portrait": (b.get("ascendancy") or "").lower()} for b in builds],
         "library": [library_row(b, ascendancies) for b in [*builds, *map(read, LIBRARY)]],
