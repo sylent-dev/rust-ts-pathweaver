@@ -310,7 +310,7 @@ def described(entry, gems, skills, tags):
 
 def gem(entry, names, gems, among_supports=False):
     """A gem of the build. One the game data don't know takes its kind from its place in the file (a
-    support among the supports of a skill), and keeps its whole id for its card (2j3b)."""
+    support among the supports of a skill, 2j3b)."""
     info = gems.get(entry["id"], {})
     base = names.get(entry["id"], {})
     known = entry["id"] in names
@@ -321,7 +321,6 @@ def gem(entry, names, gems, among_supports=False):
         "colour": info.get("color", "w"),
         "levels": interval(entry),
         "known": known,
-        **({} if known else {"id": entry["id"]}),
         # A lineage support (2j2: its colour in the list « Lineage support » of the mock-up).
         "lineage": bool(info.get("is_lineage")),
         # The note of the author on the gem, its markup kept (2j2: its mark in the row, its text in

@@ -92,6 +92,7 @@
      2026-11-20): the same in every style. */
   --unknown-note: #ffe066;
   --unknown-ink: #4a3b00;
+  --unknown-text: var(--unknown-note);   /* « Not in the game data » in the cards */
   /* The gems: a colour per attribute (strength, dexterity, intelligence, none) and a shape. */
   --gem-str: #ced4da;
   --gem-spirit: #ced4da;   /* a spirit gem, a teal of its own (2j2) */

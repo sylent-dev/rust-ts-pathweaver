@@ -33,14 +33,13 @@ function levelsWords(entry, level) {
   return low > 1 && low !== level ? `${from} to ${high}` : `${from}, until ${high}`;
 }
 
-// The card of a gem the game data don't know (2j3b, the owner, 2026-11-20: « we'd like to know why »):
-// its name, the end of its id, and its kind, from its place in the file; that the game data don't know
-// it, and the usual cause; its whole id, to look for it or to tell the author of the guide; its levels
-// and the note of its author.
+// The card of a gem the game data don't know (2j3b, the owner, 2026-11-20: « we'd like to know why »,
+// then « no need to be too explicit »): its name, the end of its id, and its kind, from its place in
+// the file; « Not in the game data of 0.5.2 » in the colour of the unknown; its levels and the note of
+// its author.
 function unknownGemHtml(gem, level) {
   return `<div class="app-hover-head"><strong>${escapeHtml(gem.name)}</strong><span class="app-weak">${gemKindName(gem)}</span></div>
-    <p class="app-hover-missing">${NOT_IN_GAME_DATA}. The file may be made for another version of the game.</p>
-    ${gem.id ? `<code class="app-gem-id">${escapeHtml(gem.id)}</code>` : ""}
+    <p class="app-hover-missing is-unknown">${NOT_IN_GAME_DATA}</p>
     <div class="app-hover-state">${levelsWords(gem, level)}</div>
     ${gem.note ? `<div class="app-hover-hint">${markupHtml(gem.note)}</div>` : ""}`;
 }

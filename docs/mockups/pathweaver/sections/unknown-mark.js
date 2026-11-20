@@ -8,7 +8,7 @@
 // its card on hover (js/gem-hover.js, SKILL_SOURCES).
 function unknownSkillsAt() {
   const [known] = SHOWN.skills;
-  const unknown = (id, kind, note = "") => ({ id, name: id.split("/").at(-1), kind, colour: "", levels: [1, 100], known: false, lineage: false, note, tags: [], text: "" });
+  const unknown = (id, kind, note = "") => ({ name: id.split("/").at(-1), kind, colour: "", levels: [1, 100], known: false, lineage: false, note, tags: [], text: "" });
   return [
     { ...known, levels: [1, 100], supports: [known.supports[0], unknown("Metadata/Items/Gems/SupportGemEchoingThunder", "support")] },
     { ...unknown("Metadata/Items/Gems/SkillGemFrostBombII", "active", "<gold>{Frost Bomb on bosses.}"), supports: [known.supports[2]] },
@@ -24,7 +24,7 @@ function unknownHints(level) {
     { id: "Helm1", x: 0, y: 0, levels: [1, 100], unique: "Crown of Embers", base: "", note: "", unknown: true }];
 }
 
-addSection(() => ["The mark of what the game data don't know: a sticky note on an item, a « ? » for a gem, and their cards", [
-  ["An unknown support and an unknown skill, their cards on hover; an unknown unique in a large and a small slot, an unknown slot in the list",
+addSection(() => ["The mark of what the game data don't know: a sticky note on an item or a gem, and their cards", [
+  ["An unknown support and an unknown skill, an unknown unique in a large and a small slot, an unknown slot in the list; the cards on hover",
     `<div class="app-window" style="width:330px"><aside class="app-side app-inventory-alone">${unknownSkills(STATE.level)}${inventoryBox(STATE.level, unknownHints(STATE.level))}</aside></div>`],
 ]]);
