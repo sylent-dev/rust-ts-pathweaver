@@ -14,19 +14,19 @@
    build, the page and its graph paper (css/textures.css), its light from the right, anchored at the
    bottom right so that the bar keeps it. The block is as tall as the drawing and the bar, cut to the bar
    while closed (--bar, the height of the bar, js/side-overflow.js): its background never moves. It
-   opens once the pointer has stayed 200 ms on it, its edge in 200 ms, and closes at once when it leaves;
+   opens once the pointer has stayed 200 ms on it, its edge in 180 ms, and closes at once when it leaves;
    at once both ways when the system asks for less motion. */
 .ov-drawer { position: absolute; left: 0; right: 0; bottom: 0; padding: 0 12px 12px 14px;
   background: radial-gradient(ellipse 330px 220px at 100% 100%, var(--page-glow) 0%, transparent 70%), var(--page);
-  clip-path: inset(calc(100% - var(--bar)) 0 0 0); transition: clip-path 200ms ease-out; }
+  clip-path: inset(calc(100% - var(--bar)) 0 0 0); transition: clip-path 180ms ease-out; }
 .ov-drawer:hover { clip-path: inset(0); transition-delay: 200ms; }
 @media (prefers-reduced-motion: reduce) { .ov-drawer, .ov-drawer:hover { transition-duration: 0s; } }
-/* How the drawing unrolls (5 · Spring of seven, the owner, 2026-11-20: a wipe, a blind, a soft edge, a
-   flap, a cascade of the slots and a line of the accent set aside): the drawing rises from behind the
-   bar with the edge, goes a little past its place and comes back, in 280 ms, the pop of the window of
-   « N changes »; at once when the system asks for less motion. */
+/* How the drawing unrolls (2 · Blind of seven, the owner, 2026-11-20: a wipe over the drawing still, a
+   spring, a soft edge, a flap, a cascade of the slots and a line of the accent set aside): the drawing
+   rises from behind the bar with the edge, like a roller blind, in 180 ms, without going past its place;
+   at once when the system asks for less motion. */
 .ov-drawer-doll { overflow: hidden; }
-.ov-drawer-doll > * { transform: translateY(100%); transition: transform 280ms cubic-bezier(.34, 1.45, .64, 1); }
+.ov-drawer-doll > * { transform: translateY(100%); transition: transform 180ms ease-out; }
 .ov-drawer:hover .ov-drawer-doll > * { transform: none; transition-delay: 200ms; }
 @media (prefers-reduced-motion: reduce) { .ov-drawer-doll > * { transition-duration: 0s !important; } }
 .ov-drawer-doll .app-inventory-head { display: none; }
