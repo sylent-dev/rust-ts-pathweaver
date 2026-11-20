@@ -12,16 +12,20 @@
 .ov.is-whole .ov-drawer, .ov.is-drawer > .ov-inventory { display: none; }
 .ov.is-drawer > .ov-skills { flex: 1; min-height: 0; overflow: hidden; }
 
-/* The drawer (the owner, 2026-11-20): no line above it, the light shade of the header of a build, the
-   page and its light, here from the right; the drawing rises above the bar on the same shade, one block. */
-.ov-drawer { display: grid; grid-template-rows: 0fr auto; margin: 0 -12px -12px -14px; padding: 0 12px 12px 14px;
-  background: radial-gradient(ellipse 110% 150% at 100% 0%, var(--page-glow) 0%, transparent 70%), var(--page);
-  transition: grid-template-rows 180ms ease-out; }
-.ov-drawer-doll { min-height: 0; overflow: hidden; order: -1; }
+/* The drawer (the owner, 2026-11-20): the bar always at the bottom, which never moves; the drawing
+   unrolls upward above it, on the same block: no line above it, the light shade of the header of a
+   build, the page and its graph paper (css/textures.css), its light from the right, anchored at the
+   bottom right so that the bar keeps it. The block is as tall as the drawing and the bar, cut to the bar
+   while closed (--bar, the height of the bar, js/side-overflow.js): its background never moves. */
+.ov.is-drawer { padding-bottom: var(--bar); }
+.ov-drawer { position: absolute; left: 0; right: 0; bottom: 0; padding: 0 12px 12px 14px;
+  background: radial-gradient(ellipse 330px 220px at 100% 100%, var(--page-glow) 0%, transparent 70%), var(--page);
+  clip-path: inset(calc(100% - var(--bar)) 0 0 0); transition: clip-path 180ms ease-out; }
 .ov-drawer-doll .app-inventory-head { display: none; }
 .ov-drawer-doll .app-inventory { margin-top: 14px; }
-.ov-drawer .app-side-title { margin-top: 10px; }
-.ov[data-open="hover"] .ov-drawer:hover, .ov[data-open="held"] .ov-drawer:hover, .ov-drawer.is-open { grid-template-rows: 1fr auto; }
+.ov-drawer-bar { padding-top: 10px; }
+.ov-drawer-bar .app-side-title { margin-top: 0; }
+.ov[data-open="hover"] .ov-drawer:hover, .ov[data-open="held"] .ov-drawer:hover, .ov-drawer.is-open { clip-path: inset(0); }
 /* Held: it opens once the pointer has stayed 200 ms, and closes at once. */
 .ov[data-open="held"] .ov-drawer:hover { transition-delay: 200ms; }
 .ov[data-open="click"] .ov-drawer-bar { cursor: pointer; }

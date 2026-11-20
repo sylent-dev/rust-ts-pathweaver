@@ -1,7 +1,8 @@
 // The overflow of the right column of the Overview (2j4): E2 of twelve variants (the owner, 2026-11-20:
 // « the only one that avoids scrolling, and it keeps a use to the Inventory tab »; the others in the
 // history of Git). The inventory is a drawer at the bottom of the column: a bar with its title, the
-// switch of the weapon set and a thumbnail per hinted slot; the drawing rises from it over the skills.
+// switch of the weapon set and a thumbnail per hinted slot, which never moves; the drawing unrolls
+// upward from it over the skills.
 // The skills take the room left (14 at the worst case of the corpus); past it, the last ones fold under
 // « and N more ». Its styles are in css/side-overflow.css.
 //
@@ -30,8 +31,8 @@ function sideColumn(level, { record = BUILDS.changes.shown.levels[level], source
     <div class="ov-skills">${skillList(level, source)}</div>
     <div class="ov-inventory">${inventoryBox(level, hints)}</div>
     <div class="ov-drawer">
-      <div class="ov-drawer-bar"><div class="app-inventory-head"><h2 class="app-side-title app-title">Inventory</h2>${inventorySetSwitch()}</div>${inventoryThumbs(level, hints)}</div>
       <div class="ov-drawer-doll">${inventoryBox(level, hints)}</div>
+      <div class="ov-drawer-bar"><div class="app-inventory-head"><h2 class="app-side-title app-title">Inventory</h2>${inventorySetSwitch()}</div>${inventoryThumbs(level, hints)}</div>
     </div>
   </aside>`;
 }
@@ -65,6 +66,8 @@ function settleColumn(column) {
   const fits = column.dataset.drawer === "crowded" && !overflows(column);
   if (fits) return;
   column.classList.replace("is-whole", "is-drawer");
+  const drawer = column.querySelector(".ov-drawer");
+  column.style.setProperty("--bar", `${drawer.offsetHeight - drawer.querySelector(".ov-drawer-bar").offsetTop}px`);
   foldSkills(column);
 }
 AFTER_RENDER.push(() => document.querySelectorAll(".app-side.ov").forEach(settleColumn));
