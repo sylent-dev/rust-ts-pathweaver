@@ -12,15 +12,10 @@ const GEM_SHAPES = {
 };
 
 // The shape says the kind of a gem, its colour what it is (the owner, 2026-11-20): a spirit gem is a
-// skill, a hexagon, in a teal of its own rather than the colour of its attribute; a lineage support is
-// a support, a square on its tip, in a grey of its own. Two open decisions, a list each in the header
-// of the mock-up (2j2), which apply at once.
+// skill, a hexagon, in a teal of its own rather than the colour of its attribute (--gem-spirit, the
+// bright teal of five); a lineage support is a support, a square on its tip, in a grey of its own,
+// still open: a list in the header of the mock-up (2j2), which applies at once.
 const GEM_CHOICES = {
-  spiritColour: {
-    label: "Spirit gem", variable: "--gem-spirit",
-    options: { "#5eead4": "Pale teal", "#2dd4bf": "Bright teal", "#14b8a6": "Deep teal", "#22c3c9": "Teal towards cyan", "#46c7a8": "Teal towards green" },
-    fallback: "#2dd4bf",
-  },
   lineageColour: {
     label: "Lineage support",
     options: { attribute: "The colour of its attribute", "#d4d9e1": "Silver", "#a3abb8": "Mid grey", "#c2b8a3": "Warm grey" },
