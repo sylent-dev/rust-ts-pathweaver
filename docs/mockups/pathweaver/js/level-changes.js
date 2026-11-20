@@ -118,7 +118,7 @@ document.addEventListener("keydown", event => {
   }
 });
 document.addEventListener("click", event => {
-  if (STATE.changesOpen === false || event.target.closest(".app-level, .app-changes-window")) return;
+  if (STATE.changesOpen === false || event.target.closest(".app-level, .app-changes-window, .app-new-more")) return;
   STATE.changesOpen = false;
   renderSheet();
 });

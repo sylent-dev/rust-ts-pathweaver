@@ -8,26 +8,37 @@
 
 const NEW_LINES = 6;
 
-// A line of the window (W1) without its category: its sign, its name, what it hangs on at the right,
-// a link to the tab that shows it.
-// A gem that comes carries its name and the skill it comes onto, so that its row lights it
-// (litFromNewAt, js/side-skills.js).
+// A line of the window (W1) without its category: its sign, its name, what it hangs on at the right.
+// Not a link (the owner, 2026-11-20): the Overview shows already what it says, the gem in its row,
+// the slot, the passives ringed on the tree; leading to a tab would leave a view that holds it all.
+// The window of « N changes », shown on every tab, keeps its links. A gem that comes carries its name
+// and the skill it comes onto, so that its row lights it on hover (litFromNewAt, js/side-skills.js).
 const newLineGem = change => change.sign === "+" && (change.category === "skill" || change.category === "support")
   ? ` data-gem="${escapeHtml(change.name)}" data-on="${escapeHtml(change.skill ?? change.name)}"` : "";
-const newLine = change => `<li class="${CHANGE_KINDS[change.sign]}"${newLineGem(change)} data-action="changes-go" data-tab="${changeTab(change)}" title="Show it in ${CHANGE_TABS[changeTab(change)]}">
+const newLine = change => `<li class="${CHANGE_KINDS[change.sign]}"${newLineGem(change)}>
   <span class="app-changes-sign">${changeSign(change)}</span>
   <span class="app-changes-name">${changeName(change)}</span>
-  <span class="app-changes-right"><span class="app-changes-leads">${CHANGE_TABS[changeTab(change)]}</span><span class="app-changes-detail">${changeDetail(change)}</span></span></li>`;
+  <span class="app-changes-right"><span class="app-changes-detail">${changeDetail(change)}</span></span></li>`;
 
 function newAtBox(level) {
   const record = BUILDS.changes.shown.levels[level];
   const list = record ? changeList(record) : [];
   if (list.length === 0) return `<h2 class="app-side-title app-title app-new-title is-empty">Nothing new at ${level}</h2>`;
   const more = list.length > NEW_LINES
-    ? `<button type="button" class="app-new-more" title="Opens the window of « N changes »">and ${list.length - NEW_LINES} more</button>` : "";
+    ? `<button type="button" class="app-new-more" data-action="new-more" title="Opens the window of « N changes »">and ${list.length - NEW_LINES} more</button>` : "";
   return `<h2 class="app-side-title app-title app-new-title">New at ${level}</h2>
     <div class="app-new"><ul class="app-changes-lines app-new-lines">${list.slice(0, NEW_LINES).map(newLine).join("")}</ul>${more}</div>`;
 }
+
+// « and N more » opens the window of « N changes » of the band of its page.
+ACTIONS["new-more"] = element => {
+  const instance = element.closest(".app-window")?.querySelector(".app-level[data-instance]")?.dataset.instance;
+  if (instance === undefined) return false;
+  STATE.changesOpen = Number(instance);
+  STATE.changesOpening = true;
+  STATE.buildsMenu = false;
+  return true;
+};
 
 // Its motion when the level changes (M3 of three, the owner, 2026-11-20: a fade, and a rise of the
 // lines one after the other, set aside): the lines replaced at once, as in the window, and the title
