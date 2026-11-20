@@ -103,22 +103,55 @@ function reachedPart({ depth, upTo }, a, b) {
 const ZOOM_RANGE = [0.005, 0.5];
 const clampScale = scale => Math.min(ZOOM_RANGE[1], Math.max(ZOOM_RANGE[0], scale));
 
+// The time of each way to zoom, in milliseconds, by variant: Z1 jumps at each step; Z2 eases − + and the
+// frame, the wheel at once; Z3 eases the wheel too, a turn after another starting from where the last
+// one is.
+const ZOOM_TIMES = { z1: {}, z2: { button: 200, fit: 350 }, z3: { button: 200, fit: 350, wheel: 120 } };
+const zoomTime = way => (lessMotion() ? 0 : ZOOM_TIMES[chosen.zoomMotion][way] ?? 0);
+
+// The zooms under way, by data-view: from and to a view, and the point of the game that stays under the
+// pointer (a zoom), or none (the frame, which moves too).
+const ZOOMS = {};
 function zoomTree(canvas, factor, way, atX = canvas.clientWidth / 2, atY = canvas.clientHeight / 2) {
   const view = viewOf(canvas);
   const [dx, dy] = [atX - canvas.clientWidth / 2, atY - canvas.clientHeight / 2];
-  const [x, y] = [view.x + dx / view.scale, view.y + dy / view.scale];
-  const scale = clampScale(view.scale * factor);
-  moveView(canvas, { x: x - dx / scale, y: y - dy / scale, scale });
+  const anchor = [view.x + dx / view.scale, view.y + dy / view.scale, dx, dy];
+  // A step during a zoom goes on from where that zoom was heading.
+  const scale = clampScale((ZOOMS[canvas.dataset.view]?.to.scale ?? view.scale) * factor);
+  moveView(canvas, { x: anchor[0] - dx / scale, y: anchor[1] - dy / scale, scale }, zoomTime(way), anchor);
 }
 function fitTree(canvas) {
-  moveView(canvas, fittedView(canvas));
+  moveView(canvas, fittedView(canvas), zoomTime("fit"), null);
 }
-function moveView(canvas, to) {
-  Object.assign(viewOf(canvas), to);
+function moveView(canvas, to, duration, anchor) {
+  const key = canvas.dataset.view;
+  if (duration === 0) {
+    delete ZOOMS[key];
+    Object.assign(viewOf(canvas), to);
+  } else {
+    ZOOMS[key] = { start: performance.now(), duration, from: { ...viewOf(canvas) }, to, anchor };
+  }
   askDrawing(canvas);
 }
-function moveZoom() {}
-function stopZoom() {}
+// Sets the view of a tree where its zoom is at a moment: the scale eased on a log scale, so that each
+// step looks the same, around its point, or the centre moving with it.
+function moveZoom(canvas, now) {
+  const key = canvas.dataset.view, motion = ZOOMS[key];
+  if (!motion) return;
+  const t = progressOf(motion.start, motion.duration, now), k = easeOut(t);
+  const view = viewOf(canvas), { from, to, anchor } = motion;
+  view.scale = from.scale * (to.scale / from.scale) ** k;
+  if (anchor) {
+    view.x = anchor[0] - anchor[2] / view.scale;
+    view.y = anchor[1] - anchor[3] / view.scale;
+  } else {
+    view.x = from.x + (to.x - from.x) * k;
+    view.y = from.y + (to.y - from.y) * k;
+  }
+  if (t >= 1) delete ZOOMS[key];
+}
+// A drag stops the zoom where it is.
+const stopZoom = canvas => delete ZOOMS[canvas.dataset.view];
 
 // Whether a tree is still moving at a moment, to draw it again at the next frame.
-const moving = (canvas, now) => setMoving(now);
+const moving = (canvas, now) => canvas.dataset.view in ZOOMS || setMoving(now);

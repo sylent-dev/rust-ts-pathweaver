@@ -26,6 +26,8 @@ const VARIANTS = {
   homeWidth: { label: "Home width", options: { 900: "900 px", 960: "960 px", 1600: "1,600 px" }, fallback: "960" },
   // The motion of the switch of the weapon set over the tree (2i4, js/tree-motion.js).
   setMotion: { label: "Set switch", options: { s1: "S1 · Fade", s2: "S2 · Wave", s3: "S3 · Flash" }, fallback: "s1" },
+  // The motion of the zoom of the tree (2i4, js/tree-motion.js).
+  zoomMotion: { label: "Zoom", options: { z1: "Z1 · Jump", z2: "Z2 · Eased buttons", z3: "Z3 · Eased wheel too" }, fallback: "z1" },
 };
 
 // The styles a section shows side by side: the style of the page alone, Frost Night by default, the
