@@ -24,6 +24,8 @@ const VARIANTS = {
   // The width of the windows of the home page (2l): the minimum of specs.md, half a 1920-pixel screen, and a wide
   // window of the owner's screen.
   homeWidth: { label: "Home width", options: { 900: "900 px", 960: "960 px", 1600: "1,600 px" }, fallback: "960" },
+  // The size of the icon of a gem card (2k): the name and its tags are 35 px high, the icon gives them room.
+  cardIconSize: { label: "Icon size", range: { min: 35, max: 52, step: 1 }, variable: "--sc-icon-size", unit: "px", fallback: "42" },
   // The card of a support (2k): the card of a skill, with its icon, a disc, cut to a square, or without
   // (css/skill-card.css).
   supportIcon: { label: "Support icon", options: { with: "Disc", square: "Square", without: "Without" }, fallback: "square" },
