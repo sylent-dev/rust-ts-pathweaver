@@ -20,10 +20,15 @@ const isMarker = record => record.count > PASSIVES_TAKEN.filter(group => record.
 const markers = key => Object.entries(BUILDS.changes[key].levels)
   .filter(([, record]) => isMarker(record)).map(([level]) => Number(level)).sort((a, b) => a - b);
 
-// The skills at the level, each with the supports that apply with it.
-const skillsAt = level => SHOWN.skills
+// The skills of a build at the level, each with the supports that apply with it. A support applies only
+// with its skill: its levels are those where both apply (2k: the card of a support said « From the
+// start » under a skill that only comes at 59).
+const within = ([low, high], [skillLow, skillHigh]) => [Math.max(low, skillLow), Math.min(high, skillHigh)];
+const skillsOf = (skills, level) => skills
   .filter(skill => appliesAt(skill.levels, level))
-  .map(skill => ({ ...skill, supports: skill.supports.filter(support => appliesAt(support.levels, level)) }));
+  .map(skill => ({ ...skill, supports: skill.supports.filter(support => appliesAt(support.levels, level))
+    .map(support => ({ ...support, levels: within(support.levels, skill.levels) })) }));
+const skillsAt = level => skillsOf(SHOWN.skills, level);
 
 // The hints of the inventory at the level: of both weapon sets, or of one (1 or 2).
 const slotsAt = (level, set) => SHOWN.slots.filter(slot => appliesAt(slot.levels, level) && (set === undefined || slotSet(slot.id) !== otherSet(set)));

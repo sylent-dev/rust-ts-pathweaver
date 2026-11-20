@@ -5,12 +5,8 @@
 // at 70 (Herald of Ice, Freezing Mark and Ghost Dance, dexterity and intelligence), a Mercenary at 31
 // (four grenades, strength and dexterity; Pounce, strength and intelligence).
 
-// The skills of a case of BUILDS.attributes at a level, as the build shown (js/levels.js, skillsAt).
-for (const key of Object.keys(BUILDS.attributes)) {
-  SKILL_SOURCES[key] = level => BUILDS.attributes[key]
-    .filter(skill => appliesAt(skill.levels, level))
-    .map(skill => ({ ...skill, supports: skill.supports.filter(support => appliesAt(support.levels, level)) }));
-}
+// The skills of a case of BUILDS.attributes at a level, as the build shown (js/levels.js, skillsOf).
+for (const [key, skills] of Object.entries(BUILDS.attributes)) SKILL_SOURCES[key] = level => skillsOf(skills, level);
 
 const skillsTabWindow = (band, level, source) =>
   `<div class="app-window" style="width:960px">${band ? levelBand() : ""}${buildTabs("skills")}${skillsTab(level, source)}</div>`;

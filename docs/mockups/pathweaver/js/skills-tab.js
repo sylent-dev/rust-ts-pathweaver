@@ -52,8 +52,8 @@ function stSentence(skill) {
 }
 
 // The bar of a gem on the levels 1 to 100 (H3): where it starts and where it ends, the level a line.
-const stBar = (gem, skill = gem) => {
-  const low = Math.max(gem.levels[0], skill.levels[0]), high = Math.min(gem.levels[1], skill.levels[1]);
+const stBar = gem => {
+  const [low, high] = gem.levels;
   return `<span class="st-bar-track"><span class="st-bar" style="left:${low - 1}%;width:${high - low + 1}%;background:${gemColourOf(gem)}"></span></span>`;
 };
 
@@ -105,7 +105,7 @@ const SKILLS_TAB_VARIANTS = {
     draw: (rows, level, source) => stList(level, source, "st-h3", `<div class="st-h3-scale app-number app-weak"><span></span><span class="st-bar-track">${[1, 25, 50, 75, 100].map(mark => `<span style="left:${mark - 1}%">${mark}</span>`).join("")}<span class="st-h3-now" style="left:${level - 0.5}%">${level}</span></span></div>
       ${rows.map(skill => `<div class="st-h3-skill">
         <div class="st-h3-line st-head" ${stSkillAttributes(skill)}><span>${stGem(skill, "st-gem st-skill")}${stNote(skill)}</span>${stBar(skill)}</div>
-        ${[...skill.supports, ...skill.triggered].map(gem => `<div class="st-h3-line st-support" ${stSkillAttributes(skill, gem.kind !== "support")}><span>${stGem(gem)}${stNote(gem, skill)}</span>${stBar(gem, skill)}</div>`).join("")}
+        ${[...skill.supports, ...skill.triggered].map(gem => `<div class="st-h3-line st-support" ${stSkillAttributes(skill, gem.kind !== "support")}><span>${stGem(gem)}${stNote(gem, skill)}</span>${stBar(gem)}</div>`).join("")}
       </div>`).join("")}<span class="st-h3-rule" style="--at:${level - 0.5}"></span>`),
   },
   e1: {
