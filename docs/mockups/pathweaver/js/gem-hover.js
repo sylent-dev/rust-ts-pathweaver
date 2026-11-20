@@ -48,19 +48,33 @@ function unknownGemHtml(gem, level) {
 
 function gemHoverHtml(gem, level) {
   if (gem.known === false) return unknownGemHtml(gem, level);
-  const comes = levelsWords(gem, level);
+  if (gem.icon) return skillCardHtml(gem, level);
   const tags = gem.tags.filter(tag => tag !== "Support" && tag !== "Lineage");
-  const icon = gem.icon ? `<img class="gi-inline" src="pathweaver/img/skills/${gem.icon}" alt="">` : "";
-  const body = `<div class="app-hover-head"><strong>${icon}${escapeHtml(gem.name)}</strong><span class="app-weak">${gemKindName(gem)}</span></div>
+  return `<div class="app-hover-head"><strong>${escapeHtml(gem.name)}</strong><span class="app-weak">${gemKindName(gem)}</span></div>
     ${tags.length ? `<div class="app-gem-tags">${tags.map(escapeHtml).join(" · ")}</div>` : ""}
     ${gem.text ? `<p class="app-gem-text">${escapeHtml(gem.text)}</p>` : ""}
-    <div class="app-hover-state">${comes}</div>
+    <div class="app-hover-state">${levelsWords(gem, level)}</div>
     ${gem.note ? `<div class="app-hover-hint">${markupHtml(gem.note)}</div>` : ""}`;
-  // The icon of a skill (2k, the owner, 2026-11-20), fourteen ways to place it (VARIANTS.gemIcon,
-  // css/gem-icon.css): the same HTML for all, the art apart from the body; a support has none.
-  return gem.icon
-    ? `<div class="gi-art"><img src="pathweaver/img/skills/${gem.icon}" alt=""></div><div class="gi-body">${body}</div>`
-    : body;
+}
+
+// The card of a skill, a gem with an icon (2k, the owner, 2026-11-20, on the wireframe
+// docs/wireframes/gem-card.excalidraw; css/skill-card.css): three parts, each told by its shade on the
+// graph paper of the blocks. Its head, light, as the header of a build: the icon of the skill square in
+// its corner, the full height of the head, its name and its tags beside it, the light of the page from
+// the top left; its body, darker: its description and its levels; the note of its author, light again,
+// the light from the bottom right. No kind (« Skill gem ») for now (the owner, 2026-11-20). The card of
+// a support stays as it was, until this one is done.
+function skillCardHtml(gem, level) {
+  const tags = gem.tags.filter(tag => tag !== "Support" && tag !== "Lineage");
+  return `<div class="sc-head">
+      <span class="sc-icon"><img src="pathweaver/img/skills/${gem.icon}" alt="">${gemMark(gem)}</span>
+      <div class="sc-title"><strong>${escapeHtml(gem.name)}</strong>${tags.length ? `<div class="app-gem-tags">${tags.map(escapeHtml).join(" · ")}</div>` : ""}</div>
+    </div>
+    <div class="sc-body">
+      ${gem.text ? `<p class="app-gem-text">${escapeHtml(gem.text)}</p>` : ""}
+      <div class="app-hover-state">${levelsWords(gem, level)}</div>
+    </div>
+    ${gem.note ? `<div class="sc-note">${markupHtml(gem.note)}</div>` : ""}`;
 }
 
 // One card for the page, fixed, so that the narrow column doesn't cut it, never following the pointer
@@ -77,8 +91,8 @@ function showGemHover(element) {
   const gem = gemOfRow(element);
   if (!gem) return;
   gemCard.innerHTML = gemHoverHtml(gem, Number(element.closest("[data-level]").dataset.level));
-  // The way the icon shows (2k, while compared), and the colours of the gem, which frame it in some.
-  gemCard.dataset.icon = gem.icon ? chosen.gemIcon : "";
+  // The card of a skill (css/skill-card.css), and the colours of the gem, which its icon shows in some variants.
+  gemCard.classList.toggle("is-skill-card", Boolean(gem.icon));
   const [first, second = first] = gemColoursOf(gem);
   gemCard.style.setProperty("--gem", first);
   gemCard.style.setProperty("--gem-2", second);
@@ -107,9 +121,7 @@ function showGemBeside(element) {
   gemCard.classList.remove("is-support");
   const box = element.getBoundingClientRect();
   const [w, h] = [gemCard.offsetWidth, gemCard.offsetHeight];
-  // An icon on the left edge stands out of the card (--gi-out): the card leaves it room on the right of the gem.
-  const out = parseFloat(getComputedStyle(gemCard).getPropertyValue("--gi-out")) || 0;
-  gemCard.style.left = `${box.right + 12 + out + w <= innerWidth - 8 ? box.right + 12 + out : Math.max(8, box.left - w - 12)}px`;
+  gemCard.style.left = `${box.right + 12 + w <= innerWidth - 8 ? box.right + 12 : Math.max(8, box.left - w - 12)}px`;
   gemCard.style.top = `${Math.max(8, Math.min(innerHeight - h - 8, box.top + box.height / 2 - h / 2))}px`;
 }
 document.addEventListener("mouseover", event => {
