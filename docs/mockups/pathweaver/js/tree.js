@@ -131,7 +131,7 @@ function drawPortrait(context, screen, scale, portrait) {
 }
 
 // Options: the smallest radius of a shape, the frame from which the icons show, the weapon sets of the
-// passives (setMasks) and the look of the links of each set (js/tree-motion.js); `clear` false draws
+// passives (setMasks) and the strength of the links of each set (js/tree-motion.js); `clear` false draws
 // over what the canvas holds (the ascendancy over the tree), `under` draws before the links (the
 // portrait).
 function drawTree(canvas, graph, states, view, { minRadius = 1.5, iconsFromPx = ICONS_FROM, sets = null, look = restingLook(1), clear = true, under = null } = {}) {
@@ -163,29 +163,24 @@ function drawTree(canvas, graph, states, view, { minRadius = 1.5, iconsFromPx = 
 
   // The links: dimmed, then faded between passives taken later (solid, the owner, 2026-11-19), then lit
   // between passives taken, those of one weapon set alone in its colour, the set away from the switch
-  // faint; while a wave runs (js/tree-motion.js), the part it has reached drawn strong over its set.
+  // faint, or both moving while the set switches (js/tree-motion.js).
   const takenWidth = number("--tree-edge-width", 2);
-  const setLayer = set => [2, set, colour(`--tree-set-${set}`), takenWidth * look[set].width, look[set].alpha, null];
   const linkLayers = [
-    [0, 3, colour("--tree-edge"), 1, 1, null],
-    [1, 3, colour("--tree-later"), 1, 1, null],
-    [2, 3, colour("--tree-edge-taken"), takenWidth, 1, null],
-    setLayer(1),
-    setLayer(2),
-    ...(look.wave ? [[2, look.wave.set, colour(`--tree-set-${look.wave.set}`), takenWidth, 1, look.wave]] : []),
+    [0, 3, colour("--tree-edge"), 1, 1],
+    [1, 3, colour("--tree-later"), 1, 1],
+    [2, 3, colour("--tree-edge-taken"), takenWidth, 1],
+    [2, 1, colour("--tree-set-1"), takenWidth, look[1]],
+    [2, 2, colour("--tree-set-2"), takenWidth, look[2]],
   ];
   const setOf = (a, b) => (sets ? sets[a] & sets[b] || 3 : 3);
-  for (const [layer, set, stroke, lineWidth, alpha, wave] of linkLayers) {
+  for (const [layer, set, stroke, lineWidth, alpha] of linkLayers) {
     context.beginPath();
     for (const [a, b] of graph.edges) {
       const both = Math.min(states[a] === 3 ? 2 : states[a], states[b] === 3 ? 2 : states[b]);
       if (both !== layer || (layer === 2 && setOf(a, b) !== set)) continue;
-      const part = wave ? reachedPart(wave, a, b) : [a, b, 1];
-      if (!part) continue;
-      const [from, to, fraction] = part;
-      const [ax, ay] = screen(graph.nodes[from]), [bx, by] = screen(graph.nodes[to]);
+      const [ax, ay] = screen(graph.nodes[a]), [bx, by] = screen(graph.nodes[b]);
       context.moveTo(ax, ay);
-      context.lineTo(ax + (bx - ax) * fraction, ay + (by - ay) * fraction);
+      context.lineTo(bx, by);
     }
     context.strokeStyle = stroke;
     context.lineWidth = lineWidth;
@@ -249,13 +244,12 @@ function drawTree(canvas, graph, states, view, { minRadius = 1.5, iconsFromPx = 
 }
 
 // Draws the tree of the build at a level: the portrait, the tree, then the ascendancy over them; `look`
-// is the look of the links of each set (js/tree-motion.js).
+// is the strength of the links of each set (js/tree-motion.js).
 function drawBuildTree(canvas, view, level, look) {
   const states = treeStates(TREE.taken, TREE.nodes.length, level);
-  const sets = setMasks(TREE.taken, TREE.nodes.length);
   const portrait = portraitOf(BUILDS.shown.portrait);
   const under = (context, screen, scale) => drawPortrait(context, screen, scale, portrait);
-  drawTree(canvas, TREE, states, view, { sets, look: look.wave ? withDepths(look, states, sets) : look, under });
+  drawTree(canvas, TREE, states, view, { sets: setMasks(TREE.taken, TREE.nodes.length), look, under });
   const ascendancy = TREE.ascendancy;
   drawTree(canvas, ascendancy, treeStates(TREE.ascendancyTaken, ascendancy.nodes.length, level), view, { clear: false });
 }
