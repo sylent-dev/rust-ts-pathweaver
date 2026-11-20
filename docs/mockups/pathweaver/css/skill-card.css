@@ -11,7 +11,8 @@
    than the icon) and in the body, the graph paper of the blocks (on the whole card, then on the body and
    the note).
 
-   Open: the side of the icon (« Icon side », left or right); its size (« Icon size »); the icon, five
+   Open: what tells the head from the body (« Head edge », D0–D9); the side of the icon (« Icon side »,
+   left or right); its size (« Icon size »); the icon, five
    ways (« Card icon », I17–I21, the sixteen of before are in the history of Git); the shade of the note,
    four (« Note shade », S1–S4: the light shade of the bands, a step lighter, between the two shades, the
    deep shade of the rest of the card). */
@@ -37,6 +38,32 @@
 .sc-title strong { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 14px; font-weight: 600; }
 .sc-tags { margin: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .app-gem-hover.is-static .sc-tags[title] { pointer-events: auto; cursor: default; }
+
+/* What tells the head from the body (« Head edge », the owner, 2026-11-20: without the graph paper, the
+   two read as one block). D0 · Nothing, as before. */
+.sc-head { position: relative; z-index: 1; }
+/* The lines lie just under the head, over the top of the body, never on the tags. */
+.sc-head::after { content: ""; position: absolute; left: 0; right: 0; bottom: -1px; height: 1px; }
+/* D1 · A thin line under the head, the full width of the card, under the icon too. */
+:root[data-head-edge="d1"] .sc-head::after, :root[data-head-edge="d9"] .sc-head::after { background: var(--divider); }
+/* D2 · A thin line under the text only, from the edge of the card's text to the icon. */
+:root[data-head-edge="d2"] .sc-head::after { left: calc(var(--sc-icon) + 11px); right: 12px; background: var(--divider); }
+:root[data-head-edge="d2"][data-card-icon-side="right"] .sc-head::after { left: 12px; right: calc(var(--sc-icon) + 11px); }
+/* D3 · The head a step lighter than the body. */
+:root[data-head-edge="d3"] .is-skill-card { --sc-head: color-mix(in srgb, var(--band-deep), var(--band) 70%); }
+/* D4 · The body a step darker than the head. */
+:root[data-head-edge="d4"] .is-skill-card { --sc-body: color-mix(in srgb, var(--band-deep), #000 60%); }
+/* D5 · A band of 3 px in the light shade of the bands between them. */
+:root[data-head-edge="d5"] .sc-head::after { bottom: -3px; height: 3px; background: var(--band); }
+:root[data-head-edge="d5"] .sc-body { margin-top: 3px; }
+/* D6 · A line of 2 px in the colours of the gem, its two halves for two attributes. */
+:root[data-head-edge="d6"] .sc-head::after { bottom: -2px; height: 2px; background: linear-gradient(90deg, var(--gem) 50%, var(--gem-2) 50%); }
+/* D7 · A line of light fading at both ends (a shadow, tried first, didn't show on the deep shade). */
+:root[data-head-edge="d7"] .sc-head::after { background: linear-gradient(90deg, transparent, color-mix(in srgb, var(--on-band) 30%, transparent) 50%, transparent); }
+/* D8 · The head tinted by the colour of its gem. */
+:root[data-head-edge="d8"] .is-skill-card { --sc-head: color-mix(in srgb, var(--band-deep), var(--gem) 12%); }
+/* D9 · The head lighter and a thin line under it: D3 and D1 together. */
+:root[data-head-edge="d9"] .is-skill-card { --sc-head: color-mix(in srgb, var(--band-deep), var(--band) 70%); }
 
 /* On the right (« Icon side »): the name and the tags start where the body starts, 12 px from the edge. */
 :root[data-card-icon-side="right"] .sc-head { flex-direction: row-reverse; }
