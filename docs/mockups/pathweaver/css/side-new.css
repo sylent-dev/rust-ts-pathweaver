@@ -1,0 +1,9 @@
+/* « New at N », at the top of the right column (js/side-new.js): a title in the accent, grey when
+   nothing changes, the lines of the window under it. */
+.app-new-title { margin-top: 0; color: var(--accent); }
+.app-new-title.is-empty { color: var(--weak); }
+.app-side .app-new-lines { margin: 0 -10px 0 -6px; font-size: 12px; }
+.app-side .app-new-lines li { padding: 1px 10px; }
+.app-side .app-new-lines b { font-weight: 600; }
+.app-new-more { display: block; margin: 4px 0 0 14px; padding: 0; border: 0; background: none; color: var(--accent); font-size: 12px; font-weight: 600; cursor: pointer; }
+.app-new-more:hover { color: var(--text); }

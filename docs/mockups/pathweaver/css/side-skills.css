@@ -1,0 +1,13 @@
+/* The skills of the right column (js/side-skills.js). */
+.app-skills { margin: 0; padding: 0 0 0 4px; list-style: none; }
+.app-skill { display: flex; align-items: center; gap: 8px; height: 22px; font-size: 13px; }
+/* The mark of a gem: its colour says its attribute, a hollow mark a spirit gem. */
+.app-gem { flex: none; width: var(--gem-size); height: var(--gem-size); box-sizing: border-box; margin: 0 2px; border: var(--gem-line); border-radius: var(--gem-radius); clip-path: var(--gem-clip); transform: rotate(var(--gem-rotate)); background: var(--gem-none); box-shadow: var(--gem-glow); }
+.app-gem { color: var(--gem-none); }   /* the glow (--gem-glow) takes the colour of the gem */
+.app-gem.is-r { background: var(--gem-str); color: var(--gem-str); }
+.app-gem.is-g { background: var(--gem-dex); color: var(--gem-dex); }
+.app-gem.is-b { background: var(--gem-int); color: var(--gem-int); }
+.app-gem.is-spirit { background: none; border: 2px solid currentColor; clip-path: none; }
+.app-skill-name { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.app-skill-new { font-size: 12px; }
+.app-skill-supports { margin-left: auto; font-size: 12px; white-space: nowrap; }

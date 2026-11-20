@@ -1,0 +1,6 @@
+/* The inventory of the right column (js/side-inventory.js). */
+.app-side .app-switch { margin-left: 4px; }
+.app-inventory { position: relative; width: 216px; height: 216px; margin: 10px 0 0 4px; }
+.app-slot { position: absolute; display: grid; place-items: center; box-sizing: border-box; border-radius: var(--slot-radius); background: var(--slot-empty); color: var(--weak); font-size: 10px; }
+.app-slot.is-hinted { background: var(--slot-fill); color: var(--text); }
+.app-slot.is-hinted::after { content: ""; position: absolute; top: 4px; right: 4px; width: 5px; height: 5px; border-radius: 50%; background: var(--accent-soft); }

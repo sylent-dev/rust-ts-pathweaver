@@ -8,8 +8,6 @@ const ASCENDANCY_POINTS = 8;
 
 const appliesAt = ([low, high], level) => low <= level && level <= high;
 const startsAt = ([low], level) => low === level;
-// Stopped just before the level: listed as removed at it.
-const stoppedAt = ([, high], level) => high === level - 1;
 
 // The passives of the tree that apply at the level, for a weapon set (0: the shared ones only).
 const passivesAt = (level, set) => TREE.taken.filter(([, low, high, s]) => s === set && appliesAt([low, high], level));
@@ -32,21 +30,6 @@ const slotsAt = (level, set) => SHOWN.slots.filter(slot => appliesAt(slot.levels
 // The slots of the weapons belong to a weapon set: Weapon1 and Offhand1 to set I, Weapon2 and Offhand2 to set II.
 const slotSet = id => /^(Weapon|Offhand)([12])$/.exec(id)?.[2] ?? "0";
 const otherSet = set => (set === 1 ? "2" : "1");
-
-// What changes at a level: what starts, as new; what stopped just before it, as removed.
-function changesAt(level) {
-  const skills = SHOWN.skills.filter(skill => startsAt(skill.levels, level));
-  const supports = SHOWN.skills.filter(skill => appliesAt(skill.levels, level) && !startsAt(skill.levels, level))
-    .flatMap(skill => skill.supports.filter(support => startsAt(support.levels, level)).map(support => ({ ...support, skill: skill.name })));
-  const slots = SHOWN.slots.filter(slot => startsAt(slot.levels, level));
-  const passives = TREE.taken.filter(([, low, high]) => startsAt([low, high], level)).length
-    + TREE.ascendancyTaken.filter(([, low, high]) => startsAt([low, high], level)).length;
-  const removed = SHOWN.skills.filter(skill => stoppedAt(skill.levels, level)).length
-    + SHOWN.skills.flatMap(skill => skill.supports).filter(support => stoppedAt(support.levels, level)).length
-    + SHOWN.slots.filter(slot => stoppedAt(slot.levels, level)).length;
-  const removedPassives = TREE.taken.filter(([, low, high]) => stoppedAt([low, high], level)).length;
-  return { skills, supports, slots, passives, removed, removedPassives };
-}
 
 // The name of an item without the base its author wrote after it, « (Dex Base) » (2g3, the owner,
 // 2026-11-19): the window of what changes says what changes, not what the item is; the gear tab
