@@ -6,7 +6,8 @@
 // the icons and frames of the game (2i, docs/game-data.md), greyed when not taken; further out, as
 // the shapes of the style. The two weapon sets are drawn together, the links of the passives of one
 // set alone in its colour, the set of the switch strong and the other faint (2i, the owner,
-// 2026-11-19).
+// 2026-11-19). The ascendancy is drawn at the centre, in the empty disc inside the ring of the class
+// starts, over its portrait large and faded (2i2, the owner, 2026-11-19).
 
 STATE.set = 1;
 // The view of the tree: its centre in the coordinates of the game, and the pixels per unit.
@@ -34,9 +35,9 @@ function setMasks(taken, count) {
   return sets;
 }
 
-// Fits the passives of the build (every set, every level) in the canvas.
-function fitView(nodes, indices, width, height, margin) {
-  const xs = indices.map(i => nodes[i][0]), ys = indices.map(i => nodes[i][1]);
+// Fits the passives of the build (every set, every level, the ascendancy too) in the canvas.
+function fitView(points, width, height, margin) {
+  const xs = points.map(([x]) => x), ys = points.map(([, y]) => y);
   const [x0, x1, y0, y1] = [Math.min(...xs), Math.max(...xs), Math.min(...ys), Math.max(...ys)];
   return { x: (x0 + x1) / 2, y: (y0 + y1) / 2, scale: Math.min((width - margin) / (x1 - x0 || 1), (height - margin) / (y1 - y0 || 1)) };
 }
@@ -105,26 +106,49 @@ function drawArt(context, frames, iconIndex, taken, x, y, size) {
   put(TREE_ART.frame, frames[taken ? 1 : 0]);
 }
 
-// Options: the smallest radius of a shape, the frame from which
-// the icons show, the weapon sets of the passives (setMasks) and the set shown strong.
-function drawTree(canvas, graph, states, view, { minRadius = 1.5, iconsFromPx = ICONS_FROM, sets = null, shownSet = 1 } = {}) {
-  const ratio = window.devicePixelRatio || 1;
+// The portrait under the ascendancy (tools/make-data.py), the build shown only: the tree is drawn
+// again once it has loaded. Its radius, in units of the game, keeps it inside the frames of the class
+// starts (1,443 units from the centre, their frames about 50 units wide).
+const PORTRAIT = new Image();
+PORTRAIT.onload = () => mountTrees();
+PORTRAIT.src = `pathweaver/img/portraits-large/${BUILDS.shown.portrait}.webp`;
+const PORTRAIT_RADIUS = 1380;
+
+// Draws the portrait at the centre of the tree, faded (--tree-portrait-opacity), in colour or in grey.
+function drawPortrait(canvas, context, screen, scale) {
+  if (!PORTRAIT.complete || PORTRAIT.naturalWidth === 0) return;
+  const [x, y] = screen([0, 0]), radius = PORTRAIT_RADIUS * scale;
+  context.save();
+  context.globalAlpha = (Number.parseFloat(token(canvas, "--tree-portrait-opacity")) || 0) / 100;
+  if (chosen.portraitInk === "grey") context.filter = "grayscale(1)";
+  context.drawImage(PORTRAIT, x - radius, y - radius, radius * 2, radius * 2);
+  context.restore();
+}
+
+// Options: the smallest radius of a shape, the frame from which the icons show, the weapon sets of the
+// passives (setMasks) and the set shown strong; `clear` false draws over what the canvas holds (the
+// ascendancy over the tree), `under` draws before the links (the portrait).
+function drawTree(canvas, graph, states, view, { minRadius = 1.5, iconsFromPx = ICONS_FROM, sets = null, shownSet = 1, clear = true, under = null } = {}) {
   const width = canvas.clientWidth, height = canvas.clientHeight;
-  canvas.width = Math.round(width * ratio);
-  canvas.height = Math.round(height * ratio);
   const context = canvas.getContext("2d");
-  context.setTransform(ratio, 0, 0, ratio, 0, 0);
   const colour = name => token(canvas, name);
   const number = (name, fallback) => Number.parseFloat(colour(name)) || fallback;
   const shapes = shapeOf(canvas);
   const glow = number("--tree-glow", 0), glowColour = colour("--tree-glow-colour");
   const screen = ([x, y]) => [(x - view.x) * view.scale + width / 2, (y - view.y) * view.scale + height / 2];
-  // A style with a pattern behind the window leaves the canvas transparent, so that it shows.
-  context.clearRect(0, 0, width, height);
-  const background = colour("--tree-background");
-  if (background !== "transparent") {
-    context.fillStyle = background;
-    context.fillRect(0, 0, width, height);
+  if (clear) {
+    const ratio = window.devicePixelRatio || 1;
+    canvas.width = Math.round(width * ratio);
+    canvas.height = Math.round(height * ratio);
+    context.setTransform(ratio, 0, 0, ratio, 0, 0);
+    // A style with a pattern behind the window leaves the canvas transparent, so that it shows.
+    context.clearRect(0, 0, width, height);
+    const background = colour("--tree-background");
+    if (background !== "transparent") {
+      context.fillStyle = background;
+      context.fillRect(0, 0, width, height);
+    }
+    under?.(canvas, context, screen, view.scale);
   }
   const lit = on => {
     context.shadowBlur = on ? glow : 0;
@@ -213,14 +237,25 @@ function drawTree(canvas, graph, states, view, { minRadius = 1.5, iconsFromPx = 
   lit(false);
 }
 
-// Draws every canvas of the tree on the page, and lets the main one move and zoom.
+// Draws the tree of the build at a level: the portrait, the tree, then the ascendancy over them.
+function drawBuildTree(canvas, view, level, shownSet) {
+  const states = treeStates(TREE.taken, TREE.nodes.length, level);
+  drawTree(canvas, TREE, states, view, { sets: setMasks(TREE.taken, TREE.nodes.length), shownSet, under: drawPortrait });
+  const ascendancy = TREE.ascendancy;
+  drawTree(canvas, ascendancy, treeStates(TREE.ascendancyTaken, ascendancy.nodes.length, level), view, { clear: false });
+}
+
+// Draws every canvas of the tree on the page, and lets the main one move and zoom; a canvas with a
+// data-scale is a fixed view of the centre of the tree, at its data-level.
 function mountTrees() {
+  for (const canvas of document.querySelectorAll('canvas[data-tree="centre"]')) {
+    drawBuildTree(canvas, { x: 0, y: 0, scale: Number(canvas.dataset.scale) }, Number(canvas.dataset.level), STATE.set);
+  }
   const level = STATE.level;
   for (const canvas of document.querySelectorAll('canvas[data-tree="main"]')) {
-    const states = treeStates(TREE.taken, TREE.nodes.length, level);
-    const sets = setMasks(TREE.taken, TREE.nodes.length);
-    STATE.treeView ??= fitView(TREE.nodes, TREE.taken.map(([i]) => i), canvas.clientWidth, canvas.clientHeight, 80);
-    const draw = () => drawTree(canvas, TREE, states, STATE.treeView, { sets, shownSet: STATE.set });
+    const points = [...TREE.taken.map(([i]) => TREE.nodes[i]), ...TREE.ascendancyTaken.map(([i]) => TREE.ascendancy.nodes[i])];
+    STATE.treeView ??= fitView(points, canvas.clientWidth, canvas.clientHeight, 80);
+    const draw = () => drawBuildTree(canvas, STATE.treeView, level, STATE.set);
     draw();
     canvas.onwheel = event => {
       event.preventDefault();
@@ -254,6 +289,10 @@ function zoomTree(canvas, factor, atX = canvas.clientWidth / 2, atY = canvas.cli
 }
 
 AFTER_RENDER.push(mountTrees);
+// The opacity of the portrait is a slider: the canvases follow it as it moves.
+document.getElementById("tabs").addEventListener("input", event => {
+  if (event.target.dataset.variant === "portraitOpacity") mountTrees();
+});
 ACTIONS["tree-zoom"] = element => {
   zoomTree(document.querySelector('canvas[data-tree="main"]'), element.dataset.zoom === "in" ? 1.4 : 1 / 1.4);
   return true;

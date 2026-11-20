@@ -24,6 +24,10 @@ const VARIANTS = {
   // The width of the windows of the home page (2l): the minimum of specs.md, half a 1920-pixel screen, and a wide
   // window of the owner's screen.
   homeWidth: { label: "Home width", options: { 900: "900 px", 960: "960 px", 1600: "1,600 px" }, fallback: "960" },
+  // The portrait under the ascendancy, at the centre of the tree (2i2): in colour or in grey, and how
+  // faded.
+  portraitInk: { label: "Portrait", options: { colour: "Colour", grey: "Grey" }, fallback: "colour" },
+  portraitOpacity: { label: "Portrait opacity", range: { min: 0, max: 60, step: 1 }, variable: "--tree-portrait-opacity", unit: "%", fallback: "20" },
 };
 
 // The styles a section shows side by side: the style of the page alone, Frost Night by default, the
