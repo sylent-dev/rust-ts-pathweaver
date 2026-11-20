@@ -9,8 +9,8 @@
 .app-st ul { margin: 0; padding: 0; list-style: none; }
 
 /* A card: its head in the deep shade, its name, then its badge at the right, a square of 32 px; its body a
-   step darker. */
-.st-card { position: relative; break-inside: avoid; margin-bottom: 12px; background: color-mix(in srgb, var(--band-deep), #000 60%); }
+   step darker (--st-body). */
+.st-card { --st-body: color-mix(in srgb, var(--band-deep), #000 60%); position: relative; break-inside: avoid; margin-bottom: 12px; background: var(--st-body); }
 .st-head { display: flex; align-items: center; gap: 5px; min-height: 32px; padding-left: 10px; background: var(--band-deep); }
 .st-badge { flex: none; display: block; width: 32px; height: 32px; margin-left: auto; overflow: hidden; }
 .st-badge img { display: block; width: 100%; height: 100%; object-fit: cover; }
@@ -28,9 +28,10 @@
 .st-new { margin-left: auto; color: var(--accent); font-size: 10px; font-weight: 800; letter-spacing: .04em; text-transform: uppercase; }
 /* A skill new at the level (the owner, 2026-11-21): a tag on the top edge of its card, just before its
    badge (T3 of three: on the left edge at the height of the title, on the top edge above its start), in
-   place of « NEW » beside its name, its words in the accent on the deep shade; its supports keep theirs. */
+   place of « NEW » beside its name, its words in the accent on the darker shade of the body (the owner,
+   2026-11-21); its supports keep theirs. */
 .st-new-tag { position: absolute; z-index: 1; top: 0; right: 38px; transform: translateY(-50%); padding: 0 5px; border-radius: 2px;
-  background: var(--band-deep); color: var(--accent); font-size: 9.5px; font-weight: 800; letter-spacing: .05em; line-height: 15px;
+  background: var(--st-body); color: var(--accent); font-size: 9.5px; font-weight: 800; letter-spacing: .05em; line-height: 15px;
   text-transform: uppercase; pointer-events: none; }
 /* Its title swept by a light from left to right every 2.5 s, in 0.7 s (the owner, 2026-11-21; in the
    Skills tab only): a band of the accent crossing the words (lightened, it didn't show on words already
