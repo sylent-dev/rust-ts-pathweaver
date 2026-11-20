@@ -81,6 +81,10 @@ LARGE_PORTRAIT_SIZE = 300
 # of the class starts, every ascendancy shrunk alike so that the largest (Monk3, 1,490 units from the
 # centre of its box) fits with room for its passives.
 ASCENDANCY_SCALE = 0.85
+# The opacity of the portrait compared on three ascendancies (2i2, the owner, 2026-11-20): the build shown
+# (Sorceress1, the brightest portrait), then a bright and warm one and the darkest with passives in the
+# corpus, each with the ascendancy passives of a build of the corpus.
+COMPARED = {"Mercenary3": "mobalytics-fubgun-flameblast-endgame.build", "Warrior1": "ggg-titan-warrior-sample.build"}
 ASCENDANCY_MARGIN = 100
 # The kinds of passives, in the order the mock-up reads them.
 KINDS = ["small", "notable", "keystone", "jewel", "attribute", "start"]
@@ -187,40 +191,45 @@ def ascendancy_place(tree):
     return places
 
 
-def tree_data(tree, shown, sheet):
+def ascendancy_graph(tree, asc_id, build, icons):
+    """The passives of an ascendancy at the centre of the tree (2i2), its links, and those the build
+    takes, with their levels."""
+    place = ascendancy_place(tree)[asc_id]
+    members = [(key, n) for key, n in tree["nodes"].items() if n.get("ascendancyId") == asc_id and "x" in n]
+    index = {key: i for i, (key, _) in enumerate(members)}
+    nodes = [[round(x), round(y), KINDS.index("start") if n.get("isAscendancyStart") else kind_of(n), icon_of(n, icons)]
+             for (_, n), (x, y) in zip(members, (place(n) for _, n in members))]
+    edges = [[index[str(e["from"])], index[str(e["to"])]] for e in tree["edges"]
+             if str(e["from"]) in index and str(e["to"]) in index]
+    by_id = {node["id"]: key for key, node in tree["nodes"].items() if "id" in node}
+    # A passive may be written as its id alone (53 of the corpus): from level 1 to 100.
+    passives = [p if isinstance(p, dict) else {"id": p} for p in build.get("passives", [])]
+    taken = [[index[by_id[p["id"]]], *interval(p)] for p in passives if by_id.get(p["id"]) in index]
+    return {"nodes": nodes, "edges": edges, "taken": taken}
+
+
+def tree_data(tree, shown, sheet, compared):
     icons = {key: i for i, (key, _) in enumerate(sheet["icons"])}
-    nodes, index, ascendancy = [], {}, []
-    asc_id = shown.get("ascendancy")
+    nodes, index = [], {}
     for key, node in tree["nodes"].items():
         # The masteries are only the art at the centre of a group, never taken nor linked (Path of
         # Building reads them as « isOnlyImage »): their art waits in docs/backlog.md.
-        if "x" not in node or node.get("isMastery"):
-            continue
-        if node.get("ascendancyId"):
-            if node["ascendancyId"] == asc_id:
-                ascendancy.append((key, node))
+        if "x" not in node or node.get("isMastery") or node.get("ascendancyId"):
             continue
         index[key] = len(nodes)
         nodes.append([round(node["x"]), round(node["y"]), kind_of(node), icon_of(node, icons)])
     edges = [[index[str(e["from"])], index[str(e["to"])]] for e in tree["edges"]
              if str(e["from"]) in index and str(e["to"]) in index]
-    # The ascendancy, at the centre of the tree (2i2): the centre of its box on the centre of the tree.
-    place = ascendancy_place(tree)[asc_id]
-    asc_index = {key: i for i, (key, _) in enumerate(ascendancy)}
-    asc_nodes = [[round(x), round(y), KINDS.index("start") if n.get("isAscendancyStart") else kind_of(n),
-                  icon_of(n, icons)] for (_, n), (x, y) in zip(ascendancy, map(place, (n for _, n in ascendancy)))]
-    asc_edges = [[asc_index[str(e["from"])], asc_index[str(e["to"])]] for e in tree["edges"]
-                 if str(e["from"]) in asc_index and str(e["to"]) in asc_index]
+    ascendancy = ascendancy_graph(tree, shown.get("ascendancy"), shown, icons)
     by_id = {node["id"]: key for key, node in tree["nodes"].items() if "id" in node}
-    taken, asc_taken, unknown = [], [], []
+    asc_ids = {node["id"] for node in tree["nodes"].values() if node.get("ascendancyId") and "id" in node}
+    taken, unknown = [], []
     for passive in shown.get("passives", []):
         key = by_id.get(passive["id"])
         low, high = interval(passive)
         if key in index:
             taken.append([index[key], low, high, passive.get("weapon_set", 0)])
-        elif key in asc_index:
-            asc_taken.append([asc_index[key], low, high])
-        else:
+        elif passive["id"] not in asc_ids:
             unknown.append(passive["id"])
     return {
         "kinds": KINDS,
@@ -228,9 +237,11 @@ def tree_data(tree, shown, sheet):
                    "frames": sheet["frames"]},
         "nodes": nodes,
         "edges": edges,
-        "ascendancy": {"nodes": asc_nodes, "edges": asc_edges},
+        "ascendancy": {"nodes": ascendancy["nodes"], "edges": ascendancy["edges"]},
         "taken": taken,
-        "ascendancyTaken": asc_taken,
+        "ascendancyTaken": ascendancy["taken"],
+        # The ascendancies the opacity of the portrait is compared on (2i2).
+        "compared": {asc_id: ascendancy_graph(tree, asc_id, build, icons) for asc_id, build in compared.items()},
         "unknown": unknown,
     }
 
@@ -448,7 +459,8 @@ def main():
                     for c in tree["classes"] for a in c["ascendancies"]}
     read = lambda name: json.loads((CORPUS / name).read_text(encoding="utf-8-sig"))
     builds = [read(name) for name in [SHOWN, *OPEN]]
-    write_js("data-tree.js", "TREE", tree_data(tree, builds[0], sheets(cache)))
+    compared = {asc_id: read(name) for asc_id, name in COMPARED.items()}
+    write_js("data-tree.js", "TREE", tree_data(tree, builds[0], sheets(cache), compared))
     write_js("data-builds.js", "BUILDS", {
         "treeVersion": TREE_TAG,
         "shown": build_data(builds[0], names, gems, ascendancies),
@@ -465,7 +477,7 @@ def main():
         },
     })
     for ascendancy, sprite in PORTRAITS.items():
-        portrait(cache, ascendancy, sprite, large=ascendancy == builds[0].get("ascendancy"))
+        portrait(cache, ascendancy, sprite, large=ascendancy == builds[0].get("ascendancy") or ascendancy in COMPARED)
 
 
 main()

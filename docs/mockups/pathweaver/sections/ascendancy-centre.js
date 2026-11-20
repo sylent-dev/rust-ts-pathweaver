@@ -1,12 +1,21 @@
 // The ascendancy at the centre of the tree (2i2, the owner, 2026-11-19): its passives moved by
 // tools/make-data.py into the empty disc inside the ring of the class starts, every ascendancy shrunk
-// alike to 85 %, over the portrait of the ascendancy, large, in colour at 20 % (the owner, 2026-11-20),
-// not linked to the start of the class, since the export links them nowhere. At level 80, where the build
-// shown has taken seven of its nine passives of the ascendancy, the last at 80, ringed.
+// alike to 85 %, over the portrait of the ascendancy, large, in colour, faded by the slider « Portrait
+// opacity » (the owner, 2026-11-20), not linked to the start of the class, since the export links them
+// nowhere. At level 80, where the build shown has taken seven of its nine passives of the ascendancy, the
+// last at 80, ringed. Then the opacity compared on three portraits, close, at level 100: the build shown
+// (Sorceress1, the brightest portrait), a bright and warm one, the darkest, each with the ascendancy
+// passives of a build of the corpus (tools/make-data.py, COMPARED).
 
 const CENTRE_ZOOMS = [["Whole", 0.021], ["Middle", 0.07], ["Close", 0.17]];
 
 addSection(() => ["The ascendancy at the centre of the tree, over its portrait", CENTRE_ZOOMS.map(([label, scale]) => [
   `${label} · ${scale} px per unit · level 80`,
   `<div class="app-tree" style="width:960px;height:540px;flex:none"><canvas class="app-tree-canvas" data-tree="centre" data-scale="${scale}" data-level="80" aria-label="The centre of the tree, ${label.toLowerCase()}"></canvas></div>`,
+])]);
+
+const COMPARED_PORTRAITS = [[null, "Stormweaver (Sorceress1), bright and cool"], ["Mercenary3", "Gemling Legionnaire (Mercenary3), bright and warm"], ["Warrior1", "Titan (Warrior1), dark"]];
+addSection(() => ["The opacity of the portrait, on three ascendancies (the slider « Portrait opacity »)", COMPARED_PORTRAITS.map(([id, label]) => [
+  `${label} · close · level 100`,
+  `<div class="app-tree" style="width:620px;height:540px;flex:none"><canvas class="app-tree-canvas" data-tree="centre" data-scale="0.17" data-level="100" ${id ? `data-ascendancy="${id}"` : ""} aria-label="${label}"></canvas></div>`,
 ])]);
