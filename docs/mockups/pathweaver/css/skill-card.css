@@ -1,20 +1,21 @@
 /* The card of a skill (2k, js/gem-hover.js, skillCardHtml; the owner, 2026-11-20, on the wireframe
-   docs/wireframes/gem-card.excalidraw): three parts, without a light.
-   - The head as high as the icon, in the deep shade of the bands, without the graph paper: the icon of
-     the skill square in its corner, its name beside it, its tags under the name on one line, cut by an ellipsis
-     (the owner, 2026-11-20: not in the body).
-   - The body, in the same deep shade, on the graph paper of the blocks: the description and the levels.
-   - The note of the author, in a shade of its own, on the graph paper.
+   docs/wireframes/gem-card.excalidraw): three parts, without a light, without the graph paper.
+   - The head as high as the icon, in the deep shade of the bands: the icon of the skill square in its
+     corner, its name beside it, its tags under the name on one line, cut by an ellipsis.
+   - The body, in the same deep shade: the description and the levels.
+   - The note of the author, in a shade of its own.
+   Over the tree the parts are see-through at 10 %, as the card of a passive; opaque over rows. The card
+   of a support is untouched.
    Set aside by the owner (2026-11-20): the head light, the light of the page from its top left, the light
    from the bottom right on the note, the tags on two lines in the head (18 skills of 37: the head higher
-   than the icon) and in the body. Over the tree the parts are see-through at 10 %, as the
-   card of a passive; opaque over rows. The card of a support is untouched.
+   than the icon) and in the body, the graph paper of the blocks (on the whole card, then on the body and
+   the note).
 
    Open: the side of the icon (« Icon side », left or right); its size (« Icon size »); the icon, five
    ways (« Card icon », I17–I21, the sixteen of before are in the history of Git); the shade of the note,
    four (« Note shade », S1–S4: the light shade of the bands, a step lighter, between the two shades, the
    deep shade of the rest of the card). */
-.app-gem-hover.is-skill-card { --sc-alpha: 90%; --sc-icon: var(--sc-icon-size, 35px); width: 320px; max-width: none; padding: 0; overflow: hidden; isolation: isolate; background: none; }
+.app-gem-hover.is-skill-card { --sc-alpha: 90%; --sc-icon: var(--sc-icon-size, 35px); width: 320px; max-width: none; padding: 0; overflow: hidden; background: none; }
 .app-gem-hover.is-skill-card.is-over-rows, .app-gem-hover.is-skill-card.is-static { --sc-alpha: 100%; }
 
 /* The shades of the parts: the head and the body in the deep shade of the bands; the note, S1, in their
@@ -24,9 +25,7 @@
 :root[data-note-shade="s3"] .is-skill-card { --sc-note: color-mix(in srgb, var(--band), var(--band-deep)); }
 :root[data-note-shade="s4"] .is-skill-card { --sc-note: var(--band-deep); }
 
-/* The head over the graph paper (the owner, 2026-11-20: the texture on the body and the note only): its
-   shade covers the layer of the texture beneath it. */
-.sc-head { position: relative; z-index: 2; display: flex; min-height: var(--sc-icon); background: color-mix(in srgb, var(--sc-head) var(--sc-alpha), transparent); }
+.sc-head { display: flex; min-height: var(--sc-icon); background: color-mix(in srgb, var(--sc-head) var(--sc-alpha), transparent); }
 .sc-body { padding: 9px 12px 10px; background: color-mix(in srgb, var(--sc-body) var(--sc-alpha), transparent); }
 .sc-body .app-gem-text { margin: 0; }
 .sc-note { padding: 9px 12px 10px; background: color-mix(in srgb, var(--sc-note) var(--sc-alpha), transparent); }
@@ -38,13 +37,6 @@
 .sc-title strong { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 14px; font-weight: 600; }
 .sc-tags { margin: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .app-gem-hover.is-static .sc-tags[title] { pointer-events: auto; cursor: default; }
-
-/* The graph paper of the blocks over the body and the note (css/textures.css): over their shades,
-   which would hide it beneath them; at 3 %, it doesn't touch the reading of the words. */
-.is-skill-card::after { content: ""; position: absolute; inset: 0; z-index: 1; pointer-events: none;
-  background: var(--texture-colour); opacity: var(--texture-opacity);
-  mask-image: var(--texture); mask-size: var(--texture-size) var(--texture-size);
-  mask-position: calc(var(--texture-size) / 8) calc(var(--texture-size) / 8); }
 
 /* On the right (« Icon side »): the name and the tags start where the body starts, 12 px from the edge. */
 :root[data-card-icon-side="right"] .sc-head { flex-direction: row-reverse; }
