@@ -11,14 +11,16 @@ const gemKindName = gem => gem.lineage ? "Lineage support" : GEM_KIND_NAMES[gem.
 
 // The gem a mark or a name stands for: the skill of its row at the level of its list, or one of the
 // gems under it (a support, or the skill a spirit gem triggers). A list of a case of the mock-up names
-// its own skills (data-source, a key of SKILL_SOURCES); the others are the build shown.
+// its own skills (data-source, a key of SKILL_SOURCES); the others are the build shown. In the right
+// column a row is an .app-skill of an .app-skills; in the Skills tab (js/skills-tab.js), the nearest
+// element that names its skill (data-skill) and its level (data-level).
 const SKILL_SOURCES = { shown: skillsAt };
 function gemOfRow(element) {
-  const row = element.closest(".app-skill"), list = element.closest(".app-skills");
+  const row = element.closest("[data-skill]"), list = element.closest("[data-level]");
   const skills = SKILL_SOURCES[list.dataset.source ?? "shown"] ?? skillsAt;
   const skill = skills(Number(list.dataset.level)).find(entry => entry.name === row.dataset.skill);
   if (!skill) return undefined;
-  return skill.name === element.dataset.gem && !row.classList.contains("is-triggered")
+  return skill.name === element.dataset.gem && !row.classList.contains("is-triggered") && !row.hasAttribute("data-triggered")
     ? skill : skill.supports.find(gem => gem.name === element.dataset.gem);
 }
 
@@ -68,7 +70,8 @@ document.body.append(gemCard);
 function showGemHover(element) {
   const gem = gemOfRow(element);
   if (!gem) return;
-  gemCard.innerHTML = gemHoverHtml(gem, Number(element.closest(".app-skills").dataset.level));
+  gemCard.innerHTML = gemHoverHtml(gem, Number(element.closest("[data-level]").dataset.level));
+  if (element.closest(".app-st:not(.st-h1) , .st-h1-detail")) return showGemBeside(element);
   const support = Boolean(element.closest(".app-skill-supports"));
   gemCard.classList.toggle("is-over-rows", support);
   gemCard.classList.toggle("is-support", support);
@@ -85,8 +88,18 @@ function showGemHover(element) {
     gemCard.style.top = `${Math.max(8, Math.min(innerHeight - h - 8, row.top + row.height / 2 - h / 2))}px`;
   }
 }
+// In the Skills tab (2k, while its variants are compared): just right of the gem, over what is beside it,
+// opaque; left of it when there is no room on the right.
+function showGemBeside(element) {
+  gemCard.classList.add("is-over-rows", "is-shown");
+  gemCard.classList.remove("is-support");
+  const box = element.getBoundingClientRect();
+  const [w, h] = [gemCard.offsetWidth, gemCard.offsetHeight];
+  gemCard.style.left = `${box.right + 12 + w <= innerWidth - 8 ? box.right + 12 : Math.max(8, box.left - w - 12)}px`;
+  gemCard.style.top = `${Math.max(8, Math.min(innerHeight - h - 8, box.top + box.height / 2 - h / 2))}px`;
+}
 document.addEventListener("mouseover", event => {
-  const element = event.target.closest?.(".app-skills [data-gem]");
+  const element = event.target.closest?.(".app-skills [data-gem], .app-st [data-gem]");
   if (element) showGemHover(element);
   else gemCard.classList.remove("is-shown");
 });

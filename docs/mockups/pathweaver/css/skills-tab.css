@@ -1,0 +1,119 @@
+/* The Skills tab (js/skills-tab.js, 2k): twelve variants while they are compared. As high as the
+   Overview, scrolling inside when its skills don't fit. */
+.app-skills-tab { height: 668px; overflow-y: auto; box-sizing: border-box; padding: 18px 20px 24px; background: var(--side-column); scrollbar-width: thin; }
+.app-st { font-size: 13px; }
+.app-st ul { margin: 0; padding: 0; list-style: none; }
+
+/* A gem: its mark, its name, « new » in the accent. */
+.st-gem { display: inline-flex; align-items: center; gap: 7px; min-width: 0; }
+.st-gem .app-gem-mark { flex: none; }
+.st-name { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.st-skill { font-weight: 700; }
+.st-new { margin-left: 2px; color: var(--accent); font-size: 11px; font-weight: 700; }
+.st-head { display: flex; align-items: center; gap: 5px; min-height: 22px; }
+.st-support { display: flex; align-items: center; gap: 5px; min-height: 21px; font-size: 12.5px; }
+.st-triggered { display: flex; align-items: center; gap: 5px; min-height: 22px; margin-top: 2px; }
+.st-hook { font-size: 12px; }
+.st-note-text { margin: 2px 0 6px 17px; font-size: 12px; line-height: 1.4; }
+.st-levels { margin: 0 0 4px 17px; font-size: 11.5px; }
+
+/* The cards (N1, H2, E1, E2), packed in columns. */
+.st-card { break-inside: avoid; margin: 0 0 12px; padding: 10px 12px 9px; background: var(--panel); border-radius: var(--radius); }
+.st-card .st-supports { margin-top: 3px; padding-left: 17px; }
+.st-n1, .st-e1, .st-e2 { columns: 3; column-gap: 12px; }
+
+/* N2: a row per skill, one in two a shade lighter. */
+.st-row { display: grid; grid-template-columns: 230px 1fr; gap: 12px; align-items: start; padding: 8px 12px; }
+.st-row:nth-child(odd) { background: var(--panel); }
+.st-n2 .st-supports { display: flex; flex-wrap: wrap; gap: 0 16px; }
+
+/* N3: an outline in three columns, no box. */
+.st-n3 { columns: 3; column-gap: 28px; }
+.st-block { break-inside: avoid; margin-bottom: 12px; }
+.st-n3 .st-supports { padding-left: 17px; border-left: 1px solid var(--divider); margin-left: 4px; }
+
+/* H1: the rows of the Overview on the left, the skill chosen on the right. */
+.st-h1 { display: grid; grid-template-columns: 330px 1fr; gap: 24px; }
+.st-h1-row { padding: 0 6px; cursor: pointer; border-radius: var(--radius); }
+.st-h1-row:hover { background: var(--panel); }
+.st-h1-row.is-chosen { background: color-mix(in srgb, var(--accent) 22%, transparent); }
+.st-h1-row .st-new { margin-left: 6px; }
+.st-h1-detail { padding: 4px 0; }
+.st-detail-gem { margin-bottom: 12px; }
+.st-detail-head { display: flex; align-items: baseline; gap: 10px; }
+.st-detail-head .st-skill { font-size: 16px; }
+.st-detail-text { margin: 3px 0 4px 17px; font-size: 12px; line-height: 1.4; }
+.st-h1-title { margin: 16px 0 8px; font-size: 13px; }
+
+/* H2: two columns of cards with the notes. */
+.st-h2 { columns: 2; column-gap: 12px; }
+.st-h2 .st-support { flex-wrap: wrap; }
+.st-h2 .st-support .st-note-text { flex-basis: 100%; margin: 0 0 4px 17px; }
+
+/* H3: a line per gem, its bar on the levels 1 to 100, the level of the band a line across. */
+.st-h3 { position: relative; --label: 260px; }
+.st-h3-scale, .st-h3-line { display: grid; grid-template-columns: var(--label) 1fr; align-items: center; gap: 12px; }
+.st-h3-scale { position: sticky; top: -18px; z-index: 1; height: 22px; background: var(--side-column); font-size: 11px; }
+.st-h3-scale .st-bar-track span { position: absolute; transform: translateX(-50%); }
+.st-h3-now { color: var(--accent); font-weight: 700; }
+.st-h3-skill { padding: 4px 0; border-top: 1px solid var(--divider); }
+.st-h3-line { min-height: 20px; }
+.st-h3-line > span:first-child { display: flex; align-items: center; gap: 5px; min-width: 0; }
+.st-h3-line.st-support > span:first-child { padding-left: 17px; }
+.st-bar-track { position: relative; height: 6px; }
+.st-bar { position: absolute; top: 0; height: 6px; border-radius: 3px; opacity: 0.8; }
+.st-h3-rule { position: absolute; top: 22px; bottom: 0; left: calc(var(--label) + 12px + (100% - var(--label) - 12px) * var(--at) / 100); width: 2px; background: var(--accent); opacity: 0.7; pointer-events: none; }
+
+/* E1: a large hexagon per skill, its supports hanging from it on a line. */
+.st-card.is-sockets .st-head .app-gem-mark { width: 22px; height: 22px; }
+.st-card.is-sockets .st-supports { position: relative; margin-left: 10px; padding-left: 16px; border-left: 2px solid var(--divider); }
+.st-card.is-sockets .st-support { position: relative; }
+.st-card.is-sockets .st-support::before { content: ""; position: absolute; left: -16px; top: 50%; width: 12px; border-top: 2px solid var(--divider); }
+.st-card.is-sockets .st-support .app-gem-mark { width: 13px; height: 13px; }
+
+/* E2: the head of each card in the colour of its skill, the supports as small tinted labels. */
+.st-e2-wrap { break-inside: avoid; }
+.st-e2 .st-card { padding: 0 0 9px; overflow: hidden; }
+.st-e2 .st-card > .st-head { padding: 7px 12px; background: color-mix(in srgb, var(--gem) 26%, transparent); }
+.st-e2 .st-supports { display: flex; flex-wrap: wrap; gap: 5px; padding: 8px 10px 0; }
+.st-e2 .st-support { padding: 1px 7px 1px 5px; background: var(--fill); border-radius: 999px; font-size: 12px; }
+.st-e2 .st-triggered { padding: 6px 12px 0; }
+
+/* E3: what is new on top, in large cards; the rest a line each. */
+.st-e3-title { margin: 0 0 10px; color: var(--accent); font-size: 15px; }
+.st-e3-title.is-rest { margin-top: 10px; color: var(--text); }
+.st-e3-fresh { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-bottom: 8px; }
+.st-e3-fresh .st-card { margin: 0; outline: 1px solid var(--accent); font-size: 14px; }
+.st-e3-fresh .st-support { font-size: 13.5px; min-height: 24px; }
+.st-e3-line { display: grid; grid-template-columns: 230px 1fr; gap: 12px; align-items: baseline; padding: 5px 0; border-top: 1px solid var(--divider); }
+.st-e3-supports { font-size: 12.5px; line-height: 1.7; }
+.st-e3-supports { display: flex; flex-wrap: wrap; gap: 0 16px; }
+
+/* F1: each skill a sentence, large. */
+.st-f1 { columns: 2; column-gap: 32px; }
+.st-sentence { break-inside: avoid; margin: 0 0 16px; font-size: 17px; line-height: 1.6; }
+.st-word { display: inline-flex; align-items: center; gap: 4px; }
+.st-word .st-gem { display: inline-flex; gap: 5px; }
+.st-sentence .st-skill { font-weight: 800; }
+.st-sentence .st-skill .st-name { color: var(--accent); }
+
+/* F2: a tile per skill, its supports around it on a ring. */
+.st-f2 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+.st-f2-tile { padding: 8px; background: var(--panel); border-radius: var(--radius); }
+.st-f2-ring { position: relative; height: 190px; }
+.st-f2-ring::before { content: ""; position: absolute; inset: 12%; border: 1px dashed var(--divider); border-radius: 50%; }
+.st-f2-core { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); }
+.st-f2-core .app-gem-mark { width: 30px; height: 30px; }
+.st-f2-star { position: absolute; display: flex; flex-direction: column; align-items: center; gap: 1px; width: max-content; max-width: 110px; transform: translate(-50%, -6px); font-size: 10.5px; text-align: center; }
+.st-f2-star .st-name { max-width: 110px; white-space: normal; line-height: 1.15; }
+.st-f2-name { justify-content: center; }
+.st-f2-name .app-skill-gem, .st-f3-name .app-skill-gem { display: none; }
+
+/* F3: tall cards, as a hand of a card game. */
+.st-f3 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+.st-f3-card { padding: 0 10px 10px; background: var(--panel); border-radius: calc(var(--radius) + 4px); border-top: 3px solid var(--gem); }
+.st-f3-art { justify-content: center; height: 64px; background: radial-gradient(circle at 50% 60%, color-mix(in srgb, var(--gem) 30%, transparent), transparent 65%); }
+.st-f3-art .app-gem-mark { width: 34px; height: 34px; }
+.st-f3-name { justify-content: center; }
+.st-f3-tags { margin: 0 0 6px; color: var(--weak); font-size: 10px; letter-spacing: 0.08em; text-align: center; text-transform: uppercase; }
+.st-f3 .st-supports { padding-top: 6px; border-top: 1px solid var(--divider); }
