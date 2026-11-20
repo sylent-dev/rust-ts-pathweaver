@@ -48,7 +48,8 @@
    an icon sits on the baseline by its bottom; in the column of the signs, where it is a block, by
    moving it. */
 .app-changes-note { display: inline-flex; margin-left: 5px; vertical-align: -2px; color: var(--on-band-weak); }
-.app-changes-sign > svg { position: relative; top: 2px; }
+.app-changes-sign svg { position: relative; top: 2px; }
+.app-changes-sign > .app-changes-note { display: inline; margin-left: 0; color: inherit; }
 
 /* The section of the window on other builds (sections/level-changes.js): the band of the case, its
    level and « N changes » open, the page under it where the window hangs. */

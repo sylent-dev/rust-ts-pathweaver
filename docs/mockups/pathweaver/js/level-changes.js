@@ -13,9 +13,9 @@
 STATE.changesOpen = false;
 
 // A note of the author (N2 of twelve marks, the owner, 2026-11-19): a filled speech bubble, simple
-// enough to read at 12 px; on an entry, a mark rather than a change of its own.
+// enough to read at 12 px; on an entry, a mark rather than a change of its own, its card on hover
+// (noteMark, js/note-hover.js).
 ICONS.note = '<path d="M2 3h12v8.2H7.2L3.4 14.2V11.2H2z" fill="currentColor" stroke="none"/>';
-const noteMark = (has, title = "The author left a note") => has ? `<span class="app-changes-note" title="${title}">${icon(12, ICONS.note)}</span>` : "";
 
 // « N changes », the block between ◀ and ▶, or « 0 changes » in grey when there is none, the block
 // kept so that ◀ and ▶ never move; no chevron, since it opens a window, not a menu (the owner,
@@ -52,9 +52,12 @@ function changeList(record) {
 // The words of a change: its name, and what it hangs on, in grey at the right.
 const slotName = id => escapeHtml(SLOT_NAMES[id] ?? id);
 function changeName(change) {
-  if (change.category === "passives") return `<b>${plural(change.count, "passive")}</b>${change.label ? ` ${change.label}` : ""}${
-    noteMark(change.notes?.length > 0, `${plural(change.notes?.length ?? 0, "passive")} with a note of the author`)}`;
-  if (change.category === "skill" || change.category === "support") return `${gemMark(change)}<b>${escapeHtml(change.name)}</b>${noteMark(change.note)}`;
+  if (change.category === "passives") {
+    const [count, label] = [plural(change.count, "passive"), change.label ? ` ${change.label}` : ""];
+    return `<b>${count}</b>${label}${noteMark({ head: count + label, list: change.notes })}`;
+  }
+  if (change.category === "skill" || change.category === "support") return `${gemMark(change)}<b>${escapeHtml(change.name)}</b>${
+    noteMark({ place: change.category === "support" ? change.skill : "", head: change.name, text: change.note })}`;
   if (change.category === "gear") return `<b>${escapeHtml(change.name || "a hint")}</b>${change.unique ? ' <span class="app-changes-tag">unique</span>' : ""}`;
   return `<b>${escapeHtml(change.name)}</b>`;
 }
@@ -67,7 +70,7 @@ function changeDetail(change) {
   return change.kind === "gear" ? `${slotName(change.on)} · new text` : change.kind === "support" ? `on ${escapeHtml(change.on)} · new note` : "new note";
 }
 const CHANGE_KINDS = { "+": "is-added", "⇄": "is-swapped", "−": "is-gone", note: "is-note" };
-const changeSign = change => change.sign === "note" ? icon(12, ICONS.note) : change.sign;
+const changeSign = change => change.sign === "note" ? retoldMark(change) : change.sign;
 
 // Where a click on a line leads (the owner, 2026-11-19): the tab that shows its change, the hint of
 // a note in Inventory, the gem of a note in Skills; the passives in the tree, which the Overview

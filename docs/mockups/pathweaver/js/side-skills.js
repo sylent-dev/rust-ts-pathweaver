@@ -31,8 +31,8 @@ function skillRow(skill, level) {
 function skillLine(row) {
   const skill = escapeHtml(row.name);
   const triggered = row.triggered.map(gem =>
-    `<li class="app-skill is-triggered" data-skill="${skill}"><span class="app-weak app-skill-hook" aria-hidden="true">↳</span>${skillMark(gem)}${skillName(gem)}${noteMark(Boolean(gem.note))}</li>`).join("");
-  return `<li class="app-skill" data-skill="${skill}">${skillMark(row)}${skillName(row)}${noteMark(Boolean(row.note))}<span class="app-skill-supports">${row.supports.map(skillMark).join("")}</span></li>${triggered}`;
+    `<li class="app-skill is-triggered" data-skill="${skill}"><span class="app-weak app-skill-hook" aria-hidden="true">↳</span>${skillMark(gem)}${skillName(gem)}${noteMark({ head: gem.name, text: gem.note })}</li>`).join("");
+  return `<li class="app-skill" data-skill="${skill}">${skillMark(row)}${skillName(row)}${noteMark({ head: row.name, text: row.note })}<span class="app-skill-supports">${row.supports.map(skillMark).join("")}</span></li>${triggered}`;
 }
 
 // The skills at a level, of the build shown or of a case of the mock-up that names its own (`source`,
