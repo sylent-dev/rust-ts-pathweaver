@@ -16,8 +16,9 @@
    of light, the head tinted by the colours of its gem (one, a blend or two halves); the note in a light
    shade (that of the bands, a step lighter, or between the two).
 
-   Open: the side of the icon (« Icon side », left or right); its size (« Icon size »); the icon, five
-   ways (« Card icon », I17–I21, the sixteen of before are in the history of Git). */
+   Open: the strength of the graph paper on the note (« Note grid »); the side of the icon (« Icon
+   side », left or right); its size (« Icon size »); the icon, five ways (« Card icon », I17–I21, the
+   sixteen of before are in the history of Git). */
 .app-gem-hover.is-skill-card { --sc-alpha: 90%; --sc-icon: var(--sc-icon-size, 35px); width: 320px; max-width: none; padding: 0; overflow: hidden; background: none; }
 .app-gem-hover.is-skill-card.is-over-rows, .app-gem-hover.is-skill-card.is-static { --sc-alpha: 100%; }
 
@@ -29,10 +30,11 @@
 .sc-body .app-gem-text { margin: 0; }
 .sc-note { padding: 9px 12px 10px; background: color-mix(in srgb, var(--sc-note) var(--sc-alpha), transparent); }
 /* The graph paper of the blocks on the note only (the owner, 2026-11-20: in the shade of the body, it tells
-   the note from the description; css/textures.css), under its words. */
+   the note from the description; css/textures.css), under its words; its strength tuned by eye with
+   « Note grid » (VARIANTS.noteGrid, 0 to 30 %; 3 % as the blocks of the page by default). */
 .sc-note { position: relative; isolation: isolate; }
 .sc-note::before { content: ""; position: absolute; inset: 0; z-index: -1; pointer-events: none;
-  background: var(--texture-colour); opacity: var(--texture-opacity);
+  background: var(--texture-colour); opacity: var(--sc-note-texture, var(--texture-opacity));
   mask-image: var(--texture); mask-size: var(--texture-size) var(--texture-size);
   mask-position: calc(var(--texture-size) / 8) calc(var(--texture-size) / 8); }
 
