@@ -50,11 +50,17 @@ function gemHoverHtml(gem, level) {
   if (gem.known === false) return unknownGemHtml(gem, level);
   const comes = levelsWords(gem, level);
   const tags = gem.tags.filter(tag => tag !== "Support" && tag !== "Lineage");
-  return `<div class="app-hover-head"><strong>${escapeHtml(gem.name)}</strong><span class="app-weak">${gemKindName(gem)}</span></div>
+  const icon = gem.icon ? `<img class="gi-inline" src="pathweaver/img/skills/${gem.icon}" alt="">` : "";
+  const body = `<div class="app-hover-head"><strong>${icon}${escapeHtml(gem.name)}</strong><span class="app-weak">${gemKindName(gem)}</span></div>
     ${tags.length ? `<div class="app-gem-tags">${tags.map(escapeHtml).join(" · ")}</div>` : ""}
     ${gem.text ? `<p class="app-gem-text">${escapeHtml(gem.text)}</p>` : ""}
     <div class="app-hover-state">${comes}</div>
     ${gem.note ? `<div class="app-hover-hint">${markupHtml(gem.note)}</div>` : ""}`;
+  // The icon of a skill (2k, the owner, 2026-11-20), twelve ways to place it (VARIANTS.gemIcon,
+  // css/gem-icon.css): the same HTML for all, the art apart from the body; a support has none.
+  return gem.icon
+    ? `<div class="gi-art"><img src="pathweaver/img/skills/${gem.icon}" alt=""></div><div class="gi-body">${body}</div>`
+    : body;
 }
 
 // One card for the page, fixed, so that the narrow column doesn't cut it, never following the pointer
@@ -71,9 +77,15 @@ function showGemHover(element) {
   const gem = gemOfRow(element);
   if (!gem) return;
   gemCard.innerHTML = gemHoverHtml(gem, Number(element.closest("[data-level]").dataset.level));
+  // The way the icon shows (2k, while compared), and the colours of the gem, which frame it in some.
+  gemCard.dataset.icon = gem.icon ? chosen.gemIcon : "";
+  const [first, second = first] = gemColoursOf(gem);
+  gemCard.style.setProperty("--gem", first);
+  gemCard.style.setProperty("--gem-2", second);
   if (element.closest(".app-st:not(.st-h1) , .st-h1-detail")) return showGemBeside(element);
   const support = Boolean(element.closest(".app-skill-supports"));
-  gemCard.classList.toggle("is-over-rows", support);
+  // Opaque over rows: above a support, or beside a row of the Skills tab, which has no tree beside it.
+  gemCard.classList.toggle("is-over-rows", support || !element.closest(".app-side"));
   gemCard.classList.toggle("is-support", support);
   gemCard.classList.add("is-shown");
   const box = element.getBoundingClientRect(), row = element.closest(".app-skill").getBoundingClientRect();
