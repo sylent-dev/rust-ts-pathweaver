@@ -18,7 +18,6 @@
 .app-side-link:hover { color: var(--accent); }
 .app-side-link:hover .app-side-link-words::after { transform: scaleX(1); transform-origin: 0; }
 @media (prefers-reduced-motion: reduce) { .app-side-link-words::after { transition: none; } }
-.ov-drawer-tab { display: block; margin: 10px 0 0 5px; color: var(--weak); font-size: 12px; }
 
 /* The drawer (the owner, 2026-11-20): the bar always at the bottom, which never moves; the drawing
    unrolls upward above it, on the same block: no line above it, the light shade of the header of a

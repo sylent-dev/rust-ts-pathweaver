@@ -13,9 +13,9 @@ SKILL_SOURCES.crowded = level => BUILDS.crowded.skills
   .filter(skill => appliesAt(skill.levels, level))
   .map(skill => ({ ...skill, supports: skill.supports.filter(support => appliesAt(support.levels, level)) }));
 
-// A link of the column to a tab of the build (the owner, 2026-11-20): the title Skills, « and N more »
-// under the skills folded, « Open the Inventory tab » in the drawing unrolled; not the title of the bar,
-// whose hover unrolls the drawing. In the colour of its words, the accent and a line on hover.
+// A link of the column to a tab of the build (the owner, 2026-11-20): the title Skills, and « and N more »
+// under the skills folded; not the title of the bar, whose hover unrolls the drawing, nor a link under
+// the drawing (tried, removed by the owner). In the colour of its words, the accent and a line on hover.
 const sideLink = (tab, words, className = "app-side-link") =>
   `<button type="button" class="${className}" data-action="tab-go" data-tab="${tab}"><span class="app-side-link-words">${words}</span></button>`;
 
@@ -32,7 +32,7 @@ function sideColumn(level, { record = BUILDS.changes.shown.levels[level], source
     <div class="ov-new">${newAtBox(level, record)}</div>
     <div class="ov-skills">${skillList(level, source)}</div>
     <div class="ov-drawer">
-      <div class="ov-drawer-doll">${inventoryBox(level, hints)}${sideLink("inventory", "Open the Inventory tab", "app-side-link ov-drawer-tab")}</div>
+      <div class="ov-drawer-doll">${inventoryBox(level, hints)}</div>
       <div class="ov-drawer-bar"><div class="app-inventory-head"><h2 class="app-side-title app-title">Inventory</h2>${inventorySetSwitch()}</div>${inventoryThumbs(level, hints)}</div>
     </div>
   </aside>`;
