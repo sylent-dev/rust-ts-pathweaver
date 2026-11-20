@@ -1,5 +1,5 @@
 /* The icon of a skill on its card (2k, js/gem-hover.js): twelve ways, then I5 on the left edge (I13,
-   I14), chosen with « Skill icon » (VARIANTS.gemIcon), each a [data-icon] of the card. The art of the game from RePoE, 88 × 88 pixels;
+   I14), then small in place of the kind (I15, I16), chosen with « Skill icon » (VARIANTS.gemIcon), each a [data-icon] of the card. The art of the game from RePoE, 88 × 88 pixels;
    --gem and --gem-2 are the colours of the gem (the same twice for a gem of one attribute). */
 .app-gem-hover .gi-art, .app-gem-hover .gi-inline { display: none; }
 .app-gem-hover .gi-art img { display: block; width: 100%; height: 100%; object-fit: cover; }
@@ -77,6 +77,17 @@
 [data-icon="i13"] .gi-art { top: 6px; }
 /* I14 · In the middle of the height of the card. */
 [data-icon="i14"] .gi-art { top: 50%; transform: translateY(-50%); }
+
+/* I15 and I16 · Small, 24 px, at the top right, in place of the kind (« Skill gem », « Spirit gem »): the
+   badge of I7 (I15), the hexagon of I5 (I16). The name and the tags under it leave it room. */
+[data-icon="i15"] .app-hover-head .app-weak, [data-icon="i16"] .app-hover-head .app-weak { display: none; }
+[data-icon="i15"] .app-hover-head, [data-icon="i16"] .app-hover-head,
+[data-icon="i15"] .app-gem-tags, [data-icon="i16"] .app-gem-tags { padding-right: 32px; }
+[data-icon="i15"] .gi-art { display: block; position: absolute; top: 8px; right: 10px; width: 24px; height: 24px; border-radius: 4px; overflow: hidden;
+  box-shadow: 0 2px 6px rgb(0 0 0 / .45), 0 0 0 1.5px var(--band-deep); }
+[data-icon="i16"] .gi-art { display: block; position: absolute; top: 7px; right: 10px; width: 24px; height: 27px; padding: 1.5px; box-sizing: border-box;
+  clip-path: polygon(50% 0, 100% 25%, 100% 75%, 50% 100%, 0 75%, 0 25%); background: linear-gradient(90deg, var(--gem) 50%, var(--gem-2) 50%); }
+[data-icon="i16"] .gi-art img { clip-path: polygon(50% 0, 100% 25%, 100% 75%, 50% 100%, 0 75%, 0 25%); }
 
 /* The section of the mock-up (sections/gem-icon.js): the cards drawn in place, three per way. */
 .gi-cards { display: flex; flex-direction: column; gap: 22px; width: 340px; padding: 22px 18px 22px 40px; background: var(--page); }

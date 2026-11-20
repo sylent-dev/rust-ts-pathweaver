@@ -25,8 +25,9 @@ const VARIANTS = {
   // window of the owner's screen.
   homeWidth: { label: "Home width", options: { 900: "900 px", 960: "960 px", 1600: "1,600 px" }, fallback: "960" },
   // The Skills tab (2k): twelve variants, three at each of four temperatures (js/skills-tab.js).
-  // The icon of a skill on its card (2k): twelve ways, then I5 on the left edge, I13 and I14 (css/gem-icon.css).
-  gemIcon: { label: "Skill icon", options: Object.fromEntries(Array.from({ length: 14 }, (_, index) => [`i${index + 1}`, `I${index + 1}`])), fallback: "i13" },
+  // The icon of a skill on its card (2k): twelve ways, then I5 on the left edge, I13 and I14, then small in
+  // place of the kind, I15 and I16 (css/gem-icon.css).
+  gemIcon: { label: "Skill icon", options: Object.fromEntries(Array.from({ length: 16 }, (_, index) => [`i${index + 1}`, `I${index + 1}`])), fallback: "i13" },
   skillsTab: { label: "Skills tab", options: Object.fromEntries(["n1", "n2", "n3", "h1", "h2", "h3", "e1", "e2", "e3", "f1", "f2", "f3"].map(id => [id, id.toUpperCase()])), fallback: "n1" },
 };
 
