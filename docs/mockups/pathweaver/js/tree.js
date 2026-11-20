@@ -10,8 +10,6 @@
 // starts, over its portrait large and faded (2i2, the owner, 2026-11-19).
 
 STATE.set = 1;
-// The view of the tree: its centre in the coordinates of the game, and the pixels per unit.
-STATE.treeView = null;
 
 // The radius of each kind of passive (TREE.kinds), in units of the game.
 const NODE_RADIUS = { small: 26, notable: 40, keystone: 58, jewel: 38, attribute: 26, start: 52 };
@@ -254,35 +252,65 @@ function drawBuildTree(canvas, view, level, shownSet) {
   drawTree(canvas, ascendancy, treeStates(TREE.ascendancyTaken, ascendancy.nodes.length, level), view, { clear: false });
 }
 
-// Draws every canvas of the tree on the page, and lets the main one move and zoom; a canvas with a
+// The views of the main trees, by their data-view: each window keeps its own (the page at 960 px, the
+// Tree tab at 1,600 px), fitted to its canvas the first time it is drawn.
+STATE.treeViews = {};
+const viewOf = canvas => STATE.treeViews[canvas.dataset.view];
+
+// Draws every canvas of the tree on the page, and lets the main ones move and zoom; a canvas with a
 // data-scale is a fixed view of the centre of the tree, at its data-level.
 function mountTrees() {
   for (const canvas of document.querySelectorAll('canvas[data-tree="centre"]')) {
     drawBuildTree(canvas, { x: 0, y: 0, scale: Number(canvas.dataset.scale) }, Number(canvas.dataset.level), STATE.set);
   }
   const level = STATE.level;
+  const points = [...TREE.taken.map(([i]) => TREE.nodes[i]), ...TREE.ascendancyTaken.map(([i]) => TREE.ascendancy.nodes[i])];
   for (const canvas of document.querySelectorAll('canvas[data-tree="main"]')) {
-    const points = [...TREE.taken.map(([i]) => TREE.nodes[i]), ...TREE.ascendancyTaken.map(([i]) => TREE.ascendancy.nodes[i])];
-    STATE.treeView ??= fitView(points, canvas.clientWidth, canvas.clientHeight, 80);
-    const draw = () => drawBuildTree(canvas, STATE.treeView, level, STATE.set);
+    STATE.treeViews[canvas.dataset.view] ??= fitView(points, canvas.clientWidth, canvas.clientHeight, 80);
+    const meter = canvas.parentElement.querySelector(".app-fps");
+    const draw = () => {
+      const start = performance.now();
+      drawBuildTree(canvas, viewOf(canvas), level, STATE.set);
+      if (meter) countFrame(meter, performance.now() - start);
+    };
     draw();
+    // A move or a turn of the wheel asks for a drawing; the screen draws at most one per frame.
+    let asked = false;
+    const ask = () => {
+      if (asked) return;
+      asked = true;
+      requestAnimationFrame(() => { asked = false; draw(); });
+    };
     canvas.onwheel = event => {
       event.preventDefault();
       zoomTree(canvas, event.deltaY < 0 ? 1.2 : 1 / 1.2, event.offsetX, event.offsetY);
-      draw();
+      ask();
     };
     canvas.onpointerdown = event => {
       canvas.setPointerCapture(event.pointerId);
       let [lastX, lastY] = [event.clientX, event.clientY];
       canvas.onpointermove = move => {
-        STATE.treeView.x -= (move.clientX - lastX) / STATE.treeView.scale;
-        STATE.treeView.y -= (move.clientY - lastY) / STATE.treeView.scale;
+        const view = viewOf(canvas);
+        view.x -= (move.clientX - lastX) / view.scale;
+        view.y -= (move.clientY - lastY) / view.scale;
         [lastX, lastY] = [move.clientX, move.clientY];
-        draw();
+        ask();
       };
       canvas.onpointerup = () => { canvas.onpointermove = null; };
     };
   }
+}
+
+// The counter of frames per second (2i3): the drawings of the last second while the tree moves, and the
+// time the script takes to draw once, the mean of the last 30 (the browser paints after it). Written into its element at once, without drawing the
+// page again.
+const FRAMES = { times: [], costs: [] };
+function countFrame(meter, cost) {
+  const now = performance.now();
+  FRAMES.times = [...FRAMES.times.filter(time => now - time < 1000), now];
+  FRAMES.costs = [...FRAMES.costs.slice(-29), cost];
+  const mean = FRAMES.costs.reduce((sum, c) => sum + c, 0) / FRAMES.costs.length;
+  meter.textContent = `${FRAMES.times.length} fps · script ${mean.toFixed(1)} ms`;
 }
 
 // The bounds of the zoom, in pixels per unit of the game.
@@ -290,7 +318,7 @@ const ZOOM_RANGE = [0.005, 0.5];
 
 // Zooms around a point of the canvas, which stays under the pointer.
 function zoomTree(canvas, factor, atX = canvas.clientWidth / 2, atY = canvas.clientHeight / 2) {
-  const view = STATE.treeView;
+  const view = viewOf(canvas);
   const [dx, dy] = [atX - canvas.clientWidth / 2, atY - canvas.clientHeight / 2];
   view.x += dx / view.scale - dx / (view.scale * factor);
   view.y += dy / view.scale - dy / (view.scale * factor);
@@ -298,12 +326,14 @@ function zoomTree(canvas, factor, atX = canvas.clientWidth / 2, atY = canvas.cli
 }
 
 AFTER_RENDER.push(mountTrees);
+// The controls act on the tree of their own window.
+const canvasOf = element => element.closest(".app-tree").querySelector('canvas[data-tree="main"]');
 ACTIONS["tree-zoom"] = element => {
-  zoomTree(document.querySelector('canvas[data-tree="main"]'), element.dataset.zoom === "in" ? 1.4 : 1 / 1.4);
+  zoomTree(canvasOf(element), element.dataset.zoom === "in" ? 1.4 : 1 / 1.4);
   return true;
 };
-ACTIONS["tree-fit"] = () => {
-  STATE.treeView = null;
+ACTIONS["tree-fit"] = element => {
+  delete STATE.treeViews[canvasOf(element).dataset.view];
   return true;
 };
 ACTIONS["tree-set"] = element => {

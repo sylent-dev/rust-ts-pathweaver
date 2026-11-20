@@ -57,12 +57,13 @@ function inventoryBox(level) {
     }).join("")}</div>`;
 }
 
-// The tree and the controls over it (js/tree-controls.js); the ascendancy moves to the centre of the
-// tree in 2i2.
-function treePanel(level) {
+// The tree and the controls over it (js/tree-controls.js). `view` names the view of the tree the window
+// keeps (js/tree.js, STATE.treeViews); `fps` shows the counter of frames per second (2i3).
+function treePanel(level, { view = "page", fps = false } = {}) {
   return `<div class="app-tree">
-    <canvas class="app-tree-canvas" data-tree="main" aria-label="Passive tree"></canvas>
+    <canvas class="app-tree-canvas" data-tree="main" data-view="${view}" aria-label="Passive tree"></canvas>
     ${treeControls(level)}
+    ${fps ? '<output class="app-fps app-number">Drag or zoom the tree</output>' : ""}
   </div>`;
 }
 
