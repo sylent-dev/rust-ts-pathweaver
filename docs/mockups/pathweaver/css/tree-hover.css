@@ -11,6 +11,10 @@
 .app-hover.is-shown { opacity: 1; visibility: visible; transition: opacity 120ms ease-out, visibility 0s; }
 @media (prefers-reduced-motion: reduce) { .app-hover, .app-hover.is-shown { transition: none; } }
 .app-hover-head { display: flex; align-items: baseline; justify-content: space-between; gap: 14px; }
+/* The gap between the title of a card and its subtitle (the base of a unique, the state of an item, the
+   tags of a skill gem): none, the subtitle right under the title, on every card but a support's, which
+   has no subtitle (the owner, 2026-11-20, of 0 to 12 px). */
+.app-hover:not(.is-support) > .app-hover-head + * { margin-top: 0; }
 .app-hover-head strong { font-size: 14px; font-weight: 600; }
 .app-hover-head .app-weak, .app-hover-state { color: var(--on-band-weak); font-size: 11px; }
 .app-hover-stats { margin: 6px 0 0; padding: 0; list-style: none; }

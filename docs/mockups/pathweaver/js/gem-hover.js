@@ -71,6 +71,7 @@ function showGemHover(element) {
   gemCard.innerHTML = gemHoverHtml(gem, Number(element.closest(".app-skills").dataset.level));
   const support = Boolean(element.closest(".app-skill-supports"));
   gemCard.classList.toggle("is-over-rows", support);
+  gemCard.classList.toggle("is-support", support);
   gemCard.classList.add("is-shown");
   const box = element.getBoundingClientRect(), row = element.closest(".app-skill").getBoundingClientRect();
   const [w, h] = [gemCard.offsetWidth, gemCard.offsetHeight];
