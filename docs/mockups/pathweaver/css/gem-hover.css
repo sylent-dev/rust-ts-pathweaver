@@ -3,8 +3,5 @@
    that the narrow column doesn't cut them; opaque over rows (is-over-rows), see-through at 10 % over the
    tree as the card of a passive. */
 .app-gem-hover { position: fixed; z-index: 20; font-family: var(--font-text); }
-/* Shown, it takes the pointer, so that the card of a gem stays open while the pointer is on it
-   (js/gem-hover.js, 2k). */
-.app-gem-hover.is-shown { pointer-events: auto; }
 .app-gem-text { margin: 6px 0 0; }
 .app-skill-name { cursor: default; }

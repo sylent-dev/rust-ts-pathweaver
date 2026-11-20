@@ -53,9 +53,4 @@ function showSlotHover(element) {
   slotCard.style.left = `${column.left - w - 8 >= 8 ? column.left - w - 8 : column.right + 8}px`;
   slotCard.style.top = `${Math.max(8, Math.min(innerHeight - h - 8, box.top + box.height / 2 - h / 2))}px`;
 }
-document.addEventListener("mouseover", event => {
-  const element = event.target.closest?.(".app-inventory [data-item], .app-inventory-others [data-item]");
-  if (element) showSlotHover(element);
-  else slotCard.classList.remove("is-shown");
-});
-document.addEventListener("scroll", () => slotCard.classList.remove("is-shown"), { capture: true, passive: true });
+openOnHover(slotCard, ".app-inventory [data-item], .app-inventory-others [data-item]", showSlotHover);

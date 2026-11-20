@@ -131,16 +131,18 @@ function placeHover(card, panel, passive, radius) {
 function mountHover() {
   for (const canvas of document.querySelectorAll('canvas[data-tree="main"]')) {
     const panel = canvas.parentElement, card = panel.querySelector(".app-hover");
-    // Hidden, the card keeps its words and its place while it fades out.
-    const hide = () => card.classList.remove("is-shown");
+    // Hidden, the card keeps its words and its place while it fades out. Off a passive, it waits for the
+    // pointer to reach it (cardCloser, js/hover-card.js); a drag hides it at once.
+    const { cancel, closeSoon } = cardCloser(card);
     canvas.onmousemove = event => {
       const view = viewOf(canvas);
-      if (event.buttons !== 0 || !view) return hide();
+      if (event.buttons !== 0 || !view) return card.classList.remove("is-shown");
       const [width, height] = [canvas.clientWidth, canvas.clientHeight];
       const gameX = (event.offsetX - width / 2) / view.scale + view.x, gameY = (event.offsetY - height / 2) / view.scale + view.y;
       const found = passiveAt(gameX, gameY, view.scale);
       canvas.style.cursor = found ? "pointer" : "";
-      if (!found) return hide();
+      if (!found) return closeSoon();
+      cancel();
       const [x, y, kind] = found.graph.nodes[found.index];
       card.innerHTML = hoverHtml(found.graph, found.index, STATE.level);
       titleIfCut(card);
@@ -148,7 +150,7 @@ function mountHover() {
       const passive = [(x - view.x) * view.scale + width / 2, (y - view.y) * view.scale + height / 2];
       placeHover(card, panel, passive, NODE_RADIUS[TREE.kinds[kind]] * view.scale);
     };
-    canvas.onmouseleave = hide;
+    canvas.onmouseleave = closeSoon;
   }
 }
 AFTER_RENDER.push(mountHover);

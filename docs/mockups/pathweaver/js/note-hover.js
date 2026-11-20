@@ -65,9 +65,4 @@ function showNoteHover(mark) {
   noteCard.style.left = `${onLeft ? left : right}px`;
   noteCard.style.top = `${Math.max(8, Math.min(innerHeight - h - 8, box.top + box.height / 2 - h / 2))}px`;
 }
-document.addEventListener("mouseover", event => {
-  const mark = event.target.closest?.(".app-changes-note[data-note-head]");
-  if (mark) showNoteHover(mark);
-  else noteCard.classList.remove("is-shown");
-});
-document.addEventListener("scroll", () => noteCard.classList.remove("is-shown"), { capture: true, passive: true });
+openOnHover(noteCard, ".app-changes-note[data-note-head]", showNoteHover);

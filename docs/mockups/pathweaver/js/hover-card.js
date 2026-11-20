@@ -33,3 +33,42 @@ function titleIfCut(root) {
   }
 }
 AFTER_RENDER.push(() => titleIfCut(document.getElementById("sheet")));
+
+// Every card stays open while the pointer is on it (2k, the owner, 2026-11-20, then for every card on
+// 2026-11-21: the native tooltip of a cut subtitle, the text of a note): leaving what carries it, the
+// pointer has HC_GRACE ms to reach the card across the gap between them; on the card, it stays; leaving
+// the card, it closes as it would leaving what carries it.
+const HC_GRACE = 200;
+// The delay starts once: a pointer that keeps moving off what carries the card doesn't hold it open.
+function cardCloser(card) {
+  let timer = null;
+  const cancel = () => {
+    clearTimeout(timer);
+    timer = null;
+  };
+  const closeSoon = () => {
+    if (timer !== null) return;
+    timer = setTimeout(() => {
+      timer = null;
+      card.classList.remove("is-shown");
+    }, HC_GRACE);
+  };
+  card.addEventListener("mouseenter", cancel);
+  card.addEventListener("mouseleave", closeSoon);
+  return { cancel, closeSoon };
+}
+
+// A card fixed on the page (of a gem, a note, a slot), opened by `show` on hover of what carries it
+// (`selector`); a scroll of the page closes it at once, as it moves what carries it.
+function openOnHover(card, selector, show) {
+  const { cancel, closeSoon } = cardCloser(card);
+  document.addEventListener("mouseover", event => {
+    if (card.contains(event.target)) return;
+    const element = event.target.closest?.(selector);
+    if (element) {
+      cancel();
+      show(element);
+    } else if (card.classList.contains("is-shown")) closeSoon();
+  });
+  document.addEventListener("scroll", () => card.classList.remove("is-shown"), { capture: true, passive: true });
+}

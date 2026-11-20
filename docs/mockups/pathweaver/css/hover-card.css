@@ -22,6 +22,9 @@
    right beside the card, on the tree; 2026-11-21). */
 .app-hover.is-hover-card { --hc-alpha: 90%; --hc-art: 48px; width: 320px; max-width: none; padding: 0; overflow: hidden; background: none; }
 .app-hover.is-hover-card.is-over-rows, .app-hover.is-hover-card.is-static { --hc-alpha: 100%; }
+/* Shown, a card takes the pointer, so that it stays open while the pointer is on it (js/hover-card.js,
+   cardCloser; the owner, 2026-11-21: every card). */
+.app-hover.is-hover-card.is-shown { pointer-events: auto; }
 
 /* The shades of the parts: the head and the note in the deep shade of the bands; the body a step darker. */
 .is-hover-card { --hc-head: var(--band-deep); --hc-body: color-mix(in srgb, var(--band-deep), #000 60%); --hc-note: var(--hc-head); }
