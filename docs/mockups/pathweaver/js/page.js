@@ -24,10 +24,6 @@ const VARIANTS = {
   // The width of the windows of the home page (2l): the minimum of specs.md, half a 1920-pixel screen, and a wide
   // window of the owner's screen.
   homeWidth: { label: "Home width", options: { 900: "900 px", 960: "960 px", 1600: "1,600 px" }, fallback: "960" },
-  // The portrait of the About tab (2k3): where it starts to fade toward the bottom, and how far the text rises
-  // over it (css/about-tab.css).
-  aboutFade: { label: "Portrait fade from", range: { min: 0, max: 90, step: 5 }, variable: "--ab-fade", unit: "%", fallback: "35" },
-  aboutRise: { label: "Text rises", range: { min: 0, max: 160, step: 5 }, variable: "--ab-rise", unit: "px", fallback: "65" },
 };
 
 // The styles a section shows side by side: the style of the page alone, Frost Night by default, the
