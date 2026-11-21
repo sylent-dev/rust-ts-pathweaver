@@ -4,12 +4,21 @@
 
 The `.build` format is the one Grinding Gear Games documents for the in-game Build Planner: a file made by any tool (poe.ninja, a Path of Building converter, a guide site) opens here, and a file saved here opens in the game. The core is written in Rust, compiled to WebAssembly; the interface is written in TypeScript with Svelte. Everything runs in the browser: no account, no server, for now.
 
+The website: <https://pathweaver.sylent.tools>.
+
 The project is being built: see [specs.md](specs.md) for what the application does, and [roadmap.md](roadmap.md) for its progress.
+
+## The website and its network
+
+- **Served by Cloudflare**, as static files, at its own domain; published at each merge into `main` by the workflow `.github/workflows/deploy.yml`, with Wrangler (`deploy/`). See [docs/cloudflare-usage.md](docs/cloudflare-usage.md).
+- **What it calls**: its own files only, from its own address; no analytics, no cookies, no font or script of another site. Cloudflare, which serves them, processes the IP address of each visitor, as any host does ([its privacy policy](https://www.cloudflare.com/privacypolicy/)).
+- **What it keeps in the browser**: nothing yet; the library of version 1 will keep the builds opened, in this browser only. A build never leaves the browser without the user's action: it is shared as its `.build` file.
 
 ## Layout
 
 - `crates/build-file`: the `.build` files, read, checked and written back without loss, a plain Rust library.
 - `crates/wasm`: the bridge that exposes the core to the interface, compiled to WebAssembly.
+- `deploy`: Wrangler and its configuration, which upload `web/build` to Cloudflare.
 - `web`: the interface, a SvelteKit application in TypeScript built as a static website; its texts in `web/locales/`.
 
 ## Requirements
