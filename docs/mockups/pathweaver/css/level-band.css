@@ -30,7 +30,9 @@
 .app-level-track { position: relative; flex: 1; max-width: 1600px; align-self: stretch; height: 84px; margin-left: 26px; cursor: pointer; }
 .app-level-line { position: absolute; top: 41px; left: 0; right: 0; height: 2px; background: var(--track); }
 .app-level-marker { position: absolute; top: 36px; width: 1px; height: 12px; background: var(--accent); }
-.app-level-cursor { position: absolute; top: 28px; width: 4px; height: 28px; margin-left: -2px; background: var(--on-band); }
+/* The cursor 26 px high, a pixel shorter at each end than at 2g (2k5, the owner, 2026-11-21: more room for what
+   sits over and under the line). */
+.app-level-cursor { position: absolute; top: 29px; width: 4px; height: 26px; margin-left: -2px; background: var(--on-band); }
 
 /* Dragging it (2g2): a hand over it, a wider grip than its 4 px; lifted while dragged, its ghost
    grey where it was; set down, it settles back to its height. */
@@ -41,25 +43,35 @@
 @keyframes level-land { from { transform: scaleY(1.25); } to { transform: none; } }
 /* The tail of the dragged cursor (T2, the owner, 2026-11-19): grey, faint, the height of the cursor,
    fading away from it, shrinking back to it once it stops; not on a slide, too short to see it. */
-.app-level-trail { position: absolute; top: 28px; height: 28px; pointer-events: none;
+.app-level-trail { position: absolute; top: 29px; height: 26px; pointer-events: none;
   background: linear-gradient(to right, transparent, color-mix(in srgb, var(--on-band) 22%, transparent)); }
 .app-level-trail[data-towards="left"] { background: linear-gradient(to left, transparent, color-mix(in srgb, var(--on-band) 22%, transparent)); }
 .app-level-trail.is-fading { transition: left .3s ease-out, width .3s ease-out; }
 .app-level.is-dragging .app-level-steps { opacity: .35; }
-.app-level-ghost { position: absolute; top: 28px; width: 4px; height: 28px; margin-left: -2px; background: var(--on-band-weak); opacity: .45; }
+.app-level-ghost { position: absolute; top: 29px; width: 4px; height: 26px; margin-left: -2px; background: var(--on-band-weak); opacity: .45; }
 @media (prefers-reduced-motion: reduce) { .app-level-cursor.is-landing { animation: none; } }
 /* The lowest and the highest level under the ends (2k5, the owner, 2026-11-21: the cursor at 1 or at 100 hid them):
-   in the figures of the level, Archivo 800 drawn tight, smaller and fainter, their tops trimmed to the figures, 6 px
-   under the foot of the cursor, even lifted by a drag (its middle at 42 px, its half height 17.5 px: 59.5 px). */
-.app-level-end { position: absolute; top: 66px; transform: translateX(-50%); font: 800 var(--level-end-size, 16px)/1 var(--brand-font);
+   in the figures of the level, Archivo 800 drawn tight, smaller and fainter, their tops trimmed to the figures, close
+   under the line, the foot of the cursor at rest 1 px above them (2k5, the owner, 2026-11-21: further down looked
+   taken apart). Where the cursor covers one of them, or the words of a snapshot, see .is-covered below. */
+.app-level-end { position: absolute; top: 56px; transform: translateX(-50%); font: 800 var(--level-end-size, 16px)/1 var(--brand-font);
   text-box: trim-both cap alphabetic; letter-spacing: -.05em; font-variant-numeric: tabular-nums;
   color: color-mix(in srgb, var(--on-band) var(--level-end-alpha, 45%), transparent); }
 
 /* A snapshot (2g2): its track says why it has no marker, over the line, from its start. */
-.app-level-note { position: absolute; top: 18px; left: 0; font-size: 11px; color: var(--on-band-weak); white-space: nowrap; }
+/* Trimmed to its capitals and its baseline, 2 px over the top of the cursor at rest, which covers it only lifted by
+   a drag (2k5). */
+.app-level-note { position: absolute; top: 19px; left: 0; font-size: 11px; line-height: 1; text-box: trim-both cap alphabetic; color: var(--on-band-weak); white-space: nowrap; }
 
 /* The focus of the keyboard on the cursor (2g2, F2 of three looks, the owner, 2026-11-19): the cursor
    itself in the accent, 6 px wide; a ring framed it heavily, bars on its sides read as markers.
    Reached with Tab only: the focus a click gives it keeps it white (js/level-band.js). */
 .app-level-cursor:focus { outline: none; }
 .app-level-cursor:is(.is-tabbed:focus, .is-focus-shown) { width: 6px; margin-left: -3px; background: var(--accent); }
+
+/* Where the cursor covers the figures of an end or the words of a snapshot (2k5, the owner, 2026-11-21): one of
+   the two fades a little, the covered words (L1) or the cursor (L2), on the list « Under the cursor »; js/level-band.js
+   measures where they meet, at each drawing and during a drag. */
+.app-level-end, .app-level-note, .app-level-cursor { transition: opacity .15s; }
+:root[data-level-cover="words"] .is-covered { opacity: .3; }
+:root[data-level-cover="cursor"] .app-level-cursor.is-covering { opacity: .55; }
