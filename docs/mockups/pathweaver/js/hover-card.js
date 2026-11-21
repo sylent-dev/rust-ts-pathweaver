@@ -19,9 +19,7 @@ function hoverCardHtml({ title, subtitle = "", art = "", body = "", note = "" })
 
 // The title of the text of the author, the same in every card and in the box of the Inventory tab (the owner,
 // 2026-11-21: « From the author », shorter than « Note of the author », which the card of a note had as its
-// subtitle). Four looks, chosen with the tabs « Author title » (VARIANTS.authorTitle, css/hover-card.css):
-// small capitals (A1), the words of a subtitle (A2), a tag on the top edge of the part (A3), the bubble of the
-// mark of a note before the words (A4).
+// subtitle), after the bubble of the mark of a note (A4 of four, css/hover-card.css).
 const fromAuthor = () => `<div class="hc-from">${icon(11, ICONS.note)}<span>From the author</span></div>`;
 
 // The art of a card from an image of the game: whole (the square icon of a skill), or a disc cut to a
