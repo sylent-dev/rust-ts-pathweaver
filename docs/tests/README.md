@@ -4,4 +4,4 @@ The guides of what only a real browser or a real service shows, run again before
 
 | Guide | Step | What it checks |
 |---|---|---|
-| [The website online](website-online.md) | 3. Deployment | The address, the core loaded there, the headers of Cloudflare. |
+| [The website online](website-online.md) | 3. Deployment | The address, the core loaded there, the headers of Cloudflare, no request to another site. |

@@ -5,7 +5,7 @@ The website is published to Cloudflare at each merge into `main`, at its own dom
 ## Before
 
 1. The pull request merged and the workflow **Deploy** green on `main` (the tab Actions of the repository).
-2. Run the tests 1 to 3 in Firefox, then in a Chromium (Chrome, Edge, Brave), each in a private window, so that no copy of the website kept by the browser answers in its place; run the test 1 on the phone as well.
+2. Run the tests 1 to 4 in Firefox, then in a Chromium (Chrome, Edge, Brave), each in a private window, so that no copy of the website kept by the browser answers in its place; run the test 1 on the phone as well.
 3. The file `inputs/builds/maxroll-aer0-ice-shot-amazon.build`, the largest of the corpus (71 KB).
 
 ## The tests
@@ -17,9 +17,12 @@ The website is published to Cloudflare at each merge into `main`, at its own dom
    ✅ Its Name, Author, Ascendancy and Contents show under the box (« … passives, … skills, … inventory hints »), never « This file can't be read: ».
 
 3. **The headers**: open the tools of the browser (F12), tab Network, and reload the page.
-   ✅ The response of the page itself (the first line, `/`) has `x-content-type-options: nosniff`, `x-frame-options: DENY` and `referrer-policy: strict-origin-when-cross-origin`; a file of `/_app/immutable/` (a `.js` or the `.wasm`) has `cache-control: public, max-age=31536000, immutable`.
+   ✅ The response of the page itself (the first line, `/`) has `x-content-type-options: nosniff`, `x-frame-options: DENY` and `referrer-policy: strict-origin-when-cross-origin`; a file of `/_app/immutable/` (a `.js` or the `.wasm`) has `cache-control: public, max-age=31536000, immutable`; the `.wasm` (`pathweaver_bg….wasm`) has `content-type: application/wasm` (with another type the core still loads, more slowly, so the test 1 doesn't show it).
 
-4. **Your own scenarios**: whatever else you want to try.
+4. **Nothing from elsewhere**: in the same tab Network, after the reload, look at the column Domain (in Chromium, right-click the titles of the columns to show it).
+   ✅ Every request goes to `pathweaver.sylent.tools`, none to another site (`cloudflareinsights.com`, a font, a script), and none has a path under `/cdn-cgi/`, where Cloudflare puts the scripts it adds.
+
+5. **Your own scenarios**: whatever else you want to try.
 
 ## Results
 
@@ -28,4 +31,5 @@ The website is published to Cloudflare at each merge into `main`, at its own dom
 | 1. The address (Firefox, Chromium, phone) | | |
 | 2. A build opens | | |
 | 3. The headers | | |
-| 4. Your own scenarios | | |
+| 4. Nothing from elsewhere | | |
+| 5. Your own scenarios | | |
