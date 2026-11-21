@@ -46,3 +46,6 @@
 .app-slot.is-hinted, .app-inventory-others li[data-item] { cursor: default; }
 .app-slot-hover .is-unique { color: var(--unique); }
 .app-item-implicits { padding-bottom: 5px; border-bottom: 1px solid color-mix(in srgb, var(--on-band) 14%, transparent); }
+/* The title of the text of the author, in the card of a slot and the box of the Inventory tab (the owner,
+   2026-11-21), so that the stats they aim for don't read as those of the item. */
+.app-from-author { margin-bottom: 4px; color: var(--on-band-weak); font-size: 10px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; }
