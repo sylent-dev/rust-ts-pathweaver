@@ -2,7 +2,8 @@
    prefix (`app-`, or a short one of its own: `st-` the Skills tab, `it-` the Inventory tab, `ab-` the
    About tab…), its states with `is-`; the prefixes fall at the copy into Svelte, whose styles stay
    in their component. */
-.app-window { position: relative; overflow: hidden; background: var(--page-image), var(--page); background-size: var(--page-image-size); color: var(--text); font: var(--text-weight) 14px/1.35 var(--font-text); box-shadow: var(--window-shadow); }
+/* A container, named window: the components ask its width (@container window), never the class of a page. */
+.app-window { container: window / inline-size; position: relative; overflow: hidden; background: var(--page-image), var(--page); background-size: var(--page-image-size); color: var(--text); font: var(--text-weight) 14px/1.35 var(--font-text); }
 :where(.app-window) button { font: inherit; color: inherit; }   /* weaker than any class of a block */
 .app-portrait { flex: none; display: block; border-radius: var(--portrait-radius); object-fit: cover; background: var(--portrait-placeholder); box-shadow: var(--portrait-ring); }
 .app-weak { color: var(--weak); }

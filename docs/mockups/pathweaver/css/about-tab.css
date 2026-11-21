@@ -56,3 +56,10 @@
 .ab-warning .app-unknown { flex: none; }
 .ab-warning-name { font-weight: 600; }
 .ab-warning-levels { flex: none; margin-left: auto; font-size: 11.5px; }
+
+/* A wide window (the page of a build at 1,920 px, js/wide-page.js, 2k4; from 1,600 px, the owner, 2026-11-21): A3, the warnings in a column
+   between the colophon and the description (js/about-tab.js, wide), on the pane of the colophon. */
+@container window (min-width: 1600px) {
+  .ab-aside { flex: none; width: 460px; box-sizing: border-box; padding: 24px 32px 28px; }
+  .ab-colophon-main { max-width: 680px; }
+}

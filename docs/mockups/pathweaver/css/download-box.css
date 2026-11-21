@@ -1,6 +1,5 @@
 /* The box of Download .build (2k6, js/download-box.js): 3 px under the header, against its right edge, in the
    shade and the construction of the window of « N changes », 440 px. */
-.dl-case { position: relative; }
 .dl-box { position: absolute; z-index: 6; top: calc(66px + 3px); right: 16px; width: 440px; box-sizing: border-box; padding: 12px 16px 14px;
   border-radius: 3px; background: var(--band-image), var(--shade-deep); color: var(--on-band); box-shadow: var(--popover-shadow);
   font-size: 12px; line-height: 1.45; transform-origin: top right; animation: reveal-pop 280ms cubic-bezier(.34, 1.56, .64, 1) both; }

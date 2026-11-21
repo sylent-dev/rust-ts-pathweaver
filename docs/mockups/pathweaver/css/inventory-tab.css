@@ -26,3 +26,7 @@
 /* The head of the drawing: no title (T2, the owner, 2026-11-21: the band above says the level; the title
    and the level large behind the drawing set aside), the switch of the set alone at its right. */
 .it-head { display: flex; align-items: baseline; justify-content: flex-end; gap: 16px; width: 396px; min-height: 22px; }
+
+/* A wide window (the page of a build at 1,920 px, js/wide-page.js, 2k4; from 1,600 px, the owner, 2026-11-21): the drawing at 56 px a cell
+   (504 px, js/wide-page.js gives the cell). */
+@container window (min-width: 1600px) { .it-left { width: 568px; } .it-head { width: 504px; } }

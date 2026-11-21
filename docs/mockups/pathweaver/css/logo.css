@@ -1,4 +1,4 @@
-/* The mark and the name (2c, 2e), and the section of the brand (sections/brand.js). */
+/* The mark and the name (2c, 2e). */
 
 /* The name: its font, weight and spacing are tokens (css/tokens.css), here and in the app bar. */
 .logo-name { font-family: var(--brand-font); font-weight: var(--brand-weight); font-size: 18px; line-height: 1.15;
@@ -9,13 +9,3 @@
 .logo-mark { flex: none; }
 .logo-frame { fill: var(--accent); }
 .logo-p { fill: currentColor; }
-
-/* The brand in the app bar, in the section of the brand. */
-.brand-card { display: flex; gap: 8px; }
-.brand-style { width: 560px; overflow: hidden; border-radius: 6px; background: var(--page); }
-
-/* The favicon in the tabs of a browser, in the colours of the browser. */
-.brand-browser { display: flex; flex-direction: column; justify-content: center; gap: 4px; width: 250px; padding: 6px; border-radius: 6px; background: var(--chrome-strip); color: var(--chrome-text); font: 12px system-ui, sans-serif; }
-.brand-browser-tab { display: flex; align-items: center; gap: 8px; height: 32px; padding: 0 10px; border-radius: 6px; }
-.brand-browser-tab.is-current { background: var(--chrome-tab); box-shadow: 0 0 4px rgb(0 0 0 / .18); }
-.brand-browser-tab > span { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }

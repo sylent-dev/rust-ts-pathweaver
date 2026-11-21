@@ -41,3 +41,7 @@
   -webkit-background-clip: text; background-clip: text; color: transparent; animation: st-sheen 2.5s ease-in-out infinite; }
 @keyframes st-sheen { 0% { background-position: 100% 0; } 28%, 100% { background-position: 0 0; } }
 @media (prefers-reduced-motion: reduce) { .st-card.is-new > .st-head .st-skill { animation: none; background: none; color: var(--text); } }
+
+/* A wide window (the page of a build at 1,920 px, js/wide-page.js, 2k4; from 1,600 px, the owner, 2026-11-21): S2, four columns, 1,280 px at most, in the middle;
+   the graph paper of the content to the edges. */
+@container window (min-width: 1600px) { .app-st { columns: 4; padding-inline: max(20px, calc((100% - 1280px) / 2)); } }

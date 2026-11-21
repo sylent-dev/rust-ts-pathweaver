@@ -101,28 +101,3 @@
    99 tinted with the accent, 100 filled with it) are in the history of Git (commit ee61467). */
 .app-builds-tab:not(.is-current) .app-builds-portrait { filter: grayscale(1) brightness(.8); opacity: .55; }
 .app-builds-tab:not(.is-current):is(:hover, .is-hover, .is-close-hover) .app-builds-portrait { filter: grayscale(.3); opacity: .9; }
-
-/* The section of the tab (sections/bar-tab.js): the states side by side, then the page below. */
-.tab-states { display: flex; }
-.tab-strip .app-builds { padding: 0; }
-.tab-states > span { width: 184px; color: #adb5bd; font-size: 12px; }
-.tab-strip { overflow: hidden; border-radius: 6px; background: var(--page); }
-.tab-strip-page { height: 14px; }
-.tab-card { display: flex; flex-direction: column; gap: 6px; }
-
-/* The section of the two bands (sections/bands.js): the page under them, where the menu opens. */
-.bands-page { height: 230px; background: var(--page); }
-/* The stand-ins of the home page in the section of My library (sections/library-link.js). */
-.link-page { display: grid; place-items: center; height: 72px; background: var(--page); color: var(--weak); font-size: 12px; }
-.link-row { display: flex; gap: 16px; }
-.link-states { display: flex; gap: 16px; }
-.link-states > span, .link-strip { width: 560px; flex: none; }
-
-/* The sections of the end of the band (sections/band-end.js). */
-.end-states > span { width: 420px; }
-.end-states { gap: 8px; }
-.end-row { display: flex; gap: 8px; }
-.end-strip { width: 420px; }
-.menu-row { display: flex; gap: 8px; }
-.menu-window { overflow: visible; }
-.menu-page { height: 330px; }

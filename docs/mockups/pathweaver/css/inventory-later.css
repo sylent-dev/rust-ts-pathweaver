@@ -25,3 +25,7 @@
 .up [data-shown] .it-name:not(.is-unique) { color: var(--text); }
 .up-sub { overflow: hidden; color: var(--on-band-weak); font-size: 11px; text-overflow: ellipsis; white-space: nowrap; }
 .up-sub b { color: var(--accent); }
+
+/* A wide window (the page of a build at 1,920 px, js/wide-page.js, 2k4; from 1,600 px, the owner, 2026-11-21): « Upcoming » the width of
+   the drawing at 56 px a cell. */
+@container window (min-width: 1600px) { .up-tiles { width: 504px; } }

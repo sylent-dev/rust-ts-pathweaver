@@ -11,9 +11,11 @@
 // - About, A3: the warnings in a column of their own between the colophon and the description, when there are
 //   any (the description in two columns set aside).
 
-const wideSkills = level => `<div class="wide-skills">${skillsTab(level)}</div>`;
-const wideInventory = level => `<div class="wide-inventory">${inventoryTab(level, undefined, { cell: 56 })}</div>`;
-const wideAbout = (level, source) => `<div class="wide-about">${aboutTab(level, source, { wide: true })}</div>`;
+// Each view asks the width of its window (@container window, in its style sheet); the drawing of the inventory is
+// given its cell, and the About tab where its warnings go.
+const wideSkills = level => skillsTab(level);
+const wideInventory = level => inventoryTab(level, undefined, { cell: 56 });
+const wideAbout = (level, source) => aboutTab(level, source, { wide: true });
 
 // A window of 1,920 px: the bar of the app, the header, the band, the tabs, the view.
 const wideWindow = (tab, body, header = buildHeader()) =>

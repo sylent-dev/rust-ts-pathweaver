@@ -48,12 +48,6 @@
 .is-swapped > .app-changes-sign { color: var(--change-swapped); }
 .is-gone > .app-changes-sign { color: var(--change-gone); }
 
-/* The section of the window on other builds (sections/level-changes.js): the band of the case, its
-   level and « N changes » open, the page under it where the window hangs. */
-.app-changes-case { position: relative; overflow: visible; }
-.app-changes-case-name { margin-left: 26px; }
-.app-changes-case-page { height: 440px; }
-
 /* Its scroll bar (2g3, the owner, 2026-11-19): a thin line in the accent, square ends, on no track;
    the accent, since it can be dragged. Chromium and Safari draw ::-webkit-scrollbar; Firefox only
    takes a thin width and the colours. */

@@ -11,5 +11,3 @@
 /* A window of a fixed height (2i3): the tree takes what the bands above it leave. */
 .app-window-full { display: flex; flex-direction: column; }
 .app-window-full .app-tree-tab { flex: 1; height: auto; min-height: 0; }
-/* The counter of frames per second (2i3), at the bottom right over the bottom bar: for the mock-up only. */
-.app-fps { position: absolute; right: 12px; bottom: 44px; padding: 2px 6px; border-radius: 2px; background: color-mix(in srgb, var(--shade-deep) 80%, transparent); color: var(--weak); font-size: 12px; pointer-events: none; }
