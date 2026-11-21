@@ -13,7 +13,6 @@ const UPDATES = [
     art: ["huntress1", "sorceress3", "warrior2", "sorceress1"],
     items: ["Your builds published", "Short links, for a chat", "Votes and search, by ascendancy", "The versions of a build", "In French too"] },
 ];
-const NEXT_FOOT = "Until then, a build is shared as its .build file.";
 // The window whose box is open (its data-next-case), or false.
 STATE.nextOpen = false;
 
@@ -47,10 +46,11 @@ const updateCards = () => UPDATES.map(updateCard).join("");
 // The icons of passives that rise behind the halves, without end, each from its own place and at its own moment.
 const nextMotes = () => `<div class="nx-motes" aria-hidden="true">${Array.from({ length: 14 }, (_, i) =>
   `<span style="--m:${i};left:${(i * 53) % 100}%">${passiveIcon(i, 18 + (i % 3) * 6)}</span>`).join("")}</div>`;
-// The box: × at its corner, the icons rising, the two halves, the line under them.
+// The box: × at its corner, the icons rising, the two halves; no line under them (the owner, 2026-11-21: people
+// will know a build is shared as its file).
 const nextBox = () => `<div class="nx" role="dialog" aria-label="What's next">
   <button type="button" class="nx-close" data-action="next-close" aria-label="Close">${icon(12, ICONS.close)}</button>
-  ${nextMotes()}<div class="nx-halves">${updateCards()}</div><p class="nx-foot">${NEXT_FOOT}</p>
+  ${nextMotes()}<div class="nx-halves">${updateCards()}</div>
 </div>`;
 
 // Esc, or a click outside the box and its link, closes it.

@@ -9,14 +9,13 @@
 .app-window:has(.nx) [data-action="next-toggle"] { color: var(--on-bar); }
 .nx-close { position: absolute; z-index: 3; top: 8px; right: 8px; display: flex; padding: 5px; border: none; background: none; color: var(--on-band-weak); cursor: pointer; }
 .nx-close:hover { color: var(--on-band); }
-.nx-foot { position: relative; margin: 0; padding: 10px 24px 14px; border-top: 1px solid color-mix(in srgb, var(--on-band) 8%, transparent);
-  font-size: 12px; color: var(--on-band-weak); }
 
-/* The icons rising behind the halves: from under the panel to past its top, faint, each at its own moment. */
+/* The icons rising behind the halves: from under the panel to past its top, at 70 % at most (the owner, 2026-11-21:
+   45 % was too faint), each at its own moment. */
 .nx-icon { display: inline-block; flex: none; background-image: url("../img/tree/skills.webp"); background-repeat: no-repeat; border-radius: 50%; }
 .nx-motes { position: absolute; inset: 0; pointer-events: none; }
 .nx-motes > span { position: absolute; bottom: -30px; opacity: 0; animation: nx-rise 5s linear infinite; animation-delay: calc(var(--m) * -.37s); }
-@keyframes nx-rise { 0% { opacity: 0; transform: translateY(0); } 15% { opacity: .45; } 100% { opacity: 0; transform: translateY(-480px); } }
+@keyframes nx-rise { 0% { opacity: 0; transform: translateY(0); } 15% { opacity: .7; } 100% { opacity: 0; transform: translateY(-480px); } }
 
 /* The two halves, opening from the seam. */
 .nx-halves { position: relative; display: flex; }
