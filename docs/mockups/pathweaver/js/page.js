@@ -26,8 +26,6 @@ const VARIANTS = {
   homeWidth: { label: "Home width", options: { 900: "900 px", 960: "960 px", 1600: "1,600 px" }, fallback: "960" },
   // The line of the levels of a hint and its weapon set in the box of the Inventory tab (js/inventory-detail.js).
   rangeLine: { label: "Range line", options: { r0: "R0", r1: "R1", r2: "R2", r3: "R3" }, fallback: "r1" },
-  // The Inventory tab cut in two (2k2, the owner, 2026-11-21): where the cut falls.
-  invCut: { label: "Pane start", range: { min: 436, max: 600, step: 4 }, variable: "--it-cut", unit: "px", fallback: "480" },
 };
 
 // The styles a section shows side by side: the style of the page alone, Frost Night by default, the
