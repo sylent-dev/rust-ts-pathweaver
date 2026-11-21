@@ -4,8 +4,11 @@ name: Deploy
 # (see docs/cloudflare-usage.md). It builds again rather than wait for the workflow CI, which
 # checks the same commit at the same time: the pull request already passed CI, but its branch
 # doesn't have to be up to date with `main`, so the merged commit itself is built here.
-# A pull request that changes the deployment builds the website and tries its upload without
-# sending it (`wrangler deploy --dry-run`), so that a mistake shows before the merge.
+# A pull request that changes the deployment or the files built builds the website and tries
+# its upload without sending it (`wrangler deploy --dry-run`), so that a mistake of the
+# configuration of wrangler or of the build shows before the merge. The try doesn't read
+# `web/static/_headers`: a wrong rule shows only at the test by hand of the headers
+# (docs/tests/website-online.md).
 on:
   push:
     branches: [main]
@@ -14,7 +17,9 @@ on:
       - '.github/workflows/deploy.yml'
       - '.github/actions/**'
       - 'deploy/**'
-      - 'web/static/_headers'
+      - 'web/package.json'
+      - 'web/vite.config.ts'
+      - 'web/static/**'
   workflow_dispatch:
 
 permissions:
@@ -62,11 +67,12 @@ jobs:
 
   # The job that holds the token of Cloudflare: it runs no code of the website, only wrangler,
   # on the files built above. Its secrets belong to the environment `production`, which only
-  # `main` may use (docs/cloudflare-usage.md, The token of the deployment).
+  # `main` may use (docs/cloudflare-usage.md, The token of the deployment); the condition below
+  # holds even before that rule exists, and for a run started by hand from another branch.
   deploy:
     name: Deploy
     needs: build
-    if: github.event_name != 'pull_request'
+    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     environment:
       name: production
@@ -75,14 +81,17 @@ jobs:
       - uses: actions/checkout@v7
         with:
           sparse-checkout: deploy
+          # The token of GitHub isn't kept in the folder, beside the one of Cloudflare.
+          persist-credentials: false
       - uses: actions/setup-node@v7
         with:
           node-version-file: deploy/package.json
           cache: npm
           cache-dependency-path: deploy/package-lock.json
+      # No script of a package runs beside the token; wrangler uploads without them.
       - name: Install wrangler
         working-directory: deploy
-        run: npm ci
+        run: npm ci --ignore-scripts
       - uses: actions/download-artifact@v8
         with:
           name: website
