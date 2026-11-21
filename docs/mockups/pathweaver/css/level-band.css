@@ -48,7 +48,12 @@
 .app-level.is-dragging .app-level-steps { opacity: .35; }
 .app-level-ghost { position: absolute; top: 28px; width: 4px; height: 28px; margin-left: -2px; background: var(--on-band-weak); opacity: .45; }
 @media (prefers-reduced-motion: reduce) { .app-level-cursor.is-landing { animation: none; } }
-.app-level-end { position: absolute; top: 52px; transform: translateX(-50%); font-size: 11px; color: var(--on-band-weak); }
+/* The lowest and the highest level under the ends (2k5, the owner, 2026-11-21: the cursor at 1 or at 100 hid them):
+   in the figures of the level, Archivo 800 drawn tight, smaller and fainter, their tops trimmed to the figures, 6 px
+   under the foot of the cursor, even lifted by a drag (its middle at 42 px, its half height 17.5 px: 59.5 px). */
+.app-level-end { position: absolute; top: 66px; transform: translateX(-50%); font: 800 var(--level-end-size, 16px)/1 var(--brand-font);
+  text-box: trim-both cap alphabetic; letter-spacing: -.05em; font-variant-numeric: tabular-nums;
+  color: color-mix(in srgb, var(--on-band) var(--level-end-alpha, 45%), transparent); }
 
 /* A snapshot (2g2): its track says why it has no marker, over the line, from its start. */
 .app-level-note { position: absolute; top: 18px; left: 0; font-size: 11px; color: var(--on-band-weak); white-space: nowrap; }
