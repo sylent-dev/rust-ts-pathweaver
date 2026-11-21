@@ -4,7 +4,8 @@
 // in the game, the real image of each item in its box (from RePoE, BUILDS.items, written by
 // tools/make-data.py), square corners on every box; an empty slot its name in the weak grey. A hint
 // that names no item of the game data (a free text of its author, « Any Belt ») has no image: its
-// words stand in for it. The slots the drawing has no place for (Trinket1, Flask2, an unknown id) in a
+// words stand in for it. The slots the drawing has no place for (an unknown id; Trinket1 and Flask2 drawn where they belong,
+// drawnSlot in js/levels.js) in a
 // short list under it. Each box darker than the column with a line (B4 at 25 %, css/side-inventory.css).
 // A hinted slot, or a line of the list, shows the card of its item under the pointer (js/slot-hover.js).
 
@@ -41,8 +42,8 @@ const UNKNOWN_MARK = `<span class="app-unknown" title="${NOT_IN_GAME_DATA}">?</s
 
 // The mark of a free text of its author in a box too small for its words (a small slot, a thumbnail): it
 // names no item, so has no image (2k2c, the owner, 2026-11-21: an empty box read as an image not loaded).
-// Four variants, the tabs « Free text » (VARIANTS.freeText): « … » as the small slots had; the bubble of the
-// mark of a note, as before « From the author »; a sticky note with lines, grey, or pale and turned, never the
+// Five variants, the tabs « Free text » (VARIANTS.freeText): « … » as the small slots had; the bubble of the
+// mark of a note, as before « From the author »; a sticky note with lines, grey, grey and turned, or pale and turned, never the
 // yellow of the « ? » of an unknown id, which warns.
 const NOTE_LINES = '<svg class="app-free-note" viewBox="0 0 14 14" aria-hidden="true"><rect width="14" height="14"/><path d="M3 4.5H11M3 7.5H11M3 10.5H8"/></svg>';
 const FREE_TEXT_MARKS = {
@@ -50,6 +51,7 @@ const FREE_TEXT_MARKS = {
   bubble: () => `<span class="app-free-text is-bubble">${icon(12, ICONS.note)}</span>`,
   grey: () => `<span class="app-free-text is-grey">${NOTE_LINES}</span>`,
   pale: () => `<span class="app-free-text is-pale">${NOTE_LINES}</span>`,
+  tilted: () => `<span class="app-free-text is-grey is-tilted">${NOTE_LINES}</span>`,
 };
 const freeTextMark = () => (FREE_TEXT_MARKS[chosen.freeText] ?? FREE_TEXT_MARKS.dots)();
 // The thumbnail of an item: its image, the « ? » of an unknown id, the mark of a free text.
