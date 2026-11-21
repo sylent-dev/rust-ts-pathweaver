@@ -684,9 +684,8 @@ def main():
     # The skills of the cases of the gems of two attributes (2kb).
     attributes = {key: build_data(read(name), names, gems, ascendancies, skills, tags)["skills"]
                   for key, name in ATTRIBUTE_CASES.items()}
-    # The hints and the portrait of the cases of the Inventory tab (2k2).
-    inventories = {key: {k: v for k, v in build_data(read(name), names, gems, ascendancies, skills, tags).items()
-                         if k in ("portrait", "slots")}
+    # The hints of the cases of the Inventory tab (2k2).
+    inventories = {key: build_data(read(name), names, gems, ascendancies, skills, tags)["slots"]
                    for key, name in INVENTORY_CASES.items()}
     skill_icons(cache, gems, [shown["skills"], crowded, *attributes.values()])
     write_js("data-builds.js", "BUILDS", {

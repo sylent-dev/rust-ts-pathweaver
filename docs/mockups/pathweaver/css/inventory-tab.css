@@ -1,64 +1,36 @@
-/* The Inventory tab (js/inventory-tab.js, 2k2): twelve variants, as high as the Overview, scrolling inside;
-   the content on the graph paper of the blocks (css/textures.css), as the Skills tab. */
+/* The Inventory tab (js/inventory-tab.js, 2k2; the owner, 2026-11-21): H1, the drawing on the left, the
+   detail of the slot chosen on the right; as high as the Overview, scrolling inside; the content on the
+   graph paper of the blocks (css/textures.css), as the Skills tab. Set aside: two lists (the wireframe),
+   cards, a table by slot, bars on the levels, now and next, an annotated drawing, columns by level, ghosts
+   in the drawing, words, a stash and the portrait behind the drawing. */
 .app-inventory-tab { height: 668px; overflow-y: auto; box-sizing: border-box; background: var(--side-column); scrollbar-width: thin; }
-.app-it { box-sizing: border-box; min-height: 100%; padding: 18px 20px 24px; font-size: 13px; }
+.app-it { display: flex; align-items: flex-start; gap: 28px; box-sizing: border-box; min-height: 100%; padding: 18px 20px 24px; font-size: 13px; }
 .app-it ul { margin: 0; padding: 0; list-style: none; }
 .app-it .app-inventory { margin: 8px 0 0; }
 .app-it .app-inventory-head { gap: 16px; }
+.app-it [data-item] { cursor: default; }
+.it-left { flex: none; }
+.it-side { flex: 1; min-width: 0; }
 
-/* The pieces every variant shares. */
 .it-title { margin: 0 0 8px; font-size: 14px; }
 .it-title.is-next { margin-top: 20px; }
-.it-drawing .it-title { margin: 0; }
+.it-left .app-inventory-head .it-title { margin: 0; }
 .it-none { margin: 0; font-size: 12.5px; }
 .it-name { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .it-name.is-unique { color: var(--unique); }
-.it-slot { flex: none; color: var(--on-band-weak); font-size: 10px; letter-spacing: .08em; text-transform: uppercase; white-space: nowrap; }
+.it-slot { flex: none; width: 84px; color: var(--on-band-weak); font-size: 10px; letter-spacing: .08em; text-transform: uppercase; white-space: nowrap; }
 .it-at { flex: none; min-width: 24px; color: var(--accent); font-size: 12px; font-weight: 700; }
 .it-thumb { width: 26px; height: 26px; }
-.it-replaces { overflow: hidden; font-size: 11.5px; text-overflow: ellipsis; white-space: nowrap; }
 .it-note { font-size: 12px; line-height: 1.45; white-space: pre-line; }
-.app-it [data-item] { cursor: default; }
 
-/* The drawing on the left, the rest on the right. */
-.it-n1, .it-n2, .it-n3, .it-h1, .it-h2, .it-e3, .it-f1, .it-f3 { display: flex; align-items: flex-start; gap: 28px; }
-.it-drawing, .it-left { flex: none; }
-.it-side { flex: 1; min-width: 0; }
-
-/* A line of a list. */
+/* A line of a list: the hints to come, the hints of a slot. */
 .it-row { display: flex; align-items: center; gap: 9px; min-height: 32px; }
-.it-row .it-slot { width: 84px; }
-.it-row .st-new { margin-left: auto; }
 
-/* N2: the cards of the Skills tab. */
-.it-cards { columns: 2; column-gap: 14px; }
-.it-card { --it-body: color-mix(in srgb, var(--band-deep), #000 60%); break-inside: avoid; margin-bottom: 10px; background: var(--it-body); }
-.it-card-head { display: flex; align-items: center; gap: 7px; min-height: 36px; padding-left: 10px; background: var(--band-deep); }
-.it-card-words { display: flex; flex-direction: column; min-width: 0; }
-.it-card-head .st-new { margin-left: auto; }
-.it-badge { flex: none; margin-left: auto; }
-.it-card-head .st-new + .it-badge { margin-left: 4px; }
-.it-badge .it-thumb { width: 36px; height: 36px; }
-.it-card-body { padding: 6px 10px 8px; }
-.it-card-replaces { margin: 0 0 4px; }
-.it-card.is-later .it-card-head { opacity: .85; }
+/* The slot chosen, outlined in the accent; a click on a slot or a line chooses it. */
+.app-it .app-slot, .it-left .it-row { cursor: pointer; }
+.app-it .app-slot.is-chosen { box-shadow: inset 0 0 0 2px var(--accent); }
 
-/* N3: a table by slot. */
-.it-table { width: 100%; border-collapse: collapse; table-layout: fixed; font-size: 12.5px; }
-.it-table th { text-align: left; font-weight: 600; }
-.it-table thead th { padding: 0 8px 6px 0; color: var(--weak); font-size: 11px; }
-.it-table thead th:first-child { width: 86px; }
-.it-table tbody tr { border-top: 1px solid color-mix(in srgb, var(--text) 8%, transparent); }
-.it-table tbody th, .it-table td { padding: 4px 8px 4px 0; vertical-align: middle; }
-.it-table td.is-before { opacity: .55; }
-.it-table td.is-now { background: color-mix(in srgb, var(--accent) 6%, transparent); }
-.it-cell-item { display: flex; align-items: center; gap: 6px; min-height: 28px; min-width: 0; }
-.it-cell-item .it-thumb { width: 22px; height: 22px; }
-
-/* H1: the slot chosen, its detail on the right. */
-.it-h1 .app-slot { cursor: pointer; }
-.it-h1 .app-slot.is-chosen { box-shadow: inset 0 0 0 2px var(--accent); }
-.it-h1 .it-left .it-row { cursor: pointer; }
+/* Its detail on the right. */
 .it-detail { padding: 14px 16px; background: color-mix(in srgb, var(--band-deep), #000 60%); }
 .it-detail-head { display: flex; align-items: center; gap: 12px; margin-bottom: 10px; font-size: 16px; font-weight: 700; }
 .it-detail-art { flex: none; display: grid; place-items: center; width: 64px; height: 64px; background: var(--slot-box); box-shadow: inset 0 0 0 1px var(--slot-line); }
@@ -69,99 +41,3 @@
 .it-detail .it-title { margin-top: 16px; }
 .it-span { flex: none; width: 52px; color: var(--weak); font-size: 12px; }
 .it-row.is-now .it-span { color: var(--accent); }
-
-/* H2: a bar per hint on the levels 1 to 100. */
-.it-h2-line { display: grid; grid-template-columns: 84px 1fr; align-items: center; height: 30px; }
-.it-h2-track { position: relative; height: 100%; }
-.it-h2-scale { height: 18px; font-size: 10px; }
-.it-h2-scale .it-h2-track span { position: absolute; top: 0; }
-.it-h2-bar { position: absolute; top: 4px; bottom: 4px; display: flex; align-items: center; gap: 4px; box-sizing: border-box; overflow: hidden;
-  padding-right: 4px; background: color-mix(in srgb, var(--text) 9%, transparent); box-shadow: inset 0 0 0 1px var(--slot-line); font-size: 11.5px; }
-.it-h2-bar .it-thumb { width: 22px; height: 22px; background: none; box-shadow: none; }
-.it-h2-bar.is-now { background: color-mix(in srgb, var(--accent) 22%, transparent); }
-.it-h2-bar.is-before { opacity: .45; }
-.it-h2-bar.is-later { opacity: .75; }
-.it-h2-now { position: absolute; top: 0; bottom: 0; width: 1px; background: var(--accent); pointer-events: none; }
-
-/* H3: now and a level to come, side by side. */
-.it-h3-steps { display: flex; align-items: center; gap: 6px; margin-bottom: 14px; font-size: 12.5px; }
-.it-h3-step { height: 26px; min-width: 34px; border: none; background: color-mix(in srgb, var(--text) 8%, transparent); color: var(--text); font-weight: 700; cursor: pointer; }
-.it-h3-step[aria-pressed="true"] { background: var(--accent); color: var(--on-accent); }
-.it-h3-row { display: flex; align-items: flex-start; gap: 22px; }
-.app-slot.is-changed { box-shadow: inset 0 0 0 2px var(--accent); }
-.it-h3-change { display: flex; flex-direction: column; gap: 2px; padding: 6px 0; border-top: 1px solid color-mix(in srgb, var(--text) 8%, transparent); }
-.it-h3-old .it-name { color: var(--weak); text-decoration: line-through; font-size: 12px; }
-.it-h3-new { display: flex; align-items: center; gap: 7px; min-width: 0; }
-.it-h3-new .it-thumb { width: 22px; height: 22px; }
-
-/* E1: the drawing large, its labels on each side joined by lines. */
-.it-e1-board { position: relative; display: flex; gap: 26px; margin-top: 10px; }
-.it-e1-board .app-inventory { margin: 0; }
-.it-e1-lines { position: absolute; top: 0; left: 0; z-index: 0; overflow: visible; fill: var(--accent); stroke: color-mix(in srgb, var(--accent) 55%, transparent); stroke-width: 1; pointer-events: none; }
-.it-e1-lines path { fill: none; }
-.it-e1-side { position: relative; z-index: 1; flex: none; width: 236px; }
-.it-e1-drawing { position: relative; z-index: 1; flex: none; }
-.it-e1-label { position: absolute; left: 0; right: 0; display: flex; flex-direction: column; justify-content: center; box-sizing: border-box; height: 44px; padding: 0 10px;
-  background: color-mix(in srgb, var(--band-deep), #000 40%); box-shadow: inset 0 0 0 1px var(--slot-line); }
-.it-e1-label.is-left { text-align: right; }
-.it-e1-line { display: flex; align-items: center; gap: 6px; }
-.it-e1-label.is-left .it-e1-line { justify-content: flex-end; }
-.it-e1-first { overflow: hidden; font-size: 11px; text-overflow: ellipsis; white-space: nowrap; }
-.it-chips { display: flex; flex-wrap: wrap; gap: 6px; }
-.it-chip { display: inline-flex; align-items: center; gap: 6px; max-width: 280px; padding: 2px 8px 2px 4px; background: color-mix(in srgb, var(--text) 6%, transparent); }
-.it-chip .it-thumb { width: 22px; height: 22px; }
-
-/* E2: a column per level where the gear changes. */
-.it-e2-columns { display: flex; align-items: stretch; gap: 10px; min-height: 100%; overflow-x: auto; scrollbar-width: thin; }
-.it-e2-column { flex: 1 0 132px; display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); align-content: start; gap: 6px; opacity: .6; }
-.it-e2-head { grid-column: 1 / -1; }
-.it-e2-column.is-reached { opacity: 1; }
-.it-e2-head { padding: 6px 8px; background: var(--band-deep); font-weight: 700; }
-.it-e2-column.is-reached .it-e2-head { box-shadow: inset 0 -2px 0 var(--accent); }
-.it-e2-tile { display: flex; align-items: center; gap: 8px; padding: 4px; background: color-mix(in srgb, var(--text) 5%, transparent); }
-.it-e2-tile .it-thumb { width: 40px; height: 40px; }
-.it-e2-tile.is-before { opacity: .45; }
-.it-e2-tile.is-before .it-name { text-decoration: line-through; }
-.it-e2-words { display: flex; flex-direction: column; min-width: 0; font-size: 12px; }
-.it-e2-until { font-size: 10.5px; }
-.it-e2-here { flex: none; position: relative; width: 2px; background: var(--accent); }
-.it-e2-here span { position: absolute; top: -2px; left: 50%; transform: translateX(-50%); padding: 1px 5px; background: var(--accent); color: var(--on-accent); font-size: 11px; font-weight: 800; }
-
-/* E3: what comes, in the drawing. */
-.it-soon { position: absolute; right: 2px; bottom: 2px; z-index: 1; min-width: 16px; padding: 0 3px; box-sizing: border-box; background: var(--accent); color: var(--on-accent);
-  font-size: 10px; font-weight: 800; line-height: 15px; text-align: center; }
-.app-slot.is-ghost .app-slot-empty { display: none; }
-.it-ghost { position: absolute; inset: 2px; display: grid; place-items: center; }
-.it-ghost .app-item-art { filter: grayscale(1); opacity: .35; }
-.it-e3-hint { margin-bottom: 12px; }
-.it-e3-head { display: flex; align-items: center; gap: 8px; margin-bottom: 3px; }
-.it-e3-head .st-new { margin-left: auto; }
-.it-e3 .it-note { padding-left: 34px; color: color-mix(in srgb, var(--text) 85%, transparent); }
-
-/* F1: in words. */
-.it-f1-step { margin: 0 0 14px; font-size: 15px; line-height: 2; }
-.it-f1-step.is-later { opacity: .5; }
-.it-f1-when { font-weight: 800; }
-.it-f1-step.is-current .it-f1-when { color: var(--accent); }
-.it-f1-item { display: inline-flex; align-items: center; gap: 5px; vertical-align: middle; }
-.it-f1-item .it-thumb { width: 24px; height: 24px; }
-.it-f1-item .it-name { max-width: 300px; font-weight: 600; }
-.it-f1-here { display: flex; align-items: center; gap: 8px; margin: -4px 0 14px; color: var(--accent); font-size: 11px; font-weight: 800; }
-.it-f1-here::after { content: ""; flex: 1; height: 1px; background: var(--accent); }
-
-/* F2: a stash. */
-.it-stash { position: relative; width: 920px; margin-bottom: 4px; background-image: linear-gradient(var(--slot-line) 1px, transparent 1px), linear-gradient(90deg, var(--slot-line) 1px, transparent 1px);
-  background-size: 40px 40px; }
-.it-stash-item { position: absolute; display: grid; place-items: center; box-sizing: border-box; padding: 3px; background: var(--slot-box); box-shadow: inset 0 0 0 1px var(--slot-line); }
-.it-stash-item.is-text { padding: 2px 4px; font-size: 10px; line-height: 1.2; text-align: center; overflow: hidden; }
-.it-stash.is-now .it-stash-item { box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--accent) 60%, transparent); background: color-mix(in srgb, var(--accent) 10%, var(--slot-box)); }
-.it-stash.is-later .it-stash-item .app-item-art { opacity: .6; }
-.it-stash.is-before { opacity: .4; }
-.it-stash-item .it-at { position: absolute; top: 1px; left: 3px; min-width: 0; font-size: 10px; }
-.it-stash-item .st-new { position: absolute; top: 1px; right: 3px; font-size: 9px; }
-
-/* F3: the slots over the portrait of the ascendancy. */
-.it-f3-figure { position: relative; flex: none; isolation: isolate; }
-.it-f3-portrait { position: absolute; top: 30px; left: 50%; z-index: -1; width: 380px; height: 380px; transform: translateX(-50%); border-radius: 50%; object-fit: cover; opacity: .28;
-  mask-image: radial-gradient(circle, #000 45%, transparent 70%); }
-.it-f3 .app-slot.is-empty { background: transparent; }
