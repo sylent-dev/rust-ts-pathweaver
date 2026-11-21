@@ -47,6 +47,12 @@
 /* What a part holds starts at its top: the gaps of the old cards are between its lines only. */
 .hc-body > :first-child, .hc-note > :first-child { margin-top: 0; }
 
+/* The title of the text of the author (js/hover-card.js, fromAuthor), in every card and in the box of the
+   Inventory tab: A4, the bubble of the mark of a note before the words, in the weak grey (the owner,
+   2026-11-21; small capitals, the words of a subtitle and a tag on the top edge of the part set aside). */
+.hc-from { display: flex; align-items: center; gap: 5px; margin-bottom: 4px; color: var(--on-band-weak); font-size: 11px; line-height: 1.3; }
+.hc-from .app-icon { flex: none; }
+
 /* The section of the mock-up (sections/hover-cards.js): the cards drawn in place, visible by themselves,
    not by is-shown, which the hover scripts take off every card of the page (a turn of the wheel hides the
    cards over the tree, js/tree-hover.js); they take the pointer, for the tooltip of a cut subtitle. */

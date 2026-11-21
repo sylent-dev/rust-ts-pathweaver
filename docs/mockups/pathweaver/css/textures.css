@@ -18,11 +18,11 @@
 /* The blocks that take the texture: a layer under their content, in their own stacking context. */
 /* The band of the site takes it too (the owner, 2026-11-18), not the band of the open builds; and the
    page of the library (2l2); the drawer of the inventory, on the shade of the header (2j4); the content of
-   the Skills tab (2k, the owner, 2026-11-21). */
-.app-header, .app-level, .app-tabs, .app-side, .app-st { position: relative; }   /* the drawer of the inventory is placed by css/side-overflow.css */
-.app-site, .app-header, .app-level, .app-tabs, .app-tree, .app-side, .ov-drawer, .library-page, .app-st { isolation: isolate; }
+   the Skills tab (2k, the owner, 2026-11-21); the content of the Inventory tab (2k2), and its block of the hints upcoming. */
+.app-header, .app-level, .app-tabs, .app-side, .app-st, .app-it { position: relative; }   /* the drawer of the inventory is placed by css/side-overflow.css */
+.app-site, .app-header, .app-level, .app-tabs, .app-tree, .app-side, .ov-drawer, .library-page, .app-st, .app-it, .up { isolation: isolate; }
 
-:is(.app-site, .app-header, .app-level, .app-tabs, .app-tree, .app-side, .ov-drawer, .library-page, .app-st)::before {
+:is(.app-site, .app-header, .app-level, .app-tabs, .app-tree, .app-side, .ov-drawer, .library-page, .app-st, .app-it, .up)::before {
   content: ""; position: absolute; inset: 0; z-index: -1; pointer-events: none;
   background: var(--texture-colour); opacity: var(--texture-opacity);
   mask-image: var(--texture); mask-size: var(--texture-size) var(--texture-size);

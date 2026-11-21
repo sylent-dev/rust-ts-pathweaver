@@ -1,0 +1,27 @@
+/* The hints upcoming in the Inventory tab (js/inventory-later.js, 2k2): a block of their own under the drawing
+   (the owner, 2026-11-21), so that the tab shows three blocks: the drawing, what comes, the box. The block in the
+   background of the drawer of the Overview (css/side-overflow.css), the page with its light from the bottom right
+   at 20 %, and its graph paper (css/textures.css), across the left half and down to its bottom. Set aside: the
+   hints on the graph paper of the drawing. */
+.app-it .it-left { display: flex; flex-direction: column; padding-bottom: 0; }
+.up { position: relative; flex: 1; margin: 22px 0 0 -32px; padding: 16px 32px 24px;
+  background: radial-gradient(ellipse 330px 220px at 100% 100%, color-mix(in srgb, var(--page-glow) 20%, transparent) 0%, transparent 70%), var(--page); }
+.up .it-title.is-next { margin-top: 0; }
+
+/* H2: tiles in two columns, the width of the drawing, 396 px; the one shown in the box marked. A tile dark, its
+   thumbnail darker, the whole height of the tile and without its edge (D3 of six, the owner, 2026-11-21; set
+   aside: a tile as light as on the paper, its thumbnail in it, lighter, on it edged as a slot, the shades of a
+   card on hover). */
+.up-tiles { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; width: 396px; }
+.up-tile { display: flex; align-items: center; gap: 9px; min-width: 0; height: 38px; padding-right: 6px; background: rgb(0 0 0 / 25%); cursor: pointer; }
+.up-tile:hover { background: color-mix(in srgb, rgb(0 0 0 / 25%), var(--text) 6%); }
+.up-tile[data-shown] { background: color-mix(in srgb, var(--accent) 10%, transparent); }
+.up-tile .it-thumb { width: 38px; height: 38px; padding: 3px; background: rgb(0 0 0 / 35%); box-shadow: none; }
+.up-words { display: flex; flex-direction: column; min-width: 0; line-height: 1.25; }
+.up .it-name { color: color-mix(in srgb, var(--text) 85%, transparent); }
+.up .it-name.is-unique { color: var(--unique); }
+/* The one shown in bold, a unique kept in its gold (the owner, 2026-11-21: the gold says what the item is). */
+.up [data-shown] .it-name { color: var(--text); font-weight: 700; }
+.up [data-shown] .it-name.is-unique { color: var(--unique); }
+.up-sub { overflow: hidden; color: var(--on-band-weak); font-size: 11px; text-overflow: ellipsis; white-space: nowrap; }
+.up-sub b { color: var(--accent); }

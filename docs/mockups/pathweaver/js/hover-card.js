@@ -6,7 +6,7 @@
 //   ellipsis and whole in a native tooltip (titleIfCut), and the art at the right (the icon of a gem,
 //   the mark of an unknown id; none for a note, a passive or an item).
 // - Its body, a step darker.
-// - The note of the author, in the shade of the head.
+// - The note of the author, in the shade of the head, under its title « From the author » (fromAuthor).
 // Every part is HTML its caller escaped (the data come from files of strangers).
 function hoverCardHtml({ title, subtitle = "", art = "", body = "", note = "" }) {
   return `<div class="hc-head">
@@ -14,8 +14,13 @@ function hoverCardHtml({ title, subtitle = "", art = "", body = "", note = "" })
       <div class="hc-title"><strong>${title}</strong>${subtitle ? `<div class="hc-sub">${subtitle}</div>` : ""}</div>
     </div>
     ${body ? `<div class="hc-body">${body}</div>` : ""}
-    ${note ? `<div class="hc-note">${note}</div>` : ""}`;
+    ${note ? `<div class="hc-note">${fromAuthor()}${note}</div>` : ""}`;
 }
+
+// The title of the text of the author, the same in every card and in the box of the Inventory tab (the owner,
+// 2026-11-21: « From the author », shorter than « Note of the author », which the card of a note had as its
+// subtitle), after the bubble of the mark of a note (A4 of four, css/hover-card.css).
+const fromAuthor = () => `<div class="hc-from">${icon(11, ICONS.note)}<span>From the author</span></div>`;
 
 // The art of a card from an image of the game: whole (the square icon of a skill), or a disc cut to a
 // square (the round icon of a support), grown by √2 so that its round edge falls outside

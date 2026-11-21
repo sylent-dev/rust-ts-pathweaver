@@ -1,8 +1,8 @@
 /* The card of a note of the author (2j5, js/note-hover.js), in the construction of every card on hover
-   (2k, css/hover-card.css), without art: its title naming what carries the note, the place in grey,
-   « Note of the author » as its subtitle; its body, the note; a group of passives, a short list. Set
-   aside (the owner, 2026-11-20): « Note of the author » at the right of the head, the note 4 px under
-   it. */
+   (2k, css/hover-card.css), without art: its title naming what carries the note, the place in grey, the
+   note under « From the author » as in every card; a group of passives, a short list, « N notes » as its
+   subtitle; the whole card in the darker shade of the body of a card. Set aside (the owner, 2026-11-20 and 2026-11-21): « Note of the
+   author » as its subtitle, or at the right of the head, the note 4 px under it. */
 .app-note-place { color: var(--on-band-weak); font-weight: 400; }
 /* The weapon set of a passive in its colour on the tree (--tree-set-1, --tree-set-2). */
 .app-note-place .is-set1 { color: var(--tree-set-1); }
@@ -18,3 +18,12 @@
 .app-changes-note[data-note-head] { position: relative; cursor: default; }
 .app-changes-note[data-note-head]::after { content: ""; position: absolute; inset: -4px; }
 .app-changes-note[data-note-head]:hover { color: var(--on-band); }
+
+/* The whole card in the darker shade of the body of the card of a skill (the owner, 2026-11-21), its head
+   and its note alike, see-through over the tree at the alpha of every card. */
+.is-hover-card.app-note-hover { --hc-head: var(--hc-body); --hc-note: var(--hc-body); }
+/* The card of a note: no art, so its head isn't 48 px high; as much room over
+   the name of the passive as between it and « From the author », 12 px (the owner, 2026-11-21, on a slider). The head and the note share their shade: the room is the padding of both. */
+.app-note-hover .hc-head { min-height: 0; padding-top: 12px; }
+.app-note-hover .hc-title { align-self: auto; }
+.app-note-hover .hc-head + .hc-note { padding-top: 12px; }

@@ -48,32 +48,48 @@ function slotInner(item, id, small) {
   return `<span class="app-slot-text">${escapeHtml(item.name)}</span>${item.unknown ? UNKNOWN_MARK : ""}`;
 }
 
-// The switch of the weapon set, in the language of Set I and Set II under the tree: buttons without
-// a box, in the weak grey, the set shown in its colour.
-const inventorySetSwitch = () => `<span class="app-inventory-sets">${[1, 2].map(set =>
+// The switch of the weapon set, in the right column, its drawer and the Inventory tab (2k2b, N2 of twelve
+// variants, the owner, 2026-11-21; the words without a box, two trapezoids from the top, hanging tags and
+// eight others set aside): a box in two halves, the set shown filled with its colour, which fades in once
+// when the set changes (STATE.setMoved).
+const inventorySetSwitch = () => `<span class="app-inventory-sets${STATE.setMoved ? " is-moved" : ""}">${[1, 2].map(set =>
   `<button type="button" class="is-set${set}" data-action="inventory-set" data-set="${set}" aria-pressed="${STATE.inventorySet === set}">Set ${set === 1 ? "I" : "II"}</button>`).join("")}</span>`;
 
-// The inventory at a level, from the hints of the build (or given ones, for a case of the mock-up).
-function inventoryBox(level, hints = slotsAt(level, STATE.inventorySet)) {
-  const set = STATE.inventorySet, scale = INVENTORY_CELL / 24;
+// The drawing of the slots at a level, for a weapon set, a cell of the game drawn `cell` px wide; `extra`
+// adds to a slot a class, attributes and some HTML (the Inventory tab, js/inventory-tab.js: what comes later,
+// the slot chosen).
+function inventoryDrawing(level, hints, { set = STATE.inventorySet, cell = INVENTORY_CELL, extra } = {}) {
+  const scale = cell / 24;
   const px = value => `${Math.round(value * scale)}px`;
-  const slots = INVENTORY_LAYOUT.map(([base, x, y, w, h, cell]) => {
+  const slots = INVENTORY_LAYOUT.map(([base, x, y, w, h, index]) => {
     const id = cellId(base, set);
-    const hint = hints.find(slot => slot.id === id && (cell === undefined || slot.x === cell));
+    const hint = hints.find(slot => slot.id === id && (index === undefined || slot.x === index));
     const item = hint && hintItem(hint);
     const state = item ? `is-hinted${item.unknown ? " is-unknown" : ""}${item.art ? "" : " is-text"}` : "is-empty";
+    const more = { className: "", attributes: "", html: "", ...extra?.(id, index ?? 0) };
     // An empty slot says which it is in its title (a small one shows no name); a hinted one has its card.
     const about = item ? hintAttributes(hint, item, level) : `title="${escapeHtml(INVENTORY_NAMES[id])}: nothing"`;
-    return `<div class="app-slot ${state}" style="left:${px(x)};top:${px(y)};width:${px(w)};height:${px(h)}" ${about}>${slotInner(item, id, w < 48)}</div>`;
+    return `<div class="app-slot ${state} ${more.className}" style="left:${px(x)};top:${px(y)};width:${px(w)};height:${px(h)}" ${about} ${more.attributes}>${slotInner(item, id, w < 48)}${more.html}</div>`;
   }).join("");
-  const others = hints.filter(hint => !inLayout(hint.id));
-  return `<div class="app-inventory-head"><h2 class="app-side-title app-title">Inventory</h2>${inventorySetSwitch()}</div>
-    <div class="app-inventory" style="width:${px(216)};height:${px(216)}">${slots}</div>
-    ${others.length ? `<ul class="app-inventory-others">${others.map(hint => [hint, hintItem(hint)]).map(([hint, item]) =>
-      `<li ${hintAttributes(hint, item, level)}><span class="app-item-thumb">${item.art ? itemArt(item) : item.unknown ? UNKNOWN_MARK : ""}</span><span class="app-inventory-slot">${escapeHtml(item.slot)}</span><span class="app-inventory-name">${escapeHtml(item.name)}</span>${item.unknown ? '<span class="app-unknown-word">unknown</span>' : ""}</li>`).join("")}</ul>` : ""}`;
+  return `<div class="app-inventory" style="width:${px(216)};height:${px(216)}">${slots}</div>`;
 }
 
+// The slots the drawing has no place for, under it: a thumbnail, the slot, the name.
+function inventoryOthers(level, hints) {
+  const others = hints.filter(hint => !inLayout(hint.id));
+  return others.length ? `<ul class="app-inventory-others">${others.map(hint => [hint, hintItem(hint)]).map(([hint, item]) =>
+    `<li ${hintAttributes(hint, item, level)}><span class="app-item-thumb">${item.art ? itemArt(item) : item.unknown ? UNKNOWN_MARK : ""}</span><span class="app-inventory-slot">${escapeHtml(item.slot)}</span><span class="app-inventory-name">${escapeHtml(item.name)}</span>${item.unknown ? '<span class="app-unknown-word">unknown</span>' : ""}</li>`).join("")}</ul>` : "";
+}
+
+// The inventory at a level, from the hints of the build (or given ones, for a case of the mock-up).
+const inventoryBox = (level, hints = slotsAt(level, STATE.inventorySet)) =>
+  `<div class="app-inventory-head"><h2 class="app-side-title app-title">Inventory</h2>${inventorySetSwitch()}</div>
+    ${inventoryDrawing(level, hints)}${inventoryOthers(level, hints)}`;
+
 ACTIONS["inventory-set"] = element => {
+  // A change of set fades the colour of the switch in once.
+  STATE.setMoved = STATE.inventorySet !== Number(element.dataset.set);
   STATE.inventorySet = Number(element.dataset.set);
   return true;
 };
+AFTER_RENDER.push(() => { STATE.setMoved = false; });
