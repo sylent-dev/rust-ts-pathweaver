@@ -1,0 +1,15 @@
+/* The page of a build at 1,920 px (js/wide-page.js, 2k4). The Overview needs nothing: the tree takes the width. */
+
+/* Skills, S2: four columns, 1,280 px at most, in the middle; the graph paper of the content to the edges. */
+.wide-skills .app-st { columns: 4; padding-inline: max(20px, calc((100% - 1280px) / 2)); }
+
+/* Inventory: the drawing at 56 px a cell (504 px), « Upcoming » under it the width of its column; the box's words
+   640 px at most. */
+.wide-inventory .it-left { width: 568px; }
+.wide-inventory .it-left .app-inventory-head { width: 504px; }
+.wide-inventory .up-tiles { width: 504px; }
+.wide-inventory .it-bare { max-width: 640px; }
+
+/* About, A3: the warnings in a column between the colophon and the description, on the pane of the colophon. */
+.wide-about .ab-aside { flex: none; width: 460px; box-sizing: border-box; padding: 24px 32px 28px; box-shadow: inset 1px 0 0 color-mix(in srgb, var(--text) 6%, transparent); }
+.wide-about .ab-colophon-main { max-width: 680px; }
