@@ -14,3 +14,12 @@
 .up-sub { overflow: hidden; color: var(--on-band-weak); font-size: 11px; text-overflow: ellipsis; white-space: nowrap; }
 .up-sub b { color: var(--accent); }
 
+
+/* In a block (the tabs « Upcoming »): the background of the drawer of the Overview (css/side-overflow.css), the
+   page with its light from the bottom right at 20 %, across the left half and down to its bottom, so that the
+   tab shows three blocks: the drawing, what comes, the box. */
+:root[data-upcoming-block="block"] .it-left { display: flex; flex-direction: column; padding-bottom: 0; }
+:root[data-upcoming-block="block"] .up { flex: 1; width: auto; margin: 22px 0 0 -32px; padding: 16px 32px 24px;
+  background: radial-gradient(ellipse 330px 220px at 100% 100%, color-mix(in srgb, var(--page-glow) 20%, transparent) 0%, transparent 70%), var(--page); }
+:root[data-upcoming-block="block"] .up .it-title.is-next { margin-top: 0; }
+:root[data-upcoming-block="block"] .up-tiles { width: 396px; }

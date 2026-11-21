@@ -24,6 +24,9 @@ const VARIANTS = {
   // The width of the windows of the home page (2l): the minimum of specs.md, half a 1920-pixel screen, and a wide
   // window of the owner's screen.
   homeWidth: { label: "Home width", options: { 900: "900 px", 960: "960 px", 1600: "1,600 px" }, fallback: "960" },
+  // The hints upcoming in the Inventory tab (2k2): on the graph paper under the drawing, or in a block of their
+  // own in the background of the drawer of the Overview (css/inventory-later.css).
+  upcomingBlock: { label: "Upcoming", options: { paper: "On the paper", block: "In a block" }, fallback: "paper" },
 };
 
 // The styles a section shows side by side: the style of the page alone, Frost Night by default, the
