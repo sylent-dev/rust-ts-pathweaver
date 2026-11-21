@@ -20,5 +20,5 @@
 
 /* The face: the sticky note « ? » of an unknown id (--unknown-note, --unknown-ink), turned, a light shadow under it. */
 .ph-note { display: block; margin-bottom: 28px; color: var(--unknown-ink); transform: rotate(-8deg);
-  filter: drop-shadow(2px 4px 4px rgb(0 0 0 / 45%)); }
+  filter: drop-shadow(2px 4px 4px var(--shadow-colour)); }
 .ph-note-paper { fill: var(--unknown-note); }

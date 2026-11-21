@@ -53,7 +53,7 @@ function flashNewGems(list, index) {
   skillLevelBefore.set(index, list.dataset.level);
   if (before === undefined || before === list.dataset.level || lessMotion()) return;
   for (const gem of list.querySelectorAll(".is-new > .app-gem-mark")) {
-    gem.animate([{ color: "#ffffff", transform: "scale(1.6)", filter: "drop-shadow(0 0 3px var(--accent))" }, { color: getComputedStyle(gem).color, transform: "scale(1)", filter: "none" }],
+    gem.animate([{ color: "var(--highlight)", transform: "scale(1.6)", filter: "drop-shadow(0 0 3px var(--accent))" }, { color: getComputedStyle(gem).color, transform: "scale(1)", filter: "none" }],
       { duration: 400, easing: "ease-out" });
   }
 }

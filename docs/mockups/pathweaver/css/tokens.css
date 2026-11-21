@@ -106,6 +106,40 @@
   --change-added: #5fcf80;
   --change-swapped: #f0b85a;
   --change-gone: #e66a5c;
+  /* The red of the errors, vivid, apart from the red of the gems of strength, so that an error never
+     reads as strength (the owner, 2026-11-18): a file refused, the bin of the library. */
+  --error: #ef4444;
+  --error-strong: #dc2626;   /* the button that confirms a removal, on hover */
+  --on-error: #ffffff;
+  /* The brightest ink, over the text: the bar under the current tab, a close × on hover, the flash
+     of what was just chosen or what is new, the fluid of the first visit. */
+  --highlight: #ffffff;
+  --accent-bright: color-mix(in srgb, var(--accent), #fff 15%);   /* the light that sweeps « NEW » */
+  --unique: #d6a15e;   /* the name of a unique item, its gold in the game */
+  /* What is laid over a surface: a box sunk into its panel (the path of a file, a tile of the hints to
+     come, the line of an error), the zone of the first visit, the veil under a box over the page, the
+     rows of the library one in two a shade lighter. */
+  --inset: rgb(0 0 0 / 25%);
+  --inset-strong: rgb(0 0 0 / 35%);   /* the thumbnail in a tile */
+  --drop-zone: rgb(0 0 0 / 50%);
+  --drop-zone-hover: rgb(0 0 0 / 65%);
+  --veil: rgb(0 0 0 / 50%);
+  --row: rgb(255 255 255 / 5%);
+  --row-even: rgb(255 255 255 / 1.5%);
+  --row-hover: rgb(255 255 255 / 9%);
+  /* The body of a card, a step darker than its head (the cards on hover, the cards of the Skills tab). */
+  --card-body: color-mix(in srgb, var(--band-deep), #000 60%);
+  /* The shadows: of a small thing over its panel (a sticky note, the level band), of a window over
+     its panel (the changes at a level, the card of a passive, the box of Download), of a box over
+     the page (What's next). */
+  /* The named colours of the author's markup (specs.md, The author's texts), readable on the cards of
+     the style; « gray » reads as grey. */
+  --markup-white: #ffffff; --markup-grey: #8c8c8c; --markup-black: #000000; --markup-red: #e05050;
+  --markup-green: #5fc35f; --markup-blue: #6c8cff; --markup-yellow: #e6d25a; --markup-orange: #e8913c;
+  --markup-gold: #c8a65a; --markup-purple: #a86ce0; --markup-cyan: #4fd2d2; --markup-magenta: #d24fd2;
+  --shadow-colour: rgb(0 0 0 / 45%);
+  --popover-shadow: 0 8px 18px rgb(0 0 0 / 28%);
+  --dialog-shadow: 0 18px 48px rgb(0 0 0 / 55%);
   /* The tree, read by the canvas: colours, the width of the links taken, a glow (blur in pixels)
      on what is taken, and a shape per kind (circle, square, diamond, hex, star). */
   --tree-background: #ffffff;

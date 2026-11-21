@@ -53,7 +53,7 @@ function flashNewTitle(column, index) {
   const before = newLevelBefore.get(index);
   newLevelBefore.set(index, title.textContent);
   if (before === undefined || before === title.textContent || title.classList.contains("is-empty") || lessMotion()) return;
-  title.animate([{ color: "#ffffff", textShadow: "0 0 10px color-mix(in srgb, var(--accent) 80%, transparent)" }, { color: getComputedStyle(title).color, textShadow: "none" }],
+  title.animate([{ color: "var(--highlight)", textShadow: "0 0 10px color-mix(in srgb, var(--accent) 80%, transparent)" }, { color: getComputedStyle(title).color, textShadow: "none" }],
     { duration: 400, easing: "ease-out" });
 }
 AFTER_RENDER.push(() => document.querySelectorAll(".app-side").forEach(flashNewTitle));

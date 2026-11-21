@@ -4,7 +4,7 @@
 .app-level { display: flex; align-items: center; height: 84px; padding-right: 18px; overflow: visible; z-index: 4;
   background: var(--band-image), var(--band-deep); color: var(--on-band); font-size: 13px;
   /* A light shadow under it, over the tabs, for a little relief: 6 px of blur (2h, the owner, 2026-11-19). */
-  box-shadow: 0 1px 6px rgb(0 0 0 / var(--shadow-alpha-dark)); }
+  box-shadow: 0 1px 6px var(--shadow-colour); }
 /* A band whose window of what changes is open over everything, the windows of the mock-up under it
    included (the owner, 2026-11-19). */
 .app-level:has(> .app-changes-window) { z-index: 8; }

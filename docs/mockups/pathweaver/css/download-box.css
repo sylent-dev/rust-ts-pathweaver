@@ -2,12 +2,12 @@
    shade and the construction of the window of « N changes », 440 px. */
 .dl-case { position: relative; }
 .dl-box { position: absolute; z-index: 6; top: calc(66px + 3px); right: 16px; width: 440px; box-sizing: border-box; padding: 12px 16px 14px;
-  border-radius: 3px; background: var(--band-image), var(--band-deep); color: var(--on-band); box-shadow: 0 8px 18px rgb(0 0 0 / .28);
+  border-radius: 3px; background: var(--band-image), var(--band-deep); color: var(--on-band); box-shadow: var(--popover-shadow);
   font-size: 12px; line-height: 1.45; transform-origin: top right; animation: reveal-pop 280ms cubic-bezier(.34, 1.56, .64, 1) both; }
 @media (prefers-reduced-motion: reduce) { .dl-box { animation: none; } }
 .dl-head { display: flex; align-items: baseline; justify-content: space-between; margin: 0 0 8px; font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: var(--on-band-weak); }
 .dl-folder { margin-top: 8px; }
-.dl-path { display: flex; align-items: flex-start; gap: 10px; padding: 7px 8px 7px 10px; border-radius: 2px; background: rgb(0 0 0 / .25); }
+.dl-path { display: flex; align-items: flex-start; gap: 10px; padding: 7px 8px 7px 10px; border-radius: 2px; background: var(--inset); }
 .dl-path code { flex: 1; min-width: 0; font: 11px/1.45 var(--font-code); overflow-wrap: anywhere; color: var(--on-band); }
 .dl-copy { flex: none; padding: 0; border: none; background: none; color: var(--accent); font: inherit; font-weight: 600; cursor: pointer; transition: color .3s; }
 .dl-copy:hover { color: var(--on-band); }
