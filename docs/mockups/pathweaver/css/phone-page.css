@@ -1,0 +1,48 @@
+/* The phone page (2m, js/phone-page.js): one column in the middle of the phone, on the page and its graph paper. */
+
+.ph-window { isolation: isolate; display: flex; flex-direction: column; }
+.ph-window::before {
+  content: ""; position: absolute; inset: 0; z-index: -1; pointer-events: none;
+  background: var(--texture-colour); opacity: var(--texture-opacity);
+  mask-image: var(--texture); mask-size: var(--texture-size) var(--texture-size);
+  mask-position: calc(var(--texture-size) / 8) calc(var(--texture-size) / 8);
+}
+
+/* The brand at the top, as in the band of the site, without its band: nothing on this page leads anywhere. */
+.ph-brand { display: flex; align-items: center; gap: var(--brand-gap); padding: 20px 24px; }
+.ph-brand .logo-name { font-size: var(--brand-size); }
+
+.ph-message { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 0;
+  padding: 0 32px 72px; text-align: center; }
+.ph-face { margin-bottom: 28px; }
+.ph-title { margin: 0 0 14px; font: 800 26px/1.15 var(--brand-font); letter-spacing: -0.03em; color: var(--text); }
+.ph-message p { margin: 0; max-width: 300px; color: var(--weak); font-size: 16px; line-height: 1.5; }
+.ph-open { margin-top: 28px !important; display: flex; flex-direction: column; align-items: center; gap: 8px; }
+.ph-open code { font: 600 17px var(--font-code); color: var(--text); padding: 8px 14px; background: rgb(0 0 0 / 35%); }
+
+/* U1: the line in the colour of the text, a little softer. */
+.ph-line { color: color-mix(in srgb, var(--text) 80%, transparent); }
+
+/* U2: the mark turned onto its side and grey; a tear of the accent under its inner ring. */
+.ph-mark { position: relative; display: inline-block; transform: rotate(-24deg); color: var(--weak); }
+.ph-mark .logo-frame { fill: color-mix(in srgb, var(--weak) 60%, transparent); }
+.ph-tear { position: absolute; left: 47%; top: 62%; width: 7px; height: 10px; background: var(--accent);
+  border-radius: 50% 50% 50% 50% / 65% 65% 35% 35%; transform: rotate(24deg);
+  animation: ph-tear 2.4s ease-in infinite; }
+@keyframes ph-tear { 0%, 40% { translate: 0 0; opacity: 0; } 50% { opacity: 1; } 100% { translate: 0 26px; opacity: 0; } }
+
+/* U3: the icon of the notable in grey and faded under the face, its frame in the weak grey. */
+.ph-passive { position: relative; display: grid; place-items: center; width: 96px; height: 96px; color: var(--text); }
+.ph-passive > * { grid-area: 1 / 1; }
+.ph-passive .nx-icon { filter: grayscale(1) brightness(.55); opacity: .5; }
+.ph-passive svg circle:not([fill]) { stroke: var(--weak); }
+
+/* U4: the accent, the disc at 14 %, the head tilted and sighing. */
+.ph-accent { color: var(--accent); transform-origin: 50% 85%; animation: ph-sigh 3.2s ease-in-out infinite; }
+.ph-accent-disc { fill: color-mix(in srgb, var(--accent) 14%, transparent); }
+@keyframes ph-sigh { 0%, 100% { rotate: -8deg; } 50% { rotate: -14deg; translate: 0 3px; } }
+
+@media (prefers-reduced-motion: reduce) {
+  .ph-tear { animation: none; opacity: 1; }
+  .ph-accent { animation: none; rotate: -8deg; }
+}
