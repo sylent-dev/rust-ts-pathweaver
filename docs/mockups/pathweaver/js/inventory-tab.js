@@ -44,7 +44,7 @@ function itState(level, source) {
 }
 
 // The pieces of the tab.
-const itThumb = hint => `<span class="app-item-thumb it-thumb">${thumbInner(hint.item, true)}</span>`;
+const itThumb = (hint, className = "") => `<span class="app-item-thumb it-thumb${className && ` ${className}`}">${thumbInner(hint.item, true)}</span>`;
 const itName = hint => `<span class="it-name${hint.item.unique ? " is-unique" : ""}">${escapeHtml(hint.item.name)}</span>`;
 const itSlot = hint => `<span class="it-slot">${escapeHtml(hint.label)}</span>`;
 const itAt = level => `<span class="it-at app-number">${level}</span>`;
@@ -74,8 +74,8 @@ function inventoryTab(level = STATE.level, source, { middle = false, cell = 44 }
   const drawn = shown && state.now.includes(shown);
   const extra = (id, x) => ({ attributes: `data-action="it-choose" data-pick="${cellKey({ id, x })}"`,
     className: drawn && cellKey({ id, x }) === cellKey(shown) ? `is-chosen${STATE.itFlash ? " is-flash" : ""}` : "" });
-  return `<div class="app-inventory-tab"><div class="app-it" data-level="${level}"${source ? ` data-source="${source}"` : ""}>
-      <div class="it-left"><div class="app-inventory-head">${inventorySetSwitch()}</div>${inventoryDrawing(level, state.now, { cell, extra, said: true })}
+  return `<div class="app-inventory-tab"><div class="app-it graph-paper" data-level="${level}"${source ? ` data-source="${source}"` : ""}>
+      <div class="it-left"><div class="it-head">${inventorySetSwitch()}</div>${inventoryDrawing(level, state.now, { cell, extra, said: true, choosable: true })}
         ${inventoryOthers(level, state.now, true)}${middle ? "" : inventoryLater(state, shown)}</div>
       ${middle ? `<div class="it-mid">${inventoryLater(state, shown)}</div>` : ""}
       <div class="it-side">${inventoryDetail(shown, state)}</div>

@@ -6,7 +6,7 @@
 /* Inventory: the drawing at 56 px a cell (504 px), « Upcoming » under it the width of its column; the box's words
    640 px at most. */
 .wide-inventory .it-left { width: 568px; }
-.wide-inventory .it-left .app-inventory-head { width: 504px; }
+.wide-inventory .it-head { width: 504px; }
 .wide-inventory .up-tiles { width: 504px; }
 .wide-inventory .it-bare { max-width: 640px; }
 

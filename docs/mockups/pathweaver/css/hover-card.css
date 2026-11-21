@@ -58,3 +58,15 @@
    cards over the tree, js/tree-hover.js); they take the pointer, for the tooltip of a cut subtitle. */
 .hc-cards { display: flex; flex-direction: column; gap: 22px; padding: 22px 18px; background: var(--page); font-family: var(--font-text); }
 .app-hover.is-hover-card.is-static { position: relative; z-index: auto; opacity: 1; visibility: visible; transition: none; pointer-events: auto; }
+
+/* What the body of a card holds: stats one per line (how far under what is above them, --hover-stats-margin), the
+   state at the level in the weak grey. */
+.app-hover-stats { margin: var(--hover-stats-margin, 6px 0 0); padding: 0; list-style: none; }
+.app-hover-stats li + li { margin-top: 3px; }
+.app-hover-state { margin-top: 6px; color: var(--on-band-weak); font-size: 11px; }
+/* What a card says of what the data lack (2j3b): in the weak grey, upright; of an id the game data don't
+   know, in the yellow of its sticky note (--unknown-text, css/tokens.css; the owner, 2026-11-20: red
+   would read as « gone », as in the window of what changes, and amber is close to the gold of the
+   authors' notes). */
+.app-hover-missing { margin: 6px 0 0; color: var(--on-band-weak); }
+.app-hover-missing.is-unknown { color: var(--unknown-text); }

@@ -20,9 +20,13 @@
 /* A line per change (W1, the owner, 2026-11-19): its sign, its category, its name cut to fit, what it
    hangs on at the right; the whole line a link, lighter on hover, where it leads in place of its
    detail (H4). */
-.app-changes-lines { margin: 0; padding: 0; list-style: none; }
+.app-changes-lines { margin: var(--lines-margin, 0); padding: 0; list-style: none; }   /* --lines-margin: set by its place */
 .app-changes-lines li { display: flex; align-items: baseline; gap: 8px; padding: 2px 16px; line-height: 1.4; cursor: pointer; transition: background .15s; }
-.app-changes-lines li:hover { background: color-mix(in srgb, var(--on-band) 8%, transparent); }
+.app-changes-lines:not(.is-plain) li:hover { background: color-mix(in srgb, var(--on-band) 8%, transparent); }
+/* Plain (is-plain): the lines of « New at N » in the right column (js/side-new.js), not links: the Overview
+   shows what they say. */
+.app-changes-lines.is-plain li { padding: 1px 10px; cursor: default; }
+.app-changes-lines.is-plain b { font-weight: 600; }
 .app-changes-category { flex: none; width: 50px; font-size: 10px; letter-spacing: .08em; text-transform: uppercase; color: var(--on-band-weak); }
 .app-changes-name { min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 /* The detail and where the line leads share one cell, as wide as the wider of the two, so that the
@@ -43,13 +47,6 @@
 .is-added > .app-changes-sign { color: var(--change-added); }
 .is-swapped > .app-changes-sign { color: var(--change-swapped); }
 .is-gone > .app-changes-sign { color: var(--change-gone); }
-
-/* The mark of a note (N2), 2 px under the baseline of the letters beside it (the owner, 2026-11-19):
-   an icon sits on the baseline by its bottom; in the column of the signs, where it is a block, by
-   moving it. */
-.app-changes-note { display: inline-flex; margin-left: 5px; vertical-align: -2px; color: var(--on-band-weak); }
-.app-changes-sign svg { position: relative; top: 2px; }
-.app-changes-sign > .app-changes-note { display: inline; margin-left: 0; color: inherit; }
 
 /* The section of the window on other builds (sections/level-changes.js): the band of the case, its
    level and « N changes » open, the page under it where the window hangs. */

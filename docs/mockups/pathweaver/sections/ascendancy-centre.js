@@ -8,5 +8,5 @@ const CENTRE_ZOOMS = [["Whole", 0.021], ["Middle", 0.07], ["Close", 0.17]];
 
 addSection(() => ["The ascendancy at the centre of the tree, over its portrait", CENTRE_ZOOMS.map(([label, scale]) => [
   `${label} · ${scale} px per unit · level 80`,
-  `<div class="app-tree" style="width:960px;height:540px;flex:none"><canvas class="app-tree-canvas" data-tree="centre" data-scale="${scale}" data-level="80" aria-label="The centre of the tree, ${label.toLowerCase()}"></canvas></div>`,
+  `<div class="app-tree graph-paper" style="width:960px;height:540px;flex:none"><canvas class="app-tree-canvas" data-tree="centre" data-scale="${scale}" data-level="80" aria-label="The centre of the tree, ${label.toLowerCase()}"></canvas></div>`,
 ])]);

@@ -6,7 +6,6 @@
   color: var(--on-band); font-size: 13px; line-height: 1.45; }
 .nx-veil { position: absolute; inset: 0; z-index: 8; background: var(--veil); animation: nx-fade 300ms ease-out both; }
 @keyframes nx-fade { from { opacity: 0; } }
-.app-window:has(.nx) [data-action="next-toggle"] { color: var(--on-top-band); }
 .nx-close { position: absolute; z-index: 3; top: 8px; right: 8px; display: flex; padding: 5px; border: none; background: none; color: var(--on-band-weak); cursor: pointer; }
 .nx-close:hover { color: var(--on-band); }
 

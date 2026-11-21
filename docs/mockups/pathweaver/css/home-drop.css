@@ -43,8 +43,14 @@
 /* The zone grows with its notes, so that their lines still reach its edges (2l2). */
 .home-drop.is-drag .home-drop-stage { transform: scale(1.03); }
 
-/* Paste JSON, a link under the zone, like the links of the band of the site (its line on hover),
-   without an icon (the owner, 2026-11-18). */
-.home-drop-paste.app-site-link { height: 32px; padding: 0 4px; }
+/* The strip (is-strip): the zone low and wide, its icon on the left, its words beside it, one over the other; the
+   library (sections/library.js). A file over the page lights it as the zone, a little less. */
+.home-drop-zone.is-strip { flex: 1; flex-direction: row; justify-content: flex-start; gap: 18px; width: auto; height: 84px; padding: 0 26px; }
+.home-drop-zone .home-drop-words { display: flex; flex-direction: column; gap: 4px; color: var(--text); }
+.home-drop-zone.is-strip strong { font-size: 16px; }
+.home-drop-zone.is-strip.is-paste { height: 200px; padding: 0; justify-content: center; }
+.home-drop-zone.is-strip.is-drag { background: color-mix(in srgb, var(--accent) 16%, var(--page));
+  box-shadow: 0 0 0 6px color-mix(in srgb, var(--accent) 16%, transparent), 0 0 40px color-mix(in srgb, var(--accent) 40%, transparent); }
+.home-drop-zone.is-strip.is-drag .drop-mark-corner { transform: translate(2.4px, 2.4px); }
 
 .home-drop-sources { position: absolute; left: 0; right: 0; bottom: 22px; color: var(--weak); font-size: 12.5px; text-align: center; }

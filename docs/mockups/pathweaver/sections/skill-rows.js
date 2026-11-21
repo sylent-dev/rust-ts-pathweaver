@@ -12,5 +12,5 @@ addSection(() => ["A row of a skill: N2, the spirit gem teal, the lineage suppor
   ["The Overview at the level of the band: ◀ ▶, the track or ← →, to see the flash",
     `<div class="app-window" style="width:960px">${levelBand()}${overview()}</div>`],
   ...SKILL_ROW_CASES.map(([level, label]) => [label,
-    `<div class="app-window" style="width:960px"><div class="app-overview app-sr-short"><div class="app-sr-tree app-weak">The tree</div><aside class="app-side">${newAtBox(level)}${skillList(level)}</aside></div></div>`]),
+    `<div class="app-window" style="width:960px"><div class="app-overview app-sr-short"><div class="app-sr-tree app-weak">The tree</div><aside class="app-side graph-paper">${newAtBox(level)}${skillList(level)}</aside></div></div>`]),
 ]]);

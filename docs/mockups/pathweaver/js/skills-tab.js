@@ -44,4 +44,4 @@ function stCard(skill) {
 
 // The Skills tab at a level, of the build shown or of a case.
 const skillsTab = (level = STATE.level, source) =>
-  `<div class="app-skills-tab"><div class="app-st" data-level="${level}"${source ? ` data-source="${source}"` : ""}>${stSkills(level, source).map(stCard).join("")}</div></div>`;
+  `<div class="app-skills-tab"><div class="app-st graph-paper" data-level="${level}"${source ? ` data-source="${source}"` : ""}>${stSkills(level, source).map(stCard).join("")}</div></div>`;

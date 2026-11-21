@@ -4,4 +4,3 @@
    tree as the card of a passive. */
 .app-pinned-card { position: fixed; z-index: 20; font-family: var(--font-text); }
 .app-gem-text { margin: 6px 0 0; }
-.app-skill-name { cursor: default; }

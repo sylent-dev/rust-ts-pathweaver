@@ -52,7 +52,7 @@ function levelBand({ key = "shown", focusShown = false } = {}) {
   const record = changesHere(key, level);
   const open = STATE.changesOpen === instance && record !== undefined;
   const snapshot = isSnapshot(key);
-  return `<div class="app-level" data-band="${key}" data-instance="${instance}">
+  return `<div class="app-level graph-paper" data-band="${key}" data-instance="${instance}">
     <div class="app-level-now"><span class="app-level-label">Level</span><span class="app-level-number">${level}</span></div>
     ${levelSteps(markerBeside(key, level, "previous"), markerBeside(key, level, "next"), record, open, snapshot)}
     <div class="app-level-track" data-action="level-track">

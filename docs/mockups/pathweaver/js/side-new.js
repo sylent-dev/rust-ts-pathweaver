@@ -27,7 +27,7 @@ function newAtBox(level, record = BUILDS.changes.shown.levels[level]) {
   const more = list.length > NEW_LINES
     ? `<button type="button" class="app-new-more" data-action="new-more" title="Opens the window of « N changes »">and ${plural(list.length - NEW_LINES, "more change", "more changes")}</button>` : "";
   return `<h2 class="app-side-title app-title app-new-title">New at ${level}</h2>
-    <div class="app-new"><ul class="app-changes-lines app-new-lines">${list.slice(0, NEW_LINES).map(newLine).join("")}</ul>${more}</div>`;
+    <div class="app-new"><ul class="app-changes-lines is-plain">${list.slice(0, NEW_LINES).map(newLine).join("")}</ul>${more}</div>`;
 }
 
 // « and N more changes » opens the window of « N changes » of the band of its page.

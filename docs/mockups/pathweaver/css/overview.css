@@ -1,4 +1,8 @@
 /* The Overview tab: the tree on the left, a column of 330 px on the right (css/side-*.css). */
 .app-overview { display: flex; height: 668px; }
 .app-side { flex: none; width: 330px; box-sizing: border-box; padding: 12px 12px 12px 14px; overflow: hidden; background: var(--side-column); }
+/* The switch of the weapon set as far from the right edge as the « I » of « Inventory » from the left (the owner,
+   2026-11-21): 18 px against the 12 px of the padding (css/side-inventory.css). */
+.app-side { --sets-inset: 6px; }
 .app-side-title { margin: 16px 0 8px 4px; font-size: 15px; }   /* the titles of the column: Skills, Inventory */
+.app-side-title.is-first { margin-top: 0; }   /* at the top of its block: the bar of the drawer */

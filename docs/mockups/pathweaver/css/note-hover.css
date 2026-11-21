@@ -14,6 +14,14 @@
 .app-note-passive { display: block; margin-bottom: 1px; color: var(--on-band); font-size: 13px; font-weight: 600; }
 .app-note-more { margin: 6px 0 0; color: var(--on-band-weak); font-size: 11px; }
 
+/* The mark of a note (N2, noteMark of js/note-hover.js), 2 px under the baseline of the letters beside it (the
+   owner, 2026-11-19): an icon sits on the baseline by its bottom; how far down, its place may set (2n3,
+   --note-mark-offset). The sign of a note set again, in the column of the
+   signs of the lines of what changes (is-sign), where it is a block: moved down. */
+.app-changes-note { display: inline-flex; margin-left: 5px; vertical-align: var(--note-mark-offset, -2px); color: var(--on-band-weak); }
+.app-changes-note.is-sign { display: inline; margin-left: 0; color: inherit; }
+.app-changes-note.is-sign svg { position: relative; top: 2px; }
+
 /* The mark answers the pointer: a little lighter, and a target wider than its 12 px. */
 .app-changes-note[data-note-head] { position: relative; cursor: default; }
 .app-changes-note[data-note-head]::after { content: ""; position: absolute; inset: -4px; }

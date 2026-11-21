@@ -13,7 +13,7 @@ const endCard = () => `<div class="tab-card">
 </div>`;
 
 // The menu of this section opens and closes on its own, open at first: a click on « +N ▾ » plays
-// its opening, 5 · Pop (css/menu-reveal.css).
+// its opening, 5 · Pop (css/app-bar.css).
 STATE.menuDemo = true;
 ACTIONS.toggleMenuDemo = () => {
   STATE.menuDemo = !STATE.menuDemo;

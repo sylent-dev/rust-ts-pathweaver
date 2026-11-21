@@ -9,7 +9,7 @@ const ART_KINDS = [
   ["Ascendancy", "small", true], ["Ascendancy notable", "notable", true], ["Ascendancy start", "start", true],
 ];
 addSection(() => ["The passives with the icons and frames of the game: each kind", [
-  ["Each kind of passive, not taken (top) and taken (bottom), at the size of the sheets", `<div class="app-tree" style="width:960px;height:270px;flex:none"><canvas class="app-tree-canvas" data-tree="kinds" aria-label="Kinds of passives"></canvas></div>`],
+  ["Each kind of passive, not taken (top) and taken (bottom), at the size of the sheets", `<div class="app-tree graph-paper" style="width:960px;height:270px;flex:none"><canvas class="app-tree-canvas" data-tree="kinds" aria-label="Kinds of passives"></canvas></div>`],
 ]]);
 
 // Each kind at the size of the sheets: the first passive of the kind that has its icon.

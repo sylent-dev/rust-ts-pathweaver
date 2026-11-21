@@ -70,8 +70,9 @@ const inventorySetSwitch = () => `<span class="app-inventory-sets${STATE.setMove
 
 // The drawing of the slots at a level, for a weapon set, a cell of the game drawn `cell` px wide; `extra`
 // adds to a slot a class, attributes and some HTML (the Inventory tab, js/inventory-tab.js: what comes later,
-// the slot chosen); `said`, the tooltip of the mark of a free text, where no card opens on hover.
-function inventoryDrawing(level, hints, { set = STATE.inventorySet, cell = INVENTORY_CELL, extra, said = false } = {}) {
+// the slot chosen); `said`, the tooltip of the mark of a free text, where no card opens on hover; `choosable`, a
+// click on a slot chooses it (the Inventory tab).
+function inventoryDrawing(level, hints, { set = STATE.inventorySet, cell = INVENTORY_CELL, extra, said = false, choosable = false } = {}) {
   const scale = cell / 24;
   const px = value => `${Math.round(value * scale)}px`;
   const slots = INVENTORY_LAYOUT.map(([base, x, y, w, h, index]) => {
@@ -84,7 +85,7 @@ function inventoryDrawing(level, hints, { set = STATE.inventorySet, cell = INVEN
     const about = item ? hintAttributes(hint, item, level) : `title="${escapeHtml(INVENTORY_NAMES[id])}: nothing"`;
     return `<div class="app-slot ${state} ${more.className}" style="left:${px(x)};top:${px(y)};width:${px(w)};height:${px(h)}" ${about} ${more.attributes}>${slotInner(item, id, w < 48, said)}${more.html}</div>`;
   }).join("");
-  return `<div class="app-inventory" style="width:${px(216)};height:${px(216)}">${slots}</div>`;
+  return `<div class="app-inventory${choosable ? " is-choosable" : ""}" style="width:${px(216)};height:${px(216)}">${slots}</div>`;
 }
 
 // The slots the drawing has no place for, under it: a thumbnail, the slot, the name.
@@ -94,10 +95,18 @@ function inventoryOthers(level, hints, said = false) {
     `<li ${hintAttributes(hint, item, level)}><span class="app-item-thumb">${thumbInner(item, said)}</span><span class="app-inventory-slot">${escapeHtml(item.slot)}</span><span class="app-inventory-name">${escapeHtml(item.name)}</span>${item.unknown ? '<span class="app-unknown-word">unknown</span>' : ""}</li>`).join("")}</ul>` : "";
 }
 
-// The inventory at a level, from the hints of the build (or given ones, for a case of the mock-up).
-const inventoryBox = (level, hints = slotsAt(level, STATE.inventorySet)) =>
-  `<div class="app-inventory-head"><h2 class="app-side-title app-title">Inventory</h2>${inventorySetSwitch()}</div>
+// The inventory at a level, from the hints of the build (or given ones, for a case of the mock-up); without its
+// title and switch (`head` false) in the drawer of the right column, whose bar shows them.
+const inventoryBox = (level, hints = slotsAt(level, STATE.inventorySet), { head = true } = {}) =>
+  `${head ? `<div class="app-inventory-head"><h2 class="app-side-title app-title">Inventory</h2>${inventorySetSwitch()}</div>` : ""}
     ${inventoryDrawing(level, hints)}${inventoryOthers(level, hints)}`;
+
+// The drawing as thumbnails, in the bar of the drawer of the right column (2j4, js/side-overflow.js): a box per
+// hinted slot, its card on hover as in the drawing.
+function inventoryThumbs(level, hints) {
+  return `<div class="app-inventory is-thumbs">${hints.map(hint => [hint, hintItem(hint)]).map(([hint, item]) =>
+    `<span class="app-slot is-hinted${item.unknown ? " is-unknown" : ""}" ${hintAttributes(hint, item, level)}>${thumbInner(item)}</span>`).join("")}</div>`;
+}
 
 ACTIONS["inventory-set"] = element => {
   // A change of set fades the colour of the switch in once.

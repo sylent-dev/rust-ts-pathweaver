@@ -20,7 +20,7 @@ addSection(() => ["The inventory: N2, square corners, the images of the items, t
   ["The Overview at the level of the band: ◀ ▶, the track or ← →",
     `<div class="app-window" style="width:960px">${levelBand()}${overview()}</div>`],
   ["Alone, at the level of the band",
-    `<div class="app-window" style="width:330px"><aside class="app-side app-inventory-alone">${inventoryBox(STATE.level)}</aside></div>`],
+    `<div class="app-window" style="width:330px"><aside class="app-side graph-paper app-inventory-alone">${inventoryBox(STATE.level)}</aside></div>`],
   ["A sample: « Any Belt », a free text without image; a charm in Trinket1, as Maxroll writes it, drawn among the charms; a unique and a slot the game data don't know",
-    `<div class="app-window" style="width:330px"><aside class="app-side app-inventory-alone">${inventoryBox(STATE.level, sampleHints(STATE.level))}</aside></div>`],
+    `<div class="app-window" style="width:330px"><aside class="app-side graph-paper app-inventory-alone">${inventoryBox(STATE.level, sampleHints(STATE.level))}</aside></div>`],
 ]]);

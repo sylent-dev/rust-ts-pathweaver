@@ -13,20 +13,20 @@ const NOTE_LIST = 3;
 
 // The mark of a note, carrying what its card says (data-note-*, read back by noteHoverHtml): the place
 // and the name of what carries it, and its text, or the list of a group of passives as JSON. Nothing
-// when there is no note.
-function noteMark(note) {
+// when there is no note. `className`, the sign of a line of what changes (is-sign).
+function noteMark(note, className = "") {
   if (!note || !(note.text || note.list?.length)) return "";
   if (note.list?.length === 1) note = { place: note.place, set: note.set, head: note.list[0].name, text: note.list[0].note };
   const data = [["place", note.place], ["set", note.set], ["head", note.head], ["text", note.text], ["list", note.list && JSON.stringify(note.list)]]
     .filter(([, value]) => value).map(([key, value]) => ` data-note-${key}="${escapeHtml(value)}"`).join("");
-  return `<span class="app-changes-note" aria-label="A note of the author"${data}>${icon(12, ICONS.note)}</span>`;
+  return `<span class="app-changes-note${className && ` ${className}`}" aria-label="A note of the author"${data}>${icon(12, ICONS.note)}</span>`;
 }
 
 // A note set again, the line of the window that says so: the bubble of its sign is its mark.
 const retoldMark = change => noteMark({
   place: change.kind === "gear" ? SLOT_NAMES[change.on] ?? change.on : change.kind === "support" ? change.on : "",
   head: change.name, text: change.kind === "gear" ? withoutNumbers(change.note) : change.note,
-});
+}, "is-sign");
 
 // The card in the construction of every card on hover (2k, the owner, 2026-11-20; js/hover-card.js), no
 // art: its head names what carries the note, the place first in grey, a passive's set in its colour; the

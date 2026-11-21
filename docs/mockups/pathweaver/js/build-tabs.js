@@ -12,7 +12,7 @@ const BUILD_TABS = { overview: "Overview", skills: "Skills", tree: "Tree", inven
 
 // `shown`: the tab of a window that always shows the same one (the Tree tab of 2i).
 function buildTabs(shown = STATE.tab) {
-  return `<div class="app-tabs" role="tablist">${Object.entries(BUILD_TABS).map(([key, label]) =>
+  return `<div class="app-tabs graph-paper" role="tablist">${Object.entries(BUILD_TABS).map(([key, label]) =>
     `<button type="button" role="tab" class="app-tab" aria-selected="${shown === key}" data-action="tab-go" data-tab="${key}">${label}</button>`).join("")}<span class="app-tabs-bar" aria-hidden="true"></span></div>`;
 }
 
