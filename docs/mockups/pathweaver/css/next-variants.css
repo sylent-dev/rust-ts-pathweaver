@@ -1,0 +1,171 @@
+/* The twelve ways of the box of What's next (2k6, sections/next-box.js), on trial: their look and their motion.
+   Each plays when the box is drawn; less motion turns them all into a fade (css/next-box.css). */
+
+/* Normal · V1 · Twins: the box grows down from the link, the cards come down one after the other. */
+.nx.v1 { animation: v1-box 240ms ease-out both; }
+@keyframes v1-box { from { opacity: 0; transform: translateY(-8px) scaleY(.96); } }
+.nx.v1 .nx-card { animation: v1-card 460ms cubic-bezier(.2, 1.25, .4, 1) backwards; animation-delay: calc(120ms + var(--i) * 110ms); }
+@keyframes v1-card { from { opacity: 0; transform: translateY(-16px); } }
+.nx.v1 .nx-items li { animation: nx-fade 300ms ease-out backwards; animation-delay: calc(380ms + var(--i) * 110ms + var(--row) * 50ms); }
+
+/* Normal · V2 · The road: a line down from version 1, « you are here » beating on it, the updates as stops. */
+.nx.v2 { width: 470px; }
+.nx-road { position: relative; margin: 0; padding: 0 0 0 26px; list-style: none; }
+.nx-road::before { content: ""; position: absolute; left: 6px; top: 8px; bottom: 30px; width: 2px;
+  background: linear-gradient(var(--accent), color-mix(in srgb, var(--accent) 25%, transparent)); transform-origin: top; animation: v2-line 700ms ease-out both; }
+@keyframes v2-line { from { transform: scaleY(0); } }
+.nx-stop { position: relative; margin-bottom: 12px; animation: v1-card 420ms cubic-bezier(.2, 1.25, .4, 1) backwards; animation-delay: calc(150ms + var(--i, 0) * 220ms); }
+.nx-stop:last-child { margin-bottom: 0; }
+.nx-dot { position: absolute; left: -26px; top: 4px; width: 10px; height: 10px; border: 2px solid var(--accent); border-radius: 50%; background: var(--band-deep); }
+.nx-stop.is-now .nx-dot { background: var(--accent); animation: v2-beat 1.6s ease-out infinite; }
+@keyframes v2-beat { 0% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--accent) 60%, transparent); } 100% { box-shadow: 0 0 0 12px transparent; } }
+.nx-stop.is-now { display: flex; gap: 8px; align-items: baseline; }
+.nx-stop.is-now b { font-weight: 600; }
+.nx-stop.is-now span:last-child { color: var(--accent); font-size: 12px; }
+.nx.v2 .nx-card { width: 430px; }
+.nx.v2 .nx-face { display: grid; grid-template-columns: 120px 1fr; }
+.nx.v2 .nx-art { height: auto; -webkit-mask-image: linear-gradient(to right, #000 55%, transparent); mask-image: linear-gradient(to right, #000 55%, transparent); }
+.nx.v2 .nx-art.is-many { display: grid; grid-template-columns: 1fr 1fr; }
+.nx.v2 .nx-art.is-many img { width: 100%; }
+.nx.v2 .nx-body { margin: 0; padding: 12px 14px 12px 4px; }
+.nx.v2 .nx-items { columns: 2; column-gap: 12px; }
+.nx.v2 .nx-items li { break-inside: avoid; }
+
+/* Normal · V3 · Two halves: one panel, its halves opening from the seam, a line of light on the seam. */
+.nx.v3 { padding: 0; overflow: hidden; }
+.nx-halves { position: relative; display: flex; }
+.nx-halves::after { content: ""; position: absolute; left: 50%; top: 0; bottom: 0; width: 2px; margin-left: -1px; background: var(--accent);
+  animation: v3-seam 900ms ease-out both; }
+@keyframes v3-seam { 0% { opacity: 1; transform: scaleY(0); } 40% { opacity: 1; transform: scaleY(1); } 100% { opacity: .25; transform: scaleY(1); } }
+.nx.v3 .nx-card { width: 320px; border-radius: 0; box-shadow: none; background: none; }
+.nx.v3 .nx-art { height: 190px; }
+.nx.v3 .nx-card:first-child { clip-path: inset(0); animation: v3-left 650ms cubic-bezier(.6, 0, .2, 1) 250ms backwards; }
+.nx.v3 .nx-card:last-child { clip-path: inset(0); animation: v3-right 650ms cubic-bezier(.6, 0, .2, 1) 250ms backwards; }
+@keyframes v3-left { from { clip-path: inset(0 0 0 100%); } }
+@keyframes v3-right { from { clip-path: inset(0 100% 0 0); } }
+.nx.v3 .nx-foot { margin: 0; padding: 10px 24px 14px; border-top: 1px solid color-mix(in srgb, var(--on-band) 8%, transparent); }
+
+/* High · V4 · Dealt: no box, the cards dealt from the link and fanned; the pointer straightens one and lifts it. */
+.nx.v4.is-link { right: 28px; padding: 10px 14px; background: none; box-shadow: none; }
+.nx.v4 .nx-card { transition: transform .25s cubic-bezier(.2, 1.3, .4, 1); animation: v4-deal 620ms cubic-bezier(.2, 1.15, .35, 1) backwards; animation-delay: calc(var(--i) * 170ms); }
+.nx.v4 .nx-card:first-child { transform: rotate(-5deg) translateY(10px); }
+.nx.v4 .nx-card:last-child { margin-left: -34px; transform: rotate(4deg); }
+.nx.v4 .nx-card:hover { z-index: 2; transform: rotate(0) translateY(-10px) scale(1.04); }
+@keyframes v4-deal { from { opacity: 0; transform: translate(calc(260px - var(--i) * 230px), -120px) rotate(28deg) scale(.45); } }
+
+/* High · V5 · Turned over: face down at first, Pathweaver's mark on their backs, turned one after the other. */
+.nx.v5 .nx-cards { perspective: 1100px; }
+.nx.v5 .nx-card { transform-style: preserve-3d; animation: v5-turn 760ms cubic-bezier(.3, 1.3, .5, 1) backwards; animation-delay: calc(450ms + var(--i) * 380ms); }
+.nx.v5 .nx-face, .nx-back { backface-visibility: hidden; }
+.nx-back { position: absolute; inset: 0; z-index: 1; display: grid; place-items: center; align-content: center; gap: 10px; border-radius: 4px; transform: rotateY(180deg);
+  background: linear-gradient(color-mix(in srgb, var(--accent) 14%, transparent) 1px, transparent 1px) 0 0 / 16px 16px,
+    linear-gradient(90deg, color-mix(in srgb, var(--accent) 14%, transparent) 1px, transparent 1px) 0 0 / 16px 16px, var(--band-deep);
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--accent) 40%, transparent); }
+.nx-back span { font: 800 40px/1 var(--brand-font); color: var(--accent); }
+@keyframes v5-turn { from { transform: rotateY(180deg); } }
+.nx.v5 { animation: nx-fade 250ms ease-out both; }
+
+/* High · V6 · Foil: a gleam crosses each card as it comes; the pointer tilts it in 3D and moves its gleam. */
+.nx.v6 .nx-cards { gap: 22px; }
+.nx.v6 .nx-card { transform: perspective(800px) rotateX(var(--tilt-x, 0deg)) rotateY(var(--tilt-y, 0deg)); transition: transform .12s ease-out, box-shadow .3s;
+  animation: v6-in 520ms cubic-bezier(.2, 1.2, .4, 1) backwards; animation-delay: calc(100ms + var(--i) * 140ms); }
+.nx.v6 .nx-card:hover { box-shadow: 0 18px 40px rgb(0 0 0 / .5), 0 0 0 1px color-mix(in srgb, var(--accent) 55%, transparent); }
+.nx.v6 .nx-art { height: 160px; }
+.nx.v6 .nx-face::after { content: ""; position: absolute; inset: 0; pointer-events: none; mix-blend-mode: screen;
+  background: linear-gradient(105deg, transparent 35%, color-mix(in srgb, var(--accent) 45%, transparent) 47%, rgb(255 255 255 / .35) 50%, color-mix(in srgb, var(--accent) 45%, transparent) 53%, transparent 65%) no-repeat;
+  background-size: 260% 100%; background-position: 130% 0; animation: v6-gleam 1100ms ease-in-out backwards; animation-delay: calc(450ms + var(--i) * 200ms); }
+.nx.v6 .nx-card:hover .nx-face::after { animation: none; background-position: calc(115% - var(--shine, 50%) * 1.3) 0; }
+@keyframes v6-in { from { opacity: 0; transform: perspective(800px) rotateX(18deg) translateY(30px) scale(.9); } }
+@keyframes v6-gleam { from { background-position: -30% 0; } to { background-position: 130% 0; } }
+
+/* Explosive · V7 · Burst (9 · Burst, the owner, 2026-11-18): the box out of the link small and turned, a flash of
+   the accent that fades, the cards flying out of its middle; its turn and its flash on the sliders of the page. */
+.nx.v7 { animation: v7-burst 480ms cubic-bezier(.34, 1.7, .5, 1) both, v7-flash 800ms ease-out both; }
+@keyframes v7-burst { from { opacity: 0; transform: scale(.3) rotate(calc(-1 * var(--burst-turn, 6deg))); } }
+@keyframes v7-flash {
+  from { box-shadow: 0 0 0 2px var(--accent), 0 0 var(--burst-flash, 32px) calc(var(--burst-flash, 32px) / 5) color-mix(in srgb, var(--accent) 70%, transparent), 0 10px 28px rgb(0 0 0 / .4); }
+  to { box-shadow: 0 0 0 0 transparent, 0 0 0 0 transparent, 0 10px 28px rgb(0 0 0 / .4); }
+}
+.nx.v7 .nx-card { animation: v7-fly 560ms cubic-bezier(.2, 1.4, .4, 1) backwards; animation-delay: calc(200ms + var(--i) * 90ms); }
+@keyframes v7-fly { from { opacity: 0; transform: translateX(calc((.5 - var(--i)) * 150px)) scale(.3) rotate(calc((var(--i) - .5) * 40deg)); } }
+
+/* Explosive · V8 · The path: passives light up one by one from version 1, as a path allocated on the tree; each
+   update a notable that opens into its card. */
+.nx.v8 { width: 840px; height: 450px; padding: 0; overflow: hidden; }
+.nx-path { position: absolute; inset: 0; width: 840px; height: 450px; }
+.nx-path-line { fill: none; stroke: var(--accent); stroke-width: 3; stroke-dasharray: 900; stroke-dashoffset: 0; filter: drop-shadow(0 0 4px var(--accent));
+  animation: v8-draw 1300ms linear both; }
+@keyframes v8-draw { from { stroke-dashoffset: 900; } }
+.nx-node { fill: var(--band-deep); stroke: var(--on-band-weak); stroke-width: 2; animation: v8-lit 300ms ease-out both; animation-delay: calc(var(--n) * 150ms); }
+@keyframes v8-lit { from { fill: var(--band-deep); stroke: var(--on-band-weak); } to { fill: var(--accent); stroke: var(--on-band); } }
+.nx-path-start { position: absolute; left: 24px; top: 318px; display: flex; align-items: center; gap: 8px; margin: 0; font-size: 12px; color: var(--on-band-weak); }
+.nx-path-start b { color: var(--on-band); font-weight: 600; }
+.nx.v8 .nx-cards { display: block; }
+.nx.v8 .nx-card { position: absolute; top: 24px; width: 236px; transform-origin: 50% 100%; animation: v8-pop 520ms cubic-bezier(.2, 1.5, .4, 1) backwards; }
+.nx.v8 .nx-card:first-child { left: 252px; animation-delay: 600ms; }
+.nx.v8 .nx-card:last-child { left: 562px; animation-delay: 1200ms; }
+@keyframes v8-pop { from { opacity: 0; transform: translateY(40px) scale(.2); } }
+
+/* Explosive · V9 · Shock wave: rings of the accent from the middle, the panel shaken, the cards thrown up from it,
+   icons of passives rising behind them all the while. */
+.nx.v9 { overflow: hidden; animation: v9-shake 360ms ease-out 80ms both; }
+@keyframes v9-shake { 0%, 100% { translate: 0; } 20% { translate: -4px 2px; } 40% { translate: 4px -2px; } 60% { translate: -3px 1px; } 80% { translate: 2px 0; } }
+.nx-wave { position: absolute; left: 50%; top: 50%; width: 40px; height: 40px; margin: -20px 0 0 -20px; border: 3px solid var(--accent); border-radius: 50%;
+  opacity: 0; animation: v9-wave 900ms ease-out both; pointer-events: none; }
+.nx-wave.is-second { animation-delay: 160ms; }
+@keyframes v9-wave { from { opacity: 1; transform: scale(0); } to { opacity: 0; transform: scale(22); } }
+.nx-motes { position: absolute; inset: 0; pointer-events: none; }
+.nx-motes > span { position: absolute; bottom: -30px; opacity: 0; animation: v9-rise 5s linear infinite; animation-delay: calc(var(--m) * -.37s); }
+@keyframes v9-rise { 0% { opacity: 0; transform: translateY(0); } 15% { opacity: .45; } 100% { opacity: 0; transform: translateY(-480px); } }
+.nx.v9 .nx-kicker, .nx.v9 .nx-cards, .nx.v9 .nx-foot { position: relative; }
+.nx.v9 .nx-card { animation: v9-throw 700ms cubic-bezier(.2, 1.6, .4, 1) backwards; animation-delay: calc(140ms + var(--i) * 110ms); }
+@keyframes v9-throw { from { opacity: 0; transform: translateY(120px) scale(.5) rotate(calc((var(--i) - .5) * 24deg)); } }
+
+/* Free · V10 · The poster: the numbers 2 and 3 huge and outlined behind the cards, sliding in from both sides,
+   « Coming » stamped at the end. */
+.nx.v10 { width: 640px; overflow: hidden; padding: 34px 40px 30px; }
+.nx-numeral { position: absolute; top: -40px; font: 800 380px/1 var(--brand-font); letter-spacing: -.06em; color: transparent;
+  -webkit-text-stroke: 2px color-mix(in srgb, var(--accent) 45%, transparent); animation: v10-slide 800ms cubic-bezier(.2, .9, .3, 1) both; pointer-events: none; }
+.nx-numeral.is-2 { left: -36px; --from: -260px; }
+.nx-numeral.is-3 { right: -36px; --from: 260px; }
+@keyframes v10-slide { from { opacity: 0; transform: translateX(var(--from)); } }
+.nx.v10 .nx-cards { position: relative; justify-content: center; gap: 40px; }
+.nx.v10 .nx-card { animation: nx-fade 400ms ease-out backwards; animation-delay: calc(350ms + var(--i) * 120ms); }
+.nx-stamp { position: absolute; right: 24px; bottom: 16px; padding: 3px 10px; border: 2px solid var(--accent); color: var(--accent);
+  font: 800 13px/1.2 var(--brand-font); letter-spacing: .24em; text-transform: uppercase; transform: rotate(-10deg); animation: v10-stamp 380ms cubic-bezier(.3, 1.6, .5, 1) 1000ms backwards; }
+@keyframes v10-stamp { from { opacity: 0; transform: rotate(-24deg) scale(2.6); } }
+
+/* Free · V11 · Level up: Pathweaver on a level band of its own under the band of the site, « Version » over 1,
+   2 then 3, the cursor going from marker to marker, each update popping at its marker. */
+.nx.is-band { top: 44px; left: 0; right: 0; padding: 0 0 20px; background: var(--band-image), var(--band-deep); box-shadow: 0 14px 30px rgb(0 0 0 / .45); animation: v1-box 240ms ease-out both; }
+.nx-level { display: flex; height: 84px; }
+.nx-level-now { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 7px; width: 124px; flex: none; }
+.nx-level-now > span { font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: var(--on-band-weak); }
+.nx-level-number { display: flex; flex-direction: column; height: 46px; overflow: hidden; font: 800 58px/46px var(--brand-font); letter-spacing: -.05em; }
+.nx-level-number i { font-style: normal; animation: v11-count 1800ms steps(1, end) both; }
+@keyframes v11-count { 0% { transform: translateY(0); } 45% { transform: translateY(-46px); } 90%, 100% { transform: translateY(-92px); } }
+.nx-level-track { position: relative; flex: 1; margin: 0 52px 0 26px; }
+.nx-level-line { position: absolute; top: 41px; left: 0; right: 0; height: 2px; background: var(--track); }
+.nx-level-mark { position: absolute; top: 36px; width: 1px; height: 12px; background: var(--accent); }
+.nx-level-cursor { position: absolute; top: 29px; left: 100%; width: 4px; height: 26px; margin-left: -2px; background: var(--on-band);
+  animation: v11-cursor 1800ms cubic-bezier(.6, 0, .3, 1) both; }
+@keyframes v11-cursor { 0% { left: 0; } 15% { left: 0; } 45% { left: 50%; } 60% { left: 50%; } 90%, 100% { left: 100%; } }
+.nx-level-end { position: absolute; top: 58px; transform: translateX(-50%); font-size: 11px; color: var(--on-band-weak); white-space: nowrap; }
+.nx-level-end[style="left:0"] { transform: none; }
+.nx.v11 .nx-cards { position: relative; height: 330px; }
+.nx.v11 .nx-card { position: absolute; top: 0; transform-origin: 50% 0; animation: v11-pop 480ms cubic-bezier(.2, 1.5, .4, 1) backwards; }
+.nx.v11 .nx-card:first-child { left: calc(150px + (100% - 202px) / 2 - 125px); animation-delay: 820ms; }
+.nx.v11 .nx-card:last-child { right: 16px; animation-delay: 1640ms; }
+@keyframes v11-pop { from { opacity: 0; transform: translateY(-24px) scale(.4); } }
+
+/* Free · V12 · A peek: a veil of graph paper over the box, a circle cleared through it around the pointer; a click
+   lifts it all. */
+.nx.v12 { animation: nx-fade 250ms ease-out both; }
+.nx-veil-paper { position: absolute; inset: 0; z-index: 2; display: grid; place-items: end center; padding: 0 0 18px; border: none; border-radius: inherit; cursor: pointer;
+  background: linear-gradient(color-mix(in srgb, var(--accent) 16%, transparent) 1px, transparent 1px) 0 0 / 18px 18px,
+    linear-gradient(90deg, color-mix(in srgb, var(--accent) 16%, transparent) 1px, transparent 1px) 0 0 / 18px 18px, var(--band-deep);
+  -webkit-mask-image: radial-gradient(circle at var(--peek-x, -300px) var(--peek-y, -300px), transparent 0 70px, #000 96px);
+  mask-image: radial-gradient(circle at var(--peek-x, -300px) var(--peek-y, -300px), transparent 0 70px, #000 96px); }
+.nx-veil-paper span { padding: 4px 10px; border-radius: 2px; background: var(--band-deep); color: var(--accent); font: 600 12px/1.4 var(--font-text); }
+.nx.v12.is-unveiled .nx-veil-paper { pointer-events: none; animation: v12-lift 500ms ease-in both; }
+@keyframes v12-lift { to { opacity: 0; transform: translateY(-30px); } }
