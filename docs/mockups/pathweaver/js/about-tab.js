@@ -58,17 +58,19 @@ const abWarnings = about => `${abTitle(`<span class="ab-warned">${plural(about.w
 const abWatermark = () => `<svg class="ab-watermark" viewBox="0 0 16 16" aria-hidden="true">${ICONS.note}</svg>`;
 
 // The About tab of the build shown, or of a case (`source`, a key of BUILDS.abouts).
-// `aside`, the warnings in a column of their own at the right (2k4, a way to use 1,920 px).
-function aboutTab(level, source = "shown", { aside = false } = {}) {
+// The warnings before the description, where ⚠ of the header leads (data-warnings, its anchor; the owner,
+// 2026-11-21); `wide`, in a column of their own between the colophon and the description, only when there are
+// any (2k4: 31 builds of the 32 of the corpus have none).
+function aboutTab(level, source = "shown", { wide = false } = {}) {
   const about = BUILDS.abouts[source];
-  const warnings = about.warnings.length ? abWarnings(about) : "";
+  const warnings = about.warnings.length ? `<div class="ab-warnings-part" data-warnings="">${abWarnings(about)}</div>` : "";
   return `<div class="app-about-tab"><div class="app-ab"><div class="ab-colophon">
       <aside class="ab-colophon-side"><img class="ab-portrait" src="pathweaver/img/portraits-about/${about.portrait}.webp" width="260" height="260" alt="">
         <h3 class="ab-name app-title">${escapeHtml(about.name)}</h3>
         <p class="ab-by">${about.author ? `by ${escapeHtml(about.author)} · ` : ""}${escapeHtml(about.ascendancy)} <span class="app-weak">${escapeHtml(about.class)}</span></p>
         <dl class="ab-facts"><dt>Levels</dt><dd>${about.levels ? `${about.levels[0]}–${about.levels[1]}` : "a snapshot"}</dd><dt>Entries</dt><dd>${abCounts(about).join("<br>")}</dd><dt>Guide</dt><dd class="ab-guide">${abGuide(about)}</dd></dl>
         ${abFile(about)}</aside>
-      <div class="ab-colophon-main">${abWatermark()}${abDescription(about)}${warnings && !aside ? `<div class="ab-gap">${warnings}</div>` : ""}${abWhere()}</div>
-      ${aside ? `<div class="ab-aside">${warnings || `${abTitle("Warnings")}<p class="ab-none app-weak">None: every id of the file is in the game data of ${BUILDS.treeVersion}.</p>`}</div>` : ""}
+      ${wide && warnings ? `<div class="ab-aside">${warnings}</div>` : ""}
+      <div class="ab-colophon-main">${abWatermark()}${!wide && warnings ? warnings : ""}${abDescription(about)}${abWhere()}</div>
     </div></div></div>`;
 }

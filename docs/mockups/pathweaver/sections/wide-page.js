@@ -1,15 +1,11 @@
-// The page of a build at 1,920 px (2k4): the Overview, Skills, Inventory and About, three ways each, with the
-// tabs « Wide overview », « Wide skills », « Wide inventory », « Wide about »; About twice, the build shown and
-// the leveling guide of the corpus with 18 warnings, its button ⚠ in yellow in its header.
+// The page of a build at 1,920 px (2k4): the Overview, Skills, Inventory and About in the way kept for each;
+// About twice, the build shown and the leveling guide of the corpus with 18 warnings, « 18 warnings » in its
+// header, a link to them.
 
-addSection(() => {
-  const title = (view, key) => WIDE[view][chosen[key]].title;
-  const label = (view, key) => `${title(view, key)}: ${WIDE[view][chosen[key]].text}`;
-  return [`The page of a build · 1,920 px: ${title("overview", "wideOverview")}, ${title("skills", "wideSkills")}, ${title("inventory", "wideInventory")}, ${title("about", "wideAbout")}`, [
-    [`Overview · ${label("overview", "wideOverview")}`, wideWindow("overview", wideOverview(STATE.level))],
-    [`Skills · ${label("skills", "wideSkills")}`, wideWindow("skills", wideSkills(STATE.level))],
-    [`Inventory · ${label("inventory", "wideInventory")}`, wideWindow("inventory", wideInventory(STATE.level))],
-    [`About · ${label("about", "wideAbout")}`, wideWindow("about", wideAbout(STATE.level, "shown"))],
-    ["About · the leveling guide with 18 warnings, its button ⚠ in yellow in the header", wideWindow("about", wideAbout(STATE.level, "warnings"), warnedHeader())],
-  ]];
-});
+addSection(() => ["The page of a build · 1,920 px: the Overview, its tree wide; Skills in four columns; Inventory, the drawing larger; About, the warnings in a column", [
+  ["Overview · the tree takes the width, the column stays 330 px", wideWindow("overview", overview())],
+  ["Skills · four columns, 1,280 px at most, in the middle", wideWindow("skills", wideSkills(STATE.level))],
+  ["Inventory · the drawing at 56 px a cell, « Upcoming » under it, the box over the rest", wideWindow("inventory", wideInventory(STATE.level))],
+  ["About · the build shown: no warning, so no column for them", wideWindow("about", wideAbout(STATE.level, "shown"))],
+  ["About · the leveling guide with 18 warnings: their column, and « 18 warnings » in the header, a link to them", wideWindow("about", wideAbout(STATE.level, "warnings"), warnedHeader())],
+]]);

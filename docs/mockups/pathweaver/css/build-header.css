@@ -19,7 +19,8 @@
 .app-file:hover .app-file-label { color: var(--text); }
 .app-file small { color: var(--weak); font-size: 12px; line-height: 1.1; }
 
-/* The warnings of a build, in the yellow of the sticky note « ? » of an unknown id (the owner, 2026-11-21: how
-   many a build has matters before starting it), as « 18 warnings » in the About tab. */
-.app-button.is-warned { border-color: color-mix(in srgb, var(--unknown-note) 45%, transparent); background: color-mix(in srgb, var(--unknown-note) 12%, transparent); color: var(--unknown-note); }
-.app-button.is-warned:hover { background: color-mix(in srgb, var(--unknown-note) 20%, transparent); }
+/* « 18 warnings », in words in the yellow of the sticky note « ? » of an unknown id, as « Download .build »: no box
+   nor icon, the colour of the text on hover (the owner, 2026-11-21: how many warnings a build has matters before
+   starting it); a link to them in the About tab. */
+.app-header-warnings { margin-right: 14px; padding: 0; border: none; background: none; color: var(--unknown-note); font: inherit; font-size: 13px; font-weight: 600; cursor: pointer; transition: color .3s; }
+.app-header-warnings:hover { color: var(--text); }

@@ -45,6 +45,8 @@
 
 /* The warnings by part. */
 .ab-gap { margin-top: 22px; }
+/* Before the description at 960 px, a gap under them. */
+.ab-colophon-main > .ab-warnings-part { margin-bottom: 26px; }
 .ab-title { margin: 0 0 8px; font-size: 14px; }
 /* « 18 warnings » in the yellow of the sticky note: how many a build has matters before starting it. */
 .ab-warned { color: var(--unknown-note); }

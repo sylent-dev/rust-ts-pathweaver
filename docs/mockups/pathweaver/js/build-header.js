@@ -16,8 +16,9 @@ const fileIcon = () => `<svg class="app-file-icon" width="26" height="32" viewBo
     <path d="M0 0H17L26 9V32H0Z" fill="var(--on-band)"/><path d="M17 0V9H26Z" fill="var(--band-deep)" fill-opacity=".35"/>
     <text x="13" y="26" text-anchor="middle" font-size="7.5" font-weight="700" font-family="Manrope, sans-serif" fill="var(--band-deep)">.build</text></svg>`;
 
-// `build`: the build of the header, the build shown by default; `warnings`, their number (2k4: a build of the
-// corpus with warnings, the button in the yellow of the sticky note « ? », the owner, 2026-11-21).
+// `build`: the build of the header, the build shown by default; `warnings`, their number (2k4, the owner,
+// 2026-11-21: « 18 warnings » in words, in the yellow of the sticky note « ? », without a box nor an icon, a link
+// to the warnings of the About tab).
 function buildHeader(build = SHOWN, warnings = TREE.unknown.length
     + SHOWN.skills.flatMap(skill => [skill, ...skill.supports]).filter(gem => !gem.known).length, file = BUILD_FILE) {
   return `<div class="app-header">
@@ -27,8 +28,23 @@ function buildHeader(build = SHOWN, warnings = TREE.unknown.length
       <p class="app-header-by app-weak">${build.author ? `by ${escapeHtml(build.author)} · ` : ""}${escapeHtml(build.ascendancy)} <span class="app-header-class">${escapeHtml(build.class)}</span></p>
     </div>
     <div class="app-header-actions">
-      ${warnings > 0 ? `<button type="button" class="app-button is-filled is-warned" data-action="tab-go" data-tab="about">${icon(14, ICONS.warning)}${plural(warnings, "warning")}</button>` : ""}
+      ${warnings > 0 ? `<button type="button" class="app-header-warnings" data-action="warnings-go">${plural(warnings, "warning")}</button>` : ""}
       <button type="button" class="app-file" draggable="true" title="${escapeHtml(file.name)}">${fileIcon()}<span class="app-file-text"><span class="app-file-label">Download .build</span><small>${file.size}</small></span></button>
     </div>
   </div>`;
 }
+
+// « 18 warnings » shows the About tab, scrolled to its warnings (their anchor, data-warnings), in the window of
+// the link.
+ACTIONS["warnings-go"] = element => {
+  STATE.toWarnings = [...document.querySelectorAll(".app-window")].indexOf(element.closest(".app-window"));
+  showTab("about");
+  return true;
+};
+AFTER_RENDER.push(() => {
+  if (STATE.toWarnings === undefined) return;
+  const part = document.querySelectorAll(".app-window")[STATE.toWarnings]?.querySelector("[data-warnings]");
+  delete STATE.toWarnings;
+  const box = part?.closest(".app-about-tab");
+  if (box) box.scrollTo({ top: part.getBoundingClientRect().top - box.getBoundingClientRect().top + box.scrollTop - 16, behavior: lessMotion() ? "auto" : "smooth" });
+});

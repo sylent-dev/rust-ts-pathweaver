@@ -24,13 +24,6 @@ const VARIANTS = {
   // The width of the windows of the home page (2l): the minimum of specs.md, half a 1920-pixel screen, and a wide
   // window of the owner's screen.
   homeWidth: { label: "Home width", options: { 900: "900 px", 960: "960 px", 1600: "1,600 px" }, fallback: "960" },
-  // The page of a build at 1,920 px (2k4): the longest the level track may be (css/level-band.css), and three
-  // ways for each view (js/wide-page.js).
-  trackMax: { label: "Track max", range: { min: 708, max: 1700, step: 20 }, variable: "--track-max", unit: "px", fallback: "1600" },
-  wideOverview: { label: "Wide overview", options: { o1: "O1", o2: "O2", o3: "O3" }, fallback: "o1" },
-  wideSkills: { label: "Wide skills", options: { s1: "S1", s2: "S2", s3: "S3" }, fallback: "s1" },
-  wideInventory: { label: "Wide inventory", options: { i1: "I1", i2: "I2", i3: "I3" }, fallback: "i1" },
-  wideAbout: { label: "Wide about", options: { a1: "A1", a2: "A2", a3: "A3" }, fallback: "a1" },
 };
 
 // The styles a section shows side by side: the style of the page alone, Frost Night by default, the

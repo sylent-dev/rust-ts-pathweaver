@@ -26,8 +26,8 @@
 /* The track, from the column to the margin of the band: its line at the height of « here », the
    markers in the accent, the cursor of the level white, without glow (hard to judge, kitsch at
    worst: the owner, 2026-11-18). */
-/* The track takes the width the band leaves it (708 px at 960), up to --track-max (2k4). */
-.app-level-track { position: relative; flex: 1; max-width: var(--track-max, 1600px); align-self: stretch; height: 84px; margin-left: 26px; cursor: pointer; }
+/* The track takes the width the band leaves it (708 px at 960), up to 1,600 px (2k4, the owner, 2026-11-21). */
+.app-level-track { position: relative; flex: 1; max-width: 1600px; align-self: stretch; height: 84px; margin-left: 26px; cursor: pointer; }
 .app-level-line { position: absolute; top: 41px; left: 0; right: 0; height: 2px; background: var(--track); }
 .app-level-marker { position: absolute; top: 36px; width: 1px; height: 12px; background: var(--accent); }
 .app-level-cursor { position: absolute; top: 28px; width: 4px; height: 28px; margin-left: -2px; background: var(--on-band); }

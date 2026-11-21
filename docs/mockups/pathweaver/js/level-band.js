@@ -23,8 +23,8 @@ function setBandLevel(key, level, { slide = true } = {}) {
 }
 
 // The x of a level on the track, from the lowest level of the build to its highest, in % of the track: the track
-// takes the width the band leaves it, up to --track-max (2k4, the owner, 2026-11-21: longer on a large screen, 16
-// px a level at 1,920 px against 8 at 960). A marker set on a whole pixel (markerX): a line of 1 px on a half
+// takes the width the band leaves it (2k4, the owner, 2026-11-21: longer on a large screen, 16
+// px a level at 1,920 px against 8 at 960), up to 1,600 px. A marker set on a whole pixel (markerX): a line of 1 px on a half
 // pixel smears.
 const levelX = (level, [low, high]) => ((level - low) / Math.max(1, high - low)) * 100;
 const markerX = (level, range) => `round(${levelX(level, range).toFixed(3)}%, 1px)`;
