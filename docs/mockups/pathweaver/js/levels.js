@@ -49,3 +49,19 @@ const SLOT_NAMES = {
   BodyArmour1: "Body", Gloves1: "Gloves", Boots1: "Boots", Belt1: "Belt", Amulet1: "Amulet",
   Ring1: "Ring", Ring2: "Ring", Flask1: "Flask", Flask2: "Flask", Charm1: "Charm", Trinket1: "Trinket",
 };
+
+// Where a hint is drawn (2k2c, the owner, 2026-11-21): two writings of a slot that the drawing has, brought to
+// the cell the other files write, so that they aren't left in the list under the drawing.
+// - The mana flask in Flask2 (Path of Building, poe2-tools: 2 files of the corpus; the campaign writes its
+//   levels in blue there, in red in Flask1) is Flask1, cell 1, as Mobalytics and Maxroll write it.
+// - A charm in Trinket1 (Maxroll, cells 2 to 4: 7 entries, its 2 builds) is in Charm1, its cell less 2, as
+//   Mobalytics and Path of Building write it: an item the game data know as a charm, so a free text stays.
+// The rule of the code is measured and tested in the core at step 6 (docs/backlog.md).
+function drawnSlot(hint) {
+  if (hint.id === "Flask2") return { ...hint, id: "Flask1", x: 1 };
+  const kind = BUILDS.items[hint.unique || withoutBase(hint.base)]?.kind;
+  if (hint.id === "Trinket1" && kind === "Charm" && hint.x >= 2 && hint.x <= 4) return { ...hint, id: "Charm1", x: hint.x - 2 };
+  return hint;
+}
+SHOWN.slots = SHOWN.slots.map(drawnSlot);
+for (const key of Object.keys(BUILDS.inventories)) BUILDS.inventories[key] = BUILDS.inventories[key].map(drawnSlot);

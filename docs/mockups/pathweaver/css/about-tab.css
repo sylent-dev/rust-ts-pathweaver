@@ -1,0 +1,54 @@
+/* The About tab (js/about-tab.js, 2k3): H2 of twelve variants (the owner, 2026-11-21), a colophon at the left
+   on a pane as dark as a slot, the description at the right at the width of a page of text. As high as the
+   Overview, scrolling inside, on the graph paper of the blocks (css/textures.css). Set aside: one column, cut in
+   two the other way, cards, the warnings first on a band, a letter, the portrait large, contents, tiles, the
+   file opened, a check-up, a table of properties. */
+.app-about-tab { height: 668px; overflow-y: auto; box-sizing: border-box; background: var(--side-column); scrollbar-width: thin; }
+.app-ab { box-sizing: border-box; min-height: 100%; font-size: 13px; line-height: 1.5; }
+.app-ab ul { margin: 0; padding: 0; list-style: none; }
+
+.ab-colophon { display: flex; min-height: 668px; }
+.ab-colophon-side { flex: none; width: 260px; box-sizing: border-box; padding: 24px 24px 28px 32px; background: var(--slot-box); }
+.ab-colophon-main { flex: 1; max-width: 600px; padding: 24px 32px 28px; }
+/* The portrait across the pane from its top, fading toward the bottom from 40 % of its height, to nothing at
+   its foot; the name and the author rise 70 px over it (the owner, 2026-11-21, on sliders: too imposing whole). */
+.ab-portrait { display: block; width: calc(100% + 56px); height: auto; margin: -24px -24px -54px -32px;
+  mask-image: linear-gradient(#000 40%, transparent); }
+.ab-name, .ab-by { position: relative; }
+.ab-name { margin: 0; font-size: 17px; line-height: 1.25; overflow-wrap: anywhere; }
+.ab-by { margin: 2px 0 0; font-size: 12.5px; }
+.ab-facts { display: grid; grid-template-columns: 58px 1fr; gap: 8px 10px; margin: 16px 0; font-size: 12.5px; }
+.ab-facts dt { color: var(--on-band-weak); font-size: 11px; }
+.ab-facts dd { margin: 0; min-width: 0; }
+.ab-file { flex: none; padding-left: 0; }
+
+/* The description, the author's words, colours and styles; an address in it a link where it is, underlined
+   on hover. */
+.ab-desc { font-size: 13.5px; line-height: 1.6; overflow-wrap: anywhere; }
+.ab-inline-link { color: inherit; text-decoration: none; }
+.ab-inline-link:hover { text-decoration: underline; text-underline-offset: 3px; }
+.ab-none { margin: 0; font-size: 12.5px; }
+
+/* A link of the guide, in the look of « Download .build » (css/build-header.css): its site in the accent, the
+   colour of the text on hover, its site alone, its whole address in its tooltip. */
+.ab-guide { display: flex; flex-direction: column; gap: 8px; }
+.ab-link { color: var(--accent); font-size: 13px; font-weight: 600; line-height: 1.1; text-decoration: none; transition: color .3s; }
+.ab-link:hover { color: var(--text); }
+.ab-link-text { overflow-wrap: anywhere; }
+.ab-from { font-size: 11px; }
+
+.ab-where { margin: 14px 0 0; font-size: 11.5px; line-height: 1.45; }
+.ab-where code { color: var(--text); font-family: var(--font-code); font-size: 11px; }
+
+/* The warnings by part. */
+.ab-gap { margin-top: 22px; }
+.ab-title { margin: 0 0 8px; font-size: 14px; }
+/* « 18 warnings » in the yellow of the sticky note: how many a build has matters before starting it. */
+.ab-warned { color: var(--unknown-note); }
+.ab-intro { margin: 0 0 8px; font-size: 12px; }
+.ab-part { margin: 10px 0 4px; color: var(--on-band-weak); font-size: 10.5px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; }
+.ab-warning { display: flex; align-items: center; gap: 8px; min-height: 24px; font-size: 12.5px; white-space: nowrap; }
+.ab-warning > span:not(.app-unknown) { overflow: hidden; text-overflow: ellipsis; }
+.ab-warning .app-unknown { flex: none; }
+.ab-warning-name { font-weight: 600; }
+.ab-warning-levels { flex: none; margin-left: auto; font-size: 11.5px; }
