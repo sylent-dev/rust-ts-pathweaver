@@ -1,8 +1,7 @@
-/* The phone page (2m, js/phone-page.js): one column in the middle of the phone, on the page and its graph paper. */
+/* The phone page (2m, js/phone-page.js): one column in the middle of the phone, on the page and its graph paper,
+   without the light of the page (the owner, 2026-11-21: from the top left or along the bottom, of no use here). */
 
-/* The light of the page moved from its top left to its bottom, flat along the bottom edge (the owner, 2026-11-21). */
-.ph-window { isolation: isolate; display: flex; flex-direction: column;
-  background: radial-gradient(ellipse 110% 22% at 50% 100%, var(--page-glow) 0%, transparent 75%), var(--page); }
+.ph-window { isolation: isolate; display: flex; flex-direction: column; background: var(--page); }
 .ph-window::before {
   content: ""; position: absolute; inset: 0; z-index: -1; pointer-events: none;
   background: var(--texture-colour); opacity: var(--texture-opacity);
@@ -14,60 +13,12 @@
 .ph-brand { display: flex; align-items: center; gap: var(--brand-gap); padding: 20px 24px; }
 .ph-brand .logo-name { font-size: var(--brand-size); }
 
-.ph-message { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 0;
+.ph-message { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center;
   padding: 0 32px 72px; text-align: center; }
-.ph-face { margin-bottom: 28px; }
 .ph-title { margin: 0 0 14px; font: 800 26px/1.15 var(--brand-font); letter-spacing: -0.03em; color: var(--text); }
 .ph-message p { margin: 0; color: var(--weak); font-size: 14px; line-height: 1.6; white-space: nowrap; }   /* one sentence a line */
 
-/* The note (U14 and the six after it): its paper and its ink in the colour chosen, grey as a free text
-   (css/side-inventory.css) or yellow as the « ? » of an unknown id (--unknown-note, --unknown-ink). */
-.ph-window { --note-paper: color-mix(in srgb, var(--text) 22%, transparent); --note-ink: color-mix(in srgb, var(--text) 78%, transparent); }
-.ph-window[data-note="yellow"] { --note-paper: var(--unknown-note); --note-ink: var(--unknown-ink); }
-.ph-note-face { display: block; color: var(--note-ink); }
-.ph-note-paper { fill: var(--note-paper); }
-.ph-note { position: relative; display: block; width: 92px; height: 92px; margin-bottom: 28px;
-  transform: rotate(-8deg); filter: drop-shadow(2px 4px 4px rgb(0 0 0 / 45%)); }
-.ph-note > i { position: absolute; display: block; }
-
-/* U18: a strip of see-through tape across its top, the note swinging from it. */
-.ph-note.is-taped { transform-origin: 50% 8%; animation: ph-swing 3.6s ease-in-out infinite; }
-.ph-tape { left: 28px; top: -2px; width: 38px; height: 14px; background: rgb(255 255 255 / 22%); rotate: 4deg; }
-@keyframes ph-swing { 0%, 100% { transform: rotate(-9deg); } 50% { transform: rotate(-3deg); } }
-
-/* U19: a pin in the accent at the top, its shadow on the note. */
-.ph-pin { left: 40px; top: 8px; width: 12px; height: 12px; border-radius: 50%; background: radial-gradient(circle at 35% 35%, #fff8, transparent 45%), var(--accent);
-  box-shadow: 2px 3px 2px rgb(0 0 0 / 40%); }
-
-/* U20: the bottom right corner peeling off, its back a shade darker. */
-.ph-note.is-peeling .ph-note-face { clip-path: polygon(0 0, 100% 0, 100% 66%, 66% 100%, 0 100%); }
-.ph-curl { right: 10px; bottom: 10px; width: 26px; height: 26px; clip-path: polygon(0 100%, 100% 0, 0 0);
-  background: linear-gradient(135deg, color-mix(in srgb, var(--note-paper) 70%, black), var(--note-paper)); }
-
-/* U21: two notes under it, fanned. */
-.ph-note.is-stacked > i { inset: 4px; background: var(--note-paper); filter: brightness(.7); }
-.ph-note.is-stacked > i:nth-child(1) { rotate: 14deg; filter: brightness(.55); }
-.ph-note.is-stacked > i:nth-child(2) { rotate: 6deg; }
-.ph-note.is-stacked .ph-note-face { position: relative; }
-
-/* U22: the whole message on a large note, its face small at the top, its words in its ink. */
-.ph-sheet { box-sizing: border-box; width: 330px; padding: 22px 20px 26px; background: var(--note-paper); color: var(--note-ink); rotate: -3deg;
-  display: flex; flex-direction: column; align-items: center; filter: drop-shadow(2px 6px 6px rgb(0 0 0 / 45%)); }
-.ph-sheet .ph-note-face { margin-bottom: 10px; }
-.ph-sheet .ph-note-paper { fill: none; }
-.ph-sheet .ph-title { color: var(--note-ink); font-size: 22px; }
-.ph-message .ph-sheet p { color: var(--note-ink); font-size: 13px; opacity: .85; }
-
-/* U23: falling from the top of the screen, landing with a small bounce, then resting; again every 6 s. */
-.ph-note.is-falling { animation: ph-fall 6s cubic-bezier(.3, 0, .6, 1) infinite; }
-@keyframes ph-fall {
-  0% { transform: translateY(-360px) rotate(14deg); opacity: 0; }
-  4% { opacity: 1; }
-  16% { transform: translateY(0) rotate(-12deg); }
-  20% { transform: translateY(-10px) rotate(-6deg); }
-  24%, 100% { transform: translateY(0) rotate(-8deg); }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .ph-note.is-taped, .ph-note.is-falling { animation: none; }
-}
+/* The face: the sticky note « ? » of an unknown id (--unknown-note, --unknown-ink), turned, a light shadow under it. */
+.ph-note { display: block; margin-bottom: 28px; color: var(--unknown-ink); transform: rotate(-8deg);
+  filter: drop-shadow(2px 4px 4px rgb(0 0 0 / 45%)); }
+.ph-note-paper { fill: var(--unknown-note); }
