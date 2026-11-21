@@ -15,7 +15,7 @@
 .app-file:active { cursor: grabbing; }
 .app-file-icon { flex: none; display: block; }
 .app-file-text { display: flex; flex-direction: column; gap: 4px; }
-.app-file-label { color: var(--accent); font-size: 13px; font-weight: 600; line-height: 1.1; transition: color .3s; }
+.app-file-label { color: var(--accent); font-size: 13px; font-weight: 600; line-height: 1.1; transition: color var(--hover-fade); }
 .app-file:hover .app-file-label { color: var(--text); }
 .app-file small { color: var(--weak); font-size: 12px; line-height: 1.1; }
 
@@ -24,5 +24,5 @@
    the header, a little apart from « Download .build » (2k5, the owner, 2026-11-21), its shade a little stronger on
    hover; no icon; a link to them in the About tab. */
 .app-header-actions:has(.app-header-warnings) { align-self: stretch; }
-.app-header-warnings { align-self: stretch; margin-right: 28px; padding: 0 20px; border: none; border-radius: 0; background: color-mix(in srgb, var(--unknown-note) 12%, transparent); color: var(--unknown-note); font: inherit; font-size: 13px; font-weight: 600; cursor: pointer; transition: background-color .3s; }
+.app-header-warnings { align-self: stretch; margin-right: 28px; padding: 0 20px; border: none; border-radius: 0; background: color-mix(in srgb, var(--unknown-note) 12%, transparent); color: var(--unknown-note); font: inherit; font-size: 13px; font-weight: 600; cursor: pointer; transition: background-color var(--hover-fade); }
 .app-header-warnings:hover { background: color-mix(in srgb, var(--unknown-note) 20%, transparent); }

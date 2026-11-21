@@ -25,7 +25,7 @@
    lightly (2i3, the owner, 2026-11-20: 120 ms, at once when the system asks for less motion). The shades of
    the parts: the head and the note in the deep shade of the bands; the body a step darker. */
 .app-hover { --hc-alpha: 90%; --hc-art: 48px; --hc-head: var(--shade-deep); --hc-body: var(--card-body); --hc-note: var(--hc-head);
-  position: absolute; z-index: 4; width: 320px; overflow: hidden; border-radius: 3px; pointer-events: none;
+  position: absolute; z-index: 4; width: 320px; overflow: hidden; border-radius: var(--popover-radius); pointer-events: none;
   color: var(--on-band); box-shadow: var(--popover-shadow); font-size: 12px; line-height: 1.4;
   opacity: 0; visibility: hidden; transition: opacity 120ms ease-out, visibility 0s 120ms; }
 .app-hover.is-over-rows { --hc-alpha: 100%; }

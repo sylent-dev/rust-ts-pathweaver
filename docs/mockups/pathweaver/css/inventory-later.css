@@ -4,7 +4,7 @@
    at 20 %, and its graph paper (css/textures.css), across the left half and down to its bottom. Set aside: the
    hints on the graph paper of the drawing. */
 .up { position: relative; flex: 1; margin: 22px 0 0 -32px; padding: 16px 32px 24px;
-  background: radial-gradient(ellipse 330px 220px at 100% 100%, color-mix(in srgb, var(--page-glow) 20%, transparent) 0%, transparent 70%), var(--page); }
+  background: var(--drawer-image), var(--page); }
 /* As much room under the title as under « Inventory » in the drawer of the Overview, 14 px (the owner, 2026-11-21). */
 .up .it-title.is-next { margin: 0 0 14px; }
 

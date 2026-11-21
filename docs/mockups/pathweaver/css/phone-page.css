@@ -13,6 +13,6 @@
 .ph-message p { margin: 0; color: var(--weak); font-size: 14px; line-height: 1.6; white-space: nowrap; }   /* one sentence a line */
 
 /* The face: the sticky note « ? » of an unknown id (--unknown-note, --unknown-ink), turned, a light shadow under it. */
-.ph-note { display: block; margin-bottom: 28px; color: var(--unknown-ink); transform: rotate(-8deg);
+.ph-note { display: block; margin-bottom: 28px; color: var(--unknown-ink); transform: rotate(var(--note-tilt));
   filter: drop-shadow(2px 4px 4px var(--shadow-colour)); }
 .ph-note-paper { fill: var(--unknown-note); }

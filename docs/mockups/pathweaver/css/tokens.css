@@ -46,6 +46,7 @@
   --page-glow: #172644;   /* the light of the page, from its top left; from the right on the drawer of the inventory (2j4) */
   --page-image: radial-gradient(ellipse 80% 40% at 0% 0%, var(--page-glow) 0%, transparent 70%);
   --page-image-size: auto;
+  --drawer-image: radial-gradient(ellipse 330px 220px at 100% 100%, color-mix(in srgb, var(--page-glow) 20%, transparent) 0%, transparent 70%);   /* the light of the drawer of the inventory and of « Upcoming », from the bottom right at 20 % (2j4, 2k2) */
   --top-band-image: none;
   --on-top-band: var(--text);
   --band: #0f1726;
@@ -68,6 +69,10 @@
   --border-width: 0;   /* no borders: the blocks are told apart by their colours only (the owner, 2026-11-17) */
   --portrait-radius: 50%;
   --portrait-ring: none;
+  --build-tab-height: 668px;   /* a tab of a build, the window at 960 × 1,080 under its bands */
+  --popover-radius: 3px;   /* the windows that hang under a control: the menu, the changes, Download, the cards (the owner, 2026-11-19) */
+  --popover-gap: 3px;   /* how far under its control such a window hangs */
+  --note-tilt: -8deg;   /* the sticky note « ? », tilted */
 
   /* Text, the one accent (what is new, the links, the markers of the level), the brightest ink (the
      bar under the current tab, a close × on hover, the flash of what was just chosen or what is
@@ -98,8 +103,10 @@
   --row: rgb(255 255 255 / 5%);
   --row-even: rgb(255 255 255 / 1.5%);
   --row-hover: rgb(255 255 255 / 9%);
+  --hover-tile: color-mix(in srgb, var(--text) 8%, transparent);   /* a small button under the pointer (the controls over the tree, the weapon sets) */
   /* The body of a card, a step darker than its head (the cards on hover, the cards of the Skills tab). */
   --card-body: color-mix(in srgb, var(--shade-deep), #000 60%);
+  --card-rule: color-mix(in srgb, var(--on-band) 14%, transparent);   /* a thin line between the parts of a text in a card */
 
   /* The shadows: the colour of those of a small thing over its panel (a sticky note; the level band,
      6 px of blur, 2h); under the band of the open builds, 1 px down, 3 px of blur (2e2, the owner,
@@ -111,6 +118,12 @@
   --popover-shadow: 0 8px 18px rgb(0 0 0 / 28%);
   --dialog-shadow: 0 18px 48px rgb(0 0 0 / 55%);
   --window-shadow: 0 24px 60px #000000aa;
+
+  /* Motion: the curve that goes a little past its end and comes back (a window that opens, a mark that
+     springs), the soft one that slows to its end, and how long a link takes to change its colour. */
+  --ease-overshoot: cubic-bezier(.34, 1.56, .64, 1);
+  --ease-out-soft: cubic-bezier(.2, .7, .2, 1);
+  --hover-fade: .3s;
 
   /* The graph paper behind the blocks (css/textures.css): its lines in pale blue (set aside: the grey
      of the text, the accent), a tile of 24 px (the owner, 2026-11-19), at 3 % everywhere, the home

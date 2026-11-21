@@ -1,6 +1,6 @@
 /* What Pathweaver does, on the drop zone of the first visit (js/home-line.js): a title above the zone, the three
    things a build shows as notes of a plan around it. */
-.home-drop-stage { position: relative; transition: transform .3s cubic-bezier(.34, 1.56, .64, 1); }
+.home-drop-stage { position: relative; transition: transform .3s var(--ease-overshoot); }
 @media (prefers-reduced-motion: reduce) { .home-drop-stage { transition: none; } }
 
 /* The title: the game, small, in the grey of the secondary texts; the words, large, in sentence
@@ -22,7 +22,7 @@
 .home-note b { color: var(--text); font-family: var(--font-number); font-size: 11px; font-weight: 500; letter-spacing: .14em; text-transform: uppercase; white-space: nowrap;
   animation: home-note-in .4s ease-out calc(.4s + var(--note) * .35s) both; }
 .home-note i { position: relative; width: 34px; height: 1px; margin: 0 0 0 10px; background: color-mix(in srgb, var(--text) 55%, transparent); transform-origin: right;
-  animation: home-note-line .5s cubic-bezier(.2, .7, .2, 1) calc(.2s + var(--note) * .35s) both; }
+  animation: home-note-line .5s var(--ease-out-soft) calc(.2s + var(--note) * .35s) both; }
 .home-note i::after { content: ""; position: absolute; right: -3px; top: -3px; width: 7px; height: 7px; background: var(--text); animation: home-note-dot 1.667s ease-in-out infinite; }
 .home-note-1 { right: 100%; top: 26%; }
 .home-note-2, .home-note-3 { left: 100%; flex-direction: row-reverse; }

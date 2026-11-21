@@ -3,11 +3,11 @@
    Overview, scrolling inside, on the graph paper of the blocks (css/textures.css). Set aside: one column, cut in
    two the other way, cards, the warnings first on a band, a letter, the portrait large, contents, tiles, the
    file opened, a check-up, a table of properties. */
-.app-about-tab { height: 668px; overflow-y: auto; box-sizing: border-box; background: var(--side-column); scrollbar-width: thin; }
+.app-about-tab { height: var(--build-tab-height); overflow-y: auto; box-sizing: border-box; background: var(--side-column); scrollbar-width: thin; }
 .app-ab { box-sizing: border-box; min-height: 100%; font-size: 13px; line-height: 1.5; }
 .app-ab ul { margin: 0; padding: 0; list-style: none; }
 
-.ab-colophon { display: flex; min-height: 668px; }
+.ab-colophon { display: flex; min-height: var(--build-tab-height); }
 .ab-colophon-side { flex: none; width: 260px; box-sizing: border-box; padding: 24px 24px 28px 32px; background: var(--pane); }
 .ab-colophon-main { position: relative; isolation: isolate; flex: 1; max-width: 600px; padding: 24px 32px 28px; }
 /* The watermark: the mark of a note, filled, 240 px, in the middle of the part, behind the words, at 3 % (2k3b,
@@ -35,7 +35,7 @@
 /* A link of the guide, in the look of « Download .build » (css/build-header.css): its site in the accent, the
    colour of the text on hover, its site alone, its whole address in its tooltip. */
 .ab-guide { display: flex; flex-direction: column; gap: 3px; }
-.ab-link { color: var(--accent); font-size: 13px; font-weight: 600; line-height: 1.1; text-decoration: none; transition: color .3s; }
+.ab-link { color: var(--accent); font-size: 13px; font-weight: 600; line-height: 1.1; text-decoration: none; transition: color var(--hover-fade); }
 .ab-link:hover { color: var(--text); }
 .ab-link-text { overflow-wrap: anywhere; }
 .ab-from { font-size: 11px; line-height: 1.3; }

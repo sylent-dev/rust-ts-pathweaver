@@ -5,7 +5,7 @@
 /* The buttons, without a box; on hover a transparent tile behind the words, its corners rounded by
    2 px (the owner, 2026-11-19). */
 .tc button { pointer-events: auto; display: inline-flex; align-items: center; justify-content: center; min-width: 28px; height: 26px; padding: 0 8px; border: none; border-radius: 2px; background: none; color: var(--weak); font: inherit; cursor: pointer; }
-.tc button:hover { color: var(--text); background: color-mix(in srgb, var(--text) 8%, transparent); }
+.tc button:hover { color: var(--text); background: var(--hover-tile); }
 .tc button.tc-zoom { padding: 0; width: 28px; }
 /* The set shown in its colour, without a line under it (the owner, 2026-11-19). */
 .tc button.is-set1[aria-pressed="true"] { color: var(--tree-set-1); }

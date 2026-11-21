@@ -21,5 +21,5 @@
    the note straight and the hollow shape in yellow, set aside. The row draws no mark then (js/side-skills.js). */
 .app-skill-gem.is-unknown::before { content: "?"; display: inline-grid; place-items: center; width: 12px; height: 12px; margin: 0 -1px;
   background: var(--unknown-note); color: var(--unknown-ink); font-size: 9px; font-weight: 800; line-height: 1;
-  transform: translateY(0.5px) rotate(-8deg); box-shadow: 1px 1px 2px var(--shadow-colour); }
-.app-skill-supports .app-skill-gem.is-unknown::before { width: 10px; height: 10px; margin: 0; font-size: 8px; transform: translateY(-2px) rotate(-8deg); }
+  transform: translateY(0.5px) rotate(var(--note-tilt)); box-shadow: 1px 1px 2px var(--shadow-colour); }
+.app-skill-supports .app-skill-gem.is-unknown::before { width: 10px; height: 10px; margin: 0; font-size: 8px; transform: translateY(-2px) rotate(var(--note-tilt)); }

@@ -4,7 +4,7 @@
    (css/textures.css), the layer on the content rather than on the box that scrolls, so that it runs to
    its end. Set aside: H1 (a list and its detail), N3 (an outline, the supports along a line), K3 (the
    head of a skill on a band, the supports on the page), and fourteen other variants. */
-.app-skills-tab { height: 668px; overflow-y: auto; box-sizing: border-box; background: var(--side-column); scrollbar-width: thin; }
+.app-skills-tab { height: var(--build-tab-height); overflow-y: auto; box-sizing: border-box; background: var(--side-column); scrollbar-width: thin; }
 .app-st { box-sizing: border-box; min-height: 100%; padding: 18px 20px 24px; columns: 3; column-gap: 28px; font-size: 13px; --gem-mark-margin: 0; }
 .app-st ul { margin: 0; padding: 0; list-style: none; }
 

@@ -12,7 +12,7 @@
 .app-inventory-sets button { height: 24px; padding: 0 11px; border: none; border-radius: 0; background: none; color: var(--weak); font-size: 12px; cursor: pointer; }
 .app-inventory-sets .is-set1 { --set: var(--tree-set-1); }
 .app-inventory-sets .is-set2 { --set: var(--tree-set-2); }
-.app-inventory-sets button:hover { color: var(--text); background: color-mix(in srgb, var(--text) 8%, transparent); }
+.app-inventory-sets button:hover { color: var(--text); background: var(--hover-tile); }
 .app-inventory-sets button[aria-pressed="true"] { color: var(--set); background: color-mix(in srgb, var(--set) 20%, transparent); }
 .app-inventory-sets.is-moved button[aria-pressed="true"] { animation: sets-fade .25s ease-out; }
 @keyframes sets-fade { from { background: transparent; } }
@@ -31,7 +31,7 @@
 .app-slot.is-unknown { overflow: visible; }
 .app-slot.is-unknown .app-unknown:not(:only-child) { position: absolute; top: -3px; right: -2px; }
 .app-unknown { display: inline-grid; place-items: center; width: 14px; height: 14px; background: var(--unknown-note); color: var(--unknown-ink);
-  font-size: 10px; font-weight: 800; transform: rotate(-8deg); box-shadow: 1px 2px 3px var(--shadow-colour); }
+  font-size: 10px; font-weight: 800; transform: rotate(var(--note-tilt)); box-shadow: 1px 2px 3px var(--shadow-colour); }
 
 /* The box of a slot, and of a thumbnail under the drawing: B4 at 25 % (the owner, 2026-11-20, of seven
    looks: darker, lighter, a line, darker and a line, lighter and a line, a light from the middle, solid). */
@@ -63,7 +63,7 @@
    sticky note with lines, turned as the « ? » of an unknown id, a light shadow under it; larger in the tiles of
    « Upcoming » (--free-note-size, css/inventory-later.css). */
 .app-free-text { display: inline-grid; place-items: center; line-height: 1; }
-.app-free-note { display: block; width: var(--free-note-size, 14px); height: var(--free-note-size, 14px); transform: rotate(-8deg); filter: drop-shadow(1px 2px 2px var(--shadow-colour)); }
+.app-free-note { display: block; width: var(--free-note-size, 14px); height: var(--free-note-size, 14px); transform: rotate(var(--note-tilt)); filter: drop-shadow(1px 2px 2px var(--shadow-colour)); }
 .app-free-note rect { fill: color-mix(in srgb, var(--text) 22%, transparent); }
 .app-free-note path { fill: none; stroke: color-mix(in srgb, var(--text) 60%, transparent); stroke-width: 1.2; stroke-linecap: round; }
 .app-unknown-word { margin-left: 6px; color: var(--unknown-note); font-size: 10px; letter-spacing: .08em; text-transform: uppercase; }
@@ -80,4 +80,4 @@
    beside the column; the name of a unique in its gold (css/app.css), its implicits above its stats under a line, as in
    the game. */
 .app-slot.is-hinted, .app-inventory-others li[data-item] { cursor: default; }
-.app-item-implicits { padding-bottom: 5px; border-bottom: 1px solid color-mix(in srgb, var(--on-band) 14%, transparent); }
+.app-item-implicits { padding-bottom: 5px; border-bottom: 1px solid var(--card-rule); }
