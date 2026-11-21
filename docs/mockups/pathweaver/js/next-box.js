@@ -31,7 +31,7 @@ function passiveIcon(n, size) {
 // The art of a card: one portrait large, or the four of the community side by side.
 const updateArt = update => `<div class="nx-art ${update.art.length > 1 ? "is-many" : ""}">${update.art.map(key =>
   `<img src="pathweaver/img/portraits-about/${key}.webp" alt="">`).join("")}</div>`;
-const updateCard = (update, index) => `<article class="nx-card is-${update.key}" style="--i:${index}">
+const updateCard = update => `<article class="nx-card is-${update.key}">
   <div class="nx-face">
     ${updateArt(update)}
     <div class="nx-body">
