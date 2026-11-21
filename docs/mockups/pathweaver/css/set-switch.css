@@ -1,141 +1,31 @@
-/* The switch of the weapon set in the Inventory tab (js/set-switch.js, 2k2b): twelve variants, the class of
-   the tab sw-<variant>. Each set in its colour of the tree (--set); a change of set plays its motion once
-   (is-moved), none when the system asks for less motion. */
+/* The switch of the weapon set in the Inventory tab (js/set-switch.js, 2k2b): N2 and F3, the class of the tab
+   sw-<variant>. Each set in its colour of the tree (--set); a change of set plays its motion once (is-moved),
+   none when the system asks for less motion. */
 .sw-set { border: none; padding: 0; background: none; color: var(--weak); font: inherit; cursor: pointer; }
 .sw-set.is-set1 { --set: var(--tree-set-1); }
 .sw-set.is-set2 { --set: var(--tree-set-2); }
 .sw-set[aria-pressed="true"] { color: var(--set); }
 .app-it .app-inventory-head { width: 396px; }
-.app-it:is(.sw-n3, .sw-h1, .sw-h2, .sw-f1, .sw-f2, .sw-f3) .app-inventory-head { justify-content: center; }
-/* Hanging from the top of the tab. */
-.app-it:is(.sw-h1, .sw-h2, .sw-f3) .it-left { padding-top: 0; }
 
-/* N2: two halves of a box. */
+/* N2: a box in two halves, the set shown filled with its colour (without the line under it, the owner,
+   2026-11-21: too heavy). */
 .sw-seg { display: inline-flex; box-shadow: inset 0 0 0 1px var(--slot-line); }
 .sw-seg .sw-set { height: 26px; padding: 0 12px; font-size: 12px; }
-.sw-seg .sw-set[aria-pressed="true"] { background: color-mix(in srgb, var(--set) 20%, transparent); box-shadow: inset 0 -2px 0 var(--set); }
+.sw-seg .sw-set[aria-pressed="true"] { background: color-mix(in srgb, var(--set) 20%, transparent); }
 .sw-seg.is-moved .sw-set[aria-pressed="true"] { animation: sw-fade .25s ease-out; }
-@keyframes sw-fade { from { background: transparent; box-shadow: inset 0 0 0 var(--set); } }
+@keyframes sw-fade { from { background: transparent; } }
 
-/* N3: tabs over the drawing, a line under the set shown. */
-.sw-n3 .app-inventory-head { border-bottom: 1px solid color-mix(in srgb, var(--text) 10%, transparent); }
-.sw-tabs { display: flex; gap: 26px; }
-.sw-tabs .sw-set { position: relative; height: 30px; font-size: 13px; font-weight: 600; }
-.sw-tabs .sw-set[aria-pressed="true"]::after { content: ""; position: absolute; left: 0; right: 0; bottom: -1px; height: 2px; background: var(--set); }
-.sw-tabs.is-moved .sw-set[aria-pressed="true"]::after { animation: sw-grow .25s ease-out; }
-@keyframes sw-grow { from { transform: scaleX(0); } }
-
-/* H1: two trapezoids hanging from the top of the tab; the set shown drops lower, lit, a line of its colour
-   at its edge; with a little bounce when it changes. */
-.sw-trapezoids { display: flex; gap: 6px; align-items: flex-start; height: 40px; }
-.sw-trapezoids .sw-set { display: grid; place-items: end center; box-sizing: border-box; width: 100px; height: 24px; padding-bottom: 5px;
-  clip-path: polygon(0 0, 100% 0, 86% 100%, 14% 100%); background: color-mix(in srgb, var(--text) 8%, transparent);
-  font-size: 11.5px; font-weight: 700; letter-spacing: .04em; transition: height .18s ease-out, background-color .18s; }
-.sw-trapezoids .sw-set:hover { height: 27px; background-color: color-mix(in srgb, var(--text) 13%, transparent); }
-.sw-trapezoids .sw-set[aria-pressed="true"] { height: 32px; color: color-mix(in srgb, var(--set), #fff 35%);
-  background: linear-gradient(var(--set), var(--set)) bottom / 100% 2px no-repeat, linear-gradient(color-mix(in srgb, var(--set) 12%, transparent), color-mix(in srgb, var(--set) 38%, transparent)); }
-.sw-trapezoids.is-moved .sw-set[aria-pressed="true"] { animation: sw-drop .3s cubic-bezier(.3, 1.6, .5, 1); }
-@keyframes sw-drop { from { height: 24px; } }
-
-/* H2: one trapezoid cut in two, the colour sliding from one half to the other. */
-.sw-split { position: relative; display: flex; width: 208px; height: 30px; clip-path: polygon(0 0, 100% 0, 91% 100%, 9% 100%); background: color-mix(in srgb, var(--text) 8%, transparent); }
-.sw-split .sw-set { position: relative; z-index: 1; flex: 1; font-size: 11.5px; font-weight: 700; letter-spacing: .04em; }
-.sw-split .sw-set[aria-pressed="true"] { color: color-mix(in srgb, var(--set), #fff 35%); }
-.sw-split-fill { position: absolute; top: 0; bottom: 0; left: 0; width: 50%; background: color-mix(in srgb, var(--tree-set-1) 32%, transparent); box-shadow: inset 0 -2px 0 var(--tree-set-1); }
-.sw-split.is-at2 .sw-split-fill { left: 50%; background: color-mix(in srgb, var(--tree-set-2) 32%, transparent); box-shadow: inset 0 -2px 0 var(--tree-set-2); }
-.sw-split.is-moved.is-at1 .sw-split-fill { animation: sw-slide-left .28s ease-out; }
-.sw-split.is-moved.is-at2 .sw-split-fill { animation: sw-slide-right .28s ease-out; }
-@keyframes sw-slide-left { from { left: 50%; } }
-@keyframes sw-slide-right { from { left: 0; } }
-
-/* H3: small tabs I and II on the top edge of the weapon and of the offhand. */
-.sw-h3 .app-inventory-head { min-height: 0; }
-.sw-h3 .app-inventory { margin-top: 24px; }
-.app-slot.sw-has-tabs { overflow: visible; }
-.sw-slot-tabs { position: absolute; bottom: 100%; left: 3px; display: flex; gap: 2px; }
-.sw-slot-tabs .sw-set { width: 22px; height: 14px; clip-path: polygon(16% 0, 84% 0, 100% 100%, 0 100%); background: color-mix(in srgb, var(--text) 9%, transparent);
-  font-size: 9px; font-weight: 800; line-height: 14px; }
-.sw-slot-tabs .sw-set[aria-pressed="true"] { background: color-mix(in srgb, var(--set) 55%, transparent); color: #fff; }
-
-/* E1: the weapon of the other set behind, faded; a click on it swaps; the item shown slides to the front. */
-.sw-e1-hint { margin: 0; font-size: 11.5px; }
-.sw-e1-shown { font-weight: 700; }
-.sw-e1-shown.is-set1 { color: var(--tree-set-1); }
-.sw-e1-shown.is-set2 { color: var(--tree-set-2); }
-.sw-e1 .app-inventory { margin-top: 18px; }
-.app-slot.sw-has-behind { overflow: visible; }
-.sw-behind { position: absolute; inset: 0; z-index: -1; box-sizing: border-box; padding: 3px; border: none; transform: translate(10px, -10px);
-  background: var(--slot-box); box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--set) 55%, transparent); opacity: .5; cursor: pointer; transition: opacity .15s, transform .15s; }
-.sw-behind.is-set1 { --set: var(--tree-set-1); }
-.sw-behind.is-set2 { --set: var(--tree-set-2); }
-.app-slot[data-cell^="Offhand"] .sw-behind { transform: translate(-10px, -10px); }
-.sw-behind:hover { opacity: .9; transform: translate(13px, -13px); }
-.app-slot[data-cell^="Offhand"] .sw-behind:hover { transform: translate(-13px, -13px); }
-.sw-behind .app-item-art { filter: saturate(.5); }
-.sw-has-behind.is-moved > .app-item-art { animation: sw-front .3s ease-out; }
-@keyframes sw-front { from { transform: translate(8px, -8px) scale(.94); opacity: .4; } }
-
-/* E2: tabs on the left edge of the tab, as on a binder. */
-.sw-e2 .app-inventory-head { min-height: 0; }
-.sw-edge { position: absolute; top: 34px; left: 0; z-index: 1; display: flex; flex-direction: column; gap: 6px; }
-.sw-edge .sw-set { width: 22px; height: 68px; clip-path: polygon(0 0, 100% 14%, 100% 86%, 0 100%); background: color-mix(in srgb, var(--text) 8%, transparent);
-  font-size: 12px; font-weight: 800; transition: width .18s ease-out; }
-.sw-edge .sw-set:hover { width: 25px; }
-.sw-edge .sw-set[aria-pressed="true"] { width: 30px; background: color-mix(in srgb, var(--set) 34%, transparent); color: color-mix(in srgb, var(--set), #fff 40%);
-  box-shadow: inset 2px 0 0 var(--set); }
-.sw-edge.is-moved .sw-set[aria-pressed="true"] { animation: sw-out .3s cubic-bezier(.3, 1.6, .5, 1); }
-@keyframes sw-out { from { width: 22px; } }
-
-/* E3: a switch whose knob slides, and the key of the swap. */
-.sw-toggle { display: flex; align-items: center; gap: 8px; }
-.sw-end { font-size: 12px; font-weight: 800; }
-.sw-track { position: relative; width: 46px; height: 22px; border: none; border-radius: 11px; background: color-mix(in srgb, var(--text) 10%, transparent); cursor: pointer; }
-.sw-knob { position: absolute; top: 3px; left: 3px; width: 16px; height: 16px; border-radius: 50%; background: var(--tree-set-1); box-shadow: 0 0 8px color-mix(in srgb, var(--tree-set-1) 60%, transparent); }
-.sw-track.is-at2 .sw-knob { left: 27px; background: var(--tree-set-2); box-shadow: 0 0 8px color-mix(in srgb, var(--tree-set-2) 60%, transparent); }
-.sw-toggle.is-moved .sw-track.is-at1 .sw-knob { animation: sw-knob-left .22s ease-out; }
-.sw-toggle.is-moved .sw-track.is-at2 .sw-knob { animation: sw-knob-right .22s ease-out; }
-@keyframes sw-knob-left { from { left: 27px; background: var(--tree-set-2); } }
-@keyframes sw-knob-right { from { left: 3px; background: var(--tree-set-1); } }
-.sw-key { display: inline-grid; place-items: center; min-width: 20px; height: 20px; margin-left: 6px; padding: 0 5px; box-sizing: border-box; border-radius: 3px;
-  box-shadow: inset 0 -2px 0 color-mix(in srgb, var(--text) 18%, transparent), inset 0 0 0 1px color-mix(in srgb, var(--text) 22%, transparent);
-  color: var(--weak); font: 700 11px var(--font-text, inherit); }
-.sw-toggle.is-moved .sw-key { animation: sw-key .3s ease-out; }
-@keyframes sw-key { from { color: var(--text); background: color-mix(in srgb, var(--accent) 35%, transparent); } }
-
-/* F1: the numerals, engraved; the set shown lit, swept by a light when it changes. */
-.sw-numerals { display: flex; align-items: baseline; gap: 28px; height: 40px; }
-.sw-numerals .sw-set { font-family: var(--brand-font); font-size: 34px; font-weight: 800; line-height: 1; letter-spacing: .02em;
-  color: transparent; -webkit-text-stroke: 1px color-mix(in srgb, var(--text) 35%, transparent); }
-.sw-numerals .sw-set[aria-pressed="true"] { color: var(--set); -webkit-text-stroke: 0; text-shadow: 0 0 14px color-mix(in srgb, var(--set) 55%, transparent); }
-.sw-numerals.is-moved .sw-set[aria-pressed="true"] { background: linear-gradient(100deg, var(--set) 40%, #fff 50%, var(--set) 60%) 100% 0 / 300% 100% no-repeat;
-  -webkit-background-clip: text; background-clip: text; color: transparent; animation: sw-sweep .7s ease-out forwards; }
-@keyframes sw-sweep { to { background-position: 0 0; } }
-
-/* F2: a dial, its needle turning to the set shown. */
-.sw-dial-row { display: flex; align-items: center; gap: 10px; }
-.sw-dial-end { font-size: 12px; font-weight: 800; }
-.sw-dial { position: relative; width: 32px; height: 32px; border: none; border-radius: 50%; background: color-mix(in srgb, var(--text) 6%, transparent);
-  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--text) 22%, transparent); cursor: pointer; }
-.sw-dial::after { content: ""; position: absolute; top: 50%; left: 50%; width: 6px; height: 6px; border-radius: 50%; translate: -50% -50%; background: var(--text); }
-.sw-needle { position: absolute; bottom: 50%; left: 50%; width: 2px; height: 12px; margin-left: -1px; border-radius: 1px; transform-origin: 50% 100%; transform: rotate(-55deg);
-  background: var(--tree-set-1); box-shadow: 0 0 6px var(--tree-set-1); }
-.sw-dial.is-at2 .sw-needle { transform: rotate(55deg); background: var(--tree-set-2); box-shadow: 0 0 6px var(--tree-set-2); }
-.sw-dial-row.is-moved .sw-dial.is-at1 .sw-needle { animation: sw-turn-left .4s cubic-bezier(.3, 1.6, .5, 1); }
-.sw-dial-row.is-moved .sw-dial.is-at2 .sw-needle { animation: sw-turn-right .4s cubic-bezier(.3, 1.6, .5, 1); }
-@keyframes sw-turn-left { from { transform: rotate(55deg); } }
-@keyframes sw-turn-right { from { transform: rotate(-55deg); } }
-
-/* F3: tags hanging by a thread from the top of the tab; the set shown hangs lower and swings. */
+/* F3: tags hanging by a thread from the top of the tab, without a hole (the owner, 2026-11-21); the set shown
+   hangs lower and swings. */
+.sw-f3 .it-left { padding-top: 0; }
+.sw-f3 .app-inventory-head { justify-content: center; }
 .sw-tags { display: flex; align-items: flex-start; gap: 16px; height: 58px; }
-.sw-tags .sw-set { position: relative; margin-top: 14px; padding: 5px 10px 5px 18px; border-radius: 2px; background: color-mix(in srgb, var(--text) 8%, transparent);
+.sw-tags .sw-set { position: relative; margin-top: 14px; padding: 5px 12px; border-radius: 2px; background: color-mix(in srgb, var(--text) 8%, transparent);
   font-size: 11.5px; font-weight: 700; transform-origin: 50% -14px; transition: margin-top .2s ease-out; }
 .sw-tags .sw-set::before { content: ""; position: absolute; bottom: 100%; left: 50%; width: 1px; height: 14px; background: color-mix(in srgb, var(--text) 30%, transparent); }
 .sw-tags .sw-set[aria-pressed="true"] { margin-top: 24px; transform-origin: 50% -24px; background: color-mix(in srgb, var(--set) 30%, transparent); color: color-mix(in srgb, var(--set), #fff 40%); }
 .sw-tags .sw-set[aria-pressed="true"]::before { height: 24px; }
-.sw-hole { position: absolute; top: 50%; left: 6px; width: 5px; height: 5px; border-radius: 50%; translate: 0 -50%; background: var(--side-column); }
 .sw-tags.is-moved .sw-set[aria-pressed="true"] { animation: sw-swing .9s ease-out; }
 @keyframes sw-swing { 0% { rotate: 14deg; } 30% { rotate: -9deg; } 55% { rotate: 5deg; } 80% { rotate: -2deg; } 100% { rotate: 0deg; } }
 
-@media (prefers-reduced-motion: reduce) {
-  .app-it .sw-set, .app-it .sw-set::after, .sw-split-fill, .sw-knob, .sw-key, .sw-needle, .sw-behind, .sw-has-behind > .app-item-art { animation: none; transition: none; }
-}
+@media (prefers-reduced-motion: reduce) { .app-it .sw-set { animation: none; transition: none; } }

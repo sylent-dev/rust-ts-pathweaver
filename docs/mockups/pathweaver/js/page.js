@@ -24,8 +24,8 @@ const VARIANTS = {
   // The width of the windows of the home page (2l): the minimum of specs.md, half a 1920-pixel screen, and a wide
   // window of the owner's screen.
   homeWidth: { label: "Home width", options: { 900: "900 px", 960: "960 px", 1600: "1,600 px" }, fallback: "960" },
-  // The switch of the weapon set in the Inventory tab (2k2b): twelve variants at four temperatures (js/set-switch.js).
-  setSwitch: { label: "Set switch", options: Object.fromEntries(["n1", "n2", "n3", "h1", "h2", "h3", "e1", "e2", "e3", "f1", "f2", "f3"].map(id => [id, id.toUpperCase()])), fallback: "h1" },
+  // The switch of the weapon set in the Inventory tab (2k2b): N2 and F3, kept of twelve (js/set-switch.js).
+  setSwitch: { label: "Set switch", options: { n2: "N2", f3: "F3" }, fallback: "n2" },
   // The Inventory tab cut in two (2k2, the owner, 2026-11-21): where the cut falls, the shade of the pane of the
   // box, its line.
   invCut: { label: "Pane start", range: { min: 436, max: 600, step: 4 }, variable: "--it-cut", unit: "px", fallback: "480" },
