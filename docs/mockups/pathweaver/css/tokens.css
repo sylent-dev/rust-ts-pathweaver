@@ -76,6 +76,7 @@
   --weak: #8393ad;
   --accent: #60a5fa;
   --accent-bright: color-mix(in srgb, var(--accent), #fff 15%);   /* the light that sweeps « NEW » */
+  --focus-ring: 2px solid var(--accent);   /* the focus of the keyboard, on every control (css/app.css) */
   --highlight: #ffffff;
 
   /* The red of the errors, vivid, apart from the red of the gems of strength, so that an error never

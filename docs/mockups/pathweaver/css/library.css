@@ -32,7 +32,6 @@
 .library-row:nth-child(even) { background: var(--row-even); }
 .library-row:not(.is-asking):is(:hover, .is-hover) { background: var(--row-hover); }
 .library-link { flex: 1; min-width: 0; display: flex; align-items: center; gap: 16px; height: 100%; color: inherit; text-decoration: none; }
-.library-link:focus-visible { outline: 2px solid var(--accent); outline-offset: -2px; }
 .library-portrait { flex: none; display: block; width: 56px; height: 56px; object-fit: cover; }
 .library-text { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 3px; }
 .library-name, .library-meta { overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }

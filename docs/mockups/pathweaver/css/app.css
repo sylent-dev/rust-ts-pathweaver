@@ -5,6 +5,11 @@
 /* A container, named window: the components ask its width (@container window), never the class of a page. */
 .app-window { container: window / inline-size; position: relative; overflow: hidden; background: var(--page-image), var(--page); background-size: var(--page-image-size); color: var(--text); font: var(--text-weight) 14px/1.35 var(--font-text); }
 :where(.app-window) button { font: inherit; color: inherit; }   /* weaker than any class of a block */
+/* The focus of the keyboard on every control (WCAG 2.4.7): a ring in the accent, inside its box, so that a parent
+   that cuts what overflows (the menu of the builds, the right column, the box of What's next) never hides it;
+   reached with the keyboard only (:focus-visible), and no stronger than a class, so that a component may draw
+   its own (the cursor of the level, css/level-band.css; the field of Paste JSON, css/home-paste.css). */
+:where(.app-window) :focus-visible { outline: var(--focus-ring); outline-offset: -2px; }
 .app-portrait { flex: none; display: block; border-radius: var(--portrait-radius); object-fit: cover; background: var(--portrait-placeholder); box-shadow: var(--portrait-ring); }
 .app-weak { color: var(--weak); }
 .app-number { font-family: var(--font-number); font-variant-numeric: tabular-nums; }
