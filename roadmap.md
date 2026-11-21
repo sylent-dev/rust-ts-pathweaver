@@ -8,6 +8,7 @@ Read only by the steps that need them:
 
 - [Technical choices](docs/technical-choices.md): the libraries, the services and the main designs, with their reasons.
 - [Game data](docs/game-data.md): the sources of the names and stats of the game, their terms, the risks accepted.
+- [Cloudflare usage](docs/cloudflare-usage.md): the host, its limits and terms, the token of the deployment, the risks accepted.
 - [Build files in the wild](docs/build-files-in-the-wild.md): what the files of the tools do with the format, measured on a corpus.
 - [Backlog](docs/backlog.md): ideas and edge cases for later; the owner decides when one becomes a step.
 - [Process](process.md): the phases of a project, from the specifications to the build.
