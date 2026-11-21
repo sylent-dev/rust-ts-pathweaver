@@ -11,7 +11,7 @@ SKILL_SOURCES.snapshot = level => skillsOf(BUILDS.snapshot.skills, level);
 const snapshotColumn = level => `<aside class="app-side graph-paper ov">
   <div class="ov-skills">${skillList(level, "snapshot")}</div>
   <div class="ov-drawer graph-paper is-empty"><div class="ov-drawer-bar">
-    <div class="app-inventory-head"><h2 class="app-side-title app-title">Inventory</h2></div>
+    <div class="app-inventory-head"><h2 class="app-side-title is-first app-title">Inventory</h2></div>
     <p class="ov-no-gear app-weak">The file names no gear</p>
   </div></div>
 </aside>`;

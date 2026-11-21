@@ -1,4 +1,10 @@
 /* The mark of a gem (2g3, js/gem-marks.js): 10 px, on the letters beside it. */
 /* 1 px above the middle of the lowercase letters, on that of the words, which start with capitals
    (« Cast on Critical » sat too high beside it, the owner, 2026-11-19). */
-.app-gem-mark { display: inline-block; flex: none; position: relative; top: -1px; width: var(--gem-mark-size); height: var(--gem-mark-size); margin: 0 6px 0 0; vertical-align: middle; }
+/* What its place sets (2n3): its margin (--gem-mark-margin) and how far down (--gem-mark-top). */
+.app-gem-mark { display: inline-block; flex: none; position: relative; top: var(--gem-mark-top, -1px); width: var(--gem-mark-size); height: var(--gem-mark-size);
+  margin: var(--gem-mark-margin, 0 6px 0 0); vertical-align: middle; }
+/* Lit (is-lit): the gem of a line of « New at N » under the pointer, in its row (js/side-skills.js). */
+.app-gem-mark { transition: transform 120ms ease-out, filter 120ms ease-out; }
+@media (prefers-reduced-motion: reduce) { .app-gem-mark { transition: none; } }
+.app-gem-mark.is-lit { transform: scale(1.5); filter: drop-shadow(0 0 3px var(--accent)) brightness(1.3); }

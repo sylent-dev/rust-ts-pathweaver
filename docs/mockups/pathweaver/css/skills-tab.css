@@ -5,7 +5,7 @@
    its end. Set aside: H1 (a list and its detail), N3 (an outline, the supports along a line), K3 (the
    head of a skill on a band, the supports on the page), and fourteen other variants. */
 .app-skills-tab { height: 668px; overflow-y: auto; box-sizing: border-box; background: var(--side-column); scrollbar-width: thin; }
-.app-st { box-sizing: border-box; min-height: 100%; padding: 18px 20px 24px; columns: 3; column-gap: 28px; font-size: 13px; }
+.app-st { box-sizing: border-box; min-height: 100%; padding: 18px 20px 24px; columns: 3; column-gap: 28px; font-size: 13px; --gem-mark-margin: 0; }
 .app-st ul { margin: 0; padding: 0; list-style: none; }
 
 /* A card: its head in the deep shade, its name, then its badge at the right, a square of 32 px; its body a
@@ -18,7 +18,7 @@
 .st-name { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .st-skill { font-weight: 700; }
 .st-support { display: flex; align-items: center; gap: 5px; min-height: 21px; font-size: 12.5px; }
-.st-support .app-gem-mark { flex: none; margin-right: 2px; }
+.st-support { --gem-mark-margin: 0 2px 0 0; }
 /* The skill a spirit gem triggers, after « ↳ », with its mark. */
 .st-triggered { display: flex; align-items: center; gap: 5px; min-height: 22px; margin-top: 2px; padding-left: 4px; }
 .st-hook { font-size: 12px; }

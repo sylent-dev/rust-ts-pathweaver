@@ -17,12 +17,6 @@ SKILL_SOURCES.crowded = level => skillsOf(BUILDS.crowded.skills, level);
 const sideLink = (tab, words, className = "app-side-link") =>
   `<button type="button" class="${className}" data-action="tab-go" data-tab="${tab}"><span class="app-side-link-words">${words}</span></button>`;
 
-// The bar of the drawer: a box per hinted slot, its card on hover as in the drawing.
-function inventoryThumbs(level, hints) {
-  return `<div class="app-inventory ov-thumbs">${hints.map(hint => [hint, hintItem(hint)]).map(([hint, item]) =>
-    `<span class="app-slot is-hinted${item.unknown ? " is-unknown" : ""}" ${hintAttributes(hint, item, level)}>${thumbInner(item)}</span>`).join("")}</div>`;
-}
-
 // The right column at a level: of the build shown, or of a case (`record` its changes, `source` its
 // skills, `hints` its inventory). The drawing comes before the bar, so that it unrolls above it.
 function sideColumn(level, { record = BUILDS.changes.shown.levels[level], source, hints = slotsAt(level, STATE.inventorySet) } = {}) {
@@ -30,8 +24,8 @@ function sideColumn(level, { record = BUILDS.changes.shown.levels[level], source
     <div class="ov-new">${newAtBox(level, record)}</div>
     <div class="ov-skills">${skillList(level, source)}</div>
     <div class="ov-drawer graph-paper">
-      <div class="ov-drawer-doll">${inventoryBox(level, hints)}</div>
-      <div class="ov-drawer-bar"><div class="app-inventory-head"><h2 class="app-side-title app-title">Inventory</h2>${inventorySetSwitch()}</div>${inventoryThumbs(level, hints)}</div>
+      <div class="ov-drawer-doll">${inventoryBox(level, hints, { head: false })}</div>
+      <div class="ov-drawer-bar"><div class="app-inventory-head"><h2 class="app-side-title is-first app-title">Inventory</h2>${inventorySetSwitch()}</div>${inventoryThumbs(level, hints)}</div>
     </div>
   </aside>`;
 }

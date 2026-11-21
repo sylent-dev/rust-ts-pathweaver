@@ -13,9 +13,9 @@
 
 // The mark of a gem of a row, in a span that the flash and the light of « New at N » find.
 // Its name and its description on hover (js/gem-hover.js). The mark of a gem the game data don't know
-// is-unknown, an amber « ? » (css/side-skills.css, 2j3b); its name the end of its id.
+// is-unknown, the yellow sticky note « ? » in place of the mark (css/side-skills.css, 2j3b); its name the end of its id.
 const unknownClass = gem => gem.known === false ? " is-unknown" : "";
-const skillMark = gem => `<span class="app-skill-gem${gem.isNew ? " is-new" : ""}${unknownClass(gem)}" data-gem="${escapeHtml(gem.name)}">${gemMark(gem)}</span>`;
+const skillMark = gem => `<span class="app-skill-gem${gem.isNew ? " is-new" : ""}${unknownClass(gem)}" data-gem="${escapeHtml(gem.name)}">${gem.known === false ? "" : gemMark(gem)}</span>`;
 const skillName = gem => `<span class="app-skill-name" data-gem="${escapeHtml(gem.name)}">${escapeHtml(gem.name)}</span>`;
 
 // A skill at the level: whether it starts there, its supports (each new when it comes onto the skill
@@ -62,11 +62,11 @@ AFTER_RENDER.push(() => document.querySelectorAll(".app-skills").forEach(flashNe
 // The gem of a line of « New at N » lit in the rows of its column while the pointer is on the line:
 // the words above, the gem below, read as one.
 function litFromNewAt(event) {
-  const line = event.target.closest?.(".app-new-lines li[data-gem]");
+  const line = event.target.closest?.(".app-new li[data-gem]");
   if (!line) return;
   const lit = event.type === "mouseover";
   const selector = `.app-skill[data-skill="${CSS.escape(line.dataset.on)}"] .app-skill-gem[data-gem="${CSS.escape(line.dataset.gem)}"]`;
-  line.closest(".app-side")?.querySelectorAll(selector).forEach(gem => gem.classList.toggle("is-lit", lit));
+  line.closest(".app-side")?.querySelectorAll(selector).forEach(gem => gem.querySelector(".app-gem-mark")?.classList.toggle("is-lit", lit));
 }
 document.addEventListener("mouseover", litFromNewAt);
 document.addEventListener("mouseout", litFromNewAt);

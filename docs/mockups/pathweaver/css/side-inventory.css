@@ -17,12 +17,12 @@
 .app-inventory-sets.is-moved button[aria-pressed="true"] { animation: sets-fade .25s ease-out; }
 @keyframes sets-fade { from { background: transparent; } }
 @media (prefers-reduced-motion: reduce) { .app-inventory-sets.is-moved button[aria-pressed="true"] { animation: none; } }
-/* In the right column, as far from its right edge as the « I » of « Inventory » from its left edge (the owner,
-   2026-11-21): 18 px against the 12 px of the padding of the drawer. */
-:is(.app-side, .ov-drawer) .app-inventory-sets { margin-right: 6px; }
+/* How far from the right edge of its place (--sets-inset): in the right column, as far as the « I » of
+   « Inventory » from its left edge (the owner, 2026-11-21), css/overview.css. */
+.app-inventory-sets { margin-right: var(--sets-inset, 0); }
 
 /* The slots 5 px right, the edge of the weapon under the « I » of the title (the owner, 2026-11-20, by eye). */
-.app-inventory { position: relative; margin-top: 6px; margin-left: 5px; }
+.app-inventory { position: relative; margin: var(--inventory-margin, 6px 0 0 5px); }   /* --inventory-margin: set by its place */
 .app-slot { position: absolute; display: grid; place-items: center; box-sizing: border-box; padding: 2px; overflow: hidden; border-radius: 0; }
 /* The image fills its box, inside its padding, at its own proportions. */
 .app-item-art { display: block; width: 100%; height: 100%; min-height: 0; object-fit: contain; }
@@ -52,6 +52,14 @@
 .app-free-note path { fill: none; stroke: color-mix(in srgb, var(--text) 60%, transparent); stroke-width: 1.2; stroke-linecap: round; }
 .up-tile .app-free-note { width: 18px; height: 18px; }
 .app-unknown-word { margin-left: 6px; color: var(--unknown-note); font-size: 10px; letter-spacing: .08em; text-transform: uppercase; }
+
+/* The thumbnails (inventoryThumbs), in the bar of the drawer of the right column (2j4): a box per hinted slot, its
+   card on hover. Eight a row from the edge of the drawing (5 px in) to the right edge of the switch of the set
+   (6 px in), the last of a row on that edge, and the rows as far apart as the thumbnails (the owner, 2026-11-21):
+   the gap read from the width of its container, so that it holds at any width of the column. */
+.app-inventory.is-thumbs { --thumbs: calc(100cqw - 11px); position: static; display: grid; grid-template-columns: repeat(8, 32px);
+  justify-content: space-between; gap: calc((var(--thumbs) - 8 * 32px) / 7); width: var(--thumbs); }
+.is-thumbs .app-slot { position: relative; width: 32px; height: 32px; }
 
 /* The section of the mock-up (sections/inventory.js): the inventory alone, at its height. */
 .app-inventory-alone { height: auto; padding-bottom: 16px; }
