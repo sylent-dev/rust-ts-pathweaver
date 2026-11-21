@@ -5,7 +5,7 @@
 const inventoryTabWindow = (band, level, source) =>
   `<div class="app-window" style="width:960px">${band ? levelBand() : ""}${buildTabs("inventory")}${inventoryTab(level, source)}</div>`;
 
-addSection(() => [`The Inventory tab: H1 cut in two, a click on a slot or a line shows its hint on the right; the switch of the weapon set a box in two halves; the line of the levels with the tabs « Range line »: ${RANGE_LINES[chosen.rangeLine]}`, [
+addSection(() => ["The Inventory tab: H1 cut in two, a click on a slot or a line shows its hint on the right; the switch of the weapon set a box in two halves", [
   ["At the level of the band: ◀ ▶, the track or ← →", inventoryTabWindow(true, STATE.level)],
   ["An Amazon at 40: the most hints of the corpus, 13 at the level, 17 to come at 65", inventoryTabWindow(false, 40, "replaced")],
   ["A campaign at 32: free texts, three hints one after the other on the weapon of set I", inventoryTabWindow(false, 32, "campaign")],

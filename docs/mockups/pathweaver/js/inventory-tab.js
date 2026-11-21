@@ -1,10 +1,9 @@
 // The Inventory tab (2k2, the owner, 2026-11-21): the slots as in the game, where the right column of the
 // Overview only has room for the drawing (js/side-inventory.js). H1, kept of twelve variants at four
-// temperatures (the others in the history of Git): the drawing on the left, a click on a slot shows its hint
-// on the right, written out: its item, its stats, its note, and every hint of the slot along the levels
-// (js/inventory-detail.js);
-// the hints to come under the drawing, by the level they come at. The card of a slot on hover of its
-// drawing or its line (js/slot-hover.js). The tab is as high as the Overview (668 px) and scrolls inside.
+// temperatures (the others in the history of Git), cut in two: the drawing on the left, a click on a slot
+// shows its hint on the right, written out: its item, its levels and its weapon set, its stats, its note
+// (js/inventory-detail.js); the hints to come under the drawing, by the level they come at. No card on hover
+// in the tab. The tab is as high as the Overview (668 px) and scrolls inside.
 
 // The hints of the build shown, or of a case of the corpus (`source`, a key of BUILDS.inventories).
 const itHints = source => (source ? BUILDS.inventories[source] : SHOWN.slots);
@@ -47,7 +46,7 @@ const itSlot = hint => `<span class="it-slot">${escapeHtml(hint.label)}</span>`;
 const itAt = level => `<span class="it-at app-number">${level}</span>`;
 const itTitle = (text, className = "") => `<h3 class="it-title app-title ${className}">${text}</h3>`;
 // The hint shown on the right, chosen by a click: on a slot, the hint it holds at the level (its cell); on a
-// line of « To come » or of « On this slot », that hint. By default the first new at the level, or the first
+// line of « To come », that hint. By default the first new at the level, or the first
 // of the drawing. No card on hover in the tab (the owner, 2026-11-21): the box says it beside, and a card
 // would hide the slots around; nor does the box follow the pointer, which crosses other slots on its way to
 // it. A new choice flashes the edge of its slot once (S3), not a drawing again for another reason (the level,
