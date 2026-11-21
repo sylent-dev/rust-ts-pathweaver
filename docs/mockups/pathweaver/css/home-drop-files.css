@@ -1,11 +1,10 @@
 /* The zone of the first visit that refuses a file (sections/home-drop-files.js), and the field of Paste JSON
    that refuses a text (sections/home-paste.js). The red: a vivid red (the owner, 2026-11-18), apart
    from the red of the gems of strength, so that an error never reads as strength. */
-.home-drop { --home-error: #ef4444; }
 
 /* The zone that refuses: a thin line in the red; the message alone at its centre, the title in the
    text, its reason in the red; the call to drop again at its foot. It stays so until the next drop. */
-.home-drop-zone.is-refused { position: relative; box-shadow: inset 0 0 0 1.5px color-mix(in srgb, var(--home-error) 70%, transparent); }
+.home-drop-zone.is-refused { position: relative; box-shadow: inset 0 0 0 1.5px color-mix(in srgb, var(--error) 70%, transparent); }
 .home-drop-error { display: flex; flex-direction: column; align-items: center; gap: 8px; text-align: center; }
-.home-drop-zone .home-drop-reason { color: var(--home-error); font-size: 14.5px; }
+.home-drop-zone .home-drop-reason { color: var(--error); font-size: 14.5px; }
 .home-drop-zone .home-drop-again { position: absolute; left: 0; right: 0; bottom: 22px; text-align: center; }

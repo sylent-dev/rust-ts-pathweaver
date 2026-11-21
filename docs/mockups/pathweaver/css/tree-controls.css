@@ -17,7 +17,7 @@
 .tc-end { margin-left: auto; display: inline-flex; align-items: center; gap: 10px; }
 
 /* The legend at the top: one line of small words over a short gradient, the mirror of the bar. */
-.tc-shade { position: absolute; left: 0; right: 0; top: 0; display: flex; justify-content: center; padding: 8px 12px 14px; background: linear-gradient(to bottom, color-mix(in srgb, var(--band-deep) 90%, transparent) 0%, transparent 100%); }
+.tc-shade { position: absolute; left: 0; right: 0; top: 0; display: flex; justify-content: center; padding: 8px 12px 14px; background: linear-gradient(to bottom, color-mix(in srgb, var(--shade-deep) 90%, transparent) 0%, transparent 100%); }
 .tc-legend { display: flex; flex-wrap: wrap; justify-content: center; gap: 4px 14px; font-size: 12px; }
 /* Each mark on the middle of the lowercase letters beside it (vertical-align: middle), not on the box of
    the line. */
@@ -30,7 +30,7 @@
 .tc-line.is-set2 { border-color: var(--tree-set-2); }
 
 /* The bottom bar: no border, a gradient of the shade of the tree, dark at the bottom, clear upward. */
-.tc-bb { position: absolute; left: 0; right: 0; bottom: 0; padding: 28px 12px 8px; background: linear-gradient(to top, color-mix(in srgb, var(--band-deep) 94%, transparent) 0%, color-mix(in srgb, var(--band-deep) 70%, transparent) 45%, transparent 100%); }
+.tc-bb { position: absolute; left: 0; right: 0; bottom: 0; padding: 28px 12px 8px; background: linear-gradient(to top, color-mix(in srgb, var(--shade-deep) 94%, transparent) 0%, color-mix(in srgb, var(--shade-deep) 70%, transparent) 45%, transparent 100%); }
 .tc-row { position: relative; display: flex; align-items: center; gap: 14px; }
 .tc-row > * { pointer-events: auto; }
 /* The counts in the middle of the bar, whatever the width of its ends (the owner, 2026-11-19). */

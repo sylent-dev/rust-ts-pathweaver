@@ -14,10 +14,10 @@
    aside: a tile as light as on the paper, its thumbnail in it, lighter, on it edged as a slot, the shades of a
    card on hover). */
 .up-tiles { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; width: 396px; }
-.up-tile { display: flex; align-items: center; gap: 9px; min-width: 0; height: 38px; padding-right: 6px; background: rgb(0 0 0 / 25%); cursor: pointer; }
-.up-tile:hover { background: color-mix(in srgb, rgb(0 0 0 / 25%), var(--text) 6%); }
+.up-tile { display: flex; align-items: center; gap: 9px; min-width: 0; height: 38px; padding-right: 6px; background: var(--inset); cursor: pointer; }
+.up-tile:hover { background: color-mix(in srgb, var(--inset), var(--text) 6%); }
 .up-tile[data-shown] { background: color-mix(in srgb, var(--accent) 10%, transparent); }
-.up-tile .it-thumb { width: 38px; height: 38px; padding: 3px; background: rgb(0 0 0 / 35%); box-shadow: none; }
+.up-tile .it-thumb { width: 38px; height: 38px; padding: 3px; background: var(--inset-strong); box-shadow: none; }
 .up-words { display: flex; flex-direction: column; min-width: 0; line-height: 1.25; }
 .up .it-name { color: color-mix(in srgb, var(--text) 85%, transparent); }
 .up .it-name.is-unique { color: var(--unique); }

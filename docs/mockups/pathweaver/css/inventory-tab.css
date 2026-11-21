@@ -6,14 +6,14 @@
 .app-inventory-tab { height: 668px; overflow-y: auto; box-sizing: border-box; background: var(--side-column); scrollbar-width: thin; }
 /* Cut in two from top to bottom (the owner, 2026-11-21): the drawing on the left, on the graph paper, in the
    middle of its half; the box of the item on the right, on a pane darkened by transparency, so that the graph
-   paper still shows under it, as dark as a slot of the drawing (--slot-box), no line at the cut (the owner,
+   paper still shows under it, as dark as a slot of the drawing (--pane), no line at the cut (the owner,
    2026-11-21). The cut at 460 px (the owner, 2026-11-21, on a slider), the drawing of 396 px in the middle of its half. */
 .app-it { display: flex; align-items: stretch; box-sizing: border-box; min-height: 100%; font-size: 13px; }
 .app-it ul { margin: 0; padding: 0; list-style: none; }
 .app-it .app-inventory { margin: 8px 0 0; }
 .app-it .app-inventory-head { gap: 16px; }
 .it-left { flex: none; box-sizing: border-box; width: 460px; padding: 18px 0 24px 32px; }
-.it-side { flex: 1; min-width: 0; padding: 18px 20px 24px; background: var(--slot-box); }
+.it-side { flex: 1; min-width: 0; padding: 18px 20px 24px; background: var(--pane); }
 
 .it-title { margin: 0 0 8px; font-size: 14px; }
 .it-title.is-next { margin-top: 20px; }
@@ -23,22 +23,17 @@
 .it-slot { flex: none; width: 104px; color: var(--on-band-weak); font-size: 10px; letter-spacing: .08em; text-transform: uppercase; white-space: nowrap; }
 .it-at { flex: none; min-width: 24px; color: var(--accent); font-size: 12px; font-weight: 700; }
 .it-thumb { width: 26px; height: 26px; }
-.it-note { font-size: 12px; line-height: 1.45; white-space: pre-line; }
-
-/* A line of a list: the hints to come, the hints of a slot. */
-.it-row { display: flex; align-items: center; gap: 9px; min-height: 32px; }
 
 /* The slot chosen, its edge 1 px in the accent, which flashes once when it is chosen (S3, the owner,
    2026-11-21: 2 px, 1 px still and a light running around it set aside); no flash when the system asks for
    less motion. A click on a slot or a line chooses it. */
-.app-it .app-slot, .app-it .it-row[data-action] { cursor: pointer; }
-/* Under the pointer, a slot's edge a little lighter, a line a little lighter, to say a click chooses it. */
+.app-it .app-slot { cursor: pointer; }
+/* Under the pointer, a slot's edge a little lighter, to say a click chooses it. */
 .app-it .app-slot:not(.is-chosen):hover { box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--text) 35%, transparent); }
-.app-it .it-row[data-action]:hover { background: color-mix(in srgb, var(--text) 5%, transparent); }
 .app-it .app-slot.is-chosen { box-shadow: inset 0 0 0 1px var(--accent); }
 .app-it .app-slot.is-chosen.is-flash { animation: it-flash .6s ease-out; }
 @keyframes it-flash {
-  0% { box-shadow: inset 0 0 0 1px #fff, inset 0 0 14px color-mix(in srgb, var(--accent) 70%, transparent), 0 0 14px var(--accent); }
+  0% { box-shadow: inset 0 0 0 1px var(--highlight), inset 0 0 14px color-mix(in srgb, var(--accent) 70%, transparent), 0 0 14px var(--accent); }
   100% { box-shadow: inset 0 0 0 1px var(--accent), inset 0 0 0 transparent, 0 0 0 transparent; }
 }
 @media (prefers-reduced-motion: reduce) { .app-it .app-slot.is-chosen.is-flash { animation: none; } }

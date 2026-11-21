@@ -5,7 +5,7 @@
 .app-tabs { position: relative; display: flex; align-items: stretch; height: 44px; padding: 0 0 0 4px; }
 .app-tab { padding: 0 16px; border: none; background: none; color: var(--weak); cursor: pointer; font-size: 14px; font-weight: 600; transition: color .2s; }
 .app-tab:is(:hover, [aria-selected="true"]) { color: var(--text); }
-.app-tabs-bar { position: absolute; left: 0; bottom: 0; width: 28px; height: 4px; background: #fff; transform: translateX(var(--bar-x, 0)); pointer-events: none; }
+.app-tabs-bar { position: absolute; left: 0; bottom: 0; width: 28px; height: 4px; background: var(--highlight); transform: translateX(var(--bar-x, 0)); pointer-events: none; }
 /* Its motion (of three, the owner, 2026-11-19; a ghost and a stretch set aside): it slides to the tab
    clicked in 0.28 s with the small bounce of the cursor set down (css/level-band.css); nothing moves
    when the system asks for less motion. */

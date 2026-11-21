@@ -11,7 +11,7 @@
    2026-11-19), its left edge on that of the column of the
    arrows; it scrolls when a level changes more than it holds. */
 .app-changes-window { position: absolute; top: calc(100% + 3px); left: 124px; border-radius: 3px; z-index: 5; width: 440px; max-height: 460px; overflow-y: auto; padding: 10px 0 12px;
-  background: var(--band-image), var(--band-deep); color: var(--on-band); box-shadow: 0 8px 18px rgb(0 0 0 / .28); font-size: 12px; }
+  background: var(--band-image), var(--shade-deep); color: var(--on-band); box-shadow: var(--popover-shadow); font-size: 12px; }
 .app-changes-window.is-opening { transform-origin: top left; animation: reveal-pop 280ms cubic-bezier(.34, 1.56, .64, 1) both; }
 @media (prefers-reduced-motion: reduce) { .app-changes-window.is-opening { animation: none; } }
 .app-changes-head { margin: 2px 16px 6px; font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: var(--on-band-weak); }

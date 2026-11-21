@@ -17,10 +17,10 @@ const TAB_STATES = [
 
 const tabCard = () => `<div class="tab-card" style="--tab-width:184px">
   <div class="tab-states">${TAB_STATES.map(([label]) => `<span>${label}</span>`).join("")}</div>
-  ${shownStyles().map(style => `<div class="tab-strip" data-sample-theme="${style}" title="${THEMES[style].title}">
+  <div class="tab-strip">
     <div class="app-builds"><div class="app-builds-tabs">${TAB_STATES.map(([, states, build]) => openBuildTab(build, states)).join("")}</div></div>
     <div class="tab-strip-page"></div>
-  </div>`).join("")}
+  </div>
 </div>`;
 
 addSection(() => ["A build tab · its states, in the style of the page: the portrait, the name over the ascendancy, the close button; the current one the only portrait in colour",

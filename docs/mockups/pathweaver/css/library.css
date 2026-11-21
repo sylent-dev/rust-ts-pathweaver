@@ -24,19 +24,20 @@
 /* Paste JSON: a button in the style of the + of the band of the open builds (css/app-bar.css; the
    owner, 2026-11-18): the full height of the strip, square, white, its words in the colour of the
    band, the white a little dimmed and the words a little larger on hover. */
-.library-paste { flex: none; display: grid; place-items: center; padding: 0 24px; border: none; cursor: pointer; background: var(--on-bar); color: var(--builds-band, var(--band-deep));
+.library-paste { flex: none; display: grid; place-items: center; padding: 0 24px; border: none; cursor: pointer; background: var(--on-top-band); color: var(--builds-band);
   font-family: var(--site-link-font); font-weight: var(--site-link-weight); font-size: 14px; transition: background-color .3s; }
 .library-paste span { transition: transform .2s cubic-bezier(.34, 1.56, .64, 1); }
-.library-paste:is(:hover, .is-hover) { background: color-mix(in srgb, var(--on-bar) 82%, transparent); }
+.library-paste:is(:hover, .is-hover) { background: color-mix(in srgb, var(--on-top-band) 82%, transparent); }
 .library-paste:is(:hover, .is-hover) span { transform: scale(1.08); }
+@media (prefers-reduced-motion: reduce) { .library-paste span { transition: none; } }
 
 /* The rows, 56 px, touching, a shade lighter than the page one row in two, for the eye to follow a
    row (the owner, 2026-11-18). Each is a link but for its bin: lighter on hover, since a click
    anywhere opens the build (the owner, 2026-11-18, rather than a word Open). */
 .library-list { display: flex; flex-direction: column; margin: 0; padding: 0; list-style: none; }
-.library-row { display: flex; align-items: center; height: 56px; background: rgb(255 255 255 / 5%); transition: background-color .2s; }
-.library-row:nth-child(even) { background: rgb(255 255 255 / 1.5%); }
-.library-row:not(.is-asking):is(:hover, .is-hover) { background: rgb(255 255 255 / 9%); }
+.library-row { display: flex; align-items: center; height: 56px; background: var(--row); transition: background-color .2s; }
+.library-row:nth-child(even) { background: var(--row-even); }
+.library-row:not(.is-asking):is(:hover, .is-hover) { background: var(--row-hover); }
 .library-link { flex: 1; min-width: 0; display: flex; align-items: center; gap: 16px; height: 100%; color: inherit; text-decoration: none; }
 .library-link:focus-visible { outline: 2px solid var(--accent); outline-offset: -2px; }
 .library-portrait { flex: none; display: block; width: 56px; height: 56px; object-fit: cover; }
@@ -46,7 +47,7 @@
 .library-meta { color: var(--weak); font-size: 12.5px; }
 .library-date { flex: none; width: 124px; white-space: nowrap; color: var(--weak); font-family: var(--font-number); font-variant-numeric: tabular-nums; font-size: 12px; text-align: right; }
 .library-bin { flex: none; display: grid; place-items: center; width: 56px; height: 56px; margin-left: 16px; padding: 0; border: none; background: none; color: var(--weak); cursor: pointer; transition: color .2s; }
-.library-bin:is(:hover, .is-hover) { color: #ef4444; }
+.library-bin:is(:hover, .is-hover) { color: var(--error); }
 /* On hover, the lid rises 1 px, level, both its ends alike, with a small overshoot (the owner,
    2026-11-18, after a lid hinged on its right, then one that floated); at once when the system
    asks for less motion. */
@@ -55,14 +56,14 @@
 @media (prefers-reduced-motion: reduce) { .bin-lid { transition: none; } }
 
 /* The row that asks: in its place, a red shade, Remove in the red, Cancel in words. */
-.library-row.is-asking { gap: 16px; padding-right: 10px; background: color-mix(in srgb, #ef4444 12%, transparent); }
+.library-row.is-asking { gap: 16px; padding-right: 10px; background: color-mix(in srgb, var(--error) 12%, transparent); }
 .library-ask { flex: 1; min-width: 0; display: flex; white-space: pre; }
 .library-ask > span { flex: none; }
 .library-ask > .library-ask-name { flex: 0 1 auto; min-width: 0; overflow: hidden; text-overflow: ellipsis; }
 .library-ask > .app-weak { margin-left: 6px; }
 .library-remove, .library-cancel { flex: none; height: 32px; padding: 0 14px; border: none; cursor: pointer; font-weight: 600; }
-.library-remove { background: #ef4444; color: #ffffff; }
-.library-remove:hover { background: #dc2626; }
+.library-remove { background: var(--error-button); color: var(--on-error); }
+.library-remove:hover { background: var(--error-button-hover); }
 .library-cancel { background: none; color: var(--weak); }
 .library-cancel:hover { color: var(--text); }
 

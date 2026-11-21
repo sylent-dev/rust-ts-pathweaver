@@ -8,7 +8,7 @@
 .app-ab ul { margin: 0; padding: 0; list-style: none; }
 
 .ab-colophon { display: flex; min-height: 668px; }
-.ab-colophon-side { flex: none; width: 260px; box-sizing: border-box; padding: 24px 24px 28px 32px; background: var(--slot-box); }
+.ab-colophon-side { flex: none; width: 260px; box-sizing: border-box; padding: 24px 24px 28px 32px; background: var(--pane); }
 .ab-colophon-main { position: relative; isolation: isolate; flex: 1; max-width: 600px; padding: 24px 32px 28px; }
 /* The watermark: the mark of a note, filled, 240 px, in the middle of the part, behind the words, at 3 % (2k3b,
    the owner, 2026-11-21, on a slider; its outline set aside). */
@@ -44,7 +44,6 @@
 .ab-where code { color: var(--text); font-family: var(--font-code); font-size: 11px; }
 
 /* The warnings by part. */
-.ab-gap { margin-top: 22px; }
 /* Before the description at 960 px, a gap under them. */
 .ab-colophon-main > .ab-warnings-part { margin-bottom: 26px; }
 .ab-title { margin: 0 0 8px; font-size: 14px; }

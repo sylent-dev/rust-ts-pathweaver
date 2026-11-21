@@ -59,11 +59,11 @@ function foldSkills(column) {
   }
 }
 
-// Once drawn: the drawer cut to the height of its bar (--bar), which the skills leave free, then the
+// Once drawn: the drawer cut to the height of its bar (--drawer-bar-height), which the skills leave free, then the
 // skills folded to the room left.
 function settleColumn(column) {
   const drawer = column.querySelector(".ov-drawer");
-  column.style.setProperty("--bar", `${drawer.offsetHeight - drawer.querySelector(".ov-drawer-bar").offsetTop}px`);
+  column.style.setProperty("--drawer-bar-height", `${drawer.offsetHeight - drawer.querySelector(".ov-drawer-bar").offsetTop}px`);
   foldSkills(column);
 }
 AFTER_RENDER.push(() => document.querySelectorAll(".app-side.ov").forEach(settleColumn));

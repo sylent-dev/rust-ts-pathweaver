@@ -19,4 +19,3 @@ body { margin: 0; background: #2a2d31; color: #e9ecef; font: 14px/1.4 system-ui,
 .page-row { display: flex; flex-wrap: wrap; gap: 24px; align-items: flex-start; }
 .page-slot > span { display: block; margin-bottom: 6px; color: #adb5bd; font-size: 12px; }
 .page-warning { margin: 0; padding: 10px 16px; background: #8a6a10; color: #fff; }
-.page-inline { padding: 0; border: none; background: none; color: #dee2e6; font: inherit; text-decoration: underline; cursor: pointer; }

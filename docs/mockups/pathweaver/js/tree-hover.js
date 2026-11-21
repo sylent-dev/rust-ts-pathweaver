@@ -9,14 +9,15 @@
 // rgb(r, g, b). A tag it doesn't know, or a brace left open, stays plain text. Every text is escaped:
 // the hints come from files of strangers.
 const MARKUP_FONTS = { b: "font-weight:700", i: "font-style:italic", u: "text-decoration:underline", r: "", s: "", m: "", l: "" };
+// The named colours are tokens of the style (css/tokens.css, --markup-…): readable on its cards.
 const MARKUP_COLOURS = {
-  white: "#ffffff", grey: "#8c8c8c", gray: "#8c8c8c", black: "#000000", red: "#e05050", green: "#5fc35f",
-  blue: "#6c8cff", yellow: "#e6d25a", orange: "#e8913c", gold: "#c8a65a", purple: "#a86ce0", cyan: "#4fd2d2", magenta: "#d24fd2",
+  white: "white", grey: "grey", gray: "grey", black: "black", red: "red", green: "green",
+  blue: "blue", yellow: "yellow", orange: "orange", gold: "gold", purple: "purple", cyan: "cyan", magenta: "magenta",
 };
 function styleOfTag(tag) {
   const name = tag.trim().toLowerCase();
   if (name in MARKUP_FONTS) return MARKUP_FONTS[name];
-  if (name in MARKUP_COLOURS) return `color:${MARKUP_COLOURS[name]}`;
+  if (name in MARKUP_COLOURS) return `color:var(--markup-${MARKUP_COLOURS[name]})`;
   const rgb = /^rgb\(\s*(\d{1,3})\s*,\s*(\d{1,3})\s*,\s*(\d{1,3})\s*\)$/.exec(name);
   return rgb && rgb.slice(1).every(n => Number(n) <= 255) ? `color:rgb(${rgb.slice(1).join(",")})` : null;
 }

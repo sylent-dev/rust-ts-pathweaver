@@ -56,7 +56,7 @@ const libraryRow = (build, state = "") => {
 // of the site (sections/notices.js).
 const libraryHome = ({ builds = LIBRARY, rows = {}, drag = false, paste = false, notices = "" } = {}) => {
   const open = builds.filter(build => build.open);
-  return `<div class="app-window home-window home-library ${drag ? "is-drag" : ""}" ${drag ? "data-held" : ""} data-sample-theme="frost-night" style="width:${homeWidth()}px;height:${HOME_HEIGHT}px">
+  return `<div class="app-window home-window home-library ${drag ? "is-drag" : ""}" ${drag ? "data-held" : ""} style="width:${homeWidth()}px;height:${HOME_HEIGHT}px">
     ${siteBand({ library: true })}${notices}${open.length ? buildsBand(homeWidth(), { builds: open, current: -1 }) : ""}
     <div class="library-page">
       <div class="library-inner">

@@ -13,16 +13,16 @@
 
 // A card drawn in place, as it shows on hover: its classes and its HTML.
 const staticCard = (classes, html) => `<div class="hc-cards"><div class="app-hover ${classes} is-hover-card is-static">${html}</div></div>`;
-const staticGemCard = (gem, level) => staticCard("app-gem-hover", gemHoverHtml(gem, level));
+const staticGemCard = (gem, level) => staticCard("app-pinned-card", gemHoverHtml(gem, level));
 // A card read from the attributes of what carries it, as on hover (a mark of a note, a slot).
 function fromElement(html) {
   const holder = document.createElement("div");
   holder.innerHTML = html;
   return holder.firstElementChild;
 }
-const staticNoteCard = note => staticCard("app-gem-hover app-note-hover", noteHoverHtml(fromElement(noteMark(note))));
+const staticNoteCard = note => staticCard("app-pinned-card app-note-hover", noteHoverHtml(fromElement(noteMark(note))));
 const staticSlotCard = (hint, level) =>
-  staticCard("app-gem-hover app-slot-hover", slotHoverHtml(fromElement(`<span ${hintAttributes(hint, hintItem(hint), level)}></span>`)));
+  staticCard("app-pinned-card app-slot-hover", slotHoverHtml(fromElement(`<span ${hintAttributes(hint, hintItem(hint), level)}></span>`)));
 // A support of a skill of the build shown at a level, its levels within its skill's (js/levels.js).
 const supportAt = (level, skill, name) => skillsAt(level).find(entry => entry.name === skill).supports.find(gem => gem.name === name);
 // The first passive of a graph the build takes, of a kind, with a note of the author when asked.

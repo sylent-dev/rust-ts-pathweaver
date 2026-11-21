@@ -21,7 +21,7 @@ const phoneFace = () => `<svg class="ph-note" width="92" height="92" viewBox="0 
   <path d="M19 33.5l10-3"/></svg>`;
 
 // A phone of 390 × 844 px, on Frost Night as the home page: the brand at its top, the message in the middle.
-const phoneWindow = () => `<div class="app-window ph-window" data-sample-theme="frost-night" style="width:390px;height:844px">
+const phoneWindow = () => `<div class="app-window ph-window" style="width:390px;height:844px">
   <div class="ph-brand">${logoMark(22)}<span class="logo-name">Pathweaver</span></div>
   <div class="ph-message">
     ${phoneFace()}

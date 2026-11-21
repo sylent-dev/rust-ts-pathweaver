@@ -68,7 +68,7 @@ function gemHoverHtml(gem, level) {
 // - a skill, its mark or its name at the left of the column: just left of the column, over the tree,
 //   centred on the row, see-through as the card of a passive.
 const gemCard = document.createElement("div");
-gemCard.className = "app-hover app-gem-hover is-hover-card";
+gemCard.className = "app-hover app-pinned-card is-hover-card";
 document.body.append(gemCard);
 function showGemHover(element) {
   const gem = gemOfRow(element);

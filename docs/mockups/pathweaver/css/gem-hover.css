@@ -2,6 +2,6 @@
    (js/note-hover.js) and a slot (js/slot-hover.js), in the construction of css/hover-card.css, fixed so
    that the narrow column doesn't cut them; opaque over rows (is-over-rows), see-through at 10 % over the
    tree as the card of a passive. */
-.app-gem-hover { position: fixed; z-index: 20; font-family: var(--font-text); }
+.app-pinned-card { position: fixed; z-index: 20; font-family: var(--font-text); }
 .app-gem-text { margin: 6px 0 0; }
 .app-skill-name { cursor: default; }
