@@ -17,6 +17,9 @@
 .app-inventory-sets.is-moved button[aria-pressed="true"] { animation: sets-fade .25s ease-out; }
 @keyframes sets-fade { from { background: transparent; } }
 @media (prefers-reduced-motion: reduce) { .app-inventory-sets.is-moved button[aria-pressed="true"] { animation: none; } }
+/* In the right column, as far from its right edge as the « I » of « Inventory » from its left edge (the owner,
+   2026-11-21): 18 px against the 12 px of the padding of the drawer. */
+:is(.app-side, .ov-drawer) .app-inventory-sets { margin-right: 6px; }
 
 /* The slots 5 px right, the edge of the weapon under the « I » of the title (the owner, 2026-11-20, by eye). */
 .app-inventory { position: relative; margin-top: 6px; margin-left: 5px; }
