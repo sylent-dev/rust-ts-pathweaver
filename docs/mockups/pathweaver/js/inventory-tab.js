@@ -44,7 +44,7 @@ function itState(level, source) {
 }
 
 // The pieces of the tab.
-const itThumb = hint => `<span class="app-item-thumb it-thumb">${hint.item.art ? itemArt(hint.item) : hint.item.unknown ? UNKNOWN_MARK : ""}</span>`;
+const itThumb = hint => `<span class="app-item-thumb it-thumb">${thumbInner(hint.item)}</span>`;
 const itName = hint => `<span class="it-name${hint.item.unique ? " is-unique" : ""}">${escapeHtml(hint.item.name)}</span>`;
 const itSlot = hint => `<span class="it-slot">${escapeHtml(hint.label)}</span>`;
 const itAt = level => `<span class="it-at app-number">${level}</span>`;

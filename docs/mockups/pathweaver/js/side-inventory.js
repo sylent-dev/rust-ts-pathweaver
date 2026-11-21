@@ -39,12 +39,28 @@ const itemArt = item => item.art ? `<img class="app-item-art" src="pathweaver/im
 const hintAttributes = (hint, item, level) => `data-item="${escapeHtml(item.name)}" data-slot="${escapeHtml(item.slot)}" data-levels="${hint.levels}" data-level="${level}" data-note="${escapeHtml(hint.note ?? "")}"${item.unknown ? " data-unknown" : ""}`;
 const UNKNOWN_MARK = `<span class="app-unknown" title="${NOT_IN_GAME_DATA}">?</span>`;
 
+// The mark of a free text of its author in a box too small for its words (a small slot, a thumbnail): it
+// names no item, so has no image (2k2c, the owner, 2026-11-21: an empty box read as an image not loaded).
+// Four variants, the tabs « Free text » (VARIANTS.freeText): « … » as the small slots had; the bubble of the
+// mark of a note, as before « From the author »; a sticky note with lines, grey, or pale and turned, never the
+// yellow of the « ? » of an unknown id, which warns.
+const NOTE_LINES = '<svg class="app-free-note" viewBox="0 0 14 14" aria-hidden="true"><rect width="14" height="14"/><path d="M3 4.5H11M3 7.5H11M3 10.5H8"/></svg>';
+const FREE_TEXT_MARKS = {
+  dots: () => '<span class="app-free-text is-dots">…</span>',
+  bubble: () => `<span class="app-free-text is-bubble">${icon(12, ICONS.note)}</span>`,
+  grey: () => `<span class="app-free-text is-grey">${NOTE_LINES}</span>`,
+  pale: () => `<span class="app-free-text is-pale">${NOTE_LINES}</span>`,
+};
+const freeTextMark = () => (FREE_TEXT_MARKS[chosen.freeText] ?? FREE_TEXT_MARKS.dots)();
+// The thumbnail of an item: its image, the « ? » of an unknown id, the mark of a free text.
+const thumbInner = item => (item.art ? itemArt(item) : item.unknown ? UNKNOWN_MARK : freeTextMark());
+
 // What a slot holds: the image; the words of a free text or of an unknown id (a mark alone in a small
 // slot); the name of the slot, weak, when it is empty and large enough.
 function slotInner(item, id, small) {
   if (!item) return small ? "" : `<span class="app-slot-empty">${INVENTORY_NAMES[id]}</span>`;
   if (item.art) return itemArt(item);
-  if (small) return item.unknown ? UNKNOWN_MARK : '<span class="app-slot-text">…</span>';
+  if (small) return item.unknown ? UNKNOWN_MARK : freeTextMark();
   return `<span class="app-slot-text">${escapeHtml(item.name)}</span>${item.unknown ? UNKNOWN_MARK : ""}`;
 }
 
@@ -78,7 +94,7 @@ function inventoryDrawing(level, hints, { set = STATE.inventorySet, cell = INVEN
 function inventoryOthers(level, hints) {
   const others = hints.filter(hint => !inLayout(hint.id));
   return others.length ? `<ul class="app-inventory-others">${others.map(hint => [hint, hintItem(hint)]).map(([hint, item]) =>
-    `<li ${hintAttributes(hint, item, level)}><span class="app-item-thumb">${item.art ? itemArt(item) : item.unknown ? UNKNOWN_MARK : ""}</span><span class="app-inventory-slot">${escapeHtml(item.slot)}</span><span class="app-inventory-name">${escapeHtml(item.name)}</span>${item.unknown ? '<span class="app-unknown-word">unknown</span>' : ""}</li>`).join("")}</ul>` : "";
+    `<li ${hintAttributes(hint, item, level)}><span class="app-item-thumb">${thumbInner(item)}</span><span class="app-inventory-slot">${escapeHtml(item.slot)}</span><span class="app-inventory-name">${escapeHtml(item.name)}</span>${item.unknown ? '<span class="app-unknown-word">unknown</span>' : ""}</li>`).join("")}</ul>` : "";
 }
 
 // The inventory at a level, from the hints of the build (or given ones, for a case of the mock-up).

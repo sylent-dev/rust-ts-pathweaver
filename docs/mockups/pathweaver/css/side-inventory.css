@@ -43,6 +43,21 @@
 .app-item-thumb { flex: none; display: inline-grid; place-items: center; width: 20px; height: 20px; box-sizing: border-box; padding: 1px; }
 .app-inventory-slot { flex: none; width: 58px; color: var(--on-band-weak); font-size: 10px; letter-spacing: .08em; text-transform: uppercase; }
 .app-inventory-name { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+/* The mark of a free text in a small box (js/side-inventory.js, freeTextMark; 2k2c, four variants): in the
+   weak grey; a sticky note with lines, grey, or pale and turned as the « ? » of an unknown id, but never its
+   yellow. Larger in the tiles of « Upcoming ». */
+.app-free-text { display: inline-grid; place-items: center; color: var(--weak); line-height: 1; }
+.app-free-text.is-dots { font-size: 12px; }
+.app-free-note { display: block; width: 14px; height: 14px; }
+.app-free-note path { fill: none; stroke-width: 1.2; stroke-linecap: round; }
+.is-grey .app-free-note rect { fill: color-mix(in srgb, var(--text) 22%, transparent); }
+.is-grey .app-free-note path { stroke: color-mix(in srgb, var(--text) 60%, transparent); }
+.is-pale .app-free-note { transform: rotate(-8deg); filter: drop-shadow(1px 2px 2px rgb(0 0 0 / 45%)); }
+.is-pale .app-free-note rect { fill: #e9e4d6; }
+.is-pale .app-free-note path { stroke: #7d7663; }
+.up-tile .app-free-note { width: 18px; height: 18px; }
+.up-tile .app-free-text .app-icon { width: 15px; height: 15px; }
+.up-tile .app-free-text.is-dots { font-size: 15px; }
 .app-unknown-word { margin-left: 6px; color: var(--unknown-note); font-size: 10px; letter-spacing: .08em; text-transform: uppercase; }
 
 /* The section of the mock-up (sections/inventory.js): the inventory alone, at its height. */

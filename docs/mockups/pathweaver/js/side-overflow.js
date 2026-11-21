@@ -20,7 +20,7 @@ const sideLink = (tab, words, className = "app-side-link") =>
 // The bar of the drawer: a box per hinted slot, its card on hover as in the drawing.
 function inventoryThumbs(level, hints) {
   return `<div class="app-inventory ov-thumbs">${hints.map(hint => [hint, hintItem(hint)]).map(([hint, item]) =>
-    `<span class="app-slot is-hinted${item.unknown ? " is-unknown" : ""}" ${hintAttributes(hint, item, level)}>${item.art ? itemArt(item) : item.unknown ? UNKNOWN_MARK : '<span class="app-slot-text">…</span>'}</span>`).join("")}</div>`;
+    `<span class="app-slot is-hinted${item.unknown ? " is-unknown" : ""}" ${hintAttributes(hint, item, level)}>${thumbInner(item)}</span>`).join("")}</div>`;
 }
 
 // The right column at a level: of the build shown, or of a case (`record` its changes, `source` its
