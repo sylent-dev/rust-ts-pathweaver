@@ -1,13 +1,13 @@
 // The two bands at the top of every page (specs.md, Window layout): the band of the site, the
 // brand and My library, then Report a bug and what comes next (the menu, the search and the
-// settings of version 2 come there); then, once a build is open, the band of the open builds, their
+// settings of version 3 come there); then, once a build is open, the band of the open builds, their
 // tabs (as many as fit, the others in a « +N ▾ » menu) and + to add a
 // build, which opens the choice of files of the system at once (the owner, 2026-11-18: My library
 // already leads to the library).
 
 // The links of the band of the site, in words, in Manrope, the full height of the band (the owner,
 // 2026-11-17): Report a bug opens a new issue on GitHub; What's next (the owner, 2026-11-18, rather
-// than a Sign in that would lead nowhere in version 1) will open a box of what version 2 brings, the
+// than a Sign in that would lead nowhere in version 1) will open a box of what version 3 brings, the
 // community (drawn later, at 2k).
 const REPORT_BUG_URL = "https://github.com/sylent-dev/rust-ts-pathweaver/issues/new";
 // My library (the owner, 2026-11-18): the way back to the home page, the library, from anywhere,

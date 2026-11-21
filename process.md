@@ -10,7 +10,7 @@ This file is a living document: after each cycle, update it with what worked and
 
 1. **Start a project** from a template, and size it with the owner: which tools this project uses, and how far (see [Size the project](#size-the-project)).
 2. **The first cycle** takes the website to its first version online, through the tools it needs in order: specifications, structure, wireframes, mock-up and design system, build, deployment, retrospective.
-3. **Then the loop**: with the owner, pick from the [backlog](#the-backlog) what comes next, write it in `roadmap.md` as steps, size each change and split it into sub-steps when it helps ([Size a change](#size-a-change)), and run only the tools it needs. A group of steps with a goal (« the editor », version 1.5) is a **cycle**: it ends with its version online and its retrospective.
+3. **Then the loop**: with the owner, pick from the [backlog](#the-backlog) what comes next, write it in `roadmap.md` as steps, size each change and split it into sub-steps when it helps ([Size a change](#size-a-change)), and run only the tools it needs. A group of steps with a goal (« the editor », version 2) is a **cycle**: it ends with its version online and its retrospective.
 4. **Outside the roadmap**, two kinds of work: an [urgent fix](#urgent-fixes) that can't wait, and an [exploration](#explorations) that tries an idea before deciding.
 
 ## Size the project
@@ -21,7 +21,7 @@ At the setup, Claude Code asks how large the project is and proposes the tools a
 |---|---|
 | A small tool (one page, a few controls) | Short specifications, one wireframe, a mock-up with two or three styles, a short design system, build, deployment. |
 | An application of several screens (Pathweaver) | Every tool, in order, for the first cycle. |
-| A website with a back-end (accounts, a database: Pathweaver's version 2) | Every tool, in order, with a probe of the riskiest unknown before the wireframe, and the limits of every service checked during the specifications. |
+| A website with a back-end (accounts, a database: Pathweaver's version 3) | Every tool, in order, with a probe of the riskiest unknown before the wireframe, and the limits of every service checked during the specifications. |
 
 ## Size a change
 
