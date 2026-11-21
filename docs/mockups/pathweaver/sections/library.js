@@ -15,9 +15,9 @@ const LIBRARY = BUILDS.library.map((build, index) => ({ ...build, opened: LAST_O
 // 2026-11-18), which turns the strip into a field, taller.
 const libraryPaste = label => `<button type="button" class="library-paste"><span>${label}</span></button>`;
 const libraryDrop = ({ drag = false, paste = false } = {}) => paste
-  ? `<div class="library-drop-row"><div class="home-drop-zone library-drop is-paste is-focus">${pasteZone()}</div>${libraryPaste("Drop a file instead")}</div>`
-  : `<div class="library-drop-row"><div class="home-drop-zone library-drop" role="button" tabindex="0">${dropMark(32)}
-      <span class="library-drop-text"><strong>${drag ? "Let go to open it" : "Add a build"}</strong>
+  ? `<div class="library-drop-row"><div class="home-drop-zone is-strip is-paste is-focus">${pasteZone()}</div>${libraryPaste("Drop a file instead")}</div>`
+  : `<div class="library-drop-row"><div class="home-drop-zone is-strip${drag ? " is-drag" : ""}" role="button" tabindex="0">${dropMark(32)}
+      <span class="home-drop-words"><strong>${drag ? "Let go to open it" : "Add a build"}</strong>
       <span>${drag ? "1 file over the page" : "Drop .build files here, or click to choose them"}</span></span>
     </div>${libraryPaste("Paste JSON")}</div>`;
 

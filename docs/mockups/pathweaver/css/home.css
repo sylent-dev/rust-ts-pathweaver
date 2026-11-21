@@ -7,4 +7,3 @@
 .home-brand { display: inline-flex; align-items: center; gap: 10px; flex: none; color: var(--text); }
 .home-brand .logo-name { font-size: 22px; }
 .home-links { display: flex; height: 44px; }
-.home-links .app-site-link:is(:hover, .is-hover) { color: var(--text); }

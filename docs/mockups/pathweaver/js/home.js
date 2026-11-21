@@ -23,8 +23,8 @@ const homeWindow = (variant, page, { band = true } = {}) =>
 // The brand, larger, and the links of the band of the site, floating over the first visit.
 const homeBrand = (size = 28, extra = "") => `<span class="home-brand ${extra}">${logoMark(size)}<span class="logo-name">Pathweaver</span></span>`;
 const homeLinks = (extra = "") => `<nav class="home-links ${extra}">
-  <a class="app-site-link" href="${REPORT_BUG_URL}" target="_blank" rel="noopener"><span class="app-site-label">Report a bug</span></a>
-  <a class="app-site-link" href="#" role="button"><span class="app-site-label">What's next</span></a>
+  <a class="app-site-link is-on-page" href="${REPORT_BUG_URL}" target="_blank" rel="noopener"><span class="app-site-label">Report a bug</span></a>
+  <a class="app-site-link is-on-page" href="#" role="button"><span class="app-site-label">What's next</span></a>
 </nav>`;
 
 // The icon of the zone (the owner, 2026-11-18, no. 10 of the series, « raccord avec le plus
@@ -43,13 +43,15 @@ const dropMark = size => {
 
 // The link beside the zone: Paste JSON, a word alone like the links of the band (the owner,
 // 2026-11-18: without its icon).
-const dropLink = label => `<a class="app-site-link home-drop-paste" href="#" role="button"><span class="app-site-label">${label}</span></a>`;
+const dropLink = label => `<a class="app-site-link is-compact" href="#" role="button"><span class="app-site-label">${label}</span></a>`;
 
 // The page is where the files are dropped: the grid lit around the pointer, and the whole window
 // lit while a real file is dragged over it (try with any file of the desktop: the mock-up opens
 // nothing); a window drawn in that state holds it (data-held).
 const sheet = document.getElementById("sheet");
 const dropHost = event => event.target.closest(".home-drop, .home-library");
+// A file over the page: the page lit, and its zone (the strip of the library reads its own is-drag).
+const setDrag = (host, on) => [host, ...host.querySelectorAll(".home-drop-zone")].forEach(element => element.classList.toggle("is-drag", on));
 sheet.addEventListener("pointermove", event => {
   const host = dropHost(event);
   if (!host) return;
@@ -61,15 +63,15 @@ sheet.addEventListener("dragover", event => {
   const host = dropHost(event);
   if (!host) return;
   event.preventDefault();
-  host.classList.add("is-drag");
+  setDrag(host, true);
 });
 sheet.addEventListener("dragleave", event => {
   const host = dropHost(event);
-  if (host && !host.contains(event.relatedTarget) && !host.hasAttribute("data-held")) host.classList.remove("is-drag");
+  if (host && !host.contains(event.relatedTarget) && !host.hasAttribute("data-held")) setDrag(host, false);
 });
 sheet.addEventListener("drop", event => {
   const host = dropHost(event);
   if (!host) return;
   event.preventDefault();
-  if (!host.hasAttribute("data-held")) host.classList.remove("is-drag");
+  if (!host.hasAttribute("data-held")) setDrag(host, false);
 });

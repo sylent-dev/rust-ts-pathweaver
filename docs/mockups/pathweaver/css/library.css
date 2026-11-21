@@ -10,16 +10,9 @@
 .library-head h1 { margin: 0; font-family: var(--brand-font); font-weight: 800; font-size: 28px; line-height: 1; letter-spacing: -.05em; }
 .library-head span { color: var(--weak); font-size: 13px; }
 
-/* The strip: the zone of the first visit (css/home-drop.css), low and wide, its icon on the left;
-   Paste JSON on its right, against it. */
+/* The strip: the zone of the first visit, low and wide (is-strip, css/home-drop.css); Paste JSON on its right,
+   against it. */
 .library-drop-row { display: flex; align-items: stretch; }
-.home-drop-zone.library-drop { flex: 1; flex-direction: row; justify-content: flex-start; gap: 18px; width: auto; height: 84px; padding: 0 26px; }
-.home-drop-zone .library-drop-text { display: flex; flex-direction: column; gap: 4px; color: var(--text); }
-.home-drop-zone.library-drop strong { font-size: 16px; }
-.home-drop-zone.library-drop.is-paste { height: 200px; padding: 0; justify-content: center; }
-.home-library.is-drag .library-drop { background: color-mix(in srgb, var(--accent) 16%, var(--page));
-  box-shadow: 0 0 0 6px color-mix(in srgb, var(--accent) 16%, transparent), 0 0 40px color-mix(in srgb, var(--accent) 40%, transparent); }
-.home-library.is-drag .library-drop .drop-mark-corner { transform: translate(2.4px, 2.4px); }
 
 /* Paste JSON: a button in the style of the + of the band of the open builds (css/app-bar.css; the
    owner, 2026-11-18): the full height of the strip, square, white, its words in the colour of the

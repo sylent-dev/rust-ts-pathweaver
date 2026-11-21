@@ -10,9 +10,9 @@
    2026-11-21). The cut at 460 px (the owner, 2026-11-21, on a slider), the drawing of 396 px in the middle of its half. */
 .app-it { display: flex; align-items: stretch; box-sizing: border-box; min-height: 100%; font-size: 13px; }
 .app-it ul { margin: 0; padding: 0; list-style: none; }
-.app-it .app-inventory { margin: 8px 0 0; }
-.app-it .app-inventory-head { gap: 16px; }
-.it-left { flex: none; box-sizing: border-box; width: 460px; padding: 18px 0 24px 32px; }
+.app-it { --inventory-margin: 8px 0 0; }   /* the drawing (css/side-inventory.css), its slots choosable (is-choosable) */
+/* The left half a column: the drawing, then the block of what comes (css/inventory-later.js) down to its bottom. */
+.it-left { flex: none; display: flex; flex-direction: column; box-sizing: border-box; width: 460px; padding: 18px 0 0 32px; }
 .it-side { flex: 1; min-width: 0; padding: 18px 20px 24px; background: var(--pane); }
 
 .it-title { margin: 0 0 8px; font-size: 14px; }
@@ -24,20 +24,6 @@
 .it-at { flex: none; min-width: 24px; color: var(--accent); font-size: 12px; font-weight: 700; }
 .it-thumb { width: 26px; height: 26px; }
 
-/* The slot chosen, its edge 1 px in the accent, which flashes once when it is chosen (S3, the owner,
-   2026-11-21: 2 px, 1 px still and a light running around it set aside); no flash when the system asks for
-   less motion. A click on a slot or a line chooses it. */
-.app-it .app-slot { cursor: pointer; }
-/* Under the pointer, a slot's edge a little lighter, to say a click chooses it. */
-.app-it .app-slot:not(.is-chosen):hover { box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--text) 35%, transparent); }
-.app-it .app-slot.is-chosen { box-shadow: inset 0 0 0 1px var(--accent); }
-.app-it .app-slot.is-chosen.is-flash { animation: it-flash .6s ease-out; }
-@keyframes it-flash {
-  0% { box-shadow: inset 0 0 0 1px var(--highlight), inset 0 0 14px color-mix(in srgb, var(--accent) 70%, transparent), 0 0 14px var(--accent); }
-  100% { box-shadow: inset 0 0 0 1px var(--accent), inset 0 0 0 transparent, 0 0 0 transparent; }
-}
-@media (prefers-reduced-motion: reduce) { .app-it .app-slot.is-chosen.is-flash { animation: none; } }
-
 /* The head of the drawing: no title (T2, the owner, 2026-11-21: the band above says the level; the title
    and the level large behind the drawing set aside), the switch of the set alone at its right. */
-.it-left .app-inventory-head { width: 396px; justify-content: flex-end; min-height: 22px; }
+.it-head { display: flex; align-items: baseline; justify-content: flex-end; gap: 16px; width: 396px; min-height: 22px; }

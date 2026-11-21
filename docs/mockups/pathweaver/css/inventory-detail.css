@@ -6,8 +6,7 @@
 .it-bare-head strong { display: block; font-size: 18px; font-weight: 700; }
 .it-bare .is-unique { color: var(--unique); }
 .it-bare-sub { color: var(--on-band-weak); font-size: 12px; }
-.it-bare-part { padding: 10px 0; }
-.it-bare-part .app-hover-stats { margin: 0; }
+.it-bare-part { padding: 10px 0; --hover-stats-margin: 0; }
 
 /* The line of the levels under the name (R2): the levels in a sentence in the accent, the tag of the weapon set
    in the look of the switch of the set (css/side-inventory.css). */

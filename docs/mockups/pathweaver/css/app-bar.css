@@ -23,6 +23,14 @@
 /* The page shown (My library on the library): white, without its line, which stays the answer to
    the hover only (the owner, 2026-11-18). */
 .app-site-link.is-current { color: var(--on-top-band); }
+/* The box of What's next open: its link white, as on hover (aria-expanded, js/next-box.js). */
+.app-site-link[aria-expanded="true"] { color: var(--on-top-band); }
+/* On the page rather than on the band (is-on-page): the links over the first visit and the library, the colour of
+   the text on hover (css/home.css). */
+.app-site-link.is-on-page:is(:hover, .is-hover) { color: var(--text); }
+/* Compact (is-compact): Paste JSON, a link under the zone of the first visit, its line on hover, without an icon
+   (the owner, 2026-11-18; css/home-drop.css). */
+.app-site-link.is-compact { height: 32px; padding: 0 4px; }
 
 /* The band of the open builds: 44 px, their tabs of 184 px, up to 240 when they all fit; a light
    shadow under it, the only one of the two bands (--band-shadow). */

@@ -79,3 +79,7 @@ document.addEventListener("click", event => {
   STATE.nextOpen = false;
   renderSheet();
 });
+
+// The link of the box says it is open (aria-expanded), white as on hover (css/app-bar.css).
+AFTER_RENDER.push(() => document.querySelectorAll(".nx").forEach(box =>
+  box.closest(".app-window")?.querySelector("[data-action='next-toggle']")?.setAttribute("aria-expanded", "true")));

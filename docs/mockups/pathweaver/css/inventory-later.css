@@ -3,7 +3,6 @@
    background of the drawer of the Overview (css/side-overflow.css), the page with its light from the bottom right
    at 20 %, and its graph paper (css/textures.css), across the left half and down to its bottom. Set aside: the
    hints on the graph paper of the drawing. */
-.app-it .it-left { display: flex; flex-direction: column; padding-bottom: 0; }
 .up { position: relative; flex: 1; margin: 22px 0 0 -32px; padding: 16px 32px 24px;
   background: radial-gradient(ellipse 330px 220px at 100% 100%, color-mix(in srgb, var(--page-glow) 20%, transparent) 0%, transparent 70%), var(--page); }
 /* As much room under the title as under « Inventory » in the drawer of the Overview, 14 px (the owner, 2026-11-21). */
@@ -14,10 +13,10 @@
    aside: a tile as light as on the paper, its thumbnail in it, lighter, on it edged as a slot, the shades of a
    card on hover). */
 .up-tiles { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; width: 396px; }
-.up-tile { display: flex; align-items: center; gap: 9px; min-width: 0; height: 38px; padding-right: 6px; background: var(--inset); cursor: pointer; }
+.up-tile { display: flex; align-items: center; gap: 9px; min-width: 0; height: 38px; padding-right: 6px; background: var(--inset); cursor: pointer; --free-note-size: 18px; }
 .up-tile:hover { background: color-mix(in srgb, var(--inset), var(--text) 6%); }
 .up-tile[data-shown] { background: color-mix(in srgb, var(--accent) 10%, transparent); }
-.up-tile .it-thumb { width: 38px; height: 38px; padding: 3px; background: var(--inset-strong); box-shadow: none; }
+.up-tile .it-thumb { width: 38px; height: 38px; padding: 3px; background: var(--inset-strong); }
 .up-words { display: flex; flex-direction: column; min-width: 0; line-height: 1.25; }
 .up .it-name { color: color-mix(in srgb, var(--text) 85%, transparent); }
 .up .it-name.is-unique { color: var(--unique); }
