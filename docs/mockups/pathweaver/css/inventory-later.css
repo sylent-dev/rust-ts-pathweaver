@@ -2,11 +2,12 @@
    the drawing, 396 px; the one shown in the box marked. */
 .up { width: 396px; }
 .up-tiles { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; }
-.up-tile { display: flex; align-items: center; gap: 9px; min-width: 0; height: 38px; padding-right: 6px; background: color-mix(in srgb, var(--text) 4%, transparent); cursor: pointer; }
-.up-tile:hover { background: color-mix(in srgb, var(--text) 8%, transparent); }
+.up { --up-tile: color-mix(in srgb, var(--text) 4%, transparent); --up-thumb: var(--slot-box); --up-edge: none; }
+.up-tile { display: flex; align-items: center; gap: 9px; min-width: 0; height: 38px; padding-right: 6px; background: var(--up-tile); box-shadow: var(--up-edge); cursor: pointer; }
+.up-tile:hover { background: color-mix(in srgb, var(--up-tile), var(--text) 6%); }
 .up-tile[data-shown] { background: color-mix(in srgb, var(--accent) 10%, transparent); }
 /* The thumbnail the whole height of its tile, without its edge (the owner, 2026-11-21). */
-.up-tile .it-thumb { width: 38px; height: 38px; padding: 3px; box-shadow: none; }
+.up-tile .it-thumb { width: 38px; height: 38px; padding: 3px; background: var(--up-thumb); box-shadow: none; }
 .up-words { display: flex; flex-direction: column; min-width: 0; line-height: 1.25; }
 .up .it-name { color: color-mix(in srgb, var(--text) 85%, transparent); }
 .up .it-name.is-unique { color: var(--unique); }
@@ -23,3 +24,12 @@
   background: radial-gradient(ellipse 330px 220px at 100% 100%, color-mix(in srgb, var(--page-glow) 20%, transparent) 0%, transparent 70%), var(--page); }
 :root[data-upcoming-block="block"] .up .it-title.is-next { margin-top: 0; }
 :root[data-upcoming-block="block"] .up-tiles { width: 396px; }
+
+/* In a block, the shades of the tiles (the tabs « Tiles »): D1 as on the paper; D2 a dark tile, its thumbnail
+   in it; D3 a dark tile, its thumbnail darker; D4 a dark tile, its thumbnail lighter; D5 a dark tile edged as a
+   slot of the drawing, its thumbnail on it; D6 the shades of a card on hover, the head and the body. */
+:root[data-upcoming-tiles="d2"] .up-block { --up-tile: rgb(0 0 0 / 30%); --up-thumb: transparent; }
+:root[data-upcoming-tiles="d3"] .up-block { --up-tile: rgb(0 0 0 / 25%); --up-thumb: rgb(0 0 0 / 35%); }
+:root[data-upcoming-tiles="d4"] .up-block { --up-tile: rgb(0 0 0 / 30%); --up-thumb: color-mix(in srgb, var(--text) 7%, transparent); }
+:root[data-upcoming-tiles="d5"] .up-block { --up-tile: rgb(0 0 0 / 25%); --up-thumb: transparent; --up-edge: inset 0 0 0 1px var(--slot-line); }
+:root[data-upcoming-tiles="d6"] .up-block { --up-tile: var(--band-deep); --up-thumb: color-mix(in srgb, var(--band-deep), #000 60%); }
