@@ -95,6 +95,8 @@ ABOUT_CASES = {
     "shown": SHOWN,
     "warnings": "ferox-shield-wall-leveling.build",
     "amazon": "maxroll-aer0-ice-shot-amazon.build",
+    # The snapshot of the band (2g2), its page at 1,920 px (2k5): its header.
+    "snapshot": "pobr-summoner-lv98.build",
 }
 # The inventory ids of the game (docs/build-files-in-the-wild.md).
 INVENTORY_IDS = {"Weapon1", "Weapon2", "Offhand1", "Offhand2", "Helm1", "BodyArmour1", "Gloves1", "Boots1", "Belt1",
@@ -757,13 +759,16 @@ def main():
     # The hints of the cases of the Inventory tab (2k2).
     inventories = {key: build_data(read(name), names, gems, ascendancies, skills, tags)["slots"]
                    for key, name in INVENTORY_CASES.items()}
-    skill_icons(cache, gems, [shown["skills"], crowded, *attributes.values()])
+    # The skills of the snapshot of the band, its page at 1,920 px (2k5).
+    snapshot = build_data(read(BAND_CASES["snapshot"]), names, gems, ascendancies, skills, tags)["skills"]
+    skill_icons(cache, gems, [shown["skills"], crowded, snapshot, *attributes.values()])
     # The cases of the About tab (2k3).
     abouts = {key: about_of(name, read(name), tree, names, uniques, ascendancies) for key, name in ABOUT_CASES.items()}
     write_js("data-builds.js", "BUILDS", {
         "treeVersion": TREE_TAG,
         "shown": shown,
         "crowded": {"skills": crowded},
+        "snapshot": {"skills": snapshot},
         "attributes": attributes,
         "inventories": inventories,
         "abouts": abouts,

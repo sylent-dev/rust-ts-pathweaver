@@ -245,8 +245,10 @@ function drawTree(canvas, graph, states, view, { minRadius = 1.5, iconsFromPx = 
 
 // Draws the tree of the build at a level: the portrait, the tree, then the ascendancy over them; `look`
 // is the strength of the links of each set (js/tree-motion.js).
+// A snapshot (data-snapshot, 2k5) has nothing new at any level: no ring.
 function drawBuildTree(canvas, view, level, look) {
   const states = treeStates(TREE.taken, TREE.nodes.length, level);
+  if (canvas.dataset.snapshot !== undefined) states.forEach((state, index) => { if (state === 3) states[index] = 2; });
   const portrait = portraitOf(BUILDS.shown.portrait);
   const under = (context, screen, scale) => drawPortrait(context, screen, scale, portrait);
   drawTree(canvas, TREE, states, view, { sets: setMasks(TREE.taken, TREE.nodes.length), look, under });

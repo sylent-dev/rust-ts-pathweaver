@@ -25,9 +25,10 @@ const zoomButtons = () => `<span class="tc-group">${zoomButton("out")}${zoomButt
 // The legend, always shown at the top of the tree (the owner, 2026-11-19, from T24 of eleven ways): the
 // three colours of the links, which can't be guessed, and the ring of what is new at the level, which
 // the Tree tab has no box « New at N » to explain; what is not taken goes without saying.
-const treeLegend = level => `<div class="tc-shade"><div class="tc-legend app-weak">
+// A snapshot, which has nothing new at any level, goes without the ring (2k5).
+const treeLegend = (level, snapshot = false) => `<div class="tc-shade"><div class="tc-legend app-weak">
     <span><i class="tc-line"></i>shared</span><span><i class="tc-line is-set1"></i>set I</span><span><i class="tc-line is-set2"></i>set II</span>
-    <span><i class="app-dot is-new"></i>new at ${level}</span></div></div>`;
+    ${snapshot ? "" : `<span><i class="app-dot is-new"></i>new at ${level}</span>`}</div></div>`;
 
 // The bottom bar: the sets on the left, the counts in the middle, the zoom on the right.
 const bottomBar = c => `<div class="tc-bb"><span class="tc-row">
@@ -35,6 +36,6 @@ const bottomBar = c => `<div class="tc-bb"><span class="tc-row">
     <span class="tc-counts app-number app-weak">${allCounts(c)}</span>
     <span class="tc-end">${zoomButtons()}</span></span></div>`;
 
-function treeControls(level) {
-  return `<div class="tc">${treeLegend(level)}${bottomBar(treeCounts(level))}</div>`;
+function treeControls(level, { snapshot = false } = {}) {
+  return `<div class="tc">${treeLegend(level, snapshot)}${bottomBar(treeCounts(level))}</div>`;
 }

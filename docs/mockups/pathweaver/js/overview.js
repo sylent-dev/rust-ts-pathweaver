@@ -3,11 +3,12 @@
 // (js/side-overflow.js, 2j4).
 
 // The tree and the controls over it (js/tree-controls.js). `view` names the view of the tree the window
-// keeps (js/tree.js, STATE.treeViews); `fps` shows the counter of frames per second (2i3).
-function treePanel(level, { view = "page", fps = false } = {}) {
+// keeps (js/tree.js, STATE.treeViews); `fps` shows the counter of frames per second (2i3); `snapshot`
+// draws it without what is new (2k5).
+function treePanel(level, { view = "page", fps = false, snapshot = false } = {}) {
   return `<div class="app-tree">
-    <canvas class="app-tree-canvas" data-tree="main" data-view="${view}" aria-label="Passive tree"></canvas>
-    ${treeControls(level)}
+    <canvas class="app-tree-canvas" data-tree="main" data-view="${view}"${snapshot ? " data-snapshot" : ""} aria-label="Passive tree"></canvas>
+    ${treeControls(level, { snapshot })}
     <div class="app-hover is-hover-card"></div>
     ${fps ? '<output class="app-fps app-number">Drag or zoom the tree</output>' : ""}
   </div>`;
