@@ -22,3 +22,9 @@
 /* The note alone, on a line that names what it is about (the owner, 2026-11-21): no head, as wide as its
    text up to 320 px. */
 .app-hover.is-hover-card.app-note-hover:has(> .hc-note:only-child) { width: max-content; max-width: 320px; }
+/* The card of a note on a line that counts passives: no art, so its head isn't 48 px high; as much room over
+   the name of the passive as between it and « From the author » (the owner, 2026-11-21), on the slider « Note
+   gap ». The head and the note share their shade: the room is the padding of both. */
+.app-note-hover .hc-head { min-height: 0; padding-top: var(--note-gap, 12px); }
+.app-note-hover .hc-title { align-self: auto; }
+.app-note-hover .hc-head + .hc-note { padding-top: var(--note-gap, 12px); }
