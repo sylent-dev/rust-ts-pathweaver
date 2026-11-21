@@ -30,6 +30,10 @@ const VARIANTS = {
   invMark: { label: "Level mark", range: { min: 2, max: 16, step: 1 }, variable: "--it-mark-opacity", unit: "%", fallback: "6" },
   invPanel: { label: "Item box", options: { p1: "P1", p2: "P2", p3: "P3", p4: "P4", p5: "P5", p6: "P6" }, fallback: "p1" },
   invChosen: { label: "Chosen slot", options: { s1: "S1", s2: "S2", s3: "S3", s4: "S4" }, fallback: "s1" },
+  // The tab cut in two (the owner, 2026-11-21): where the cut falls, the shade of the pane of the box, its line.
+  invCut: { label: "Pane start", range: { min: 436, max: 600, step: 4 }, variable: "--it-cut", unit: "px", fallback: "480" },
+  invShade: { label: "Pane shade", range: { min: 0, max: 70, step: 5 }, variable: "--it-pane-shade", unit: "%", fallback: "35" },
+  invLine: { label: "Pane line", range: { min: 0, max: 40, step: 2 }, variable: "--it-pane-line", unit: "%", fallback: "12" },
 };
 
 // The styles a section shows side by side: the style of the page alone, Frost Night by default, the
