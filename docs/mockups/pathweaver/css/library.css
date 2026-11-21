@@ -24,11 +24,12 @@
 /* Paste JSON: a button in the style of the + of the band of the open builds (css/app-bar.css; the
    owner, 2026-11-18): the full height of the strip, square, white, its words in the colour of the
    band, the white a little dimmed and the words a little larger on hover. */
-.library-paste { flex: none; display: grid; place-items: center; padding: 0 24px; border: none; cursor: pointer; background: var(--on-bar); color: var(--builds-band);
+.library-paste { flex: none; display: grid; place-items: center; padding: 0 24px; border: none; cursor: pointer; background: var(--on-top-band); color: var(--builds-band);
   font-family: var(--site-link-font); font-weight: var(--site-link-weight); font-size: 14px; transition: background-color .3s; }
 .library-paste span { transition: transform .2s cubic-bezier(.34, 1.56, .64, 1); }
-.library-paste:is(:hover, .is-hover) { background: color-mix(in srgb, var(--on-bar) 82%, transparent); }
+.library-paste:is(:hover, .is-hover) { background: color-mix(in srgb, var(--on-top-band) 82%, transparent); }
 .library-paste:is(:hover, .is-hover) span { transform: scale(1.08); }
+@media (prefers-reduced-motion: reduce) { .library-paste span { transition: none; } }
 
 /* The rows, 56 px, touching, a shade lighter than the page one row in two, for the eye to follow a
    row (the owner, 2026-11-18). Each is a link but for its bin: lighter on hover, since a click
@@ -61,8 +62,8 @@
 .library-ask > .library-ask-name { flex: 0 1 auto; min-width: 0; overflow: hidden; text-overflow: ellipsis; }
 .library-ask > .app-weak { margin-left: 6px; }
 .library-remove, .library-cancel { flex: none; height: 32px; padding: 0 14px; border: none; cursor: pointer; font-weight: 600; }
-.library-remove { background: var(--error); color: var(--on-error); }
-.library-remove:hover { background: var(--error-strong); }
+.library-remove { background: var(--error-button); color: var(--on-error); }
+.library-remove:hover { background: var(--error-button-hover); }
 .library-cancel { background: none; color: var(--weak); }
 .library-cancel:hover { color: var(--text); }
 

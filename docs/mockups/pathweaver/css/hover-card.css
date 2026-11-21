@@ -27,7 +27,7 @@
 .app-hover.is-hover-card.is-shown { pointer-events: auto; }
 
 /* The shades of the parts: the head and the note in the deep shade of the bands; the body a step darker. */
-.is-hover-card { --hc-head: var(--band-deep); --hc-body: var(--card-body); --hc-note: var(--hc-head); }
+.is-hover-card { --hc-head: var(--shade-deep); --hc-body: var(--card-body); --hc-note: var(--hc-head); }
 
 /* The head: the art on the right, the title and its subtitle in the middle of the height, starting where
    the body starts, 12 px from the edge. */

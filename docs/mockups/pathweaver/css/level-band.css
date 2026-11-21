@@ -2,7 +2,7 @@
    of the bands, the graph paper (css/textures.css). Its window of what changes hangs under it, over
    the page (css/level-changes.css). */
 .app-level { display: flex; align-items: center; height: 84px; padding-right: 18px; overflow: visible; z-index: 4;
-  background: var(--band-image), var(--band-deep); color: var(--on-band); font-size: 13px;
+  background: var(--band-image), var(--shade-deep); color: var(--on-band); font-size: 13px;
   /* A light shadow under it, over the tabs, for a little relief: 6 px of blur (2h, the owner, 2026-11-19). */
   box-shadow: 0 1px 6px var(--shadow-colour); }
 /* A band whose window of what changes is open over everything, the windows of the mock-up under it
@@ -47,6 +47,7 @@
   background: linear-gradient(to right, transparent, color-mix(in srgb, var(--on-band) 22%, transparent)); }
 .app-level-trail[data-towards="left"] { background: linear-gradient(to left, transparent, color-mix(in srgb, var(--on-band) 22%, transparent)); }
 .app-level-trail.is-fading { transition: left .3s ease-out, width .3s ease-out; }
+@media (prefers-reduced-motion: reduce) { .app-level-trail { display: none; } }   /* a motion only */
 .app-level.is-dragging .app-level-steps { opacity: .35; }
 .app-level-ghost { position: absolute; top: 29px; width: 4px; height: 26px; margin-left: -2px; background: var(--on-band-weak); opacity: .45; }
 @media (prefers-reduced-motion: reduce) { .app-level-cursor.is-landing { animation: none; } }

@@ -5,7 +5,7 @@
    strength), private browsing by a grey one. */
 
 .app-notices { flex: none; display: flex; flex-direction: column; }
-/* Its words 2 px smaller than the text of the page, none in bold (the owner, 2026-11-18). */
+/* Its words 2.5 px smaller than the text of the page, none in bold (the owner, 2026-11-18). */
 .app-notice { --notice: color-mix(in srgb, var(--error) 14%, var(--page));
   display: flex; align-items: flex-start; background: var(--notice); font-size: 11.5px; }
 .app-notice strong { font-weight: inherit; }

@@ -13,8 +13,8 @@ const BUILD_FILE = { name: `${SHOWN.name}.build`, size: "44 KB" };
 
 // A file: a page with a corner folded at 45°, « .build » written on it, in the colours of the band.
 const fileIcon = () => `<svg class="app-file-icon" width="26" height="32" viewBox="0 0 26 32" aria-hidden="true">
-    <path d="M0 0H17L26 9V32H0Z" fill="var(--on-band)"/><path d="M17 0V9H26Z" fill="var(--band-deep)" fill-opacity=".35"/>
-    <text x="13" y="26" text-anchor="middle" font-size="7.5" font-weight="700" font-family="Manrope, sans-serif" fill="var(--band-deep)">.build</text></svg>`;
+    <path d="M0 0H17L26 9V32H0Z" fill="var(--on-band)"/><path d="M17 0V9H26Z" fill="var(--shade-deep)" fill-opacity=".35"/>
+    <text x="13" y="26" text-anchor="middle" font-size="7.5" font-weight="700" font-family="Manrope, sans-serif" fill="var(--shade-deep)">.build</text></svg>`;
 
 // `build`: the build of the header, the build shown by default; `warnings`, their number (2k4, the owner,
 // 2026-11-21: « 18 warnings » in words, in the yellow of the sticky note « ? », without a box nor an icon, a link

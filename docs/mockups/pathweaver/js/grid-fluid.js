@@ -15,7 +15,7 @@
 // The persistence sets how slowly the fluid fades in the veins. Tuned by the owner on sliders
 // (2026-11-18): a volatility of 65 %, a persistence of 975; at 0 % and 968, the fluid of sylent.art.
 
-const FLUID_CELL = 48, FLUID_VOLATILITY = 0.65, FLUID_PERSISTENCE = 0.975;
+const FLUID_VOLATILITY = 0.65, FLUID_PERSISTENCE = 0.975;
 
 // A small seeded random, so that the veins are the same at each visit.
 function seededRandom(seed) {
@@ -68,7 +68,7 @@ function fluidOf(host) {
     canvas.setAttribute("aria-hidden", "true");
     host.querySelector(":scope > .home-drop-mark")?.after(canvas) ?? host.prepend(canvas);
   }
-  const cell = FLUID_CELL;
+  const cell = parseFloat(getComputedStyle(host).getPropertyValue("--home-grid"));   // css/home-drop.css
   const width = canvas.clientWidth, height = canvas.clientHeight;
   let fluid = fluids.get(canvas);
   if (!fluid || fluid.width !== width || fluid.height !== height) {

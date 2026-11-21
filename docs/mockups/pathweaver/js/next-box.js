@@ -38,7 +38,7 @@ const updateCard = update => `<article class="nx-card is-${update.key}">
       <p class="nx-version">Version ${update.version}</p>
       <h3 class="nx-name app-title">${update.name}</h3>
       <p class="nx-line">${update.line}</p>
-      <ul class="nx-items">${update.items.map((item, row) => `<li style="--row:${row}">${item}</li>`).join("")}</ul>
+      <ul class="nx-items">${update.items.map(item => `<li>${item}</li>`).join("")}</ul>
     </div>
   </div>
 </article>`;

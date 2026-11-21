@@ -11,7 +11,7 @@
 /* A card: its head in the deep shade, its name, then its badge at the right, a square of 32 px; its body a
    step darker (--card-body). */
 .st-card { position: relative; break-inside: avoid; margin-bottom: 12px; background: var(--card-body); }
-.st-head { display: flex; align-items: center; gap: 5px; min-height: 32px; padding-left: 10px; background: var(--band-deep); }
+.st-head { display: flex; align-items: center; gap: 5px; min-height: 32px; padding-left: 10px; background: var(--shade-deep); }
 .st-badge { flex: none; display: block; width: 32px; height: 32px; margin-left: auto; overflow: hidden; }
 .st-badge img { display: block; width: 100%; height: 100%; object-fit: cover; }
 .st-body { padding: 5px 10px 6px 12px; }

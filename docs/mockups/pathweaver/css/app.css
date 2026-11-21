@@ -1,8 +1,10 @@
-/* The window of the application and what every block shares. Classes of the application
-   start with `app-`, states with `is-`, so that they never collide. */
+/* The window of the application and what every block shares. The classes of a block start with its
+   prefix (`app-`, or a short one of its own: `st-` the Skills tab, `it-` the Inventory tab, `ab-` the
+   About tab…), its states with `is-`; the prefixes fall at the copy into Svelte, whose styles stay
+   in their component. */
 .app-window { position: relative; overflow: hidden; background: var(--page-image), var(--page); background-size: var(--page-image-size); color: var(--text); font: var(--text-weight) 14px/1.35 var(--font-text); box-shadow: var(--window-shadow); }
 :where(.app-window) button { font: inherit; color: inherit; }   /* weaker than any class of a block */
-.app-portrait { flex: none; display: block; border-radius: var(--portrait-radius); object-fit: cover; background: var(--fill); box-shadow: var(--portrait-ring); }
+.app-portrait { flex: none; display: block; border-radius: var(--portrait-radius); object-fit: cover; background: var(--portrait-placeholder); box-shadow: var(--portrait-ring); }
 .app-weak { color: var(--weak); }
 .app-number { font-family: var(--font-number); font-variant-numeric: tabular-nums; }
 .app-title { font-family: var(--font-title); font-weight: var(--title-weight); text-transform: var(--title-transform); letter-spacing: var(--title-spacing); }

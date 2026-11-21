@@ -52,7 +52,7 @@ function noteHoverHtml(mark) {
 // tree, centred on the mark (right of it when the window has no room on its left); in the window of
 // « N changes », just right of the window, over the tree (left of it when there is no room).
 const noteCard = document.createElement("div");
-noteCard.className = "app-hover app-gem-hover app-note-hover is-hover-card";
+noteCard.className = "app-hover app-pinned-card app-note-hover is-hover-card";
 document.body.append(noteCard);
 function showNoteHover(mark) {
   noteCard.innerHTML = noteHoverHtml(mark);

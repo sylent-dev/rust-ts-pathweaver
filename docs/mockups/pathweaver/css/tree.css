@@ -1,10 +1,10 @@
 /* The tree: a canvas, the controls over it in css/tree-controls.css. */
-.app-tree { position: relative; flex: 1; min-width: 0; background: var(--side); border-right: var(--border-width) solid var(--divider); }
+.app-tree { position: relative; flex: 1; min-width: 0; background: var(--tree-surface); border-right: var(--border-width) solid var(--divider); }
 .app-tree-canvas { position: absolute; inset: 0; width: 100%; height: 100%; cursor: grab; touch-action: none; }
 .app-tree-canvas:active { cursor: grabbing; }
 /* The mark of a passive new at the level, in the legend: the ring of the accent around it. */
 .app-dot { display: inline-block; width: 8px; height: 8px; box-sizing: border-box; border-radius: 50%; }
-.app-dot.is-new { border: 1px solid var(--tree-taken); background: var(--tree-taken); box-shadow: 0 0 0 2px var(--band-deep), 0 0 0 3.5px var(--accent); }
+.app-dot.is-new { border: 1px solid var(--tree-taken); background: var(--tree-taken); box-shadow: 0 0 0 2px var(--shade-deep), 0 0 0 3.5px var(--accent); }
 /* The Tree tab: the tree alone, the height of the Overview. */
 .app-tree-tab { display: flex; height: 668px; }
 .app-tree-tab .app-tree { border-right: none; }
@@ -12,4 +12,4 @@
 .app-window-full { display: flex; flex-direction: column; }
 .app-window-full .app-tree-tab { flex: 1; height: auto; min-height: 0; }
 /* The counter of frames per second (2i3), at the bottom right over the bottom bar: for the mock-up only. */
-.app-fps { position: absolute; right: 12px; bottom: 44px; padding: 2px 6px; border-radius: 2px; background: color-mix(in srgb, var(--band-deep) 80%, transparent); color: var(--weak); font-size: 12px; pointer-events: none; }
+.app-fps { position: absolute; right: 12px; bottom: 44px; padding: 2px 6px; border-radius: 2px; background: color-mix(in srgb, var(--shade-deep) 80%, transparent); color: var(--weak); font-size: 12px; pointer-events: none; }

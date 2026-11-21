@@ -2,7 +2,7 @@
    shade and the construction of the window of « N changes », 440 px. */
 .dl-case { position: relative; }
 .dl-box { position: absolute; z-index: 6; top: calc(66px + 3px); right: 16px; width: 440px; box-sizing: border-box; padding: 12px 16px 14px;
-  border-radius: 3px; background: var(--band-image), var(--band-deep); color: var(--on-band); box-shadow: var(--popover-shadow);
+  border-radius: 3px; background: var(--band-image), var(--shade-deep); color: var(--on-band); box-shadow: var(--popover-shadow);
   font-size: 12px; line-height: 1.45; transform-origin: top right; animation: reveal-pop 280ms cubic-bezier(.34, 1.56, .64, 1) both; }
 @media (prefers-reduced-motion: reduce) { .dl-box { animation: none; } }
 .dl-head { display: flex; align-items: baseline; justify-content: space-between; margin: 0 0 8px; font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: var(--on-band-weak); }
