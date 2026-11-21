@@ -53,4 +53,4 @@ function showSlotHover(element) {
   slotCard.style.left = `${column.left - w - 8 >= 8 ? column.left - w - 8 : column.right + 8}px`;
   slotCard.style.top = `${Math.max(8, Math.min(innerHeight - h - 8, box.top + box.height / 2 - h / 2))}px`;
 }
-openOnHover(slotCard, ".app-inventory [data-item], .app-inventory-others [data-item]", showSlotHover);
+openOnHover(slotCard, ".app-inventory [data-item], .app-inventory-others [data-item], .app-it [data-item]", showSlotHover);

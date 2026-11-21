@@ -81,6 +81,12 @@ ATTRIBUTE_CASES = {
     "dexterity": "maxroll-aer0-ice-shot-amazon.build",
     "grenades": "mobalytics-fubgun-flameblast-lvl-15-32.build",
 }
+# The cases of the Inventory tab (2k2): the most hints of the corpus, 30 on 17 cells, 13 of them replaced
+# at 65 by the gear of the end; a campaign of free texts, up to three hints on a cell one after the other.
+INVENTORY_CASES = {
+    "replaced": "maxroll-aer0-ice-shot-amazon.build",
+    "campaign": "poe2-tools-fubgun-ice-shot-campaign.build",
+}
 # The cases of « N changes at N » (2g): a respec, 42 passives given back at 65; the swap of a
 # leveling build to its end, 82 changes at 71.
 CHANGE_CASES = {
@@ -678,14 +684,20 @@ def main():
     # The skills of the cases of the gems of two attributes (2kb).
     attributes = {key: build_data(read(name), names, gems, ascendancies, skills, tags)["skills"]
                   for key, name in ATTRIBUTE_CASES.items()}
+    # The hints and the portrait of the cases of the Inventory tab (2k2).
+    inventories = {key: {k: v for k, v in build_data(read(name), names, gems, ascendancies, skills, tags).items()
+                         if k in ("portrait", "slots")}
+                   for key, name in INVENTORY_CASES.items()}
     skill_icons(cache, gems, [shown["skills"], crowded, *attributes.values()])
     write_js("data-builds.js", "BUILDS", {
         "treeVersion": TREE_TAG,
         "shown": shown,
         "crowded": {"skills": crowded},
         "attributes": attributes,
+        "inventories": inventories,
         "items": item_art(cache, names, uniques,
-                          [*map(item_name, builds[0].get("inventory_slots", [])), *SAMPLE_ITEMS],
+                          [*map(item_name, builds[0].get("inventory_slots", [])), *SAMPLE_ITEMS,
+                           *(item_name(slot) for name in INVENTORY_CASES.values() for slot in read(name).get("inventory_slots", []))],
                           classes, pob_uniques(cache)),
         "open": [{"name": b["name"], "ascendancy": ascendancies.get(b.get("ascendancy"), {}).get("name", ""),
                   "portrait": (b.get("ascendancy") or "").lower()} for b in builds],
