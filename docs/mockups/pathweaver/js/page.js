@@ -24,6 +24,8 @@ const VARIANTS = {
   // The width of the windows of the home page (2l): the minimum of specs.md, half a 1920-pixel screen, and a wide
   // window of the owner's screen.
   homeWidth: { label: "Home width", options: { 900: "900 px", 960: "960 px", 1600: "1,600 px" }, fallback: "960" },
+  // The opacity of the spells rising behind the box of What's next (2k6), tuned by eye: at its highest, behind the text.
+  moteOpacity: { label: "Rising spells", range: { min: 0.1, max: 1, step: 0.05 }, variable: "--mote-opacity", fallback: "0.7" },
 };
 
 // The styles a section shows side by side: the style of the page alone, Frost Night by default, the
