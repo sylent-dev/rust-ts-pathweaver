@@ -42,10 +42,12 @@ function abGuide(about) {
 const abFile = about => `<button type="button" class="app-file ab-file" draggable="true" title="${escapeHtml(about.file)}">${fileIcon()}<span class="app-file-text"><span class="app-file-label">Download .build</span><small>${abSize(about.size)}</small></span></button>`;
 const abWhere = () => '<p class="ab-where app-weak">The game reads its builds in <code>Documents/My Games/Path of Exile 2/BuildPlanner</code>; on Steam Deck, in that folder of the Proton prefix.</p>';
 
-// The warnings by part: the sticky note « ? », the end of the id, what carries it, its levels.
+// The warnings: « 18 warnings », as the button ⚠ of the header (the owner, 2026-11-21: « Warnings 18 » in the
+// yellow read oddly); then by part, « GEMS · 18 », the warnings of a part (12 gems in 18 warnings for the leveling
+// guide of the corpus), each with the sticky note « ? », the end of the id, what carries it, its levels.
 const abGroups = about => Object.keys(AB_PARTS).map(part => [part, about.warnings.filter(w => w.part === part)]).filter(([, list]) => list.length);
 const abWarningRow = w => `<li class="ab-warning">${UNKNOWN_MARK}<span class="ab-warning-name" title="${escapeHtml(w.id)}">${escapeHtml(abShort(w.id))}</span>${w.where ? `<span class="app-weak">on ${escapeHtml(abShort(w.where))}</span>` : ""}${w.levels ? `<span class="ab-warning-levels app-weak">${w.levels[0]}–${w.levels[1]}</span>` : ""}</li>`;
-const abWarnings = about => `${abTitle(`Warnings <span class="ab-count">${about.warnings.length}</span>`)}
+const abWarnings = about => `${abTitle(plural(about.warnings.length, "warning"))}
   <p class="ab-intro app-weak">Not in the game data of ${BUILDS.treeVersion}: a file made for another version of the game is the usual cause. The rest of the build shows as usual.</p>
   ${abGroups(about).map(([part, list]) => `<h4 class="ab-part">${AB_PARTS[part]} · ${list.length}</h4><ul class="ab-warnings">${list.map(abWarningRow).join("")}</ul>`).join("")}`;
 
