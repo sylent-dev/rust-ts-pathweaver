@@ -30,7 +30,10 @@ const itStateLine = parts => `<div class="app-hover-state">${parts.state}</div>`
 // The box of the hint chosen, in the variant chosen.
 function inventoryDetail(hint, state) {
   if (!hint) return '<p class="it-none app-weak">No hint in this build.</p>';
-  const parts = itParts(hint, state.level);
+  // The text of the author titled as theirs (the owner, 2026-11-21): the stats they aim for, written as lines of
+  // their text since the format has no field for them, would read as the stats of the item.
+  const found = itParts(hint, state.level);
+  const parts = { ...found, note: found.note ? `<div class="it-from">From the author</div>${found.note}` : "" };
   const history = itHistory(hint, state);
   const card = (art = "", body = `${parts.stats}${itStateLine(parts)}`) => hoverCardHtml({ ...parts, art, body });
   // On the graph paper: the head, then the parts between thin lines.

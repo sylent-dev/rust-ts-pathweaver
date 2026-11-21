@@ -41,3 +41,6 @@
     linear-gradient(var(--c) 0 0) bottom left / 12px 1px, linear-gradient(var(--c) 0 0) bottom left / 1px 12px,
     linear-gradient(var(--c) 0 0) bottom right / 12px 1px, linear-gradient(var(--c) 0 0) bottom right / 1px 12px;
   background-repeat: no-repeat; }
+
+/* The title of the text of the author, so that the stats they aim for don't read as those of the item. */
+.it-from { margin-bottom: 4px; color: var(--on-band-weak); font-size: 10px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; }
