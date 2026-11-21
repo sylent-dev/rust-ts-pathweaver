@@ -5,7 +5,7 @@
 // js/tree-hover.js), without the numbers at the start of its lines (« 1. 88% increased Spell Damage »:
 // 555 lines of 215 hints of the corpus; the owner, 2026-11-20). Fixed on the page as the card of a gem,
 // just left of the column, over the tree, centred on the slot.
-// On a hinted slot of the drawing, and on a line of the list under it; a tap on a touch screen gives
+// On a hinted slot of the drawing of the right column, and on a line of the list under it; a tap on a touch screen gives
 // the same card (the browser sends the pointer there first).
 
 // The text of a hint without the numbers at the start of its lines, behind the tags of the markup
@@ -62,4 +62,5 @@ function showSlotHover(element) {
   slotCard.style.left = `${column.left - w - 8 >= 8 ? column.left - w - 8 : column.right + 8}px`;
   slotCard.style.top = `${Math.max(8, Math.min(innerHeight - h - 8, box.top + box.height / 2 - h / 2))}px`;
 }
-openOnHover(slotCard, ".app-inventory [data-item], .app-inventory-others [data-item], .app-it [data-item]", showSlotHover);
+// Not in the Inventory tab (the owner, 2026-11-21): its box says it beside the drawing.
+openOnHover(slotCard, ".app-side .app-inventory [data-item], .app-side .app-inventory-others [data-item]", showSlotHover);

@@ -5,9 +5,10 @@
 // image in its head or at its own cells, the card at 320 px with the hints beside it, four corners in the
 // accent set aside.
 
-// The hints of its slot, along the levels: the one at the level in the accent.
+// The hints of its slot, along the levels: the one at the level in the accent, the one shown in the box in
+// the colour of the text; a click on one shows it (the owner, 2026-11-21: the hint of 65–100 read at 40).
 const itHistory = (shown, state) => `<h3 class="it-title app-title">On this slot</h3><ul class="it-rows">${state.all.filter(hint => sameCell(hint, shown)).map(hint =>
-  `<li class="it-row${appliesAt(hint.levels, state.level) ? " is-now" : ""}" ${itAbout(hint, state.level)}><span class="it-span app-number">${hint.levels[0]}–${hint.levels[1]}</span>${itThumb(hint)}${itName(hint)}</li>`).join("")}</ul>`;
+  `<li class="it-row${appliesAt(hint.levels, state.level) ? " is-now" : ""}${hint === shown ? " is-shown" : ""}" data-action="it-choose" data-pick="${hintKey(hint)}"><span class="it-span app-number">${hint.levels[0]}–${hint.levels[1]}</span>${itThumb(hint)}${itName(hint)}</li>`).join("")}</ul>`;
 
 // The box of the hint shown: its name; under it its kind, its weapon set and its levels on one line
 // (« Staff · Set I · From level 16 », the owner, 2026-11-21: the words of the switch, not « Weapon · I »);

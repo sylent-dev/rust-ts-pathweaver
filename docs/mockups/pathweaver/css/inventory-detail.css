@@ -9,5 +9,6 @@
 .it-bare-part { padding: 10px 0; }
 .it-bare-part .app-hover-stats { margin: 0; }
 .it-bare-part .it-title { margin: 2px 0 4px; font-size: 12.5px; letter-spacing: normal; }
-.it-bare .it-row { min-height: 28px; }
+.it-bare .it-row { min-height: 28px; color: var(--on-band-weak); }
+.it-bare .it-row.is-shown { color: var(--text); font-weight: 600; }
 .it-bare .it-thumb { width: 22px; height: 22px; }
