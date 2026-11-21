@@ -17,7 +17,7 @@ function inventoryDetail(hint, state) {
   return `<div class="it-bare">
       <div class="it-bare-head"><strong>${parts.title}</strong><div class="it-bare-sub">${parts.subtitle}</div></div>
       <div class="it-bare-part">${parts.stats}<div class="app-hover-state">${parts.state}</div></div>
-      ${parts.note ? `<div class="it-bare-part it-bare-note">${parts.note}</div>` : ""}
+      ${parts.note ? `<div class="it-bare-part it-bare-note">${fromAuthor()}${parts.note}</div>` : ""}
       <div class="it-bare-part">${itHistory(hint, state)}</div>
     </div>`;
 }

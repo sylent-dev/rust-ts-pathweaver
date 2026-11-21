@@ -29,17 +29,18 @@ const retoldMark = change => noteMark({
 });
 
 // The card in the construction of every card on hover (2k, the owner, 2026-11-20; js/hover-card.js):
-// its title, what carries the note, its subtitle « Note of the author »; its body, the note; no art.
+// its title, what carries the note; the note in the part of the author, under « From the author », as in
+// every card (the owner, 2026-11-21: « Note of the author » as its subtitle said it another way); for a
+// group, « N notes » as its subtitle; no art.
 function noteHoverHtml(mark) {
   const { notePlace: place, noteSet: set, noteHead: head, noteText: text, noteList: list } = mark.dataset;
   const notes = list ? JSON.parse(list) : [];
   const title = `${place && !list ? `<span class="app-note-place"><span${set ? ` class="is-set${set}"` : ""}>${escapeHtml(place)}</span> · </span>` : ""}${escapeHtml(head)}`;
-  const subtitle = notes.length > 1 ? `${notes.length} notes of the author` : "Note of the author";
-  if (!list) return hoverCardHtml({ title, subtitle, body: markupHtml(text) });
+  if (!list) return hoverCardHtml({ title, note: markupHtml(text) });
   const more = notes.length - NOTE_LIST;
   return hoverCardHtml({
-    title, subtitle,
-    body: `<ul class="app-note-list">${notes.slice(0, NOTE_LIST).map(entry =>
+    title, subtitle: notes.length > 1 ? `${notes.length} notes` : "",
+    note: `<ul class="app-note-list">${notes.slice(0, NOTE_LIST).map(entry =>
       `<li><span class="app-note-passive">${escapeHtml(entry.name)}</span>${markupHtml(entry.note)}</li>`).join("")}</ul>
       ${more > 0 ? `<p class="app-note-more">and ${plural(more, "more note", "more notes")}</p>` : ""}`,
   });

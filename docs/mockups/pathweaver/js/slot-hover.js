@@ -20,10 +20,10 @@ const ITEM_MISSING = {
 // What the card of a slot says, in parts, so that the card on hover and the detail of the Inventory tab
 // (js/inventory-detail.js) read one rule: its title, the name of the item, in gold for a unique; its
 // subtitle, its kind, and the base of a unique after it; its stats, the implicits and the stats of a
-// unique and what the data lack; its state, its slot and its levels; the text of its author, titled « From
-// the author » (the owner, 2026-11-21): the format has no field for the stats of an item, so authors write
-// those they aim for as numbered lines of their text (590 lines in 217 hints of 326, the sample of Grinding
-// Gear Games too), which would read as the stats of the item.
+// unique and what the data lack; its state, its slot and its levels; the text of its author, under its title
+// « From the author » (fromAuthor, js/hover-card.js): the format has no field for the stats of an item, so
+// authors write those they aim for as numbered lines of their text (590 lines in 217 hints of 326, the sample
+// of Grinding Gear Games too), which would read as the stats of the item without it.
 function slotCardParts({ name, slot, note, unknown, levels, level }) {
   const item = unknown ? undefined : BUILDS.items[name];
   const kind = !item ? slot : item.unique ? `Unique ${item.kind.toLowerCase()}` : item.kind;
@@ -36,7 +36,7 @@ function slotCardParts({ name, slot, note, unknown, levels, level }) {
       ${lines(item?.stats)}
       ${missing ? `<p class="app-hover-missing${unknown ? " is-unknown" : ""}">${missing}</p>` : ""}`,
     state: `${item ? `${escapeHtml(slot)} · ` : ""}${levelsWords({ levels }, level)}`,
-    note: note ? `<div class="app-from-author">From the author</div>${markupHtml(withoutNumbers(note.replace(/\r/g, "")))}` : "",
+    note: note ? markupHtml(withoutNumbers(note.replace(/\r/g, ""))) : "",
   };
 }
 

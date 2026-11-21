@@ -47,6 +47,19 @@
 /* What a part holds starts at its top: the gaps of the old cards are between its lines only. */
 .hc-body > :first-child, .hc-note > :first-child { margin-top: 0; }
 
+/* The title of the text of the author (js/hover-card.js, fromAuthor), in every card and in the box of the
+   Inventory tab; four looks with the tabs « Author title »: A1 small capitals, A2 the words of a subtitle,
+   A3 a tag on the top edge of the part, A4 the bubble of the mark of a note before the words. */
+.hc-from { display: flex; align-items: center; gap: 5px; margin-bottom: 4px; color: var(--on-band-weak); font-size: 10px; font-weight: 600;
+  letter-spacing: .08em; line-height: 1.3; text-transform: uppercase; }
+.hc-from .app-icon { display: none; flex: none; }
+:root[data-author-title="a2"] .hc-from { font-size: 11px; font-weight: 400; letter-spacing: normal; text-transform: none; }
+:root[data-author-title="a3"] :is(.hc-note, .it-bare-note) { position: relative; padding-top: 12px; }
+:root[data-author-title="a3"] .hc-from { position: absolute; top: 0; left: 8px; margin: 0; padding: 0 5px; transform: translateY(-50%); border-radius: 2px;
+  background: var(--band-deep); box-shadow: 0 0 0 1px color-mix(in srgb, var(--on-band) 12%, transparent); font-size: 9.5px; font-weight: 800; line-height: 15px; }
+:root[data-author-title="a4"] .hc-from { font-size: 11px; font-weight: 400; letter-spacing: normal; text-transform: none; }
+:root[data-author-title="a4"] .hc-from .app-icon { display: block; }
+
 /* The section of the mock-up (sections/hover-cards.js): the cards drawn in place, visible by themselves,
    not by is-shown, which the hover scripts take off every card of the page (a turn of the wheel hides the
    cards over the tree, js/tree-hover.js); they take the pointer, for the tooltip of a cut subtitle. */
