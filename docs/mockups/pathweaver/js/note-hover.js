@@ -12,13 +12,12 @@
 const NOTE_LIST = 3;
 
 // The mark of a note, carrying what its card says (data-note-*, read back by noteHoverHtml): the place
-// and the name of what carries it, and its text, or the list of a group of passives as JSON; `counted`
-// when its line counts what the note is about rather than names it (« + 2 passives »). Nothing when there
-// is no note.
+// and the name of what carries it, and its text, or the list of a group of passives as JSON. Nothing
+// when there is no note.
 function noteMark(note) {
   if (!note || !(note.text || note.list?.length)) return "";
-  if (note.list?.length === 1) note = { counted: note.counted, place: note.place, set: note.set, head: note.list[0].name, text: note.list[0].note };
-  const data = [["counted", note.counted && "yes"], ["place", note.place], ["set", note.set], ["head", note.head], ["text", note.text], ["list", note.list && JSON.stringify(note.list)]]
+  if (note.list?.length === 1) note = { place: note.place, set: note.set, head: note.list[0].name, text: note.list[0].note };
+  const data = [["place", note.place], ["set", note.set], ["head", note.head], ["text", note.text], ["list", note.list && JSON.stringify(note.list)]]
     .filter(([, value]) => value).map(([key, value]) => ` data-note-${key}="${escapeHtml(value)}"`).join("");
   return `<span class="app-changes-note" aria-label="A note of the author"${data}>${icon(12, ICONS.note)}</span>`;
 }
@@ -30,14 +29,13 @@ const retoldMark = change => noteMark({
 });
 
 // The card in the construction of every card on hover (2k, the owner, 2026-11-20; js/hover-card.js), no
-// art. On a line that names what the note is about (a skill, a support, a note set again), the note alone
-// in the shade of the part of the author, as wide as its text up to 320 px: the pointer is on what it is
-// about (the owner, 2026-11-21: a head and « From the author » said it again). On a line that counts
-// passives (« + 1 passive »), the head names it, the set in its colour first, then the note under « From
-// the author », as in every card; for a group, « N notes » as its subtitle and the list.
+// art: its head names what carries the note, the place first in grey, a passive's set in its colour; the
+// note under « From the author », as in every card; for a group of passives, « N notes » as its subtitle
+// and the list. The note alone, on a line that names what it is about, was tried and set aside (the owner,
+// 2026-11-21: the name reads better, the Overview first). The whole card in the darker shade of the body
+// of the card of a skill, see-through over the tree as every card (css/note-hover.css).
 function noteHoverHtml(mark) {
-  const { noteCounted: counted, notePlace: place, noteSet: set, noteHead: head, noteText: text, noteList: list } = mark.dataset;
-  if (!counted) return `<div class="hc-note">${markupHtml(text)}</div>`;
+  const { notePlace: place, noteSet: set, noteHead: head, noteText: text, noteList: list } = mark.dataset;
   const notes = list ? JSON.parse(list) : [];
   const title = `${place && !list ? `<span class="app-note-place"><span${set ? ` class="is-set${set}"` : ""}>${escapeHtml(place)}</span> · </span>` : ""}${escapeHtml(head)}`;
   if (!list) return hoverCardHtml({ title, note: markupHtml(text) });

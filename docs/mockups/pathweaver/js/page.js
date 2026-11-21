@@ -26,9 +26,6 @@ const VARIANTS = {
   homeWidth: { label: "Home width", options: { 900: "900 px", 960: "960 px", 1600: "1,600 px" }, fallback: "960" },
   // The title of the text of the author in every card (js/hover-card.js, fromAuthor; the owner, 2026-11-21).
   authorTitle: { label: "Author title", options: { a1: "A1", a2: "A2", a3: "A3", a4: "A4" }, fallback: "a1" },
-  // The room over the name of a passive in the card of its note, and between it and « From the author »
-  // (css/note-hover.css; the owner, 2026-11-21).
-  noteGap: { label: "Note gap", range: { min: 4, max: 20, step: 1 }, variable: "--note-gap", unit: "px", fallback: "12" },
   // The Inventory tab cut in two (2k2, the owner, 2026-11-21): where the cut falls, the shade of the pane of the
   // box, its line.
   invCut: { label: "Pane start", range: { min: 436, max: 600, step: 4 }, variable: "--it-cut", unit: "px", fallback: "480" },
