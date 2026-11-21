@@ -39,7 +39,8 @@
 .nx-items li { position: relative; padding: 2px 0 2px 14px; }
 .nx-items li::before { content: ""; position: absolute; left: 1px; top: .62em; width: 5px; height: 5px; background: var(--accent); transform: rotate(45deg); }
 
-/* Less motion: a plain fade, and no icon rising. */
+/* Less motion: a plain fade, and no icon rising; important, to beat the animations of the cards and of the
+   icons, set by more precise selectors above. */
 @media (prefers-reduced-motion: reduce) {
   .nx, .nx *, .nx *::before, .nx *::after { animation: nx-fade 200ms ease-out both !important; }
   .nx-motes { display: none; }

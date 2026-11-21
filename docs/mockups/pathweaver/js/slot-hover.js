@@ -49,7 +49,7 @@ function slotHoverHtml(element) {
 }
 
 const slotCard = document.createElement("div");
-slotCard.className = "app-hover app-pinned-card app-slot-hover is-hover-card";
+slotCard.className = "app-hover app-pinned-card app-slot-hover";
 document.body.append(slotCard);
 function showSlotHover(element) {
   slotCard.innerHTML = slotHoverHtml(element);

@@ -1,7 +1,7 @@
 // The hover of a passive (2i3, specs.md, Passive tree): its name and its stats from the game data, its
 // state at the level, then the hint of the author with the markup of the game; a card beside the
 // passive (B of three, the owner, 2026-11-20: a card that follows the pointer and a panel fixed under
-// the legend set aside), see-through at 10 %, fading in and out (css/tree-hover.css), in the
+// the legend set aside), see-through at 10 %, fading in and out (css/hover-card.css), in the
 // construction of every card on hover (js/hover-card.js).
 
 // The markup of the game in the author's texts (specs.md, The author's texts): `<tag>{text}`, nested;

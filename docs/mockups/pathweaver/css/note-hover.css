@@ -29,7 +29,7 @@
 
 /* The whole card in the darker shade of the body of the card of a skill (the owner, 2026-11-21), its head
    and its note alike, see-through over the tree at the alpha of every card. */
-.is-hover-card.app-note-hover { --hc-head: var(--hc-body); --hc-note: var(--hc-body); }
+.app-note-hover { --hc-head: var(--hc-body); --hc-note: var(--hc-body); }
 /* The card of a note: no art, so its head isn't 48 px high; as much room over
    the name of the passive as between it and « From the author », 12 px (the owner, 2026-11-21, on a slider). The head and the note share their shade: the room is the padding of both. */
 .app-note-hover .hc-head { min-height: 0; padding-top: 12px; }

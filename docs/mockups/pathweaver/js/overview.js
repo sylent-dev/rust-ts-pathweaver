@@ -9,7 +9,7 @@ function treePanel(level, { view = "page", fps = false, snapshot = false } = {})
   return `<div class="app-tree graph-paper">
     <canvas class="app-tree-canvas" data-tree="main" data-view="${view}"${snapshot ? " data-snapshot" : ""} aria-label="Passive tree"></canvas>
     ${treeControls(level, { snapshot })}
-    <div class="app-hover is-hover-card"></div>
+    <div class="app-hover"></div>
     ${fps ? '<output class="app-fps app-number">Drag or zoom the tree</output>' : ""}
   </div>`;
 }

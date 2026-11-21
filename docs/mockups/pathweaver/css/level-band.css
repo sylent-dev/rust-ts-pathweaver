@@ -1,7 +1,7 @@
 /* The level band (2g, the owner, 2026-11-18; L6, specs.md, Window layout): 84 px, the darker shade
    of the bands, the graph paper (css/textures.css). Its window of what changes hangs under it, over
    the page (css/level-changes.css). */
-.app-level { position: relative; display: flex; align-items: center; height: 84px; padding-right: 18px; overflow: visible; z-index: 4;
+.app-level { position: relative; display: flex; align-items: center; height: 84px; padding-right: 18px; z-index: 4;
   background: var(--band-image), var(--shade-deep); color: var(--on-band); font-size: 13px;
   /* A light shadow under it, over the tabs, for a little relief: 6 px of blur (2h, the owner, 2026-11-19). */
   box-shadow: 0 1px 6px var(--shadow-colour); }
@@ -32,11 +32,11 @@
 .app-level-marker { position: absolute; top: 36px; width: 1px; height: 12px; background: var(--accent); }
 /* The cursor 26 px high, a pixel shorter at each end than at 2g (2k5, the owner, 2026-11-21: more room for what
    sits over and under the line). */
-.app-level-cursor { position: absolute; top: 29px; width: 4px; height: 26px; margin-left: -2px; background: var(--on-band); }
+.app-level-cursor { position: absolute; top: 29px; width: 4px; height: 26px; margin-left: -2px; background: var(--on-band);
+  cursor: grab; touch-action: none; transform-origin: 50% 50%; }   /* dragged (below) */
 
 /* Dragging it (2g2): a hand over it, a wider grip than its 4 px; lifted while dragged, its ghost
    grey where it was; set down, it settles back to its height. */
-.app-level-cursor { cursor: grab; touch-action: none; transform-origin: 50% 50%; }
 .app-level-cursor::before { content: ""; position: absolute; inset: -6px -8px; }
 .app-level-cursor.is-dragged { cursor: grabbing; transform: scaleY(1.25); }
 .app-level-cursor.is-landing { animation: level-land .26s cubic-bezier(.3, 1.6, .5, 1); }

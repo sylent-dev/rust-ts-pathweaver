@@ -9,3 +9,5 @@
 .app-number { font-family: var(--font-number); font-variant-numeric: tabular-nums; }
 .app-title { font-family: var(--font-title); font-weight: var(--title-weight); text-transform: var(--title-transform); letter-spacing: var(--title-spacing); }
 .app-icon { flex: none; display: block; }
+/* The name of a unique, in its gold, wherever it shows (a component of its own in Svelte, ItemName). */
+.is-unique { color: var(--unique); }

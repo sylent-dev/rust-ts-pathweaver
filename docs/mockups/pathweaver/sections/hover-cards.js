@@ -12,7 +12,7 @@
 // The cards on hover in the windows of the page are the same (the tree, the right column, the Skills tab).
 
 // A card drawn in place, as it shows on hover: its classes and its HTML.
-const staticCard = (classes, html) => `<div class="hc-cards"><div class="app-hover ${classes} is-hover-card is-static">${html}</div></div>`;
+const staticCard = (classes, html) => `<div class="hc-cards"><div class="app-hover ${classes} is-static">${html}</div></div>`;
 const staticGemCard = (gem, level) => staticCard("app-pinned-card", gemHoverHtml(gem, level));
 // A card read from the attributes of what carries it, as on hover (a mark of a note, a slot).
 function fromElement(html) {

@@ -4,7 +4,6 @@
 .it-bare { position: relative; padding: 4px 14px 10px; }
 .it-bare-head { padding: 6px 0 4px; }
 .it-bare-head strong { display: block; font-size: 18px; font-weight: 700; }
-.it-bare .is-unique { color: var(--unique); }
 .it-bare-sub { color: var(--on-band-weak); font-size: 12px; }
 .it-bare-part { padding: 10px 0; --hover-stats-margin: 0; }
 
