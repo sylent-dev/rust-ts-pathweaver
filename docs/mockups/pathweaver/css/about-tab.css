@@ -43,6 +43,8 @@
 /* The warnings by part. */
 .ab-gap { margin-top: 22px; }
 .ab-title { margin: 0 0 8px; font-size: 14px; }
+/* « 18 warnings » in the yellow of the sticky note: how many a build has matters before starting it. */
+.ab-warned { color: var(--unknown-note); }
 .ab-intro { margin: 0 0 8px; font-size: 12px; }
 .ab-part { margin: 10px 0 4px; color: var(--on-band-weak); font-size: 10.5px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; }
 .ab-warning { display: flex; align-items: center; gap: 8px; min-height: 24px; font-size: 12.5px; white-space: nowrap; }
