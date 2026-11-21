@@ -1,0 +1,24 @@
+/* The phone page (2m, js/phone-page.js): one column in the middle of the phone, on the page and its graph paper,
+   without the light of the page (the owner, 2026-11-21: from the top left or along the bottom, of no use here). */
+
+.ph-window { isolation: isolate; display: flex; flex-direction: column; background: var(--page); }
+.ph-window::before {
+  content: ""; position: absolute; inset: 0; z-index: -1; pointer-events: none;
+  background: var(--texture-colour); opacity: var(--texture-opacity);
+  mask-image: var(--texture); mask-size: var(--texture-size) var(--texture-size);
+  mask-position: calc(var(--texture-size) / 8) calc(var(--texture-size) / 8);
+}
+
+/* The brand at the top, as in the band of the site, without its band: nothing on this page leads anywhere. */
+.ph-brand { display: flex; align-items: center; gap: var(--brand-gap); padding: 20px 24px; }
+.ph-brand .logo-name { font-size: var(--brand-size); }
+
+.ph-message { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center;
+  padding: 0 32px 72px; text-align: center; }
+.ph-title { margin: 0 0 14px; font: 800 26px/1.15 var(--brand-font); letter-spacing: -0.03em; color: var(--text); }
+.ph-message p { margin: 0; color: var(--weak); font-size: 14px; line-height: 1.6; white-space: nowrap; }   /* one sentence a line */
+
+/* The face: the sticky note « ? » of an unknown id (--unknown-note, --unknown-ink), turned, a light shadow under it. */
+.ph-note { display: block; margin-bottom: 28px; color: var(--unknown-ink); transform: rotate(-8deg);
+  filter: drop-shadow(2px 4px 4px rgb(0 0 0 / 45%)); }
+.ph-note-paper { fill: var(--unknown-note); }
