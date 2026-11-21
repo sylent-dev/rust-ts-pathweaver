@@ -11,7 +11,6 @@
 STATE.level = 59;
 STATE.bandLevels = {};
 STATE.slides = {};
-const LEVEL_TRACK_WIDTH = 708;
 
 const bandRange = key => BUILDS.changes[key].range ?? [1, MAX_LEVEL];
 const isSnapshot = key => BUILDS.changes[key].range === null;
@@ -23,9 +22,12 @@ function setBandLevel(key, level, { slide = true } = {}) {
   else STATE.bandLevels[key] = level;
 }
 
-// The x of a level on the track, from the lowest level of the build to its highest, on a whole
-// pixel: a line of 1 px on a half pixel smears.
-const levelX = (level, [low, high]) => Math.round(((level - low) / Math.max(1, high - low)) * LEVEL_TRACK_WIDTH);
+// The x of a level on the track, from the lowest level of the build to its highest, in % of the track: the track
+// takes the width the band leaves it, up to --track-max (2k4, the owner, 2026-11-21: longer on a large screen, 16
+// px a level at 1,920 px against 8 at 960). A marker set on a whole pixel (markerX): a line of 1 px on a half
+// pixel smears.
+const levelX = (level, [low, high]) => ((level - low) / Math.max(1, high - low)) * 100;
+const markerX = (level, range) => `round(${levelX(level, range).toFixed(3)}%, 1px)`;
 
 // What changes at a level of a build, by category (tools/make-data.py).
 const changesHere = (key, level) => BUILDS.changes[key].levels[level];
@@ -53,13 +55,13 @@ function levelBand({ key = "shown", focusShown = false } = {}) {
   return `<div class="app-level" data-band="${key}" data-instance="${instance}">
     <div class="app-level-now"><span class="app-level-label">Level</span><span class="app-level-number">${level}</span></div>
     ${levelSteps(markerBeside(key, level, "previous"), markerBeside(key, level, "next"), record, open, snapshot)}
-    <div class="app-level-track" data-action="level-track" style="width:${LEVEL_TRACK_WIDTH}px">
+    <div class="app-level-track" data-action="level-track">
       <span class="app-level-line"></span>
       ${snapshot ? '<span class="app-level-note">A snapshot: the same at every level</span>' : ""}
-      ${all.map(marker => `<span class="app-level-marker" style="left:${levelX(marker, range)}px" title="${markerTitle(key, marker)}"></span>`).join("")}
-      <span class="app-level-cursor ${STATE.landing === key ? "is-landing" : ""} ${focusShown ? "is-focus-shown" : ""}" style="left:${levelX(level, range)}px"
+      ${all.map(marker => `<span class="app-level-marker" style="left:${markerX(marker, range)}" title="${markerTitle(key, marker)}"></span>`).join("")}
+      <span class="app-level-cursor ${STATE.landing === key ? "is-landing" : ""} ${focusShown ? "is-focus-shown" : ""}" style="left:${levelX(level, range)}%"
         role="slider" tabindex="0" aria-label="Level" aria-valuemin="${range[0]}" aria-valuemax="${range[1]}" aria-valuenow="${level}"></span>
-      <span class="app-level-end app-number" style="left:0">${range[0]}</span><span class="app-level-end app-number" style="left:${LEVEL_TRACK_WIDTH}px">${range[1]}</span>
+      <span class="app-level-end app-number" style="left:0">${range[0]}</span><span class="app-level-end app-number" style="left:100%">${range[1]}</span>
     </div>
     ${open ? changesWindow(record, level, { opening: STATE.changesOpening }) : ""}
   </div>`;
@@ -111,8 +113,8 @@ document.addEventListener("click", event => {
 // `from`. A band held from the ghost (T1) veiled the markers it crossed and said again where the
 // cursor came from, which the ghost says.
 function drawTrail(trail, from, to) {
-  trail.style.left = `${Math.min(from, to)}px`;
-  trail.style.width = `${Math.abs(to - from)}px`;
+  trail.style.left = `${Math.min(from, to)}%`;
+  trail.style.width = `${Math.abs(to - from)}%`;
   trail.dataset.towards = to < from ? "left" : "right";
 }
 
@@ -134,12 +136,13 @@ document.getElementById("sheet").addEventListener("pointerdown", event => {
   const move = moved => {
     level = levelAt(track, key, moved.clientX);
     const x = levelX(level, bandRange(key));
-    cursor.style.left = `${x}px`;
+    cursor.style.left = `${x}%`;
     number.textContent = level;
     if (x !== lastX) {
       // The tail as long as the last step was fast, shrinking back to the cursor once it stops.
       trail.classList.remove("is-fading");
-      drawTrail(trail, x - Math.sign(x - lastX) * Math.min(72, Math.abs(x - lastX) * 3), x);
+      // 72 px at most, in % of the track.
+      drawTrail(trail, x - Math.sign(x - lastX) * Math.min((72 / track.clientWidth) * 100, Math.abs(x - lastX) * 3), x);
       clearTimeout(fading);
       fading = setTimeout(() => { trail.classList.add("is-fading"); drawTrail(trail, x, x); }, 40);
     }
@@ -208,7 +211,7 @@ AFTER_RENDER.push(() => {
   for (const [key, from] of Object.entries(STATE.slides)) {
     if (lessMotion()) break;
     for (const cursor of document.querySelectorAll(`.app-level[data-band="${key}"] .app-level-cursor`)) {
-      cursor.animate([{ left: `${levelX(from, bandRange(key))}px` }, { left: cursor.style.left }],
+      cursor.animate([{ left: `${levelX(from, bandRange(key))}%` }, { left: cursor.style.left }],
         { duration: 280, easing: "cubic-bezier(.2, .8, .2, 1)" });
     }
   }
