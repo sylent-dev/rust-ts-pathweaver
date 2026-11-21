@@ -1,35 +1,24 @@
 // The page of the mock-up: its styles, its open decisions and their controls, its sections.
 //
-// - Each style only sets tokens (css/tokens.css, under :root[data-theme="…"]).
+// - The style, Frost Night, is tokens only (css/tokens.css); the components use nothing else.
 // - VARIANTS holds one group of tabs per open decision; the address keeps the choices
-//   (e.g. ?theme=frost), to share them. A group is removed once decided.
+//   (e.g. ?homeWidth=900), to share them. A group is removed once decided.
 //   A value that combines with others is a list (`select: true` and the CSS `variable` it sets);
 //   a value tuned by eye is a slider (`range`, its `variable` and its `unit`).
 // - SECTIONS lists every scenario and state, each a function that returns
 //   [title, [[label, html], …]]: a section script adds its own with addSection(), and the newest
 //   section comes first. Past ten sections, a table of contents under the header links to each.
 
-// The styles compared, each numbered once and for good: 28 proposals, of which the owner kept two on
-// 2026-11-17, 18 · Frost and its negative 28 · Frost Night (the others are in the history of Git),
-// then 29 · Ember, Frost Night on a neutral grey with amber first.
-const THEMES = {
-  frost: { title: "18 · Frost", text: "Light: the cool light of Aurora at the density of Slate, flat white boxes, one blue (Manrope)." },
-  "frost-night": { title: "28 · Frost Night", text: "Dark, Frost in negative: its density and its flat boxes on a blue black, pale blue lines, one blue (Manrope)." },
-  ember: { title: "29 · Ember", text: "Dark, Frost Night on a very dark neutral grey: the same density and flat boxes, amber first (Manrope)." },
-};
-
+// The style of the mock-up: 28 · Frost Night, kept by the owner of 29 proposals (2026-11-17), the
+// only one of version 1 (the owner, 2026-11-21). Frost and Ember, set aside until after version 1, are
+// whole at commit 8a58558 (docs/backlog.md, Styles).
+const STYLE = { title: "28 · Frost Night", text: "Dark: a blue black, pale blue lines, flat boxes, one blue (Manrope)." };
 
 const VARIANTS = {
-  theme: { label: "Style", options: Object.fromEntries(Object.entries(THEMES).map(([key, theme]) => [key, theme.title])), fallback: "frost-night" },
   // The width of the windows of the home page (2l): the minimum of specs.md, half a 1920-pixel screen, and a wide
   // window of the owner's screen.
   homeWidth: { label: "Home width", options: { 900: "900 px", 960: "960 px", 1600: "1,600 px" }, fallback: "960" },
 };
-
-// The styles a section shows side by side: the style of the page alone, Frost Night by default, the
-// reference on which every setting is tuned first (the owner, 2026-11-18); Frost and Ember derive
-// from it, adjusted after, and are seen with the tabs of the style.
-const shownStyles = () => [chosen.theme];
 
 const SECTIONS = [];
 // The newest section goes at the top of the page: the scripts of the sections load oldest first.
@@ -79,14 +68,13 @@ function renderControls() {
 
 function renderSheet() {
   for (const kind of Object.keys(INSTANCES)) delete INSTANCES[kind];
-  const theme = THEMES[chosen.theme];
   const sections = SECTIONS.map(section => section());
   const contents = sections.length > 10
     ? `<nav class="page-contents" aria-label="Sections">${sections.map(([title], index) =>
       `<a href="#section-${index + 1}">${title.split(":")[0]}</a>`).join("")}</nav>`
     : "";
   document.getElementById("sheet").innerHTML = `
-    <header class="page-header"><h1>Pathweaver · ${theme.title}</h1><p>${theme.text} Sample data computed from a build of the corpus and the passive tree of Path of Exile 2 ${BUILDS.treeVersion}.</p>${contents}</header>
+    <header class="page-header"><h1>Pathweaver · ${STYLE.title}</h1><p>${STYLE.text} Sample data computed from a build of the corpus and the passive tree of Path of Exile 2 ${BUILDS.treeVersion}.</p>${contents}</header>
     ${sections.map(([title, slots], index) => `<section class="page-section" id="section-${index + 1}"><h2>${title}</h2><div class="page-row">${
       slots.map(([label, html]) => `<div class="page-slot"><span>${label}</span>${html}</div>`).join("")}</div></section>`).join("")}`;
   for (const after of AFTER_RENDER) after();

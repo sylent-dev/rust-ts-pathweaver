@@ -8,8 +8,8 @@ const END_STATES = [["At rest", {}], ["Hover on « +N ▾ »", { moreState: "is-
 
 const endCard = () => `<div class="tab-card">
   <div class="tab-states end-states">${END_STATES.map(([label]) => `<span>${label}</span>`).join("")}</div>
-  ${shownStyles().map(style => `<div class="end-row" data-sample-theme="${style}" title="${THEMES[style].title}">${END_STATES.map(([, states]) =>
-    `<div class="tab-strip end-strip">${buildsBand(420, { builds: SEVEN_BUILDS, menuOpen: false, action: "", ...states })}<div class="tab-strip-page"></div></div>`).join("")}</div>`).join("")}
+  <div class="end-row">${END_STATES.map(([, states]) =>
+    `<div class="tab-strip end-strip">${buildsBand(420, { builds: SEVEN_BUILDS, menuOpen: false, action: "", ...states })}<div class="tab-strip-page"></div></div>`).join("")}</div>
 </div>`;
 
 // The menu of this section opens and closes on its own, open at first: a click on « +N ▾ » plays
@@ -20,9 +20,8 @@ ACTIONS.toggleMenuDemo = () => {
   return true;
 };
 
-const menuCard = () => `<div class="menu-row">${shownStyles().map(style =>
-  `<div class="app-window menu-window" data-sample-theme="${style}" title="${THEMES[style].title}" style="width:560px">${
-    buildsBand(560, { builds: SEVEN_BUILDS, menuOpen: STATE.menuDemo, action: "toggleMenuDemo" })}<div class="menu-page"></div></div>`).join("")}</div>`;
+const menuCard = () => `<div class="menu-row"><div class="app-window menu-window" style="width:560px">${
+  buildsBand(560, { builds: SEVEN_BUILDS, menuOpen: STATE.menuDemo, action: "toggleMenuDemo" })}<div class="menu-page"></div></div></div>`;
 
 addSection(() => ["The menu of « +N ▾ » · open, in the style of the page: the builds that don't fit; click « +N ▾ » to see it open (5 · Pop)",
   [["Attached under the band, in its shade, each build a tab laid down", menuCard()]]]);

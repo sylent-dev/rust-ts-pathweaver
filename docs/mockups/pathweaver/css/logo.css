@@ -10,7 +10,7 @@
 .logo-frame { fill: var(--accent); }
 .logo-p { fill: currentColor; }
 
-/* The brand in the app bar: the same bar on the three styles side by side (data-sample-theme). */
+/* The brand in the app bar, in the section of the brand. */
 .brand-card { display: flex; gap: 8px; }
 .brand-style { width: 560px; overflow: hidden; border-radius: 6px; background: var(--page); }
 

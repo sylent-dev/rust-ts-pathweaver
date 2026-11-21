@@ -16,7 +16,7 @@ const SOURCES = ["Mobalytics", "Maxroll", "poe.ninja", "Path of Building"];
 const HOME_HEIGHT = 900;
 const homeWidth = () => Number(chosen.homeWidth);
 const homeWindow = (variant, page, { band = true } = {}) =>
-  `<div class="app-window home-window home-${variant}" data-sample-theme="frost-night" style="width:${homeWidth()}px;height:${HOME_HEIGHT}px">
+  `<div class="app-window home-window home-${variant}" style="width:${homeWidth()}px;height:${HOME_HEIGHT}px">
     ${band ? siteBand({ library: true }) : ""}${page}
   </div>`;
 

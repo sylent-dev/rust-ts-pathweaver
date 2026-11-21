@@ -16,8 +16,7 @@ const browserTabs = chrome => `<div class="brand-browser" style="--chrome-strip:
 </div>`;
 
 addSection(() => ["The brand · the mark beside the name in the app bar, in the style of the page; the favicon in the tabs of a light and a dark browser, with the accent of the style of the page",
-  [["The app bar", `<div class="brand-card">${shownStyles().map(style =>
-    `<div class="brand-style" data-sample-theme="${style}" title="${THEMES[style].title}">${appBar(560, { menu: false })}</div>`).join("")}</div>`],
+  [["The app bar", `<div class="brand-card"><div class="brand-style">${appBar(560, { menu: false })}</div></div>`],
   ...Object.values(BROWSER_CHROMES).map(chrome => [chrome.title, browserTabs(chrome)])]]);
 
 // The favicon of this page, as the website will serve it: an SVG of the mark at 16 px, its frame

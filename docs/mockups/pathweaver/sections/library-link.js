@@ -15,8 +15,8 @@ const LINK_STATES = [["At rest", {}], ["Hover", { libraryState: "is-hover" }], [
 
 const linkStatesCard = () => `<div class="tab-card">
   <div class="tab-states link-states">${LINK_STATES.map(([label]) => `<span>${label}</span>`).join("")}</div>
-  ${shownStyles().map(style => `<div class="link-row" data-sample-theme="${style}" title="${THEMES[style].title}">${LINK_STATES.map(([, options]) =>
-    `<div class="tab-strip link-strip">${siteBand(options)}</div>`).join("")}</div>`).join("")}
+  <div class="link-row">${LINK_STATES.map(([, options]) =>
+    `<div class="tab-strip link-strip">${siteBand(options)}</div>`).join("")}</div>
 </div>`;
 
 addSection(() => ["The way back to the library · My library after the brand; the band of the open builds only while a build is open",

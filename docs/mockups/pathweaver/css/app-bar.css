@@ -4,7 +4,7 @@
 /* The two bands over everything under them, the level band (z-index 4) included, so that the menu
    of « +N ▾ » hangs over the track; the band of the site over that of the open builds; a band whose
    menu is open over everything, the windows of the mock-up under it included. */
-.app-site { position: relative; z-index: 7; display: flex; align-items: center; height: 44px; padding-left: 14px; background: var(--bar-image), var(--site-band, var(--bar)); color: var(--on-bar); }
+.app-site { position: relative; z-index: 7; display: flex; align-items: center; height: 44px; padding-left: 14px; background: var(--bar-image), var(--site-band); color: var(--on-bar); }
 .app-site-nav, .app-site-links { display: flex; height: 100%; }
 .app-site-links { margin-left: auto; }
 .app-site-link { display: flex; align-items: center; height: 100%; padding: 0 16px; color: var(--accent); text-decoration: none; transition: color .3s;
@@ -33,18 +33,11 @@
 
 /* The band of the open builds: 44 px, their tabs of 184 px, up to 240 when they all fit; the same
    light shadow under it as under the band of the site. */
-.app-builds { position: relative; z-index: 6; display: flex; align-items: flex-end; height: 44px; padding: 0 12px 0 0; background: var(--bar-image), var(--builds-band, var(--band-deep)); color: var(--on-bar); box-shadow: var(--band-shadow); }
+.app-builds { position: relative; z-index: 6; display: flex; align-items: flex-end; height: 44px; padding: 0 12px 0 0; background: var(--bar-image), var(--builds-band); color: var(--on-bar); box-shadow: var(--band-shadow); }
 .app-builds:has(.app-builds-menu) { z-index: 8; }
 .app-site-brand { display: flex; align-items: center; gap: var(--brand-gap); flex: none; padding-right: 12px; }
 .app-site-brand .logo-mark { width: var(--brand-mark-size); height: var(--brand-mark-size); }
 .app-site-brand .logo-name { position: relative; top: var(--brand-name-offset); font-size: var(--brand-size); }
-
-/* The shades of the two bands (the owner, 2026-11-18): both light in the light style, both dark in
-   the dark ones; the shadow under the band of the site tells them apart. Set on the element of the
-   style, so that --bar and --band-deep are those of its style, the page or a block of
-   data-sample-theme. */
-:root[data-theme="frost"], [data-sample-theme="frost"] { --site-band: var(--bar); --builds-band: var(--bar); }
-:root:is([data-theme="frost-night"], [data-theme="ember"]), :is([data-sample-theme="frost-night"], [data-sample-theme="ember"]) { --site-band: var(--band-deep); --builds-band: var(--band-deep); }
 
 /* The end of the band (2e2, the owner, 2026-11-18): « +N ▾ » and + the full height of the band, told
    apart by contrast, without a line between them. « +N ▾ » in the blue of the frame of the logo on
@@ -55,9 +48,9 @@
 .app-builds-more-wrap { position: relative; display: flex; align-self: stretch; }
 .app-builds-more, .app-builds-open { display: inline-flex; align-items: center; justify-content: center; gap: 5px; min-width: 44px; height: 100%; padding: 0 12px; border: none;
   cursor: pointer; font-size: 13px; transition: color .3s, background-color .3s; }
-.app-builds-more { background: var(--builds-band, var(--band-deep)); color: var(--accent); }
+.app-builds-more { background: var(--builds-band); color: var(--accent); }
 .app-builds-more:is(:hover, .is-hover, .is-open) { color: var(--on-bar); }
-.app-builds-open { padding: 0; background: var(--on-bar); color: var(--builds-band, var(--band-deep)); }
+.app-builds-open { padding: 0; background: var(--on-bar); color: var(--builds-band); }
 .app-builds-open:is(:hover, .is-hover) { background: color-mix(in srgb, var(--on-bar) 82%, transparent); }
 .app-builds-open svg { transition: transform .2s cubic-bezier(.34, 1.56, .64, 1); }
 .app-builds-open:is(:hover, .is-hover) svg { transform: scale(1.3); }
@@ -66,7 +59,7 @@
    build a tab laid down (a row of 44 px, its portrait square, its name over its ascendancy). */
 /* The menu 3 px under the band, its corners rounded by 3 px, as the window of what changes (the
    owner, 2026-11-19). */
-.app-builds-menu { position: absolute; z-index: 5; top: calc(100% + 3px); right: 0; border-radius: 3px; overflow: hidden; width: 300px; background: var(--bar-image), var(--builds-band, var(--band-deep)); color: var(--on-bar); box-shadow: 0 8px 18px rgb(0 0 0 / .28); font-size: 13px; }
+.app-builds-menu { position: absolute; z-index: 5; top: calc(100% + 3px); right: 0; border-radius: 3px; overflow: hidden; width: 300px; background: var(--bar-image), var(--builds-band); color: var(--on-bar); box-shadow: 0 8px 18px rgb(0 0 0 / .28); font-size: 13px; }
 .app-builds-menu-item { display: flex; align-items: center; gap: 10px; height: 44px; padding-right: 12px; color: color-mix(in srgb, var(--on-bar) 80%, transparent); cursor: pointer; }
 .app-builds-menu-item:hover { background: color-mix(in srgb, var(--on-bar) 9%, transparent); color: var(--on-bar); }
 .app-builds-menu-portrait { flex: none; width: 44px; height: 44px; }

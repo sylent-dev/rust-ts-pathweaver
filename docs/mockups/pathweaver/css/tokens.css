@@ -1,121 +1,99 @@
-/* Styles: tokens only (CSS variables). The components use nothing else, and the canvas of the
-   tree reads them too (tree.js), so that a style is cheap to add or tweak. :root holds every
-   token with the neutral value of the first grey pass; each style sets only what it changes.
-   The two styles left, kept by the owner on 2026-11-17 after 28 proposals: 18 · Frost and
-   28 · Frost Night, its negative (the others are in the history of Git); then 29 · Ember, Frost
-   Night on a neutral grey with amber first (the owner, 2026-11-17).
-   A block with data-sample-theme takes the tokens of that style whatever the page shows: the
-   three styles side by side (the logo). Every style sets the same tokens, so none leaks. */
+/* The style: tokens only (CSS variables). The components use nothing else, and the canvas of the
+   tree reads them too (js/tree.js), so that a style is a set of values.
+   28 · Frost Night, kept by the owner of 29 proposals (2026-11-17), the reference on which every
+   setting was tuned (2026-11-18), and the only style of version 1 (the owner, 2026-11-21): dark, a
+   blue black, pale blue lines, flat boxes, one blue. Another style, after version 1 (Frost, the light
+   one, and Ember, amber on a neutral grey: docs/backlog.md, Styles), is a block
+   :root[data-theme="…"] that sets the tokens it changes; both are whole at commit 8a58558.
+   A colour that belongs to the drawing of a mark, the same on every background (the light facet of
+   a gem, js/gem-marks.js), is the only one written in a component. */
 
 :root {
-  /* Type: Manrope for every role, the text, the titles and the numbers, in every style (2d, the owner,
-     2026-11-18, among 85 fonts); the numbers in its figures of one width (tabular-nums), so that
-     the levels line up. The code (a pasted JSON, the line of an error) in the monospace font of
-     the system, which costs no download. */
+  /* Type: Manrope for every role, the text, the titles and the numbers (2d, the owner, 2026-11-18,
+     among 85 fonts); the numbers in its figures of one width (tabular-nums), so that the levels line
+     up. The code (a pasted JSON, the line of an error) in the monospace font of the system, which
+     costs no download. */
   --font-text: "Manrope", sans-serif;
   --font-title: "Manrope", sans-serif;
   --font-number: "Manrope", sans-serif;
   --font-code: ui-monospace, monospace;
   --text-weight: 400;
-  --title-weight: 400;
+  --title-weight: 600;
   --title-transform: none;
-  --title-spacing: 0;
+  --title-spacing: -.02em;
   --title-size: 20px;
   --level-weight: 400;
+
+  /* The brand: the name of Pathweaver in Archivo, in its own weight, tight (the owner, 2026-11-17);
+     the links of the band of the site in Manrope (2e2). */
+  --brand-font: "Archivo", sans-serif;
+  --brand-weight: 700;
+  --brand-spacing: -0.06em;
   --brand-mark-size: 24px;   /* the mark in the band of the site */
   --brand-size: 16px;   /* the name in the band of the site */
   --brand-gap: 8px;     /* between the mark and the name */
   --brand-name-offset: 1px;   /* the name 1 px below the middle of the mark, by eye (the owner, 2026-11-17) */
-  /* The name of Pathweaver, the same in every style (the owner, 2026-11-17): Archivo in its own weight, tight. */
-  --brand-font: "Archivo", sans-serif;
-  /* The shadow under the band of the open builds, very light (2e2, the owner, 2026-11-18): 1 px down,
-     3 px of blur, its opacity apart for the light style and the dark ones. */
-  --shadow-y: 1px;
-  --shadow-blur: 3px;
-  --shadow-alpha-light: 10%;
-  --shadow-alpha-dark: 45%;
-  --band-shadow: 0 var(--shadow-y) var(--shadow-blur) rgb(0 0 0 / var(--shadow-alpha-light));
-  --site-link-font: var(--font-text);   /* the links of the band of the site, in Manrope since 2e2 (the owner, 2026-11-17) */
+  --site-link-font: var(--font-text);
   --site-link-weight: 600;
   --site-link-size: 13px;
-  --brand-weight: 700;
-  --brand-spacing: -0.06em;
-  /* Surfaces: the window, the app bar, the level band, the side column, the boxes over the tree. */
-  --page: #ffffff;
-  --page-image: none;
+
+  /* Surfaces: the window, the bands at the top, the level band, the tree and the side column, the
+     boxes over the tree. */
+  --page: #0c111b;
+  --page-glow: #172644;   /* the light of the page, from its top left; from the right on the drawer of the inventory (2j4) */
+  --page-image: radial-gradient(ellipse 80% 40% at 0% 0%, var(--page-glow) 0%, transparent 70%);
   --page-image-size: auto;
-  --bar: #e9ecef;
+  --bar: #121a29;
   --bar-image: none;
-  --on-bar: #1e1e1e;
-  --band: #e9ecef;
+  --on-bar: #e3eaf5;
+  --band: #0f1726;
   --band-image: none;
-  --on-band: #1e1e1e;
-  --on-band-weak: #868e96;
-  --band-deep: #dee2e6;   /* the band without its lines (css/level-band.css): a shade darker than the page */
-  --side: transparent;
-  --side-column: var(--side);   /* the right column of the Overview, a shade darker than the tree (2j2) */
-  --panel: #ffffff;
+  --on-band: #e3eaf5;
+  --on-band-weak: #8393ad;
+  --band-deep: #070b12;   /* the band without its lines (css/level-band.css): a shade darker than the page */
+  /* The two bands at the top in the deep shade, the shadow under the band of the site telling them
+     apart (the owner, 2026-11-18). */
+  --site-band: var(--band-deep);
+  --builds-band: var(--band-deep);
+  --side: var(--band-deep);   /* the tree and the side column in the shade of the level band (2h, the owner, 2026-11-19) */
+  --side-column: #04070b;   /* the right column of the Overview, a shade darker than the tree, not read as part of it (the owner, 2026-11-20) */
+  --panel: #141d2ee6;
+
   /* Controls. */
-  --tab: #e9ecef;
-  --on-tab: #1e1e1e;
-  --control: #ffffff;
-  --control-line: #1e1e1e;
+  --tab: #172133;
+  --on-tab: #8393ad;
+  --control: #1a2539;
+  --control-line: #24304a;
   --control-shadow: none;
-  --fill: #e9ecef;
-  --fill-strong: #ced4da;
-  --on-fill-strong: #1e1e1e;
+  --fill: #172133;
+  --fill-strong: #3b82f6;
+  --on-fill-strong: #ffffff;
+
   /* Lines and shapes. */
-  --divider: #1e1e1e;
-  --line-weak: #adb5bd;
+  --divider: #1f2a40;
+  --line-weak: #1f2a40;
   --border-width: 0;   /* no borders: the blocks are told apart by their colours only (the owner, 2026-11-17) */
-  --radius: 4px;
-  --window-shadow: 0 8px 30px #0006;
+  --radius: 8px;
   --portrait-radius: 50%;
   --portrait-ring: none;
-  /* Text and the one accent: what is new, the cursor of the level. */
-  --text: #1e1e1e;
-  --weak: #868e96;
-  --accent: #f76707;
-  --accent-soft: #1e1e1e;
-  --on-accent: #ffffff;
-  /* The level band. */
-  --track: #1e1e1e;
-  --track-width: 1px;
-  --marker: #868e96;
-  --cursor-radius: 50%;
-  /* The inventory. */
-  /* The box of a slot of the inventory (2j3, B4 at a strength of 25 %, the owner, 2026-11-20): darker
-     than the column with a transparency, and a line of 1 px of the text with a transparency. */
-  --slot-box: rgb(0 0 0 / 17.5%);
-  --slot-line: color-mix(in srgb, var(--text) 7.5%, transparent);
-  /* The sticky note « ? » of an id the game data don't know, on an item or a gem (2j3b, F3, the owner,
-     2026-11-20): the same in every style. */
-  --unknown-note: #ffe066;
-  --unknown-ink: #4a3b00;
-  --unknown-text: var(--unknown-note);   /* « Not in the game data » in the cards */
-  /* The gems: a colour per attribute (strength, dexterity, intelligence, none) and a shape. */
-  --gem-str: #ced4da;
-  --gem-spirit: #ced4da;   /* a spirit gem, a teal of its own (2j2) */
-  --gem-lineage: #ced4da;   /* a lineage support, a warm grey of its own (2j2) */
-  --gem-dex: #ced4da;
-  --gem-int: #ced4da;
-  --gem-none: #ced4da;
-  --gem-mark-size: 10px;   /* the mark of a gem beside a text of 12 px (2g3, the owner, 2026-11-19) */
-  /* The colours of a change (2g3, the owner, 2026-11-19): what comes, what is replaced, what goes;
-     the rise, the warning and the fall of Exile Market, tuned together on a blue night. */
-  --change-added: #5fcf80;
-  --change-swapped: #f0b85a;
-  --change-gone: #e66a5c;
+
+  /* Text, the one accent (what is new, the links, the markers of the level), the brightest ink (the
+     bar under the current tab, a close × on hover, the flash of what was just chosen or what is
+     new, the fluid of the first visit). */
+  --text: #e3eaf5;
+  --weak: #8393ad;
+  --accent: #60a5fa;
+  --accent-soft: #60a5fa;
+  --accent-bright: color-mix(in srgb, var(--accent), #fff 15%);   /* the light that sweeps « NEW » */
+  --on-accent: #0c111b;
+  --highlight: #ffffff;
+
   /* The red of the errors, vivid, apart from the red of the gems of strength, so that an error never
      reads as strength (the owner, 2026-11-18): a file refused, the bin of the library. */
   --error: #ef4444;
   --error-strong: #dc2626;   /* the button that confirms a removal, on hover */
   --on-error: #ffffff;
-  /* The brightest ink, over the text: the bar under the current tab, a close × on hover, the flash
-     of what was just chosen or what is new, the fluid of the first visit. */
-  --highlight: #ffffff;
-  --accent-bright: color-mix(in srgb, var(--accent), #fff 15%);   /* the light that sweeps « NEW » */
-  --unique: #d6a15e;   /* the name of a unique item, its gold in the game */
+
   /* What is laid over a surface: a box sunk into its panel (the path of a file, a tile of the hints to
      come, the line of an error), the zone of the first visit, the veil under a box over the page, the
      rows of the library one in two a shade lighter. */
@@ -129,127 +107,83 @@
   --row-hover: rgb(255 255 255 / 9%);
   /* The body of a card, a step darker than its head (the cards on hover, the cards of the Skills tab). */
   --card-body: color-mix(in srgb, var(--band-deep), #000 60%);
-  /* The shadows: of a small thing over its panel (a sticky note, the level band), of a window over
-     its panel (the changes at a level, the card of a passive, the box of Download), of a box over
-     the page (What's next). */
+
+  /* The shadows: of a small thing over its panel (a sticky note, the level band, the band of the site:
+     1 px down, 3 px of blur, 2e2, the owner, 2026-11-18), of a window over its panel (the changes at
+     a level, the card of a passive, the box of Download), of a box over the page (What's next), of a
+     window of the mock-up. */
+  --shadow-colour: rgb(0 0 0 / 45%);
+  --band-shadow: 0 1px 3px var(--shadow-colour);
+  --popover-shadow: 0 8px 18px rgb(0 0 0 / 28%);
+  --dialog-shadow: 0 18px 48px rgb(0 0 0 / 55%);
+  --window-shadow: 0 24px 60px #000000aa;
+
+  /* The graph paper behind the blocks (css/textures.css): its lines in pale blue (set aside: the grey
+     of the text, the accent), a tile of 24 px (the owner, 2026-11-19), at 3 % everywhere, the home
+     page included (the owner, 2026-11-18; 23 % behind the blocks and 16 % on the first visit before). */
+  --texture-colour: #7aa7f0;
+  --texture-size: 24px;
+  --texture-opacity: 3%;
+
+  /* The level band. */
+  --track: #2a3a5c;
+  --track-width: 2px;
+  --marker: #4b5f86;
+  --cursor-radius: 50%;
+
+  /* The colours of a change (2g3, the owner, 2026-11-19): what comes, what is replaced, what goes;
+     the rise, the warning and the fall of Exile Market, tuned together on a blue night. */
+  --change-added: #5fcf80;
+  --change-swapped: #f0b85a;
+  --change-gone: #e66a5c;
+
+  /* The gems: a colour per attribute and a shape. The attributes as in the game, those of Exile
+     Market (2g3, the owner, 2026-11-19): a true green for dexterity, apart from the green of what
+     comes; a spirit gem a bright teal, a lineage support a warm grey (2j2, the owner, 2026-11-20). */
+  --gem-str: #e0473f;
+  --gem-dex: #3fbf4f;
+  --gem-int: #5aa7f0;
+  --gem-none: #8393ad;
+  --gem-spirit: #2dd4bf;
+  --gem-lineage: #c2b8a3;
+  --gem-mark-size: 10px;   /* the mark of a gem beside a text of 12 px (2g3, the owner, 2026-11-19) */
+
+  /* The inventory. The box of a slot (2j3, B4 at a strength of 25 %, the owner, 2026-11-20): darker
+     than the column with a transparency, and a line of 1 px of the text with a transparency. */
+  --slot-box: rgb(0 0 0 / 17.5%);
+  --slot-line: color-mix(in srgb, var(--text) 7.5%, transparent);
+  --unique: #d6a15e;   /* the name of a unique item, its gold in the game */
+  /* The sticky note « ? » of an id the game data don't know, on an item or a gem (2j3b, F3, the owner,
+     2026-11-20). */
+  --unknown-note: #ffe066;
+  --unknown-ink: #4a3b00;
+  --unknown-text: var(--unknown-note);   /* « Not in the game data » in the cards */
+
   /* The named colours of the author's markup (specs.md, The author's texts), readable on the cards of
      the style; « gray » reads as grey. */
   --markup-white: #ffffff; --markup-grey: #8c8c8c; --markup-black: #000000; --markup-red: #e05050;
   --markup-green: #5fc35f; --markup-blue: #6c8cff; --markup-yellow: #e6d25a; --markup-orange: #e8913c;
   --markup-gold: #c8a65a; --markup-purple: #a86ce0; --markup-cyan: #4fd2d2; --markup-magenta: #d24fd2;
-  --shadow-colour: rgb(0 0 0 / 45%);
-  --popover-shadow: 0 8px 18px rgb(0 0 0 / 28%);
-  --dialog-shadow: 0 18px 48px rgb(0 0 0 / 55%);
-  /* The tree, read by the canvas: colours, the width of the links taken, a glow (blur in pixels)
-     on what is taken, and a shape per kind (circle, square, diamond, hex, star). */
-  --tree-background: #ffffff;
-  --tree-edge: #dee2e6;
-  --tree-edge-taken: #495057;
-  --tree-edge-width: 2;
+
+  /* The tree, read by the canvas: colours, the width of the links taken, a glow (blur in pixels) on
+     what is taken, and a shape per kind (circle, square, diamond, hex, star). The links taken in white
+     (2i, the owner, 2026-11-19). */
+  --tree-background: transparent;
+  --tree-edge: #18223a;
+  --tree-edge-taken: #e3eaf5;
+  --tree-edge-width: 1.8;
   /* The links of the passives of one weapon set alone, as the game draws them, red for the first and
      green for the second: Vivid red and Vivid green (2i, the owner, 2026-11-19). */
   --tree-set-1: #ef4444;
   --tree-set-2: #22c55e;
-  --tree-node: #ffffff;
-  --tree-node-line: #adb5bd;
-  --tree-taken: #495057;
-  --tree-later: #adb5bd;
+  --tree-node: #0c111b;
+  --tree-node-line: #2a3a5c;
+  --tree-taken: #e3eaf5;
+  --tree-later: #4b5f86;
   --tree-glow: 0;
   --tree-glow-colour: transparent;
   --tree-shape-small: circle;
   --tree-shape-notable: circle;
-  --tree-shape-keystone: circle;
+  --tree-shape-keystone: diamond;
   --tree-shape-jewel: diamond;
-}
-
-/* 18 · Frost (Aurora × Slate, light): the cool light of Aurora at the density of Slate, flat white
-   boxes, one blue (Manrope). */
-:root[data-theme="frost"], [data-sample-theme="frost"] {
-  --title-weight: 600;
-  --title-spacing: -.02em;
-  --page: #eef2f8;
-  --page-glow: #dbe7ff;   /* the light of the page, from its top left; from the right on the drawer of the inventory (2j4) */
-  --page-image: radial-gradient(ellipse 80% 40% at 0% 0%, var(--page-glow) 0%, transparent 70%);
-  --bar: #e2e9f4; --on-bar: #0f1b33;
-  --band: #f8fbff; --on-band: #0f1b33; --on-band-weak: #5c6c88; --band-deep: #d9e2ef;
-  --panel: #ffffffd9;
-  --tab: #c9d5e6; --on-tab: #4a5a78;
-  --control: #ffffff; --control-line: #d5deec;
-  --fill: #e5ecf7; --fill-strong: #2563eb; --on-fill-strong: #ffffff;
-  --divider: #d5deec; --line-weak: #d5deec;
-  --radius: 8px;
-  --window-shadow: 0 24px 60px #0f1b332e;
-  --text: #0f1b33; --weak: #5c6c88;
-  --accent: #2563eb; --accent-soft: #2563eb; --on-accent: #ffffff;
-  --track: #c1cfe6; --track-width: 2px; --marker: #8fa2c4;
-  --gem-str: #e5484d; --gem-dex: #12a594; --gem-int: #2563eb; --gem-none: #8fa2c4; --gem-spirit: #0d9488; --gem-lineage: #8a7f6a;
-  --tree-background: transparent;
-  --tree-edge: #dce4f0; --tree-edge-taken: #2563eb; --tree-edge-width: 1.8;
-  --tree-node: #ffffff; --tree-node-line: #b4c3db;
-  --tree-taken: #0f1b33; --tree-later: #9fb2d1;
-  --tree-shape-keystone: diamond;
-}
-
-/* 28 · Frost Night (Frost in negative, dark): the density and the flat boxes of Frost on a blue
-   black, pale blue lines, one blue (Manrope). */
-:root[data-theme="frost-night"], [data-sample-theme="frost-night"] {
-  --band-shadow: 0 var(--shadow-y) var(--shadow-blur) rgb(0 0 0 / var(--shadow-alpha-dark));   /* a dark page needs more to show it */
-  --title-weight: 600;
-  --title-spacing: -.02em;
-  --page: #0c111b;
-  --page-glow: #172644;   /* the light of the page, from its top left; from the right on the drawer of the inventory (2j4) */
-  --page-image: radial-gradient(ellipse 80% 40% at 0% 0%, var(--page-glow) 0%, transparent 70%);
-  --bar: #121a29; --on-bar: #e3eaf5;
-  --band: #0f1726; --on-band: #e3eaf5; --on-band-weak: #8393ad; --band-deep: #070b12;
-  --side: var(--band-deep);   /* the tree and the side column in the shade of the level band (2h, the owner, 2026-11-19) */
-  --side-column: #04070b;   /* a shade darker than the tree, not read as part of it (the owner, 2026-11-20) */
-  --panel: #141d2ee6;
-  --tab: #172133; --on-tab: #8393ad;
-  --control: #1a2539; --control-line: #24304a;
-  --fill: #172133; --fill-strong: #3b82f6; --on-fill-strong: #ffffff;
-  --divider: #1f2a40; --line-weak: #1f2a40;
-  --radius: 8px;
-  --window-shadow: 0 24px 60px #000000aa;
-  --text: #e3eaf5; --weak: #8393ad;
-  --accent: #60a5fa; --accent-soft: #60a5fa; --on-accent: #0c111b;
-  --track: #2a3a5c; --track-width: 2px; --marker: #4b5f86;
-  /* The attributes as in the game, those of Exile Market (2g3, the owner, 2026-11-19): a true green
-     for dexterity, apart from the green of what comes. */
-  --gem-str: #e0473f; --gem-dex: #3fbf4f; --gem-int: #5aa7f0; --gem-none: #8393ad; --gem-spirit: #2dd4bf; --gem-lineage: #c2b8a3;   /* bright teal, warm grey (the owner, 2026-11-20) */
-  --tree-background: transparent;
-  --tree-edge: #18223a; --tree-edge-taken: #e3eaf5; --tree-edge-width: 1.8;   /* the links taken in white (2i, the owner, 2026-11-19) */
-  --tree-node: #0c111b; --tree-node-line: #2a3a5c;
-  --tree-taken: #e3eaf5; --tree-later: #4b5f86;
-  --tree-shape-keystone: diamond;
-}
-
-/* 29 · Ember (Frost Night on a neutral grey, dark): the density and the flat boxes of Frost on a
-   very dark grey without blue, grey lines, amber first (Manrope). */
-:root[data-theme="ember"], [data-sample-theme="ember"] {
-  --band-shadow: 0 var(--shadow-y) var(--shadow-blur) rgb(0 0 0 / var(--shadow-alpha-dark));
-  --title-weight: 600;
-  --title-spacing: -.02em;
-  --page: #131314;
-  --page-glow: #2a2117;   /* the light of the page, from its top left; from the right on the drawer of the inventory (2j4) */
-  --page-image: radial-gradient(ellipse 80% 40% at 0% 0%, var(--page-glow) 0%, transparent 70%);
-  --bar: #19191b; --on-bar: #ececee;
-  --band: #161618; --on-band: #ececee; --on-band-weak: #8e8e94; --band-deep: #0a0a0b;
-  --side: var(--band-deep);   /* as Frost Night */
-  --side-column: #060607;
-  --panel: #1e1e21e6;
-  --tab: #212124; --on-tab: #8e8e94;
-  --control: #252528; --control-line: #2c2c30;
-  --fill: #212124; --fill-strong: #f59e0b; --on-fill-strong: #131314;
-  --divider: #262629; --line-weak: #262629;
-  --radius: 8px;
-  --window-shadow: 0 24px 60px #000000aa;
-  --text: #ececee; --weak: #8e8e94;
-  --accent: #f59e0b; --accent-soft: #f59e0b; --on-accent: #131314;
-  --track: #3a3a3f; --track-width: 2px; --marker: #5c5c63;
-  --gem-str: #f87171; --gem-dex: #2dd4bf; --gem-int: #60a5fa; --gem-none: #8e8e94; --gem-spirit: #2dd4bf; --gem-lineage: #c2b8a3;
-  --tree-background: transparent;
-  --tree-edge: #222225; --tree-edge-taken: #f59e0b; --tree-edge-width: 1.8;
-  --tree-node: #131314; --tree-node-line: #3a3a3f;
-  --tree-taken: #ececee; --tree-later: #5c5c63;
-  --tree-shape-keystone: diamond;
 }
