@@ -11,5 +11,5 @@ const nextWindow = () => {
   </div>`;
 };
 
-addSection(() => ["The box of What's next · The Editor Update and The Community Update: two halves opening from the seam, passives rising behind (click What's next to see it come again)",
+addSection(() => ["The box of What's next · The Editor Update and The Community Update: two cards coming in from above and from below, passives rising behind (click What's next to see it come again)",
   [["V3 of the twelve, with the rising passives of V9", nextWindow()]]]);

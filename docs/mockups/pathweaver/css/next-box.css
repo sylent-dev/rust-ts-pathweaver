@@ -1,6 +1,6 @@
 /* The box of What's next (2k6, js/next-box.js): V3 of twelve ways, the passives of V9 rising behind it (the owner,
-   2026-11-21). One panel in the middle of the window, over a veil, its two halves opening from the seam, a line of
-   light on the seam; behind them, icons of passives rising without end. */
+   2026-11-21). One panel in the middle of the window, over a veil, its two cards coming in side by side; behind
+   them, icons of passives rising without end. */
 .nx { position: absolute; z-index: 8; inset: 0; width: fit-content; height: fit-content; margin: auto; overflow: hidden;
   border-radius: 4px; background: var(--band-image), var(--band-deep); box-shadow: 0 18px 48px rgb(0 0 0 / .55);
   color: var(--on-band); font-size: 13px; line-height: 1.45; }
@@ -17,15 +17,14 @@
 .nx-motes > span { position: absolute; bottom: -30px; opacity: 0; animation: nx-rise 5s linear infinite; animation-delay: calc(var(--m) * -.37s); }
 @keyframes nx-rise { 0% { opacity: 0; transform: translateY(0); } 15% { opacity: .3; } 100% { opacity: 0; transform: translateY(-480px); } }
 
-/* The two halves, opening from the seam. */
+/* The two cards coming in side by side (the owner, 2026-11-21: two cards, another motion than halves opening): the
+   left one fading in from above, the right one from below; between them, a thin grey line. */
 .nx-halves { position: relative; display: flex; }
-.nx-halves::after { content: ""; position: absolute; left: 50%; top: 0; bottom: 0; width: 2px; margin-left: -1px; background: var(--accent);
-  animation: nx-seam 900ms ease-out both; }
-@keyframes nx-seam { 0% { opacity: 1; transform: scaleY(0); } 40% { opacity: 1; transform: scaleY(1); } 100% { opacity: .25; transform: scaleY(1); } }
-.nx-card:first-child { animation: nx-left 650ms cubic-bezier(.6, 0, .2, 1) 250ms backwards; }
-.nx-card:last-child { animation: nx-right 650ms cubic-bezier(.6, 0, .2, 1) 250ms backwards; }
-@keyframes nx-left { from { clip-path: inset(0 0 0 100%); } }
-@keyframes nx-right { from { clip-path: inset(0 100% 0 0); } }
+.nx-card + .nx-card { border-left: 1px solid color-mix(in srgb, var(--on-band) 12%, transparent); }
+.nx-card:first-child { animation: nx-from-above 600ms cubic-bezier(.2, .8, .2, 1) 120ms backwards; }
+.nx-card:last-child { animation: nx-from-below 600ms cubic-bezier(.2, .8, .2, 1) 120ms backwards; }
+@keyframes nx-from-above { from { opacity: 0; transform: translateY(-40px); } }
+@keyframes nx-from-below { from { opacity: 0; transform: translateY(40px); } }
 
 /* A half: the art at its top, fading into the panel, the version, the name, a line, what it brings. */
 .nx-card { position: relative; width: 320px; flex: none; }

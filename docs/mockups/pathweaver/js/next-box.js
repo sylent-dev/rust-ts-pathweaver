@@ -2,8 +2,8 @@
 // Editor Update (version 2) and The Community Update (version 3, French with it), each a card with an image of
 // the game behind it (the portraits of the ascendancies, the icons of the passives: specs.md, Images), so that the
 // box makes one want them (the owner, 2026-11-21: « faut donner envie »). Of twelve ways at four temperatures, the
-// owner kept V3, one panel in the middle of the window whose halves open from the seam, with the icons of passives
-// of V9 rising behind it (2026-11-21); its look and its motion in css/next-box.css.
+// owner kept V3, one panel in the middle of the window, with the icons of passives of V9 rising behind it, its two
+// cards coming in side by side, the left one from above, the right one from below (2026-11-21); its look and its motion in css/next-box.css.
 
 const UPDATES = [
   { key: "editor", version: 2, name: "The Editor Update", line: "Plan your own build",
