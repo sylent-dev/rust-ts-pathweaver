@@ -56,3 +56,7 @@
 
 /* The section of the mock-up (sections/column-overflow.js): a column alone at its real height. */
 .app-overview.ov-alone { width: 330px; }
+
+/* A file that names no gear (2k5): the bar says so, and unrolls nothing. */
+.ov-drawer.is-empty { clip-path: none; }
+.ov-no-gear { margin: 6px 0 0; font-size: 12px; }

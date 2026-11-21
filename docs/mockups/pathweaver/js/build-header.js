@@ -29,7 +29,7 @@ function buildHeader(build = SHOWN, warnings = TREE.unknown.length
     </div>
     <div class="app-header-actions">
       ${warnings > 0 ? `<button type="button" class="app-header-warnings" data-action="warnings-go">${plural(warnings, "warning")}</button>` : ""}
-      <button type="button" class="app-file" draggable="true" title="${escapeHtml(file.name)}">${fileIcon()}<span class="app-file-text"><span class="app-file-label">Download .build</span><small>${file.size}</small></span></button>
+      <button type="button" class="app-file" data-action="download-toggle" draggable="true" title="${escapeHtml(file.name)}">${fileIcon()}<span class="app-file-text"><span class="app-file-label">Download .build</span><small>${file.size}</small></span></button>
     </div>
   </div>`;
 }

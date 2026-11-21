@@ -1,13 +1,13 @@
 // The two bands at the top of every page (specs.md, Window layout): the band of the site, the
 // brand and My library, then Report a bug and what comes next (the menu, the search and the
-// settings of version 2 come there); then, once a build is open, the band of the open builds, their
-// tabs (as many as fit, the others in a « +N ▾ » menu, which also holds Merge…) and + to add a
+// settings of version 3 come there); then, once a build is open, the band of the open builds, their
+// tabs (as many as fit, the others in a « +N ▾ » menu) and + to add a
 // build, which opens the choice of files of the system at once (the owner, 2026-11-18: My library
 // already leads to the library).
 
 // The links of the band of the site, in words, in Manrope, the full height of the band (the owner,
 // 2026-11-17): Report a bug opens a new issue on GitHub; What's next (the owner, 2026-11-18, rather
-// than a Sign in that would lead nowhere in version 1) will open a box of what version 2 brings, the
+// than a Sign in that would lead nowhere in version 1) will open a box of what version 3 brings, the
 // community (drawn later, at 2k).
 const REPORT_BUG_URL = "https://github.com/sylent-dev/rust-ts-pathweaver/issues/new";
 // My library (the owner, 2026-11-18): the way back to the home page, the library, from anywhere,
@@ -20,7 +20,7 @@ const siteBand = ({ library = false, libraryState = "" } = {}) => `<div class="a
     </nav>
     <nav class="app-site-links">
       <a class="app-site-link" href="${REPORT_BUG_URL}" target="_blank" rel="noopener"><span class="app-site-label">Report a bug</span></a>
-      <a class="app-site-link" href="#" role="button"><span class="app-site-label">What's next</span></a>
+      <a class="app-site-link" href="#" role="button" data-action="next-toggle"><span class="app-site-label">What's next</span></a>
     </nav>
   </div>`;
 
@@ -36,8 +36,9 @@ const openBuildTab = (build, states = "") => `<div class="app-builds-tab ${state
   </div>`;
 
 // The band of the open builds: its tabs full height, side by side, 184 px each, up to 240 when
-// they all fit; those that don't fit go to the menu « +N ▾ », which also holds Merge… and is always
-// there; then + to add a build, which opens the choice of files. The band is drawn only while a build is
+// they all fit; those that don't fit go to the menu « +N ▾ », there only while some don't fit (the
+// merging of a guide, which it held too, waits until after version 1, the owner, 2026-11-21); then +
+// to add a build, which opens the choice of files. The band is drawn only while a build is
 // open. `current` is the index of the build shown (-1 on the library), `menuOpen` shows the menu
 // open, `moreState` and `openState` a state of the two buttons.
 const TAB_WIDTH = 184, TAB_MAX_WIDTH = 240, TAB_GAP = 0;
@@ -54,20 +55,19 @@ function buildsBand(width, { builds = BUILDS.open, current = 0, menuOpen,
   moreState = "", openState = "", action = "toggleBuildsMenu" } = {}) {
   const instance = nextInstance("builds-band");
   menuOpen ??= STATE.buildsMenu === instance;
-  const room = width - 12 - 110;   // the padding on the right, then « +N ▾ » and +
+  // The padding on the right and +, then « +N ▾ » only when the tabs don't all fit.
+  const fitsAll = builds.length * (TAB_WIDTH + TAB_GAP) - TAB_GAP <= width - 12 - 44;
+  const room = width - 12 - (fitsAll ? 44 : 110);
   const fit = Math.max(1, Math.floor((room + TAB_GAP) / (TAB_WIDTH + TAB_GAP)));
   const shown = builds.slice(0, fit);
   const hidden = builds.slice(fit);
   const tabWidth = hidden.length ? TAB_WIDTH : Math.min(TAB_MAX_WIDTH, Math.floor((room + TAB_GAP) / builds.length) - TAB_GAP);
   return `<div class="app-builds" data-instance="${instance}" style="--tab-width:${tabWidth}px">
     <div class="app-builds-tabs" role="tablist">${shown.map((build, index) => openBuildTab(build, index === current ? "is-current" : "")).join("")}</div>
-    <span class="app-builds-more-wrap">
-      <button type="button" class="app-builds-more ${moreState} ${menuOpen ? "is-open" : ""}" data-action="${action}" aria-expanded="${menuOpen}" aria-label="More builds and Merge">${hidden.length ? `+${hidden.length}` : ""}${icon(12, ICONS.down)}</button>
-      ${menuOpen ? `<div class="app-builds-menu" role="menu">${hidden.map(menuBuild).join("")}
-        ${hidden.length ? `<div class="app-builds-menu-line"></div>` : ""}
-        <div class="app-builds-menu-item app-builds-menu-merge" role="menuitem">Merge…</div>
-      </div>` : ""}
-    </span>
+    ${hidden.length ? `<span class="app-builds-more-wrap">
+      <button type="button" class="app-builds-more ${moreState} ${menuOpen ? "is-open" : ""}" data-action="${action}" aria-expanded="${menuOpen}" aria-label="More builds">+${hidden.length}${icon(12, ICONS.down)}</button>
+      ${menuOpen ? `<div class="app-builds-menu" role="menu">${hidden.map(menuBuild).join("")}</div>` : ""}
+    </span>` : ""}
     <button type="button" class="app-builds-open ${openState}" title="Open .build files" aria-label="Open .build files">${icon(14, ICONS.add)}</button>
   </div>`;
 }

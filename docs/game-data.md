@@ -36,7 +36,7 @@ Rejected:
 
 ## French
 
-To check when French is added (version 1.x): which of the two sources carries the French texts of the game, and whether the names of `unique_name` must stay in English in the files.
+To check when French is added (version 3): which of the two sources carries the French texts of the game, and whether the names of `unique_name` must stay in English in the files.
 
 ## Risks accepted
 

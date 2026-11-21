@@ -12,5 +12,5 @@ const bandsWindow = (width, menuOpen) => `<div class="app-window" style="width:$
 </div>`;
 
 addSection(() => ["The two bands · the site above, the open builds below: seven builds, at 960 px with the menu « +N ▾ » open, at 1,600 px where every tab fits and grows",
-  [["960 px · the tabs that fit, the others in the menu, then Merge…", bandsWindow(960, true)],
-   ["1,600 px · the seven tabs fit and grow; the menu holds Merge… alone", bandsWindow(1600, false)]]]);
+  [["960 px · the tabs that fit, the others in the menu", bandsWindow(960, true)],
+   ["1,600 px · the seven tabs fit and grow, without « +N ▾ »", bandsWindow(1600, false)]]]);

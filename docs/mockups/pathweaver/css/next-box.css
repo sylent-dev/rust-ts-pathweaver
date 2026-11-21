@@ -1,0 +1,47 @@
+/* The box of What's next (2k6, js/next-box.js): V3 of twelve ways, the passives of V9 rising behind it (the owner,
+   2026-11-21). One panel in the middle of the window, over a veil, its two cards coming in side by side; behind
+   them, icons of passives rising without end. */
+.nx { position: absolute; z-index: 8; inset: 0; width: fit-content; height: fit-content; margin: auto; overflow: hidden;
+  border-radius: 4px; background: var(--band-image), var(--band-deep); box-shadow: 0 18px 48px rgb(0 0 0 / .55);
+  color: var(--on-band); font-size: 13px; line-height: 1.45; }
+.nx-veil { position: absolute; inset: 0; z-index: 8; background: rgb(0 0 0 / .5); animation: nx-fade 300ms ease-out both; }
+@keyframes nx-fade { from { opacity: 0; } }
+.app-window:has(.nx) [data-action="next-toggle"] { color: var(--on-bar); }
+.nx-close { position: absolute; z-index: 3; top: 8px; right: 8px; display: flex; padding: 5px; border: none; background: none; color: var(--on-band-weak); cursor: pointer; }
+.nx-close:hover { color: var(--on-band); }
+
+/* The icons rising behind the halves: from under the panel to past its top, at 30 % at most (the owner, on a
+   slider, 2026-11-21), each at its own moment. */
+.nx-icon { display: inline-block; flex: none; background-image: url("../img/tree/skills.webp"); background-repeat: no-repeat; border-radius: 50%; }
+.nx-motes { position: absolute; inset: 0; pointer-events: none; }
+.nx-motes > span { position: absolute; bottom: -30px; opacity: 0; animation: nx-rise 5s linear infinite; animation-delay: calc(var(--m) * -.37s); }
+@keyframes nx-rise { 0% { opacity: 0; transform: translateY(0); } 15% { opacity: .3; } 100% { opacity: 0; transform: translateY(-480px); } }
+
+/* The two cards coming in side by side (the owner, 2026-11-21: two cards, another motion than halves opening): the
+   left one fading in from above, the right one from below; between them, a thin grey line. */
+.nx-halves { position: relative; display: flex; }
+.nx-card + .nx-card { border-left: 1px solid color-mix(in srgb, var(--on-band) 12%, transparent); }
+.nx-card:first-child { animation: nx-from-above 600ms cubic-bezier(.2, .8, .2, 1) 120ms backwards; }
+.nx-card:last-child { animation: nx-from-below 600ms cubic-bezier(.2, .8, .2, 1) 120ms backwards; }
+@keyframes nx-from-above { from { opacity: 0; transform: translateY(-40px); } }
+@keyframes nx-from-below { from { opacity: 0; transform: translateY(40px); } }
+
+/* A half: the art at its top, fading into the panel, the version, the name, a line, what it brings. */
+.nx-card { position: relative; width: 320px; flex: none; }
+.nx-face { position: relative; overflow: hidden; }
+.nx-art { position: relative; height: 190px; display: flex; -webkit-mask-image: linear-gradient(#000 45%, transparent); mask-image: linear-gradient(#000 45%, transparent); }
+.nx-art img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 22%; }
+.nx-art.is-many img { width: 25%; object-position: 50% 30%; }
+.nx-body { position: relative; margin-top: -36px; padding: 0 16px 16px; }
+.nx-version { margin: 0; font: 800 11px/1 var(--brand-font); letter-spacing: .16em; text-transform: uppercase; color: var(--accent); }
+.nx-name { margin: 5px 0 2px; font-size: 18px; line-height: 1.2; }
+.nx-line { margin: 0 0 10px; color: var(--on-band-weak); font-size: 12px; }
+.nx-items { margin: 0; padding: 0; list-style: none; font-size: 12px; }
+.nx-items li { position: relative; padding: 2px 0 2px 14px; }
+.nx-items li::before { content: ""; position: absolute; left: 1px; top: .62em; width: 5px; height: 5px; background: var(--accent); transform: rotate(45deg); }
+
+/* Less motion: a plain fade, and no icon rising. */
+@media (prefers-reduced-motion: reduce) {
+  .nx, .nx *, .nx *::before, .nx *::after { animation: nx-fade 200ms ease-out both !important; }
+  .nx-motes { display: none; }
+}

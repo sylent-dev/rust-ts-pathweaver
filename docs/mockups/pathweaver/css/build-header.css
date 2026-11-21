@@ -19,8 +19,10 @@
 .app-file:hover .app-file-label { color: var(--text); }
 .app-file small { color: var(--weak); font-size: 12px; line-height: 1.1; }
 
-/* « 18 warnings », in words in the yellow of the sticky note « ? » of an unknown id, as « Download .build »: no box
-   nor icon, the colour of the text on hover (the owner, 2026-11-21: how many warnings a build has matters before
-   starting it); a link to them in the About tab. */
-.app-header-warnings { margin-right: 14px; padding: 0; border: none; background: none; color: var(--unknown-note); font: inherit; font-size: 13px; font-weight: 600; cursor: pointer; transition: color .3s; }
-.app-header-warnings:hover { color: var(--text); }
+/* « 18 warnings », in words in the yellow of the sticky note « ? » of an unknown id (the owner, 2026-11-21: how many
+   warnings a build has matters before starting it), on a pale shade of that yellow, a rectangle the full height of
+   the header, a little apart from « Download .build » (2k5, the owner, 2026-11-21), its shade a little stronger on
+   hover; no icon; a link to them in the About tab. */
+.app-header-actions:has(.app-header-warnings) { align-self: stretch; }
+.app-header-warnings { align-self: stretch; margin-right: 28px; padding: 0 20px; border: none; border-radius: 0; background: color-mix(in srgb, var(--unknown-note) 12%, transparent); color: var(--unknown-note); font: inherit; font-size: 13px; font-weight: 600; cursor: pointer; transition: background-color .3s; }
+.app-header-warnings:hover { background: color-mix(in srgb, var(--unknown-note) 20%, transparent); }
