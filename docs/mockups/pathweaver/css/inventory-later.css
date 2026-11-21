@@ -1,5 +1,5 @@
 /* The hints to come in the Inventory tab (js/inventory-later.js, 2k2): H2, tiles in two columns, the width of
-   the drawing, 396 px; the one shown in the box marked. Its heading in eight variants (up-head). */
+   the drawing, 396 px; the one shown in the box marked. */
 .up { width: 396px; }
 .up-tiles { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; }
 .up-tile { display: flex; align-items: center; gap: 9px; min-width: 0; height: 38px; padding-right: 6px; background: color-mix(in srgb, var(--text) 4%, transparent); cursor: pointer; }
@@ -14,15 +14,3 @@
 .up-sub { overflow: hidden; color: var(--on-band-weak); font-size: 11px; text-overflow: ellipsis; white-space: nowrap; }
 .up-sub b { color: var(--accent); }
 
-/* The heading: a title (.it-title.is-next), or one of these. */
-.up-head-weak { margin-left: 5px; color: var(--on-band-weak); font-family: var(--font-text); font-size: 12px; font-weight: 500; letter-spacing: normal; text-transform: none; }
-.up-head { margin: 20px 0 8px; }
-.up-head .it-title { margin: 0; }
-.up-head.is-split { display: flex; align-items: baseline; justify-content: space-between; }
-.up-head-level { color: var(--accent); font-size: 12px; font-weight: 700; }
-.up-head.is-sentence { font-size: 14px; font-weight: 600; }
-.up-head.is-sentence b { color: var(--accent); }
-.up-head.is-rule { display: flex; align-items: center; gap: 10px; color: var(--accent); font-size: 11px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; }
-.up-head.is-rule::after { content: ""; flex: 1; height: 1px; background: color-mix(in srgb, var(--text) 18%, transparent); }
-.up-head.is-plan { display: flex; flex-direction: column; gap: 2px; padding-bottom: 6px; box-shadow: inset 0 -1px 0 color-mix(in srgb, var(--text) 14%, transparent); }
-.up-head.is-plan .up-head-weak { margin-left: 0; }
