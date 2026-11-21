@@ -1,0 +1,70 @@
+/* What the page of the mock-up alone writes (sections/), never the application: the windows side by side, the
+   states drawn at once, the stand-ins of a page under a band, the counter of frames. Loaded after the style sheets
+   of the components; skipped at the copy into Svelte. */
+
+/* Every window of the application, floating over the page of the mock-up (the application is the whole page). */
+.app-window { box-shadow: var(--window-shadow); }
+
+/* The section of the tab (sections/bar-tab.js): the states side by side, then the page below. */
+.tab-states { display: flex; }
+.tab-strip .app-builds { padding: 0; }
+.tab-states > span { width: 184px; color: #adb5bd; font-size: 12px; }
+.tab-strip { overflow: hidden; border-radius: 6px; background: var(--page); }
+.tab-strip-page { height: 14px; }
+.tab-card { display: flex; flex-direction: column; gap: 6px; }
+
+/* The section of the two bands (sections/bands.js): the page under them, where the menu opens. */
+.bands-page { height: 230px; background: var(--page); }
+/* The stand-ins of the home page in the section of My library (sections/library-link.js). */
+.link-page { display: grid; place-items: center; height: 72px; background: var(--page); color: var(--weak); font-size: 12px; }
+.link-row { display: flex; gap: 16px; }
+.link-states { display: flex; gap: 16px; }
+.link-states > span, .link-strip { width: 560px; flex: none; }
+
+/* The sections of the end of the band (sections/band-end.js). */
+.end-states > span { width: 420px; }
+.end-states { gap: 8px; }
+.end-row { display: flex; gap: 8px; }
+.end-strip { width: 420px; }
+.menu-row { display: flex; gap: 8px; }
+.menu-window { overflow: visible; }
+.menu-page { height: 330px; }
+
+/* The section of the brand (sections/brand.js): the brand in the app bar. */
+.brand-card { display: flex; gap: 8px; }
+.brand-style { width: 560px; overflow: hidden; border-radius: 6px; background: var(--page); }
+
+/* The favicon in the tabs of a browser, in the colours of the browser. */
+.brand-browser { display: flex; flex-direction: column; justify-content: center; gap: 4px; width: 250px; padding: 6px; border-radius: 6px; background: var(--chrome-strip); color: var(--chrome-text); font: 12px system-ui, sans-serif; }
+.brand-browser-tab { display: flex; align-items: center; gap: 8px; height: 32px; padding: 0 10px; border-radius: 6px; }
+.brand-browser-tab.is-current { background: var(--chrome-tab); box-shadow: 0 0 4px rgb(0 0 0 / .18); }
+.brand-browser-tab > span { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+/* The section of the window on other builds (sections/level-changes.js): the band of the case, its
+   level and « N changes » open, the page under it where the window hangs. */
+.app-changes-case { position: relative; overflow: visible; }
+.app-changes-case-name { margin-left: 26px; }
+.app-changes-case-page { height: 440px; }
+
+/* The section of the mock-up (sections/hover-cards.js): the cards drawn in place, visible by themselves,
+   not by is-shown, which the hover scripts take off every card of the page (a turn of the wheel hides the
+   cards over the tree, js/tree-hover.js); they take the pointer, for the tooltip of a cut subtitle. */
+.hc-cards { display: flex; flex-direction: column; gap: 22px; padding: 22px 18px; background: var(--page); font-family: var(--font-text); }
+.app-hover.is-static { position: relative; z-index: auto; opacity: 1; visibility: visible; transition: none; pointer-events: auto; --hc-alpha: 100%; }
+
+/* The section of the mock-up (sections/skill-rows.js): the tree left out at 65 and 85. */
+.app-sr-tree { display: grid; flex: 1; place-items: center; font-size: 12px; }
+.app-overview.app-sr-short { height: auto; min-height: 420px; }
+
+/* The section of the mock-up (sections/inventory.js): the inventory alone, at its height. */
+.app-inventory-alone { height: auto; padding-bottom: 16px; }
+.app-inventory-alone .app-side-title { margin-top: 0; }
+
+/* The section of the mock-up (sections/column-overflow.js): a column alone at its real height. */
+.app-overview.ov-alone { width: 330px; }
+
+/* The counter of frames per second (2i3), at the bottom right over the bottom bar (js/tree.js): it measures the drawing for the mock-up, never shown by the application. */
+.app-fps { position: absolute; right: 12px; bottom: 44px; padding: 2px 6px; border-radius: 2px; background: color-mix(in srgb, var(--shade-deep) 80%, transparent); color: var(--weak); font-size: 12px; pointer-events: none; }
+
+/* The section of the box of Download .build (sections/download-box.js): the window the box hangs in. */
+.dl-case { position: relative; }

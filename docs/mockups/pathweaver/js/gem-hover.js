@@ -1,7 +1,7 @@
 // The hover of a gem (2j2, specs.md, Skills): its name and its kind, its tags and its description from
 // the game data, the levels it applies at, then the note of its author with the markup of the game
 // (markupHtml, js/tree-hover.js); in the language of the card of a passive (B, 2i3), without a
-// border, fading in and out in 120 ms (css/tree-hover.css). On the mark of a gem, and on the name of a
+// border, fading in and out in 120 ms (css/hover-card.css). On the mark of a gem, and on the name of a
 // skill in its row.
 
 const GEM_KIND_NAMES = { active: "Skill gem", spirit: "Spirit gem", support: "Support gem" };
@@ -68,7 +68,7 @@ function gemHoverHtml(gem, level) {
 // - a skill, its mark or its name at the left of the column: just left of the column, over the tree,
 //   centred on the row, see-through as the card of a passive.
 const gemCard = document.createElement("div");
-gemCard.className = "app-hover app-pinned-card is-hover-card";
+gemCard.className = "app-hover app-pinned-card";
 document.body.append(gemCard);
 function showGemHover(element) {
   const gem = gemOfRow(element);

@@ -6,10 +6,8 @@
 .app-dot { display: inline-block; width: 8px; height: 8px; box-sizing: border-box; border-radius: 50%; }
 .app-dot.is-new { border: 1px solid var(--tree-taken); background: var(--tree-taken); box-shadow: 0 0 0 2px var(--shade-deep), 0 0 0 3.5px var(--accent); }
 /* The Tree tab: the tree alone, the height of the Overview. */
-.app-tree-tab { display: flex; height: 668px; }
+.app-tree-tab { display: flex; height: var(--build-tab-height); }
 .app-tree-tab .app-tree { border-right: none; }
 /* A window of a fixed height (2i3): the tree takes what the bands above it leave. */
 .app-window-full { display: flex; flex-direction: column; }
 .app-window-full .app-tree-tab { flex: 1; height: auto; min-height: 0; }
-/* The counter of frames per second (2i3), at the bottom right over the bottom bar: for the mock-up only. */
-.app-fps { position: absolute; right: 12px; bottom: 44px; padding: 2px 6px; border-radius: 2px; background: color-mix(in srgb, var(--shade-deep) 80%, transparent); color: var(--weak); font-size: 12px; pointer-events: none; }

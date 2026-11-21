@@ -25,6 +25,6 @@
 .app-notice-close { flex: none; display: grid; place-items: center; align-self: center; width: 44px; height: 44px; padding: 0; border: none; background: none; color: var(--error); cursor: pointer; transition: color .2s; }
 .app-notice.is-info .app-notice-close { color: var(--weak); }
 .app-notice .app-notice-close:is(:hover, .is-hover) { color: var(--highlight); }
-.app-notice-close svg { transition: transform .2s cubic-bezier(.34, 1.56, .64, 1); }
+.app-notice-close svg { transition: transform .2s var(--ease-overshoot); }
 .app-notice-close:is(:hover, .is-hover) svg { transform: scale(1.3); }
 @media (prefers-reduced-motion: reduce) { .app-notice-close, .app-notice-close svg { transition: none; } }

@@ -4,7 +4,6 @@
 .it-bare { position: relative; padding: 4px 14px 10px; }
 .it-bare-head { padding: 6px 0 4px; }
 .it-bare-head strong { display: block; font-size: 18px; font-weight: 700; }
-.it-bare .is-unique { color: var(--unique); }
 .it-bare-sub { color: var(--on-band-weak); font-size: 12px; }
 .it-bare-part { padding: 10px 0; --hover-stats-margin: 0; }
 
@@ -15,3 +14,7 @@
 .it-set-tag { display: inline-flex; align-items: center; height: 20px; padding: 0 8px; box-shadow: inset 0 0 0 1px var(--slot-line); font-size: 11px; }
 .it-set-tag.is-set1 { color: var(--tree-set-1); background: color-mix(in srgb, var(--tree-set-1) 20%, transparent); }
 .it-set-tag.is-set2 { color: var(--tree-set-2); background: color-mix(in srgb, var(--tree-set-2) 20%, transparent); }
+
+/* A wide window (the page of a build at 1,920 px, js/wide-page.js, 2k4; from 1,600 px, the owner, 2026-11-21): the box over the rest, its
+   words 640 px at most. */
+@container window (min-width: 1600px) { .it-bare { max-width: 640px; } }

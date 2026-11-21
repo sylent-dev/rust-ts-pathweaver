@@ -1,19 +1,18 @@
 /* What Pathweaver does, on the drop zone of the first visit (js/home-line.js): a title above the zone, the three
    things a build shows as notes of a plan around it. */
-.home-drop-stage { position: relative; transition: transform .3s cubic-bezier(.34, 1.56, .64, 1); }
+.home-drop-stage { position: relative; transition: transform .3s var(--ease-overshoot); }
 @media (prefers-reduced-motion: reduce) { .home-drop-stage { transition: none; } }
 
 /* The title: the game, small, in the grey of the secondary texts; the words, large, in sentence
    case, in Archivo at its normal width, 42 px, its letters drawn close (the owner, 2026-11-18,
    among twelve fonts and four cases). */
 .home-title { display: flex; flex-direction: column; align-items: center; gap: 14px; max-width: 860px; margin-bottom: 14px; text-align: center; }
-.home-title-game { color: var(--weak); font-family: var(--font-number); font-size: 12px; letter-spacing: .24em; text-transform: uppercase; }
-/* As the page loads, the game rises from behind the title to its place, fading in (the owner,
-   2026-11-18); still when the system asks for less motion. */
-.home-title-game { position: relative; z-index: 0; animation: home-game-rise 1.4s cubic-bezier(.22, 1, .36, 1) .35s both; }
-.home-title h1 { position: relative; z-index: 1; }
+.home-title-game { position: relative; z-index: 0; color: var(--weak); font-family: var(--font-number); font-size: 12px; letter-spacing: .24em; text-transform: uppercase;
+  /* As the page loads, the game rises from behind the title to its place, fading in (the owner,
+     2026-11-18); still when the system asks for less motion. */
+  animation: home-game-rise 1.4s cubic-bezier(.22, 1, .36, 1) .35s both; }
 @keyframes home-game-rise { from { opacity: 0; transform: translateY(34px); filter: blur(3px); } }
-.home-title h1 { margin: 0; color: var(--text); font-family: var(--brand-font); font-weight: 800; font-size: 42px; line-height: 1; letter-spacing: -.06em; text-wrap: balance; }
+.home-title h1 { position: relative; z-index: 1; margin: 0; color: var(--text); font-family: var(--brand-font); font-weight: 800; font-size: 42px; line-height: 1; letter-spacing: -.06em; text-wrap: balance; }
 
 /* The notes of a plan: the three things a build shows, their lines drawn to the zone, their dots
    beating; in white, not in the accent of the links, since they can't be clicked (the owner,
@@ -23,7 +22,7 @@
 .home-note b { color: var(--text); font-family: var(--font-number); font-size: 11px; font-weight: 500; letter-spacing: .14em; text-transform: uppercase; white-space: nowrap;
   animation: home-note-in .4s ease-out calc(.4s + var(--note) * .35s) both; }
 .home-note i { position: relative; width: 34px; height: 1px; margin: 0 0 0 10px; background: color-mix(in srgb, var(--text) 55%, transparent); transform-origin: right;
-  animation: home-note-line .5s cubic-bezier(.2, .7, .2, 1) calc(.2s + var(--note) * .35s) both; }
+  animation: home-note-line .5s var(--ease-out-soft) calc(.2s + var(--note) * .35s) both; }
 .home-note i::after { content: ""; position: absolute; right: -3px; top: -3px; width: 7px; height: 7px; background: var(--text); animation: home-note-dot 1.667s ease-in-out infinite; }
 .home-note-1 { right: 100%; top: 26%; }
 .home-note-2, .home-note-3 { left: 100%; flex-direction: row-reverse; }

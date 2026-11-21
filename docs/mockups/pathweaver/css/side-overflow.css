@@ -28,7 +28,7 @@
    at once both ways when the system asks for less motion. Its light at 20 % of that of the page (the owner,
    2026-11-21, on a slider). */
 .ov-drawer { position: absolute; left: 0; right: 0; bottom: 0; padding: 0 12px 12px 14px;
-  background: radial-gradient(ellipse 330px 220px at 100% 100%, color-mix(in srgb, var(--page-glow) 20%, transparent) 0%, transparent 70%), var(--page);
+  background: var(--drawer-image), var(--page);
   clip-path: inset(calc(100% - var(--drawer-bar-height, 100%)) 0 0 0); transition: clip-path 180ms ease-out; }
 .ov-drawer:hover { clip-path: inset(0); transition-delay: 200ms; }
 @media (prefers-reduced-motion: reduce) { .ov-drawer, .ov-drawer:hover { transition-duration: 0s; } }
@@ -39,13 +39,10 @@
 .ov-drawer-doll { overflow: hidden; }
 .ov-drawer-doll > * { transform: translateY(100%); transition: transform 180ms ease-out; }
 .ov-drawer:hover .ov-drawer-doll > * { transform: none; transition-delay: 200ms; }
-@media (prefers-reduced-motion: reduce) { .ov-drawer-doll > * { transition-duration: 0s !important; } }
+@media (prefers-reduced-motion: reduce) { .ov-drawer-doll > * { transition-duration: 0s; } }
 .ov-drawer-doll { --inventory-margin: 14px 0 0 5px; }   /* the drawing without its head (css/side-inventory.css) */
 /* The bar: its thumbnails (css/side-inventory.css, is-thumbs) read its width. */
 .ov-drawer-bar { padding-top: 10px; container-type: inline-size; }
-
-/* The section of the mock-up (sections/column-overflow.js): a column alone at its real height. */
-.app-overview.ov-alone { width: 330px; }
 
 /* A file that names no gear (2k5): the bar says so, and unrolls nothing. */
 .ov-drawer.is-empty { clip-path: none; }

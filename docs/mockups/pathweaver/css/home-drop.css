@@ -34,7 +34,7 @@
 .home-drop-zone:is(:hover, .is-hover) { background: var(--drop-zone-hover); }
 /* The corners close in toward the + rather than the icon rising (the owner, 2026-11-18): each
    along its diagonal, in units of the icon (24 a side); a little on hover, firmly with a file. */
-.drop-mark-corner { transition: transform .35s cubic-bezier(.34, 1.56, .64, 1); }
+.drop-mark-corner { transition: transform .35s var(--ease-overshoot); }
 .home-drop-zone:is(:hover, .is-hover) .drop-mark-corner { transform: translate(1.2px, 1.2px); }
 @media (prefers-reduced-motion: reduce) { .drop-mark-corner { transition: none; } }
 .home-drop.is-drag .home-drop-zone .drop-mark-corner { transform: translate(2.4px, 2.4px); }

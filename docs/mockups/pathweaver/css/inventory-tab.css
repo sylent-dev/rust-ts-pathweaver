@@ -3,7 +3,7 @@
    graph paper of the blocks (css/textures.css), as the Skills tab. Set aside: two lists (the wireframe),
    cards, a table by slot, bars on the levels, now and next, an annotated drawing, columns by level, ghosts
    in the drawing, words, a stash and the portrait behind the drawing. */
-.app-inventory-tab { height: 668px; overflow-y: auto; box-sizing: border-box; background: var(--side-column); scrollbar-width: thin; }
+.app-inventory-tab { height: var(--build-tab-height); overflow-y: auto; box-sizing: border-box; background: var(--side-column); scrollbar-width: thin; }
 /* Cut in two from top to bottom (the owner, 2026-11-21): the drawing on the left, on the graph paper, in the
    middle of its half; the box of the item on the right, on a pane darkened by transparency, so that the graph
    paper still shows under it, as dark as a slot of the drawing (--pane), no line at the cut (the owner,
@@ -19,7 +19,6 @@
 .it-title.is-next { margin-top: 20px; }
 .it-none { margin: 0; font-size: 12.5px; }
 .it-name { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.it-name.is-unique { color: var(--unique); }
 .it-slot { flex: none; width: 104px; color: var(--on-band-weak); font-size: 10px; letter-spacing: .08em; text-transform: uppercase; white-space: nowrap; }
 .it-at { flex: none; min-width: 24px; color: var(--accent); font-size: 12px; font-weight: 700; }
 .it-thumb { width: 26px; height: 26px; }
@@ -27,3 +26,7 @@
 /* The head of the drawing: no title (T2, the owner, 2026-11-21: the band above says the level; the title
    and the level large behind the drawing set aside), the switch of the set alone at its right. */
 .it-head { display: flex; align-items: baseline; justify-content: flex-end; gap: 16px; width: 396px; min-height: 22px; }
+
+/* A wide window (the page of a build at 1,920 px, js/wide-page.js, 2k4; from 1,600 px, the owner, 2026-11-21): the drawing at 56 px a cell
+   (504 px, js/wide-page.js gives the cell). */
+@container window (min-width: 1600px) { .it-left { width: 568px; } .it-head { width: 504px; } }

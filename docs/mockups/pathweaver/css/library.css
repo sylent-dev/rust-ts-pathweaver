@@ -18,8 +18,8 @@
    owner, 2026-11-18): the full height of the strip, square, white, its words in the colour of the
    band, the white a little dimmed and the words a little larger on hover. */
 .library-paste { flex: none; display: grid; place-items: center; padding: 0 24px; border: none; cursor: pointer; background: var(--on-top-band); color: var(--builds-band);
-  font-family: var(--site-link-font); font-weight: var(--site-link-weight); font-size: 14px; transition: background-color .3s; }
-.library-paste span { transition: transform .2s cubic-bezier(.34, 1.56, .64, 1); }
+  font-family: var(--site-link-font); font-weight: var(--site-link-weight); font-size: 14px; transition: background-color var(--hover-fade); }
+.library-paste span { transition: transform .2s var(--ease-overshoot); }
 .library-paste:is(:hover, .is-hover) { background: color-mix(in srgb, var(--on-top-band) 82%, transparent); }
 .library-paste:is(:hover, .is-hover) span { transform: scale(1.08); }
 @media (prefers-reduced-motion: reduce) { .library-paste span { transition: none; } }
@@ -32,7 +32,6 @@
 .library-row:nth-child(even) { background: var(--row-even); }
 .library-row:not(.is-asking):is(:hover, .is-hover) { background: var(--row-hover); }
 .library-link { flex: 1; min-width: 0; display: flex; align-items: center; gap: 16px; height: 100%; color: inherit; text-decoration: none; }
-.library-link:focus-visible { outline: 2px solid var(--accent); outline-offset: -2px; }
 .library-portrait { flex: none; display: block; width: 56px; height: 56px; object-fit: cover; }
 .library-text { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 3px; }
 .library-name, .library-meta { overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
@@ -44,7 +43,7 @@
 /* On hover, the lid rises 1 px, level, both its ends alike, with a small overshoot (the owner,
    2026-11-18, after a lid hinged on its right, then one that floated); at once when the system
    asks for less motion. */
-.bin-lid { transition: translate .3s cubic-bezier(.34, 1.56, .64, 1); }
+.bin-lid { transition: translate .3s var(--ease-overshoot); }
 .library-bin:is(:hover, .is-hover) .bin-lid { translate: 0 -1px; }
 @media (prefers-reduced-motion: reduce) { .bin-lid { transition: none; } }
 

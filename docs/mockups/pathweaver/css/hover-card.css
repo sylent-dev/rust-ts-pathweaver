@@ -20,14 +20,20 @@
    px; the disc of a support as it is (it didn't go with the square of a skill), no icon for a support;
    the image of an item (a staff, two cells by four, doesn't fit a square); the icon of a passive (it is
    right beside the card, on the tree; 2026-11-21). */
-.app-hover.is-hover-card { --hc-alpha: 90%; --hc-art: 48px; width: 320px; max-width: none; padding: 0; overflow: hidden; background: none; }
-.app-hover.is-hover-card.is-over-rows, .app-hover.is-hover-card.is-static { --hc-alpha: 100%; }
-/* Shown, a card takes the pointer, so that it stays open while the pointer is on it (js/hover-card.js,
-   cardCloser; the owner, 2026-11-21: every card). */
-.app-hover.is-hover-card.is-shown { pointer-events: auto; }
 
-/* The shades of the parts: the head and the note in the deep shade of the bands; the body a step darker. */
-.is-hover-card { --hc-head: var(--shade-deep); --hc-body: var(--card-body); --hc-note: var(--hc-head); }
+/* Without a border, see-through at 10 % over the tree, their corners rounded by 3 px, fading in and out
+   lightly (2i3, the owner, 2026-11-20: 120 ms, at once when the system asks for less motion). The shades of
+   the parts: the head and the note in the deep shade of the bands; the body a step darker. */
+.app-hover { --hc-alpha: 90%; --hc-art: 48px; --hc-head: var(--shade-deep); --hc-body: var(--card-body); --hc-note: var(--hc-head);
+  position: absolute; z-index: 4; width: 320px; overflow: hidden; border-radius: var(--popover-radius); pointer-events: none;
+  color: var(--on-band); box-shadow: var(--popover-shadow); font-size: 12px; line-height: 1.4;
+  opacity: 0; visibility: hidden; transition: opacity 120ms ease-out, visibility 0s 120ms; }
+.app-hover.is-over-rows { --hc-alpha: 100%; }
+/* Shown, it fades in; hidden, it fades out, then leaves (visibility, once the fade is over). From one
+   passive straight to the next, it stays. Shown, a card takes the pointer, so that it stays open while the
+   pointer is on it (js/hover-card.js, cardCloser; the owner, 2026-11-21: every card). */
+.app-hover.is-shown { opacity: 1; visibility: visible; transition: opacity 120ms ease-out, visibility 0s; pointer-events: auto; }
+@media (prefers-reduced-motion: reduce) { .app-hover, .app-hover.is-shown { transition: none; } }
 
 /* The head: the art on the right, the title and its subtitle in the middle of the height, starting where
    the body starts, 12 px from the edge. */
@@ -52,12 +58,6 @@
    2026-11-21; small capitals, the words of a subtitle and a tag on the top edge of the part set aside). */
 .hc-from { display: flex; align-items: center; gap: 5px; margin-bottom: 4px; color: var(--on-band-weak); font-size: 11px; line-height: 1.3; }
 .hc-from .app-icon { flex: none; translate: 0 -.5px; }   /* half a pixel up against the words (the owner, 2026-11-21, on a slider) */
-
-/* The section of the mock-up (sections/hover-cards.js): the cards drawn in place, visible by themselves,
-   not by is-shown, which the hover scripts take off every card of the page (a turn of the wheel hides the
-   cards over the tree, js/tree-hover.js); they take the pointer, for the tooltip of a cut subtitle. */
-.hc-cards { display: flex; flex-direction: column; gap: 22px; padding: 22px 18px; background: var(--page); font-family: var(--font-text); }
-.app-hover.is-hover-card.is-static { position: relative; z-index: auto; opacity: 1; visibility: visible; transition: none; pointer-events: auto; }
 
 /* What the body of a card holds: stats one per line (how far under what is above them, --hover-stats-margin), the
    state at the level in the weak grey. */

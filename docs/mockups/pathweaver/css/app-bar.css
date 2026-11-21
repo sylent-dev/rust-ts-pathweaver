@@ -7,7 +7,7 @@
 .app-site { position: relative; z-index: 7; display: flex; align-items: center; height: 44px; padding-left: 14px; background: var(--top-band-image), var(--site-band); color: var(--on-top-band); }
 .app-site-nav, .app-site-links { display: flex; height: 100%; }
 .app-site-links { margin-left: auto; }
-.app-site-link { display: flex; align-items: center; height: 100%; padding: 0 16px; color: var(--accent); text-decoration: none; transition: color .3s;
+.app-site-link { display: flex; align-items: center; height: 100%; padding: 0 16px; color: var(--accent); text-decoration: none; transition: color var(--hover-fade);
   font-family: var(--site-link-font); font-weight: var(--site-link-weight); font-size: var(--site-link-size); }
 /* On hover, the words turn from blue to the colour of the text of the band, and a line of 2 px in
    that colour sweeps under them (after sylent.art, the owner, 2026-11-18): it draws itself from the
@@ -48,25 +48,25 @@
    states have classes too (is-hover, is-open), to be shown side by side without the mouse. */
 .app-builds-more-wrap { position: relative; display: flex; align-self: stretch; }
 .app-builds-more, .app-builds-open { display: inline-flex; align-items: center; justify-content: center; gap: 5px; min-width: 44px; height: 100%; padding: 0 12px; border: none;
-  cursor: pointer; font-size: 13px; transition: color .3s, background-color .3s; }
+  cursor: pointer; font-size: 13px; transition: color var(--hover-fade), background-color var(--hover-fade); }
 .app-builds-more { background: var(--builds-band); color: var(--accent); }
 .app-builds-more:is(:hover, .is-hover, .is-open) { color: var(--on-top-band); }
 .app-builds-open { padding: 0; background: var(--on-top-band); color: var(--builds-band); }
 .app-builds-open:is(:hover, .is-hover) { background: color-mix(in srgb, var(--on-top-band) 82%, transparent); }
-.app-builds-open svg { transition: transform .2s cubic-bezier(.34, 1.56, .64, 1); }
+.app-builds-open svg { transition: transform .2s var(--ease-overshoot); }
 .app-builds-open:is(:hover, .is-hover) svg { transform: scale(1.3); }
 @media (prefers-reduced-motion: reduce) { .app-builds-open svg { transition: none; } }
 
 /* The menu (the owner, 2026-11-18): in the shade of the band, each build a tab laid down (a row of
    44 px, its portrait square, its name over its ascendancy); 3 px under the band, its corners rounded
    by 3 px, as the window of what changes (the owner, 2026-11-19). */
-.app-builds-menu { position: absolute; z-index: 5; top: calc(100% + 3px); right: 0; border-radius: 3px; overflow: hidden; width: 300px; background: var(--top-band-image), var(--builds-band); color: var(--on-top-band); box-shadow: var(--popover-shadow); font-size: 13px; }
+.app-builds-menu { position: absolute; z-index: 5; top: calc(100% + var(--popover-gap)); right: 0; border-radius: var(--popover-radius); overflow: hidden; width: 300px; background: var(--top-band-image), var(--builds-band); color: var(--on-top-band); box-shadow: var(--popover-shadow); font-size: 13px; }
 /* How the menu of « +N ▾ » shows itself when it opens (2e2, the owner, 2026-11-18): 5 · Pop, out of
    nine looks (three at a normal temperature, three high, three explosive): the menu grows out of
    « +N ▾ », its corner on the button, and goes a little past its size before it settles (reveal-pop,
    css/motion.css). It plays each time the menu is drawn. The eight others are in the history of Git (commit 4d866fd); 9 · Burst
    opens the box of What's next instead (the owner, 2026-11-18, step 2k). */
-.app-builds-menu { transform-origin: top right; animation: reveal-pop 280ms cubic-bezier(.34, 1.56, .64, 1) both; }
+.app-builds-menu { transform-origin: top right; animation: reveal-pop 280ms var(--ease-overshoot) both; }
 @media (prefers-reduced-motion: reduce) { .app-builds-menu { animation: none; } }
 .app-builds-menu-item { display: flex; align-items: center; gap: 10px; height: 44px; padding-right: 12px; color: color-mix(in srgb, var(--on-top-band) 80%, transparent); cursor: pointer; }
 .app-builds-menu-item:hover { background: color-mix(in srgb, var(--on-top-band) 9%, transparent); color: var(--on-top-band); }
@@ -80,7 +80,8 @@
    2026-11-17); its portrait square the full height, its name over its ascendancy, its close button. The
    states have classes too (is-hover, is-close-hover), to be shown side by side without the mouse. */
 .app-builds-tabs { align-self: stretch; display: flex; }
-.app-builds-tab { display: flex; align-items: center; gap: 8px; width: var(--tab-width); box-sizing: border-box; padding-right: 6px; cursor: pointer; }
+.app-builds-tab { display: flex; align-items: center; gap: 8px; width: var(--tab-width); box-sizing: border-box; padding-right: 6px; cursor: pointer;
+  color: color-mix(in srgb, var(--on-top-band) 68%, transparent); }   /* the other tabs in a weaker text (below) */
 .app-builds-portrait { flex: none; display: block; height: 100%; aspect-ratio: 1; }
 .app-builds-tab-text { flex: 1; min-width: 0; display: flex; flex-direction: column; justify-content: center; gap: 1px; }
 .app-builds-tab-text > span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; line-height: 1.2; }
@@ -92,7 +93,6 @@
 /* No box (the owner, 2026-11-17): the other tabs in a weaker text, the current one in the full
    text. Its underline in the accent went on 2026-11-18 (the owner); it is in the history of Git
    (commit 141b0eb). */
-.app-builds-tab { color: color-mix(in srgb, var(--on-top-band) 68%, transparent); }
 .app-builds-tab:is(:hover, .is-hover, .is-close-hover) { background: color-mix(in srgb, var(--on-top-band) 7%, transparent); color: var(--on-top-band); }
 .app-builds-tab.is-current { color: var(--on-top-band); }
 
@@ -101,28 +101,3 @@
    99 tinted with the accent, 100 filled with it) are in the history of Git (commit ee61467). */
 .app-builds-tab:not(.is-current) .app-builds-portrait { filter: grayscale(1) brightness(.8); opacity: .55; }
 .app-builds-tab:not(.is-current):is(:hover, .is-hover, .is-close-hover) .app-builds-portrait { filter: grayscale(.3); opacity: .9; }
-
-/* The section of the tab (sections/bar-tab.js): the states side by side, then the page below. */
-.tab-states { display: flex; }
-.tab-strip .app-builds { padding: 0; }
-.tab-states > span { width: 184px; color: #adb5bd; font-size: 12px; }
-.tab-strip { overflow: hidden; border-radius: 6px; background: var(--page); }
-.tab-strip-page { height: 14px; }
-.tab-card { display: flex; flex-direction: column; gap: 6px; }
-
-/* The section of the two bands (sections/bands.js): the page under them, where the menu opens. */
-.bands-page { height: 230px; background: var(--page); }
-/* The stand-ins of the home page in the section of My library (sections/library-link.js). */
-.link-page { display: grid; place-items: center; height: 72px; background: var(--page); color: var(--weak); font-size: 12px; }
-.link-row { display: flex; gap: 16px; }
-.link-states { display: flex; gap: 16px; }
-.link-states > span, .link-strip { width: 560px; flex: none; }
-
-/* The sections of the end of the band (sections/band-end.js). */
-.end-states > span { width: 420px; }
-.end-states { gap: 8px; }
-.end-row { display: flex; gap: 8px; }
-.end-strip { width: 420px; }
-.menu-row { display: flex; gap: 8px; }
-.menu-window { overflow: visible; }
-.menu-page { height: 330px; }
