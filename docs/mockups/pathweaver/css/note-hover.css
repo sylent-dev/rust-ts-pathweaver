@@ -1,7 +1,7 @@
 /* The card of a note of the author (2j5, js/note-hover.js), in the construction of every card on hover
-   (2k, css/hover-card.css), without art: its title naming what carries the note, the place in grey; the
-   note in the part of the author, under « From the author » as in every card; a group of passives, a short
-   list, « N notes » as its subtitle. Set aside (the owner, 2026-11-20 and 2026-11-21): « Note of the
+   (2k, css/hover-card.css), without art: on a line that names what the note is about, the note alone; on a
+   line that counts passives, its title naming the passive, the place in grey, the note under « From the
+   author » as in every card; a group of passives, a short list, « N notes » as its subtitle. Set aside (the owner, 2026-11-20 and 2026-11-21): « Note of the
    author » as its subtitle, or at the right of the head, the note 4 px under it. */
 .app-note-place { color: var(--on-band-weak); font-weight: 400; }
 /* The weapon set of a passive in its colour on the tree (--tree-set-1, --tree-set-2). */
@@ -18,3 +18,7 @@
 .app-changes-note[data-note-head] { position: relative; cursor: default; }
 .app-changes-note[data-note-head]::after { content: ""; position: absolute; inset: -4px; }
 .app-changes-note[data-note-head]:hover { color: var(--on-band); }
+
+/* The note alone, on a line that names what it is about (the owner, 2026-11-21): no head, as wide as its
+   text up to 320 px. */
+.app-hover.is-hover-card.app-note-hover:has(> .hc-note:only-child) { width: max-content; max-width: 320px; }

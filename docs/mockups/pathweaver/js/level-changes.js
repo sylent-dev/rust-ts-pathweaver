@@ -60,7 +60,7 @@ const slotName = id => escapeHtml(SLOT_NAMES[id] ?? id);
 function changeName(change) {
   if (change.category === "passives") {
     const [count, label] = [plural(change.count, "passive"), change.label ? ` ${change.label}` : ""];
-    return `<b>${count}</b>${label}${noteMark({ place: change.place, set: change.set, head: count + label, list: change.notes })}`;
+    return `<b>${count}</b>${label}${noteMark({ counted: true, place: change.place, set: change.set, head: count + label, list: change.notes })}`;
   }
   if (change.category === "skill" || change.category === "support") return `${gemMark(change)}<b>${escapeHtml(change.name)}</b>${
     noteMark({ place: change.category === "support" ? change.skill : "", head: change.name, text: change.note })}`;
