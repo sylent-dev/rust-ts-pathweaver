@@ -24,13 +24,8 @@ const VARIANTS = {
   // The width of the windows of the home page (2l): the minimum of specs.md, half a 1920-pixel screen, and a wide
   // window of the owner's screen.
   homeWidth: { label: "Home width", options: { 900: "900 px", 960: "960 px", 1600: "1,600 px" }, fallback: "960" },
-  // The Inventory tab (2k2, H1 kept): the head of the drawing, the opacity of the level behind it, the box of
-  // the item chosen, the edge of the slot chosen (js/inventory-tab.js, js/inventory-detail.js).
-  invHead: { label: "Inventory head", options: { t1: "T1", t2: "T2", t3: "T3", t4: "T4" }, fallback: "t1" },
-  invMark: { label: "Level mark", range: { min: 2, max: 16, step: 1 }, variable: "--it-mark-opacity", unit: "%", fallback: "6" },
-  invPanel: { label: "Item box", options: { p1: "P1", p2: "P2", p3: "P3", p4: "P4", p5: "P5", p6: "P6" }, fallback: "p1" },
-  invChosen: { label: "Chosen slot", options: { s1: "S1", s2: "S2", s3: "S3", s4: "S4" }, fallback: "s1" },
-  // The tab cut in two (the owner, 2026-11-21): where the cut falls, the shade of the pane of the box, its line.
+  // The Inventory tab cut in two (2k2, the owner, 2026-11-21): where the cut falls, the shade of the pane of the
+  // box, its line.
   invCut: { label: "Pane start", range: { min: 436, max: 600, step: 4 }, variable: "--it-cut", unit: "px", fallback: "480" },
   invShade: { label: "Pane shade", range: { min: 0, max: 70, step: 5 }, variable: "--it-pane-shade", unit: "%", fallback: "35" },
   invLine: { label: "Pane line", range: { min: 0, max: 40, step: 2 }, variable: "--it-pane-line", unit: "%", fallback: "12" },
