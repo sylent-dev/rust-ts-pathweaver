@@ -48,9 +48,11 @@ function slotInner(item, id, small) {
   return `<span class="app-slot-text">${escapeHtml(item.name)}</span>${item.unknown ? UNKNOWN_MARK : ""}`;
 }
 
-// The switch of the weapon set, in the language of Set I and Set II under the tree: buttons without
-// a box, in the weak grey, the set shown in its colour.
-const inventorySetSwitch = () => `<span class="app-inventory-sets">${[1, 2].map(set =>
+// The switch of the weapon set, in the right column, its drawer and the Inventory tab (2k2b, N2 of twelve
+// variants, the owner, 2026-11-21; the words without a box, two trapezoids from the top, hanging tags and
+// eight others set aside): a box in two halves, the set shown filled with its colour, which fades in once
+// when the set changes (STATE.setMoved).
+const inventorySetSwitch = () => `<span class="app-inventory-sets${STATE.setMoved ? " is-moved" : ""}">${[1, 2].map(set =>
   `<button type="button" class="is-set${set}" data-action="inventory-set" data-set="${set}" aria-pressed="${STATE.inventorySet === set}">Set ${set === 1 ? "I" : "II"}</button>`).join("")}</span>`;
 
 // The drawing of the slots at a level, for a weapon set, a cell of the game drawn `cell` px wide; `extra`
@@ -85,8 +87,9 @@ const inventoryBox = (level, hints = slotsAt(level, STATE.inventorySet)) =>
     ${inventoryDrawing(level, hints)}${inventoryOthers(level, hints)}`;
 
 ACTIONS["inventory-set"] = element => {
-  // A change of set plays the motion of the switch of the Inventory tab once (js/set-switch.js).
+  // A change of set fades the colour of the switch in once.
   STATE.setMoved = STATE.inventorySet !== Number(element.dataset.set);
   STATE.inventorySet = Number(element.dataset.set);
   return true;
 };
+AFTER_RENDER.push(() => { STATE.setMoved = false; });

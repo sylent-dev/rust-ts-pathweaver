@@ -44,7 +44,7 @@
 
 /* The head of the drawing: no title (T2, the owner, 2026-11-21: the band above says the level; the title
    and the level large behind the drawing set aside), the switch of the set alone at its right. */
-.it-left .app-inventory-head { justify-content: flex-end; min-height: 22px; }
+.it-left .app-inventory-head { width: 396px; justify-content: flex-end; min-height: 22px; }
 
 /* The hints of a slot along the levels (js/inventory-detail.js), the one at the level in the accent. */
 .it-span { flex: none; width: 52px; color: var(--weak); font-size: 12px; }

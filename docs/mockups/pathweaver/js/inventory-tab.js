@@ -64,8 +64,8 @@ function inventoryTab(level = STATE.level, source) {
     className: shown && cellKey({ id, x }) === cellKey(shown) ? `is-chosen${STATE.itFlash ? " is-flash" : ""}` : "" });
   const later = state.later.length ? `${itTitle("To come", "is-next")}<ul class="it-rows">${state.later.map(hint =>
     `<li class="it-row is-later" data-action="it-choose" data-cell="${cellKey(hint)}" ${itAbout(hint, level)}>${itAt(hint.levels[0])}${itThumb(hint)}${itSlot(hint)}${itName(hint)}</li>`).join("")}</ul>` : "";
-  return `<div class="app-inventory-tab"><div class="app-it sw-${chosen.setSwitch}" data-level="${level}"${source ? ` data-source="${source}"` : ""}>
-      <div class="it-left"><div class="app-inventory-head">${setSwitchHead()}</div>${inventoryDrawing(level, state.now, { cell: 44, extra })}
+  return `<div class="app-inventory-tab"><div class="app-it" data-level="${level}"${source ? ` data-source="${source}"` : ""}>
+      <div class="it-left"><div class="app-inventory-head">${inventorySetSwitch()}</div>${inventoryDrawing(level, state.now, { cell: 44, extra })}
         ${inventoryOthers(level, state.now)}${later}</div>
       <div class="it-side">${inventoryDetail(shown, state)}</div>
     </div></div>`;

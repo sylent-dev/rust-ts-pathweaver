@@ -5,11 +5,18 @@
    that writes its name), on its thumbnail in the list, « unknown » in its yellow; the item's words as
    any other (--unknown-note, --unknown-ink, css/tokens.css). The note of a gem is in css/side-skills.css. */
 .app-inventory-head { display: flex; align-items: baseline; justify-content: space-between; }
-.app-inventory-sets { display: inline-flex; gap: 2px; }
-.app-inventory-sets button { height: 24px; padding: 0 7px; border: none; border-radius: 0; background: none; color: var(--weak); font-size: 12px; cursor: pointer; }
+/* The switch of the weapon set (2k2b, N2, the owner, 2026-11-21): a box in two halves, the set shown filled
+   with its colour, without a line under it (too heavy); its colour fades in once when the set changes, at
+   once when the system asks for less motion. */
+.app-inventory-sets { display: inline-flex; box-shadow: inset 0 0 0 1px var(--slot-line); }
+.app-inventory-sets button { height: 24px; padding: 0 11px; border: none; border-radius: 0; background: none; color: var(--weak); font-size: 12px; cursor: pointer; }
+.app-inventory-sets .is-set1 { --set: var(--tree-set-1); }
+.app-inventory-sets .is-set2 { --set: var(--tree-set-2); }
 .app-inventory-sets button:hover { color: var(--text); background: color-mix(in srgb, var(--text) 8%, transparent); }
-.app-inventory-sets .is-set1[aria-pressed="true"] { color: var(--tree-set-1); }
-.app-inventory-sets .is-set2[aria-pressed="true"] { color: var(--tree-set-2); }
+.app-inventory-sets button[aria-pressed="true"] { color: var(--set); background: color-mix(in srgb, var(--set) 20%, transparent); }
+.app-inventory-sets.is-moved button[aria-pressed="true"] { animation: sets-fade .25s ease-out; }
+@keyframes sets-fade { from { background: transparent; } }
+@media (prefers-reduced-motion: reduce) { .app-inventory-sets.is-moved button[aria-pressed="true"] { animation: none; } }
 
 /* The slots 5 px right, the edge of the weapon under the « I » of the title (the owner, 2026-11-20, by eye). */
 .app-inventory { position: relative; margin-top: 6px; margin-left: 5px; }
