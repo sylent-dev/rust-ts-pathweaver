@@ -1,0 +1,117 @@
+/* The About tab (js/about-tab.js, 2k3): twelve variants, the class ab-<variant>. As high as the Overview,
+   scrolling inside, on the graph paper of the blocks (css/textures.css). */
+.app-about-tab { height: 668px; overflow-y: auto; box-sizing: border-box; background: var(--side-column); scrollbar-width: thin; }
+/* Its graph paper as the other tabs (css/textures.css). */
+.app-ab { box-sizing: border-box; min-height: 100%; font-size: 13px; line-height: 1.5; }
+.app-ab ul { margin: 0; padding: 0; list-style: none; }
+
+/* The shared pieces. */
+.ab-page { max-width: 640px; padding: 22px 32px 28px; }
+.ab-page.is-wide { max-width: none; }
+.ab-title { margin: 22px 0 8px; font-size: 14px; }
+.ab-title:first-child { margin-top: 0; }
+.ab-count { color: var(--unknown-note); }
+.ab-desc { font-size: 13.5px; line-height: 1.6; overflow-wrap: anywhere; }
+.ab-none { margin: 0; font-size: 12.5px; }
+.ab-line { margin: 0; }
+.ab-link { display: inline-flex; align-items: center; gap: 6px; color: var(--accent); font-weight: 600; text-decoration: none; }
+.ab-link:hover span { text-decoration: underline; text-underline-offset: 3px; }
+.ab-link-text { color: var(--text); overflow-wrap: anywhere; }
+.ab-file { flex: none; padding-left: 0; }
+.ab-file-row { display: flex; align-items: center; gap: 18px; }
+.ab-where { margin: 6px 0 0; font-size: 11.5px; line-height: 1.45; }
+.ab-where code { font-family: var(--font-code); font-size: 11px; color: var(--text); }
+.ab-intro { margin: 0 0 8px; font-size: 12px; }
+.ab-part { margin: 10px 0 4px; color: var(--on-band-weak); font-size: 10.5px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; }
+.ab-warning { display: flex; align-items: center; gap: 8px; min-height: 24px; font-size: 12.5px; white-space: nowrap; }
+.ab-warning > span:not(.app-unknown) { overflow: hidden; text-overflow: ellipsis; }
+.ab-warning .app-unknown { flex: none; }
+.ab-warning-name { font-weight: 600; }
+.ab-warning-levels { flex: none; margin-left: auto; font-size: 11.5px; }
+.ab-gap { margin-top: 22px; }
+.ab-by { margin: 2px 0 0; color: var(--text); font-size: 12.5px; }
+
+/* N2: cut in two, as the Inventory tab. */
+.ab-cut { display: flex; min-height: 668px; }
+.ab-cut-main { flex: 1; padding: 22px 28px 28px 32px; }
+.ab-cut-side { flex: none; width: 330px; box-sizing: border-box; padding: 22px 24px 28px; background: var(--slot-box); }
+
+/* N3: cards. */
+.ab-cards { display: flex; gap: 18px; padding: 20px; }
+.ab-cards-main { flex: 1; }
+.ab-cards-side { flex: none; display: flex; flex-direction: column; gap: 14px; width: 320px; }
+.ab-card { background: color-mix(in srgb, var(--band-deep), #000 60%); }
+.ab-card-head { padding: 8px 12px; background: var(--band-deep); font-weight: 600; }
+.ab-card-body { padding: 10px 12px 12px; }
+
+/* H1: the warnings first, on a band. */
+.ab-alert { padding: 14px 32px 16px; background: color-mix(in srgb, var(--unknown-note) 9%, transparent); box-shadow: inset 0 -1px 0 color-mix(in srgb, var(--unknown-note) 30%, transparent); }
+.ab-alert-head { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; color: var(--unknown-note); }
+.ab-bar { display: flex; align-items: center; justify-content: space-between; gap: 18px; margin-bottom: 16px; }
+
+/* H2: a colophon. */
+.ab-colophon { display: flex; min-height: 668px; }
+.ab-colophon-side { flex: none; width: 260px; box-sizing: border-box; padding: 24px 24px 28px 32px; background: var(--slot-box); }
+.ab-colophon-main { flex: 1; max-width: 600px; padding: 24px 32px 28px; }
+.ab-portrait { display: block; margin-bottom: 12px; }
+.ab-name { margin: 0; font-size: 17px; line-height: 1.25; }
+.ab-facts { display: grid; grid-template-columns: 58px 1fr; gap: 8px 10px; margin: 16px 0; font-size: 12.5px; }
+.ab-facts dt { color: var(--on-band-weak); font-size: 11px; }
+.ab-facts dd { margin: 0; }
+
+/* H3: a letter. */
+.ab-letter-page { max-width: 620px; margin: 0 auto; padding: 26px 32px 28px; }
+.ab-letter { padding: 22px 26px; background: color-mix(in srgb, var(--text) 5%, transparent); box-shadow: inset 3px 0 0 color-mix(in srgb, var(--accent) 60%, transparent); }
+.ab-letter .ab-desc { font-size: 14px; line-height: 1.7; }
+.ab-sign { margin: 16px 0 0; text-align: right; font-style: italic; }
+.ab-read { margin: 14px 0 0; }
+.ab-letter-foot { display: flex; align-items: center; gap: 18px; margin-top: 14px; }
+.ab-chip { display: inline-flex; align-items: center; gap: 7px; color: var(--unknown-note); font-size: 12.5px; }
+
+/* E1: the portrait. */
+.ab-hero { position: relative; display: flex; align-items: flex-end; height: 170px; padding: 0 32px 18px; overflow: hidden; }
+.ab-hero-art { position: absolute; inset: -40px auto -40px 0; width: 420px; background-size: cover; background-position: center; opacity: .28;
+  mask-image: linear-gradient(90deg, #000 30%, transparent); }
+.ab-hero-text { position: relative; flex: 1; }
+.ab-hero-name { margin: 0; font-size: 24px; }
+.ab-hero .ab-bar { margin: 12px 0 0; justify-content: flex-start; }
+.ab-e1 .ab-page { padding-top: 6px; }
+
+/* E2: contents. */
+.ab-contents { display: flex; }
+.ab-nav { position: sticky; top: 0; flex: none; display: flex; flex-direction: column; gap: 2px; width: 200px; box-sizing: border-box; padding: 22px 0 22px 32px; align-self: flex-start; }
+.ab-nav-item { padding: 3px 10px; color: var(--on-band-weak); font-size: 12.5px; box-shadow: inset 1px 0 0 color-mix(in srgb, var(--text) 15%, transparent); cursor: pointer; }
+.ab-nav-item.is-here { color: var(--text); box-shadow: inset 2px 0 0 var(--accent); }
+.ab-nav-item:hover { color: var(--text); }
+.ab-sub { padding-left: 10px; text-transform: capitalize; }
+.ab-contents-main { flex: 1; max-width: 600px; padding: 22px 32px 28px 20px; }
+
+/* E3: tiles. */
+.ab-tiles { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; margin-bottom: 8px; }
+.ab-tiles.is-three { grid-template-columns: 1.2fr 1fr 1.3fr; margin-bottom: 22px; }
+.ab-tile { display: flex; flex-direction: column; gap: 2px; padding: 12px 14px; background: color-mix(in srgb, var(--text) 5%, transparent); }
+.ab-tile b { font-size: 22px; line-height: 1.1; }
+.ab-tile.is-text .ab-title { margin: 0 0 6px; font-size: 12px; }
+.ab-tile.is-warned { background: color-mix(in srgb, var(--unknown-note) 9%, transparent); }
+
+/* F1: the file opened. */
+.ab-sheet { position: relative; margin-bottom: 18px; padding: 18px 22px 16px; background: color-mix(in srgb, var(--text) 6%, transparent); clip-path: polygon(0 0, calc(100% - 22px) 0, 100% 22px, 100% 100%, 0 100%); }
+.ab-sheet-corner { position: absolute; top: 0; right: 0; width: 22px; height: 22px; background: color-mix(in srgb, var(--text) 16%, transparent); clip-path: polygon(0 0, 0 100%, 100% 100%); }
+.ab-sheet-name { margin: 0 0 12px; font-weight: 700; }
+.ab-field { display: grid; grid-template-columns: 120px 1fr; gap: 12px; padding: 6px 0; border-top: 1px solid color-mix(in srgb, var(--text) 8%, transparent); }
+.ab-key { color: var(--accent); font-family: var(--font-code); font-size: 11.5px; }
+
+/* F2: a check-up. */
+.ab-checks { display: flex; flex-direction: column; gap: 6px; margin-bottom: 22px !important; }
+.ab-check { display: flex; align-items: center; gap: 10px; }
+.ab-check-mark { display: inline-grid; place-items: center; width: 18px; height: 18px; font-size: 11px; font-weight: 800; }
+.ab-check.is-ok .ab-check-mark { color: #5fcf80; box-shadow: inset 0 0 0 1px color-mix(in srgb, #5fcf80 50%, transparent); }
+.ab-check.is-warned .ab-check-mark { background: var(--unknown-note); color: var(--unknown-ink); }
+
+/* F3: properties. */
+.ab-props { width: 100%; margin-bottom: 16px; border-collapse: collapse; font-size: 12.5px; }
+.ab-props th { width: 130px; padding: 6px 12px 6px 0; color: var(--on-band-weak); font-size: 11.5px; font-weight: 500; text-align: left; vertical-align: top; }
+.ab-props td { padding: 6px 0; border-top: 1px solid color-mix(in srgb, var(--text) 8%, transparent); }
+.ab-props tr:first-child td { border-top: none; }
+.ab-props code { font-family: var(--font-code); font-size: 11.5px; }
+.ab-props .app-unknown { vertical-align: -2px; margin-right: 4px; }

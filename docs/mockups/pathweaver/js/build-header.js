@@ -26,7 +26,7 @@ function buildHeader() {
       <p class="app-header-by app-weak">by ${escapeHtml(SHOWN.author)} · ${escapeHtml(SHOWN.ascendancy)} <span class="app-header-class">${escapeHtml(SHOWN.class)}</span></p>
     </div>
     <div class="app-header-actions">
-      ${unknown > 0 ? `<button type="button" class="app-button is-filled">${icon(14, ICONS.warning)}${plural(unknown, "warning")}</button>` : ""}
+      ${unknown > 0 ? `<button type="button" class="app-button is-filled" data-action="tab-go" data-tab="about">${icon(14, ICONS.warning)}${plural(unknown, "warning")}</button>` : ""}
       <button type="button" class="app-file" draggable="true" title="${escapeHtml(BUILD_FILE.name)}">${fileIcon()}<span class="app-file-text"><span class="app-file-label">Download .build</span><small>${BUILD_FILE.size}</small></span></button>
     </div>
   </div>`;

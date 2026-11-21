@@ -87,6 +87,18 @@ INVENTORY_CASES = {
     "replaced": "maxroll-aer0-ice-shot-amazon.build",
     "campaign": "poe2-tools-fubgun-ice-shot-campaign.build",
 }
+# The cases of the About tab (2k3): the build shown, a long description in the markup of the game (1,160
+# characters, the longest of the corpus) and the link of its guide; a leveling guide without description nor
+# link, 18 gems the game data don't know (the only warnings of the corpus outside its test fixtures); an
+# Amazon whose links are written in its description, its `link` empty.
+ABOUT_CASES = {
+    "shown": SHOWN,
+    "warnings": "ferox-shield-wall-leveling.build",
+    "amazon": "maxroll-aer0-ice-shot-amazon.build",
+}
+# The inventory ids of the game (docs/build-files-in-the-wild.md).
+INVENTORY_IDS = {"Weapon1", "Weapon2", "Offhand1", "Offhand2", "Helm1", "BodyArmour1", "Gloves1", "Boots1", "Belt1",
+                 "Amulet1", "Ring1", "Ring2", "Flask1", "Flask2", "Charm1", "Trinket1"}
 # The cases of « N changes at N » (2g): a respec, 42 passives given back at 65; the swap of a
 # leveling build to its end, 82 changes at 71.
 CHANGE_CASES = {
@@ -420,6 +432,54 @@ def library_row(build, ascendancies):
             "levels": level_range(build)}
 
 
+def about_of(name, build, tree, names, uniques, ascendancies):
+    """What the About tab shows of a build (2k3): its words, its link, its file and its size, the levels it
+    covers, its counts, and its warnings by part: an id the game data don't know (a passive, a gem, a
+    unique, a slot, the ascendancy), an interval whose min is above its max (specs.md, The level)."""
+    dicts = lambda items: [item for item in items or [] if isinstance(item, dict)]
+    passive_ids = {node["id"] for node in tree["nodes"].values() if "id" in node}
+    unique_names = {u["name"] for u in uniques.values()}
+    skills = dicts(build.get("skills"))
+    warnings = []
+    warn = lambda part, entry_id, where, entry: warnings.append(
+        {"part": part, "id": entry_id, "where": where, "levels": interval(entry) if isinstance(entry, dict) else None})
+    if build.get("ascendancy") and build["ascendancy"] not in ascendancies:
+        warn("ascendancy", build["ascendancy"], "", None)
+    for passive in dicts(build.get("passives")):
+        if passive.get("id") not in passive_ids:
+            warn("passive", passive.get("id"), "", passive)
+    gem_name = lambda gem_id: names.get(gem_id, {}).get("name", gem_id.rsplit("/", 1)[-1])
+    for skill in skills:
+        if skill.get("id") not in names:
+            warn("gem", skill.get("id"), "", skill)
+        for support in dicts(skill.get("support_skills")):
+            if support.get("id") not in names:
+                warn("gem", support.get("id"), gem_name(skill.get("id", "")), support)
+    for slot in dicts(build.get("inventory_slots")):
+        if slot.get("inventory_id") not in INVENTORY_IDS:
+            warn("slot", slot.get("inventory_id"), "", slot)
+        if slot.get("unique_name") and slot["unique_name"] not in unique_names:
+            warn("unique", slot["unique_name"], slot.get("inventory_id", ""), slot)
+    for entry in [*dicts(build.get("passives")), *skills, *(s for k in skills for s in dicts(k.get("support_skills"))),
+                  *dicts(build.get("inventory_slots"))]:
+        low, high = interval(entry)
+        if low > high:
+            warn("interval", entry.get("id") or entry.get("inventory_id"), "", entry)
+    asc = ascendancies.get(build.get("ascendancy"), {})
+    return {
+        "name": build.get("name", ""), "author": build.get("author") or "",
+        "ascendancy": asc.get("name", ""), "class": asc.get("class", ""),
+        "portrait": (build.get("ascendancy") or "").lower(),
+        "description": build.get("description") or "", "link": build.get("link") or "",
+        "file": f"{build.get('name', name)}.build", "size": (CORPUS / name).stat().st_size,
+        "levels": level_range(build),
+        "counts": {"passives": len(dicts(build.get("passives"))), "skills": len(skills),
+                   "supports": sum(len(dicts(s.get("support_skills"))) for s in skills),
+                   "hints": len(dicts(build.get("inventory_slots")))},
+        "warnings": warnings,
+    }
+
+
 def first_line(text):
     lines = [line for line in (text or "").splitlines() if line.strip()]
     return lines[0] if lines else ""
@@ -688,12 +748,15 @@ def main():
     inventories = {key: build_data(read(name), names, gems, ascendancies, skills, tags)["slots"]
                    for key, name in INVENTORY_CASES.items()}
     skill_icons(cache, gems, [shown["skills"], crowded, *attributes.values()])
+    # The cases of the About tab (2k3).
+    abouts = {key: about_of(name, read(name), tree, names, uniques, ascendancies) for key, name in ABOUT_CASES.items()}
     write_js("data-builds.js", "BUILDS", {
         "treeVersion": TREE_TAG,
         "shown": shown,
         "crowded": {"skills": crowded},
         "attributes": attributes,
         "inventories": inventories,
+        "abouts": abouts,
         "items": item_art(cache, names, uniques,
                           [*map(item_name, builds[0].get("inventory_slots", [])), *SAMPLE_ITEMS,
                            *(item_name(slot) for name in INVENTORY_CASES.values() for slot in read(name).get("inventory_slots", []))],
