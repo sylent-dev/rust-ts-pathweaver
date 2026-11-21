@@ -60,12 +60,15 @@ function inventoryTab(level = STATE.level, source) {
   const state = itState(level, source);
   const hints = [...state.now, ...state.later];
   const shown = hints.find(hint => cellKey(hint) === STATE.itChosen) ?? state.now.find(hint => startsAt(hint.levels, level)) ?? hints[0];
-  const extra = (id, x) => ({ attributes: `data-action="it-choose" data-cell="${cellKey({ id, x })}"`,
-    className: shown && cellKey({ id, x }) === cellKey(shown) ? `is-chosen${STATE.itFlash ? " is-flash" : ""}` : "" });
+  const extra = (id, x) => {
+    const sw = setSwitchSlot(id, state.now);
+    return { attributes: `data-action="it-choose" data-cell="${cellKey({ id, x })}"`, html: sw.html ?? "",
+      className: `${shown && cellKey({ id, x }) === cellKey(shown) ? `is-chosen${STATE.itFlash ? " is-flash" : ""}` : ""} ${sw.className ?? ""}` };
+  };
   const later = state.later.length ? `${itTitle("To come", "is-next")}<ul class="it-rows">${state.later.map(hint =>
     `<li class="it-row is-later" data-action="it-choose" data-cell="${cellKey(hint)}" ${itAbout(hint, level)}>${itAt(hint.levels[0])}${itThumb(hint)}${itSlot(hint)}${itName(hint)}</li>`).join("")}</ul>` : "";
-  return `<div class="app-inventory-tab"><div class="app-it" data-level="${level}"${source ? ` data-source="${source}"` : ""}>
-      <div class="it-left"><div class="app-inventory-head">${inventorySetSwitch()}</div>${inventoryDrawing(level, state.now, { cell: 44, extra })}
+  return `<div class="app-inventory-tab"><div class="app-it sw-${chosen.setSwitch}" data-level="${level}"${source ? ` data-source="${source}"` : ""}>${setSwitchEdge()}
+      <div class="it-left"><div class="app-inventory-head">${setSwitchHead()}</div>${inventoryDrawing(level, state.now, { cell: 44, extra })}
         ${inventoryOthers(level, state.now)}${later}</div>
       <div class="it-side">${inventoryDetail(shown, state)}</div>
     </div></div>`;

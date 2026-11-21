@@ -85,6 +85,8 @@ const inventoryBox = (level, hints = slotsAt(level, STATE.inventorySet)) =>
     ${inventoryDrawing(level, hints)}${inventoryOthers(level, hints)}`;
 
 ACTIONS["inventory-set"] = element => {
+  // A change of set plays the motion of the switch of the Inventory tab once (js/set-switch.js).
+  STATE.setMoved = STATE.inventorySet !== Number(element.dataset.set);
   STATE.inventorySet = Number(element.dataset.set);
   return true;
 };
