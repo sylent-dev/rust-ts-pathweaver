@@ -16,18 +16,19 @@ const fileIcon = () => `<svg class="app-file-icon" width="26" height="32" viewBo
     <path d="M0 0H17L26 9V32H0Z" fill="var(--on-band)"/><path d="M17 0V9H26Z" fill="var(--band-deep)" fill-opacity=".35"/>
     <text x="13" y="26" text-anchor="middle" font-size="7.5" font-weight="700" font-family="Manrope, sans-serif" fill="var(--band-deep)">.build</text></svg>`;
 
-function buildHeader() {
-  const unknown = TREE.unknown.length
-    + SHOWN.skills.flatMap(skill => [skill, ...skill.supports]).filter(gem => !gem.known).length;
+// `build`: the build of the header, the build shown by default; `warnings`, their number (2k4: a build of the
+// corpus with warnings, the button in the yellow of the sticky note « ? », the owner, 2026-11-21).
+function buildHeader(build = SHOWN, warnings = TREE.unknown.length
+    + SHOWN.skills.flatMap(skill => [skill, ...skill.supports]).filter(gem => !gem.known).length, file = BUILD_FILE) {
   return `<div class="app-header">
-    <img class="app-header-portrait" src="pathweaver/img/portraits-square/${SHOWN.portrait}.webp" width="66" height="66" alt="">
+    <img class="app-header-portrait" src="pathweaver/img/portraits-square/${build.portrait}.webp" width="66" height="66" alt="">
     <div class="app-header-text">
-      <h1 class="app-header-name app-title">${escapeHtml(SHOWN.name)}</h1>
-      <p class="app-header-by app-weak">by ${escapeHtml(SHOWN.author)} · ${escapeHtml(SHOWN.ascendancy)} <span class="app-header-class">${escapeHtml(SHOWN.class)}</span></p>
+      <h1 class="app-header-name app-title">${escapeHtml(build.name)}</h1>
+      <p class="app-header-by app-weak">${build.author ? `by ${escapeHtml(build.author)} · ` : ""}${escapeHtml(build.ascendancy)} <span class="app-header-class">${escapeHtml(build.class)}</span></p>
     </div>
     <div class="app-header-actions">
-      ${unknown > 0 ? `<button type="button" class="app-button is-filled" data-action="tab-go" data-tab="about">${icon(14, ICONS.warning)}${plural(unknown, "warning")}</button>` : ""}
-      <button type="button" class="app-file" draggable="true" title="${escapeHtml(BUILD_FILE.name)}">${fileIcon()}<span class="app-file-text"><span class="app-file-label">Download .build</span><small>${BUILD_FILE.size}</small></span></button>
+      ${warnings > 0 ? `<button type="button" class="app-button is-filled is-warned" data-action="tab-go" data-tab="about">${icon(14, ICONS.warning)}${plural(warnings, "warning")}</button>` : ""}
+      <button type="button" class="app-file" draggable="true" title="${escapeHtml(file.name)}">${fileIcon()}<span class="app-file-text"><span class="app-file-label">Download .build</span><small>${file.size}</small></span></button>
     </div>
   </div>`;
 }

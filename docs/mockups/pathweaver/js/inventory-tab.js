@@ -62,8 +62,10 @@ ACTIONS["it-choose"] = element => {
 };
 AFTER_RENDER.push(() => { STATE.itFlash = false; });
 
-// The Inventory tab at a level, of the build shown or of a case.
-function inventoryTab(level = STATE.level, source) {
+// The Inventory tab at a level, of the build shown or of a case; `middle`, the hints upcoming in a column of
+// their own between the drawing and the box, and `cell`, the width of a cell of the drawing (2k4, ways to use
+// 1,920 px).
+function inventoryTab(level = STATE.level, source, { middle = false, cell = 44 } = {}) {
   const state = itState(level, source);
   const hints = [...state.now, ...state.later];
   const shown = state.all.find(hint => hintKey(hint) === STATE.itChosen) ?? hints.find(hint => cellKey(hint) === STATE.itChosen)
@@ -73,8 +75,9 @@ function inventoryTab(level = STATE.level, source) {
   const extra = (id, x) => ({ attributes: `data-action="it-choose" data-pick="${cellKey({ id, x })}"`,
     className: drawn && cellKey({ id, x }) === cellKey(shown) ? `is-chosen${STATE.itFlash ? " is-flash" : ""}` : "" });
   return `<div class="app-inventory-tab"><div class="app-it" data-level="${level}"${source ? ` data-source="${source}"` : ""}>
-      <div class="it-left"><div class="app-inventory-head">${inventorySetSwitch()}</div>${inventoryDrawing(level, state.now, { cell: 44, extra, said: true })}
-        ${inventoryOthers(level, state.now, true)}${inventoryLater(state, shown)}</div>
+      <div class="it-left"><div class="app-inventory-head">${inventorySetSwitch()}</div>${inventoryDrawing(level, state.now, { cell, extra, said: true })}
+        ${inventoryOthers(level, state.now, true)}${middle ? "" : inventoryLater(state, shown)}</div>
+      ${middle ? `<div class="it-mid">${inventoryLater(state, shown)}</div>` : ""}
       <div class="it-side">${inventoryDetail(shown, state)}</div>
     </div></div>`;
 }

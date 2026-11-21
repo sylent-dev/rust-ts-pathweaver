@@ -58,14 +58,17 @@ const abWarnings = about => `${abTitle(`<span class="ab-warned">${plural(about.w
 const abWatermark = () => `<svg class="ab-watermark" viewBox="0 0 16 16" aria-hidden="true">${ICONS.note}</svg>`;
 
 // The About tab of the build shown, or of a case (`source`, a key of BUILDS.abouts).
-function aboutTab(level, source = "shown") {
+// `aside`, the warnings in a column of their own at the right (2k4, a way to use 1,920 px).
+function aboutTab(level, source = "shown", { aside = false } = {}) {
   const about = BUILDS.abouts[source];
+  const warnings = about.warnings.length ? abWarnings(about) : "";
   return `<div class="app-about-tab"><div class="app-ab"><div class="ab-colophon">
       <aside class="ab-colophon-side"><img class="ab-portrait" src="pathweaver/img/portraits-about/${about.portrait}.webp" width="260" height="260" alt="">
         <h3 class="ab-name app-title">${escapeHtml(about.name)}</h3>
         <p class="ab-by">${about.author ? `by ${escapeHtml(about.author)} · ` : ""}${escapeHtml(about.ascendancy)} <span class="app-weak">${escapeHtml(about.class)}</span></p>
         <dl class="ab-facts"><dt>Levels</dt><dd>${about.levels ? `${about.levels[0]}–${about.levels[1]}` : "a snapshot"}</dd><dt>Entries</dt><dd>${abCounts(about).join("<br>")}</dd><dt>Guide</dt><dd class="ab-guide">${abGuide(about)}</dd></dl>
         ${abFile(about)}</aside>
-      <div class="ab-colophon-main">${abWatermark()}${abDescription(about)}${about.warnings.length ? `<div class="ab-gap">${abWarnings(about)}</div>` : ""}${abWhere()}</div>
+      <div class="ab-colophon-main">${abWatermark()}${abDescription(about)}${warnings && !aside ? `<div class="ab-gap">${warnings}</div>` : ""}${abWhere()}</div>
+      ${aside ? `<div class="ab-aside">${warnings || `${abTitle("Warnings")}<p class="ab-none app-weak">None: every id of the file is in the game data of ${BUILDS.treeVersion}.</p>`}</div>` : ""}
     </div></div></div>`;
 }
