@@ -10,8 +10,9 @@
 .ab-colophon { display: flex; min-height: 668px; }
 .ab-colophon-side { flex: none; width: 260px; box-sizing: border-box; padding: 24px 24px 28px 32px; background: var(--slot-box); }
 .ab-colophon-main { position: relative; isolation: isolate; flex: 1; max-width: 600px; padding: 24px 32px 28px; }
-/* The watermark: the mark of a note, large, in the middle of the part, behind the words (2k3b). */
-.ab-watermark { position: absolute; top: 50%; left: 50%; z-index: -1; width: 240px; height: 240px; translate: -50% -50%; color: var(--text); opacity: var(--ab-mark, 5%); pointer-events: none; }
+/* The watermark: the mark of a note, filled, 240 px, in the middle of the part, behind the words, at 3 % (2k3b,
+   the owner, 2026-11-21, on a slider; its outline set aside). */
+.ab-watermark { position: absolute; top: 50%; left: 50%; z-index: -1; width: 240px; height: 240px; translate: -50% -50%; color: var(--text); opacity: .03; pointer-events: none; }
 /* The portrait across the pane from its top, fading toward the bottom from 40 % of its height, to nothing at
    its foot; the name and the author rise 70 px over it (the owner, 2026-11-21, on sliders: too imposing whole). */
 .ab-portrait { display: block; width: calc(100% + 56px); height: auto; margin: -24px -24px -54px -32px;
