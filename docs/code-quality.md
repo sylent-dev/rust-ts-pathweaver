@@ -61,6 +61,8 @@ The name comes first: a reader who sees only the name should know what the thing
 - A rule of the game or of the format lives in the core, never in the interface: the interface shows what the core computed.
 - Every text comes from the Fluent files of `web/locales/`, never from the code, and the markup is accessible: a button is a `<button>`, an image has its text, the main actions reach the keyboard.
 - A failure of the page (a module that can't load, a message missing, the storage refused) is shown or logged, never a blank page.
+- Every colour goes through a token of the style (`var(--accent)`), and so does every size or motion the design system names (`specs.md`, The style): never a colour written out in a component, a script or the canvas, which reads the same tokens. The only colours written out are those of a drawing that is the same on every background (the light facet of the mark of a gem); a new colour is a new token, named by its role, in the style sheet of the tokens.
+- A component styles its own markup only: no selector that reaches into another component (Svelte scopes the classes and the `@keyframes` to their component, and such a rule would stop applying without a word), no rule that only undoes another (a variant is a class of its own), a layout that depends on the width asks its container (`@container window`), never a class set from outside. What every component shares (a motion, the gold of a unique, the ring of focus) lives in one global style sheet, its rules no stronger than one class (`:where()` around what scopes them), so that a component can change them.
 
 ## Modules
 

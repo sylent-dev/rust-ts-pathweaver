@@ -87,3 +87,40 @@ The static website of a freelance trainer in software development, for schools, 
 - The process names the token file `docs/design-system.md`; this project kept them in its branding note, next to the decisions they come from (the process now names it `docs/branding.md`).
 - After the build, most of the owner's remarks were about the large titles on a phone: a title that breaks on two lines or a faded word that widens the page. Each large title is now sized at build time from the metrics of its font, so that it fills one line, and a check in Chromium fails on a title on two lines. With large display titles, test them at phone width in the mock-up already.
 - The white line-art 3D scenes are what the owner liked most: playful and precise, each one tells its subject in a few elements, with the orange on what moves.
+
+## Pathweaver (2026-11)
+
+A website, run in the browser alone, that shows a build of Path of Exile 2 (a `.build` file of the game) at each level: the passive tree, the skills and the inventory ([mock-up](docs/mockups/pathweaver.html), [the style and the design system](specs.md), The style).
+
+### Context
+
+- The players open a guide next to the game, in a window as narrow as half a screen: the page must read at a glance, and the tree is the part one zooms in.
+- The data are the game's: the colours of the attributes, the icons and frames of the passives, the portraits of the ascendancies; the rest is Pathweaver's own (its mark, its marks of gems and of notes, a sticky note « ? »).
+- An owner who decides by eye, among many variants, on sliders, one decision at a time.
+
+### How it went
+
+1. Twenty-nine styles on one page, ten from directions (sober, bold, wild), five from a moodboard the owner picked, then twelve mixes of the three kept; Frost Night kept, Frost (light) and Ember (amber) on trial.
+2. The page of a build cut into its components and drawn from top to bottom, one component a sub-step and a pull request, the decisions it brings up (the second accent, the texture, the motion) settled in the component where they show: about thirty pull requests.
+3. Frost and Ember set aside until after version 1, every colour made a token, the style sheets checked by a script and a review, then split one per component so that each copies into its Svelte component; every refactoring checked the same to the pixel against `main`, on headless screenshots with the text drawn without antialiasing differences.
+
+### Choices kept
+
+- **Frost Night**: a blue black, pale blue lines, flat boxes, one blue accent; no borders, the blocks told apart by shades; a graph paper at 3 % behind every block.
+- **Manrope** for every role, its figures of one width for the levels; Archivo for the name and the big titles.
+- **The colours of the domain apart from one another**: the attributes as in the game, the changes at a level (green, orange, red) apart from them, the red of an error apart from strength.
+- **Cards on hover in one construction**: a head in the deep shade, a body a step darker, the note of the author last, see-through over the tree and opaque over rows.
+- **Motion with a small bounce** on what opens, every motion stopped when the system asks for less.
+
+### Choices rejected
+
+- Frost and Ember for version 1: one style is enough for a first version, and the light one needs a pass of its own (shadows, textures and grey portraits don't carry over).
+- Borders between the blocks, the underline in the accent under the current tab, the light of the page on the cards, the graph paper on the cards.
+- A page drawn again for the phone: one message under 600 pixels, the players use a computer.
+
+### Lessons
+
+- One component a pull request, from top to bottom, kept each review short and each decision in the place where it shows; a sub-step that brought up more decisions opened another rather than growing.
+- Svelte scopes the classes and the `@keyframes` of a component: a mock-up whose style sheets reach into each other has to be split before the copy, or its rules stop applying without a word. Writing one style sheet per component from the start, and the colours as tokens from the first style, saves that pass.
+- A refactoring of style sheets is checked to the pixel: Chromium with fixed font rendering gives two identical shots, so a difference is a real change.
+- A colour tuned on sliders slips under 4.5 to 1 easily; a contrast check by script belongs with the tokens, before the review.
