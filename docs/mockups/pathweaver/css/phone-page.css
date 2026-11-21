@@ -16,33 +16,38 @@
   padding: 0 32px 72px; text-align: center; }
 .ph-face { margin-bottom: 28px; }
 .ph-title { margin: 0 0 14px; font: 800 26px/1.15 var(--brand-font); letter-spacing: -0.03em; color: var(--text); }
-.ph-message p { margin: 0; max-width: 300px; color: var(--weak); font-size: 16px; line-height: 1.5; }
-.ph-open { margin-top: 28px !important; display: flex; flex-direction: column; align-items: center; gap: 8px; }
-.ph-open code { font: 600 17px var(--font-code); color: var(--text); padding: 8px 14px; background: rgb(0 0 0 / 35%); }
+.ph-message p { margin: 0; color: var(--weak); font-size: 14px; line-height: 1.6; white-space: nowrap; }   /* one sentence a line */
 
-/* U1: the line in the colour of the text, a little softer. */
-.ph-line { color: color-mix(in srgb, var(--text) 80%, transparent); }
+/* The faces (U5 to U16): the line in the colour of the text, a little softer, unless the accent. */
+.ph-soft, .ph-node, .ph-blink { color: color-mix(in srgb, var(--text) 80%, transparent); }
+.ph-accent-line { color: var(--accent); }
+.ph-node { color: var(--weak); }
 
-/* U2: the mark turned onto its side and grey; a tear of the accent under its inner ring. */
-.ph-mark { position: relative; display: inline-block; transform: rotate(-24deg); color: var(--weak); }
-.ph-mark .logo-frame { fill: color-mix(in srgb, var(--weak) 60%, transparent); }
-.ph-tear { position: absolute; left: 47%; top: 62%; width: 7px; height: 10px; background: var(--accent);
-  border-radius: 50% 50% 50% 50% / 65% 65% 35% 35%; transform: rotate(24deg);
-  animation: ph-tear 2.4s ease-in infinite; }
-@keyframes ph-tear { 0%, 40% { translate: 0 0; opacity: 0; } 50% { opacity: 1; } 100% { translate: 0 26px; opacity: 0; } }
+/* U6: a disc of the weak grey, its features in the colour of the page. */
+.ph-disc .ph-fill { fill: color-mix(in srgb, var(--weak) 70%, transparent); }
+.ph-disc .ph-cut { color: var(--page); }
 
-/* U3: the icon of the notable in grey and faded under the face, its frame in the weak grey. */
-.ph-passive { position: relative; display: grid; place-items: center; width: 96px; height: 96px; color: var(--text); }
-.ph-passive > * { grid-area: 1 / 1; }
-.ph-passive .nx-icon { filter: grayscale(1) brightness(.55); opacity: .5; }
-.ph-passive svg circle:not([fill]) { stroke: var(--weak); }
+/* U11: the pixels in the accent, one cell of the graph paper each. */
+.ph-pixel rect { fill: var(--accent); }
 
-/* U4: the accent, the disc at 14 %, the head tilted and sighing. */
-.ph-accent { color: var(--accent); transform-origin: 50% 85%; animation: ph-sigh 3.2s ease-in-out infinite; }
-.ph-accent-disc { fill: color-mix(in srgb, var(--accent) 14%, transparent); }
-@keyframes ph-sigh { 0%, 100% { rotate: -8deg; } 50% { rotate: -14deg; translate: 0 3px; } }
+/* U12: a face too wide for the phone, squeezed. */
+.ph-squeeze { display: block; transform: scaleX(.55); margin: -10px 0 -18px; }
+
+/* U13: the head shaking, a tear rolling down. */
+.ph-shake { color: var(--accent); animation: ph-shake 2.6s ease-in-out infinite; }
+@keyframes ph-shake { 0%, 60%, 100% { rotate: 0deg; } 66% { rotate: -7deg; } 74% { rotate: 6deg; } 82% { rotate: -4deg; } 90% { rotate: 2deg; } }
+.ph-roll { animation: ph-roll 2.6s ease-in infinite; }
+@keyframes ph-roll { 0%, 20% { translate: 0 0; opacity: 0; } 30% { opacity: 1; } 100% { translate: 0 12px; opacity: 0; } }
+
+/* U14: the grey sticky note of a free text (css/side-inventory.css), turned, a light shadow under it. */
+.ph-note { color: color-mix(in srgb, var(--text) 75%, transparent); transform: rotate(-8deg); filter: drop-shadow(2px 4px 4px rgb(0 0 0 / 45%)); }
+.ph-note .ph-fill { fill: color-mix(in srgb, var(--text) 22%, transparent); }
+
+/* U15: the eyes blink, the sweat in the accent. */
+.ph-eyes { transform-box: fill-box; transform-origin: center; animation: ph-blink 4s infinite; }
+@keyframes ph-blink { 0%, 92%, 100% { scale: 1 1; } 95% { scale: 1 .1; } }
+.ph-sweat { color: var(--accent); fill: color-mix(in srgb, var(--accent) 30%, transparent); }
 
 @media (prefers-reduced-motion: reduce) {
-  .ph-tear { animation: none; opacity: 1; }
-  .ph-accent { animation: none; rotate: -8deg; }
+  .ph-shake, .ph-roll, .ph-eyes { animation: none; }
 }
