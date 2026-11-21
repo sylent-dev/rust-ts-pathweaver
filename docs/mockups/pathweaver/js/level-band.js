@@ -219,20 +219,16 @@ AFTER_RENDER.push(() => {
   STATE.slides = {};
 });
 
-// Where the cursor covers the figures of an end or the words of a snapshot (2k5): the two marked, so that one of
-// them fades (css/level-band.css), measured where they are drawn, the cursor lifted by a drag included.
+// Where the cursor covers the figures of an end or the words of a snapshot (2k5): the words marked, so that they
+// fade (css/level-band.css), measured where they are drawn, the cursor lifted by a drag included.
 function markCovered(track) {
   const cursor = track.querySelector(".app-level-cursor");
   if (!cursor) return;
   const c = cursor.getBoundingClientRect();
-  let covering = false;
   for (const element of track.querySelectorAll(".app-level-end, .app-level-note")) {
     const r = element.getBoundingClientRect();
-    const covered = c.right > r.left - 1 && c.left < r.right + 1 && c.bottom > r.top - 1 && c.top < r.bottom + 1;
-    element.classList.toggle("is-covered", covered);
-    covering ||= covered;
+    element.classList.toggle("is-covered", c.right > r.left - 1 && c.left < r.right + 1 && c.bottom > r.top - 1 && c.top < r.bottom + 1);
   }
-  cursor.classList.toggle("is-covering", covering);
 }
 // After a drawing, once the cursor has slid to its level (or landed), so that it is measured where it stops.
 AFTER_RENDER.push(() => document.querySelectorAll(".app-level-track").forEach(track => {

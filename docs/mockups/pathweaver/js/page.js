@@ -24,12 +24,6 @@ const VARIANTS = {
   // The width of the windows of the home page (2l): the minimum of specs.md, half a 1920-pixel screen, and a wide
   // window of the owner's screen.
   homeWidth: { label: "Home width", options: { 900: "900 px", 960: "960 px", 1600: "1,600 px" }, fallback: "960" },
-  // The lowest and the highest level under the ends of the track (2k5, the owner, 2026-11-21): in the figures of
-  // the level, smaller, under the cursor rather than behind it; their size and their strength by eye.
-  endSize: { label: "Track ends", range: { min: 11, max: 22, step: 1 }, variable: "--level-end-size", unit: "px", fallback: "16" },
-  endAlpha: { label: "Their strength", range: { min: 20, max: 100, step: 5 }, variable: "--level-end-alpha", unit: "%", fallback: "45" },
-  // What fades where the cursor covers them, or the words of a snapshot (2k5): the words, or the cursor.
-  levelCover: { label: "Under the cursor", options: { words: "L1 · the words fade", cursor: "L2 · the cursor fades" }, fallback: "words" },
 };
 
 // The styles a section shows side by side: the style of the page alone, Frost Night by default, the
