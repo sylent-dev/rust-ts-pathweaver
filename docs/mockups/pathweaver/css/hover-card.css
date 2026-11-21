@@ -51,7 +51,7 @@
    Inventory tab: A4, the bubble of the mark of a note before the words, in the weak grey (the owner,
    2026-11-21; small capitals, the words of a subtitle and a tag on the top edge of the part set aside). */
 .hc-from { display: flex; align-items: center; gap: 5px; margin-bottom: 4px; color: var(--on-band-weak); font-size: 11px; line-height: 1.3; }
-.hc-from .app-icon { flex: none; translate: 0 var(--hc-from-y, 0px); }   /* its height against the words, on a slider */
+.hc-from .app-icon { flex: none; translate: 0 -.5px; }   /* half a pixel up against the words (the owner, 2026-11-21, on a slider) */
 
 /* The section of the mock-up (sections/hover-cards.js): the cards drawn in place, visible by themselves,
    not by is-shown, which the hover scripts take off every card of the page (a turn of the wheel hides the
