@@ -1,0 +1,15 @@
+# The headers Cloudflare adds to the files of the website (docs/cloudflare-usage.md); the rules
+# that match a file all apply, in their order.
+
+/*
+  # A file is read as the type it is served with, never guessed from its contents.
+  X-Content-Type-Options: nosniff
+  # No other site shows the website in a frame of its own.
+  X-Frame-Options: DENY
+  # A link followed out of the website gives the site only, not the page.
+  Referrer-Policy: strict-origin-when-cross-origin
+
+# The files of SvelteKit named by their contents: a new version has new names, so they never
+# need to be checked again.
+/_app/immutable/*
+  Cache-Control: public, max-age=31536000, immutable
