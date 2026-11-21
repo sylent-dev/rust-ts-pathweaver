@@ -24,6 +24,10 @@ const VARIANTS = {
   // The width of the windows of the home page (2l): the minimum of specs.md, half a 1920-pixel screen, and a wide
   // window of the owner's screen.
   homeWidth: { label: "Home width", options: { 900: "900 px", 960: "960 px", 1600: "1,600 px" }, fallback: "960" },
+  // The watermark of the description in the About tab (2k3b): the mark of a note, outline or filled, and its
+  // strength (css/about-tab.css).
+  aboutMark: { label: "Watermark", options: { outline: "Outline", filled: "Filled" }, fallback: "outline" },
+  aboutMarkStrength: { label: "Watermark strength", range: { min: 2, max: 16, step: 1 }, variable: "--ab-mark", unit: "%", fallback: "5" },
 };
 
 // The styles a section shows side by side: the style of the page alone, Frost Night by default, the

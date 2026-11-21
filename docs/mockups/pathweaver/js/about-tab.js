@@ -53,6 +53,11 @@ const abWarnings = about => `${abTitle(`<span class="ab-warned">${plural(about.w
   <p class="ab-intro app-weak">Not in the game data of ${BUILDS.treeVersion}: a file made for another version of the game is the usual cause. The rest of the build shows as usual.</p>
   ${abGroups(about).map(([part, list]) => `<h4 class="ab-part">${AB_PARTS[part]} · ${list.length}</h4><ul class="ab-warnings">${list.map(abWarningRow).join("")}</ul>`).join("")}`;
 
+// The watermark of the description (2k3b, the owner, 2026-11-21): the mark of a note of the author, large, in
+// the middle of the part, outline or filled (the tabs « Watermark »), its strength on a slider.
+const AB_NOTE_OUTLINE = '<path d="M2 3h12v8.2H7.2L3.4 14.2V11.2H2z" fill="none" stroke="currentColor" stroke-width=".5" stroke-linejoin="round"/>';
+const abWatermark = () => `<svg class="ab-watermark" viewBox="0 0 16 16" aria-hidden="true">${chosen.aboutMark === "filled" ? ICONS.note : AB_NOTE_OUTLINE}</svg>`;
+
 // The About tab of the build shown, or of a case (`source`, a key of BUILDS.abouts).
 function aboutTab(level, source = "shown") {
   const about = BUILDS.abouts[source];
@@ -62,6 +67,6 @@ function aboutTab(level, source = "shown") {
         <p class="ab-by">${about.author ? `by ${escapeHtml(about.author)} · ` : ""}${escapeHtml(about.ascendancy)} <span class="app-weak">${escapeHtml(about.class)}</span></p>
         <dl class="ab-facts"><dt>Levels</dt><dd>${about.levels ? `${about.levels[0]}–${about.levels[1]}` : "a snapshot"}</dd><dt>Entries</dt><dd>${abCounts(about).join("<br>")}</dd><dt>Guide</dt><dd class="ab-guide">${abGuide(about)}</dd></dl>
         ${abFile(about)}</aside>
-      <div class="ab-colophon-main">${abDescription(about)}${about.warnings.length ? `<div class="ab-gap">${abWarnings(about)}</div>` : ""}${abWhere()}</div>
+      <div class="ab-colophon-main">${abWatermark()}${abDescription(about)}${about.warnings.length ? `<div class="ab-gap">${abWarnings(about)}</div>` : ""}${abWhere()}</div>
     </div></div></div>`;
 }
