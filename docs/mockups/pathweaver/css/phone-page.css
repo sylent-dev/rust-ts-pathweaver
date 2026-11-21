@@ -1,6 +1,8 @@
 /* The phone page (2m, js/phone-page.js): one column in the middle of the phone, on the page and its graph paper. */
 
-.ph-window { isolation: isolate; display: flex; flex-direction: column; }
+/* The light of the page moved from its top left to its bottom, flat along the bottom edge (the owner, 2026-11-21). */
+.ph-window { isolation: isolate; display: flex; flex-direction: column;
+  background: radial-gradient(ellipse 110% 22% at 50% 100%, var(--page-glow) 0%, transparent 75%), var(--page); }
 .ph-window::before {
   content: ""; position: absolute; inset: 0; z-index: -1; pointer-events: none;
   background: var(--texture-colour); opacity: var(--texture-opacity);
@@ -18,36 +20,54 @@
 .ph-title { margin: 0 0 14px; font: 800 26px/1.15 var(--brand-font); letter-spacing: -0.03em; color: var(--text); }
 .ph-message p { margin: 0; color: var(--weak); font-size: 14px; line-height: 1.6; white-space: nowrap; }   /* one sentence a line */
 
-/* The faces (U5 to U16): the line in the colour of the text, a little softer, unless the accent. */
-.ph-soft, .ph-node, .ph-blink { color: color-mix(in srgb, var(--text) 80%, transparent); }
-.ph-accent-line { color: var(--accent); }
-.ph-node { color: var(--weak); }
+/* The note (U14 and the six after it): its paper and its ink in the colour chosen, grey as a free text
+   (css/side-inventory.css) or yellow as the « ? » of an unknown id (--unknown-note, --unknown-ink). */
+.ph-window { --note-paper: color-mix(in srgb, var(--text) 22%, transparent); --note-ink: color-mix(in srgb, var(--text) 78%, transparent); }
+.ph-window[data-note="yellow"] { --note-paper: var(--unknown-note); --note-ink: var(--unknown-ink); }
+.ph-note-face { display: block; color: var(--note-ink); }
+.ph-note-paper { fill: var(--note-paper); }
+.ph-note { position: relative; display: block; width: 92px; height: 92px; margin-bottom: 28px;
+  transform: rotate(-8deg); filter: drop-shadow(2px 4px 4px rgb(0 0 0 / 45%)); }
+.ph-note > i { position: absolute; display: block; }
 
-/* U6: a disc of the weak grey, its features in the colour of the page. */
-.ph-disc .ph-fill { fill: color-mix(in srgb, var(--weak) 70%, transparent); }
-.ph-disc .ph-cut { color: var(--page); }
+/* U18: a strip of see-through tape across its top, the note swinging from it. */
+.ph-note.is-taped { transform-origin: 50% 8%; animation: ph-swing 3.6s ease-in-out infinite; }
+.ph-tape { left: 28px; top: -2px; width: 38px; height: 14px; background: rgb(255 255 255 / 22%); rotate: 4deg; }
+@keyframes ph-swing { 0%, 100% { transform: rotate(-9deg); } 50% { transform: rotate(-3deg); } }
 
-/* U11: the pixels in the accent, one cell of the graph paper each. */
-.ph-pixel rect { fill: var(--accent); }
+/* U19: a pin in the accent at the top, its shadow on the note. */
+.ph-pin { left: 40px; top: 8px; width: 12px; height: 12px; border-radius: 50%; background: radial-gradient(circle at 35% 35%, #fff8, transparent 45%), var(--accent);
+  box-shadow: 2px 3px 2px rgb(0 0 0 / 40%); }
 
-/* U12: a face too wide for the phone, squeezed. */
-.ph-squeeze { display: block; transform: scaleX(.55); margin: -10px 0 -18px; }
+/* U20: the bottom right corner peeling off, its back a shade darker. */
+.ph-note.is-peeling .ph-note-face { clip-path: polygon(0 0, 100% 0, 100% 66%, 66% 100%, 0 100%); }
+.ph-curl { right: 10px; bottom: 10px; width: 26px; height: 26px; clip-path: polygon(0 100%, 100% 0, 0 0);
+  background: linear-gradient(135deg, color-mix(in srgb, var(--note-paper) 70%, black), var(--note-paper)); }
 
-/* U13: the head shaking, a tear rolling down. */
-.ph-shake { color: var(--accent); animation: ph-shake 2.6s ease-in-out infinite; }
-@keyframes ph-shake { 0%, 60%, 100% { rotate: 0deg; } 66% { rotate: -7deg; } 74% { rotate: 6deg; } 82% { rotate: -4deg; } 90% { rotate: 2deg; } }
-.ph-roll { animation: ph-roll 2.6s ease-in infinite; }
-@keyframes ph-roll { 0%, 20% { translate: 0 0; opacity: 0; } 30% { opacity: 1; } 100% { translate: 0 12px; opacity: 0; } }
+/* U21: two notes under it, fanned. */
+.ph-note.is-stacked > i { inset: 4px; background: var(--note-paper); filter: brightness(.7); }
+.ph-note.is-stacked > i:nth-child(1) { rotate: 14deg; filter: brightness(.55); }
+.ph-note.is-stacked > i:nth-child(2) { rotate: 6deg; }
+.ph-note.is-stacked .ph-note-face { position: relative; }
 
-/* U14: the grey sticky note of a free text (css/side-inventory.css), turned, a light shadow under it. */
-.ph-note { color: color-mix(in srgb, var(--text) 75%, transparent); transform: rotate(-8deg); filter: drop-shadow(2px 4px 4px rgb(0 0 0 / 45%)); }
-.ph-note .ph-fill { fill: color-mix(in srgb, var(--text) 22%, transparent); }
+/* U22: the whole message on a large note, its face small at the top, its words in its ink. */
+.ph-sheet { box-sizing: border-box; width: 330px; padding: 22px 20px 26px; background: var(--note-paper); color: var(--note-ink); rotate: -3deg;
+  display: flex; flex-direction: column; align-items: center; filter: drop-shadow(2px 6px 6px rgb(0 0 0 / 45%)); }
+.ph-sheet .ph-note-face { margin-bottom: 10px; }
+.ph-sheet .ph-note-paper { fill: none; }
+.ph-sheet .ph-title { color: var(--note-ink); font-size: 22px; }
+.ph-message .ph-sheet p { color: var(--note-ink); font-size: 13px; opacity: .85; }
 
-/* U15: the eyes blink, the sweat in the accent. */
-.ph-eyes { transform-box: fill-box; transform-origin: center; animation: ph-blink 4s infinite; }
-@keyframes ph-blink { 0%, 92%, 100% { scale: 1 1; } 95% { scale: 1 .1; } }
-.ph-sweat { color: var(--accent); fill: color-mix(in srgb, var(--accent) 30%, transparent); }
+/* U23: falling from the top of the screen, landing with a small bounce, then resting; again every 6 s. */
+.ph-note.is-falling { animation: ph-fall 6s cubic-bezier(.3, 0, .6, 1) infinite; }
+@keyframes ph-fall {
+  0% { transform: translateY(-360px) rotate(14deg); opacity: 0; }
+  4% { opacity: 1; }
+  16% { transform: translateY(0) rotate(-12deg); }
+  20% { transform: translateY(-10px) rotate(-6deg); }
+  24%, 100% { transform: translateY(0) rotate(-8deg); }
+}
 
 @media (prefers-reduced-motion: reduce) {
-  .ph-shake, .ph-roll, .ph-eyes { animation: none; }
+  .ph-note.is-taped, .ph-note.is-falling { animation: none; }
 }
