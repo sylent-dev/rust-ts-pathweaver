@@ -24,6 +24,9 @@ const VARIANTS = {
   // The width of the windows of the home page (2l): the minimum of specs.md, half a 1920-pixel screen, and a wide
   // window of the owner's screen.
   homeWidth: { label: "Home width", options: { 900: "900 px", 960: "960 px", 1600: "1,600 px" }, fallback: "960" },
+  // The burst of the box of What's next (2k6), tuned to its size by eye: its turn, and the blur of its flash.
+  burstTurn: { label: "Burst turn", range: { min: 0, max: 8, step: 0.5 }, variable: "--burst-turn", unit: "deg", fallback: "3" },
+  burstFlash: { label: "Burst flash", range: { min: 0, max: 48, step: 2 }, variable: "--burst-flash", unit: "px", fallback: "24" },
 };
 
 // The styles a section shows side by side: the style of the page alone, Frost Night by default, the

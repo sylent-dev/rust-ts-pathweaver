@@ -20,7 +20,7 @@ const siteBand = ({ library = false, libraryState = "" } = {}) => `<div class="a
     </nav>
     <nav class="app-site-links">
       <a class="app-site-link" href="${REPORT_BUG_URL}" target="_blank" rel="noopener"><span class="app-site-label">Report a bug</span></a>
-      <a class="app-site-link" href="#" role="button"><span class="app-site-label">What's next</span></a>
+      <a class="app-site-link" href="#" role="button" data-action="next-toggle"><span class="app-site-label">What's next</span></a>
     </nav>
   </div>`;
 
