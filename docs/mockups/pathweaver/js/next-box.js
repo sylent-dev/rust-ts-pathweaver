@@ -1,8 +1,9 @@
 // The box of What's next (2k6, specs.md, Window layout: the band of the site): the two updates to come, The
 // Editor Update (version 2) and The Community Update (version 3, French with it), each a card with an image of
 // the game behind it (the portraits of the ascendancies, the icons of the passives: specs.md, Images), so that the
-// box makes one want them (the owner, 2026-11-21: « faut donner envie »). Twelve ways, three at each of four
-// temperatures, on trial (sections/next-box.js, css/next-variants.css); their shared look in css/next-box.css.
+// box makes one want them (the owner, 2026-11-21: « faut donner envie »). Of twelve ways at four temperatures, the
+// owner kept V3, one panel in the middle of the window whose halves open from the seam, with the icons of passives
+// of V9 rising behind it (2026-11-21); its look and its motion in css/next-box.css.
 
 const UPDATES = [
   { key: "editor", version: 2, name: "The Editor Update", line: "Plan your own build",
@@ -13,7 +14,7 @@ const UPDATES = [
     items: ["Your builds published", "Short links, for a chat", "Votes and search, by ascendancy", "The versions of a build", "In French too"] },
 ];
 const NEXT_FOOT = "Until then, a build is shared as its .build file.";
-// The window whose box is open (its data-next-case), or "all" while the section shows them all.
+// The window whose box is open (its data-next-case), or false.
 STATE.nextOpen = false;
 
 // The icon of a notable passive of the tree, from the sheet of the icons (js/tree.js reads the same sheet):
@@ -31,8 +32,7 @@ function passiveIcon(n, size) {
 // The art of a card: one portrait large, or the four of the community side by side.
 const updateArt = update => `<div class="nx-art ${update.art.length > 1 ? "is-many" : ""}">${update.art.map(key =>
   `<img src="pathweaver/img/portraits-about/${key}.webp" alt="">`).join("")}</div>`;
-const updateCard = (update, index, { back = false } = {}) => `<article class="nx-card is-${update.key}" style="--i:${index}">
-  ${back ? `<div class="nx-back">${logoMark(56)}<span>?</span></div>` : ""}
+const updateCard = (update, index) => `<article class="nx-card is-${update.key}" style="--i:${index}">
   <div class="nx-face">
     ${updateArt(update)}
     <div class="nx-body">
@@ -43,7 +43,15 @@ const updateCard = (update, index, { back = false } = {}) => `<article class="nx
     </div>
   </div>
 </article>`;
-const updateCards = options => UPDATES.map((update, index) => updateCard(update, index, options)).join("");
+const updateCards = () => UPDATES.map(updateCard).join("");
+// The icons of passives that rise behind the halves, without end, each from its own place and at its own moment.
+const nextMotes = () => `<div class="nx-motes" aria-hidden="true">${Array.from({ length: 14 }, (_, i) =>
+  `<span style="--m:${i};left:${(i * 53) % 100}%">${passiveIcon(i, 18 + (i % 3) * 6)}</span>`).join("")}</div>`;
+// The box: × at its corner, the icons rising, the two halves, the line under them.
+const nextBox = () => `<div class="nx" role="dialog" aria-label="What's next">
+  <button type="button" class="nx-close" data-action="next-close" aria-label="Close">${icon(12, ICONS.close)}</button>
+  ${nextMotes()}<div class="nx-halves">${updateCards()}</div><p class="nx-foot">${NEXT_FOOT}</p>
+</div>`;
 
 // Esc, or a click outside the box and its link, closes it.
 ACTIONS["next-toggle"] = (element, event) => {
@@ -71,28 +79,3 @@ document.addEventListener("click", event => {
   STATE.nextOpen = false;
   renderSheet();
 });
-
-// The pointer over a card tilts it (V6), and lifts the veil around it (V12): CSS variables, no drawing.
-document.addEventListener("pointermove", event => {
-  const card = event.target.closest?.(".nx.v6 .nx-card");
-  if (card) {
-    const r = card.getBoundingClientRect();
-    card.style.setProperty("--tilt-x", `${((event.clientY - r.top) / r.height - 0.5) * -10}deg`);
-    card.style.setProperty("--tilt-y", `${((event.clientX - r.left) / r.width - 0.5) * 12}deg`);
-    card.style.setProperty("--shine", `${((event.clientX - r.left) / r.width) * 100}%`);
-  }
-  const peek = event.target.closest?.(".nx.v12");
-  if (peek) {
-    const r = peek.getBoundingClientRect();
-    peek.style.setProperty("--peek-x", `${event.clientX - r.left}px`);
-    peek.style.setProperty("--peek-y", `${event.clientY - r.top}px`);
-  }
-});
-document.addEventListener("pointerout", event => {
-  const card = event.target.closest?.(".nx.v6 .nx-card");
-  if (card && !card.contains(event.relatedTarget)) for (const name of ["--tilt-x", "--tilt-y"]) card.style.removeProperty(name);
-});
-ACTIONS["next-peek"] = element => {
-  element.closest(".nx").classList.add("is-unveiled");
-  return false;
-};

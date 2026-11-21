@@ -4,13 +4,13 @@
 // documentation of Grinding Gear Games gives them (pathofexile.com/developer/docs/game#buildplanner, read on
 // 2026-11-21): Windows, and SteamOS under its Proton prefix; nothing for another system. The game watches the
 // folder (« Our automated File Watcher system has been designed to detect changes in the BuildPlanner
-// directory »). Three ways to lay it out, on trial (sections/download-box.js).
+// directory »). Of three ways, D2: one folder, its system chosen (the owner, 2026-11-21).
 
 const GAME_FOLDERS = [
   { key: "windows", name: "Windows", path: "Documents\\My Games\\Path of Exile 2\\BuildPlanner" },
   { key: "deck", name: "Steam Deck", path: "/home/deck/.local/share/Steam/steamapps/compatdata/2315204395/pfx/drive_c/users/steamuser/Documents/My Games/Path of Exile 2/BuildPlanner" },
 ];
-// The window whose box is open (its data-download-case), the system shown by D2 and D3, the folder just copied.
+// The window whose box is open (its data-download-case), the system shown, the folder just copied.
 STATE.downloadOpen = false;
 STATE.downloadSystem = "windows";
 STATE.copied = false;
@@ -19,23 +19,17 @@ STATE.copied = false;
 const folderPath = folder => `<div class="dl-path"><code>${escapeHtml(folder.path)}</code>
   <button type="button" class="dl-copy" data-action="download-copy" data-folder="${folder.key}">${STATE.copied === folder.key ? "Copied" : "Copy"}</button></div>`;
 const folderOf = key => GAME_FOLDERS.find(folder => folder.key === key);
-// The switch of the system (D2, D3): its words without a box, as the switch of the weapon set under the tree.
+// The switch of the system: its words without a box, as the switch of the weapon set under the tree.
 const systemSwitch = () => `<span class="dl-systems">${GAME_FOLDERS.map(folder =>
   `<button type="button" class="dl-system ${folder.key === STATE.downloadSystem ? "is-current" : ""}" data-action="download-system" data-system="${folder.key}">${folder.name}</button>`).join("")}</span>`;
 const DOWNLOAD_FOOT = '<p class="dl-foot">The game watches this folder: a file put there shows in its Build Planner.</p>';
 
-const DOWNLOAD_WAYS = {
-  // D1: both folders, one under the other.
-  d1: () => `<p class="dl-head">Where the game reads it</p>
-    ${GAME_FOLDERS.map(folder => `<div class="dl-folder"><span class="dl-name">${folder.name}</span>${folderPath(folder)}</div>`).join("")}${DOWNLOAD_FOOT}`,
-  // D2: one folder, its system chosen (the one the browser runs on, at first).
-  d2: () => `<p class="dl-head">Where the game reads it ${systemSwitch()}</p>
-    <div class="dl-folder">${folderPath(folderOf(STATE.downloadSystem))}</div>${DOWNLOAD_FOOT}`,
-  // D3: what to do, in two steps, the folder of D2 in the second.
-  d3: () => `<ol class="dl-steps"><li><b>Saved</b> in the downloads of your browser.</li>
-    <li><b>Move it</b> to the folder the game reads ${systemSwitch()}${folderPath(folderOf(STATE.downloadSystem))}</li></ol>${DOWNLOAD_FOOT}`,
-};
-const downloadBox = way => `<div class="dl-box" role="dialog" aria-label="Where the game reads the file">${DOWNLOAD_WAYS[way]()}</div>`;
+// The box: « Where the game reads it » and the switch of the system (the one the browser runs on, at first), the
+// folder of that system, what the game does with it.
+const downloadBox = () => `<div class="dl-box" role="dialog" aria-label="Where the game reads the file">
+  <p class="dl-head">Where the game reads it ${systemSwitch()}</p>
+  <div class="dl-folder">${folderPath(folderOf(STATE.downloadSystem))}</div>${DOWNLOAD_FOOT}
+</div>`;
 
 // The file opens its box, or closes it, and closes the other windows and menus: one at a time.
 ACTIONS["download-toggle"] = element => {
