@@ -10,7 +10,11 @@
 .ab-colophon { display: flex; min-height: 668px; }
 .ab-colophon-side { flex: none; width: 260px; box-sizing: border-box; padding: 24px 24px 28px 32px; background: var(--slot-box); }
 .ab-colophon-main { flex: 1; max-width: 600px; padding: 24px 32px 28px; }
-.ab-portrait { display: block; width: calc(100% + 56px); height: auto; margin: -24px -24px 16px -32px; }
+/* The portrait across the pane from its top, fading toward the bottom from --ab-fade, to nothing at its foot;
+   the text rises over it by --ab-rise (the owner, 2026-11-21: too imposing whole; tuned on sliders). */
+.ab-portrait { display: block; width: calc(100% + 56px); height: auto; margin: -24px -24px calc(16px - var(--ab-rise, 65px)) -32px;
+  mask-image: linear-gradient(#000 var(--ab-fade, 35%), transparent); }
+.ab-name, .ab-by { position: relative; }
 .ab-name { margin: 0; font-size: 17px; line-height: 1.25; overflow-wrap: anywhere; }
 .ab-by { margin: 2px 0 0; font-size: 12.5px; }
 .ab-facts { display: grid; grid-template-columns: 58px 1fr; gap: 8px 10px; margin: 16px 0; font-size: 12.5px; }
