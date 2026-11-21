@@ -123,6 +123,9 @@ SQUARE_SIZE = 88
 # The portrait under the ascendancy, at the centre of the tree (2i2, the owner, 2026-11-19): large and
 # faded, the build shown only.
 LARGE_PORTRAIT_SIZE = 300
+# The portrait of the colophon of the About tab (2k3, the owner, 2026-11-21): the square inside the disc, the
+# width of its column of 260 px, twice for the screens of a higher density.
+ABOUT_PORTRAIT_SIZE = 520
 # The ascendancy at the centre of the tree (2i2, the owner, 2026-11-19): in the empty disc inside the ring
 # of the class starts, every ascendancy shrunk alike so that the largest (Monk3, 1,490 units from the
 # centre of its box) fits with room for its passives.
@@ -689,9 +692,10 @@ def band_of(build, tree, names, gems):
     return changes_of(build, range(low + 1, high + 1), tree, names, gems)
 
 
-def portrait(cache, ascendancy, sprite, large=False):
+def portrait(cache, ascendancy, sprite, large=False, about=False):
     """Cuts the round portrait of an ascendancy from the sprite of its class, and the square inside
-    it, made small; the large one too for the build shown, under its ascendancy on the tree."""
+    it, made small; the large one too for the build shown, under its ascendancy on the tree; the square
+    large for a case of the About tab, the width of its colophon."""
     frames = json.loads(fetch(cache, f"{TREE_URL}/assets/background-{sprite}.json",
                               f"background-{sprite}.json").read_text())["frames"]
     image = fetch(cache, f"{TREE_URL}/assets/background-{sprite}.webp", f"background-{sprite}.webp")
@@ -708,6 +712,12 @@ def portrait(cache, ascendancy, sprite, large=False):
     subprocess.run(["magick", str(image), "-crop", f"{side}x{side}+{frame['x'] + inset}+{frame['y'] + inset}",
                     "+repage", "-resize", f"{SQUARE_SIZE}x{SQUARE_SIZE}", "-quality", "82", str(square)],
                    check=True)
+    if about:
+        target = OUT / "img" / "portraits-about" / f"{ascendancy.lower()}.webp"
+        target.parent.mkdir(exist_ok=True)
+        subprocess.run(["magick", str(image), "-crop", f"{side}x{side}+{frame['x'] + inset}+{frame['y'] + inset}",
+                        "+repage", "-resize", f"{ABOUT_PORTRAIT_SIZE}x{ABOUT_PORTRAIT_SIZE}", "-quality", "82",
+                        str(target)], check=True)
     if large:
         target = OUT / "img" / "portraits-large" / f"{ascendancy.lower()}.webp"
         target.parent.mkdir(exist_ok=True)
@@ -773,8 +783,9 @@ def main():
             **{key: changes_of(read(name), [level], tree, names, gems) for key, (name, level) in CHANGE_CASES.items()},
         },
     })
+    about_ascendancies = {read(name).get("ascendancy") for name in ABOUT_CASES.values()}
     for ascendancy, sprite in PORTRAITS.items():
-        portrait(cache, ascendancy, sprite, large=ascendancy == builds[0].get("ascendancy"))
+        portrait(cache, ascendancy, sprite, large=ascendancy == builds[0].get("ascendancy"), about=ascendancy in about_ascendancies)
 
 
 main()
