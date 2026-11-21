@@ -1,0 +1,81 @@
+/* The hints to come in the Inventory tab (js/inventory-later.js, 2k2): twelve variants, the class up-<variant>.
+   The width of the drawing, 396 px; the one shown in the box marked. */
+.up { width: 396px; }
+.up [data-shown] .it-name, .up [data-shown].up-word .it-name { color: var(--text); font-weight: 700; }
+.up .it-row[data-shown], .up .up-tile[data-shown], .up .up-next-item[data-shown] { background: color-mix(in srgb, var(--accent) 10%, transparent); }
+.up .it-row { padding-right: 4px; }
+.up .it-name { color: color-mix(in srgb, var(--text) 85%, transparent); }
+.up .it-name.is-unique { color: var(--unique); }
+.up-words { display: flex; flex-direction: column; min-width: 0; line-height: 1.25; }
+.up-sub { overflow: hidden; color: var(--on-band-weak); font-size: 11px; text-overflow: ellipsis; white-space: nowrap; }
+.up [data-action] { cursor: pointer; }
+.up [data-action]:hover { background: color-mix(in srgb, var(--text) 5%, transparent); }
+
+/* N2: the words of the box. */
+.up-n2 { min-height: 38px; }
+.up-n2 .up-words { flex: 1; }
+.up-level { flex: none; margin-left: auto; color: var(--accent); font-size: 12px; font-weight: 700; }
+
+/* N3: a title per level. */
+.up-group { margin: 10px 0 2px; color: var(--accent); font-size: 12px; font-weight: 700; }
+
+/* H1: what it replaces. */
+.up-h1 { min-height: 38px; }
+
+/* H2: tiles in two columns. */
+.up-tiles { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; }
+.up-tile { display: flex; align-items: center; gap: 7px; min-width: 0; padding: 3px; background: color-mix(in srgb, var(--text) 4%, transparent); }
+.up-tile .up-sub b { color: var(--accent); }
+
+/* H3: a timeline. */
+.up-line { position: relative; padding-left: 18px; }
+.up-line::before { content: ""; position: absolute; top: 6px; bottom: 10px; left: 5px; width: 1px; background: color-mix(in srgb, var(--text) 20%, transparent); }
+.up-stop { position: relative; display: flex; flex-wrap: wrap; align-items: baseline; gap: 0 8px; padding-bottom: 6px; }
+.up-stop .it-rows { flex-basis: 100%; }
+.up-dot { position: absolute; top: 4px; left: -17px; width: 9px; height: 9px; border-radius: 50%; box-sizing: border-box; border: 2px solid var(--accent); background: var(--side-column); }
+.up-stop.is-now .up-dot { background: var(--accent); }
+.up-stop.is-next .up-dot { box-shadow: 0 0 8px var(--accent); }
+.up-stop-level { color: var(--accent); font-size: 12px; font-weight: 700; }
+
+/* E1: what comes next, in a card. */
+.up-next { padding: 8px 10px; background: color-mix(in srgb, var(--accent) 7%, transparent); box-shadow: inset 2px 0 0 var(--accent); }
+.up-next-head { display: flex; align-items: baseline; gap: 8px; margin-bottom: 6px; color: var(--accent); font-weight: 700; }
+.up-next-item { display: flex; align-items: center; gap: 10px; padding: 3px 0; }
+.up-next-item .it-thumb { width: 38px; height: 38px; }
+.up-after { margin-top: 8px; }
+.up-after .it-row { min-height: 24px; font-size: 12px; }
+
+/* E2: the thumbnails alone. */
+.up-thumbs { display: flex; flex-wrap: wrap; gap: 6px; }
+.up-thumb { position: relative; display: inline-block; }
+.up-e2 .up-thumb .it-thumb { width: 44px; height: 44px; }
+.up-badge { position: absolute; right: -3px; bottom: -3px; padding: 0 3px; background: var(--accent); color: var(--on-accent); font-size: 9.5px; font-weight: 800; line-height: 13px; }
+.up-e2 .up-thumb[data-shown] { box-shadow: 0 0 0 2px var(--accent); }
+
+/* E3: on the drawing. */
+.up-legend { margin: 0 0 4px; font-size: 11.5px; }
+.up-soon { position: absolute; right: 2px; bottom: 2px; z-index: 1; min-width: 16px; padding: 0 3px; box-sizing: border-box; background: var(--accent); color: var(--on-accent);
+  font-size: 10px; font-weight: 800; line-height: 15px; text-align: center; cursor: pointer; }
+.app-slot.up-ghost-slot .app-slot-empty { display: none; }
+.up-ghost { position: absolute; inset: 2px; display: grid; place-items: center; }
+.up-ghost .app-item-art { filter: grayscale(1); opacity: .35; }
+
+/* F1: in words. */
+.up-sentence { margin: 0 0 8px; font-size: 13.5px; line-height: 1.55; }
+.up-sentence b { color: var(--accent); }
+.up-word .it-name { white-space: normal; font-weight: 600; }
+
+/* F2: a countdown. */
+.up-f2 { min-height: 40px; }
+.up-count { flex: none; display: flex; flex-direction: column; align-items: center; width: 40px; color: var(--accent); font-size: 20px; font-weight: 800; line-height: 1; }
+.up-count small { color: var(--on-band-weak); font-size: 9px; font-weight: 600; letter-spacing: .04em; text-transform: uppercase; }
+
+/* F3: the road ahead. */
+.up-road { position: relative; height: 150px; margin: 4px 14px 0; }
+.up-road-stack { position: absolute; bottom: 30px; display: flex; flex-flow: column-reverse wrap-reverse; gap: 3px; height: 116px; transform: translateX(-50%); }
+.up-road-stack .it-thumb { width: 24px; height: 24px; }
+.up-ruler { position: absolute; right: 0; bottom: 14px; left: 0; height: 2px; background: color-mix(in srgb, var(--text) 25%, transparent); }
+.up-ruler-mark { position: absolute; top: 6px; transform: translateX(-50%); color: var(--accent); font-size: 10.5px; font-weight: 700; }
+.up-ruler-mark::before { content: ""; position: absolute; top: -8px; left: 50%; width: 1px; height: 6px; background: currentColor; }
+.up-ruler-mark.is-now { color: var(--text); }
+.up-ruler-mark.is-end { color: var(--on-band-weak); }

@@ -30,12 +30,16 @@ function itLabel(hint) {
 }
 
 // What the tab reads at a level: every hint with its item and its slot in words, in the order of the
-// slots; those that apply (`now`); those to come, by the level they come at.
+// slots; those that apply (`now`); those to come, by the level they come at, each with the hint it replaces
+// on its cell (of those that apply, the last to end before it comes: a campaign of the corpus gives a weapon
+// 1–32, another 32–45, a third from 46).
 function itState(level, source) {
   const all = itHints(source).map(hint => ({ ...hint, item: hintItem(hint), label: itLabel(hint) }))
     .sort((a, b) => itRank(a) - itRank(b));
   const now = all.filter(hint => appliesAt(hint.levels, level));
-  const later = all.filter(hint => hint.levels[0] > level).sort((a, b) => a.levels[0] - b.levels[0]);
+  const later = all.filter(hint => hint.levels[0] > level).sort((a, b) => a.levels[0] - b.levels[0])
+    .map(hint => ({ ...hint, replaces: now.filter(other => sameCell(other, hint) && other.levels[1] < hint.levels[0])
+      .sort((a, b) => b.levels[1] - a.levels[1])[0] }));
   return { all, now, later, level, source };
 }
 
@@ -64,13 +68,14 @@ function inventoryTab(level = STATE.level, source) {
   const hints = [...state.now, ...state.later];
   const shown = state.all.find(hint => hintKey(hint) === STATE.itChosen) ?? hints.find(hint => cellKey(hint) === STATE.itChosen)
     ?? state.now.find(hint => startsAt(hint.levels, level)) ?? hints[0];
-  const extra = (id, x) => ({ attributes: `data-action="it-choose" data-pick="${cellKey({ id, x })}"`,
-    className: shown && cellKey({ id, x }) === cellKey(shown) ? `is-chosen${STATE.itFlash ? " is-flash" : ""}` : "" });
-  const later = state.later.length ? `${itTitle("To come", "is-next")}<ul class="it-rows">${state.later.map(hint =>
-    `<li class="it-row is-later" data-action="it-choose" data-pick="${hintKey(hint)}">${itAt(hint.levels[0])}${itThumb(hint)}${itSlot(hint)}${itName(hint)}</li>`).join("")}</ul>` : "";
+  const extra = (id, x) => {
+    const soon = laterOnSlot(state, id, x);
+    return { attributes: `data-action="it-choose" data-pick="${cellKey({ id, x })}"`, html: soon.html ?? "",
+      className: `${shown && cellKey({ id, x }) === cellKey(shown) ? `is-chosen${STATE.itFlash ? " is-flash" : ""}` : ""} ${soon.className ?? ""}` };
+  };
   return `<div class="app-inventory-tab"><div class="app-it" data-level="${level}"${source ? ` data-source="${source}"` : ""}>
       <div class="it-left"><div class="app-inventory-head">${inventorySetSwitch()}</div>${inventoryDrawing(level, state.now, { cell: 44, extra })}
-        ${inventoryOthers(level, state.now)}${later}</div>
+        ${inventoryOthers(level, state.now)}${inventoryLater(state, shown)}</div>
       <div class="it-side">${inventoryDetail(shown, state)}</div>
     </div></div>`;
 }
