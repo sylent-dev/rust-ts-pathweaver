@@ -45,8 +45,13 @@
 .ov-drawer-bar { padding-top: 10px; }
 .ov-drawer-bar .app-side-title { margin-top: 0; }
 
-/* The thumbnails of the bar: a box per hinted slot, its card on hover. */
-.app-inventory.ov-thumbs { position: static; display: flex; flex-wrap: wrap; gap: 4px; margin: 6px 0 0 5px; }
+/* The thumbnails of the bar: a box per hinted slot, its card on hover. Eight a row from the edge of the
+   drawing (5 px in) to the right edge of the switch of the set (6 px in), the last of a row on that edge,
+   and the rows as far apart as the thumbnails (the owner, 2026-11-21): the gap read from the width of the
+   bar, so that it holds at any width of the column. */
+.ov-drawer-bar { container-type: inline-size; --thumbs: calc(100cqw - 11px); }
+.app-inventory.ov-thumbs { position: static; display: grid; grid-template-columns: repeat(8, 32px); justify-content: space-between;
+  gap: calc((var(--thumbs) - 8 * 32px) / 7); width: var(--thumbs); margin: 6px 0 0 5px; }
 .ov-thumbs .app-slot { position: relative; width: 32px; height: 32px; }
 
 /* The section of the mock-up (sections/column-overflow.js): a column alone at its real height. */
