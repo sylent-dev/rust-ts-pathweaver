@@ -68,11 +68,8 @@ function inventoryTab(level = STATE.level, source) {
   const hints = [...state.now, ...state.later];
   const shown = state.all.find(hint => hintKey(hint) === STATE.itChosen) ?? hints.find(hint => cellKey(hint) === STATE.itChosen)
     ?? state.now.find(hint => startsAt(hint.levels, level)) ?? hints[0];
-  const extra = (id, x) => {
-    const soon = laterOnSlot(state, id, x);
-    return { attributes: `data-action="it-choose" data-pick="${cellKey({ id, x })}"`, html: soon.html ?? "",
-      className: `${shown && cellKey({ id, x }) === cellKey(shown) ? `is-chosen${STATE.itFlash ? " is-flash" : ""}` : ""} ${soon.className ?? ""}` };
-  };
+  const extra = (id, x) => ({ attributes: `data-action="it-choose" data-pick="${cellKey({ id, x })}"`,
+    className: shown && cellKey({ id, x }) === cellKey(shown) ? `is-chosen${STATE.itFlash ? " is-flash" : ""}` : "" });
   return `<div class="app-inventory-tab"><div class="app-it" data-level="${level}"${source ? ` data-source="${source}"` : ""}>
       <div class="it-left"><div class="app-inventory-head">${inventorySetSwitch()}</div>${inventoryDrawing(level, state.now, { cell: 44, extra })}
         ${inventoryOthers(level, state.now)}${inventoryLater(state, shown)}</div>
