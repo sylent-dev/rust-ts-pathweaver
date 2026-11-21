@@ -67,6 +67,13 @@ Set aside at the wireframes (2026-11-16, see `docs/wireframes/archive.excalidraw
 
 - **A phone held sideways** (an edge case, noted on 2026-11-21 at step 2m; depends on: the phone page of the code, a real phone): about 844 pixels wide, over the 600 of the phone page, it gets the application at 900 pixels, scrolling sideways. Telling a phone by its pointer (`pointer: coarse`) rather than by its width alone is to be tried on real phones; Stepwise has the same case in its backlog.
 
+## Styles
+
+- **Frost and Ember after version 1** (set aside by the owner on 2026-11-21 at step 2m2: one style is enough for a first version; depends on: the tokens of 2n, every colour of the application through a token). Both were in the mock-up until 2n, whole at commit `8a58558` (`docs/mockups/pathweaver/css/tokens.css`, the blocks `frost` and `ember`), the place to start from; they derive from Frost Night, the reference. What each needed, measured on 2026-11-21 on every section of the mock-up:
+  - **Ember** (dark, amber on a neutral grey): nearly ready, a dark background as Frost Night; the colour of the graph paper (a pale blue) and the light of the page to tune by eye, every section checked.
+  - **Frost** (light): the larger pass, the one of its own that `specs.md` (The style) asked for: about 25 colours that assumed a dark background (a black at 50 % laid over, a white at 5 %, the body of the cards mixed with 60 % of black) became tokens in 2n, to be given their light values; the shadows, the graph paper and the grey portraits, which don't carry over as they are; the named colours of the author's markup (a dark gold rather than a light one, The author's texts).
+  - **How the user picks a style**: not specified; the style of the system (`prefers-color-scheme`) by default, and a choice kept in the browser, to decide then.
+
 ## Method and skills
 
 - **The mock-up skill in reference files** (an idea of the owner, 2026-11-17; once the general look is chosen): `html-mockups` keeps `SKILL.md` short and points to files read only when needed, the way the skill already keeps `assets/` and `scripts/`. A `textures.md` (patterns as CSS masks, coloured by their layer; two layers shifted, turned, drifting, faded; a swatch of every pattern; tried in the mock-up, commit `a819b7b`, with the generator `docs/mockups/pathweaver/tools/make-patterns.py`), then `process.md` (Mock-up) and a pull request on each template (`ts-astro-static-website-template`, `rust-desktop-template`, `rust-cli-template`). Rather than a skill of its own, whose description would go with every message. The moodboard became the `moodboards` skill (2026-11-17), hidden from the model, which `html-mockups` points to.
