@@ -6,15 +6,15 @@
 .app-inventory-tab { height: 668px; overflow-y: auto; box-sizing: border-box; background: var(--side-column); scrollbar-width: thin; }
 /* Cut in two from top to bottom (the owner, 2026-11-21): the drawing on the left, on the graph paper, in the
    middle of its half; the box of the item on the right, on a pane darkened by transparency, so that the graph
-   paper still shows under it, no line at the cut (the owner, 2026-11-21). Where the cut falls and how dark the
-   pane: the sliders « Pane start » and « Pane shade » (the drawing is 396 px wide). */
+   paper still shows under it, as dark as a slot of the drawing (--slot-box), no line at the cut (the owner,
+   2026-11-21). Where the cut falls: the slider « Pane start » (the drawing is 396 px wide). */
 .app-it { display: flex; align-items: stretch; box-sizing: border-box; min-height: 100%; font-size: 13px; }
 .app-it ul { margin: 0; padding: 0; list-style: none; }
 .app-it .app-inventory { margin: 8px 0 0; }
 .app-it .app-inventory-head { gap: 16px; }
 .app-it [data-item] { cursor: default; }
 .it-left { flex: none; box-sizing: border-box; width: var(--it-cut, 480px); padding: 18px 0 24px max(20px, calc((var(--it-cut, 480px) - 396px) / 2)); }
-.it-side { flex: 1; min-width: 0; padding: 18px 20px 24px; background: rgb(0 0 0 / var(--it-pane-shade, 35%)); }
+.it-side { flex: 1; min-width: 0; padding: 18px 20px 24px; background: var(--slot-box); }
 
 .it-title { margin: 0 0 8px; font-size: 14px; }
 .it-title.is-next { margin-top: 20px; }

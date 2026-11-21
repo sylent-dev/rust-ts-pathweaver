@@ -24,10 +24,8 @@ const VARIANTS = {
   // The width of the windows of the home page (2l): the minimum of specs.md, half a 1920-pixel screen, and a wide
   // window of the owner's screen.
   homeWidth: { label: "Home width", options: { 900: "900 px", 960: "960 px", 1600: "1,600 px" }, fallback: "960" },
-  // The Inventory tab cut in two (2k2, the owner, 2026-11-21): where the cut falls, the shade of the pane of the
-  // box.
+  // The Inventory tab cut in two (2k2, the owner, 2026-11-21): where the cut falls.
   invCut: { label: "Pane start", range: { min: 436, max: 600, step: 4 }, variable: "--it-cut", unit: "px", fallback: "480" },
-  invShade: { label: "Pane shade", range: { min: 0, max: 70, step: 5 }, variable: "--it-pane-shade", unit: "%", fallback: "35" },
 };
 
 // The styles a section shows side by side: the style of the page alone, Frost Night by default, the
