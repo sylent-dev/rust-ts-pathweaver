@@ -74,7 +74,7 @@ function inventoryTab(level = STATE.level, source, { middle = false, cell = 44 }
   const drawn = shown && state.now.includes(shown);
   const extra = (id, x) => ({ attributes: `data-action="it-choose" data-pick="${cellKey({ id, x })}"`,
     className: drawn && cellKey({ id, x }) === cellKey(shown) ? `is-chosen${STATE.itFlash ? " is-flash" : ""}` : "" });
-  return `<div class="app-inventory-tab"><div class="app-it" data-level="${level}"${source ? ` data-source="${source}"` : ""}>
+  return `<div class="app-inventory-tab"><div class="app-it graph-paper" data-level="${level}"${source ? ` data-source="${source}"` : ""}>
       <div class="it-left"><div class="app-inventory-head">${inventorySetSwitch()}</div>${inventoryDrawing(level, state.now, { cell, extra, said: true })}
         ${inventoryOthers(level, state.now, true)}${middle ? "" : inventoryLater(state, shown)}</div>
       ${middle ? `<div class="it-mid">${inventoryLater(state, shown)}</div>` : ""}

@@ -11,6 +11,6 @@ const laterPick = (hint, shown) => `data-action="it-choose" data-pick="${hintKey
 // The hints to come under the drawing: its heading, then the tiles.
 function inventoryLater(state, shown) {
   if (!state.later.length) return "";
-  return `<div class="up">${itTitle("Upcoming", "is-next")}<div class="up-tiles">${state.later.map(hint =>
+  return `<div class="up graph-paper">${itTitle("Upcoming", "is-next")}<div class="up-tiles">${state.later.map(hint =>
     `<div class="up-tile" ${laterPick(hint, shown)}>${itThumb(hint)}<span class="up-words">${itName(hint)}<span class="up-sub"><b>${hint.levels[0]}</b> · ${escapeHtml(hint.label)}</span></span></div>`).join("")}</div></div>`;
 }

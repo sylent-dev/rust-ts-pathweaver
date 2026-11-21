@@ -64,7 +64,7 @@ const abWatermark = () => `<svg class="ab-watermark" viewBox="0 0 16 16" aria-hi
 function aboutTab(level, source = "shown", { wide = false } = {}) {
   const about = BUILDS.abouts[source];
   const warnings = about.warnings.length ? `<div class="ab-warnings-part" data-warnings="">${abWarnings(about)}</div>` : "";
-  return `<div class="app-about-tab"><div class="app-ab"><div class="ab-colophon">
+  return `<div class="app-about-tab"><div class="app-ab graph-paper"><div class="ab-colophon">
       <aside class="ab-colophon-side"><img class="ab-portrait" src="pathweaver/img/portraits-about/${about.portrait}.webp" width="260" height="260" alt="">
         <h3 class="ab-name app-title">${escapeHtml(about.name)}</h3>
         <p class="ab-by">${about.author ? `by ${escapeHtml(about.author)} · ` : ""}${escapeHtml(about.ascendancy)} <span class="app-weak">${escapeHtml(about.class)}</span></p>

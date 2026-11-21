@@ -10,7 +10,7 @@
 
 /* The links of the column to the tabs of the build (js/side-overflow.js, sideLink): in the colour of
    their words, the accent and the sweep of a line of 2 px on hover, as the links of the band of the
-   site (link-sweep, css/app-bar.css); « and N more » in the accent, the colour of the text on hover. */
+   site (link-sweep, css/motion.css); « and N more » in the accent, the colour of the text on hover. */
 .app-side-link { padding: 0; border: 0; background: none; color: inherit; font: inherit; letter-spacing: inherit; cursor: pointer; }
 .app-side-link-words { position: relative; }
 .app-side-link-words::after { content: ""; position: absolute; left: 0; right: 0; bottom: -3px; height: 2px; background: currentColor;

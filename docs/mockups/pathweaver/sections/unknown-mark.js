@@ -22,5 +22,5 @@ function unknownHints(level) {
 
 addSection(() => ["The mark of what the game data don't know: a sticky note on an item or a gem, and their cards", [
   ["An unknown support and an unknown skill, an unknown unique in a large and a small slot, an unknown slot in the list; the cards on hover",
-    `<div class="app-window" style="width:330px"><aside class="app-side app-inventory-alone">${skillList(STATE.level, "unknownSample")}${inventoryBox(STATE.level, unknownHints(STATE.level))}</aside></div>`],
+    `<div class="app-window" style="width:330px"><aside class="app-side graph-paper app-inventory-alone">${skillList(STATE.level, "unknownSample")}${inventoryBox(STATE.level, unknownHints(STATE.level))}</aside></div>`],
 ]]);

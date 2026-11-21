@@ -26,10 +26,10 @@ function inventoryThumbs(level, hints) {
 // The right column at a level: of the build shown, or of a case (`record` its changes, `source` its
 // skills, `hints` its inventory). The drawing comes before the bar, so that it unrolls above it.
 function sideColumn(level, { record = BUILDS.changes.shown.levels[level], source, hints = slotsAt(level, STATE.inventorySet) } = {}) {
-  return `<aside class="app-side ov">
+  return `<aside class="app-side graph-paper ov">
     <div class="ov-new">${newAtBox(level, record)}</div>
     <div class="ov-skills">${skillList(level, source)}</div>
-    <div class="ov-drawer">
+    <div class="ov-drawer graph-paper">
       <div class="ov-drawer-doll">${inventoryBox(level, hints)}</div>
       <div class="ov-drawer-bar"><div class="app-inventory-head"><h2 class="app-side-title app-title">Inventory</h2>${inventorySetSwitch()}</div>${inventoryThumbs(level, hints)}</div>
     </div>

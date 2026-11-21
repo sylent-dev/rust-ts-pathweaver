@@ -21,7 +21,7 @@ const fileIcon = () => `<svg class="app-file-icon" width="26" height="32" viewBo
 // to the warnings of the About tab).
 function buildHeader(build = SHOWN, warnings = TREE.unknown.length
     + SHOWN.skills.flatMap(skill => [skill, ...skill.supports]).filter(gem => !gem.known).length, file = BUILD_FILE) {
-  return `<div class="app-header">
+  return `<div class="app-header graph-paper">
     <img class="app-header-portrait" src="pathweaver/img/portraits-square/${build.portrait}.webp" width="66" height="66" alt="">
     <div class="app-header-text">
       <h1 class="app-header-name app-title">${escapeHtml(build.name)}</h1>

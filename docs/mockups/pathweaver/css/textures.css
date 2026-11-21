@@ -9,14 +9,17 @@
   --texture: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40' preserveAspectRatio='none'%3E%3Cpath d='M0 0H40M0 40H40M0 0V40M40 0V40' fill='none' stroke='black' vector-effect='non-scaling-stroke'/%3E%3Cpath d='M0 10H40M0 20H40M0 30H40M10 0V40M20 0V40M30 0V40' fill='none' stroke='black' stroke-opacity='.4' vector-effect='non-scaling-stroke'/%3E%3C/svg%3E");
 }
 
-/* The blocks that take the texture: a layer under their content, in their own stacking context. */
-/* The band of the site takes it too (the owner, 2026-11-18), not the band of the open builds; and the
-   page of the library (2l2); the drawer of the inventory, on the shade of the header (2j4); the content of
-   the Skills tab (2k, the owner, 2026-11-21); the content of the Inventory tab (2k2), and its block of the hints upcoming; the content of the About tab (2k3). */
-.app-header, .app-level, .app-tabs, .app-side, .app-st, .app-it, .app-ab { position: relative; }   /* the drawer of the inventory is placed by css/side-overflow.css */
-.app-site, .app-header, .app-level, .app-tabs, .app-tree, .app-side, .ov-drawer, .library-page, .app-st, .app-it, .up, .app-ab { isolation: isolate; }
-
-:is(.app-site, .app-header, .app-level, .app-tabs, .app-tree, .app-side, .ov-drawer, .library-page, .app-st, .app-it, .up, .app-ab)::before {
+/* The graph paper behind a block: a layer under its content, in its own stacking context. A block takes it by
+   setting the class on its root (2n3), so that each block, a Svelte component, chooses it for itself: the band of the
+   site (the owner, 2026-11-18), not the band of the open builds; the header, the level band, the tabs, the tree and the
+   right column; the page of the library (2l2); the drawer of the inventory, on the shade of the header (2j4); the
+   content of the Skills tab (2k, the owner, 2026-11-21), of the Inventory tab (2k2) and its block of the hints
+   upcoming, of the About tab (2k3); the phone page (2m). The first visit draws its own (css/home-drop.css).
+   :where() makes the position weaker than any class, so that a block placed otherwise (the drawer, absolute) keeps
+   its own place. */
+:where(.graph-paper) { position: relative; }
+.graph-paper { isolation: isolate; }
+.graph-paper::before {
   content: ""; position: absolute; inset: 0; z-index: -1; pointer-events: none;
   background: var(--texture-colour); opacity: var(--texture-opacity);
   mask-image: var(--texture); mask-size: var(--texture-size) var(--texture-size);

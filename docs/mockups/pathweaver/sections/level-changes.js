@@ -6,7 +6,7 @@
 const changesCase = (key, title) => {
   const [level, record] = Object.entries(BUILDS.changes[key].levels)[0];
   return `<div class="app-window app-changes-case" style="width:960px">
-    <div class="app-level"><div class="app-level-now"><span class="app-level-label">Level</span><span class="app-level-number">${level}</span></div>
+    <div class="app-level graph-paper"><div class="app-level-now"><span class="app-level-label">Level</span><span class="app-level-number">${level}</span></div>
       ${levelSteps(undefined, undefined, record, true)}
       <span class="app-changes-case-name app-weak">${escapeHtml(BUILDS.changes[key].name)} · ${title}</span>
       ${changesWindow(record, level)}</div>
