@@ -1,13 +1,13 @@
 /* The box of the item chosen in the Inventory tab (js/inventory-detail.js, 2k2): P5 (the owner, 2026-11-21),
-   no background, the words on the graph paper of the pane; the parts between thin lines. */
+   no background, the words on the pane; no line and no frame between its parts (the owner, 2026-11-21: fewer
+   borders), their room alone, every part on the left edge of the name. */
 .it-bare { position: relative; padding: 4px 14px 10px; }
-.it-bare-head { padding: 6px 0 10px; }
+.it-bare-head { padding: 6px 0 4px; }
 .it-bare-head strong { display: block; font-size: 18px; font-weight: 700; }
 .it-bare .is-unique { color: var(--unique); }
 .it-bare-sub { color: var(--on-band-weak); font-size: 12px; }
-.it-bare-part { padding: 10px 0; border-top: 1px solid color-mix(in srgb, var(--text) 12%, transparent); }
-.it-bare-part .app-hover-stats { margin: 0 0 6px; }
+.it-bare-part { padding: 10px 0; }
+.it-bare-part .app-hover-stats { margin: 0; }
 .it-bare-part .it-title { margin: 2px 0 4px; font-size: 12.5px; letter-spacing: normal; }
-.it-bare-note { padding-left: 10px; border-left: 2px solid color-mix(in srgb, var(--accent) 60%, transparent); }
 .it-bare .it-row { min-height: 28px; }
 .it-bare .it-thumb { width: 22px; height: 22px; }

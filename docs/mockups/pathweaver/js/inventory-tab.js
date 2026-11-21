@@ -21,7 +21,7 @@ const cellKey = ({ id, x }) => `${id}:${x}`;
 // A slot in words, with its weapon set, its side or its cell where the game has several.
 function itLabel(hint) {
   const set = slotSet(hint.id);
-  if (set !== "0") return `${SLOT_NAMES[hint.id]} · ${set === "1" ? "I" : "II"}`;
+  if (set !== "0") return `${SLOT_NAMES[hint.id]} · Set ${set === "1" ? "I" : "II"}`;
   if (hint.id === "Ring1" || hint.id === "Ring2") return `Ring · ${hint.id === "Ring1" ? "left" : "right"}`;
   if (hint.id === "Flask1") return `Flask · ${hint.x ? "mana" : "life"}`;
   if (hint.id === "Charm1") return `Charm · ${hint.x + 1}`;

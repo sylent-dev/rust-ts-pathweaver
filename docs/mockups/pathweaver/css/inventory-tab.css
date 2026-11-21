@@ -21,7 +21,7 @@
 .it-none { margin: 0; font-size: 12.5px; }
 .it-name { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .it-name.is-unique { color: var(--unique); }
-.it-slot { flex: none; width: 84px; color: var(--on-band-weak); font-size: 10px; letter-spacing: .08em; text-transform: uppercase; white-space: nowrap; }
+.it-slot { flex: none; width: 104px; color: var(--on-band-weak); font-size: 10px; letter-spacing: .08em; text-transform: uppercase; white-space: nowrap; }
 .it-at { flex: none; min-width: 24px; color: var(--accent); font-size: 12px; font-weight: 700; }
 .it-thumb { width: 26px; height: 26px; }
 .it-note { font-size: 12px; line-height: 1.45; white-space: pre-line; }
