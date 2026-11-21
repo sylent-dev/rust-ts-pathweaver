@@ -24,7 +24,7 @@ const menuCard = () => `<div class="menu-row">${shownStyles().map(style =>
   `<div class="app-window menu-window" data-sample-theme="${style}" title="${THEMES[style].title}" style="width:560px">${
     buildsBand(560, { builds: SEVEN_BUILDS, menuOpen: STATE.menuDemo, action: "toggleMenuDemo" })}<div class="menu-page"></div></div>`).join("")}</div>`;
 
-addSection(() => ["The menu of « +N ▾ » · open, in the style of the page: the builds that don't fit, then Merge…; click « +N ▾ » to see it open (5 · Pop)",
+addSection(() => ["The menu of « +N ▾ » · open, in the style of the page: the builds that don't fit; click « +N ▾ » to see it open (5 · Pop)",
   [["Attached under the band, in its shade, each build a tab laid down", menuCard()]]]);
 
 addSection(() => ["The end of the band · « +N ▾ » and +, told apart by contrast, no line between them, at rest and on hover, in the style of the page",

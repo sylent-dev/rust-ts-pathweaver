@@ -2,6 +2,28 @@
 
 Ideas, polish and edge cases found along the way that the current step doesn't need. The owner decides when an entry becomes a step of [roadmap.md](../roadmap.md).
 
+## Merge .build: first after version 1
+
+The owner, 2026-11-21, at step 2k5: set aside from version 1, the first item once it is online. A tool of its own beside the viewer, **Merge .build**, a link of the band of the site just after My library: a merge is done once to prepare a guide, not while reading a build.
+
+- **Why it matters**: Mobalytics, 16 files of the 32 of the corpus, exports a guide as one file per range of levels (3 guides of the corpus: Flameblast in 7 files, Varashta in 3, Ice Shot in 3), each a snapshot whose entries say 1–100 (see [build-files-in-the-wild.md](build-files-in-the-wild.md)). Opened alone, `lvl 15-32` shows at level 80 the tree of level 32, without a word. Other tools already write a guide as one file with real windows of levels (a campaign of poe2-tools, the leveling of Maxroll), which Pathweaver reads as it is.
+- **The tool takes the files themselves**: the files of the guide dropped on its page, their start levels set, and only the merged guide opens in the viewer or downloads as a `.build`, rather than opening each file as a tab first and merging the tabs.
+- **A bridge from the viewer** (an idea of Claude Code, kept by the owner): someone who opens `lvl 15-32` in the viewer won't know the tool is there, a link of the band isn't enough. When the name of a file reads as a range (« lvl 15-32 »), a quiet line « A part of a guide in several files? Merge .build » leads to it; it replaces the line once planned under the band of the open builds when several open builds share their `link` and their ascendancy.
+- **The band of the site with three links on the left**: it fits at 960 and at 1,920 pixels; check it at the narrowest window (900 pixels) when the tool is drawn.
+- **Its name**: « Merge .build » (the owner), in answer to « Download .build » and short enough for the band; « Merge a guide », which says better what it is for, set aside. The page of the tool says what it does in its title.
+- **The rules specified before**, the section Merging a guide of `specs.md` until 2026-11-21, to start from:
+  - The user picks several builds and merges them; or completes a merged guide with one more build, for lower or higher levels.
+  - A screen lists the builds in the order of their levels, each with the level it starts at, guessed from its name (`lvl 15-32` starts at 15) and editable; a build whose level can't be guessed is asked for.
+  - Each build applies from its start level to the level before the next one; the last one up to 100.
+  - Checks before merging:
+    - **Overlap**: two builds that start at the same level block the merge, which shows the level in conflict, until a start level is changed or a build removed.
+    - **Gap**: the first build starting above level 1 is a warning (nothing is shown below it), not a block.
+    - **Different guides**: builds with different `link`s or ascendancies are a warning (« these builds don't seem to come from the same guide »), not a block.
+  - The merged guide is one build: each entry applies over the levels of the builds that hold it, within its own `level_interval` if it has one, cut at the limits of each build. The name is that of the first build without the part its level was guessed from (« lvl 1-14 - 0.5.5 Fubgun Flameblast Oil G » gives « 0.5.5 Fubgun Flameblast Oil G »), and the author is that of the first build; both are editable.
+  - A build whose level can't be guessed (« Endgame - … ») blocks the merge until its start level is typed.
+  - The merged guide joins the list of open builds; the builds it comes from stay open.
+  - The page of the tool, as specified for « Merge… »: the builds with a box to tick, the ticked ones in the order of their start levels (each in a field, with the levels it applies to), the merged guide as a track of named segments, the checks (what blocks stands out, what only warns doesn't), the name and the author, and **Merge N builds**, greyed while something blocks.
+
 ## Reading the files
 
 - **A `null` field is dropped on writing.** `"author": null` (one file of the corpus) is read as no author and not written back; keep it as it was read, as the other fields.
@@ -40,10 +62,6 @@ Set aside at the wireframes (2026-11-16, see `docs/wireframes/archive.excalidraw
 - **Two hints on one cell at the same level** (an edge case, found on 2026-11-21 at step 2k2; depends on: the inventory of step 6): a campaign of the corpus gives its weapon `[1, 32]` then `[32, 45]`, so both apply at 32, and the drawing shows only the first. Decide what a slot shows then (the one that starts last, as the next; both, with a mark), and whether the warnings name it, as an overlap of the merge does.
 - **Prefix or suffix, for each line of a hint** (an idea of the owner, 2026-11-20 at step 2j3; after the release of 1.0, whose modifiers may change; depends on: the inventory of step 6): the `.build` file doesn't say it (a hint has seven fields; 3 hints of 326 say « prefix » in their own words), but RePoE's `mods.json` gives each modifier its kind (2,767 prefixes, 2,458 suffixes), its text with its ranges (« +(10-19) to maximum Life ») and the kinds of items it can roll on: each line of the author (« +41 to maximum Life ») read against the modifiers of its base. A rule that reads the data: measured first on the 555 numbered lines of the corpus (a value out of every range, a craft or a corruption; a modifier of two lines; a line that isn't a stat; a free text), then its display drawn in the mock-up (a mark P or S, or two groups, as the game shows them with Alt). Craft of Exile isn't needed: it reads the same game data.
 - **The vertical alignment of the marks of the gems against their names, at every zoom** (the owner, 2026-11-20 at step 2j3b; depends on: the rows of the skills on the website): the hexagon before « Sigil of Power » looks a little off on the owner's screen, but a fraction of a pixel tuned at one zoom moves at another (100, 125, 150 %, the density of the screen). Tuned on the website, on a test page at several zooms, maybe with an offset in `em` that follows the size of the text rather than in pixels; the same for the sticky notes of the unknown gems (a skill's +0.5 px, a support's −2 px) and the mark of a skill (+0.25 px), tuned on the mock-up.
-
-## Merging a guide
-
-- **Offer to merge the files of a guide** (an idea of Claude Code, taken by the owner on 2026-11-18 at step 2e2; for step 7, which it depends on): when several open builds share their `link` and their ascendancy, a line under the band of the open builds offers « 3 builds of the same guide · Merge », which opens the merging screen with them ticked. Merge… stays in the menu « +N ▾ », where it is hidden for a feature that sets Pathweaver apart.
 
 ## Method and skills
 
