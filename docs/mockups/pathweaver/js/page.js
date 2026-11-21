@@ -18,6 +18,10 @@ const VARIANTS = {
   // The width of the windows of the home page (2l): the minimum of specs.md, half a 1920-pixel screen, and a wide
   // window of the owner's screen.
   homeWidth: { label: "Home width", options: { 900: "900 px", 960: "960 px", 1600: "1,600 px" }, fallback: "960" },
+  // What the named colour black of the author's markup becomes on Frost Night (2n4): as written, 1.1 to 1; the
+  // darkest neutral grey at 4.5 to 1 on the band, a little darker than grey, as a colour rgb(0, 0, 0) would be
+  // lightened (specs.md, The author's texts); the grey of the markup.
+  markupBlack: { label: "Black", variable: "--markup-black", options: { "#000000": "B1 · as written", "#808080": "B2 · a grey at 4.5 to 1", "#8c8c8c": "B3 · as grey" }, fallback: "#808080" },
 };
 
 const SECTIONS = [];
