@@ -1,7 +1,8 @@
 // The Inventory tab (2k2, the owner, 2026-11-21): the slots as in the game, where the right column of the
 // Overview only has room for the drawing (js/side-inventory.js). H1, kept of twelve variants at four
 // temperatures (the others in the history of Git): the drawing on the left, a click on a slot shows its hint
-// on the right, written out: its item, its stats, its note, and every hint of the slot along the levels;
+// on the right, written out: its item, its stats, its note, and every hint of the slot along the levels
+// (js/inventory-detail.js);
 // the hints to come under the drawing, by the level they come at. The card of a slot on hover of its
 // drawing or its line (js/slot-hover.js). The tab is as high as the Overview (668 px) and scrolls inside.
 
@@ -44,41 +45,37 @@ const itName = hint => `<span class="it-name${hint.item.unique ? " is-unique" : 
 const itSlot = hint => `<span class="it-slot">${escapeHtml(hint.label)}</span>`;
 const itAt = level => `<span class="it-at app-number">${level}</span>`;
 const itTitle = (text, className = "") => `<h3 class="it-title app-title ${className}">${text}</h3>`;
-// The note of its author written out, without the numbers of its lines, with the markup of the game.
-const itNote = hint => (hint.note ? `<div class="it-note">${markupHtml(withoutNumbers(hint.note.replace(/\r/g, "")))}</div>` : "");
-
-// The detail of the hint chosen: its item, its kind, the stats of a unique, its note, then every hint of
-// its cell along the levels.
-function itDetail(chosen, state) {
-  if (!chosen) return '<p class="it-none app-weak">No hint in this build.</p>';
-  const item = BUILDS.items[chosen.item.name];
-  const lines = list => (list?.length ? `<ul class="app-hover-stats">${list.map(line => `<li>${escapeHtml(line)}</li>`).join("")}</ul>` : "");
-  const kind = item ? ` · ${escapeHtml(item.unique ? `Unique ${item.kind.toLowerCase()}${item.base ? ` · ${item.base}` : ""}` : item.kind)}` : "";
-  return `<div class="it-detail">
-      <div class="it-detail-head"><span class="it-detail-art">${chosen.item.art ? itemArt(chosen.item) : chosen.item.unknown ? UNKNOWN_MARK : ""}</span>
-        <div>${itName(chosen)}<div class="it-detail-kind app-weak">${escapeHtml(chosen.label)}${kind}</div></div></div>
-      ${item?.implicits?.length ? `<div class="app-item-implicits">${lines(item.implicits)}</div>` : ""}${lines(item?.stats)}
-      ${itNote(chosen)}
-      ${itTitle("On this slot")}<ul class="it-rows">${state.all.filter(hint => sameCell(hint, chosen)).map(hint =>
-        `<li class="it-row${appliesAt(hint.levels, state.level) ? " is-now" : ""}" ${itAbout(hint, state.level)}><span class="it-span app-number">${hint.levels[0]}–${hint.levels[1]}</span>${itThumb(hint)}${itName(hint)}</li>`).join("")}</ul>
-    </div>`;
-}
-
 // The slot shown on the right, chosen by a click on it or on its line; by default the first new at the
-// level, or the first of the drawing.
-ACTIONS["it-choose"] = element => { STATE.itChosen = element.dataset.cell; return true; };
+// level, or the first of the drawing. A new choice flashes the edge of its slot once (S3, S4 of « Chosen
+// slot »), not a drawing again for another reason (the level, the weapon set).
+ACTIONS["it-choose"] = element => {
+  STATE.itFlash = STATE.itChosen !== element.dataset.cell;
+  STATE.itChosen = element.dataset.cell;
+  return true;
+};
+AFTER_RENDER.push(() => { STATE.itFlash = false; });
+
+// The head of the drawing, chosen with the tabs « Inventory head »: the title « At level N » (T1), none (T2:
+// the band above says the level), the level large behind the drawing, filled (T3) or outlined (T4), its
+// opacity on the slider « Level mark ».
+const INVENTORY_CHOSEN = { s1: "S1 · 2 px", s2: "S2 · 1 px", s3: "S3 · 1 px, a flash when chosen", s4: "S4 · 1 px, a light around when chosen" };
+const INVENTORY_HEADS = { t1: "T1 · The title", t2: "T2 · No title", t3: "T3 · The level behind, filled", t4: "T4 · The level behind, outlined" };
+const itHead = level => `<div class="app-inventory-head">${chosen.invHead === "t1" ? itTitle(`At level ${level}`) : ""}${inventorySetSwitch()}</div>`;
+const itMark = level => (["t3", "t4"].includes(chosen.invHead)
+  ? `<span class="it-mark app-number${chosen.invHead === "t4" ? " is-outlined" : ""}${String(level).length > 2 ? " is-long" : ""}" aria-hidden="true">${level}</span>` : "");
 
 // The Inventory tab at a level, of the build shown or of a case.
 function inventoryTab(level = STATE.level, source) {
   const state = itState(level, source);
   const hints = [...state.now, ...state.later];
-  const chosen = hints.find(hint => cellKey(hint) === STATE.itChosen) ?? state.now.find(hint => startsAt(hint.levels, level)) ?? hints[0];
-  const extra = (id, x) => ({ attributes: `data-action="it-choose" data-cell="${cellKey({ id, x })}"`, className: chosen && cellKey({ id, x }) === cellKey(chosen) ? "is-chosen" : "" });
+  const shown = hints.find(hint => cellKey(hint) === STATE.itChosen) ?? state.now.find(hint => startsAt(hint.levels, level)) ?? hints[0];
+  const extra = (id, x) => ({ attributes: `data-action="it-choose" data-cell="${cellKey({ id, x })}"`,
+    className: shown && cellKey({ id, x }) === cellKey(shown) ? `is-chosen${STATE.itFlash ? " is-flash" : ""}` : "" });
   const later = state.later.length ? `${itTitle("To come", "is-next")}<ul class="it-rows">${state.later.map(hint =>
     `<li class="it-row is-later" data-action="it-choose" data-cell="${cellKey(hint)}" ${itAbout(hint, level)}>${itAt(hint.levels[0])}${itThumb(hint)}${itSlot(hint)}${itName(hint)}</li>`).join("")}</ul>` : "";
   return `<div class="app-inventory-tab"><div class="app-it" data-level="${level}"${source ? ` data-source="${source}"` : ""}>
-      <div class="it-left"><div class="app-inventory-head">${itTitle(`At level ${level}`)}${inventorySetSwitch()}</div>
-        ${inventoryDrawing(level, state.now, { cell: 44, extra })}${inventoryOthers(level, state.now)}${later}</div>
-      <div class="it-side">${itDetail(chosen, state)}</div>
+      <div class="it-left">${itHead(level)}<div class="it-figure">${itMark(level)}${inventoryDrawing(level, state.now, { cell: 44, extra })}</div>
+        ${inventoryOthers(level, state.now)}${later}</div>
+      <div class="it-side">${inventoryDetail(shown, state)}</div>
     </div></div>`;
 }

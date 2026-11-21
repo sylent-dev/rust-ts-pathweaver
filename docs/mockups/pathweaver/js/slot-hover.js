@@ -17,26 +17,32 @@ const ITEM_MISSING = {
   stats: "Its stats are not in the data yet",
 };
 
-// In the construction of every card on hover (2k, the owner, 2026-11-20; js/hover-card.js), without art:
-// the image of an item doesn't fit its square (a staff is two cells by four). Its title, the name of the
-// item, in gold for a unique; its subtitle, its kind, and the base of a unique after it; its body, the
-// implicits and the stats of a unique, what the data lack, its slot and its levels; the note.
-function slotHoverHtml(element) {
-  const { item: name, slot, note } = element.dataset;
-  const unknown = "unknown" in element.dataset;
+// What the card of a slot says, in parts, so that the card on hover and the detail of the Inventory tab
+// (js/inventory-detail.js) read one rule: its title, the name of the item, in gold for a unique; its
+// subtitle, its kind, and the base of a unique after it; its stats, the implicits and the stats of a
+// unique and what the data lack; its state, its slot and its levels; the note of its author.
+function slotCardParts({ name, slot, note, unknown, levels, level }) {
   const item = unknown ? undefined : BUILDS.items[name];
   const kind = !item ? slot : item.unique ? `Unique ${item.kind.toLowerCase()}` : item.kind;
   const lines = list => list?.length ? `<ul class="app-hover-stats">${list.map(line => `<li>${escapeHtml(line)}</li>`).join("")}</ul>` : "";
   const missing = unknown ? ITEM_MISSING.unknown : item?.unique && !item.stats ? ITEM_MISSING.stats : "";
-  return hoverCardHtml({
+  return {
     title: item?.unique ? `<span class="is-unique">${escapeHtml(name)}</span>` : escapeHtml(name),
     subtitle: escapeHtml(item?.unique && item.base ? `${kind} · ${item.base}` : kind),
-    body: `${item?.implicits?.length ? `<div class="app-item-implicits">${lines(item.implicits)}</div>` : ""}
+    stats: `${item?.implicits?.length ? `<div class="app-item-implicits">${lines(item.implicits)}</div>` : ""}
       ${lines(item?.stats)}
-      ${missing ? `<p class="app-hover-missing${unknown ? " is-unknown" : ""}">${missing}</p>` : ""}
-      <div class="app-hover-state">${item ? `${slot} · ` : ""}${levelsWords({ levels: element.dataset.levels.split(",").map(Number) }, Number(element.dataset.level))}</div>`,
-    note: note ? markupHtml(withoutNumbers(note)) : "",
-  });
+      ${missing ? `<p class="app-hover-missing${unknown ? " is-unknown" : ""}">${missing}</p>` : ""}`,
+    state: `${item ? `${escapeHtml(slot)} · ` : ""}${levelsWords({ levels }, level)}`,
+    note: note ? markupHtml(withoutNumbers(note.replace(/\r/g, ""))) : "",
+  };
+}
+
+// In the construction of every card on hover (2k, the owner, 2026-11-20; js/hover-card.js), without art:
+// the image of an item doesn't fit its square (a staff is two cells by four).
+function slotHoverHtml(element) {
+  const { item: name, slot, note, levels, level } = element.dataset;
+  const parts = slotCardParts({ name, slot, note, unknown: "unknown" in element.dataset, levels: levels.split(",").map(Number), level: Number(level) });
+  return hoverCardHtml({ ...parts, body: `${parts.stats}<div class="app-hover-state">${parts.state}</div>` });
 }
 
 const slotCard = document.createElement("div");

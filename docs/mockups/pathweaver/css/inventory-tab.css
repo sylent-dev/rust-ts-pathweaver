@@ -26,18 +26,37 @@
 /* A line of a list: the hints to come, the hints of a slot. */
 .it-row { display: flex; align-items: center; gap: 9px; min-height: 32px; }
 
-/* The slot chosen, outlined in the accent; a click on a slot or a line chooses it. */
+/* The slot chosen, its edge in the accent (« Chosen slot »): S1 2 px, S2 1 px, S3 1 px that flashes once
+   when it is chosen, S4 1 px with a light that runs once around it; no flash when the system asks for less
+   motion. A click on a slot or a line chooses it. */
 .app-it .app-slot, .it-left .it-row { cursor: pointer; }
 .app-it .app-slot.is-chosen { box-shadow: inset 0 0 0 2px var(--accent); }
+:root:not([data-inv-chosen="s1"]) .app-it .app-slot.is-chosen { box-shadow: inset 0 0 0 1px var(--accent); }
+:root[data-inv-chosen="s3"] .app-it .app-slot.is-chosen.is-flash { animation: it-flash .6s ease-out; }
+@keyframes it-flash {
+  0% { box-shadow: inset 0 0 0 1px #fff, inset 0 0 14px color-mix(in srgb, var(--accent) 70%, transparent), 0 0 14px var(--accent); }
+  100% { box-shadow: inset 0 0 0 1px var(--accent), inset 0 0 0 transparent, 0 0 0 transparent; }
+}
+@property --it-turn { syntax: "<angle>"; inherits: false; initial-value: 0deg; }
+:root[data-inv-chosen="s4"] .app-it .app-slot.is-chosen.is-flash::after {
+  content: ""; position: absolute; inset: 0; padding: 1px; pointer-events: none;
+  background: conic-gradient(from var(--it-turn), transparent 0 70%, color-mix(in srgb, var(--accent), #fff 55%) 92%, transparent 100%);
+  mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); mask-composite: exclude;
+  animation: it-run .8s ease-in-out forwards; }
+@keyframes it-run { 0% { --it-turn: 0deg; opacity: 1; } 85% { opacity: 1; } 100% { --it-turn: 360deg; opacity: 0; } }
+@media (prefers-reduced-motion: reduce) { .app-it .app-slot.is-chosen.is-flash, .app-it .app-slot.is-chosen.is-flash::after { animation: none; } }
 
-/* Its detail on the right. */
-.it-detail { padding: 14px 16px; background: color-mix(in srgb, var(--band-deep), #000 60%); }
-.it-detail-head { display: flex; align-items: center; gap: 12px; margin-bottom: 10px; font-size: 16px; font-weight: 700; }
-.it-detail-art { flex: none; display: grid; place-items: center; width: 64px; height: 64px; background: var(--slot-box); box-shadow: inset 0 0 0 1px var(--slot-line); }
-.it-detail-art .app-item-art { width: 56px; height: 56px; }
-.it-detail-kind { font-size: 12px; font-weight: 400; }
-.it-detail .app-hover-stats { margin: 6px 0; font-size: 12.5px; }
-.it-detail .it-note { margin: 10px 0 0; padding: 8px 10px; background: var(--band-deep); }
-.it-detail .it-title { margin-top: 16px; }
+/* The head of the drawing (« Inventory head »): without its title, the switch of the set alone at the right;
+   the level large behind the drawing, filled or outlined, at the opacity of « Level mark ». */
+.it-left .app-inventory-head { justify-content: flex-end; min-height: 22px; }
+.it-left .app-inventory-head .it-title + .app-inventory-sets { margin-left: auto; }
+.it-left .app-inventory-head:has(.it-title) { justify-content: space-between; }
+.it-figure { position: relative; isolation: isolate; }
+.it-mark { position: absolute; inset: 0; z-index: -1; display: grid; place-items: center; color: var(--text); opacity: var(--it-mark-opacity, 6%);
+  font-size: 300px; font-weight: 800; letter-spacing: -.05em; line-height: 1; pointer-events: none; user-select: none; }
+.it-mark.is-long { font-size: 200px; }
+.it-mark.is-outlined { color: transparent; -webkit-text-stroke: 2px var(--text); opacity: calc(var(--it-mark-opacity, 6%) * 3); }
+
+/* The hints of a slot along the levels (js/inventory-detail.js), the one at the level in the accent. */
 .it-span { flex: none; width: 52px; color: var(--weak); font-size: 12px; }
 .it-row.is-now .it-span { color: var(--accent); }

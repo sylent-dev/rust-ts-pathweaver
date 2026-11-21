@@ -1,0 +1,43 @@
+/* The box of the item chosen in the Inventory tab (js/inventory-detail.js, 2k2): six variants (« Item box »).
+   P1 to P4 in the construction of the cards on hover (css/hover-card.css), opaque; P5 and P6 without a
+   background, on the graph paper. */
+.it-panel.app-hover.is-hover-card { width: 100%; }
+.it-panel .app-hover-stats { margin: 0 0 6px; }
+.it-history .it-title, .it-bare-part .it-title { margin: 2px 0 4px; font-size: 12.5px; letter-spacing: normal; }
+.it-history .it-row { min-height: 28px; }
+.it-history .it-thumb { width: 22px; height: 22px; }
+
+/* P2: the image of the item in the square of its head, whole. */
+.it-p2 .hc-art { background: var(--slot-box); box-shadow: inset 0 0 0 1px var(--slot-line); }
+.it-p2 .hc-art .app-item-art { position: absolute; inset: 3px; width: calc(100% - 6px); height: calc(100% - 6px); object-fit: contain; }
+
+/* P3: the image at its own cells, beside the stats. */
+.it-p3-row { display: flex; align-items: flex-start; gap: 14px; }
+.it-cells-art { flex: none; display: grid; box-sizing: border-box; padding: 3px; background: var(--slot-box); box-shadow: inset 0 0 0 1px var(--slot-line); }
+.it-p3-words { flex: 1; min-width: 0; }
+
+/* P4: the card at its width on hover, the hints of the slot beside it. */
+.it-p4 { display: flex; align-items: flex-start; gap: 18px; }
+.it-p4 .it-panel.app-hover.is-hover-card { flex: none; width: 320px; }
+.it-p4-history { flex: 1; min-width: 0; }
+.it-p4-history .it-title { margin-top: 0; }
+
+/* P5, P6: no background, the words on the graph paper; the parts between thin lines. */
+.it-bare { position: relative; padding: 4px 14px 10px; }
+.it-bare-head { padding: 6px 0 10px; }
+.it-bare-head strong { display: block; font-size: 18px; font-weight: 700; }
+.it-bare-head strong .is-unique, .it-bare .is-unique { color: var(--unique); }
+.it-bare-sub { color: var(--on-band-weak); font-size: 12px; }
+.it-bare-part { padding: 10px 0; border-top: 1px solid color-mix(in srgb, var(--text) 12%, transparent); }
+.it-bare-part .app-hover-stats { margin: 0 0 6px; }
+.it-bare-note { padding-left: 10px; border-left: 2px solid color-mix(in srgb, var(--accent) 60%, transparent); }
+/* P6: four corners in the accent, 12 px, around the box; the lines between the parts in the accent too. */
+.it-p6 .it-bare-part { border-top-color: color-mix(in srgb, var(--accent) 22%, transparent); }
+.it-corners { position: absolute; inset: 0; pointer-events: none;
+  --c: var(--accent);
+  background:
+    linear-gradient(var(--c) 0 0) top left / 12px 1px, linear-gradient(var(--c) 0 0) top left / 1px 12px,
+    linear-gradient(var(--c) 0 0) top right / 12px 1px, linear-gradient(var(--c) 0 0) top right / 1px 12px,
+    linear-gradient(var(--c) 0 0) bottom left / 12px 1px, linear-gradient(var(--c) 0 0) bottom left / 1px 12px,
+    linear-gradient(var(--c) 0 0) bottom right / 12px 1px, linear-gradient(var(--c) 0 0) bottom right / 1px 12px;
+  background-repeat: no-repeat; }
