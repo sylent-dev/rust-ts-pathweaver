@@ -32,12 +32,13 @@ function abGuideLink(url) {
   try { host = new URL(url).host.replace(/^www\./, ""); } catch { /* shown whole */ }
   return `<a class="ab-link" href="${escapeHtml(url)}" target="_blank" rel="noopener noreferrer" title="${escapeHtml(url)}">${escapeHtml(host)}</a>`;
 }
-// The guide: the link of the file, the one its author named; when it has none, the addresses of the description,
-// in their order, said to come from it (the Amazon of the corpus: its guide and its planner); else nothing.
+// The guide, one link: the link of the file, the one its author named; when it has none, the first address of the
+// description, said to come from it (the owner, 2026-11-21: one guide, not two links to the same site; the Amazon
+// of the corpus writes its guide, then its planner); else nothing.
 function abGuide(about) {
   if (about.link) return about.link.startsWith("https://") ? abGuideLink(about.link) : `<span class="ab-link-text">${escapeHtml(about.link)}</span>`;
-  const found = [...new Set(about.description.match(AB_URL) ?? [])];
-  return found.length ? `${found.map(abGuideLink).join("")}<span class="ab-from app-weak">from the description</span>` : '<span class="app-weak">none</span>';
+  const first = about.description.match(AB_URL)?.[0];
+  return first ? `${abGuideLink(first)}<span class="ab-from app-weak">from the description</span>` : '<span class="app-weak">none</span>';
 }
 const abFile = about => `<button type="button" class="app-file ab-file" draggable="true" title="${escapeHtml(about.file)}">${fileIcon()}<span class="app-file-text"><span class="app-file-label">Download .build</span><small>${abSize(about.size)}</small></span></button>`;
 const abWhere = () => '<p class="ab-where app-weak">The game reads its builds in <code>Documents/My Games/Path of Exile 2/BuildPlanner</code>; on Steam Deck, in that folder of the Proton prefix.</p>';
