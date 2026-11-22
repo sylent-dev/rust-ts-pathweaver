@@ -23,7 +23,7 @@ pub fn held<T>(what: T) -> Held<'static, T> {
 pub fn noted<T>(what: T, notes: &[&'static str]) -> Held<'static, T> {
     Held {
         what,
-        notes: notes.to_vec(),
+        notes: notes.iter().copied().collect(),
     }
 }
 

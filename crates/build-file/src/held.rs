@@ -1,18 +1,18 @@
 //! What a build holds at a level of the character, as its file says (`specs.md`, The level):
 //! each thing once, whatever the number of entries that set it there.
 
-use std::collections::BTreeMap;
+use std::collections::{BTreeMap, BTreeSet};
 
 use crate::{Build, Entry, InventorySlot, LevelRange, Passive};
 
 /// A thing a build holds at a level (a gem, a passive, the item of a hint), once, with the
-/// notes of its author on the entries that set it there, in their order: several when two
-/// entries of the file set the same thing at the same level with different notes, each note
-/// once.
+/// notes of its author on the entries that set it there: several when two entries of the file
+/// set the same thing at the same level with different notes. A set, sorted: a note counts
+/// once, and neither the number of the entries that carry it nor their order is a change.
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct Held<'a, T> {
     pub what: T,
-    pub notes: Vec<&'a str>,
+    pub notes: BTreeSet<&'a str>,
 }
 
 /// A support on its skill, by their ids: the same support on two skills is two things.
@@ -159,10 +159,9 @@ fn note(text: Option<&str>) -> Option<&str> {
     text.map(str::trim).filter(|text| !text.is_empty())
 }
 
-/// Each thing once, in the order it first comes in, with the notes of all its entries, each
-/// note once. The place
-/// of each thing is kept in a sorted table: searching the list for every entry took 6 seconds
-/// for a file of 10,000 passives (`changes/corpus.rs`).
+/// Each thing once, in the order it first comes in, with the notes of all its entries. The place
+/// of each thing is kept in a sorted table, and so are its notes: searching a list for every
+/// entry took 6 seconds for a file of 10,000 passives (`changes/large_files.rs`).
 fn held_once<'a, T: Ord + Copy>(
     entries: impl Iterator<Item = (T, Option<&'a str>)>,
 ) -> Vec<Held<'a, T>> {
@@ -171,13 +170,7 @@ fn held_once<'a, T: Ord + Copy>(
     for (what, note) in entries {
         let place = *places.entry(what).or_insert(things.len());
         match things.get_mut(place) {
-            Some(held) => {
-                if let Some(note) = note
-                    && !held.notes.contains(&note)
-                {
-                    held.notes.push(note);
-                }
-            }
+            Some(held) => held.notes.extend(note),
             None => things.push(Held {
                 what,
                 notes: note.into_iter().collect(),

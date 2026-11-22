@@ -121,20 +121,6 @@ fn an_entry_is_set_for_the_levels_of_its_interval_and_for_none_when_it_is_invali
 }
 
 #[test]
-fn a_skill_written_as_its_id_alone_has_no_support() {
-    let build = build(json!({ "skills": ["Earthquake", { "id": "Boneshatter" }] }));
-
-    let supports: Vec<usize> = build
-        .skills
-        .get()
-        .unwrap()
-        .iter()
-        .map(|skill| skill.supports().len())
-        .collect();
-    assert_eq!(supports, [0, 0]);
-}
-
-#[test]
 fn the_invalid_intervals_are_listed_with_their_entry_in_the_order_of_the_file() {
     let build = build(json!({
         "passives": [

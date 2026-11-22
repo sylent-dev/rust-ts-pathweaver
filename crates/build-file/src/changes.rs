@@ -78,8 +78,8 @@ pub struct LevelChanges<'a> {
 
 impl Build {
     /// What changes at each level of the build where something does, from the lowest to the
-    /// highest. None at the lowest level it covers, which nothing comes before to compare
-    /// with. Only the levels where an entry starts or has just stopped are read: reading all
+    /// highest. Nothing changes at the lowest level it covers, which nothing comes before to
+    /// compare with. Only the levels where an entry starts or has just stopped are read: reading all
     /// hundred took 3.8 s for a snapshot of 1 MB (`changes/large_files.rs`).
     #[must_use]
     pub fn changes_by_level(&self) -> Vec<LevelChanges<'_>> {
@@ -261,13 +261,13 @@ fn things_with_other_notes<'h, 'a, T: Ord>(
     held: &'h [Held<'a, T>],
     before: &'h [Held<'a, T>],
 ) -> impl Iterator<Item = &'h Held<'a, T>> {
-    let notes_before: BTreeMap<&T, &[&str]> = before
+    let notes_before: BTreeMap<&T, &BTreeSet<&str>> = before
         .iter()
-        .map(|held| (&held.what, held.notes.as_slice()))
+        .map(|held| (&held.what, &held.notes))
         .collect();
     held.iter().filter(move |held| {
         let notes_before = notes_before.get(&held.what);
-        notes_before.is_some_and(|notes_before| *notes_before != held.notes.as_slice())
+        notes_before.is_some_and(|notes_before| **notes_before != held.notes)
     })
 }
 

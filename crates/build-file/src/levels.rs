@@ -167,16 +167,9 @@ impl Build {
     /// entry starts to apply, and those just after one stops. At any other level, every entry
     /// applies as it did at the level before.
     pub(crate) fn turning_levels(&self) -> BTreeSet<u32> {
-        let passives = self.passives.get().into_iter().flatten();
-        let passives = passives.filter_map(Entry::levels);
-        let gems = self.skills.get().into_iter().flatten().flat_map(|skill| {
-            let supports = skill.supports().iter().filter_map(Entry::levels);
-            skill.levels().into_iter().chain(supports)
-        });
-        let hints = self.inventory_slots.get().into_iter().flatten();
-        let hints = hints.filter_map(InventorySlot::levels);
-        let levels_of_entries = passives.chain(gems).chain(hints);
-        levels_of_entries
+        let levels = self.named_intervals();
+        let levels = levels.filter_map(|(_, interval)| levels_of(interval));
+        levels
             .flat_map(|levels| [levels.first, levels.last.saturating_add(1)])
             .collect()
     }
@@ -185,40 +178,37 @@ impl Build {
     /// each skill followed by its supports, the hints of the inventory.
     #[must_use]
     pub fn invalid_intervals(&self) -> Vec<InvalidInterval<'_>> {
-        let passives = self
-            .passives
-            .get()
-            .into_iter()
-            .flatten()
-            .filter_map(|passive| {
-                InvalidInterval::of(
-                    EntryName::Passive { id: passive.id() },
-                    passive.level_interval(),
-                )
-            });
+        let intervals = self.named_intervals();
+        let invalid =
+            intervals.filter_map(|(entry, interval)| InvalidInterval::of(entry, interval));
+        invalid.collect()
+    }
+
+    /// Every entry of the build with its `level_interval`, in the order of the file: the
+    /// passives, each skill followed by its supports, the hints of the inventory.
+    fn named_intervals(&self) -> impl Iterator<Item = (EntryName<'_>, Option<&LevelInterval>)> {
+        let passives = self.passives.get().into_iter().flatten().map(|passive| {
+            let name = EntryName::Passive { id: passive.id() };
+            (name, passive.level_interval())
+        });
         let gems = self.skills.get().into_iter().flatten().flat_map(|skill| {
-            let supports = skill.supports().iter().filter_map(|support| {
-                InvalidInterval::of(
-                    EntryName::Support(SupportOnSkill {
-                        id: support.id(),
-                        skill: skill.id(),
-                    }),
-                    support.level_interval(),
-                )
+            let supports = skill.supports().iter().map(move |support| {
+                let name = EntryName::Support(SupportOnSkill {
+                    id: support.id(),
+                    skill: skill.id(),
+                });
+                (name, support.level_interval())
             });
-            InvalidInterval::of(EntryName::Skill { id: skill.id() }, skill.level_interval())
-                .into_iter()
-                .chain(supports)
+            let name = EntryName::Skill { id: skill.id() };
+            std::iter::once((name, skill.level_interval())).chain(supports)
         });
         let hints = self
             .inventory_slots
             .get()
             .into_iter()
             .flatten()
-            .filter_map(|hint| {
-                InvalidInterval::of(EntryName::Hint(hint.on_slot()), hint.level_interval.get())
-            });
-        passives.chain(gems).chain(hints).collect()
+            .map(|hint| (EntryName::Hint(hint.on_slot()), hint.level_interval.get()));
+        passives.chain(gems).chain(hints)
     }
 }
 

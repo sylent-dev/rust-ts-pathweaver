@@ -1,6 +1,7 @@
 use serde_json::{Value, json};
 
 use super::*;
+use crate::fixtures::build;
 
 const EVERY_FIELD: &str = include_str!("../tests/builds/every-field.build");
 
@@ -213,4 +214,18 @@ fn each_field_left_out_is_read_absent_and_written_back_left_out() {
         }
     );
     assert_eq!(as_json(&build.write()), as_json(&text));
+}
+
+#[test]
+fn a_skill_written_as_its_id_alone_has_no_support() {
+    let build = build(json!({ "skills": ["Earthquake", { "id": "Boneshatter" }] }));
+
+    let supports: Vec<usize> = build
+        .skills
+        .get()
+        .unwrap()
+        .iter()
+        .map(|skill| skill.supports().len())
+        .collect();
+    assert_eq!(supports, [0, 0]);
 }

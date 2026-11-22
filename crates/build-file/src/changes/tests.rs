@@ -621,3 +621,16 @@ fn a_gem_or_a_hint_listed_again_with_the_same_note_while_it_is_held_changes_noth
 
     assert_eq!(build.changes_by_level(), []);
 }
+
+#[test]
+fn the_same_notes_carried_by_other_entries_change_nothing() {
+    let build = build(json!({
+        "skills": [
+            { "id": "Spark", "level_interval": [1, 5], "additional_text": "Main skill" },
+            { "id": "Spark", "level_interval": [1, 10], "additional_text": "Swap at 10" },
+            { "id": "Spark", "level_interval": [6, 10], "additional_text": "Main skill" }
+        ]
+    }));
+
+    assert_eq!(build.changes_by_level(), []);
+}

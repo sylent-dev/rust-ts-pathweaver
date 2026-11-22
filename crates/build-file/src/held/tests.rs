@@ -115,21 +115,12 @@ fn two_entries_of_a_skill_at_the_same_level_are_one_skill_with_the_supports_and_
     let at_1 = build.at_level(1);
     assert_eq!(
         at_1.skills,
-        [
-            Held {
-                what: "Mirage",
-                notes: vec!["Level 20", "again"]
-            },
-            held("Other")
-        ]
+        [noted("Mirage", &["Level 20", "again"]), held("Other")]
     );
     assert_eq!(
         at_1.supports,
         [
-            Held {
-                what: support("Pierce", "Mirage"),
-                notes: vec!["first", "second"]
-            },
+            noted(support("Pierce", "Mirage"), &["first", "second"]),
             held(support("Fork", "Mirage")),
             held(support("Chain", "Mirage"))
         ]
@@ -171,14 +162,11 @@ fn a_passive_is_held_once_in_each_weapon_set_it_is_taken_in() {
     assert_eq!(
         build.at_level(1).passives,
         [
-            Held {
-                what: passive("melee17", WeaponSet::Shared),
-                notes: vec!["again"]
-            },
-            Held {
-                what: passive("melee17", WeaponSet::First),
-                notes: vec!["in set I", "set I again"]
-            },
+            noted(passive("melee17", WeaponSet::Shared), &["again"]),
+            noted(
+                passive("melee17", WeaponSet::First),
+                &["in set I", "set I again"]
+            ),
             held(passive("melee17", WeaponSet::Second)),
         ]
     );
@@ -200,27 +188,24 @@ fn a_hint_names_its_unique_or_the_first_line_of_its_text() {
     assert_eq!(
         build.at_level(1).hints,
         [
-            Held {
-                what: hint("Helm1", HintItem::Unique("The Black Crest")),
-                notes: vec!["Any helmet before it"]
-            },
-            Held {
-                what: hint(
+            noted(
+                hint("Helm1", HintItem::Unique("The Black Crest")),
+                &["Any helmet before it"]
+            ),
+            noted(
+                hint(
                     "BodyArmour1",
                     HintItem::Named("<b>{Sacramental Robe} (Int Base)")
                 ),
-                notes: vec!["<b>{Sacramental Robe} (Int Base)  \r\n  Life and resistances"]
-            },
-            Held {
-                what: hint("Belt1", HintItem::Named("Any belt")),
-                notes: vec!["Any belt"]
-            },
+                &["<b>{Sacramental Robe} (Int Base)  \r\n  Life and resistances"]
+            ),
+            noted(hint("Belt1", HintItem::Named("Any belt")), &["Any belt"]),
             held(hint("Ring1", HintItem::Unnamed)),
             held(hint("Ring2", HintItem::Unnamed)),
-            Held {
-                what: hint("Charm1", HintItem::Named("Thawing Charm")),
-                notes: vec!["Thawing Charm \nAgainst the cold"]
-            },
+            noted(
+                hint("Charm1", HintItem::Named("Thawing Charm")),
+                &["Thawing Charm \nAgainst the cold"]
+            ),
         ]
     );
 }
@@ -240,19 +225,19 @@ fn the_hints_of_a_slot_are_told_apart_by_their_item_never_by_their_place() {
     assert_eq!(
         build.at_level(1).hints,
         [
-            Held {
-                what: hint("Charm1", HintItem::Named("Thawing Charm")),
-                notes: vec!["Thawing Charm", "Thawing Charm\nA second one"]
-            },
-            Held {
-                what: hint("Charm1", HintItem::Named("Golden Charm")),
-                notes: vec!["Golden Charm"]
-            },
+            noted(
+                hint("Charm1", HintItem::Named("Thawing Charm")),
+                &["Thawing Charm", "Thawing Charm\nA second one"]
+            ),
+            noted(
+                hint("Charm1", HintItem::Named("Golden Charm")),
+                &["Golden Charm"]
+            ),
             held(hint("Charm1", HintItem::Unique("Thawing Charm"))),
-            Held {
-                what: hint("Trinket1", HintItem::Named("Thawing Charm")),
-                notes: vec!["Thawing Charm"]
-            },
+            noted(
+                hint("Trinket1", HintItem::Named("Thawing Charm")),
+                &["Thawing Charm"]
+            ),
         ]
     );
 }
@@ -274,21 +259,12 @@ fn a_note_is_read_without_the_spaces_around_it_and_one_of_spaces_alone_is_none()
     assert_eq!(
         at_1.passives,
         [
-            Held {
-                what: passive("melee17", WeaponSet::Shared),
-                notes: vec!["Take it early"]
-            },
+            noted(passive("melee17", WeaponSet::Shared), &["Take it early"]),
             held(passive("melee18", WeaponSet::Shared)),
             held(passive("melee19", WeaponSet::Shared)),
         ]
     );
-    assert_eq!(
-        at_1.skills,
-        [Held {
-            what: "Spark",
-            notes: vec!["Main skill"]
-        }]
-    );
+    assert_eq!(at_1.skills, [noted("Spark", &["Main skill"])]);
     assert_eq!(at_1.supports, [held(support("Pierce", "Spark"))]);
 }
 
