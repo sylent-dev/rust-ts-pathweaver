@@ -34,6 +34,18 @@ export default defineConfig({
 					include: ['src/**/*.{test,spec}.{js,ts}'],
 					exclude: ['src/**/*.svelte.{test,spec}.{js,ts}']
 				}
+			},
+			{
+				// The tests named `*.svelte.spec.ts`: the state of the interface, its `$state` the
+				// proxies of a browser, without a page. Their files are compiled as for a browser
+				// (see vitest-node-client.ts), and Svelte itself is the one of a browser.
+				extends: './vite.config.ts',
+				resolve: { conditions: ['browser'] },
+				test: {
+					name: 'client',
+					environment: './vitest-node-client.ts',
+					include: ['src/**/*.svelte.{test,spec}.{js,ts}']
+				}
 			}
 		]
 	}
