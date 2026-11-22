@@ -1,13 +1,12 @@
-<!-- The first page: a .build file dropped or chosen, read by the core in Rust, and its summary.
+<!-- The first page: a .build file dropped or chosen, read by the core in Rust, and what it is.
      Replaced by the viewer of the passive tree, the skills and the inventory. -->
 <script lang="ts">
-	import { loadCore, summarizeBuild, type BuildSummary } from '#lib/core.ts';
+	import { loadCore, readBuildFile, type BuildFile, type RefusedFile } from '#lib/core.ts';
 	import { t } from '#lib/i18n.ts';
 
 	const core = loadCore();
 
-	let summary = $state<BuildSummary>();
-	let failure = $state<string>();
+	let opened = $state<BuildFile>();
 	let isDragging = $state(false);
 
 	async function read(file: File | undefined): Promise<void> {
@@ -15,12 +14,22 @@
 			return;
 		}
 		await core;
-		try {
-			summary = summarizeBuild(await file.text());
-			failure = undefined;
-		} catch (error) {
-			summary = undefined;
-			failure = error instanceof Error ? error.message : String(error);
+		opened = readBuildFile(await file.text());
+	}
+
+	/** Why a file is refused, in a sentence. */
+	function reason(error: RefusedFile): string {
+		switch (error.reason) {
+			case 'tooLarge':
+				return t('refused-too-large', { bytes: error.bytes, limit: error.limit });
+			case 'notJson':
+				return t('refused-not-json', { line: error.line, excerpt: error.excerpt });
+			case 'notABuild':
+				return t('refused-not-a-build');
+			case 'wrongValue':
+				return t('refused-wrong-value', { field: error.field });
+			case 'missingField':
+				return t('refused-missing-field', { field: error.field });
 		}
 	}
 
@@ -56,26 +65,20 @@
 			{t('drop-build')}
 			<input type="file" accept=".build,application/json" onchange={choose} />
 		</label>
-		{#if summary}
+		{#if opened?.kind === 'build'}
+			{@const build = opened.build}
 			<dl>
 				<dt>{t('build-name')}</dt>
-				<dd>{summary.name}</dd>
+				<dd>{build.name}</dd>
 				<dt>{t('build-author')}</dt>
-				<dd>{summary.author ?? t('build-unknown')}</dd>
+				<dd>{build.author ?? t('build-unknown')}</dd>
 				<dt>{t('build-ascendancy')}</dt>
-				<dd>{summary.ascendancy ?? t('build-unknown')}</dd>
-				<dt>{t('build-contents')}</dt>
-				<dd>
-					{t('build-counts', {
-						passives: summary.passiveCount,
-						skills: summary.skillCount,
-						slots: summary.inventorySlotCount
-					})}
-				</dd>
+				<dd>{build.ascendancy ?? t('build-unknown')}</dd>
+				<dt>{t('build-link')}</dt>
+				<dd>{build.link ?? t('build-unknown')}</dd>
 			</dl>
-		{/if}
-		{#if failure}
-			<p role="alert">{t('build-unreadable', { reason: failure })}</p>
+		{:else if opened?.kind === 'refused'}
+			<p role="alert">{t('build-unreadable', { reason: reason(opened.error) })}</p>
 		{/if}
 		<p class="version">{t('core-version', { version })}</p>
 	{:catch}

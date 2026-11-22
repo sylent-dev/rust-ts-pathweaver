@@ -1,18 +1,53 @@
 //! The entries of a build: its passives, its skills with their supports, and the hints of its
 //! inventory slots.
 
-use serde::{Deserialize, Serialize};
+use std::marker::PhantomData;
 
-use crate::{Extra, LevelInterval};
+use serde::de::value::MapAccessDeserializer;
+use serde::de::{self, MapAccess, Visitor};
+use serde::{Deserialize, Deserializer, Serialize};
+
+use crate::{Extra, LevelInterval, Nullable};
 
 /// An entry the format lets write as its id alone, when it needs no other field:
 /// `"strength89"` or `{ "id": "strength89", "level_interval": [1, 20] }`. Kept in the form it
 /// was read in.
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize)]
 #[serde(untagged)]
 pub enum Entry<T> {
     Id(String),
     Detailed(T),
+}
+
+/// Read by its JSON type rather than by `#[serde(untagged)]`, which would try each form and
+/// say only that none matched: an object is read as its fields, so that a wrong value inside
+/// it keeps its place (`skills[0].support_skills[0].id`, not `skills[0]`).
+impl<'de, T: Deserialize<'de>> Deserialize<'de> for Entry<T> {
+    fn deserialize<D: Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
+        struct EntryVisitor<T>(PhantomData<T>);
+
+        impl<'de, T: Deserialize<'de>> Visitor<'de> for EntryVisitor<T> {
+            type Value = Entry<T>;
+
+            fn expecting(&self, formatter: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+                formatter.write_str("an id or an object")
+            }
+
+            fn visit_str<E: de::Error>(self, id: &str) -> Result<Self::Value, E> {
+                Ok(Entry::Id(id.to_owned()))
+            }
+
+            fn visit_string<E: de::Error>(self, id: String) -> Result<Self::Value, E> {
+                Ok(Entry::Id(id))
+            }
+
+            fn visit_map<A: MapAccess<'de>>(self, map: A) -> Result<Self::Value, A::Error> {
+                T::deserialize(MapAccessDeserializer::new(map)).map(Entry::Detailed)
+            }
+        }
+
+        deserializer.deserialize_any(EntryVisitor(PhantomData))
+    }
 }
 
 /// The fields every entry shares, through [`Entry::id`] and [`Entry::level_interval`].
@@ -46,14 +81,14 @@ impl<T: Identified> Entry<T> {
 pub struct Passive {
     /// An id of the `PassiveSkills` table, such as `strength89`.
     pub id: String,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub level_interval: Option<LevelInterval>,
+    #[serde(default, skip_serializing_if = "Nullable::is_absent")]
+    pub level_interval: Nullable<LevelInterval>,
     /// The weapon set the passive is allocated in, from 0 to 2.
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub weapon_set: Option<u32>,
+    #[serde(default, skip_serializing_if = "Nullable::is_absent")]
+    pub weapon_set: Nullable<u32>,
     /// Shown when the passive is hovered in the game, with the markup of the game.
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub additional_text: Option<String>,
+    #[serde(default, skip_serializing_if = "Nullable::is_absent")]
+    pub additional_text: Nullable<String>,
     #[serde(flatten)]
     pub extra: Extra,
 }
@@ -63,12 +98,12 @@ pub struct Passive {
 pub struct Skill {
     /// An id of the `BaseItemTypes` table, such as `Metadata/Items/Gems/SkillGemEarthquake`.
     pub id: String,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub level_interval: Option<LevelInterval>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub additional_text: Option<String>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub support_skills: Option<Vec<Entry<Support>>>,
+    #[serde(default, skip_serializing_if = "Nullable::is_absent")]
+    pub level_interval: Nullable<LevelInterval>,
+    #[serde(default, skip_serializing_if = "Nullable::is_absent")]
+    pub additional_text: Nullable<String>,
+    #[serde(default, skip_serializing_if = "Nullable::is_absent")]
+    pub support_skills: Nullable<Vec<Entry<Support>>>,
     #[serde(flatten)]
     pub extra: Extra,
 }
@@ -78,10 +113,10 @@ pub struct Skill {
 pub struct Support {
     /// An id of the `BaseItemTypes` table.
     pub id: String,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub level_interval: Option<LevelInterval>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub additional_text: Option<String>,
+    #[serde(default, skip_serializing_if = "Nullable::is_absent")]
+    pub level_interval: Nullable<LevelInterval>,
+    #[serde(default, skip_serializing_if = "Nullable::is_absent")]
+    pub additional_text: Nullable<String>,
     #[serde(flatten)]
     pub extra: Extra,
 }
@@ -91,17 +126,17 @@ pub struct Support {
 pub struct InventorySlot {
     /// An id of the `Inventories` table, such as `Weapon1`.
     pub inventory_id: String,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub slot_x: Option<u32>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub slot_y: Option<u32>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub level_interval: Option<LevelInterval>,
+    #[serde(default, skip_serializing_if = "Nullable::is_absent")]
+    pub slot_x: Nullable<u32>,
+    #[serde(default, skip_serializing_if = "Nullable::is_absent")]
+    pub slot_y: Nullable<u32>,
+    #[serde(default, skip_serializing_if = "Nullable::is_absent")]
+    pub level_interval: Nullable<LevelInterval>,
     /// A unique item suggested for the slot, a `UniqueName` of the `Words` table.
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub unique_name: Option<String>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub additional_text: Option<String>,
+    #[serde(default, skip_serializing_if = "Nullable::is_absent")]
+    pub unique_name: Nullable<String>,
+    #[serde(default, skip_serializing_if = "Nullable::is_absent")]
+    pub additional_text: Nullable<String>,
     #[serde(flatten)]
     pub extra: Extra,
 }
@@ -114,7 +149,7 @@ macro_rules! identified {
             }
 
             fn level_interval(&self) -> Option<&LevelInterval> {
-                self.level_interval.as_ref()
+                self.level_interval.get()
             }
         })*
     };

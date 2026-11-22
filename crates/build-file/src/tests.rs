@@ -14,8 +14,12 @@ fn a_file_with_every_field_is_read_with_each_entry_in_its_form() {
 
     assert_eq!(build.name, "Every Field");
     assert_eq!(build.ascendancy.as_deref(), Some("Warrior1"));
+    assert_eq!(
+        build.link.as_deref(),
+        Some("https://example.com/guides/every-field")
+    );
 
-    let passives = build.passives.unwrap();
+    let passives = build.passives.into_option().unwrap();
     let ids: Vec<&str> = passives.iter().map(Entry::id).collect();
     assert_eq!(ids, ["strength89", "melee17", "melee18"]);
     assert!(matches!(passives[0], Entry::Id(_)));
@@ -28,13 +32,14 @@ fn a_file_with_every_field_is_read_with_each_entry_in_its_form() {
         Some(&LevelInterval::Level(40))
     );
 
-    let skills = build.skills.unwrap();
+    let skills = build.skills.into_option().unwrap();
     let Entry::Detailed(earthquake) = &skills[1] else {
         panic!("the second skill is written with its fields");
     };
     let supports: Vec<&str> = earthquake
         .support_skills
-        .iter()
+        .get()
+        .into_iter()
         .flatten()
         .map(Entry::id)
         .collect();
@@ -46,7 +51,7 @@ fn a_file_with_every_field_is_read_with_each_entry_in_its_form() {
         ]
     );
 
-    let slots = build.inventory_slots.unwrap();
+    let slots = build.inventory_slots.into_option().unwrap();
     assert_eq!(slots[1].unique_name.as_deref(), Some("Blackflame"));
 }
 
@@ -106,24 +111,106 @@ fn a_file_is_written_with_four_spaces_of_indentation() {
 }
 
 #[test]
-fn a_build_without_a_name_isnt_read() {
-    let error = Build::read(r#"{ "author": "Nobody" }"#).unwrap_err();
+fn a_field_written_twice_keeps_its_last_value() {
+    let build = Build::read(
+        r#"{ "name": "First", "name": "Last", "passives": [{ "id": "a", "id": "b" }] }"#,
+    )
+    .unwrap();
 
-    assert!(error.to_string().contains("name"), "{error}");
+    assert_eq!(build.name, "Last");
+    assert_eq!(build.passives.into_option().unwrap()[0].id(), "b");
 }
 
 #[test]
-fn a_text_that_isnt_json_is_refused_with_its_line() {
-    let error = Build::read("{\n  \"name\": \"Broken\",\n  oops\n}").unwrap_err();
+fn a_field_written_null_is_written_back_null() {
+    let text = json!({
+        "name": "Nulls",
+        "author": null,
+        "description": null,
+        "link": null,
+        "ascendancy": null,
+        "passives": [{ "id": "a", "level_interval": null, "weapon_set": null, "additional_text": null }],
+        "skills": [
+            { "id": "b", "level_interval": null, "additional_text": null, "support_skills": null },
+            { "id": "c", "support_skills": [{ "id": "d", "level_interval": null, "additional_text": null }] }
+        ],
+        "inventory_slots": [{
+            "inventory_id": "Weapon1",
+            "slot_x": null,
+            "slot_y": null,
+            "level_interval": null,
+            "unique_name": null,
+            "additional_text": null
+        }]
+    })
+    .to_string();
 
-    assert_eq!(error.line(), 3);
+    let build = Build::read(&text).unwrap();
+
+    assert_eq!(build.author, Nullable::Null);
+    assert_eq!(build.author.get(), None);
+    assert_eq!(as_json(&build.write()), as_json(&text));
 }
 
 #[test]
-fn a_weapon_set_or_a_level_that_isnt_a_whole_number_is_refused() {
-    let negative = r#"{ "name": "Bad", "passives": [{ "id": "a", "weapon_set": -1 }] }"#;
-    let fraction = r#"{ "name": "Bad", "passives": [{ "id": "a", "level_interval": 1.5 }] }"#;
+fn the_lists_of_a_build_written_null_are_written_back_null() {
+    let text = r#"{ "name": "Nulls", "passives": null, "skills": null, "inventory_slots": null }"#;
 
-    assert!(Build::read(negative).is_err());
-    assert!(Build::read(fraction).is_err());
+    assert_eq!(as_json(&Build::read(text).unwrap().write()), as_json(text));
+}
+
+#[test]
+fn each_field_left_out_is_read_absent_and_written_back_left_out() {
+    // Every struct written whole: a field added to one of them must be added here, and read
+    // absent when the file leaves it out, which its `#[serde(default)]` decides.
+    let text = json!({
+        "name": "Bare",
+        "passives": [{ "id": "a" }],
+        "skills": [{ "id": "b", "support_skills": [{ "id": "c" }] }],
+        "inventory_slots": [{ "inventory_id": "Weapon1" }]
+    })
+    .to_string();
+
+    let build = Build::read(&text).unwrap();
+
+    assert_eq!(
+        build,
+        Build {
+            name: "Bare".to_owned(),
+            author: Nullable::Absent,
+            description: Nullable::Absent,
+            link: Nullable::Absent,
+            ascendancy: Nullable::Absent,
+            passives: Nullable::Value(vec![Entry::Detailed(Passive {
+                id: "a".to_owned(),
+                level_interval: Nullable::Absent,
+                weapon_set: Nullable::Absent,
+                additional_text: Nullable::Absent,
+                extra: Extra::new(),
+            })]),
+            skills: Nullable::Value(vec![Entry::Detailed(Skill {
+                id: "b".to_owned(),
+                level_interval: Nullable::Absent,
+                additional_text: Nullable::Absent,
+                support_skills: Nullable::Value(vec![Entry::Detailed(Support {
+                    id: "c".to_owned(),
+                    level_interval: Nullable::Absent,
+                    additional_text: Nullable::Absent,
+                    extra: Extra::new(),
+                })]),
+                extra: Extra::new(),
+            })]),
+            inventory_slots: Nullable::Value(vec![InventorySlot {
+                inventory_id: "Weapon1".to_owned(),
+                slot_x: Nullable::Absent,
+                slot_y: Nullable::Absent,
+                level_interval: Nullable::Absent,
+                unique_name: Nullable::Absent,
+                additional_text: Nullable::Absent,
+                extra: Extra::new(),
+            }]),
+            extra: Extra::new(),
+        }
+    );
+    assert_eq!(as_json(&build.write()), as_json(&text));
 }
