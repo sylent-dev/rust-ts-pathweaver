@@ -13,6 +13,7 @@
 		"build": "npm run wasm -- --release && vite build",
 		"preview": "vite preview",
 		"wasm": "node scripts/build-wasm.ts",
+		"game-data": "node scripts/game-data/convert-game-data.ts",
 		"prepare": "svelte-kit sync || echo ''",
 		"check": "npm run wasm && svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
 		"check:watch": "npm run wasm && svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",

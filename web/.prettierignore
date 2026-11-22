@@ -7,3 +7,6 @@ bun.lockb
 
 # Miscellaneous
 /static/
+
+# The game data, written by scripts/game-data/ one entry per line.
+/src/lib/game-data/[0-9]*/
