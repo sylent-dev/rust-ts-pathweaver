@@ -74,9 +74,9 @@ pub fn read_file(text: &str) -> BuildFile {
             build: OpenedBuild {
                 content_key: build.content_key(),
                 name: build.name,
-                author: build.author,
-                ascendancy: build.ascendancy,
-                link: build.link,
+                author: build.author.into_option(),
+                ascendancy: build.ascendancy.into_option(),
+                link: build.link.into_option(),
             },
         },
         Err(error) => BuildFile::Refused {

@@ -26,6 +26,7 @@
 mod content_key;
 mod entries;
 mod level_interval;
+mod nullable;
 mod read_error;
 
 use serde::{Deserialize, Serialize};
@@ -33,6 +34,7 @@ use serde_json::{Map, Value};
 
 pub use entries::{Entry, InventorySlot, Passive, Skill, Support};
 pub use level_interval::LevelInterval;
+pub use nullable::Nullable;
 pub use read_error::{MAX_BYTES, ReadError};
 
 /// The fields of a JSON object that the format doesn't name, kept in their order.
@@ -43,23 +45,23 @@ pub type Extra = Map<String, Value>;
 pub struct Build {
     /// The name the game lists the build under; the only field the format requires.
     pub name: String,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub author: Option<String>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub description: Option<String>,
+    #[serde(default, skip_serializing_if = "Nullable::is_absent")]
+    pub author: Nullable<String>,
+    #[serde(default, skip_serializing_if = "Nullable::is_absent")]
+    pub description: Nullable<String>,
     /// Where the build comes from, usually the page of its guide; any text, not always an
     /// address.
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub link: Option<String>,
+    #[serde(default, skip_serializing_if = "Nullable::is_absent")]
+    pub link: Nullable<String>,
     /// The id of the ascendancy, such as `Warrior1`.
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub ascendancy: Option<String>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub passives: Option<Vec<Entry<Passive>>>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub skills: Option<Vec<Entry<Skill>>>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub inventory_slots: Option<Vec<InventorySlot>>,
+    #[serde(default, skip_serializing_if = "Nullable::is_absent")]
+    pub ascendancy: Nullable<String>,
+    #[serde(default, skip_serializing_if = "Nullable::is_absent")]
+    pub passives: Nullable<Vec<Entry<Passive>>>,
+    #[serde(default, skip_serializing_if = "Nullable::is_absent")]
+    pub skills: Nullable<Vec<Entry<Skill>>>,
+    #[serde(default, skip_serializing_if = "Nullable::is_absent")]
+    pub inventory_slots: Nullable<Vec<InventorySlot>>,
     #[serde(flatten)]
     pub extra: Extra,
 }
