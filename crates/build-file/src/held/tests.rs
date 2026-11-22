@@ -349,3 +349,35 @@ fn the_same_note_on_two_entries_of_a_thing_is_held_once() {
         }
     );
 }
+
+#[test]
+fn the_notes_of_a_thing_are_kept_in_the_order_of_the_file() {
+    let build = build(json!({
+        "passives": [
+            { "id": "intelligence59", "level_interval": [36, 100], "additional_text": "Point #47" },
+            { "id": "intelligence59", "level_interval": [83, 100], "additional_text": "Point #106" },
+            { "id": "intelligence59", "level_interval": [90, 100], "additional_text": "Point #47" }
+        ]
+    }));
+
+    let at_90 = build.at_level(90);
+    let notes: Vec<&str> = at_90.passives[0].notes.iter().collect();
+    assert_eq!(notes, ["Point #47", "Point #106"]);
+}
+
+#[test]
+fn two_notes_are_the_same_whatever_their_order() {
+    let notes = |notes: &[&'static str]| notes.iter().copied().collect::<Notes>();
+
+    assert_eq!(
+        notes(&["Swap at 10", "Main skill"]),
+        notes(&["Main skill", "Swap at 10"])
+    );
+    assert_eq!(notes(&["Main skill", "Main skill"]), notes(&["Main skill"]));
+    assert_ne!(notes(&["Main skill"]), notes(&["Main skill", "Swap at 10"]));
+    assert_ne!(
+        notes(&["Main skill", "Late"]),
+        notes(&["Main skill", "Swap at 10"])
+    );
+    assert_ne!(notes(&[]), notes(&["Main skill"]));
+}

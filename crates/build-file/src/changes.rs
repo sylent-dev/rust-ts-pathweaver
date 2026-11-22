@@ -4,7 +4,7 @@
 use std::collections::{BTreeMap, BTreeSet};
 
 use crate::{
-    Build, BuildAtLevel, Held, HintItem, HintOnSlot, PassiveInSet, SupportOnSkill, WeaponSet,
+    Build, BuildAtLevel, Held, HintItem, HintOnSlot, Notes, PassiveInSet, SupportOnSkill, WeaponSet,
 };
 
 /// One change of a build at a level, a line of the window of « N changes »: a gem, a hint or a
@@ -79,8 +79,8 @@ pub struct LevelChanges<'a> {
 impl Build {
     /// What changes at each level of the build where something does, from the lowest to the
     /// highest. Nothing changes at the lowest level it covers, which nothing comes before to
-    /// compare with. Only the levels where an entry starts or has just stopped are read: reading all
-    /// hundred took 3.8 s for a snapshot of 1 MB (`changes/large_files.rs`).
+    /// compare with. Only the levels where an entry starts or has just stopped are read:
+    /// reading all hundred took 3.8 s for a snapshot of 1 MB (`changes/large_files.rs`).
     #[must_use]
     pub fn changes_by_level(&self) -> Vec<LevelChanges<'_>> {
         let levels = self.covered_levels();
@@ -261,7 +261,7 @@ fn things_with_other_notes<'h, 'a, T: Ord>(
     held: &'h [Held<'a, T>],
     before: &'h [Held<'a, T>],
 ) -> impl Iterator<Item = &'h Held<'a, T>> {
-    let notes_before: BTreeMap<&T, &BTreeSet<&str>> = before
+    let notes_before: BTreeMap<&T, &Notes> = before
         .iter()
         .map(|held| (&held.what, &held.notes))
         .collect();

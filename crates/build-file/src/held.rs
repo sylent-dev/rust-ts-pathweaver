@@ -6,14 +6,53 @@ use std::collections::{BTreeMap, BTreeSet};
 use crate::{Build, Entry, InventorySlot, LevelRange, Passive};
 
 /// A thing a build holds at a level (a gem, a passive, the item of a hint), once, with the
-/// notes of its author on the entries that set it there: several when two entries of the file
-/// set the same thing at the same level with different notes. A set, sorted: a note counts
-/// once, and neither the number of the entries that carry it nor their order is a change.
+/// notes of its author on the entries that set it there.
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct Held<'a, T> {
     pub what: T,
-    pub notes: BTreeSet<&'a str>,
+    pub notes: Notes<'a>,
 }
+
+/// The notes of the author on the entries that set a thing at a level: several when two entries
+/// set it with different notes. Each note once, in the order of the file, the author's; two
+/// levels compare them as a set, so that neither a note listed again nor the order of the
+/// entries is a change of note.
+#[derive(Debug, Clone, Default)]
+pub struct Notes<'a>(Vec<&'a str>);
+
+impl<'a> Notes<'a> {
+    /// The notes, in the order of the file.
+    pub fn iter(&self) -> impl Iterator<Item = &'a str> + '_ {
+        self.0.iter().copied()
+    }
+}
+
+/// Each note once, where it first comes.
+impl<'a> FromIterator<&'a str> for Notes<'a> {
+    fn from_iter<I: IntoIterator<Item = &'a str>>(notes: I) -> Self {
+        let mut seen = BTreeSet::new();
+        Self(
+            notes
+                .into_iter()
+                .filter(|note| seen.insert(*note))
+                .collect(),
+        )
+    }
+}
+
+/// The same notes, whatever their order.
+impl PartialEq for Notes<'_> {
+    fn eq(&self, other: &Self) -> bool {
+        let sorted = |notes: &Self| {
+            let mut notes = notes.0.clone();
+            notes.sort_unstable();
+            notes
+        };
+        self.0 == other.0 || (self.0.len() == other.0.len() && sorted(self) == sorted(other))
+    }
+}
+
+impl Eq for Notes<'_> {}
 
 /// A support on its skill, by their ids: the same support on two skills is two things.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord)]
@@ -160,24 +199,27 @@ fn note(text: Option<&str>) -> Option<&str> {
 }
 
 /// Each thing once, in the order it first comes in, with the notes of all its entries. The place
-/// of each thing is kept in a sorted table, and so are its notes: searching a list for every
-/// entry took 6 seconds for a file of 10,000 passives (`changes/large_files.rs`).
+/// of each thing is kept in a sorted table: searching a list for every entry took 6 seconds for
+/// a file of 10,000 passives (`changes/large_files.rs`).
 fn held_once<'a, T: Ord + Copy>(
     entries: impl Iterator<Item = (T, Option<&'a str>)>,
 ) -> Vec<Held<'a, T>> {
-    let mut things: Vec<Held<'a, T>> = Vec::new();
+    let mut things: Vec<(T, Vec<&'a str>)> = Vec::new();
     let mut places: BTreeMap<T, usize> = BTreeMap::new();
     for (what, note) in entries {
         let place = *places.entry(what).or_insert(things.len());
         match things.get_mut(place) {
-            Some(held) => held.notes.extend(note),
-            None => things.push(Held {
-                what,
-                notes: note.into_iter().collect(),
-            }),
+            Some((_, notes)) => notes.extend(note),
+            None => things.push((what, note.into_iter().collect())),
         }
     }
+    let things = things.into_iter();
     things
+        .map(|(what, notes)| Held {
+            what,
+            notes: notes.into_iter().collect(),
+        })
+        .collect()
 }
 
 #[cfg(test)]

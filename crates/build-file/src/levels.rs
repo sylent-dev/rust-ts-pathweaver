@@ -59,12 +59,6 @@ impl LevelRange {
             last: self.last.max(other.last),
         }
     }
-
-    /// The levels of both: where a support applies, whose skill must apply too. None when they
-    /// share no level.
-    fn shared_with(self, other: Self) -> Option<Self> {
-        Self::between(self.first.max(other.first), self.last.min(other.last))
-    }
 }
 
 impl LevelInterval {
@@ -142,26 +136,22 @@ impl Build {
     /// The levels the build covers, those its slider moves among: from the lowest to the
     /// highest level its entries apply at. An entry without a `level_interval` applies at every
     /// level, so covers 1 to 100: a guide of the maps covers 65 to 100 only when each of its
-    /// entries writes its levels. A support covers the levels it shares with its skill, an
-    /// entry with an invalid interval none, and a build without a valid entry every level.
+    /// passives, skills and hints writes its levels. A support covers no more than its skill,
+    /// an entry with an invalid interval none, and a build without a valid entry every level.
     #[must_use]
     pub fn covered_levels(&self) -> LevelRange {
-        let passives = self.passives.get().into_iter().flatten();
-        let passives = passives.filter_map(Entry::levels);
-        let gems = self.skills.get().into_iter().flatten().flat_map(|skill| {
-            let supports = skill
-                .supports()
-                .iter()
-                .filter_map(move |support| support.levels()?.shared_with(skill.levels()?));
-            skill.levels().into_iter().chain(supports)
-        });
-        let hints = self.inventory_slots.get().into_iter().flatten();
-        let hints = hints.filter_map(InventorySlot::levels);
-        let covered = passives
-            .chain(gems)
-            .chain(hints)
-            .reduce(LevelRange::stretched_to);
-        covered.unwrap_or(LevelRange::ALL)
+        let covered = self
+            .named_intervals()
+            .filter_map(|(entry, interval)| match entry {
+                // A support applies only where its skill does, whose levels count already.
+                EntryName::Support(_) => None,
+                EntryName::Passive { .. } | EntryName::Skill { .. } | EntryName::Hint(_) => {
+                    levels_of(interval)
+                }
+            });
+        covered
+            .reduce(LevelRange::stretched_to)
+            .unwrap_or(LevelRange::ALL)
     }
 
     /// The levels where what the build holds may differ from the level before: those where an

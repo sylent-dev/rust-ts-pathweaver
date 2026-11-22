@@ -256,7 +256,7 @@ fn the_things_set_twice_at_one_level_in_the_corpus() {
     let hints_of_two_texts = corpus.values().filter(|build| {
         let levels = build.covered_levels();
         let mut held = (levels.first()..=levels.last()).map(|level| build.at_level(level));
-        held.any(|held| held.hints.iter().any(|hint| hint.notes.len() > 1))
+        held.any(|held| held.hints.iter().any(|hint| hint.notes.iter().count() > 1))
     });
     assert_eq!(hints_of_two_texts.count(), 1);
 

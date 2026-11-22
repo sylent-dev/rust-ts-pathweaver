@@ -57,21 +57,6 @@ fn an_interval_that_covers_no_level_of_a_character_is_invalid() {
 }
 
 #[test]
-fn the_levels_two_ranges_share_are_those_of_both() {
-    let levels = |interval| LevelInterval::Levels(interval).range().unwrap();
-
-    assert_eq!(
-        levels(vec![1, 70]).shared_with(levels(vec![59, 100])),
-        Some(levels(vec![59, 70]))
-    );
-    assert_eq!(
-        levels(vec![59, 100]).shared_with(levels(vec![1, 59])),
-        Some(levels(vec![59, 59]))
-    );
-    assert_eq!(levels(vec![1, 58]).shared_with(levels(vec![59, 100])), None);
-}
-
-#[test]
 fn an_entry_without_an_interval_is_set_for_every_level() {
     let build = build(json!({
         "passives": ["strength89", { "id": "melee17", "level_interval": null }],
@@ -238,6 +223,14 @@ fn an_entry_without_an_interval_covers_every_level() {
 
     assert_eq!(guide_of_the_maps(json!("strength89")), every_level);
     assert_eq!(
+        levels_of_build(json!({
+            "passives": ["strength89"],
+            "skills": [{ "id": "Spark", "support_skills": ["Pierce"] }],
+            "inventory_slots": [{ "inventory_id": "Weapon1" }]
+        })),
+        every_level
+    );
+    assert_eq!(
         guide_of_the_maps(json!({ "id": "melee19", "level_interval": null })),
         every_level
     );
@@ -273,7 +266,7 @@ fn an_entry_with_an_invalid_interval_covers_no_level() {
 }
 
 #[test]
-fn a_support_covers_only_the_levels_it_shares_with_its_skill() {
+fn a_support_covers_no_more_than_its_skill() {
     assert_eq!(
         levels_of_build(json!({
             "skills": [
@@ -303,14 +296,12 @@ fn a_build_without_a_valid_entry_covers_every_level() {
     assert_eq!(levels_of_build(json!({})), every_level);
     assert_eq!(
         levels_of_build(json!({
-            "passives": ["strength89"],
-            "skills": [{ "id": "Spark", "support_skills": ["Pierce"] }],
-            "inventory_slots": [{ "inventory_id": "Weapon1" }]
+            "passives": [{ "id": "melee17", "level_interval": [9, 3] }],
+            "skills": [{ "id": "Spark", "level_interval": [], "support_skills": [
+                { "id": "Pierce", "level_interval": [20, 30] }
+            ] }],
+            "inventory_slots": [{ "inventory_id": "Weapon1", "level_interval": 101 }]
         })),
-        every_level
-    );
-    assert_eq!(
-        levels_of_build(json!({ "passives": [{ "id": "melee17", "level_interval": [9, 3] }] })),
         every_level
     );
 }
