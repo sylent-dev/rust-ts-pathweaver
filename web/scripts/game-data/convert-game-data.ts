@@ -11,15 +11,12 @@ import { mkdir, mkdtemp, writeFile } from 'node:fs/promises';
 import os from 'node:os';
 import path from 'node:path';
 import { parseArgs } from 'node:util';
-import type { Sources } from '#lib/game-data/format.ts';
+import { GAME_LANGUAGE, GAME_VERSION, type Sources } from '#lib/game-data/format.ts';
 import { convertAscendancies } from './ascendancies.ts';
 import { convertGems } from './gems.ts';
 import { writePortraits } from './portraits.ts';
 import { tableJson } from './table-json.ts';
-import { Downloads, GAME_VERSION, repoeFile, TREE_TAG, treeFile } from './sources.ts';
-
-/** The language of the texts of the game, the only one of version 1 (`specs.md`, Languages). */
-const LANGUAGE = 'en';
+import { Downloads, repoeFile, TREE_TAG, treeFile } from './sources.ts';
 
 const webDirectory = path.resolve(import.meta.dirname, '..', '..');
 const versionDirectory = path.join(webDirectory, 'src', 'lib', 'game-data', GAME_VERSION);
@@ -52,8 +49,8 @@ async function main(): Promise<void> {
 	);
 
 	await write('sources.json', `${JSON.stringify(sources, null, '\t')}\n`);
-	await write(path.join(LANGUAGE, 'gems.json'), tableJson(gems));
-	await write(path.join(LANGUAGE, 'ascendancies.json'), tableJson(ascendancies));
+	await write(path.join(GAME_LANGUAGE, 'gems.json'), tableJson(gems));
+	await write(path.join(GAME_LANGUAGE, 'ascendancies.json'), tableJson(ascendancies));
 	await writePortraits(downloads, portraits, path.join(versionDirectory, 'portraits'));
 	console.log(`wrote ${portraits.length} portraits`);
 	const withoutDescription = Object.values(gems).filter((gem) => gem.description === '').length;

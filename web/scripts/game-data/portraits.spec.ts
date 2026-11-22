@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { ShapeError } from './json-shape.ts';
-import { cutArguments, frameAt, portraitFile, squareInDisc } from './portraits.ts';
+import { cutArguments, frameAt, squareInDisc } from './portraits.ts';
 
 describe('squareInDisc', () => {
 	it('gives the largest square inside the disc of a frame, centred in it', () => {
@@ -39,10 +39,6 @@ describe('frameAt', () => {
 			new ShapeError('witch.json.frames.classWitch:Class5.frame', 'a square')
 		);
 	});
-});
-
-it('names a portrait by its ascendancy, in lower case, and its side', () => {
-	expect(portraitFile('Witch3b', 88)).toBe('witch3b-88.webp');
 });
 
 it('asks ImageMagick to cut the square, then make it as wide as the side', () => {

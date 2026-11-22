@@ -5,17 +5,10 @@
 import { execFileSync } from 'node:child_process';
 import { mkdir } from 'node:fs/promises';
 import path from 'node:path';
+import { PORTRAIT_SIDES, portraitFile } from '#lib/game-data/format.ts';
 import type { PortraitPlace } from './ascendancies.ts';
 import { numberAt, objectAt, ShapeError } from './json-shape.ts';
 import { type Downloads, treeFile } from './sources.ts';
-
-/**
- * The sides of the portraits, in pixels, each the largest square inside the disc of the game
- * (the owner, 2026-11-17): 88 for a tab of the open builds (44 pixels, twice for the screens of a
- * higher density), which the header (66) and the library (56) show too, as in the mock-up; 520 for
- * the colophon of the About tab (its column of 260 pixels, twice).
- */
-export const PORTRAIT_SIDES = [88, 520] as const;
 
 /** The quality of the WebP of a portrait, as in the mock-up. */
 const WEBP_QUALITY = 82;
@@ -26,11 +19,6 @@ export interface Rectangle {
 	y: number;
 	width: number;
 	height: number;
-}
-
-/** The name of the file of a portrait, such as `witch3b-88.webp`. */
-export function portraitFile(ascendancyId: string, side: number): string {
-	return `${ascendancyId.toLowerCase()}-${side}.webp`;
 }
 
 /** The largest square inside the disc of a frame, centred, in whole pixels. */

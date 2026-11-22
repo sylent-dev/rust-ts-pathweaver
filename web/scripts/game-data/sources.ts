@@ -5,12 +5,6 @@ import { existsSync } from 'node:fs';
 import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 
-/**
- * The version of the game the data are for: the name of their folder, and the version the page
- * names beside an unknown id (`specs.md`, Unknown and invalid entries).
- */
-export const GAME_VERSION = '0.5.2';
-
 /** The tag of the tree export of Grinding Gear Games, one per version of the game. */
 export const TREE_TAG = '0.5.2';
 
