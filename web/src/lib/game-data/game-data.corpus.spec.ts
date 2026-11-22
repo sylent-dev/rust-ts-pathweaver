@@ -64,8 +64,12 @@ const MISSES = [
 	'pobr-writer-fixture.build: Metadata/Items/Gem/SupportGemFastForward'
 ];
 
-describe.skipIf(!existsSync(corpus))('the corpus', () => {
-	const builds = readdirSync(corpus)
+/**
+ * The builds of the corpus, by file name. Read by the tests themselves: the body of a `describe`
+ * runs even when it is skipped, and the corpus isn't there in the CI.
+ */
+function corpusBuilds(): { name: string; build: { ascendancy?: unknown; skills?: unknown } }[] {
+	return readdirSync(corpus)
 		.filter((name) => name.endsWith('.build'))
 		.sort()
 		.map((name) => ({
@@ -76,14 +80,16 @@ describe.skipIf(!existsSync(corpus))('the corpus', () => {
 				skills?: unknown;
 			}
 		}));
+}
 
+describe.skipIf(!existsSync(corpus))('the corpus', () => {
 	it('holds builds to look up', () => {
-		expect(builds.length).toBeGreaterThan(30);
+		expect(corpusBuilds().length).toBeGreaterThan(30);
 	});
 
 	it('finds every gem and every ascendancy of the corpus in the game data, but its 21 misses', async () => {
 		const data = await loadGameData();
-		const unknown = builds.flatMap(({ name, build }) => [
+		const unknown = corpusBuilds().flatMap(({ name, build }) => [
 			...gemIds(build)
 				.filter((id) => data.gem(id) === undefined)
 				.map((id) => `${name}: ${id}`),
