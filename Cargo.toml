@@ -21,6 +21,8 @@ serde = { version = "1.0.228", features = ["derive"] }
 # `preserve_order`: the fields a build file holds and the format doesn't name are written back
 # in the order they were read in, not sorted.
 serde_json = { version = "1.0.145", features = ["preserve_order"] }
+# The place of a value of the wrong type in a build file, which `serde_json` doesn't give.
+serde_path_to_error = "0.1.20"
 # The TypeScript types of what crosses the bridge, generated from its Rust types, which
 # `serde-wasm-bindgen` (its `js` feature) turns into JavaScript objects, as in Stepwise.
 tsify = { version = "0.5.8", default-features = false, features = ["js"] }

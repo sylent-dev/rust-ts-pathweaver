@@ -78,8 +78,6 @@ mod tests {
 
     #[test]
     fn a_text_that_isnt_a_build_gives_the_sentence_of_the_core() {
-        let error = summarize("[]").unwrap_err();
-
-        assert!(error.starts_with("not a .build file"), "{error}");
+        assert_eq!(summarize("[]"), Err("not a build: no `name`".to_owned()));
     }
 }

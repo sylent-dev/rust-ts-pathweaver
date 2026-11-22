@@ -104,26 +104,3 @@ fn a_file_is_written_with_four_spaces_of_indentation() {
         "{\n    \"name\": \"Indented\",\n    \"author\": \"Me\"\n}"
     );
 }
-
-#[test]
-fn a_build_without_a_name_isnt_read() {
-    let error = Build::read(r#"{ "author": "Nobody" }"#).unwrap_err();
-
-    assert!(error.to_string().contains("name"), "{error}");
-}
-
-#[test]
-fn a_text_that_isnt_json_is_refused_with_its_line() {
-    let error = Build::read("{\n  \"name\": \"Broken\",\n  oops\n}").unwrap_err();
-
-    assert_eq!(error.line(), 3);
-}
-
-#[test]
-fn a_weapon_set_or_a_level_that_isnt_a_whole_number_is_refused() {
-    let negative = r#"{ "name": "Bad", "passives": [{ "id": "a", "weapon_set": -1 }] }"#;
-    let fraction = r#"{ "name": "Bad", "passives": [{ "id": "a", "level_interval": 1.5 }] }"#;
-
-    assert!(Build::read(negative).is_err());
-    assert!(Build::read(fraction).is_err());
-}

@@ -1,18 +1,53 @@
 //! The entries of a build: its passives, its skills with their supports, and the hints of its
 //! inventory slots.
 
-use serde::{Deserialize, Serialize};
+use std::marker::PhantomData;
+
+use serde::de::value::MapAccessDeserializer;
+use serde::de::{self, MapAccess, Visitor};
+use serde::{Deserialize, Deserializer, Serialize};
 
 use crate::{Extra, LevelInterval};
 
 /// An entry the format lets write as its id alone, when it needs no other field:
 /// `"strength89"` or `{ "id": "strength89", "level_interval": [1, 20] }`. Kept in the form it
 /// was read in.
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize)]
 #[serde(untagged)]
 pub enum Entry<T> {
     Id(String),
     Detailed(T),
+}
+
+/// Read by its JSON type rather than by `#[serde(untagged)]`, which would try each form and
+/// say only that none matched: an object is read as its fields, so that a wrong value inside
+/// it keeps its place (`skills[0].support_skills[0].id`, not `skills[0]`).
+impl<'de, T: Deserialize<'de>> Deserialize<'de> for Entry<T> {
+    fn deserialize<D: Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
+        struct EntryVisitor<T>(PhantomData<T>);
+
+        impl<'de, T: Deserialize<'de>> Visitor<'de> for EntryVisitor<T> {
+            type Value = Entry<T>;
+
+            fn expecting(&self, formatter: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+                formatter.write_str("an id or an object")
+            }
+
+            fn visit_str<E: de::Error>(self, id: &str) -> Result<Self::Value, E> {
+                Ok(Entry::Id(id.to_owned()))
+            }
+
+            fn visit_string<E: de::Error>(self, id: String) -> Result<Self::Value, E> {
+                Ok(Entry::Id(id))
+            }
+
+            fn visit_map<A: MapAccess<'de>>(self, map: A) -> Result<Self::Value, A::Error> {
+                T::deserialize(MapAccessDeserializer::new(map)).map(Entry::Detailed)
+            }
+        }
+
+        deserializer.deserialize_any(EntryVisitor(PhantomData))
+    }
 }
 
 /// The fields every entry shares, through [`Entry::id`] and [`Entry::level_interval`].

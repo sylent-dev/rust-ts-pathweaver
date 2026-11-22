@@ -25,12 +25,14 @@
 
 mod entries;
 mod level_interval;
+mod read_error;
 
 use serde::{Deserialize, Serialize};
 use serde_json::{Map, Value};
 
 pub use entries::{Entry, InventorySlot, Passive, Skill, Support};
 pub use level_interval::LevelInterval;
+pub use read_error::{MAX_BYTES, ReadError};
 
 /// The fields of a JSON object that the format doesn't name, kept in their order.
 pub type Extra = Map<String, Value>;
@@ -57,36 +59,28 @@ pub struct Build {
     pub extra: Extra,
 }
 
-/// Why a text isn't a `.build` file.
-#[derive(Debug)]
-pub struct ReadError(serde_json::Error);
-
-impl std::fmt::Display for ReadError {
-    fn fmt(&self, formatter: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        write!(formatter, "not a .build file: {}", self.0)
-    }
-}
-
-impl std::error::Error for ReadError {}
-
-impl ReadError {
-    /// The line of the text where reading stopped, from 1.
-    #[must_use]
-    pub fn line(&self) -> usize {
-        self.0.line()
-    }
-}
-
 impl Build {
     /// Reads the text of a `.build` file. A byte order mark at its start, which some editors of
     /// Windows write, is skipped.
     ///
     /// # Errors
     ///
-    /// When the text isn't JSON, or not an object with the fields of the format.
+    /// When the text is larger than [`MAX_BYTES`], isn't JSON, isn't an object with a `name`, or
+    /// holds a value of the wrong type ([`ReadError`]).
     pub fn read(text: &str) -> Result<Self, ReadError> {
+        if text.len() > MAX_BYTES {
+            return Err(ReadError::TooLarge { bytes: text.len() });
+        }
         let text = text.strip_prefix('\u{feff}').unwrap_or(text);
-        serde_json::from_str(text).map_err(ReadError)
+        let value: Value =
+            serde_json::from_str(text).map_err(|error| ReadError::not_json(text, &error))?;
+        if !value
+            .as_object()
+            .is_some_and(|object| object.contains_key("name"))
+        {
+            return Err(ReadError::NotABuild);
+        }
+        serde_path_to_error::deserialize(value).map_err(|error| ReadError::wrong_value(&error))
     }
 
     /// The text of the file, indented with four spaces as the files of Grinding Gear Games are.
