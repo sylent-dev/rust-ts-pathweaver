@@ -27,6 +27,7 @@ mod content_key;
 mod entries;
 #[cfg(test)]
 mod fixtures;
+mod held;
 mod level_interval;
 mod levels;
 mod nullable;
@@ -36,6 +37,7 @@ use serde::{Deserialize, Serialize};
 use serde_json::{Map, Value};
 
 pub use entries::{Entry, InventorySlot, Passive, Skill, Support};
+pub use held::{BuildAtLevel, Held, HintItem, HintOnSlot, PassiveInSet, SupportOnSkill, WeaponSet};
 pub use level_interval::LevelInterval;
 pub use levels::{EntryName, HIGHEST_LEVEL, InvalidInterval, LOWEST_LEVEL, Levels};
 pub use nullable::Nullable;

@@ -50,10 +50,12 @@ impl<'de, T: Deserialize<'de>> Deserialize<'de> for Entry<T> {
     }
 }
 
-/// The fields every entry shares, through [`Entry::id`] and [`Entry::level_interval`].
+/// The fields every entry shares, through [`Entry::id`], [`Entry::level_interval`] and
+/// [`Entry::additional_text`].
 pub trait Identified {
     fn id(&self) -> &str;
     fn level_interval(&self) -> Option<&LevelInterval>;
+    fn additional_text(&self) -> Option<&str>;
 }
 
 impl<T: Identified> Entry<T> {
@@ -72,6 +74,16 @@ impl<T: Identified> Entry<T> {
         match self {
             Self::Id(_) => None,
             Self::Detailed(entry) => entry.level_interval(),
+        }
+    }
+
+    /// The text of the author on the entry, with the markup of the game; none for an entry
+    /// written as its id alone.
+    #[must_use]
+    pub fn additional_text(&self) -> Option<&str> {
+        match self {
+            Self::Id(_) => None,
+            Self::Detailed(entry) => entry.additional_text(),
         }
     }
 }
@@ -150,6 +162,10 @@ macro_rules! identified {
 
             fn level_interval(&self) -> Option<&LevelInterval> {
                 self.level_interval.get()
+            }
+
+            fn additional_text(&self) -> Option<&str> {
+                self.additional_text.as_deref()
             }
         })*
     };
