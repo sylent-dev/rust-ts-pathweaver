@@ -83,14 +83,21 @@ function weightsAt(value: unknown, place: string): Record<Attribute, number> {
 	};
 }
 
-/** The tags of a gem as the game names them; a tag the game hides (`strength`) has no name. */
+/**
+ * The tags of a gem as the game names them; a tag the game hides (`strength`) has no name, and a
+ * tag missing from `gem_tags.json` stops the script rather than vanish from the page.
+ */
 function tagNames(
 	tags: unknown,
 	names: Readonly<Record<string, unknown>>,
 	place: string
 ): string[] {
-	return arrayAt(tags, place).flatMap((tag, index) => {
-		const name = optionalStringAt(names[stringAt(tag, `${place}[${index}]`)], `gem_tags.${tag}`);
+	return arrayAt(tags, place).flatMap((value, index) => {
+		const tag = stringAt(value, `${place}[${index}]`);
+		if (!Object.hasOwn(names, tag)) {
+			throw new ShapeError('gem_tags', `a tag « ${tag} », which ${place} names`);
+		}
+		const name = optionalStringAt(names[tag], `gem_tags.${tag}`);
 		return name === undefined ? [] : [gameWords(name)];
 	});
 }

@@ -148,6 +148,12 @@ describe('convertGems', () => {
 		expect(Object.values(gems).map((gem) => gem.description)).toEqual(['', '', '', '']);
 	});
 
+	it('stops on a tag the words of the game do not name', () => {
+		expect(() => convertGems({ X: skillGem({ tags: ['spell', 'storm'] }) }, SKILLS, TAGS)).toThrow(
+			new ShapeError('gem_tags', 'a tag « storm », which skill_gems.X.tags names')
+		);
+	});
+
 	it('stops at the place of a value of another shape', () => {
 		expect(() => convertGems({ X: skillGem({ base_item: {} }) }, SKILLS, TAGS)).toThrow(
 			new ShapeError('skill_gems.X.base_item.display_name', 'a string')
