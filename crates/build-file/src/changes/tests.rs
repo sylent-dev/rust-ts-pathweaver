@@ -578,3 +578,24 @@ fn the_level_after_an_entry_stops_is_a_marker_when_nothing_starts_there() {
 
     assert_eq!(build.markers(), [23, 99]);
 }
+
+#[test]
+fn a_gem_or_a_hint_listed_again_with_the_same_note_while_it_is_held_changes_nothing() {
+    let build = build(json!({
+        "skills": [
+            { "id": "Spark", "level_interval": [1, 10], "additional_text": "Main skill", "support_skills": [
+                { "id": "Pierce", "additional_text": "Always" }
+            ] },
+            { "id": "Spark", "level_interval": [5, 20], "additional_text": "Main skill", "support_skills": [
+                { "id": "Pierce", "additional_text": "Always" }
+            ] },
+            { "id": "Comet", "level_interval": [1, 20] }
+        ],
+        "inventory_slots": [
+            { "inventory_id": "Belt1", "level_interval": [1, 10], "additional_text": "Any belt" },
+            { "inventory_id": "Belt1", "level_interval": [5, 20], "additional_text": "Any belt" }
+        ]
+    }));
+
+    assert_eq!(build.changes_by_level(), []);
+}

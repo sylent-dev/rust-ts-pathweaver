@@ -1,7 +1,7 @@
 use serde_json::json;
 
 use super::*;
-use crate::fixtures::{build, held, hint, passive, support};
+use crate::fixtures::{build, held, hint, noted, passive, support};
 
 #[test]
 fn a_build_holds_at_a_level_the_things_of_the_entries_that_apply_there() {
@@ -322,4 +322,44 @@ fn a_build_holds_nothing_at_a_level_a_character_doesnt_have() {
     assert_eq!(every_field.at_level(101), nothing);
     assert_ne!(every_field.at_level(1), nothing);
     assert_ne!(every_field.at_level(100), nothing);
+}
+
+#[test]
+fn the_same_note_on_two_entries_of_a_thing_is_held_once() {
+    let build = build(json!({
+        "passives": [
+            { "id": "melee17", "additional_text": "Early" },
+            { "id": "melee17", "additional_text": " Early " },
+            { "id": "melee17", "additional_text": "Late" },
+            { "id": "melee17", "additional_text": "Early" }
+        ],
+        "skills": [
+            { "id": "Spark", "level_interval": [1, 10], "additional_text": "Main skill", "support_skills": [
+                { "id": "Pierce", "additional_text": "Always" }
+            ] },
+            { "id": "Spark", "level_interval": [5, 20], "additional_text": "Main skill", "support_skills": [
+                { "id": "Pierce", "additional_text": "Always" }
+            ] }
+        ],
+        "inventory_slots": [
+            { "inventory_id": "Belt1", "level_interval": [1, 10], "additional_text": "Any belt" },
+            { "inventory_id": "Belt1", "level_interval": [5, 20], "additional_text": "Any belt" }
+        ]
+    }));
+
+    assert_eq!(
+        build.at_level(5),
+        BuildAtLevel {
+            skills: vec![noted("Spark", &["Main skill"])],
+            supports: vec![noted(support("Pierce", "Spark"), &["Always"])],
+            passives: vec![noted(
+                passive("melee17", WeaponSet::Shared),
+                &["Early", "Late"]
+            )],
+            hints: vec![noted(
+                hint("Belt1", HintItem::Named("Any belt")),
+                &["Any belt"]
+            )],
+        }
+    );
 }

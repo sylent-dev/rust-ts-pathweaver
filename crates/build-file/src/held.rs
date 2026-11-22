@@ -7,7 +7,8 @@ use crate::{Build, Entry, InventorySlot, Levels, Passive};
 
 /// A thing a build holds at a level (a gem, a passive, the item of a hint), once, with the
 /// notes of its author on the entries that set it there, in their order: several when two
-/// entries of the file set the same thing at the same level.
+/// entries of the file set the same thing at the same level with different notes, each note
+/// once.
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct Held<'a, T> {
     pub what: T,
@@ -151,7 +152,8 @@ fn note(text: Option<&str>) -> Option<&str> {
     text.map(str::trim).filter(|text| !text.is_empty())
 }
 
-/// Each thing once, in the order it first comes in, with the notes of all its entries. The place
+/// Each thing once, in the order it first comes in, with the notes of all its entries, each
+/// note once. The place
 /// of each thing is kept in a sorted table: searching the list for every entry took 6 seconds
 /// for a file of 10,000 passives (`changes/corpus.rs`).
 fn held_once<'a, T: Ord + Copy>(
@@ -162,7 +164,13 @@ fn held_once<'a, T: Ord + Copy>(
     for (what, note) in entries {
         let place = *places.entry(what).or_insert(things.len());
         match things.get_mut(place) {
-            Some(held) => held.notes.extend(note),
+            Some(held) => {
+                if let Some(note) = note
+                    && !held.notes.contains(&note)
+                {
+                    held.notes.push(note);
+                }
+            }
             None => things.push(Held {
                 what,
                 notes: note.into_iter().collect(),
