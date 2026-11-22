@@ -158,3 +158,59 @@ fn the_lists_of_a_build_written_null_are_written_back_null() {
 
     assert_eq!(as_json(&Build::read(text).unwrap().write()), as_json(text));
 }
+
+#[test]
+fn each_field_left_out_is_read_absent_and_written_back_left_out() {
+    // Every struct written whole: a field added to one of them must be added here, and read
+    // absent when the file leaves it out, which its `#[serde(default)]` decides.
+    let text = json!({
+        "name": "Bare",
+        "passives": [{ "id": "a" }],
+        "skills": [{ "id": "b", "support_skills": [{ "id": "c" }] }],
+        "inventory_slots": [{ "inventory_id": "Weapon1" }]
+    })
+    .to_string();
+
+    let build = Build::read(&text).unwrap();
+
+    assert_eq!(
+        build,
+        Build {
+            name: "Bare".to_owned(),
+            author: Nullable::Absent,
+            description: Nullable::Absent,
+            link: Nullable::Absent,
+            ascendancy: Nullable::Absent,
+            passives: Nullable::Value(vec![Entry::Detailed(Passive {
+                id: "a".to_owned(),
+                level_interval: Nullable::Absent,
+                weapon_set: Nullable::Absent,
+                additional_text: Nullable::Absent,
+                extra: Extra::new(),
+            })]),
+            skills: Nullable::Value(vec![Entry::Detailed(Skill {
+                id: "b".to_owned(),
+                level_interval: Nullable::Absent,
+                additional_text: Nullable::Absent,
+                support_skills: Nullable::Value(vec![Entry::Detailed(Support {
+                    id: "c".to_owned(),
+                    level_interval: Nullable::Absent,
+                    additional_text: Nullable::Absent,
+                    extra: Extra::new(),
+                })]),
+                extra: Extra::new(),
+            })]),
+            inventory_slots: Nullable::Value(vec![InventorySlot {
+                inventory_id: "Weapon1".to_owned(),
+                slot_x: Nullable::Absent,
+                slot_y: Nullable::Absent,
+                level_interval: Nullable::Absent,
+                unique_name: Nullable::Absent,
+                additional_text: Nullable::Absent,
+                extra: Extra::new(),
+            }]),
+            extra: Extra::new(),
+        }
+    );
+    assert_eq!(as_json(&build.write()), as_json(&text));
+}

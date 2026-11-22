@@ -17,8 +17,8 @@ pub enum ReadError {
     /// the last line that holds a character other than a space.
     NotJson {
         line: usize,
-        /// The byte of the line where reading stopped, from 1; after its end for a text that
-        /// ends too soon.
+        /// The byte of the line where reading stopped, from 1; after its end, its spaces
+        /// left out, for an error on its line break or a text that ends too soon.
         column: usize,
         /// The line, cut to 80 characters around the error, an ellipsis where it was cut.
         excerpt: String,
@@ -61,35 +61,16 @@ impl std::fmt::Display for ReadError {
 impl std::error::Error for ReadError {}
 
 impl ReadError {
-    /// The error of a text `serde_json` couldn't read, with the line where it stopped: for a
-    /// text that ends too soon, where `serde_json` names the line after the last line break,
-    /// the last line with a character other than a space, the only one a reader can look at.
+    /// The error of a text `serde_json` couldn't read, at the line of the error
+    /// ([`place_of`]); a text of spaces only isn't a build.
     pub(crate) fn of_json(text: &str, error: &serde_json::Error) -> Self {
-        if error.classify() == serde_json::error::Category::Eof {
-            let last = text
-                .lines()
-                .enumerate()
-                .filter(|(_, line)| !line.trim().is_empty())
-                .last();
-            let Some((index, last)) = last else {
-                return Self::NotABuild;
-            };
-            let column = last.len().saturating_add(1);
-            return Self::NotJson {
-                line: index.saturating_add(1),
-                column,
-                excerpt: excerpt(last, column),
-            };
-        }
-        let (line, column) = (error.line(), error.column());
-        let excerpt = line
-            .checked_sub(1)
-            .and_then(|index| text.lines().nth(index))
-            .map_or_else(String::new, |text| excerpt(text, column));
+        let Some((line, column, text_of_line)) = place_of(text, error) else {
+            return Self::NotABuild;
+        };
         Self::NotJson {
             line,
             column,
-            excerpt,
+            excerpt: excerpt(text_of_line, column),
         }
     }
 
@@ -112,6 +93,43 @@ impl ReadError {
             None => Self::WrongValue { field },
         }
     }
+}
+
+/// The line of a JSON error, from 1, its byte from 1 and its text; none for a text of spaces
+/// only. `serde_json` places an error after the character it stopped on, which for two errors
+/// is where no one can look: for a text that ends too soon, the line after its last line break,
+/// where the last line with a character other than a space is meant; for an error on the line
+/// break that ends its line (a string without its closing quote, a number or a `true` cut by
+/// it), the column 0 of the next line, where the end of that line is meant, as for a file of
+/// CRLF, whose `\r` stops `serde_json` before the line break.
+fn place_of<'text>(
+    text: &'text str,
+    error: &serde_json::Error,
+) -> Option<(usize, usize, &'text str)> {
+    let line_of = |line: usize| {
+        line.checked_sub(1)
+            .and_then(|index| text.lines().nth(index))
+            .unwrap_or_default()
+    };
+    let at_its_end = |line: usize, text_of_line: &'text str| {
+        let text_of_line = text_of_line.trim_end();
+        (line, text_of_line.len().saturating_add(1), text_of_line)
+    };
+    if error.classify() == serde_json::error::Category::Eof {
+        let (index, last) = text
+            .lines()
+            .enumerate()
+            .filter(|(_, line)| !line.trim().is_empty())
+            .last()?;
+        return Some(at_its_end(index.saturating_add(1), last));
+    }
+    Some(match (error.line(), error.column()) {
+        (line, 0) if line > 1 => {
+            let line = line.saturating_sub(1);
+            at_its_end(line, line_of(line))
+        }
+        (line, column) => (line, column, line_of(line)),
+    })
 }
 
 /// The characters of `line` around its byte `column` (from 1, as `serde_json` counts), at most

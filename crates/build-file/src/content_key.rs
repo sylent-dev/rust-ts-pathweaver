@@ -124,6 +124,8 @@ mod tests {
             r#"{ "name": "Same", "passives": ["a", { "id": "b" }] }"#,
             r#"{ "name": "Same ", "passives": ["a", "b"] }"#,
             r#"{ "name": "Same", "passives": ["a", "b"], "link": "" }"#,
+            // A field written `null` is written back so: not the content of a file without it.
+            r#"{ "name": "Same", "passives": ["a", "b"], "author": null }"#,
         ] {
             assert_ne!(key_of(other), build, "{other}");
         }
