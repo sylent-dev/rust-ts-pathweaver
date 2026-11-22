@@ -1,27 +1,7 @@
 use serde_json::json;
 
 use super::*;
-use crate::fixtures::build;
-
-/// A thing held without a note.
-fn held<T>(what: T) -> Held<'static, T> {
-    Held {
-        what,
-        notes: Vec::new(),
-    }
-}
-
-fn support(id: &'static str, skill: &'static str) -> SupportOnSkill<'static> {
-    SupportOnSkill { id, skill }
-}
-
-fn passive(id: &'static str, weapon_set: WeaponSet) -> PassiveInSet<'static> {
-    PassiveInSet { id, weapon_set }
-}
-
-fn hint(slot: &'static str, item: HintItem<'static>) -> HintOnSlot<'static> {
-    HintOnSlot { slot, item }
-}
+use crate::fixtures::{build, held, hint, passive, support};
 
 #[test]
 fn a_build_holds_at_a_level_the_things_of_the_entries_that_apply_there() {

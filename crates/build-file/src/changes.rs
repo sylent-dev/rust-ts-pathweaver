@@ -1,0 +1,236 @@
+//! What changes at a level of a build (`specs.md`, The level): what it holds at the level
+//! against what it held at the level before, read from its file alone.
+
+use std::collections::{BTreeMap, BTreeSet};
+
+use crate::{BuildAtLevel, Held, HintItem, HintOnSlot, PassiveInSet, SupportOnSkill, WeaponSet};
+
+/// One change of a build at a level, a line of the window of « N changes »: a gem, a hint or a
+/// note counts as one change, each group of passives as one.
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub enum Change<'a> {
+    /// A skill comes, with the supports that come with it, by their ids.
+    SkillAdded {
+        skill: Held<'a, &'a str>,
+        supports: Vec<Held<'a, &'a str>>,
+    },
+    /// A skill goes, and its supports with it.
+    SkillRemoved { id: &'a str },
+    /// A support comes onto a skill already there.
+    SupportAdded(Held<'a, SupportOnSkill<'a>>),
+    /// A support leaves a skill that stays.
+    SupportRemoved(SupportOnSkill<'a>),
+    /// The passives taken in a weapon set, by their ids.
+    PassivesTaken {
+        weapon_set: WeaponSet,
+        passives: Vec<Held<'a, &'a str>>,
+    },
+    /// The passives given back, of every weapon set: a respec.
+    PassivesGivenBack(Vec<PassiveInSet<'a>>),
+    /// A hint comes on a slot.
+    HintAdded(Held<'a, HintOnSlot<'a>>),
+    /// A hint comes on a slot where the hint of another item goes, the only ones to come and
+    /// to go there: where several do, the file doesn't say which replaces which.
+    HintReplaced {
+        hint: Held<'a, HintOnSlot<'a>>,
+        before: HintItem<'a>,
+    },
+    /// A hint goes.
+    HintRemoved(HintOnSlot<'a>),
+    /// A skill that stays is set again with other notes of its author: the new ones.
+    SkillNoteChanged(Held<'a, &'a str>),
+    /// A support that stays on its skill is set again with other notes: the new ones.
+    SupportNoteChanged(Held<'a, SupportOnSkill<'a>>),
+    /// A hint that stays is set again with another text: the new one.
+    HintTextChanged(Held<'a, HintOnSlot<'a>>),
+}
+
+impl Change<'_> {
+    /// Whether the change makes a marker of its level: every change but the passives taken,
+    /// which a file can add at every level.
+    #[must_use]
+    pub fn makes_marker(&self) -> bool {
+        match self {
+            Self::PassivesTaken { .. } => false,
+            Self::SkillAdded { .. }
+            | Self::SkillRemoved { .. }
+            | Self::SupportAdded(_)
+            | Self::SupportRemoved(_)
+            | Self::PassivesGivenBack(_)
+            | Self::HintAdded(_)
+            | Self::HintReplaced { .. }
+            | Self::HintRemoved(_)
+            | Self::SkillNoteChanged(_)
+            | Self::SupportNoteChanged(_)
+            | Self::HintTextChanged(_) => true,
+        }
+    }
+}
+
+impl<'a> BuildAtLevel<'a> {
+    /// What changes from the level before to this one, in the order of the categories: the
+    /// skills, the supports, the passives, the hints of the inventory, the notes; each in the
+    /// order of the file. A thing held at both levels changes nothing, whatever the entries
+    /// that set it, unless its notes differ.
+    #[must_use]
+    pub fn changes_since(&self, before: &Self) -> Vec<Change<'a>> {
+        let mut changes = self.gem_changes_since(before);
+        changes.extend(self.passive_changes_since(before));
+        changes.extend(self.hint_changes_since(before));
+        changes.extend(self.note_changes_since(before));
+        changes
+    }
+
+    /// The skills that come, with their supports, and go; then the supports that come onto a
+    /// skill already there, and leave one that stays.
+    fn gem_changes_since(&self, before: &Self) -> Vec<Change<'a>> {
+        let holds_skill = |held: &Self, id| held.skills.iter().any(|skill| skill.what == id);
+        let skills_added = things_missing(&self.skills, &before.skills).map(|skill| {
+            let supports = self.supports.iter();
+            let supports = supports.filter(|support| support.what.skill == skill.what);
+            Change::SkillAdded {
+                skill: skill.clone(),
+                supports: supports
+                    .map(|support| support.named(support.what.id))
+                    .collect(),
+            }
+        });
+        let skills_removed = things_missing(&before.skills, &self.skills)
+            .map(|skill| Change::SkillRemoved { id: skill.what });
+        let supports_added = things_missing(&self.supports, &before.supports)
+            .filter(|support| holds_skill(before, support.what.skill))
+            .map(|support| Change::SupportAdded(support.clone()));
+        let supports_removed = things_missing(&before.supports, &self.supports)
+            .filter(|support| holds_skill(self, support.what.skill))
+            .map(|support| Change::SupportRemoved(support.what));
+        skills_added
+            .chain(skills_removed)
+            .chain(supports_added)
+            .chain(supports_removed)
+            .collect()
+    }
+
+    /// The passives taken, one change for each weapon set that takes some, then those given
+    /// back, in one change.
+    fn passive_changes_since(&self, before: &Self) -> Vec<Change<'a>> {
+        let (mut shared, mut first, mut second) = (Vec::new(), Vec::new(), Vec::new());
+        for passive in things_missing(&self.passives, &before.passives) {
+            let taken_in_set = match passive.what.weapon_set {
+                WeaponSet::Shared => &mut shared,
+                WeaponSet::First => &mut first,
+                WeaponSet::Second => &mut second,
+            };
+            taken_in_set.push(passive.named(passive.what.id));
+        }
+        let taken = [
+            (WeaponSet::Shared, shared),
+            (WeaponSet::First, first),
+            (WeaponSet::Second, second),
+        ];
+        let taken = taken
+            .into_iter()
+            .filter(|(_, passives)| !passives.is_empty());
+        let mut changes: Vec<Change<'a>> = taken
+            .map(|(weapon_set, passives)| Change::PassivesTaken {
+                weapon_set,
+                passives,
+            })
+            .collect();
+        let given_back: Vec<PassiveInSet<'a>> = things_missing(&before.passives, &self.passives)
+            .map(|passive| passive.what)
+            .collect();
+        if !given_back.is_empty() {
+            changes.push(Change::PassivesGivenBack(given_back));
+        }
+        changes
+    }
+
+    /// The hints that come, those that replace another, those that go.
+    fn hint_changes_since(&self, before: &Self) -> Vec<Change<'a>> {
+        let coming: Vec<_> = things_missing(&self.hints, &before.hints).collect();
+        let going: Vec<_> = things_missing(&before.hints, &self.hints).collect();
+        // The item a hint that comes replaces: the one that goes from its slot, when one hint
+        // comes and one goes there.
+        let replaced_on = |slot| {
+            let replaced = only_on_slot(&going, slot)?;
+            only_on_slot(&coming, slot).map(|_| replaced.what.item)
+        };
+        let added = coming
+            .iter()
+            .filter(|hint| replaced_on(hint.what.slot).is_none());
+        let added = added.map(|hint| Change::HintAdded((*hint).clone()));
+        let replaced = coming.iter().filter_map(|hint| {
+            replaced_on(hint.what.slot).map(|before| Change::HintReplaced {
+                hint: (*hint).clone(),
+                before,
+            })
+        });
+        let removed = going
+            .iter()
+            .filter(|hint| replaced_on(hint.what.slot).is_none());
+        let removed = removed.map(|hint| Change::HintRemoved(hint.what));
+        added.chain(replaced).chain(removed).collect()
+    }
+
+    /// The skills, the supports and the hints held at both levels whose notes differ.
+    fn note_changes_since(&self, before: &Self) -> Vec<Change<'a>> {
+        let skills = things_retold(&self.skills, &before.skills);
+        let supports = things_retold(&self.supports, &before.supports);
+        let hints = things_retold(&self.hints, &before.hints);
+        skills
+            .map(|skill| Change::SkillNoteChanged(skill.clone()))
+            .chain(supports.map(|support| Change::SupportNoteChanged(support.clone())))
+            .chain(hints.map(|hint| Change::HintTextChanged(hint.clone())))
+            .collect()
+    }
+}
+
+impl<'a, T> Held<'a, T> {
+    /// The thing under another name, with its notes: a support by its id alone, under its
+    /// skill.
+    fn named<N>(&self, what: N) -> Held<'a, N> {
+        Held {
+            what,
+            notes: self.notes.clone(),
+        }
+    }
+}
+
+/// The things of `held` that `others` doesn't hold, in their order.
+fn things_missing<'h, 'a, T: Ord>(
+    held: &'h [Held<'a, T>],
+    others: &'h [Held<'a, T>],
+) -> impl Iterator<Item = &'h Held<'a, T>> {
+    let others: BTreeSet<&T> = others.iter().map(|held| &held.what).collect();
+    held.iter().filter(move |held| !others.contains(&held.what))
+}
+
+/// The things of `held` that `before` held too, with other notes.
+fn things_retold<'h, 'a, T: Ord>(
+    held: &'h [Held<'a, T>],
+    before: &'h [Held<'a, T>],
+) -> impl Iterator<Item = &'h Held<'a, T>> {
+    let notes_before: BTreeMap<&T, &[&str]> = before
+        .iter()
+        .map(|held| (&held.what, held.notes.as_slice()))
+        .collect();
+    held.iter().filter(move |held| {
+        let notes_before = notes_before.get(&held.what);
+        notes_before.is_some_and(|notes_before| *notes_before != held.notes.as_slice())
+    })
+}
+
+/// The hint of a list on a slot, when it is the only one there.
+fn only_on_slot<'h, 'a>(
+    hints: &[&'h Held<'a, HintOnSlot<'a>>],
+    slot: &str,
+) -> Option<&'h Held<'a, HintOnSlot<'a>>> {
+    let mut on_slot = hints.iter().filter(|hint| hint.what.slot == slot);
+    match (on_slot.next(), on_slot.next()) {
+        (Some(only), None) => Some(only),
+        _ => None,
+    }
+}
+
+#[cfg(test)]
+mod tests;
