@@ -46,6 +46,10 @@ pub struct Build {
     pub author: Option<String>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
+    /// Where the build comes from, usually the page of its guide; any text, not always an
+    /// address.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub link: Option<String>,
     /// The id of the ascendancy, such as `Warrior1`.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub ascendancy: Option<String>,

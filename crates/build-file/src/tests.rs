@@ -14,6 +14,10 @@ fn a_file_with_every_field_is_read_with_each_entry_in_its_form() {
 
     assert_eq!(build.name, "Every Field");
     assert_eq!(build.ascendancy.as_deref(), Some("Warrior1"));
+    assert_eq!(
+        build.link.as_deref(),
+        Some("https://example.com/guides/every-field")
+    );
 
     let passives = build.passives.unwrap();
     let ids: Vec<&str> = passives.iter().map(Entry::id).collect();

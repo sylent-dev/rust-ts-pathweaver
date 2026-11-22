@@ -3,6 +3,7 @@
     "author": "Pathweaver",
     "description": "A build written for the tests: every field of version 1 of the format, in both of its forms.",
     "ascendancy": "Warrior1",
+    "link": "https://example.com/guides/every-field",
     "passives": [
         "strength89",
         {
