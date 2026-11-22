@@ -1,5 +1,6 @@
 // The game data as the page reads them (see docs/game-data.md): the files of a version and a
-// language, loaded once when a build first needs them, and the lookup of an id.
+// language, loaded when a build first needs them, and the lookup of an id. Each call loads them
+// again: the page keeps the one it loaded.
 //
 // Vite copies each file under a name made from its contents, which the browser keeps without
 // asking again (`static/_headers`), and loads a file only when the page asks for it.
@@ -28,7 +29,7 @@ const portraitFiles = import.meta.glob<string>('./*/portraits/*.webp', {
 
 /** The game data of one version of the game, in one language. */
 export interface GameData {
-	/** The version of the game they are for, such as `0.5.2`. */
+	/** The version of the game they are for, such as `0.5.5`. */
 	readonly version: string;
 	/** The gem of an id, such as `Metadata/Items/Gem/SkillGemSpark`, or `undefined` if unknown. */
 	gem(id: string): Gem | undefined;

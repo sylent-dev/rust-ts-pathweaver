@@ -5,7 +5,10 @@ import { existsSync } from 'node:fs';
 import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 
-/** The tag of the tree export of Grinding Gear Games, one per version of the game. */
+/**
+ * The tag of the tree export of Grinding Gear Games: the last at or before the version of the
+ * game, since the tree doesn't change at every patch (0.5.2 for 0.5.5).
+ */
 export const TREE_TAG = '0.5.2';
 
 /** A file to download: its address, and its name in the cache. */
@@ -30,6 +33,16 @@ export function treeFile(name: string): SourceFile {
 /** A file of RePoE, such as `skill_gems.min.json`. */
 export function repoeFile(name: string): SourceFile {
 	return { url: `${REPOE_URL}/${name}`, name: `repoe-${name}` };
+}
+
+/**
+ * Stops the script when RePoE, which serves the latest version of the game only, is at another
+ * version than the one converted: its `version.txt` (`0.5.5.10`) must begin with it (`0.5.5`).
+ */
+export function checkRepoeVersion(repoe: string, gameVersion: string): void {
+	if (repoe !== gameVersion && !repoe.startsWith(`${gameVersion}.`)) {
+		throw new Error(`RePoE is at ${repoe}, not at the version converted, ${gameVersion}.`);
+	}
 }
 
 /** Downloads files of the sources into a cache folder, each once. */

@@ -89,9 +89,12 @@ describe('gemAttributes', () => {
 		]).toEqual([[], [], [], []]);
 	});
 
-	it('stops on a colour it does not know', () => {
+	it('stops on a colour it does not know, a property every object inherits included', () => {
 		expect(() => gemAttributes('y', weights(0, 0, 0), 'skill_gems.X')).toThrow(
 			new ShapeError('skill_gems.X.color', 'r, g, b or w, not « y »')
+		);
+		expect(() => gemAttributes('toString', weights(0, 0, 0), 'skill_gems.X')).toThrow(
+			new ShapeError('skill_gems.X.color', 'r, g, b or w, not « toString »')
 		);
 	});
 });
@@ -134,18 +137,31 @@ describe('convertGems', () => {
 		});
 	});
 
-	it('leaves the description empty when the game data have none', () => {
+	it('leaves out the description when the game data have none', () => {
 		const gems = convertGems(
 			{
 				granting: skillGem({ grants_skills: [] }),
-				unknownSkill: skillGem({ grants_skills: ['Missing'] }),
 				undescribed: skillGem({ grants_skills: ['Plain'] }),
+				blank: skillGem({ grants_skills: ['Blank'] }),
 				support: skillGem({ gem_type: 'support' })
 			},
-			{ Plain: { active_skill: {} } },
+			{ Plain: { active_skill: {} }, Blank: { active_skill: { description: ' \r\n' } } },
 			TAGS
 		);
-		expect(Object.values(gems).map((gem) => gem.description)).toEqual(['', '', '', '']);
+		expect(Object.values(gems).map((gem) => Object.hasOwn(gem, 'description'))).toEqual([
+			false,
+			false,
+			false,
+			false
+		]);
+	});
+
+	it('stops on a skill granted that the skills of the game data do not have', () => {
+		expect(() =>
+			convertGems({ X: skillGem({ grants_skills: ['Missing'] }) }, SKILLS, TAGS)
+		).toThrow(
+			new ShapeError('skills', 'a skill « Missing », which skill_gems.X.grants_skills names')
+		);
 	});
 
 	it('stops on a tag the words of the game do not name', () => {

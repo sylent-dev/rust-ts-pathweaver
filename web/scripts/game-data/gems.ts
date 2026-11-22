@@ -5,9 +5,9 @@
 import type { Attribute, Gem, GemAttributes, GemKind, Gems } from '#lib/game-data/format.ts';
 import {
 	arrayAt,
-	flagAt,
 	numberAt,
 	objectAt,
+	optionalBooleanAt,
 	optionalStringAt,
 	ShapeError,
 	stringAt
@@ -59,7 +59,7 @@ export function gemAttributes(
 	weights: Readonly<Record<Attribute, number>>,
 	place: string
 ): GemAttributes {
-	if (!(colour in COLOUR_ATTRIBUTES)) {
+	if (!Object.hasOwn(COLOUR_ATTRIBUTES, colour)) {
 		throw new ShapeError(`${place}.color`, `r, g, b or w, not « ${colour} »`);
 	}
 	const attribute = COLOUR_ATTRIBUTES[colour];
@@ -102,46 +102,53 @@ function tagNames(
 	});
 }
 
-/** The description of a gem: the text of a support, or that of the first skill a gem grants. */
+/** A text of the game as the page shows it, or `undefined` when there is none. */
+function shownText(text: string | undefined): string | undefined {
+	const words = gameWords(text ?? '');
+	return words === '' ? undefined : words;
+}
+
+/**
+ * The description of a gem: the text of a support, or that of the first skill a gem grants;
+ * `undefined` when the game data have none (76 gems of 1,191 in RePoE at 0.5.5.10). A skill
+ * granted that `skills.json` doesn't have stops the script.
+ */
 function description(
 	entry: Readonly<Record<string, unknown>>,
 	kind: GemKind,
-	skills: unknown,
+	skills: Readonly<Record<string, unknown>>,
 	place: string
-): string {
+): string | undefined {
 	if (kind === 'support' || kind === 'lineage') {
-		return gameWords(optionalStringAt(entry.support_text, `${place}.support_text`) ?? '');
+		return shownText(optionalStringAt(entry.support_text, `${place}.support_text`));
 	}
 	const [granted] = arrayAt(entry.grants_skills ?? [], `${place}.grants_skills`);
 	if (granted === undefined) {
-		return '';
+		return undefined;
 	}
-	const skill = objectAt(skills, 'skills')[stringAt(granted, `${place}.grants_skills[0]`)];
-	if (skill === undefined) {
-		return '';
+	const id = stringAt(granted, `${place}.grants_skills[0]`);
+	if (!Object.hasOwn(skills, id)) {
+		throw new ShapeError('skills', `a skill « ${id} », which ${place}.grants_skills names`);
 	}
-	const active = objectAt(skill, `skills.${granted}`).active_skill;
-	if (active === undefined) {
-		return '';
-	}
-	const text = objectAt(active, `skills.${granted}.active_skill`).description;
-	return gameWords(optionalStringAt(text, `skills.${granted}.active_skill.description`) ?? '');
+	const skill = objectAt(skills[id], `skills.${id}`);
+	const active = objectAt(skill.active_skill, `skills.${id}.active_skill`);
+	return shownText(optionalStringAt(active.description, `skills.${id}.active_skill.description`));
 }
 
 /** One gem of `skill_gems.json`. */
 function convertGem(
 	value: unknown,
-	skills: unknown,
+	skills: Readonly<Record<string, unknown>>,
 	tags: Readonly<Record<string, unknown>>,
 	place: string
 ): Gem {
 	const entry = objectAt(value, place);
 	const kind = gemKind(
 		stringAt(entry.gem_type, `${place}.gem_type`),
-		flagAt(entry.is_lineage, `${place}.is_lineage`),
+		optionalBooleanAt(entry.is_lineage, `${place}.is_lineage`),
 		place
 	);
-	return {
+	const gem: Gem = {
 		name: stringAt(
 			objectAt(entry.base_item, `${place}.base_item`).display_name,
 			`${place}.base_item.display_name`
@@ -152,17 +159,19 @@ function convertGem(
 			weightsAt(entry.requirement_weights, `${place}.requirement_weights`),
 			place
 		),
-		tags: tagNames(entry.tags, tags, `${place}.tags`),
-		description: description(entry, kind, skills, place)
+		tags: tagNames(entry.tags, tags, `${place}.tags`)
 	};
+	const text = description(entry, kind, skills, place);
+	return text === undefined ? gem : { ...gem, description: text };
 }
 
 /** Every gem of the game by its id, from the three files of RePoE. */
 export function convertGems(skillGems: unknown, skills: unknown, gemTags: unknown): Gems {
 	const tags = objectAt(gemTags, 'gem_tags');
+	const skillTable = objectAt(skills, 'skills');
 	const gems: Gems = {};
 	for (const [id, entry] of Object.entries(objectAt(skillGems, 'skill_gems'))) {
-		gems[id] = convertGem(entry, skills, tags, `skill_gems.${id}`);
+		gems[id] = convertGem(entry, skillTable, tags, `skill_gems.${id}`);
 	}
 	return gems;
 }

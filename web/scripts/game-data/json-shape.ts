@@ -51,7 +51,7 @@ export function optionalStringAt(value: unknown, place: string): string | undefi
 }
 
 /** A boolean, or `false` for a field missing. */
-export function flagAt(value: unknown, place: string): boolean {
+export function optionalBooleanAt(value: unknown, place: string): boolean {
 	if (value === undefined) {
 		return false;
 	}

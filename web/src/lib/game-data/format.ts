@@ -6,7 +6,7 @@
  * folder, and the version the page names beside an unknown id (`specs.md`, Unknown and invalid
  * entries).
  */
-export const GAME_VERSION = '0.5.2';
+export const GAME_VERSION = '0.5.5';
 
 /** The language of the texts of the game, the only one of version 1 (`specs.md`, Languages). */
 export const GAME_LANGUAGE = 'en';
@@ -47,8 +47,8 @@ export interface Gem {
 	attributes: GemAttributes;
 	/** Its tags as the game names them, in the order of the game data, without those it hides. */
 	tags: string[];
-	/** The text of a support, or the description of the skill a gem grants; empty when the game data have none. */
-	description: string;
+	/** The text of a support, or the description of the skill a gem grants; absent when the game data have none. */
+	description?: string;
 }
 
 /** The gems by their id, such as `Metadata/Items/Gem/SkillGemSpark`, in `<version>/<language>/gems.json`. */
@@ -66,7 +66,7 @@ export type Ascendancies = Record<string, Ascendancy>;
 
 /** The versions of the sources a folder was converted from, in `<version>/sources.json`. */
 export interface Sources {
-	/** The tag of the tree export of Grinding Gear Games, such as `0.5.2`. */
+	/** The tag of the tree export of Grinding Gear Games, such as `0.5.2`, the last before 0.5.5. */
 	treeExport: string;
 	/** The version of the game RePoE was exported from, its `version.txt`. */
 	repoe: string;

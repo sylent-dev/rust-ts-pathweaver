@@ -1,12 +1,12 @@
 import { describe, expect, it, vi } from 'vitest';
-import ascendancies from './0.5.2/en/ascendancies.json';
-import gems from './0.5.2/en/gems.json';
+import ascendancies from './0.5.5/en/ascendancies.json';
+import gems from './0.5.5/en/gems.json';
 import { loadGameData } from './game-data.ts';
 
 describe('loadGameData', () => {
 	it('loads the game data of the version and language of the page', async () => {
 		const data = await loadGameData();
-		expect(data.version).toBe('0.5.2');
+		expect(data.version).toBe('0.5.5');
 		expect(data.gem('Metadata/Items/Gems/SkillGemSpark')).toEqual(
 			gems['Metadata/Items/Gems/SkillGemSpark']
 		);

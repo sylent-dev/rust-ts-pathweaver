@@ -14,9 +14,9 @@ import { parseArgs } from 'node:util';
 import { GAME_LANGUAGE, GAME_VERSION, type Sources } from '#lib/game-data/format.ts';
 import { convertAscendancies } from './ascendancies.ts';
 import { convertGems } from './gems.ts';
-import { writePortraits } from './portraits.ts';
+import { checkMagick, portraitCuts, writePortraits } from './portraits.ts';
 import { tableJson } from './table-json.ts';
-import { Downloads, repoeFile, TREE_TAG, treeFile } from './sources.ts';
+import { checkRepoeVersion, Downloads, repoeFile, TREE_TAG, treeFile } from './sources.ts';
 
 const webDirectory = path.resolve(import.meta.dirname, '..', '..');
 const versionDirectory = path.join(webDirectory, 'src', 'lib', 'game-data', GAME_VERSION);
@@ -34,11 +34,13 @@ async function main(): Promise<void> {
 	const cache = values.cache ?? (await mkdtemp(path.join(os.tmpdir(), 'pathweaver-game-data-')));
 	const downloads = new Downloads(cache);
 	console.log(`downloads in ${cache}`);
+	checkMagick();
 
 	const sources: Sources = {
 		treeExport: TREE_TAG,
 		repoe: (await downloads.text(repoeFile('version.txt'))).trim()
 	};
+	checkRepoeVersion(sources.repoe, GAME_VERSION);
 	const gems = convertGems(
 		await downloads.json(repoeFile('skill_gems.min.json')),
 		await downloads.json(repoeFile('skills.min.json')),
@@ -47,13 +49,16 @@ async function main(): Promise<void> {
 	const { ascendancies, portraits } = convertAscendancies(
 		await downloads.json(treeFile('data.json'))
 	);
+	const cuts = await portraitCuts(downloads, portraits);
 
 	await write('sources.json', `${JSON.stringify(sources, null, '\t')}\n`);
 	await write(path.join(GAME_LANGUAGE, 'gems.json'), tableJson(gems));
 	await write(path.join(GAME_LANGUAGE, 'ascendancies.json'), tableJson(ascendancies));
-	await writePortraits(downloads, portraits, path.join(versionDirectory, 'portraits'));
+	await writePortraits(cuts, path.join(versionDirectory, 'portraits'));
 	console.log(`wrote ${portraits.length} portraits`);
-	const withoutDescription = Object.values(gems).filter((gem) => gem.description === '').length;
+	const withoutDescription = Object.values(gems).filter(
+		(gem) => gem.description === undefined
+	).length;
 	console.log(
 		`${Object.keys(gems).length} gems (${withoutDescription} without a description), ` +
 			`${Object.keys(ascendancies).length} ascendancies, RePoE at ${sources.repoe}`

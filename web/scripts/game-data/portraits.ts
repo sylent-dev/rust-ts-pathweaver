@@ -5,7 +5,7 @@
 import { execFileSync } from 'node:child_process';
 import { mkdir } from 'node:fs/promises';
 import path from 'node:path';
-import { PORTRAIT_SIDES, portraitFile } from '#lib/game-data/format.ts';
+import { PORTRAIT_SIDES, portraitFile, type PortraitSide } from '#lib/game-data/format.ts';
 import type { PortraitPlace } from './ascendancies.ts';
 import { numberAt, objectAt, ShapeError } from './json-shape.ts';
 import { type Downloads, treeFile } from './sources.ts';
@@ -67,8 +67,16 @@ export function cutArguments(
 	];
 }
 
+/** A portrait to cut: the sprite of its class, the square of its disc, and its file. */
+export interface PortraitCut {
+	sprite: string;
+	square: Rectangle;
+	side: PortraitSide;
+	file: string;
+}
+
 /** Stops the script with a clear message when ImageMagick isn't installed. */
-function checkMagick(): void {
+export function checkMagick(): void {
 	try {
 		execFileSync('magick', ['-version'], { stdio: 'ignore' });
 	} catch {
@@ -76,14 +84,15 @@ function checkMagick(): void {
 	}
 }
 
-/** Writes the portraits of every ascendancy, at each side, into `folder`. */
-export async function writePortraits(
+/**
+ * The portraits of every ascendancy, at each side, their sprites downloaded and their frames read:
+ * a frame missing stops the script before it writes anything.
+ */
+export async function portraitCuts(
 	downloads: Downloads,
-	places: readonly PortraitPlace[],
-	folder: string
-): Promise<void> {
-	checkMagick();
-	await mkdir(folder, { recursive: true });
+	places: readonly PortraitPlace[]
+): Promise<PortraitCut[]> {
+	const cuts: PortraitCut[] = [];
 	for (const place of places) {
 		const spriteName = `assets/background-${place.sprite}`;
 		const frame = frameAt(
@@ -93,8 +102,24 @@ export async function writePortraits(
 		);
 		const sprite = await downloads.path(treeFile(`${spriteName}.webp`));
 		for (const side of PORTRAIT_SIDES) {
-			const target = path.join(folder, portraitFile(place.ascendancyId, side));
-			execFileSync('magick', cutArguments(sprite, squareInDisc(frame), side, target));
+			cuts.push({
+				sprite,
+				square: squareInDisc(frame),
+				side,
+				file: portraitFile(place.ascendancyId, side)
+			});
 		}
+	}
+	return cuts;
+}
+
+/** Cuts the portraits into `folder`. */
+export async function writePortraits(cuts: readonly PortraitCut[], folder: string): Promise<void> {
+	await mkdir(folder, { recursive: true });
+	for (const cut of cuts) {
+		execFileSync(
+			'magick',
+			cutArguments(cut.sprite, cut.square, cut.side, path.join(folder, cut.file))
+		);
 	}
 }
