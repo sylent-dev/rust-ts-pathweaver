@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { dragged } from './drag.ts';
+import { dragged } from './pointer-drag.ts';
 
 /** An element that hears events and notes the pointers it keeps, without a page. */
 class FakeElement extends EventTarget {
@@ -113,5 +113,44 @@ describe('dragged', () => {
 		element.dispatchEvent(pointer('pointermove', { clientX: 14 }));
 		element.dispatchEvent(pointer('pointerup'));
 		expect(told).toEqual([]);
+	});
+
+	it('drops a drag under way when detached', () => {
+		const { element, told, detach } = draggedElement();
+		element.dispatchEvent(pointer('pointerdown'));
+		detach();
+		element.dispatchEvent(pointer('pointermove', { clientX: 14 }));
+		element.dispatchEvent(pointer('pointerup'));
+		expect(told).toEqual(['start 0,0', 'drop']);
+	});
+});
+
+// A browser sends a click to the element that kept the pointer once it is released.
+describe('the click that follows a release', () => {
+	/** Whether a click sent to the element stops there, rather than going on to what is around. */
+	function stopsClick(element: FakeElement): boolean {
+		const click = new Event('click', { bubbles: true });
+		element.dispatchEvent(click);
+		return click.cancelBubble;
+	}
+
+	it('stops at the element, and the click after it goes on', () => {
+		const { element } = draggedElement();
+		element.dispatchEvent(pointer('pointerdown'));
+		element.dispatchEvent(pointer('pointerup'));
+		expect([stopsClick(element), stopsClick(element)]).toEqual([true, false]);
+	});
+
+	it('is none when the system took the pointer back: the next click goes on', () => {
+		const { element } = draggedElement();
+		element.dispatchEvent(pointer('pointerdown'));
+		element.dispatchEvent(pointer('pointercancel'));
+		expect(stopsClick(element)).toBe(false);
+	});
+
+	it('is none without a press: a click goes on', () => {
+		const { element } = draggedElement();
+		element.dispatchEvent(pointer('pointerup'));
+		expect(stopsClick(element)).toBe(false);
 	});
 });

@@ -14,6 +14,11 @@ function isInField(target: EventTarget | null): boolean {
 	return target instanceof Element && target.closest(FIELDS) !== null;
 }
 
+/** Whether an element is marked as belonging to a window or a menu (`popupArea`). */
+function isPopupArea(node: EventTarget): node is HTMLElement {
+	return node instanceof HTMLElement && node.dataset.popup !== undefined;
+}
+
 /** Hears a key pressed anywhere on the page. */
 export function hearKey(event: KeyboardEvent): void {
 	const command = commandOf({
@@ -21,9 +26,10 @@ export function hearKey(event: KeyboardEvent): void {
 		isModified: event.altKey || event.ctrlKey || event.metaKey || event.shiftKey,
 		isInField: isInField(event.target)
 	});
-	switch (command?.kind) {
-		case undefined:
-			return;
+	if (command === undefined) {
+		return;
+	}
+	switch (command.kind) {
 		case 'close-popup':
 			popup.close();
 			return;
@@ -33,15 +39,18 @@ export function hearKey(event: KeyboardEvent): void {
 				event.preventDefault();
 				openBuilds.showMarker(command.side);
 			}
+			return;
+		default:
+			// A command added to `PageCommand` and not run here stops the type check.
+			command satisfies never;
 	}
 }
 
 /**
- * Hears a click anywhere on the page, after its trigger: closes the window or the menu open
- * unless the click landed in what belongs to it, an element under `data-popup="<its name>"`.
+ * Hears a click anywhere on the page: closes the window or the menu open unless the click landed
+ * in what belongs to it. The area is read from the path of the event, set when it left: an
+ * element the click has taken off the page (a line removed from a list) is still on it.
  */
 export function hearClick(event: MouseEvent): void {
-	const { target } = event;
-	const area = target instanceof Element ? target.closest<HTMLElement>('[data-popup]') : null;
-	popup.closeFromOutside(area?.dataset.popup);
+	popup.closeUnlessClickedIn(event.composedPath().find(isPopupArea)?.dataset.popup);
 }

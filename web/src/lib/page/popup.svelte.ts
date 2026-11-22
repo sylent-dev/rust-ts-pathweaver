@@ -8,33 +8,47 @@
  */
 export type PopupName = 'builds-menu' | 'level-changes';
 
+/**
+ * What marks an element as belonging to a window or a menu, its trigger as its window, to
+ * spread on it (`{...popupArea('level-changes')}`): a click under it doesn't close it
+ * (page-events.ts reads the attribute).
+ */
+export function popupArea(name: PopupName): { 'data-popup': PopupName } {
+	return { 'data-popup': name };
+}
+
 /** The window or the menu open over the page. */
 export class Popup {
-	#open = $state<PopupName>();
+	#openName = $state<PopupName>();
 
 	/** The one open, none when all are closed. */
-	get open(): PopupName | undefined {
-		return this.#open;
+	get openName(): PopupName | undefined {
+		return this.#openName;
+	}
+
+	/** Whether this one is the one open. */
+	isOpen(name: PopupName): boolean {
+		return this.#openName === name;
 	}
 
 	/** What a click on its trigger does: opens it in place of the one open, or closes it. */
 	toggle(name: PopupName): void {
-		this.#open = this.#open === name ? undefined : name;
+		this.#openName = this.#openName === name ? undefined : name;
 	}
 
 	/** Closes the one open. */
 	close(): void {
-		this.#open = undefined;
+		this.#openName = undefined;
 	}
 
 	/**
-	 * What a click anywhere on the page does, heard after its trigger: closes the one open,
-	 * unless the click landed in what belongs to it (its trigger, its window), named by
-	 * `clickedIn`.
+	 * What a click anywhere on the page does: closes the one open, unless the click landed in
+	 * what belongs to it, the area named by `area` (none for a click elsewhere). The same
+	 * whether it is heard before or after the trigger the click landed on.
 	 */
-	closeFromOutside(clickedIn: string | undefined): void {
-		if (clickedIn !== this.#open) {
-			this.#open = undefined;
+	closeUnlessClickedIn(area: string | undefined): void {
+		if (area !== this.#openName) {
+			this.#openName = undefined;
 		}
 	}
 }
