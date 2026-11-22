@@ -16,3 +16,8 @@ updates:
     groups:
       web:
         patterns: ["*"]
+  # Wrangler, which uploads the website to Cloudflare (deploy/).
+  - package-ecosystem: npm
+    directory: /deploy
+    schedule:
+      interval: weekly

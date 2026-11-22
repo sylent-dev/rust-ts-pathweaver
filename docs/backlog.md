@@ -86,6 +86,15 @@ Set aside at the wireframes (2026-11-16, see `docs/wireframes/archive.excalidraw
 
 - **Two components the mock-up repeats** (refactoring, the review of the style sheets of 2n2, item 6, left out of 2n3b by the owner on 2026-11-22; for step 4, when the first view is copied): a panel of a tab of a build, `BuildTabPanel.svelte`, which holds the height, the scroll and the background that `.app-skills-tab`, `.app-inventory-tab` and `.app-about-tab` write three times, each followed by the same reset of its lists; and the small capitals written eight times in six sheets (`11px`, `.12em`, uppercase, the weak grey on a band; `10px`, `.08em`, uppercase) as two shared classes or components, a caption and a label, beside `.app-title`.
 
+## Deployment
+
+Set aside at step 3 (Claude Code, 2026-11-22), see [cloudflare-usage.md](cloudflare-usage.md):
+
+- **A content security policy** (security; for the security audit before version 1): a header `Content-Security-Policy` that lets the page load its own files only, so that a script slipped into a build's text can't run. It needs `'wasm-unsafe-eval'` for the core and the hashes of the inline scripts of SvelteKit (its option `kit.csp`), so it is decided with the audit, once the interface draws the texts of strangers (step 4).
+- **A page 404** (polish; depends on the addresses of the website, specified with the library or the short links of version 3): today an address that doesn't exist gets the plain answer of Cloudflare for a missing file; the website has one page, so no link leads there yet.
+- **The website on the owner's VPS** (an idea of the owner, 2026-11-22, at step 3; depends on the VPS with Coolify the owner plans to buy): serve the static website from it rather than from Cloudflare. To weigh then: a static website costs nothing on Cloudflare, with no machine to keep up, the reason a VPS was rejected (`docs/technical-choices.md`, Host); worth it if the VPS hosts the server of version 3 anyway, or if Cloudflare limits the website (`docs/cloudflare-usage.md`, Risks). The move is the workflow of deployment and the DNS record of `pathweaver.sylent.tools`, the files unchanged.
+- **A preview of each pull request** (method; depends on nothing, costs a workflow and the secret on the pull requests): a version of the website at an address of its own, to try a branch on the phone before the merge. The pull requests come from the owner alone, who tries them on `npm run dev`; worth it once a tester tries the branches.
+
 ## Later versions
 
 - **The side panel of the open builds** (layout, set aside by the owner on 2026-11-17 at step 2e2; depends on the band of the open builds): from about 1,400 pixels, the open builds in a panel on the left, with their full names, **+ Open files or JSON**, **Merge…** and **Home**, in place of the band of their tabs (the frames of `docs/wireframes/pathweaver.excalidraw`). Version 1 keeps the band at every width: a second layout to draw, code and test by hand at two widths.

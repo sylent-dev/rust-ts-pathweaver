@@ -2,9 +2,10 @@ import { defineConfig } from 'vitest/config';
 import adapter from '@sveltejs/adapter-static';
 import { sveltekit } from '@sveltejs/kit/vite';
 
-// The path the website is served from, given by the deployment workflow: empty at the root of a
-// domain (`https://pathweaver.sylent.tools/`), `/rust-ts-pathweaver` at the default address of GitHub
-// Pages. Never hard-coded, so that the domain can change without changing the code.
+// The path the website is served from: empty (unset) at the root of its domain,
+// `https://pathweaver.sylent.tools/`, where .github/workflows/deploy.yml builds it; set only to
+// serve it under a path of another host. Never hard-coded, so that the address can change
+// without changing the code.
 // SvelteKit refuses a value that doesn't start with `/` or ends with it.
 const base = (process.env.BASE_PATH ?? '') as '' | `/${string}`;
 

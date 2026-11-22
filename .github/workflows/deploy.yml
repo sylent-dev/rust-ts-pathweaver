@@ -1,0 +1,104 @@
+name: Deploy
+
+# Every merge into `main` publishes the website to Cloudflare, at https://pathweaver.sylent.tools
+# (see docs/cloudflare-usage.md). It builds again rather than wait for the workflow CI, which
+# checks the same commit at the same time: the pull request already passed CI, but its branch
+# doesn't have to be up to date with `main`, so the merged commit itself is built here.
+# A pull request that changes the deployment or the files built builds the website and tries
+# its upload without sending it (`wrangler deploy --dry-run`), so that a mistake of the
+# configuration of wrangler or of the build shows before the merge. The try doesn't read
+# `web/static/_headers`: a wrong rule shows only at the test by hand of the headers
+# (docs/tests/website-online.md).
+on:
+  push:
+    branches: [main]
+  pull_request:
+    paths:
+      - '.github/workflows/deploy.yml'
+      - '.github/actions/**'
+      - 'deploy/**'
+      - 'web/package.json'
+      - 'web/vite.config.ts'
+      - 'web/static/**'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+# One deployment at a time; one in progress finishes rather than leave the website half
+# published, and only the latest waiting one runs after it. A pull request has a group of its
+# own, so that it never waits for a deployment.
+concurrency:
+  group: ${{ github.event_name == 'pull_request' && format('deploy-{0}', github.ref) || 'deploy' }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+env:
+  CARGO_TERM_COLOR: always
+  # Wrangler sends no statistics of its use from the workflow.
+  WRANGLER_SEND_METRICS: false
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: ./.github/actions/setup-web
+      # At the root of its domain: no base path.
+      - name: Build the website
+        working-directory: web
+        run: npm run build
+      - uses: actions/upload-artifact@v7
+        with:
+          name: website
+          path: web/build
+          # The files are read again by the job below only.
+          retention-days: 1
+          if-no-files-found: error
+      # A pull request tries the upload without sending it, nor any token.
+      - name: Install wrangler
+        if: github.event_name == 'pull_request'
+        working-directory: deploy
+        run: npm ci
+      - name: Try the upload
+        if: github.event_name == 'pull_request'
+        working-directory: deploy
+        run: npm run check
+
+  # The job that holds the token of Cloudflare: it runs no code of the website, only wrangler,
+  # on the files built above. Its secrets belong to the environment `production`, which only
+  # `main` may use (docs/cloudflare-usage.md, The token of the deployment); the condition below
+  # holds even before that rule exists, and for a run started by hand from another branch.
+  deploy:
+    name: Deploy
+    needs: build
+    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    environment:
+      name: production
+      url: https://pathweaver.sylent.tools
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          sparse-checkout: deploy
+          # The token of GitHub isn't kept in the folder, beside the one of Cloudflare.
+          persist-credentials: false
+      - uses: actions/setup-node@v7
+        with:
+          node-version-file: deploy/package.json
+          cache: npm
+          cache-dependency-path: deploy/package-lock.json
+      # No script of a package runs beside the token; wrangler uploads without them.
+      - name: Install wrangler
+        working-directory: deploy
+        run: npm ci --ignore-scripts
+      - uses: actions/download-artifact@v8
+        with:
+          name: website
+          path: web/build
+      - name: Upload the website
+        working-directory: deploy
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        run: npm run deploy
