@@ -26,18 +26,19 @@ From [Limits](https://developers.cloudflare.com/workers/platform/limits/) and [P
 
 ## Risks
 
-To be accepted by the owner:
+Accepted by the owner on 2026-11-22:
 
 - Cloudflare may suspend the website without notice: the files stay in the repository, and the website moves to another static host (GitHub Pages, as Stepwise) by changing the workflow and the DNS record.
 - The clause on large files has no threshold: if Cloudflare judges the images of the game too large a share, it may limit the website on the free plan; the way out is the paid plan of Workers (5 dollars a month) or fewer images.
-- The token of the deployment (the secret `CLOUDFLARE_API_TOKEN` of the environment `production`) can change the Workers of the account: it is limited to what `wrangler deploy` needs (below), and only the job of deployment on `main` reads it, never a pull request.
+- The token of the deployment (the secret `CLOUDFLARE_API_TOKEN` of the environment `production`) can change the Workers of the account: it is limited to what `wrangler deploy` needs (below), and only the job of deployment on `main` reads it, never a pull request. Its right on the routes covers every domain of the account, not `sylent.tools` alone: leaked, it could attach a Worker to the owner's other domains, without touching their DNS records or their contents.
 
 ## The token of the deployment
 
-Created by the owner in the dashboard (My Profile › API Tokens › Create Token › Custom token), limited to:
+Created by the owner on 2026-11-22 in the dashboard (My Profile › API Tokens › Create Token), named `pathweaver-deploy`, without expiration nor filter of IP addresses (the machines of GitHub Actions change of address at each run), limited to:
 
-- Account › Workers Scripts › Edit, on the owner's account;
-- Zone › Workers Routes › Edit, on the zone `sylent.tools`, for the custom domain.
+- Account › Workers Scripts › Edit, on the whole account (the scripts belong to the account, not to a domain);
+- Account › Account Settings › Read, left from the template, read only;
+- Zone › Workers Routes › Edit, on all the domains of the account, for the custom domain.
 
 If the first deployment refuses to create the DNS record of the custom domain, Zone › DNS › Edit on the same zone is added (Cloudflare's pages don't say whether the custom domain needs it). The token is saved as the secret `CLOUDFLARE_API_TOKEN`, and the id of the account as `CLOUDFLARE_ACCOUNT_ID`, in the environment `production` of the repository (Settings › Environments), which only the branch `main` may use: the job of the workflow that reads them runs wrangler alone, on the files the job before it built, and a pull request only tries the upload (`wrangler deploy --dry-run`), without them.
 
