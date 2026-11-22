@@ -16,7 +16,7 @@ import { convertAscendancies } from './ascendancies.ts';
 import { convertGems } from './gems.ts';
 import { checkMagick, portraitCuts, writePortraits } from './portraits.ts';
 import { tableJson } from './table-json.ts';
-import { checkRepoeVersion, Downloads, repoeFile, TREE_TAG, treeFile } from './sources.ts';
+import { checkRepoeVersion, Downloads, repoeFile, TREE_COMMIT, treeFile } from './sources.ts';
 
 const webDirectory = path.resolve(import.meta.dirname, '..', '..');
 const versionDirectory = path.join(webDirectory, 'src', 'lib', 'game-data', GAME_VERSION);
@@ -37,7 +37,7 @@ async function main(): Promise<void> {
 	checkMagick();
 
 	const sources: Sources = {
-		treeExport: TREE_TAG,
+		treeExport: TREE_COMMIT,
 		repoe: (await downloads.text(repoeFile('version.txt'))).trim()
 	};
 	checkRepoeVersion(sources.repoe, GAME_VERSION);

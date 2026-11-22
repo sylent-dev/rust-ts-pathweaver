@@ -9,7 +9,7 @@ Goal: the same procedure at each version of the game, so that nothing is forgott
 
 ## 1. The sources
 
-- **The tree export** of Grinding Gear Games: find its last tag at or before the new version (`gh api repos/grindinggear/poe2-skilltree-export/tags --jq '.[].name'`; a patch that doesn't change the tree has none), and set `TREE_TAG` in `web/scripts/game-data/sources.ts`.
+- **The tree export** of Grinding Gear Games: find the commit named after the new version (`gh api repos/grindinggear/poe2-skilltree-export/commits --jq '.[] | .sha + " " + .commit.message'`). Its tags stop at some versions (none for 0.5.4 and 0.5.5): read the commits, never the tags alone. A patch without a commit of its own keeps the tree of the last one before it. Set `TREE_COMMIT` in `web/scripts/game-data/sources.ts`, the whole hash.
 - **RePoE** serves the latest version of the game only: read <https://repoe-fork.github.io/poe2/version.txt> (`0.5.5.10`). A late update of its volunteers delays the data: wait, or say so to the owner.
 - **The version of the game** the page reads: `GAME_VERSION` in `web/src/lib/game-data/format.ts`, the first three numbers of RePoE's version (`0.5.5`), the name of the new folder and the version the warnings name. The script stops when RePoE is at another.
 - **Read the terms of each source again** (`docs/game-data.md`, Sources): a license added or changed, a source that stopped. Write the date of the check there.

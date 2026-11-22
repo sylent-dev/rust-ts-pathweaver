@@ -66,7 +66,7 @@ export type Ascendancies = Record<string, Ascendancy>;
 
 /** The versions of the sources a folder was converted from, in `<version>/sources.json`. */
 export interface Sources {
-	/** The tag of the tree export of Grinding Gear Games, such as `0.5.2`, the last before 0.5.5. */
+	/** The commit of the tree export of Grinding Gear Games, that of the version of the game. */
 	treeExport: string;
 	/** The version of the game RePoE was exported from, its `version.txt`. */
 	repoe: string;

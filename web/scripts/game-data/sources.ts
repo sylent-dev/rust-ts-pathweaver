@@ -6,10 +6,11 @@ import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 
 /**
- * The tag of the tree export of Grinding Gear Games: the last at or before the version of the
- * game, since the tree doesn't change at every patch (0.5.2 for 0.5.5).
+ * The commit of the tree export of Grinding Gear Games for the version of the game converted: they
+ * don't tag every version (0.5.4 and 0.5.5 are commits named after them, of 2026-09-04, after the
+ * tag 0.5.2), so the script reads the commit of the version, not the last tag.
  */
-export const TREE_TAG = '0.5.2';
+export const TREE_COMMIT = 'bd87e6512c92b868542eddfb1ba4ea8b6dc2da36';
 
 /** A file to download: its address, and its name in the cache. */
 export interface SourceFile {
@@ -17,7 +18,7 @@ export interface SourceFile {
 	name: string;
 }
 
-const TREE_URL = `https://raw.githubusercontent.com/grindinggear/poe2-skilltree-export/${TREE_TAG}`;
+const TREE_URL = `https://raw.githubusercontent.com/grindinggear/poe2-skilltree-export/${TREE_COMMIT}`;
 
 /**
  * RePoE serves the data of the latest version of the game only, at no fixed address: the version
@@ -27,7 +28,7 @@ const REPOE_URL = 'https://repoe-fork.github.io/poe2';
 
 /** A file of the tree export, such as `data.json` or `assets/background-witch.webp`. */
 export function treeFile(name: string): SourceFile {
-	return { url: `${TREE_URL}/${name}`, name: `tree-${TREE_TAG}-${name.replaceAll('/', '-')}` };
+	return { url: `${TREE_URL}/${name}`, name: `tree-${TREE_COMMIT}-${name.replaceAll('/', '-')}` };
 }
 
 /** A file of RePoE, such as `skill_gems.min.json`. */

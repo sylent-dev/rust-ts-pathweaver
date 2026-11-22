@@ -22,7 +22,7 @@ export interface ConvertedAscendancies {
 
 /**
  * The ascendancies of the tree export, by class. Frame 0 of a sprite is the class; frame `n` the
- * `n`-th ascendancy of its list, the slots without a name included (`Ranger2`, unused in 0.5.2),
+ * `n`-th ascendancy of its list, the slots without a name included (`Ranger2`, unused in 0.5.5),
  * which are left out: `Witch3b`, the fourth of the Witch, is `classWitch:Class4`.
  */
 export function convertAscendancies(tree: unknown): ConvertedAscendancies {
