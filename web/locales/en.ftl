@@ -10,22 +10,17 @@ drop-build = Drop a .build file here, or choose one.
 build-name = Name
 build-author = Author
 build-ascendancy = Ascendancy
-build-contents = Contents
+build-link = Link
 build-unknown = Not given
-# $passives (Number), $skills (Number), $slots (Number): the entries of each kind in the file.
-build-counts =
-    { $passives ->
-        [one] { $passives } passive
-       *[other] { $passives } passives
-    }, { $skills ->
-        [one] { $skills } skill
-       *[other] { $skills } skills
-    }, { $slots ->
-        [one] { $slots } inventory hint
-       *[other] { $slots } inventory hints
-    }
-# $reason (String): the sentence of the core, in English.
+# $reason (String): one of the refused- messages below.
 build-unreadable = This file can't be read: { $reason }
+# $bytes (Number), $limit (Number): the size of the file and the largest the core reads.
+refused-too-large = it is { $bytes } bytes, larger than { $limit }.
+# $line (Number): from 1. $excerpt (String): the text of that line, cut around the error.
+refused-not-json = it isn't JSON, at line { $line }: { $excerpt }
+refused-not-a-build = it isn't a build, it has no name.
+# $field (String): the place of the value in the build, such as skills[2].support_skills[0].id.
+refused-wrong-value = the value of { $field } isn't of the right type.
 # $version (String): the version of the core, as the WebAssembly module gives it.
 core-version = Core { $version }, in Rust.
 core-load-failed = The core of Pathweaver could not load.

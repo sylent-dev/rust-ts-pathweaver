@@ -23,6 +23,7 @@
     )
 )]
 
+mod content_key;
 mod entries;
 mod level_interval;
 mod read_error;

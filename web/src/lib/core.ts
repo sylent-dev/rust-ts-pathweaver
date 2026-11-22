@@ -23,8 +23,12 @@ export async function loadCore(): Promise<Core> {
 }
 
 /**
- * The summary of the text of a `.build` file (see crates/wasm/src/summary.rs), to call once
- * `loadCore` has resolved. It throws an `Error` with the sentence of the core when the text isn't
- * a `.build` file.
+ * The build of the text of a file, or why it is refused (see crates/wasm/src/read.rs), to call
+ * once `loadCore` has resolved. A file that isn't a build is a result, never an exception.
  */
-export { summarizeBuild, type BuildSummary } from '#lib/wasm/pathweaver.js';
+export {
+	readBuildFile,
+	type BuildFile,
+	type OpenedBuild,
+	type RefusedFile
+} from '#lib/wasm/pathweaver.js';

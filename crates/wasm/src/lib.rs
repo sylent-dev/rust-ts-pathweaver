@@ -19,7 +19,7 @@
     )
 )]
 
-mod summary;
+mod read;
 
 use wasm_bindgen::prelude::wasm_bindgen;
 
