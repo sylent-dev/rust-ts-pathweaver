@@ -100,8 +100,11 @@ impl ReadError {
 /// is where no one can look: for a text that ends too soon, the line after its last line break,
 /// where the last line with a character other than a space is meant; for an error on the line
 /// break that ends its line (a string without its closing quote, a number or a `true` cut by
-/// it), the column 0 of the next line, where the end of that line is meant, as for a file of
-/// CRLF, whose `\r` stops `serde_json` before the line break.
+/// it), the column 0 of the next line, where the end of that line is meant. One rule then for
+/// every error past the last character other than a space of its line (the `\r` of a file of
+/// CRLF, the spaces of a string left open): it is placed right after that character. An
+/// escape `\u` cut by a line break, whose four characters `serde_json` reads at once, is still
+/// placed on the next line: a case too rare for a rule of its own.
 fn place_of<'text>(
     text: &'text str,
     error: &serde_json::Error,
@@ -128,7 +131,14 @@ fn place_of<'text>(
             let line = line.saturating_sub(1);
             at_its_end(line, line_of(line))
         }
-        (line, column) => (line, column, line_of(line)),
+        (line, column) => {
+            let text_of_line = line_of(line);
+            if column > text_of_line.trim_end().len() {
+                at_its_end(line, text_of_line)
+            } else {
+                (line, column, text_of_line)
+            }
+        }
     })
 }
 

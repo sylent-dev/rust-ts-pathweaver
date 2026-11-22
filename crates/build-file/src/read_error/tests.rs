@@ -117,27 +117,20 @@ fn an_error_on_a_line_break_gives_the_line_it_ends() {
         ("{\n\"name\": tru\n}", 2, "\"name\": tru"),
         ("{\n\"name\": 1e\n}", 2, "\"name\": 1e"),
         ("{\"name\": \"abc\n\"}", 1, "{\"name\": \"abc"),
+        ("{\n\"name\": \"abc   \n\"}", 2, "\"name\": \"abc"),
     ] {
-        let excerpt = last.to_owned();
-        assert_eq!(
-            error_of(text),
-            ReadError::NotJson {
-                line,
-                column: last.len() + 1,
-                excerpt: excerpt.clone(),
-            },
-            "{text:?}"
-        );
-        // The same file in CRLF, whose `\r` stops `serde_json` on the line of the error.
-        let ReadError::NotJson {
-            line: crlf_line,
-            excerpt: crlf_excerpt,
-            ..
-        } = error_of(&text.replace('\n', "\r\n"))
-        else {
-            panic!("the text isn't JSON");
+        let expected = ReadError::NotJson {
+            line,
+            column: last.len() + 1,
+            excerpt: last.to_owned(),
         };
-        assert_eq!((crlf_line, crlf_excerpt), (line, excerpt), "{text:?}");
+        assert_eq!(error_of(text), expected, "{text:?}");
+        // The same file in CRLF, whose `\r` stops `serde_json` on the line of the error.
+        assert_eq!(
+            error_of(&text.replace('\n', "\r\n")),
+            expected,
+            "{text:?} in CRLF"
+        );
     }
 }
 
