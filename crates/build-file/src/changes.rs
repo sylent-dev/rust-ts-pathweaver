@@ -80,13 +80,19 @@ pub struct LevelChanges<'a> {
 impl Build {
     /// What changes at each level of the build where something does, from the lowest to the
     /// highest. None at the lowest level it covers, which nothing comes before to compare
-    /// with.
+    /// with. Only the levels where an entry starts or has just stopped are read: reading all
+    /// hundred took 3.8 s for a snapshot of 1 MB (`changes/large_files.rs`).
     #[must_use]
     pub fn changes_by_level(&self) -> Vec<LevelChanges<'_>> {
         let levels = self.levels();
+        let turning_levels = self.turning_levels();
         let mut before = self.at_level(levels.first());
         let mut by_level = Vec::new();
         for level in (levels.first()..=levels.last()).skip(1) {
+            // The build holds what it held at the level before, which `before` still is.
+            if !turning_levels.contains(&level) {
+                continue;
+            }
             let held = self.at_level(level);
             let changes = held.changes_since(&before);
             if !changes.is_empty() {
@@ -124,24 +130,29 @@ impl<'a> BuildAtLevel<'a> {
     /// The skills that come, with their supports, and go; then the supports that come onto a
     /// skill already there, and leave one that stays.
     fn gem_changes_since(&self, before: &Self) -> Vec<Change<'a>> {
-        let holds_skill = |held: &Self, id| held.skills.iter().any(|skill| skill.what == id);
+        let skills_of = |held: &Self| -> BTreeSet<&'a str> {
+            held.skills.iter().map(|skill| skill.what).collect()
+        };
+        let (skills, skills_before) = (skills_of(self), skills_of(before));
+        let mut supports_of: BTreeMap<&str, Vec<Held<'a, &'a str>>> = BTreeMap::new();
+        for support in &self.supports {
+            let of_skill = supports_of.entry(support.what.skill).or_default();
+            of_skill.push(support.named(support.what.id));
+        }
         let skills_added = things_missing(&self.skills, &before.skills).map(|skill| {
-            let supports = self.supports.iter();
-            let supports = supports.filter(|support| support.what.skill == skill.what);
+            let supports = supports_of.get(skill.what).cloned().unwrap_or_default();
             Change::SkillAdded {
                 skill: skill.clone(),
-                supports: supports
-                    .map(|support| support.named(support.what.id))
-                    .collect(),
+                supports,
             }
         });
         let skills_removed = things_missing(&before.skills, &self.skills)
             .map(|skill| Change::SkillRemoved { id: skill.what });
         let supports_added = things_missing(&self.supports, &before.supports)
-            .filter(|support| holds_skill(before, support.what.skill))
+            .filter(|support| skills_before.contains(support.what.skill))
             .map(|support| Change::SupportAdded(support.clone()));
         let supports_removed = things_missing(&before.supports, &self.supports)
-            .filter(|support| holds_skill(self, support.what.skill))
+            .filter(|support| skills.contains(support.what.skill))
             .map(|support| Change::SupportRemoved(support.what));
         skills_added
             .chain(skills_removed)
@@ -189,11 +200,12 @@ impl<'a> BuildAtLevel<'a> {
     fn hint_changes_since(&self, before: &Self) -> Vec<Change<'a>> {
         let coming: Vec<_> = things_missing(&self.hints, &before.hints).collect();
         let going: Vec<_> = things_missing(&before.hints, &self.hints).collect();
+        let (only_coming, only_going) = (only_on_their_slot(&coming), only_on_their_slot(&going));
         // The item a hint that comes replaces: the one that goes from its slot, when one hint
         // comes and one goes there.
         let replaced_on = |slot| {
-            let replaced = only_on_slot(&going, slot)?;
-            only_on_slot(&coming, slot).map(|_| replaced.what.item)
+            let replaced = only_going.get(slot)?;
+            only_coming.get(slot).map(|_| replaced.item)
         };
         let added = coming
             .iter()
@@ -260,19 +272,26 @@ fn things_retold<'h, 'a, T: Ord>(
     })
 }
 
-/// The hint of a list on a slot, when it is the only one there.
-fn only_on_slot<'h, 'a>(
-    hints: &[&'h Held<'a, HintOnSlot<'a>>],
-    slot: &str,
-) -> Option<&'h Held<'a, HintOnSlot<'a>>> {
-    let mut on_slot = hints.iter().filter(|hint| hint.what.slot == slot);
-    match (on_slot.next(), on_slot.next()) {
-        (Some(only), None) => Some(only),
-        _ => None,
+/// The hints of a list that are the only one on their slot, by their slot.
+fn only_on_their_slot<'a>(
+    hints: &[&Held<'a, HintOnSlot<'a>>],
+) -> BTreeMap<&'a str, HintOnSlot<'a>> {
+    let mut on_slot: BTreeMap<&str, Vec<HintOnSlot<'a>>> = BTreeMap::new();
+    for hint in hints {
+        on_slot.entry(hint.what.slot).or_default().push(hint.what);
     }
+    let only = on_slot
+        .into_iter()
+        .filter_map(|(slot, hints)| match hints.as_slice() {
+            &[only] => Some((slot, only)),
+            _ => None,
+        });
+    only.collect()
 }
 
 #[cfg(test)]
 mod corpus;
+#[cfg(test)]
+mod large_files;
 #[cfg(test)]
 mod tests;

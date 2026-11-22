@@ -1,5 +1,7 @@
 //! The levels of the character an entry applies at (`specs.md`, The level).
 
+use std::collections::BTreeSet;
+
 use crate::entries::Identified;
 use crate::{Build, Entry, InventorySlot, LevelInterval, Skill, Support};
 
@@ -181,6 +183,24 @@ impl Build {
             .chain(hints)
             .reduce(Levels::stretched_to);
         covered.unwrap_or(Levels::ALL)
+    }
+
+    /// The levels where what the build holds may differ from the level before: those where an
+    /// entry starts to apply, and those just after one stops. At any other level, every entry
+    /// applies as it did at the level before.
+    pub(crate) fn turning_levels(&self) -> BTreeSet<u32> {
+        let passives = self.passives.get().into_iter().flatten();
+        let passives = passives.filter_map(Entry::levels);
+        let gems = self.skills.get().into_iter().flatten().flat_map(|skill| {
+            let supports = skill.supports().iter().filter_map(Entry::levels);
+            skill.levels().into_iter().chain(supports)
+        });
+        let hints = self.inventory_slots.get().into_iter().flatten();
+        let hints = hints.filter_map(InventorySlot::levels);
+        let levels_of_entries = passives.chain(gems).chain(hints);
+        levels_of_entries
+            .flat_map(|levels| [levels.first, levels.last.saturating_add(1)])
+            .collect()
     }
 
     /// The entries whose `level_interval` is invalid, in the order of the file: the passives,

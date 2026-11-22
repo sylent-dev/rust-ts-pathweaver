@@ -527,3 +527,54 @@ fn a_change_at_the_highest_level_of_a_build_is_a_marker() {
 
     assert_eq!(build.markers(), [100]);
 }
+
+#[test]
+fn the_changes_of_a_build_are_those_of_every_level_compared_with_the_one_before() {
+    let builds = [
+        Build::read(include_str!("../../tests/builds/every-field.build")).unwrap(),
+        build(json!({
+            "passives": [
+                "strength89",
+                { "id": "melee17", "level_interval": [10, 64], "weapon_set": 1 },
+                { "id": "melee18", "level_interval": 41 },
+                { "id": "melee19", "level_interval": [100, 100] }
+            ],
+            "skills": [
+                { "id": "Spark", "level_interval": [2, 22], "support_skills": [
+                    { "id": "FromTheStart", "level_interval": [1, 100] },
+                    { "id": "Early", "level_interval": [1, 9] },
+                    { "id": "Late", "level_interval": [15, 30] }
+                ] },
+                { "id": "Comet", "support_skills": [{ "id": "Pierce", "level_interval": [50, 99] }] },
+                { "id": "Never", "level_interval": [30, 20] }
+            ],
+            "inventory_slots": [
+                { "inventory_id": "Weapon1", "level_interval": [1, 1], "additional_text": "Any wand" },
+                { "inventory_id": "Weapon1", "level_interval": [2, 100], "additional_text": "A better wand" },
+                { "inventory_id": "Ring1", "level_interval": [0, 98], "unique_name": "Dream Fragments" }
+            ]
+        })),
+    ];
+
+    for build in &builds {
+        let levels = build.levels();
+        let every_level = (levels.first() + 1..=levels.last()).filter_map(|level| {
+            let changes = changes_at(build, level);
+            (!changes.is_empty()).then_some(LevelChanges { level, changes })
+        });
+        let every_level: Vec<LevelChanges> = every_level.collect();
+        assert_eq!(build.changes_by_level(), every_level);
+        assert!(every_level.len() > 2);
+    }
+}
+
+#[test]
+fn the_level_after_an_entry_stops_is_a_marker_when_nothing_starts_there() {
+    let build = build(json!({
+        "passives": [{ "id": "melee17", "level_interval": [1, 100] }],
+        "skills": [{ "id": "Spark", "level_interval": [1, 22] }, "Comet"],
+        "inventory_slots": [{ "inventory_id": "Weapon1", "level_interval": [1, 98] }]
+    }));
+
+    assert_eq!(build.markers(), [23, 99]);
+}

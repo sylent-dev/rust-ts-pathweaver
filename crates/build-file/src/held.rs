@@ -1,6 +1,8 @@
 //! What a build holds at a level of the character, as its file says (`specs.md`, The level):
 //! each thing once, whatever the number of entries that set it there.
 
+use std::collections::BTreeMap;
+
 use crate::{Build, Entry, InventorySlot, Levels, Passive};
 
 /// A thing a build holds at a level (a gem, a passive, the item of a hint), once, with the
@@ -149,13 +151,17 @@ fn note(text: Option<&str>) -> Option<&str> {
     text.map(str::trim).filter(|text| !text.is_empty())
 }
 
-/// Each thing once, in the order it first comes in, with the notes of all its entries.
-fn held_once<'a, T: PartialEq>(
+/// Each thing once, in the order it first comes in, with the notes of all its entries. The place
+/// of each thing is kept in a sorted table: searching the list for every entry took 6 seconds
+/// for a file of 10,000 passives (`changes/corpus.rs`).
+fn held_once<'a, T: Ord + Copy>(
     entries: impl Iterator<Item = (T, Option<&'a str>)>,
 ) -> Vec<Held<'a, T>> {
     let mut things: Vec<Held<'a, T>> = Vec::new();
+    let mut places: BTreeMap<T, usize> = BTreeMap::new();
     for (what, note) in entries {
-        match things.iter_mut().find(|held| held.what == what) {
+        let place = *places.entry(what).or_insert(things.len());
+        match things.get_mut(place) {
             Some(held) => held.notes.extend(note),
             None => things.push(Held {
                 what,

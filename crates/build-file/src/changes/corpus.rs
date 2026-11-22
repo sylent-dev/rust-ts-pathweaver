@@ -160,7 +160,7 @@ fn the_levels_and_the_changes_of_each_build_of_the_corpus() {
         .iter()
         .map(|(name, build)| (name.as_str(), numbers(build)))
         .collect();
-    // 86 ms in release and 823 ms in debug on 2026-11-22: under 3 ms a build opened.
+    // 15 ms in release and 112 ms in debug on 2026-11-22: half a millisecond a build opened.
     println!(
         "the levels of {} builds read in {:?}",
         corpus.len(),
