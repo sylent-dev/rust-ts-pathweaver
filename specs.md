@@ -56,9 +56,9 @@ Pathweaver (the build viewer and planner of Path of Exile 2: the subtitle that g
 - **◀ and ▶** on both sides of the level go to the previous and the next marker, each with the level it goes to written under it; the keys ← and → do the same anywhere on the page of a build, without aiming at the slider first, but in a field, where they move the caret (the owner, 2026-11-19).
 - An entry (a passive, a skill, a support, an inventory slot) applies at a level when:
   - it has no `level_interval`: at every level;
-  - its `level_interval` is `[min, max]`: from `min` to `max`, both included (`0` counts as `1`);
+  - its `level_interval` is `[min, max]`: from `min` to `max`, both included (`0` counts as `1`, and a `max` above 100 stops at 100);
   - its `level_interval` is a single number `n` (allowed by the documentation, without its meaning): from `n` to 100. To check in the game.
-  - an interval whose `min` is above its `max` applies at no level, and is listed among the [warnings](#unknown-and-invalid-entries).
+  - an invalid interval applies at no level, and is listed among the [warnings](#unknown-and-invalid-entries): a `min` above its `max` or above 100, a list that isn't two numbers (`[]`, `[5]`, `[1, 50, 100]`; 4c, the owner, 2026-11-22: none in the corpus, whose intervals are lists of two numbers but three single ones).
 - A build opens at the highest level it covers (100 for most).
 - A build that is the same at every level (a snapshot of a character, from poe.ninja or Path of Building) has no marker; the slider says so: « A snapshot: the same at every level » over its track from 1 to 100, ◀ and ▶ alone and greyed, without « N changes » (2g2). Its page says nothing else of it (2k5, the owner, 2026-11-21: one knows what one opens, and the track says it already): no « New at N » in the right column, whose skills start at its top (« A snapshot: nothing changes » in its place set aside), no ring on the tree, nor « new at N » in its legend.
 - **What changes here**: at a marker, each part (skills, tree, inventory) marks what starts at this level as new, and lists what stopped just before it as removed (for instance « − 34 passives » at a respec).

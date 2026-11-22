@@ -25,7 +25,10 @@
 
 mod content_key;
 mod entries;
+#[cfg(test)]
+mod fixtures;
 mod level_interval;
+mod levels;
 mod nullable;
 mod read_error;
 
@@ -34,6 +37,7 @@ use serde_json::{Map, Value};
 
 pub use entries::{Entry, InventorySlot, Passive, Skill, Support};
 pub use level_interval::LevelInterval;
+pub use levels::{EntryName, HIGHEST_LEVEL, InvalidInterval, LOWEST_LEVEL, Levels};
 pub use nullable::Nullable;
 pub use read_error::{MAX_BYTES, ReadError};
 
