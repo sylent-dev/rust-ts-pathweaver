@@ -15,6 +15,7 @@ Path of Exile 2 1.0 (2026-12-11) may change the format and will rename ids: meas
 
 - Almost every entry is an object: 3,552 passives against 53 written as an id alone, 964 supports against 13.
 - `level_interval` is `[min, max]` almost always (2,535 entries), a single number 3 times (in a test file); it goes from 0 to 100.
+- The same thing set twice at one level (measured on 2026-11-22 at step 4c): a passive listed again in the same weapon set while it applies, 226 times in 15 files of Mobalytics, 25 of them with another note; a skill in two entries at once, in one conversion from Path of Building; two hints of a slot whose texts start with the same line, in one file. No support misses every level of its skill, though 356 reach levels beyond it, 297 of them by an interval of their own, the others by having none.
 - `weapon_set` is on 771 passives: 390 with 1, 380 with 2, 1 with 0.
 - 1,127 entries have an `additional_text`, often with markup (`<b>{<m>{Allocation Step #1}}`).
 
