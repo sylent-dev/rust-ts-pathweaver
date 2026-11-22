@@ -140,22 +140,23 @@ impl<'a> InvalidInterval<'a> {
 
 impl Build {
     /// The levels the build covers, those its slider moves among: from the lowest to the
-    /// highest level its entries write and apply at, 65 to 100 for a guide of the maps. An
-    /// entry without a `level_interval` covers none of its own, and a build without any, a
-    /// snapshot of a character, covers every level.
+    /// highest level its entries apply at. An entry without a `level_interval` applies at every
+    /// level, so covers 1 to 100: a guide of the maps covers 65 to 100 only when each of its
+    /// entries writes its levels. A support covers the levels it shares with its skill, an
+    /// entry with an invalid interval none, and a build without a valid entry every level.
     #[must_use]
     pub fn covered_levels(&self) -> LevelRange {
-        let written = |interval: Option<&LevelInterval>| interval.and_then(LevelInterval::range);
         let passives = self.passives.get().into_iter().flatten();
-        let passives = passives.filter_map(|passive| written(passive.level_interval()));
+        let passives = passives.filter_map(Entry::levels);
         let gems = self.skills.get().into_iter().flatten().flat_map(|skill| {
-            let supports = skill.supports().iter().filter_map(move |support| {
-                written(support.level_interval())?.shared_with(skill.levels()?)
-            });
-            written(skill.level_interval()).into_iter().chain(supports)
+            let supports = skill
+                .supports()
+                .iter()
+                .filter_map(move |support| support.levels()?.shared_with(skill.levels()?));
+            skill.levels().into_iter().chain(supports)
         });
         let hints = self.inventory_slots.get().into_iter().flatten();
-        let hints = hints.filter_map(|hint| written(hint.level_interval.get()));
+        let hints = hints.filter_map(InventorySlot::levels);
         let covered = passives
             .chain(gems)
             .chain(hints)

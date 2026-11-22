@@ -228,17 +228,45 @@ fn a_build_covers_from_the_lowest_to_the_highest_level_its_entries_write() {
 }
 
 #[test]
-fn an_entry_without_an_interval_or_with_an_invalid_one_covers_no_level_of_its_own() {
+fn an_entry_without_an_interval_covers_every_level() {
+    let every_level = (LOWEST_LEVEL, HIGHEST_LEVEL);
+    let guide_of_the_maps = |entry: serde_json::Value| {
+        levels_of_build(json!({
+            "passives": [{ "id": "melee17", "level_interval": [65, 100] }, entry]
+        }))
+    };
+
+    assert_eq!(guide_of_the_maps(json!("strength89")), every_level);
+    assert_eq!(
+        guide_of_the_maps(json!({ "id": "melee19", "level_interval": null })),
+        every_level
+    );
+    assert_eq!(
+        levels_of_build(json!({
+            "passives": [{ "id": "melee17", "level_interval": [65, 100] }],
+            "skills": [{ "id": "Spark" }]
+        })),
+        every_level
+    );
+    assert_eq!(
+        levels_of_build(json!({
+            "passives": [{ "id": "melee17", "level_interval": [65, 100] }],
+            "inventory_slots": [{ "inventory_id": "Weapon1" }]
+        })),
+        every_level
+    );
+}
+
+#[test]
+fn an_entry_with_an_invalid_interval_covers_no_level() {
     assert_eq!(
         levels_of_build(json!({
             "passives": [
-                "strength89",
                 { "id": "melee17", "level_interval": [65, 100] },
-                { "id": "melee18", "level_interval": [30, 2] },
-                { "id": "melee19", "level_interval": null }
+                { "id": "melee18", "level_interval": [30, 2] }
             ],
-            "skills": [{ "id": "Spark" }],
-            "inventory_slots": [{ "inventory_id": "Weapon1" }]
+            "skills": [{ "id": "Spark", "level_interval": [] }],
+            "inventory_slots": [{ "inventory_id": "Weapon1", "level_interval": 101 }]
         })),
         (65, 100)
     );
@@ -262,16 +290,14 @@ fn a_support_covers_only_the_levels_it_shares_with_its_skill() {
     );
     assert_eq!(
         levels_of_build(json!({
-            "skills": [{ "id": "Spark", "support_skills": [
-                { "id": "Pierce", "level_interval": [23, 40] }
-            ] }]
+            "skills": [{ "id": "Spark", "level_interval": [30, 40], "support_skills": ["Pierce"] }]
         })),
-        (23, 40)
+        (30, 40)
     );
 }
 
 #[test]
-fn a_build_whose_entries_write_no_level_covers_every_level() {
+fn a_build_without_a_valid_entry_covers_every_level() {
     let every_level = (LOWEST_LEVEL, HIGHEST_LEVEL);
 
     assert_eq!(levels_of_build(json!({})), every_level);

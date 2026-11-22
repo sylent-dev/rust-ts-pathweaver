@@ -516,7 +516,7 @@ fn a_level_where_the_build_only_takes_passives_is_no_marker() {
 #[test]
 fn nothing_changes_at_the_lowest_level_a_build_covers() {
     let build = build(json!({
-        "passives": ["strength89"],
+        "passives": [{ "id": "strength89", "level_interval": [65, 100] }],
         "skills": [
             { "id": "Spark", "level_interval": [65, 89] },
             { "id": "Comet", "level_interval": [90, 100] }
