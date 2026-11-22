@@ -50,8 +50,7 @@ pub enum Change<'a> {
 impl Change<'_> {
     /// Whether the change makes a marker of its level: every change but the passives taken,
     /// which a file can add at every level.
-    #[must_use]
-    pub fn makes_marker(&self) -> bool {
+    fn makes_marker(&self) -> bool {
         match self {
             Self::PassivesTaken { .. } => false,
             Self::SkillAdded { .. }
@@ -84,7 +83,7 @@ impl Build {
     /// hundred took 3.8 s for a snapshot of 1 MB (`changes/large_files.rs`).
     #[must_use]
     pub fn changes_by_level(&self) -> Vec<LevelChanges<'_>> {
-        let levels = self.levels();
+        let levels = self.covered_levels();
         let turning_levels = self.turning_levels();
         let mut before = self.at_level(levels.first());
         let mut by_level = Vec::new();
@@ -104,7 +103,7 @@ impl Build {
     }
 
     /// The markers of the build: the levels where it changes, from the lowest to the highest,
-    /// but those where it only takes passives ([`Change::makes_marker`]).
+    /// but those where it only takes passives, which a file can add at every level.
     #[must_use]
     pub fn markers(&self) -> Vec<u32> {
         let by_level = self.changes_by_level().into_iter();
@@ -118,8 +117,7 @@ impl<'a> BuildAtLevel<'a> {
     /// skills, the supports, the passives, the hints of the inventory, the notes; each in the
     /// order of the file. A thing held at both levels changes nothing, whatever the entries
     /// that set it, unless its notes differ.
-    #[must_use]
-    pub fn changes_since(&self, before: &Self) -> Vec<Change<'a>> {
+    fn changes_since(&self, before: &Self) -> Vec<Change<'a>> {
         let mut changes = self.gem_changes_since(before);
         changes.extend(self.passive_changes_since(before));
         changes.extend(self.hint_changes_since(before));
@@ -139,19 +137,19 @@ impl<'a> BuildAtLevel<'a> {
             let of_skill = supports_of.entry(support.what.skill).or_default();
             of_skill.push(support.named(support.what.id));
         }
-        let skills_added = things_missing(&self.skills, &before.skills).map(|skill| {
+        let skills_added = things_absent_from(&self.skills, &before.skills).map(|skill| {
             let supports = supports_of.get(skill.what).cloned().unwrap_or_default();
             Change::SkillAdded {
                 skill: skill.clone(),
                 supports,
             }
         });
-        let skills_removed = things_missing(&before.skills, &self.skills)
+        let skills_removed = things_absent_from(&before.skills, &self.skills)
             .map(|skill| Change::SkillRemoved { id: skill.what });
-        let supports_added = things_missing(&self.supports, &before.supports)
+        let supports_added = things_absent_from(&self.supports, &before.supports)
             .filter(|support| skills_before.contains(support.what.skill))
             .map(|support| Change::SupportAdded(support.clone()));
-        let supports_removed = things_missing(&before.supports, &self.supports)
+        let supports_removed = things_absent_from(&before.supports, &self.supports)
             .filter(|support| skills.contains(support.what.skill))
             .map(|support| Change::SupportRemoved(support.what));
         skills_added
@@ -165,7 +163,7 @@ impl<'a> BuildAtLevel<'a> {
     /// back, in one change.
     fn passive_changes_since(&self, before: &Self) -> Vec<Change<'a>> {
         let (mut shared, mut first, mut second) = (Vec::new(), Vec::new(), Vec::new());
-        for passive in things_missing(&self.passives, &before.passives) {
+        for passive in things_absent_from(&self.passives, &before.passives) {
             let taken_in_set = match passive.what.weapon_set {
                 WeaponSet::Shared => &mut shared,
                 WeaponSet::First => &mut first,
@@ -187,9 +185,10 @@ impl<'a> BuildAtLevel<'a> {
                 passives,
             })
             .collect();
-        let given_back: Vec<PassiveInSet<'a>> = things_missing(&before.passives, &self.passives)
-            .map(|passive| passive.what)
-            .collect();
+        let given_back: Vec<PassiveInSet<'a>> =
+            things_absent_from(&before.passives, &self.passives)
+                .map(|passive| passive.what)
+                .collect();
         if !given_back.is_empty() {
             changes.push(Change::PassivesGivenBack(given_back));
         }
@@ -198,8 +197,8 @@ impl<'a> BuildAtLevel<'a> {
 
     /// The hints that come, those that replace another, those that go.
     fn hint_changes_since(&self, before: &Self) -> Vec<Change<'a>> {
-        let coming: Vec<_> = things_missing(&self.hints, &before.hints).collect();
-        let going: Vec<_> = things_missing(&before.hints, &self.hints).collect();
+        let coming: Vec<_> = things_absent_from(&self.hints, &before.hints).collect();
+        let going: Vec<_> = things_absent_from(&before.hints, &self.hints).collect();
         let (only_coming, only_going) = (only_on_their_slot(&coming), only_on_their_slot(&going));
         // The item a hint that comes replaces: the one that goes from its slot, when one hint
         // comes and one goes there.
@@ -226,9 +225,9 @@ impl<'a> BuildAtLevel<'a> {
 
     /// The skills, the supports and the hints held at both levels whose notes differ.
     fn note_changes_since(&self, before: &Self) -> Vec<Change<'a>> {
-        let skills = things_retold(&self.skills, &before.skills);
-        let supports = things_retold(&self.supports, &before.supports);
-        let hints = things_retold(&self.hints, &before.hints);
+        let skills = things_with_other_notes(&self.skills, &before.skills);
+        let supports = things_with_other_notes(&self.supports, &before.supports);
+        let hints = things_with_other_notes(&self.hints, &before.hints);
         skills
             .map(|skill| Change::SkillNoteChanged(skill.clone()))
             .chain(supports.map(|support| Change::SupportNoteChanged(support.clone())))
@@ -249,7 +248,7 @@ impl<'a, T> Held<'a, T> {
 }
 
 /// The things of `held` that `others` doesn't hold, in their order.
-fn things_missing<'h, 'a, T: Ord>(
+fn things_absent_from<'h, 'a, T: Ord>(
     held: &'h [Held<'a, T>],
     others: &'h [Held<'a, T>],
 ) -> impl Iterator<Item = &'h Held<'a, T>> {
@@ -258,7 +257,7 @@ fn things_missing<'h, 'a, T: Ord>(
 }
 
 /// The things of `held` that `before` held too, with other notes.
-fn things_retold<'h, 'a, T: Ord>(
+fn things_with_other_notes<'h, 'a, T: Ord>(
     held: &'h [Held<'a, T>],
     before: &'h [Held<'a, T>],
 ) -> impl Iterator<Item = &'h Held<'a, T>> {

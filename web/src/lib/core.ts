@@ -29,7 +29,6 @@ export async function loadCore(): Promise<Core> {
 export {
 	readBuildFile,
 	type BuildFile,
-	type BuildLevels,
 	type OpenedBuild,
 	type RefusedFile
 } from '#lib/wasm/pathweaver.js';

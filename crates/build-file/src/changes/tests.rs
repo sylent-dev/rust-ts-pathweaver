@@ -297,6 +297,28 @@ fn a_hint_replaces_another_when_one_comes_and_one_goes_on_its_slot() {
 }
 
 #[test]
+fn a_hint_replaces_another_beside_one_that_stays_on_their_slot() {
+    let build = build(json!({
+        "inventory_slots": [
+            { "inventory_id": "Charm1", "additional_text": "Stone Charm" },
+            { "inventory_id": "Charm1", "level_interval": [1, 9], "additional_text": "Thawing Charm" },
+            { "inventory_id": "Charm1", "level_interval": [10, 100], "additional_text": "Golden Charm" }
+        ]
+    }));
+
+    assert_eq!(
+        changes_at(&build, 10),
+        [Change::HintReplaced {
+            hint: noted(
+                hint("Charm1", HintItem::Named("Golden Charm")),
+                &["Golden Charm"]
+            ),
+            before: HintItem::Named("Thawing Charm"),
+        }]
+    );
+}
+
+#[test]
 fn where_several_hints_come_or_go_on_a_slot_none_replaces_another() {
     let build = build(json!({
         "inventory_slots": [
@@ -557,7 +579,7 @@ fn the_changes_of_a_build_are_those_of_every_level_compared_with_the_one_before(
     ];
 
     for build in &builds {
-        let levels = build.levels();
+        let levels = build.covered_levels();
         let every_level = (levels.first() + 1..=levels.last()).filter_map(|level| {
             let changes = changes_at(build, level);
             (!changes.is_empty()).then_some(LevelChanges { level, changes })

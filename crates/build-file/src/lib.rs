@@ -41,7 +41,7 @@ pub use changes::{Change, LevelChanges};
 pub use entries::{Entry, InventorySlot, Passive, Skill, Support};
 pub use held::{BuildAtLevel, Held, HintItem, HintOnSlot, PassiveInSet, SupportOnSkill, WeaponSet};
 pub use level_interval::LevelInterval;
-pub use levels::{EntryName, HIGHEST_LEVEL, InvalidInterval, LOWEST_LEVEL, Levels};
+pub use levels::{EntryName, HIGHEST_LEVEL, InvalidInterval, LOWEST_LEVEL, LevelRange};
 pub use nullable::Nullable;
 pub use read_error::{MAX_BYTES, ReadError};
 

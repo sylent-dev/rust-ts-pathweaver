@@ -88,6 +88,17 @@ impl<T: Identified> Entry<T> {
     }
 }
 
+impl Entry<Skill> {
+    /// The supports of the skill, none for a skill written as its id alone.
+    #[must_use]
+    pub fn supports(&self) -> &[Entry<Support>] {
+        match self {
+            Self::Id(_) => &[],
+            Self::Detailed(skill) => skill.support_skills.get().map_or(&[], Vec::as_slice),
+        }
+    }
+}
+
 /// A passive of the passive skill tree.
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Passive {

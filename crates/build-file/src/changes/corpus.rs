@@ -7,7 +7,7 @@ use std::collections::BTreeMap;
 use std::path::Path;
 use std::time::Instant;
 
-use crate::{Build, Change};
+use crate::{Build, Change, Entry, LevelRange, Passive, WeaponSet};
 
 /// The builds of the corpus, by the name of their file.
 fn corpus() -> BTreeMap<String, Build> {
@@ -33,7 +33,7 @@ fn corpus() -> BTreeMap<String, Build> {
 type Numbers = (u32, u32, usize, usize, usize);
 
 fn numbers(build: &Build) -> Numbers {
-    let levels = build.levels();
+    let levels = build.covered_levels();
     let by_level = build.changes_by_level();
     let changes = by_level.iter().map(|level| level.changes.len()).sum();
     (
@@ -189,5 +189,100 @@ fn a_build_that_lists_its_supports_again_at_71_changes_only_by_those_that_come()
             .changes
             .iter()
             .all(|change| matches!(change, Change::SupportAdded(_)))
+    );
+}
+
+/// The pairs of entries of a list that set the same thing at a level they share, each with
+/// whether their notes are the same.
+fn set_twice<T, K: PartialEq>(
+    entries: &[T],
+    key_of: impl Fn(&T) -> (K, Option<LevelRange>, Option<&str>),
+) -> Vec<bool> {
+    let mut pairs = Vec::new();
+    for (index, entry) in entries.iter().enumerate() {
+        let (key, levels, note) = key_of(entry);
+        for earlier in &entries[..index] {
+            let (earlier_key, earlier_levels, earlier_note) = key_of(earlier);
+            let shared = levels.zip(earlier_levels).is_some_and(|(levels, earlier)| {
+                levels.first().max(earlier.first()) <= levels.last().min(earlier.last())
+            });
+            if key == earlier_key && shared {
+                pairs.push(note.map(str::trim) == earlier_note.map(str::trim));
+            }
+        }
+    }
+    pairs
+}
+
+/// A passive in its weapon set, the levels it is set for and its note.
+fn passive(passive: &Entry<Passive>) -> ((String, WeaponSet), Option<LevelRange>, Option<&str>) {
+    let in_set = (passive.id().to_owned(), passive.weapon_set());
+    (in_set, passive.levels(), passive.additional_text())
+}
+
+/// The numbers of `docs/build-files-in-the-wild.md` (Entries) and of `specs.md` (The level),
+/// measured on 2026-11-22.
+#[test]
+#[ignore = "reads the corpus of inputs/builds, kept out of Git"]
+fn the_things_set_twice_at_one_level_in_the_corpus() {
+    let corpus = corpus();
+    let passives_twice: Vec<Vec<bool>> = corpus
+        .values()
+        .map(|build| {
+            set_twice(
+                build.passives.get().map(Vec::as_slice).unwrap_or_default(),
+                passive,
+            )
+        })
+        .collect();
+    let pairs = passives_twice.iter().flatten();
+    assert_eq!(pairs.clone().count(), 226);
+    assert_eq!(pairs.filter(|same_note| !**same_note).count(), 25);
+    let files = passives_twice.iter().filter(|pairs| !pairs.is_empty());
+    assert_eq!(files.count(), 15);
+
+    let skills_twice = corpus.values().flat_map(|build| {
+        let skills = build.skills.get().map(Vec::as_slice).unwrap_or_default();
+        set_twice(skills, |skill| {
+            (
+                skill.id().to_owned(),
+                skill.levels(),
+                skill.additional_text(),
+            )
+        })
+    });
+    assert_eq!(skills_twice.count(), 1);
+
+    let hints_of_two_texts = corpus.values().filter(|build| {
+        let levels = build.covered_levels();
+        let mut held = (levels.first()..=levels.last()).map(|level| build.at_level(level));
+        held.any(|held| held.hints.iter().any(|hint| hint.notes.len() > 1))
+    });
+    assert_eq!(hints_of_two_texts.count(), 1);
+
+    let (mut beyond, mut by_their_own_interval, mut never_with_their_skill) = (0, 0, 0);
+    let skills = corpus
+        .values()
+        .flat_map(|build| build.skills.get().into_iter().flatten());
+    for skill in skills {
+        let Some(skill_levels) = skill.levels() else {
+            continue;
+        };
+        for support in skill.supports() {
+            let Some(levels) = support.levels() else {
+                continue;
+            };
+            if levels.first() < skill_levels.first() || levels.last() > skill_levels.last() {
+                beyond += 1;
+                by_their_own_interval += usize::from(support.level_interval().is_some());
+            }
+            let shared =
+                levels.first().max(skill_levels.first()) <= levels.last().min(skill_levels.last());
+            never_with_their_skill += usize::from(!shared);
+        }
+    }
+    assert_eq!(
+        (beyond, by_their_own_interval, never_with_their_skill),
+        (356, 297, 0)
     );
 }

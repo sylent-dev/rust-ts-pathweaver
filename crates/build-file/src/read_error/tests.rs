@@ -323,3 +323,35 @@ fn a_larger_text_is_refused_before_it_is_read() {
         }
     );
 }
+
+#[test]
+fn a_level_that_isnt_a_whole_number_refuses_the_file_with_its_place() {
+    let refused = [
+        json!([-1, 5]),
+        json!([1.5, 5]),
+        json!([1.0, 50.0]),
+        json!([1, 4_294_967_296_u64]),
+        json!([1, null]),
+        json!("1-50"),
+        json!(-1),
+    ];
+
+    for interval in refused {
+        let text = json!({
+            "name": "Bad",
+            "passives": [{ "id": "melee17", "level_interval": interval }]
+        })
+        .to_string();
+        assert_eq!(
+            Build::read(&text),
+            Err(wrong_value("passives[0].level_interval")),
+            "{interval}"
+        );
+    }
+    let read = json!({
+        "name": "Good",
+        "passives": [{ "id": "melee17", "level_interval": [4_294_967_295_u32, 0] }]
+    })
+    .to_string();
+    assert!(Build::read(&read).is_ok());
+}

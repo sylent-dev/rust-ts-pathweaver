@@ -3,7 +3,7 @@
 use std::collections::BTreeSet;
 
 use crate::entries::Identified;
-use crate::{Build, Entry, InventorySlot, LevelInterval, Skill, Support};
+use crate::{Build, Entry, HintOnSlot, InventorySlot, LevelInterval, SupportOnSkill};
 
 /// The lowest level of a character.
 pub const LOWEST_LEVEL: u32 = 1;
@@ -13,12 +13,12 @@ pub const HIGHEST_LEVEL: u32 = 100;
 /// Levels of the character that follow one another, from the first to the last, both included:
 /// at least one, all of them from 1 to 100.
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
-pub struct Levels {
+pub struct LevelRange {
     first: u32,
     last: u32,
 }
 
-impl Levels {
+impl LevelRange {
     /// Every level of a character: where an entry without a `level_interval` applies.
     pub const ALL: Self = Self {
         first: LOWEST_LEVEL,
@@ -62,8 +62,7 @@ impl Levels {
 
     /// The levels of both: where a support applies, whose skill must apply too. None when they
     /// share no level.
-    #[must_use]
-    pub fn shared_with(self, other: Self) -> Option<Self> {
+    fn shared_with(self, other: Self) -> Option<Self> {
         Self::between(self.first.max(other.first), self.last.min(other.last))
     }
 }
@@ -75,11 +74,11 @@ impl LevelInterval {
     /// no level of a character: a first level above the second or above 100, a list that isn't
     /// two levels.
     #[must_use]
-    pub fn levels(&self) -> Option<Levels> {
+    pub fn range(&self) -> Option<LevelRange> {
         match self {
-            Self::Level(first) => Levels::between(*first, HIGHEST_LEVEL),
+            Self::Level(first) => LevelRange::between(*first, HIGHEST_LEVEL),
             Self::Levels(levels) => match levels.as_slice() {
-                &[first, last] => Levels::between(first, last),
+                &[first, last] => LevelRange::between(first, last),
                 _ => None,
             },
         }
@@ -88,28 +87,16 @@ impl LevelInterval {
 
 /// The levels of an entry from its `level_interval`: every level without one, none with an
 /// invalid one.
-fn levels_of(interval: Option<&LevelInterval>) -> Option<Levels> {
-    interval.map_or(Some(Levels::ALL), LevelInterval::levels)
+fn levels_of(interval: Option<&LevelInterval>) -> Option<LevelRange> {
+    interval.map_or(Some(LevelRange::ALL), LevelInterval::range)
 }
 
 impl<T: Identified> Entry<T> {
     /// The levels the entry is set for: every level without a `level_interval`, none with an
-    /// invalid one. A support applies only at those of them where its skill applies too
-    /// ([`Levels::shared_with`]).
+    /// invalid one. A support applies only at those of them where its skill applies too.
     #[must_use]
-    pub fn levels(&self) -> Option<Levels> {
+    pub fn levels(&self) -> Option<LevelRange> {
         levels_of(self.level_interval())
-    }
-}
-
-impl Entry<Skill> {
-    /// The supports of the skill, none for a skill written as its id alone.
-    #[must_use]
-    pub fn supports(&self) -> &[Entry<Support>] {
-        match self {
-            Self::Id(_) => &[],
-            Self::Detailed(skill) => skill.support_skills.get().map_or(&[], Vec::as_slice),
-        }
     }
 }
 
@@ -117,28 +104,19 @@ impl InventorySlot {
     /// The levels the hint applies at: every level without a `level_interval`, none with an
     /// invalid one.
     #[must_use]
-    pub fn levels(&self) -> Option<Levels> {
+    pub fn levels(&self) -> Option<LevelRange> {
         levels_of(self.level_interval.get())
     }
 }
 
-/// An entry of a build, as the page names it: by its id, and by its skill for a support.
+/// An entry of a build, as the page names it: by its id, with its skill for a support, and by
+/// its slot and its item for a hint of the inventory.
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum EntryName<'a> {
-    Passive {
-        id: &'a str,
-    },
-    Skill {
-        id: &'a str,
-    },
-    Support {
-        id: &'a str,
-        skill: &'a str,
-    },
-    /// A hint of the inventory, by the id of its slot.
-    Hint {
-        slot: &'a str,
-    },
+    Passive { id: &'a str },
+    Skill { id: &'a str },
+    Support(SupportOnSkill<'a>),
+    Hint(HintOnSlot<'a>),
 }
 
 /// An entry whose `level_interval` is invalid: it applies at no level, and the warnings of the
@@ -155,7 +133,7 @@ impl<'a> InvalidInterval<'a> {
     /// one.
     fn of(entry: EntryName<'a>, interval: Option<&'a LevelInterval>) -> Option<Self> {
         interval
-            .filter(|interval| interval.levels().is_none())
+            .filter(|interval| interval.range().is_none())
             .map(|interval| Self { entry, interval })
     }
 }
@@ -166,8 +144,8 @@ impl Build {
     /// entry without a `level_interval` covers none of its own, and a build without any, a
     /// snapshot of a character, covers every level.
     #[must_use]
-    pub fn levels(&self) -> Levels {
-        let written = |interval: Option<&LevelInterval>| interval.and_then(LevelInterval::levels);
+    pub fn covered_levels(&self) -> LevelRange {
+        let written = |interval: Option<&LevelInterval>| interval.and_then(LevelInterval::range);
         let passives = self.passives.get().into_iter().flatten();
         let passives = passives.filter_map(|passive| written(passive.level_interval()));
         let gems = self.skills.get().into_iter().flatten().flat_map(|skill| {
@@ -181,8 +159,8 @@ impl Build {
         let covered = passives
             .chain(gems)
             .chain(hints)
-            .reduce(Levels::stretched_to);
-        covered.unwrap_or(Levels::ALL)
+            .reduce(LevelRange::stretched_to);
+        covered.unwrap_or(LevelRange::ALL)
     }
 
     /// The levels where what the build holds may differ from the level before: those where an
@@ -221,10 +199,10 @@ impl Build {
         let gems = self.skills.get().into_iter().flatten().flat_map(|skill| {
             let supports = skill.supports().iter().filter_map(|support| {
                 InvalidInterval::of(
-                    EntryName::Support {
+                    EntryName::Support(SupportOnSkill {
                         id: support.id(),
                         skill: skill.id(),
-                    },
+                    }),
                     support.level_interval(),
                 )
             });
@@ -238,12 +216,7 @@ impl Build {
             .into_iter()
             .flatten()
             .filter_map(|hint| {
-                InvalidInterval::of(
-                    EntryName::Hint {
-                        slot: &hint.inventory_id,
-                    },
-                    hint.level_interval.get(),
-                )
+                InvalidInterval::of(EntryName::Hint(hint.on_slot()), hint.level_interval.get())
             });
         passives.chain(gems).chain(hints).collect()
     }

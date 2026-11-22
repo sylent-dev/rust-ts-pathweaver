@@ -1,18 +1,19 @@
 use serde_json::json;
 
 use super::*;
-use crate::fixtures::build;
+use crate::fixtures::{build, hint};
+use crate::{HintItem, SupportOnSkill};
 
 fn levels_of_interval(interval: serde_json::Value) -> Option<(u32, u32)> {
     let interval: LevelInterval = serde_json::from_value(interval).unwrap();
     interval
-        .levels()
+        .range()
         .map(|levels| (levels.first(), levels.last()))
 }
 
 #[test]
 fn a_list_of_two_levels_covers_from_the_first_to_the_second_both_included() {
-    let levels = LevelInterval::Levels(vec![6, 14]).levels().unwrap();
+    let levels = LevelInterval::Levels(vec![6, 14]).range().unwrap();
 
     let covered: Vec<u32> = (0..=101).filter(|level| levels.contains(*level)).collect();
     assert_eq!(covered, (6..=14).collect::<Vec<u32>>());
@@ -57,7 +58,7 @@ fn an_interval_that_covers_no_level_of_a_character_is_invalid() {
 
 #[test]
 fn the_levels_two_ranges_share_are_those_of_both() {
-    let levels = |interval| LevelInterval::Levels(interval).levels().unwrap();
+    let levels = |interval| LevelInterval::Levels(interval).range().unwrap();
 
     assert_eq!(
         levels(vec![1, 70]).shared_with(levels(vec![59, 100])),
@@ -78,20 +79,20 @@ fn an_entry_without_an_interval_is_set_for_every_level() {
         "inventory_slots": [{ "inventory_id": "Weapon1" }]
     }));
 
-    let passives: Vec<Option<Levels>> = build
+    let passives: Vec<Option<LevelRange>> = build
         .passives
         .get()
         .unwrap()
         .iter()
         .map(Entry::levels)
         .collect();
-    assert_eq!(passives, [Some(Levels::ALL), Some(Levels::ALL)]);
+    assert_eq!(passives, [Some(LevelRange::ALL), Some(LevelRange::ALL)]);
     let skill = &build.skills.get().unwrap()[0];
-    assert_eq!(skill.levels(), Some(Levels::ALL));
-    assert_eq!(skill.supports()[0].levels(), Some(Levels::ALL));
+    assert_eq!(skill.levels(), Some(LevelRange::ALL));
+    assert_eq!(skill.supports()[0].levels(), Some(LevelRange::ALL));
     assert_eq!(
         build.inventory_slots.get().unwrap()[0].levels(),
-        Some(Levels::ALL)
+        Some(LevelRange::ALL)
     );
 }
 
@@ -111,11 +112,11 @@ fn an_entry_is_set_for_the_levels_of_its_interval_and_for_none_when_it_is_invali
     let skills = build.skills.get().unwrap();
     assert_eq!(
         skills[0].levels(),
-        LevelInterval::Levels(vec![6, 14]).levels()
+        LevelInterval::Levels(vec![6, 14]).range()
     );
     assert_eq!(skills[1].levels(), None);
     let hints = build.inventory_slots.get().unwrap();
-    assert_eq!(hints[0].levels(), LevelInterval::Level(60).levels());
+    assert_eq!(hints[0].levels(), LevelInterval::Level(60).range());
     assert_eq!(hints[1].levels(), None);
 }
 
@@ -154,7 +155,11 @@ fn the_invalid_intervals_are_listed_with_their_entry_in_the_order_of_the_file() 
         ],
         "inventory_slots": [
             { "inventory_id": "Weapon1", "level_interval": 101 },
-            { "inventory_id": "Ring1", "level_interval": [60, 100] }
+            { "inventory_id": "Ring1", "level_interval": [60, 100] },
+            { "inventory_id": "Charm1", "additional_text": "Thawing Charm" },
+            { "inventory_id": "Charm1", "additional_text": "Golden Charm\nLater", "level_interval": [3] },
+            { "inventory_id": "Charm1", "unique_name": "Nascent Hope", "level_interval": [9, 2] },
+            { "inventory_id": "Charm1", "level_interval": [8, 2] }
         ]
     }));
 
@@ -170,15 +175,27 @@ fn the_invalid_intervals_are_listed_with_their_entry_in_the_order_of_the_file() 
                 interval: &LevelInterval::Levels(vec![30, 20]),
             },
             InvalidInterval {
-                entry: EntryName::Support {
+                entry: EntryName::Support(SupportOnSkill {
                     id: "Aftershock",
                     skill: "Earthquake"
-                },
+                }),
                 interval: &LevelInterval::Levels(vec![]),
             },
             InvalidInterval {
-                entry: EntryName::Hint { slot: "Weapon1" },
+                entry: EntryName::Hint(hint("Weapon1", HintItem::Unnamed)),
                 interval: &LevelInterval::Level(101),
+            },
+            InvalidInterval {
+                entry: EntryName::Hint(hint("Charm1", HintItem::Named("Golden Charm"))),
+                interval: &LevelInterval::Levels(vec![3]),
+            },
+            InvalidInterval {
+                entry: EntryName::Hint(hint("Charm1", HintItem::Unique("Nascent Hope"))),
+                interval: &LevelInterval::Levels(vec![9, 2]),
+            },
+            InvalidInterval {
+                entry: EntryName::Hint(hint("Charm1", HintItem::Unnamed)),
+                interval: &LevelInterval::Levels(vec![8, 2]),
             },
         ]
     );
@@ -192,7 +209,7 @@ fn a_build_without_an_invalid_interval_lists_none() {
 }
 
 fn levels_of_build(fields: serde_json::Value) -> (u32, u32) {
-    let levels = build(fields).levels();
+    let levels = build(fields).covered_levels();
     (levels.first(), levels.last())
 }
 

@@ -38,13 +38,14 @@ pub struct BuildLevels {
     pub lowest: u32,
     /// The highest level its entries cover, included.
     pub highest: u32,
-    /// The levels where the build changes, each once, from the lowest to the highest.
+    /// The markers: the levels where the build changes, but those where it only takes
+    /// passives, each once, from the lowest to the highest.
     pub markers: Vec<u32>,
 }
 
 impl From<&Build> for BuildLevels {
     fn from(build: &Build) -> Self {
-        let levels = build.levels();
+        let levels = build.covered_levels();
         Self {
             lowest: levels.first(),
             highest: levels.last(),

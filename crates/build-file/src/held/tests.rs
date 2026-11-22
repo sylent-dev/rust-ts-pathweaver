@@ -63,8 +63,13 @@ fn a_support_applies_only_where_it_and_its_skill_both_apply() {
             held(support("FromTheStart", "Comet"))
         ]
     );
-    assert_eq!(supports_at(70).len(), 3);
-    assert_eq!(supports_at(80).len(), 3);
+    let all_three = [
+        held(support("Always", "Comet")),
+        held(support("FromTheStart", "Comet")),
+        held(support("Late", "Comet")),
+    ];
+    assert_eq!(supports_at(70), all_three);
+    assert_eq!(supports_at(80), all_three);
     assert_eq!(supports_at(81), []);
 }
 
@@ -187,7 +192,8 @@ fn a_hint_names_its_unique_or_the_first_line_of_its_text() {
             { "inventory_id": "BodyArmour1", "additional_text": "  <b>{Sacramental Robe} (Int Base)  \r\n  Life and resistances\n" },
             { "inventory_id": "Belt1", "unique_name": "", "additional_text": "Any belt" },
             { "inventory_id": "Ring1" },
-            { "inventory_id": "Ring2", "additional_text": "   " }
+            { "inventory_id": "Ring2", "additional_text": "   " },
+            { "inventory_id": "Charm1", "additional_text": "\n Thawing Charm \nAgainst the cold" }
         ]
     }));
 
@@ -209,8 +215,12 @@ fn a_hint_names_its_unique_or_the_first_line_of_its_text() {
                 what: hint("Belt1", HintItem::Named("Any belt")),
                 notes: vec!["Any belt"]
             },
-            held(hint("Ring1", HintItem::Named(""))),
-            held(hint("Ring2", HintItem::Named(""))),
+            held(hint("Ring1", HintItem::Unnamed)),
+            held(hint("Ring2", HintItem::Unnamed)),
+            Held {
+                what: hint("Charm1", HintItem::Named("Thawing Charm")),
+                notes: vec!["Thawing Charm \nAgainst the cold"]
+            },
         ]
     );
 }

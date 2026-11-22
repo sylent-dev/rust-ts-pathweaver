@@ -3,7 +3,7 @@
 
 use std::collections::BTreeMap;
 
-use crate::{Build, Entry, InventorySlot, Levels, Passive};
+use crate::{Build, Entry, InventorySlot, LevelRange, Passive};
 
 /// A thing a build holds at a level (a gem, a passive, the item of a hint), once, with the
 /// notes of its author on the entries that set it there, in their order: several when two
@@ -45,9 +45,10 @@ pub struct PassiveInSet<'a> {
 pub enum HintItem<'a> {
     /// Its `unique_name`.
     Unique(&'a str),
-    /// Without a unique: the first line of its text, as its author wrote it, markup included;
-    /// empty for a hint without text.
+    /// Without a unique: the first line of its text, as its author wrote it, markup included.
     Named(&'a str),
+    /// A hint without a unique nor a text.
+    Unnamed,
 }
 
 /// A hint on its slot, by its item and never by its place: the hints that share a slot (the
@@ -73,10 +74,11 @@ pub struct BuildAtLevel<'a> {
 
 impl Build {
     /// What the build holds at a level: the things of its entries that apply there. A support
-    /// applies only where its skill does. None at a level a character doesn't have.
+    /// applies only where its skill does. Nothing at a level a character doesn't have.
     #[must_use]
     pub fn at_level(&self, level: u32) -> BuildAtLevel<'_> {
-        let applies = |levels: Option<Levels>| levels.is_some_and(|levels| levels.contains(level));
+        let applies =
+            |levels: Option<LevelRange>| levels.is_some_and(|levels| levels.contains(level));
         let skills = || {
             let skills = self.skills.get().into_iter().flatten();
             skills.filter(|skill| applies(skill.levels()))
@@ -106,13 +108,9 @@ impl Build {
                 };
                 (in_set, note(passive.additional_text()))
             })),
-            hints: held_once(hints.map(|hint| {
-                let on_slot = HintOnSlot {
-                    slot: &hint.inventory_id,
-                    item: hint.item(),
-                };
-                (on_slot, note(hint.additional_text.as_deref()))
-            })),
+            hints: held_once(
+                hints.map(|hint| (hint.on_slot(), note(hint.additional_text.as_deref()))),
+            ),
         }
     }
 }
@@ -134,15 +132,24 @@ impl Entry<Passive> {
 }
 
 impl InventorySlot {
-    /// The item the hint names: its unique, or the first line of its text.
+    /// The hint on its slot, as a build holds it.
     #[must_use]
-    pub fn item(&self) -> HintItem<'_> {
+    pub fn on_slot(&self) -> HintOnSlot<'_> {
+        HintOnSlot {
+            slot: &self.inventory_id,
+            item: self.item(),
+        }
+    }
+
+    /// The item the hint names: its unique, or the first line of its text once the spaces
+    /// around the text are taken off.
+    fn item(&self) -> HintItem<'_> {
         if let Some(unique) = note(self.unique_name.as_deref()) {
             return HintItem::Unique(unique);
         }
         let text = note(self.additional_text.as_deref());
         let first_line = text.and_then(|text| text.lines().next());
-        HintItem::Named(first_line.map_or("", str::trim_end))
+        first_line.map_or(HintItem::Unnamed, |line| HintItem::Named(line.trim_end()))
     }
 }
 
