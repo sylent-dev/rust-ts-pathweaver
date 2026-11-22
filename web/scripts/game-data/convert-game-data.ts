@@ -14,6 +14,7 @@ import { parseArgs } from 'node:util';
 import type { Sources } from '#lib/game-data/format.ts';
 import { convertAscendancies } from './ascendancies.ts';
 import { convertGems } from './gems.ts';
+import { writePortraits } from './portraits.ts';
 import { tableJson } from './table-json.ts';
 import { Downloads, GAME_VERSION, repoeFile, TREE_TAG, treeFile } from './sources.ts';
 
@@ -46,11 +47,15 @@ async function main(): Promise<void> {
 		await downloads.json(repoeFile('skills.min.json')),
 		await downloads.json(repoeFile('gem_tags.min.json'))
 	);
-	const { ascendancies } = convertAscendancies(await downloads.json(treeFile('data.json')));
+	const { ascendancies, portraits } = convertAscendancies(
+		await downloads.json(treeFile('data.json'))
+	);
 
 	await write('sources.json', `${JSON.stringify(sources, null, '\t')}\n`);
 	await write(path.join(LANGUAGE, 'gems.json'), tableJson(gems));
 	await write(path.join(LANGUAGE, 'ascendancies.json'), tableJson(ascendancies));
+	await writePortraits(downloads, portraits, path.join(versionDirectory, 'portraits'));
+	console.log(`wrote ${portraits.length} portraits`);
 	const withoutDescription = Object.values(gems).filter((gem) => gem.description === '').length;
 	console.log(
 		`${Object.keys(gems).length} gems (${withoutDescription} without a description), ` +
