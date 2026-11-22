@@ -13,7 +13,8 @@ const FNV_PRIME: u64 = 0x0000_0100_0000_01b3;
 impl Build {
     /// The key of the content of the build, 16 hexadecimal digits: FNV-1a on 64 bits of the
     /// build written in JSON, without spaces, the fields of each object sorted by name. The
-    /// same from one version of Rust to the next, since the library keeps it.
+    /// same from one version of Rust to the next, since the library keeps it; a number with a
+    /// fraction is written by `serde_json`, whose updates the keys recorded in the tests watch.
     #[must_use]
     pub fn content_key(&self) -> String {
         // Every value of a `Build` is JSON, a map with keys that are strings: it can't fail.
@@ -83,6 +84,18 @@ mod tests {
         let sorted = r#"{"name":"Key","zeta":{"a":null,"b":[1,"x"]}}"#;
 
         assert_eq!(key_of(text), format!("{:016x}", fnv1a(sorted.as_bytes())));
+    }
+
+    #[test]
+    fn the_key_stays_the_one_recorded() {
+        // Recorded on 2026-11-22. A key that changes is a key the library no longer finds: a
+        // change of the fixture records it again, a change of the core or of `serde_json` is
+        // a finding.
+        let every_field = include_str!("../tests/builds/every-field.build");
+        let numbers = r#"{ "name": "Float", "x": [1.5, 1e29, 123456789012345678901234567890] }"#;
+
+        assert_eq!(key_of(every_field), "01b5828dfd9bcb94");
+        assert_eq!(key_of(numbers), "87b5bec56127ddcd");
     }
 
     #[test]

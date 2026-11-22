@@ -39,16 +39,16 @@ pub struct OpenedBuild {
 pub enum RefusedFile {
     /// Larger than the limit of the core, in bytes.
     TooLarge { bytes: usize, limit: usize },
-    /// Where reading stopped, from 1, and the line cut to 80 characters around the error.
-    NotJson {
-        line: usize,
-        column: usize,
-        excerpt: String,
-    },
-    /// JSON, but not an object with a `name`.
+    /// The line of the error, from 1, and its text cut to 80 characters around the error;
+    /// for a text that ends too soon, its last line with a character other than a space. The
+    /// column of the core, in bytes, means nothing to JavaScript, which counts in UTF-16.
+    NotJson { line: usize, excerpt: String },
+    /// JSON, but not an object with a `name`; or a text empty, or of spaces only.
     NotABuild,
     /// The place of a value of the wrong type, such as `skills[2].support_skills[0].id`.
     WrongValue { field: String },
+    /// The place of a field an entry needs that is missing, such as `passives[0].id`.
+    MissingField { field: String },
 }
 
 impl From<ReadError> for RefusedFile {
@@ -58,17 +58,10 @@ impl From<ReadError> for RefusedFile {
                 bytes,
                 limit: pathweaver_build_file::MAX_BYTES,
             },
-            ReadError::NotJson {
-                line,
-                column,
-                excerpt,
-            } => Self::NotJson {
-                line,
-                column,
-                excerpt,
-            },
+            ReadError::NotJson { line, excerpt, .. } => Self::NotJson { line, excerpt },
             ReadError::NotABuild => Self::NotABuild,
             ReadError::WrongValue { field } => Self::WrongValue { field },
+            ReadError::MissingField { field } => Self::MissingField { field },
         }
     }
 }
@@ -139,7 +132,6 @@ mod tests {
                 "{ oops",
                 RefusedFile::NotJson {
                     line: 1,
-                    column: 3,
                     excerpt: "{ oops".to_owned(),
                 },
             ),
@@ -148,6 +140,12 @@ mod tests {
                 r#"{ "name": 3 }"#,
                 RefusedFile::WrongValue {
                     field: "name".to_owned(),
+                },
+            ),
+            (
+                r#"{ "name": "Bad", "passives": [{}] }"#,
+                RefusedFile::MissingField {
+                    field: "passives[0].id".to_owned(),
                 },
             ),
         ];

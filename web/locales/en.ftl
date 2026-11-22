@@ -18,9 +18,11 @@ build-unreadable = This file can't be read: { $reason }
 refused-too-large = it is { $bytes } bytes, larger than { $limit }.
 # $line (Number): from 1. $excerpt (String): the text of that line, cut around the error.
 refused-not-json = it isn't JSON, at line { $line }: { $excerpt }
-refused-not-a-build = it isn't a build, it has no name.
+refused-not-a-build = it isn't a build: an object with a name.
 # $field (String): the place of the value in the build, such as skills[2].support_skills[0].id.
 refused-wrong-value = the value of { $field } isn't of the right type.
+# $field (String): the place of the field in the build, such as passives[0].id.
+refused-missing-field = the field { $field } is missing.
 # $version (String): the version of the core, as the WebAssembly module gives it.
 core-version = Core { $version }, in Rust.
 core-load-failed = The core of Pathweaver could not load.

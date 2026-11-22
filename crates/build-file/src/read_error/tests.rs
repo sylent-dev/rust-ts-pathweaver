@@ -12,7 +12,7 @@ fn wrong_value(field: &str) -> ReadError {
     }
 }
 
-/// A build named `name`, with `skills` as its skills.
+/// A build with `skills` as its skills.
 fn with_skills(skills: &serde_json::Value) -> String {
     json!({ "name": "Bad", "skills": skills }).to_string()
 }
@@ -91,15 +91,77 @@ fn a_long_line_is_cut_around_the_error_counted_in_characters() {
 }
 
 #[test]
-fn a_text_that_ends_too_soon_gives_its_last_line() {
+fn a_text_that_ends_too_soon_gives_its_last_line_with_a_character() {
+    let last = "  \"name\": \"Cut\",";
+    let error = ReadError::NotJson {
+        line: 2,
+        column: last.len() + 1,
+        excerpt: last.to_owned(),
+    };
+
+    assert_eq!(error_of(&format!("{{\n{last}")), error);
+    assert_eq!(error_of(&format!("{{\n{last}\n")), error);
+    assert_eq!(error_of(&format!("{{\n{last}\n   \n\n")), error);
+}
+
+#[test]
+fn a_long_last_line_of_a_text_that_ends_too_soon_keeps_its_end() {
+    let text = format!("{{\"name\": \"{}", "a".repeat(200));
+
+    let ReadError::NotJson { excerpt, .. } = error_of(&text) else {
+        panic!("the text isn't JSON");
+    };
+
+    assert_eq!(excerpt, format!("…{}", "a".repeat(80)));
+}
+
+#[test]
+fn an_empty_text_or_one_of_spaces_isnt_a_build() {
+    for text in ["", "\u{feff}", "   \n\t\n", "\r\n"] {
+        assert_eq!(error_of(text), ReadError::NotABuild, "{text:?}");
+    }
+}
+
+#[test]
+fn a_line_ending_in_crlf_gives_its_text_without_the_carriage_return() {
     assert_eq!(
-        error_of("{\n  \"name\": \"Cut"),
+        error_of("{\r\n  \"name\": \"Broken\",\r\n  oops\r\n}"),
         ReadError::NotJson {
-            line: 2,
-            column: 14,
-            excerpt: "  \"name\": \"Cut".to_owned(),
+            line: 3,
+            column: 3,
+            excerpt: "  oops".to_owned(),
         }
     );
+}
+
+#[test]
+fn a_line_of_80_characters_is_kept_whole_and_one_of_81_cut() {
+    // `{ oops "…" }`: 11 characters around the name.
+    let of_80 = format!("{{ oops \"{}\" }}", "a".repeat(69));
+    let of_81 = format!("{{ oops \"{}\" }}", "a".repeat(70));
+    assert_eq!((of_80.chars().count(), of_81.chars().count()), (80, 81));
+
+    let excerpt_of = |text: &str| match error_of(text) {
+        ReadError::NotJson { excerpt, .. } => excerpt,
+        other => panic!("{other:?}"),
+    };
+
+    assert_eq!(excerpt_of(&of_80), of_80);
+    let kept: String = of_81.chars().take(80).collect();
+    assert_eq!(excerpt_of(&of_81), format!("{kept}…"));
+}
+
+#[test]
+fn json_nested_too_deep_is_refused_without_a_panic() {
+    let text = format!("{{\"name\": \"Deep\", \"x\": {}}}", "[".repeat(200));
+
+    let ReadError::NotJson { line, column, .. } = error_of(&text) else {
+        panic!("the text isn't JSON");
+    };
+
+    // `serde_json` refuses the 128th level, the object of the build the first: the 127th `[`,
+    // after the 22 characters before the first.
+    assert_eq!((line, column), (1, 22 + 127));
 }
 
 #[test]
@@ -168,13 +230,21 @@ fn an_entry_neither_an_id_nor_an_object_gives_its_place() {
 
 #[test]
 fn a_field_an_entry_needs_that_is_missing_gives_its_place() {
+    let missing = |field: &str| ReadError::MissingField {
+        field: field.to_owned(),
+    };
+
     assert_eq!(
         error_of(r#"{ "name": "Bad", "passives": [{ "weapon_set": 1 }] }"#),
-        wrong_value("passives[0].id")
+        missing("passives[0].id")
+    );
+    assert_eq!(
+        error_of(r#"{ "name": "Bad", "skills": ["a", { "support_skills": [{}] }] }"#),
+        missing("skills[1].support_skills[0].id")
     );
     assert_eq!(
         error_of(r#"{ "name": "Bad", "inventory_slots": [{ "slot_x": 1 }] }"#),
-        wrong_value("inventory_slots[0].inventory_id")
+        missing("inventory_slots[0].inventory_id")
     );
 }
 

@@ -28,6 +28,8 @@
 				return t('refused-not-a-build');
 			case 'wrongValue':
 				return t('refused-wrong-value', { field: error.field });
+			case 'missingField':
+				return t('refused-missing-field', { field: error.field });
 		}
 	}
 

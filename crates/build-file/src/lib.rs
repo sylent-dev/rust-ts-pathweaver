@@ -66,26 +66,27 @@ pub struct Build {
 
 impl Build {
     /// Reads the text of a `.build` file. A byte order mark at its start, which some editors of
-    /// Windows write, is skipped.
+    /// Windows write, is skipped. A field written twice in an object keeps its last value, as
+    /// `JSON.parse` of the browsers does (`specs.md`, Unknown and invalid entries).
     ///
     /// # Errors
     ///
     /// When the text is larger than [`MAX_BYTES`], isn't JSON, isn't an object with a `name`, or
-    /// holds a value of the wrong type ([`ReadError`]).
+    /// holds a value of the wrong type or misses a field ([`ReadError`]).
     pub fn read(text: &str) -> Result<Self, ReadError> {
         if text.len() > MAX_BYTES {
             return Err(ReadError::TooLarge { bytes: text.len() });
         }
         let text = text.strip_prefix('\u{feff}').unwrap_or(text);
         let value: Value =
-            serde_json::from_str(text).map_err(|error| ReadError::not_json(text, &error))?;
+            serde_json::from_str(text).map_err(|error| ReadError::of_json(text, &error))?;
         if !value
             .as_object()
             .is_some_and(|object| object.contains_key("name"))
         {
             return Err(ReadError::NotABuild);
         }
-        serde_path_to_error::deserialize(value).map_err(|error| ReadError::wrong_value(&error))
+        serde_path_to_error::deserialize(value).map_err(|error| ReadError::of_value(&error))
     }
 
     /// The text of the file, indented with four spaces as the files of Grinding Gear Games are.

@@ -13,18 +13,26 @@ const EXCERPT_CHARS: usize = 80;
 pub enum ReadError {
     /// Larger than [`MAX_BYTES`], refused before it is read.
     TooLarge { bytes: usize },
-    /// Not JSON: where reading stopped, from 1, and the text of that line.
+    /// Not JSON: the line of the error, from 1, and its text. For a text that ends too soon,
+    /// the last line that holds a character other than a space.
     NotJson {
         line: usize,
+        /// The byte of the line where reading stopped, from 1; after its end for a text that
+        /// ends too soon.
         column: usize,
         /// The line, cut to 80 characters around the error, an ellipsis where it was cut.
         excerpt: String,
     },
-    /// JSON, but not an object with a `name`.
+    /// JSON, but not an object with a `name`; or a text empty, or of spaces only.
     NotABuild,
-    /// A value of the wrong type, or a field an entry needs that is missing.
+    /// A value of the wrong type.
     WrongValue {
         /// Its place in the build, such as `skills[2].support_skills[0].id`.
+        field: String,
+    },
+    /// A field an entry needs that is missing.
+    MissingField {
+        /// Its place in the build, such as `passives[0].id`.
         field: String,
     },
 }
@@ -45,6 +53,7 @@ impl std::fmt::Display for ReadError {
             ),
             Self::NotABuild => write!(formatter, "not a build: no `name`"),
             Self::WrongValue { field } => write!(formatter, "a wrong value at `{field}`"),
+            Self::MissingField { field } => write!(formatter, "a missing field `{field}`"),
         }
     }
 }
@@ -52,8 +61,26 @@ impl std::fmt::Display for ReadError {
 impl std::error::Error for ReadError {}
 
 impl ReadError {
-    /// The error of a text that isn't JSON, with the line where `serde_json` stopped.
-    pub(crate) fn not_json(text: &str, error: &serde_json::Error) -> Self {
+    /// The error of a text `serde_json` couldn't read, with the line where it stopped: for a
+    /// text that ends too soon, where `serde_json` names the line after the last line break,
+    /// the last line with a character other than a space, the only one a reader can look at.
+    pub(crate) fn of_json(text: &str, error: &serde_json::Error) -> Self {
+        if error.classify() == serde_json::error::Category::Eof {
+            let last = text
+                .lines()
+                .enumerate()
+                .filter(|(_, line)| !line.trim().is_empty())
+                .last();
+            let Some((index, last)) = last else {
+                return Self::NotABuild;
+            };
+            let column = last.len().saturating_add(1);
+            return Self::NotJson {
+                line: index.saturating_add(1),
+                column,
+                excerpt: excerpt(last, column),
+            };
+        }
         let (line, column) = (error.line(), error.column());
         let excerpt = line
             .checked_sub(1)
@@ -66,22 +93,24 @@ impl ReadError {
         }
     }
 
-    /// The error of a value of the wrong type, at the place `serde_path_to_error` followed.
-    /// A field that is missing is named after the object that misses it: `serde` says it in
-    /// its message only, ``missing field `id` ``.
-    pub(crate) fn wrong_value(error: &serde_path_to_error::Error<serde_json::Error>) -> Self {
-        let path = error.path().to_string();
+    /// The error of a value read from the JSON of a build, at the place `serde_path_to_error`
+    /// followed. A field that is missing is named after the object that misses it: `serde`
+    /// says it in its message only, ``missing field `id` ``, without the line and column that
+    /// `serde_json` adds when it reads a text, since it reads a `Value` here.
+    pub(crate) fn of_value(error: &serde_path_to_error::Error<serde_json::Error>) -> Self {
+        let field = error.path().to_string();
         let message = error.inner().to_string();
-        let missing = message
+        // The root needs only `name`, which `Build::read` checks first: a field missing is
+        // always inside an object of the build, never at the root (`.`).
+        match message
             .strip_prefix("missing field `")
-            .and_then(|rest| rest.strip_suffix('`'));
-        let field = match missing {
-            // The path of the root is `.`, which a field doesn't follow.
-            Some(missing) if path == "." => missing.to_owned(),
-            Some(missing) => format!("{path}.{missing}"),
-            None => path,
-        };
-        Self::WrongValue { field }
+            .and_then(|rest| rest.strip_suffix('`'))
+        {
+            Some(missing) => Self::MissingField {
+                field: format!("{field}.{missing}"),
+            },
+            None => Self::WrongValue { field },
+        }
     }
 }
 

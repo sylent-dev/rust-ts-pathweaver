@@ -108,3 +108,14 @@ fn a_file_is_written_with_four_spaces_of_indentation() {
         "{\n    \"name\": \"Indented\",\n    \"author\": \"Me\"\n}"
     );
 }
+
+#[test]
+fn a_field_written_twice_keeps_its_last_value() {
+    let build = Build::read(
+        r#"{ "name": "First", "name": "Last", "passives": [{ "id": "a", "id": "b" }] }"#,
+    )
+    .unwrap();
+
+    assert_eq!(build.name, "Last");
+    assert_eq!(build.passives.unwrap()[0].id(), "b");
+}
