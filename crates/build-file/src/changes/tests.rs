@@ -424,3 +424,106 @@ fn nothing_changes_between_two_levels_that_hold_the_same() {
     assert_eq!(changes_at(&every_field, 20), []);
     assert_ne!(changes_at(&every_field, 30), []);
 }
+
+#[test]
+fn the_changes_of_a_build_are_those_of_each_level_where_something_changes() {
+    let build = build(json!({
+        "passives": [
+            { "id": "melee17", "level_interval": [10, 100] },
+            { "id": "melee18", "level_interval": [23, 100] }
+        ],
+        "skills": [
+            { "id": "Spark", "level_interval": [1, 22] },
+            { "id": "Comet", "level_interval": [23, 100] }
+        ]
+    }));
+
+    assert_eq!(
+        build.changes_by_level(),
+        [
+            LevelChanges {
+                level: 10,
+                changes: vec![Change::PassivesTaken {
+                    weapon_set: WeaponSet::Shared,
+                    passives: vec![held("melee17")],
+                }],
+            },
+            LevelChanges {
+                level: 23,
+                changes: vec![
+                    Change::SkillAdded {
+                        skill: held("Comet"),
+                        supports: vec![],
+                    },
+                    Change::SkillRemoved { id: "Spark" },
+                    Change::PassivesTaken {
+                        weapon_set: WeaponSet::Shared,
+                        passives: vec![held("melee18")],
+                    },
+                ],
+            },
+        ]
+    );
+}
+
+#[test]
+fn a_level_where_the_build_only_takes_passives_is_no_marker() {
+    let build = build(json!({
+        "passives": [
+            { "id": "melee17", "level_interval": [10, 64] },
+            { "id": "melee18", "level_interval": [11, 100], "weapon_set": 1 },
+            { "id": "melee19", "level_interval": [65, 100] }
+        ],
+        "skills": [
+            { "id": "Spark", "level_interval": [1, 22], "additional_text": "Early" },
+            { "id": "Spark", "level_interval": [23, 100], "additional_text": "Late" },
+            { "id": "Comet", "level_interval": [90, 100] }
+        ],
+        "inventory_slots": [{ "inventory_id": "Weapon1", "level_interval": [40, 100] }]
+    }));
+
+    let with_a_change: Vec<u32> = build
+        .changes_by_level()
+        .iter()
+        .map(|level| level.level)
+        .collect();
+    assert_eq!(with_a_change, [10, 11, 23, 40, 65, 90]);
+    assert_eq!(build.markers(), [23, 40, 65, 90]);
+}
+
+#[test]
+fn nothing_changes_at_the_lowest_level_a_build_covers() {
+    let build = build(json!({
+        "passives": ["strength89"],
+        "skills": [
+            { "id": "Spark", "level_interval": [65, 89] },
+            { "id": "Comet", "level_interval": [90, 100] }
+        ]
+    }));
+
+    assert_eq!(build.markers(), [90]);
+}
+
+#[test]
+fn a_build_that_is_the_same_at_every_level_has_no_change_and_no_marker() {
+    let snapshot = build(json!({
+        "passives": ["strength89", { "id": "melee17", "level_interval": [0, 100] }],
+        "skills": [{ "id": "Spark", "support_skills": ["Pierce"] }],
+        "inventory_slots": [{ "inventory_id": "Weapon1", "unique_name": "Blackflame" }]
+    }));
+
+    assert_eq!(snapshot.changes_by_level(), []);
+    assert_eq!(snapshot.markers(), [] as [u32; 0]);
+}
+
+#[test]
+fn a_change_at_the_highest_level_of_a_build_is_a_marker() {
+    let build = build(json!({
+        "skills": [
+            { "id": "Spark", "level_interval": [1, 99] },
+            { "id": "Comet", "level_interval": [100, 100] }
+        ]
+    }));
+
+    assert_eq!(build.markers(), [100]);
+}

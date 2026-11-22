@@ -2,25 +2,13 @@
 // level): the one source of what the band of the open builds, the level band, the tabs and the
 // tree all read (docs/technical-choices.md, State of the interface).
 
-/**
- * The levels of a build, as far as the page moves among them. The core reads them from the
- * entries of the build.
- */
-export interface BuildLevels {
-	/** The lowest level its entries cover. */
-	lowest: number;
-	/** The highest level its entries cover, included. */
-	highest: number;
-	/** The levels where the build changes, each once, from the lowest to the highest. */
-	markers: readonly number[];
-}
+import type { OpenedBuild } from '#lib/core.ts';
 
-/** A build open in the page, as the core has read it from its file. */
-export interface OpenBuild {
-	/** The key of its content: two files of the same content have the same key. */
-	contentKey: string;
-	levels: BuildLevels;
-}
+/**
+ * A build open in the page: what the state reads of a build the core has read from its file, the
+ * key of its content and the levels the page moves among.
+ */
+export type OpenBuild = Pick<OpenedBuild, 'contentKey' | 'levels'>;
 
 /** The side of the level a marker is looked for on. */
 export type MarkerSide = 'previous' | 'next';

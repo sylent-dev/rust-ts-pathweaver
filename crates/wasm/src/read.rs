@@ -27,6 +27,30 @@ pub struct OpenedBuild {
     pub ascendancy: Option<String>,
     /// Usually the page of its guide; any text, not always an address.
     pub link: Option<String>,
+    pub levels: BuildLevels,
+}
+
+/// The levels of a build, as far as the page moves among them (`specs.md`, The level).
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Tsify)]
+#[serde(rename_all = "camelCase")]
+pub struct BuildLevels {
+    /// The lowest level its entries cover.
+    pub lowest: u32,
+    /// The highest level its entries cover, included.
+    pub highest: u32,
+    /// The levels where the build changes, each once, from the lowest to the highest.
+    pub markers: Vec<u32>,
+}
+
+impl From<&Build> for BuildLevels {
+    fn from(build: &Build) -> Self {
+        let levels = build.levels();
+        Self {
+            lowest: levels.first(),
+            highest: levels.last(),
+            markers: build.markers(),
+        }
+    }
 }
 
 /// Why a file is refused, [`ReadError`] as the interface reads it.
@@ -73,6 +97,7 @@ pub fn read_file(text: &str) -> BuildFile {
         Ok(build) => BuildFile::Build {
             build: OpenedBuild {
                 content_key: build.content_key(),
+                levels: BuildLevels::from(&build),
                 name: build.name,
                 author: build.author.into_option(),
                 ascendancy: build.ascendancy.into_option(),
@@ -112,7 +137,32 @@ mod tests {
                     author: Some("Pathweaver".to_owned()),
                     ascendancy: Some("Warrior1".to_owned()),
                     link: Some("https://example.com/guides/every-field".to_owned()),
+                    levels: BuildLevels {
+                        lowest: 1,
+                        highest: 100,
+                        markers: vec![30, 51, 60],
+                    },
                 },
+            }
+        );
+    }
+
+    #[test]
+    fn a_build_gives_the_levels_it_covers_and_its_markers() {
+        let guide_of_the_maps = r#"{ "name": "Maps", "skills": [
+            { "id": "Spark", "level_interval": [65, 89] },
+            { "id": "Comet", "level_interval": [90, 100] }
+        ], "passives": [{ "id": "melee17", "level_interval": [70, 100] }] }"#;
+
+        let BuildFile::Build { build } = read_file(guide_of_the_maps) else {
+            panic!("the text is a build");
+        };
+        assert_eq!(
+            build.levels,
+            BuildLevels {
+                lowest: 65,
+                highest: 100,
+                markers: vec![90],
             }
         );
     }

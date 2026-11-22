@@ -3,7 +3,9 @@
 
 use std::collections::{BTreeMap, BTreeSet};
 
-use crate::{BuildAtLevel, Held, HintItem, HintOnSlot, PassiveInSet, SupportOnSkill, WeaponSet};
+use crate::{
+    Build, BuildAtLevel, Held, HintItem, HintOnSlot, PassiveInSet, SupportOnSkill, WeaponSet,
+};
 
 /// One change of a build at a level, a line of the window of « N changes »: a gem, a hint or a
 /// note counts as one change, each group of passives as one.
@@ -64,6 +66,44 @@ impl Change<'_> {
             | Self::SupportNoteChanged(_)
             | Self::HintTextChanged(_) => true,
         }
+    }
+}
+
+/// The changes of a build at one of its levels.
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct LevelChanges<'a> {
+    pub level: u32,
+    /// At least one, in the order of the categories.
+    pub changes: Vec<Change<'a>>,
+}
+
+impl Build {
+    /// What changes at each level of the build where something does, from the lowest to the
+    /// highest. None at the lowest level it covers, which nothing comes before to compare
+    /// with.
+    #[must_use]
+    pub fn changes_by_level(&self) -> Vec<LevelChanges<'_>> {
+        let levels = self.levels();
+        let mut before = self.at_level(levels.first());
+        let mut by_level = Vec::new();
+        for level in (levels.first()..=levels.last()).skip(1) {
+            let held = self.at_level(level);
+            let changes = held.changes_since(&before);
+            if !changes.is_empty() {
+                by_level.push(LevelChanges { level, changes });
+            }
+            before = held;
+        }
+        by_level
+    }
+
+    /// The markers of the build: the levels where it changes, from the lowest to the highest,
+    /// but those where it only takes passives ([`Change::makes_marker`]).
+    #[must_use]
+    pub fn markers(&self) -> Vec<u32> {
+        let by_level = self.changes_by_level().into_iter();
+        let with_marker = by_level.filter(|level| level.changes.iter().any(Change::makes_marker));
+        with_marker.map(|level| level.level).collect()
     }
 }
 
@@ -232,5 +272,7 @@ fn only_on_slot<'h, 'a>(
     }
 }
 
+#[cfg(test)]
+mod corpus;
 #[cfg(test)]
 mod tests;

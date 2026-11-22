@@ -50,6 +50,14 @@ impl Levels {
         self.first <= level && level <= self.last
     }
 
+    /// The levels from the lowest of both to the highest of both.
+    fn stretched_to(self, other: Self) -> Self {
+        Self {
+            first: self.first.min(other.first),
+            last: self.last.max(other.last),
+        }
+    }
+
     /// The levels of both: where a support applies, whose skill must apply too. None when they
     /// share no level.
     #[must_use]
@@ -151,6 +159,30 @@ impl<'a> InvalidInterval<'a> {
 }
 
 impl Build {
+    /// The levels the build covers, those its slider moves among: from the lowest to the
+    /// highest level its entries write and apply at, 65 to 100 for a guide of the maps. An
+    /// entry without a `level_interval` covers none of its own, and a build without any, a
+    /// snapshot of a character, covers every level.
+    #[must_use]
+    pub fn levels(&self) -> Levels {
+        let written = |interval: Option<&LevelInterval>| interval.and_then(LevelInterval::levels);
+        let passives = self.passives.get().into_iter().flatten();
+        let passives = passives.filter_map(|passive| written(passive.level_interval()));
+        let gems = self.skills.get().into_iter().flatten().flat_map(|skill| {
+            let supports = skill.supports().iter().filter_map(move |support| {
+                written(support.level_interval())?.shared_with(skill.levels()?)
+            });
+            written(skill.level_interval()).into_iter().chain(supports)
+        });
+        let hints = self.inventory_slots.get().into_iter().flatten();
+        let hints = hints.filter_map(|hint| written(hint.level_interval.get()));
+        let covered = passives
+            .chain(gems)
+            .chain(hints)
+            .reduce(Levels::stretched_to);
+        covered.unwrap_or(Levels::ALL)
+    }
+
     /// The entries whose `level_interval` is invalid, in the order of the file: the passives,
     /// each skill followed by its supports, the hints of the inventory.
     #[must_use]

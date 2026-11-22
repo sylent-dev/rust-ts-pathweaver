@@ -190,3 +190,98 @@ fn a_build_without_an_invalid_interval_lists_none() {
 
     assert_eq!(Build::read(every_field).unwrap().invalid_intervals(), []);
 }
+
+fn levels_of_build(fields: serde_json::Value) -> (u32, u32) {
+    let levels = build(fields).levels();
+    (levels.first(), levels.last())
+}
+
+#[test]
+fn a_build_covers_from_the_lowest_to_the_highest_level_its_entries_write() {
+    assert_eq!(
+        levels_of_build(json!({
+            "passives": [{ "id": "melee17", "level_interval": [70, 80] }],
+            "skills": [{ "id": "Spark", "level_interval": [65, 75], "support_skills": [
+                { "id": "Pierce", "level_interval": [66, 70] }
+            ] }],
+            "inventory_slots": [{ "inventory_id": "Weapon1", "level_interval": [72, 90] }]
+        })),
+        (65, 90)
+    );
+    assert_eq!(
+        levels_of_build(json!({ "passives": [{ "id": "melee17", "level_interval": [12, 30] }] })),
+        (12, 30)
+    );
+    assert_eq!(
+        levels_of_build(json!({ "skills": [{ "id": "Spark", "level_interval": 41 }] })),
+        (41, 100)
+    );
+    assert_eq!(
+        levels_of_build(json!({
+            "inventory_slots": [{ "inventory_id": "Weapon1", "level_interval": [0, 7] }]
+        })),
+        (1, 7)
+    );
+}
+
+#[test]
+fn an_entry_without_an_interval_or_with_an_invalid_one_covers_no_level_of_its_own() {
+    assert_eq!(
+        levels_of_build(json!({
+            "passives": [
+                "strength89",
+                { "id": "melee17", "level_interval": [65, 100] },
+                { "id": "melee18", "level_interval": [30, 2] },
+                { "id": "melee19", "level_interval": null }
+            ],
+            "skills": [{ "id": "Spark" }],
+            "inventory_slots": [{ "inventory_id": "Weapon1" }]
+        })),
+        (65, 100)
+    );
+}
+
+#[test]
+fn a_support_covers_only_the_levels_it_shares_with_its_skill() {
+    assert_eq!(
+        levels_of_build(json!({
+            "skills": [
+                { "id": "Comet", "level_interval": [59, 80], "support_skills": [
+                    { "id": "FromTheStart", "level_interval": [1, 100] },
+                    { "id": "Never", "level_interval": [10, 20] }
+                ] },
+                { "id": "Invalid", "level_interval": [80, 59], "support_skills": [
+                    { "id": "FromTheStart", "level_interval": [1, 100] }
+                ] }
+            ]
+        })),
+        (59, 80)
+    );
+    assert_eq!(
+        levels_of_build(json!({
+            "skills": [{ "id": "Spark", "support_skills": [
+                { "id": "Pierce", "level_interval": [23, 40] }
+            ] }]
+        })),
+        (23, 40)
+    );
+}
+
+#[test]
+fn a_build_whose_entries_write_no_level_covers_every_level() {
+    let every_level = (LOWEST_LEVEL, HIGHEST_LEVEL);
+
+    assert_eq!(levels_of_build(json!({})), every_level);
+    assert_eq!(
+        levels_of_build(json!({
+            "passives": ["strength89"],
+            "skills": [{ "id": "Spark", "support_skills": ["Pierce"] }],
+            "inventory_slots": [{ "inventory_id": "Weapon1" }]
+        })),
+        every_level
+    );
+    assert_eq!(
+        levels_of_build(json!({ "passives": [{ "id": "melee17", "level_interval": [9, 3] }] })),
+        every_level
+    );
+}

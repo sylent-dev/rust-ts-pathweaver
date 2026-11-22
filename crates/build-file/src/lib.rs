@@ -37,7 +37,7 @@ mod read_error;
 use serde::{Deserialize, Serialize};
 use serde_json::{Map, Value};
 
-pub use changes::Change;
+pub use changes::{Change, LevelChanges};
 pub use entries::{Entry, InventorySlot, Passive, Skill, Support};
 pub use held::{BuildAtLevel, Held, HintItem, HintOnSlot, PassiveInSet, SupportOnSkill, WeaponSet};
 pub use level_interval::LevelInterval;
