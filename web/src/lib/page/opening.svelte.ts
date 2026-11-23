@@ -1,10 +1,10 @@
-// The files the page opens, dropped anywhere or chosen (specs.md, Opening builds): each build
-// opens and the last is shown, each file refused is kept with its reason until the next files.
-// Apart from the drag (file-drop.svelte.ts): the files chosen and, in 4e3, the JSON pasted open
-// here too, with no drag.
+// The files the page opens, dropped anywhere or chosen, and the JSON of a build pasted (specs.md,
+// Opening builds): each build opens and the last is shown, each file refused is kept with its
+// reason until the next files. Apart from the drag (file-drop.svelte.ts): the files chosen and
+// the text pasted open here too, with no drag.
 
 import { openBuilds } from './open-builds.svelte.ts';
-import { readFiles, type ReadFile } from './read-files.ts';
+import { readFiles, readText, type FileRefusal, type ReadFile } from './read-files.ts';
 
 /** A file refused, its name and why. */
 export type RefusedRead = Extract<ReadFile, { kind: 'refused' }>;
@@ -12,12 +12,21 @@ export type RefusedRead = Extract<ReadFile, { kind: 'refused' }>;
 /** The files opened, one set after the other. */
 export class Opening {
 	#refused = $state.raw<readonly RefusedRead[]>([]);
+	#openedNone = $state(false);
 	/** The files opened last, or being opened: the next wait for them. Never rejected. */
 	#pending: Promise<void> = Promise.resolve();
 
 	/** The files refused of the last files dropped or chosen, in their order. */
 	get refused(): readonly RefusedRead[] {
 		return this.#refused;
+	}
+
+	/**
+	 * The files refused of the last files dropped or chosen when none of them opened, which the
+	 * drop zone of the first visit says; none when one of them opened, which a notice says (4f).
+	 */
+	get refusedAll(): readonly RefusedRead[] {
+		return this.#openedNone ? this.#refused : [];
 	}
 
 	/**
@@ -39,6 +48,34 @@ export class Opening {
 		return this.#pending;
 	}
 
+	/**
+	 * Opens the JSON of a build pasted, after the files given before it: its build opens and is
+	 * shown, the files refused before it forgotten. Gives why it is refused, which the field that took it says; nothing when it opens or
+	 * when the core can't load, which the page already says (+page.svelte).
+	 */
+	openText(text: string): Promise<FileRefusal | undefined> {
+		const opened = this.#pending.then(() => this.#openTextNow(text));
+		this.#pending = opened.then(
+			() => {},
+			(error: unknown) => {
+				console.error('opening: the text could not be opened', error);
+			}
+		);
+		return opened.catch(() => undefined);
+	}
+
+	async #openTextNow(text: string): Promise<FileRefusal | undefined> {
+		const read = await readText(text);
+		if (read.kind === 'refused') {
+			return read.refusal;
+		}
+		openBuilds.open(read.build);
+		// The files refused before it are no longer those of the build shown.
+		this.#refused = [];
+		this.#openedNone = false;
+		return undefined;
+	}
+
 	async #openNow(files: readonly File[]): Promise<void> {
 		const read = await readFiles(files);
 		for (const file of read) {
@@ -47,6 +84,7 @@ export class Opening {
 			}
 		}
 		this.#refused = read.filter((file) => file.kind === 'refused');
+		this.#openedNone = this.#refused.length === read.length;
 	}
 }
 

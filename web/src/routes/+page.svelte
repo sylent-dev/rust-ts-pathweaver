@@ -1,50 +1,45 @@
-<!-- The home page: the first visit, where .build files are dropped or chosen and read by the core
-     in Rust; once one opens, what it is, until the page of a build (4f). The files refused are
-     said in a line each, until the zone that refuses (4e3) and the notice of the page of a
-     build (4f). -->
+<!-- The home page: the first visit, where .build files are dropped or chosen, or the JSON of a
+     build pasted, and read by the core in Rust, its zone saying why when none of them opens; once one opens, what it is, until the
+     page of a build (4f), the files refused with it in a line each, until its notice (4f). -->
 <script lang="ts">
 	import { loadCore } from '#lib/core.ts';
 	import DropZone from '#lib/home/DropZone.svelte';
 	import FirstVisit from '#lib/home/FirstVisit.svelte';
 	import { t } from '#lib/i18n.ts';
+	import { carriesFiles } from '#lib/page/file-drop.svelte.ts';
 	import { opening } from '#lib/page/opening.svelte.ts';
 	import { openBuilds } from '#lib/page/open-builds.svelte.ts';
-	import type { FileRefusal } from '#lib/page/read-files.ts';
+	import { refusalReason } from '#lib/page/refusal-text.ts';
+	import SiteLink from '#lib/site/SiteLink.svelte';
 
 	/** Loaded at once, so that the first files dropped don't wait for it. */
 	const core = loadCore();
 
-	/** Why a file is refused, in a sentence. */
-	function reason(refusal: FileRefusal): string {
-		switch (refusal.reason) {
-			case 'tooLarge':
-				return t('refused-too-large', { bytes: refusal.bytes, limit: refusal.limit });
-			case 'notText':
-				return t('refused-not-text');
-			case 'notJson':
-				return t('refused-not-json', { line: refusal.line, excerpt: refusal.excerpt });
-			case 'notABuild':
-				return t('refused-not-a-build');
-			case 'wrongValue':
-				return t('refused-wrong-value', { field: refusal.field });
-			case 'missingField':
-				return t('refused-missing-field', { field: refusal.field });
-			case 'unreadable':
-				return t('refused-unreadable');
+	/** Whether the drop zone is the field of Paste JSON. */
+	let isPasting = $state(false);
+	let pasteSwitch: SiteLink | undefined = $state();
+
+	/** Gives the zone back, the keyboard on the link that turns it into the field again. */
+	function backToFiles(): void {
+		isPasting = false;
+		pasteSwitch?.focus();
+	}
+
+	/** Files dropped give the zone back, which says why when none of them opens. */
+	function hearDrop(event: DragEvent): void {
+		if (carriesFiles(event)) {
+			isPasting = false;
 		}
 	}
 </script>
+
+<svelte:window ondrop={hearDrop} />
 
 <svelte:head>
 	<title>{t('app-page-title')}</title>
 </svelte:head>
 
-{#snippet refusals()}
-	{#each opening.refused as refused, index (index)}
-		<p role="alert">
-			{t('build-unreadable', { file: refused.fileName, reason: reason(refused.refusal) })}
-		</p>
-	{/each}
+{#snippet coreFailure()}
 	{#await core catch}
 		<p role="alert">{t('core-load-failed')}</p>
 	{/await}
@@ -63,7 +58,10 @@
 			<dt>{t('build-link')}</dt>
 			<dd>{build.link ?? t('build-unknown')}</dd>
 		</dl>
-		{@render refusals()}
+		{#each opening.refused as refused, index (index)}
+			<p role="alert">{refused.fileName} {refusalReason(refused.refusal)}</p>
+		{/each}
+		{@render coreFailure()}
 		{#await core then { version }}
 			<p class="version">{t('core-version', { version })}</p>
 		{/await}
@@ -71,10 +69,16 @@
 {:else}
 	<FirstVisit>
 		{#snippet zone()}
-			<DropZone />
+			<DropZone {isPasting} onback={backToFiles} />
 		{/snippet}
 		{#snippet below()}
-			{@render refusals()}
+			<SiteLink
+				bind:this={pasteSwitch}
+				size="compact"
+				label={t(isPasting ? 'paste-back' : 'paste-json')}
+				onclick={() => (isPasting ? backToFiles() : (isPasting = true))}
+			/>
+			{@render coreFailure()}
 		{/snippet}
 	</FirstVisit>
 {/if}

@@ -39,6 +39,20 @@ drop-zone-files-over =
        *[other] { $count } files over the page
     }
 
+## Paste JSON: the drop zone become a field, where the JSON of a build pasted opens at once.
+
+# Under the zone, a link in words.
+paste-json = Paste JSON
+# Under the field, in place of Paste JSON: gives the zone back.
+paste-back = Drop a file instead
+# The name of the field for a screen reader.
+paste-field = The JSON of a build
+paste-title = Paste the JSON of a build
+paste-call = Ctrl+V: it opens at once · Esc: back to the files
+# $reason (String): one of the refused- messages below, never refused-not-text nor
+# refused-unreadable, which a text pasted can't be.
+paste-refused = This text { $reason }
+
 ## The phone page: one message in place of every page, under 600 pixels. One sentence a line.
 
 phone-title = Pathweaver needs a computer
@@ -52,21 +66,34 @@ build-author = Author
 build-ascendancy = Ascendancy
 build-link = Link
 build-unknown = Not given
-# $file (String): the name of the file. $reason (String): one of the refused- messages below.
-build-unreadable = { $file } can't be read: { $reason }
+## Why a file is refused, written after its name, which the page shows in the colour of the text
+## and the reason in the red; without a period at its end (the owner, 2026-11-23).
+
 # $bytes (Number), $limit (Number): the size of the file and the largest the core reads.
-refused-too-large = it is { $bytes } bytes, larger than { $limit }.
+refused-too-large = is { $bytes } bytes, larger than { $limit }
 # Bytes that aren't text (UTF-8), such as an image.
-refused-not-text = it isn't text.
-# $line (Number): from 1. $excerpt (String): the text of that line, cut around the error.
-refused-not-json = it isn't JSON, at line { $line }: { $excerpt }
-refused-not-a-build = it isn't a build: an object with a name.
+refused-not-text = isn't a text file
+# $line (Number): from 1.
+refused-not-json = isn't valid JSON at line { $line }
+refused-not-a-build = isn't a build: an object with a name
 # $field (String): the place of the value in the build, such as skills[2].support_skills[0].id.
-refused-wrong-value = the value of { $field } isn't of the right type.
+refused-wrong-value = has a value of the wrong type at { $field }
 # $field (String): the place of the field in the build, such as passives[0].id.
-refused-missing-field = the field { $field } is missing.
+refused-missing-field = misses the field { $field }
 # A folder dropped, or a file removed or locked since it was chosen.
-refused-unreadable = the browser could not read it.
+refused-unreadable = couldn't be read by the browser
+# $count (Number): the files refused that aren't listed, from 2.
+refused-more = and { $count } more
+
+## The drop zone of the first visit, when no file of a drop opens: what went wrong, over the
+## files refused and their reasons.
+
+# One file, which isn't text.
+refused-zone-not-a-build-file = That isn't a .build file
+# One file, for any other reason.
+refused-zone-unreadable = That build can't be read
+refused-zone-several = These files can't be read
+
 # $version (String): the version of the core, as the WebAssembly module gives it.
 core-version = Core { $version }, in Rust.
 core-load-failed = The core of Pathweaver could not load.

@@ -23,4 +23,4 @@ const pasteHome = (text, reason) => dropHome({ zone: pasteZone(text, reason), fi
 
 addSection(() => ["Home · Paste JSON: the zone becomes a field, and a paste opens the build at once",
   [["After a click on Paste JSON: the field, the caret in it (click it and paste any text)", pasteHome()],
-   ["A text that isn't a whole build: it stays, its reason at the foot of the field", pasteHome(PASTED_CUT, "That isn't the JSON of a whole build: it stops at line 7.")]]]);
+   ["A text that isn't a build: it stays, its reason at the foot of the field", pasteHome(PASTED_CUT, "This text isn't valid JSON at line 7")]]]);

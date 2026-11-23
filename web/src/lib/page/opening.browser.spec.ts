@@ -32,6 +32,41 @@ describe('the files opened', () => {
 		]);
 	});
 
+	it('say the files refused all refused only when none of them opened', async () => {
+		const opening = new Opening();
+		const notJson = fileOf('notes.txt', 'Act 1');
+
+		await opening.open([image, buildA]);
+		expect(opening.refusedAll).toEqual([]);
+
+		await opening.open([image, notJson]);
+		expect(opening.refusedAll).toEqual([
+			{ kind: 'refused', fileName: 'passive-tree.png', refusal: { reason: 'notText' } },
+			{
+				kind: 'refused',
+				fileName: 'notes.txt',
+				refusal: { reason: 'notJson', line: 1, excerpt: 'Act 1' }
+			}
+		]);
+	});
+
+	it('forget the files refused before a build pasted, and keep them before a text refused', async () => {
+		const opening = new Opening();
+		await opening.open([image]);
+
+		expect(await opening.openText('{ "name": "Not')).toEqual({
+			reason: 'notJson',
+			line: 1,
+			excerpt: '{ "name": "Not'
+		});
+		expect(opening.refusedAll).toHaveLength(1);
+
+		expect(await opening.openText('{ "name": "Pasted" }')).toBeUndefined();
+		expect(openBuilds.shown?.name).toBe('Pasted');
+		expect(opening.refused).toEqual([]);
+		expect(opening.refusedAll).toEqual([]);
+	});
+
 	it('forget the files refused before them', async () => {
 		const opening = new Opening();
 		await opening.open([image]);
@@ -39,6 +74,7 @@ describe('the files opened', () => {
 		await opening.open([buildA]);
 
 		expect(opening.refused).toEqual([]);
+		expect(opening.refusedAll).toEqual([]);
 	});
 
 	it('open after the files given before them, however long those take to read', async () => {

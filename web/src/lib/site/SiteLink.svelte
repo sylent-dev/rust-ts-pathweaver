@@ -1,29 +1,49 @@
 <!-- A link in words, as on the band of the site (specs.md, Window layout): in the colour of the frame
      of the logo, the full height of its row; on hover, its words turn to the colour of the text and
      a line of 2 pixels sweeps under them, never left drawn. Over the first visit for now (Report a
-     bug); the band of the site takes it with its links (4f). It leads out of the website, in a new
-     tab, so that the builds open stay open, which its name says to a screen reader (WCAG G201). -->
+     bug, Paste JSON); the band of the site takes it with its links (4f). Given an address, it leads
+     out of the website, in a new tab, so that the builds open stay open, which its name says to a
+     screen reader (WCAG G201); given an action of the page, it is a button. Compact, 32 pixels high
+     and its words almost to its edges: under the zone of the first visit. -->
 <script lang="ts">
 	import { t } from '#lib/i18n.ts';
 
-	interface Props {
-		href: string;
+	type Props = {
 		label: string;
-	}
+		/** The height of its row: the band's, or 32 pixels. */
+		size?: 'band' | 'compact';
+	} & ({ href: string; onclick?: never } | { onclick: () => void; href?: never });
 
-	let { href, label }: Props = $props();
+	let { label, size = 'band', href, onclick }: Props = $props();
+
+	let button: HTMLButtonElement | undefined = $state();
+
+	/** Gives the keyboard to the button of an action, as when the field it opened closes. */
+	export function focus(): void {
+		button?.focus();
+	}
 </script>
 
-<!-- eslint-disable svelte/no-navigation-without-resolve -- an address outside the website, which resolve() would put under its path -->
-<a
-	class="link"
-	{href}
-	target="_blank"
-	rel="noopener noreferrer"
-	aria-label={t('site-link-new-tab', { label })}><span class="label">{label}</span></a
->
-
-<!-- eslint-enable svelte/no-navigation-without-resolve -->
+{#if href !== undefined}
+	<!-- eslint-disable svelte/no-navigation-without-resolve -- an address outside the website, which resolve() would put under its path -->
+	<a
+		class="link"
+		class:is-compact={size === 'compact'}
+		{href}
+		target="_blank"
+		rel="noopener noreferrer"
+		aria-label={t('site-link-new-tab', { label })}><span class="label">{label}</span></a
+	>
+	<!-- eslint-enable svelte/no-navigation-without-resolve -->
+{:else}
+	<button
+		bind:this={button}
+		type="button"
+		class="link"
+		class:is-compact={size === 'compact'}
+		{onclick}><span class="label">{label}</span></button
+	>
+{/if}
 
 <style>
 	.link {
@@ -31,12 +51,20 @@
 		align-items: center;
 		height: 100%;
 		padding: 0 16px;
+		border: none;
+		background: none;
 		color: var(--accent);
 		font-family: var(--site-link-font);
 		font-weight: var(--site-link-weight);
 		font-size: var(--site-link-size);
 		text-decoration: none;
+		cursor: pointer;
 		transition: color var(--hover-fade);
+	}
+
+	.is-compact {
+		height: 32px;
+		padding: 0 4px;
 	}
 
 	.link:hover {

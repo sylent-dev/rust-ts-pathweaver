@@ -5,7 +5,7 @@
 import { opening } from './opening.svelte.ts';
 
 /** Whether a drag carries files, rather than a text or a link dragged from a page. */
-function carriesFiles(event: DragEvent): boolean {
+export function carriesFiles(event: DragEvent): boolean {
 	return event.dataTransfer?.types.includes('Files') ?? false;
 }
 

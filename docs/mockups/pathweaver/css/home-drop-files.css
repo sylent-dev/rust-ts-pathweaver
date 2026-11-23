@@ -8,3 +8,14 @@
 .home-drop-error { display: flex; flex-direction: column; align-items: center; gap: 8px; text-align: center; }
 .home-drop-zone .home-drop-reason { color: var(--error); font-size: 14.5px; }
 .home-drop-zone .home-drop-again { position: absolute; left: 0; right: 0; bottom: 22px; text-align: center; }
+
+/* The file named in the colour of the text, its reason in the red (sections/home-refused-cases.js). */
+.home-drop-zone .home-drop-file { color: var(--text); }
+/* Several files: the title, then a line each, left aligned, four at most, above the call at the foot. */
+.home-drop-error.is-list { align-self: stretch; align-items: stretch; gap: 12px; margin-bottom: 30px; padding: 0 28px; text-align: left; }
+.home-drop-error.is-list strong { text-align: center; }
+.home-drop-files { display: flex; flex-direction: column; gap: 6px; margin: 0; padding: 0; list-style: none; font-size: 13.5px; }
+/* One line each, cut by « … » at the width of the zone, so that four always fit. */
+.home-drop-files li { overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+.home-drop-zone .home-drop-files .home-drop-reason { font-size: 13.5px; }
+.home-drop-files .home-drop-more { color: var(--weak); }
