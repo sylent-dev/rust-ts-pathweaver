@@ -40,9 +40,9 @@ describe('reading the files given', () => {
 		});
 	});
 
-	it('refuses a file larger than the core reads from its size, without reading its text', async () => {
+	it('refuses a file larger than the core reads from its size, without reading it', async () => {
 		const large = fileOf('large.build', ' '.repeat(MAX_BYTES + 1));
-		const text = vi.spyOn(large, 'text');
+		const bytes = vi.spyOn(large, 'arrayBuffer');
 
 		const [read] = await readFiles([large]);
 
@@ -51,7 +51,33 @@ describe('reading the files given', () => {
 			fileName: 'large.build',
 			refusal: { reason: 'tooLarge', bytes: MAX_BYTES + 1, limit: MAX_BYTES }
 		});
-		expect(text).not.toHaveBeenCalled();
+		expect(bytes).not.toHaveBeenCalled();
+	});
+
+	it('refuses a file of 4 GiB or more with its whole size, never as a small one', async () => {
+		const huge = fileOf('huge.build', '{ "name": "A" }');
+		Object.defineProperty(huge, 'size', { value: 5 * 2 ** 30 });
+
+		const [read] = await readFiles([huge]);
+
+		expect(read?.kind === 'refused' && read.refusal).toEqual({
+			reason: 'tooLarge',
+			bytes: 5 * 2 ** 30,
+			limit: MAX_BYTES
+		});
+	});
+
+	it('says that an image isn’t text, never that it is too large', async () => {
+		// 600 KB of an image: decoded as text, each byte would become a character of 3 bytes.
+		const image = new File([new Uint8Array(600_000).fill(0x89)], 'passive-tree.png');
+
+		const [read] = await readFiles([image]);
+
+		expect(read).toEqual({
+			kind: 'refused',
+			fileName: 'passive-tree.png',
+			refusal: { reason: 'notText' }
+		});
 	});
 
 	it('reads a file of the largest size the core reads', async () => {
@@ -67,7 +93,9 @@ describe('reading the files given', () => {
 	it('says that a file the browser could not read is refused, and reads the others', async () => {
 		vi.spyOn(console, 'warn').mockImplementation(() => {});
 		const folder = fileOf('Builds', '');
-		vi.spyOn(folder, 'text').mockRejectedValue(new DOMException('A folder', 'NotReadableError'));
+		vi.spyOn(folder, 'arrayBuffer').mockRejectedValue(
+			new DOMException('A folder', 'NotReadableError')
+		);
 
 		const read = await readFiles([folder, fileOf('a.build', '{ "name": "A" }')]);
 

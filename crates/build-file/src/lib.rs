@@ -76,7 +76,28 @@ pub struct Build {
     pub extra: Extra,
 }
 
+/// The size of a text or of the bytes of a file, as the size of a file is given.
+fn size_of(length: usize) -> u64 {
+    u64::try_from(length).unwrap_or(u64::MAX)
+}
+
 impl Build {
+    /// Reads the bytes of a `.build` file, as they are on the disk: their size is the size of
+    /// the file, and bytes that aren't UTF-8 (an image) are refused as such, rather than read
+    /// as a text of replacement characters three times larger.
+    ///
+    /// # Errors
+    ///
+    /// When the bytes are more than [`MAX_BYTES`], aren't UTF-8, or their text isn't a build
+    /// ([`Build::read`]).
+    pub fn read_bytes(bytes: &[u8]) -> Result<Self, ReadError> {
+        if let Some(error) = ReadError::of_size(size_of(bytes.len())) {
+            return Err(error);
+        }
+        let text = std::str::from_utf8(bytes).map_err(|_| ReadError::NotText)?;
+        Self::read(text)
+    }
+
     /// Reads the text of a `.build` file. A byte order mark at its start, which some editors of
     /// Windows write, is skipped. A field written twice in an object keeps its last value, as
     /// `JSON.parse` of the browsers does (`specs.md`, Unknown and invalid entries).
@@ -86,7 +107,7 @@ impl Build {
     /// When the text is larger than [`MAX_BYTES`], isn't JSON, isn't an object with a `name`, or
     /// holds a value of the wrong type or misses a field ([`ReadError`]).
     pub fn read(text: &str) -> Result<Self, ReadError> {
-        if let Some(error) = ReadError::of_size(u64::try_from(text.len()).unwrap_or(u64::MAX)) {
+        if let Some(error) = ReadError::of_size(size_of(text.len())) {
             return Err(error);
         }
         let text = text.strip_prefix('\u{feff}').unwrap_or(text);

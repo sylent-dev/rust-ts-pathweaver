@@ -1,8 +1,9 @@
 //! Why a text isn't a `.build` file the viewer can open (`specs.md`, Opening builds): data the
 //! interface writes as a sentence in each language, never a sentence of the core.
 
-/// The largest text read, in bytes: 1 MB, when the largest file of the corpus is 72 KB.
-pub const MAX_BYTES: usize = 1_048_576;
+/// The largest file read, in bytes: 1 MB, when the largest file of the corpus is 72 KB. A
+/// `u64`, as the size of a file is.
+pub const MAX_BYTES: u64 = 1_048_576;
 
 /// The characters of a line of the text kept around a JSON error: a JSON pasted on one line
 /// would otherwise be shown whole.
@@ -14,6 +15,8 @@ pub enum ReadError {
     /// Larger than [`MAX_BYTES`], refused before it is read: by its size alone, for a file the
     /// interface hasn't read yet ([`ReadError::of_size`]).
     TooLarge { bytes: u64 },
+    /// Not text: bytes that aren't UTF-8, such as an image or an archive.
+    NotText,
     /// Not JSON: the line of the error, from 1, and its text. For a text that ends too soon,
     /// the last line that holds a character other than a space.
     NotJson {
@@ -44,6 +47,7 @@ impl std::fmt::Display for ReadError {
             Self::TooLarge { bytes } => {
                 write!(formatter, "larger than {MAX_BYTES} bytes: {bytes} bytes")
             }
+            Self::NotText => write!(formatter, "not text: bytes that aren't UTF-8"),
             Self::NotJson {
                 line,
                 column,
@@ -67,8 +71,7 @@ impl ReadError {
     /// read (`specs.md`, Opening builds).
     #[must_use]
     pub fn of_size(bytes: u64) -> Option<Self> {
-        let limit = u64::try_from(MAX_BYTES).unwrap_or(u64::MAX);
-        (bytes > limit).then_some(Self::TooLarge { bytes })
+        (bytes > MAX_BYTES).then_some(Self::TooLarge { bytes })
     }
 
     /// The error of a text `serde_json` couldn't read, at the line of the error

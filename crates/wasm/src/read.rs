@@ -63,7 +63,9 @@ impl From<&Build> for BuildLevels {
 )]
 pub enum RefusedFile {
     /// Larger than the limit of the core, in bytes.
-    TooLarge { bytes: u64, limit: usize },
+    TooLarge { bytes: u64, limit: u64 },
+    /// Not text: bytes that aren't UTF-8, such as an image.
+    NotText,
     /// The line of the error, from 1, and its text cut to 80 characters around the error;
     /// for a text that ends too soon, its last line with a character other than a space. The
     /// column of the core, in bytes, means nothing to JavaScript, which counts in UTF-16.
@@ -83,6 +85,7 @@ impl From<ReadError> for RefusedFile {
                 bytes,
                 limit: pathweaver_build_file::MAX_BYTES,
             },
+            ReadError::NotText => Self::NotText,
             ReadError::NotJson { line, excerpt, .. } => Self::NotJson { line, excerpt },
             ReadError::NotABuild => Self::NotABuild,
             ReadError::WrongValue { field } => Self::WrongValue { field },
@@ -100,7 +103,8 @@ pub fn refused_by_size(bytes: u64) -> Option<RefusedFile> {
 
 /// Why a file of `bytes` bytes is refused from its size alone, so that the page never reads
 /// the text of a file the core would refuse (`specs.md`, Opening builds): the rule of the core,
-/// not a copy of its limit. A `bigint`, since a file may be larger than a `number` of 32 bits.
+/// not a copy of its limit. A `u64`, a `bigint` in JavaScript: wasm-bindgen would take a file of
+/// 4 GiB or more modulo 2³² as a `u32`, as a small one.
 ///
 /// # Errors
 ///
@@ -112,10 +116,10 @@ pub fn refused_by_size_of_file(bytes: u64) -> Result<Option<Ts<RefusedFile>>, Js
         .transpose()?)
 }
 
-/// The build of the text of a file, or why it is refused, in plain Rust for `cargo test`.
+/// The build of the bytes of a file, or why it is refused, in plain Rust for `cargo test`.
 #[must_use]
-pub fn read_file(text: &str) -> BuildFile {
-    match Build::read(text) {
+pub fn read_file(bytes: &[u8]) -> BuildFile {
+    match Build::read_bytes(bytes) {
         Ok(build) => BuildFile::Build {
             build: OpenedBuild {
                 content_key: build.content_key(),
@@ -132,14 +136,16 @@ pub fn read_file(text: &str) -> BuildFile {
     }
 }
 
-/// The build of the text of a file, or why it is refused.
+/// The build of the bytes of a file, or why it is refused: the bytes as they are on the disk,
+/// a `Uint8Array` in JavaScript, so that the core measures the file and not its text, and says
+/// when it isn't text.
 ///
 /// # Errors
 ///
 /// When the result can't be made a JavaScript object, which it never is.
 #[wasm_bindgen(js_name = readBuildFile)]
-pub fn read_build_file(text: &str) -> Result<Ts<BuildFile>, JsError> {
-    Ok(Ts::from_rust(&read_file(text))?)
+pub fn read_build_file(bytes: &[u8]) -> Result<Ts<BuildFile>, JsError> {
+    Ok(Ts::from_rust(&read_file(bytes))?)
 }
 
 #[cfg(test)]
@@ -151,7 +157,7 @@ mod tests {
         let text = include_str!("../../build-file/tests/builds/every-field.build");
 
         assert_eq!(
-            read_file(text),
+            read_file(text.as_bytes()),
             BuildFile::Build {
                 build: OpenedBuild {
                     content_key: Build::read(text).unwrap().content_key(),
@@ -176,7 +182,7 @@ mod tests {
             { "id": "Comet", "level_interval": [90, 100] }
         ], "passives": [{ "id": "melee17", "level_interval": [70, 100] }] }"#;
 
-        let BuildFile::Build { build } = read_file(guide_of_the_maps) else {
+        let BuildFile::Build { build } = read_file(guide_of_the_maps.as_bytes()) else {
             panic!("the text is a build");
         };
         assert_eq!(
@@ -191,48 +197,50 @@ mod tests {
 
     #[test]
     fn each_error_of_the_core_crosses_with_its_values() {
-        let too_large = " ".repeat(pathweaver_build_file::MAX_BYTES + 1);
-        let cases = [
+        let limit = pathweaver_build_file::MAX_BYTES;
+        let too_large = " ".repeat(usize::try_from(limit + 1).unwrap());
+        let cases: [(&[u8], RefusedFile); 6] = [
             (
-                too_large.as_str(),
+                too_large.as_bytes(),
                 RefusedFile::TooLarge {
-                    bytes: u64::try_from(pathweaver_build_file::MAX_BYTES + 1).unwrap(),
-                    limit: pathweaver_build_file::MAX_BYTES,
+                    bytes: limit + 1,
+                    limit,
                 },
             ),
+            (b"\x89PNG", RefusedFile::NotText),
             (
-                "{ oops",
+                b"{ oops",
                 RefusedFile::NotJson {
                     line: 1,
                     excerpt: "{ oops".to_owned(),
                 },
             ),
-            ("[]", RefusedFile::NotABuild),
+            (b"[]", RefusedFile::NotABuild),
             (
-                r#"{ "name": 3 }"#,
+                br#"{ "name": 3 }"#,
                 RefusedFile::WrongValue {
                     field: "name".to_owned(),
                 },
             ),
             (
-                r#"{ "name": "Bad", "passives": [{}] }"#,
+                br#"{ "name": "Bad", "passives": [{}] }"#,
                 RefusedFile::MissingField {
                     field: "passives[0].id".to_owned(),
                 },
             ),
         ];
 
-        for (text, error) in cases {
-            assert_eq!(read_file(text), BuildFile::Refused { error });
+        for (bytes, error) in cases {
+            assert_eq!(read_file(bytes), BuildFile::Refused { error });
         }
     }
 
     #[test]
     fn a_size_is_refused_by_the_rule_of_the_core_with_its_limit() {
         let limit = pathweaver_build_file::MAX_BYTES;
-        let larger = u64::try_from(limit + 1).unwrap();
+        let larger = limit + 1;
 
-        assert_eq!(refused_by_size(u64::try_from(limit).unwrap()), None);
+        assert_eq!(refused_by_size(limit), None);
         assert_eq!(
             refused_by_size(larger),
             Some(RefusedFile::TooLarge {

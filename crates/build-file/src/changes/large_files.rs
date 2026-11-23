@@ -14,7 +14,7 @@ fn build_of(opening: &str, closing: &str, entry: impl Fn(usize) -> String) -> (B
     let mut entries = 0;
     loop {
         let next = entry(entries);
-        if text.len() + next.len() + closing.len() + 1 > MAX_BYTES {
+        if text.len() + next.len() + closing.len() + 1 > usize::try_from(MAX_BYTES).unwrap() {
             break;
         }
         if entries > 0 {

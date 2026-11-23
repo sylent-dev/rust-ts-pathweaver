@@ -53,7 +53,7 @@ function textDrag(type: string): DragEvent {
 
 const buildA = fileOf('a.build', '{ "name": "A" }');
 const buildB = fileOf('b.build', '{ "name": "B" }');
-const image = fileOf('passive-tree.png', '\u0089PNG');
+const image = new File([new Uint8Array([0x89, 0x50, 0x4e, 0x47])], 'passive-tree.png');
 
 afterEach(() => {
 	zone.remove();
@@ -163,7 +163,7 @@ describe('files dropped', () => {
 			{
 				kind: 'refused',
 				fileName: 'passive-tree.png',
-				refusal: expect.objectContaining({ reason: 'notJson' })
+				refusal: { reason: 'notText' }
 			}
 		]);
 	});

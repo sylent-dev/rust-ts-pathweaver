@@ -54,6 +54,8 @@ build-unknown = Not given
 build-unreadable = { $file } can't be read: { $reason }
 # $bytes (Number), $limit (Number): the size of the file and the largest the core reads.
 refused-too-large = it is { $bytes } bytes, larger than { $limit }.
+# Bytes that aren't text (UTF-8), such as an image.
+refused-not-text = it isn't text.
 # $line (Number): from 1. $excerpt (String): the text of that line, cut around the error.
 refused-not-json = it isn't JSON, at line { $line }: { $excerpt }
 refused-not-a-build = it isn't a build: an object with a name.

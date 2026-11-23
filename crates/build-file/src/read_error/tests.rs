@@ -293,6 +293,11 @@ fn a_field_an_entry_needs_that_is_missing_gives_its_place() {
     );
 }
 
+/// The largest text read, as a length.
+fn max_length() -> usize {
+    usize::try_from(MAX_BYTES).unwrap()
+}
+
 /// A build whose text is `bytes` long, its name filled to reach it.
 fn build_of(bytes: usize) -> String {
     let empty = r#"{"name":""}"#;
@@ -301,30 +306,25 @@ fn build_of(bytes: usize) -> String {
 
 #[test]
 fn a_text_of_1_mb_is_read_and_a_larger_one_refused() {
-    assert_eq!(build_of(MAX_BYTES).len(), MAX_BYTES);
+    assert_eq!(build_of(max_length()).len(), max_length());
 
-    assert!(Build::read(&build_of(MAX_BYTES)).is_ok());
+    assert!(Build::read(&build_of(max_length())).is_ok());
     assert_eq!(
-        error_of(&build_of(MAX_BYTES + 1)),
+        error_of(&build_of(max_length() + 1)),
         ReadError::TooLarge {
-            bytes: bytes_of(MAX_BYTES + 1)
+            bytes: MAX_BYTES + 1
         }
     );
-}
-
-/// A count of bytes as the size of a file gives it.
-fn bytes_of(count: usize) -> u64 {
-    u64::try_from(count).unwrap()
 }
 
 #[test]
 fn a_size_of_1_mb_is_read_and_a_larger_one_refused_before_its_text_is() {
     assert_eq!(ReadError::of_size(0), None);
-    assert_eq!(ReadError::of_size(bytes_of(MAX_BYTES)), None);
+    assert_eq!(ReadError::of_size(MAX_BYTES), None);
     assert_eq!(
-        ReadError::of_size(bytes_of(MAX_BYTES + 1)),
+        ReadError::of_size(MAX_BYTES + 1),
         Some(ReadError::TooLarge {
-            bytes: bytes_of(MAX_BYTES + 1)
+            bytes: MAX_BYTES + 1
         })
     );
 }
@@ -344,14 +344,55 @@ fn a_size_past_what_the_memory_of_the_page_holds_is_refused_with_its_size() {
 
 #[test]
 fn a_larger_text_is_refused_before_it_is_read() {
-    let text = format!("{}oops", " ".repeat(MAX_BYTES));
+    let text = format!("{}oops", " ".repeat(max_length()));
 
     assert_eq!(
         error_of(&text),
         ReadError::TooLarge {
-            bytes: bytes_of(MAX_BYTES + 4)
+            bytes: MAX_BYTES + 4
         }
     );
+}
+
+#[test]
+fn the_bytes_of_a_build_are_read_as_its_text() {
+    let build = Build::read_bytes(br#"{ "name": "Bytes" }"#).unwrap();
+    assert_eq!(build.name, "Bytes");
+}
+
+#[test]
+fn bytes_that_arent_utf_8_arent_text() {
+    // The start of a PNG image, its 0x89 never a character of UTF-8.
+    let image = b"\x89PNG\r\n\x1a\n\0\0\0\rIHDR";
+    assert_eq!(Build::read_bytes(image), Err(ReadError::NotText));
+}
+
+#[test]
+fn bytes_that_arent_utf_8_are_measured_as_bytes_not_as_their_text() {
+    // 600 KB of an image: read as text, each byte would become a replacement character of 3
+    // bytes, 1.8 MB, and the file would be refused as too large.
+    let image = vec![0x89; 600_000];
+    assert_eq!(Build::read_bytes(&image), Err(ReadError::NotText));
+}
+
+#[test]
+fn bytes_of_1_mb_are_read_and_more_refused_by_their_size_before_their_text() {
+    assert!(Build::read_bytes(build_of(max_length()).as_bytes()).is_ok());
+
+    let mut more = vec![0x89; max_length()];
+    more.push(b' ');
+    assert_eq!(
+        Build::read_bytes(&more),
+        Err(ReadError::TooLarge {
+            bytes: MAX_BYTES + 1
+        })
+    );
+}
+
+#[test]
+fn a_byte_order_mark_before_the_bytes_of_a_build_is_skipped() {
+    let build = Build::read_bytes(b"\xef\xbb\xbf{ \"name\": \"Windows\" }").unwrap();
+    assert_eq!(build.name, "Windows");
 }
 
 #[test]

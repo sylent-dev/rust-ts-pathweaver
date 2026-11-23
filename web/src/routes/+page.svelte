@@ -19,6 +19,8 @@
 		switch (refusal.reason) {
 			case 'tooLarge':
 				return t('refused-too-large', { bytes: refusal.bytes, limit: refusal.limit });
+			case 'notText':
+				return t('refused-not-text');
 			case 'notJson':
 				return t('refused-not-json', { line: refusal.line, excerpt: refusal.excerpt });
 			case 'notABuild':

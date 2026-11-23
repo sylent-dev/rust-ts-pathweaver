@@ -17,8 +17,10 @@ export type ReadFile =
 
 /**
  * Reads the files given, in their order, once the core is loaded. A file larger than the core
- * reads is refused from its size, before its text is read (a file of a few gigabytes would fill
- * the memory of the page). Rejects only when the core can't load.
+ * reads is refused from its size, before its bytes are read (a file of a few gigabytes would fill
+ * the memory of the page). The core reads the bytes of each file, not a text decoded here: it
+ * measures the file itself and says when it isn't text (an image). Rejects only when the core
+ * can't load.
  */
 export async function readFiles(files: Iterable<File>): Promise<ReadFile[]> {
 	await loadCore();
@@ -35,14 +37,14 @@ async function readFile(file: File): Promise<ReadFile> {
 	if (tooLarge !== undefined) {
 		return { kind: 'refused', fileName: file.name, refusal: tooLarge };
 	}
-	let text: string;
+	let bytes: Uint8Array;
 	try {
-		text = await file.text();
+		bytes = new Uint8Array(await file.arrayBuffer());
 	} catch (error) {
 		console.warn(`read-files: the browser could not read ${file.name}`, error);
 		return { kind: 'refused', fileName: file.name, refusal: { reason: 'unreadable' } };
 	}
-	const result = readBuildFile(text);
+	const result = readBuildFile(bytes);
 	return result.kind === 'build'
 		? result
 		: { kind: 'refused', fileName: file.name, refusal: result.error };
