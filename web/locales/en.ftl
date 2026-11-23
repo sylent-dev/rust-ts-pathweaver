@@ -4,6 +4,12 @@
 app-name = Pathweaver
 app-tagline = The build viewer and planner of Path of Exile 2.
 
+## The phone page: one message in place of every page, under 600 pixels. One sentence a line.
+
+phone-title = Pathweaver needs a computer
+phone-why-computer = It is made for a computer next to the game:
+phone-why-screen = its passive tree needs a large screen.
+
 ## The first page, replaced by the viewer.
 
 drop-build = Drop a .build file here, or choose one.
