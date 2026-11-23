@@ -12,21 +12,23 @@ describe('the veins', () => {
 		expect(seededRandom(7)()).toBe(seededRandom(7)());
 	});
 
-	it('run from a crossing to a neighbour along a line of the grid', () => {
-		const columns = 21;
-		const { downstream, isOnVein } = veinsOf(columns, 19);
+	it('run from a crossing to a neighbour along a line of the grid, never across a row', () => {
+		// The crossings of a window of 1,920 by 1,080 pixels.
+		const columns = 41;
+		const { downstream, isOnVein } = veinsOf(columns, 24);
 		const segments = [...downstream].flatMap((to, from) => (to < 0 ? [] : [[from, to]]));
 
 		expect(segments.length).toBeGreaterThan(0);
 		for (const [from = 0, to = 0] of segments) {
-			const step = Math.abs(to - from);
-			expect(step === 1 || step === columns).toBe(true);
+			const columnsApart = Math.abs((from % columns) - (to % columns));
+			const rowsApart = Math.abs(Math.floor(from / columns) - Math.floor(to / columns));
+			expect(columnsApart + rowsApart).toBe(1);
 			expect([isOnVein[from], isOnVein[to]]).toEqual([1, 1]);
 		}
 	});
 
 	it('never run back to the crossing they came from', () => {
-		const { downstream } = veinsOf(21, 19);
+		const { downstream } = veinsOf(41, 24);
 		downstream.forEach((to, from) => {
 			if (to >= 0) {
 				expect(downstream[to]).not.toBe(from);

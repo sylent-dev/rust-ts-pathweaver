@@ -44,4 +44,22 @@ describe('the fluid', () => {
 		expect(host.querySelector('canvas')).toBeNull();
 		host.remove();
 	});
+
+	it('says in the console when its ink is not written #rrggbb, rather than vanish unsaid', async () => {
+		const warn = vi.spyOn(console, 'warn').mockImplementation(() => {});
+		const host = document.createElement('div');
+		host.style.cssText =
+			'position: relative; width: 480px; height: 480px; --tile: 48px; --accent: rgb(96 165 250)';
+		document.body.append(host);
+		shown = mount(GridFluid, { target: host });
+		flushSync();
+
+		await expect
+			.poll(() => warn.mock.calls[0])
+			.toEqual([
+				'grid-fluid: --accent is not written #rrggbb, the fluid is not drawn',
+				'rgb(96 165 250)'
+			]);
+		host.remove();
+	});
 });

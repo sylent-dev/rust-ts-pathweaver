@@ -9,6 +9,8 @@ app-page-title = { app-name } · Build viewer and planner for Path of Exile 2
 
 # Opens a new issue on GitHub.
 site-report-bug = Report a bug
+# The name a screen reader gives a link of the site, which opens in a new tab. $label (String): its words.
+site-link-new-tab = { $label } (opens in a new tab)
 
 ## The home page at the first visit.
 

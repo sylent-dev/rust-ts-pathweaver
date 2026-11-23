@@ -25,10 +25,13 @@
 
 	let { zone, below }: Props = $props();
 
-	/** Where the pointer was last over the page, which the grid is lit around. */
+	/**
+	 * Where the files are over the page, which the grid is lit around: from the drag alone, since
+	 * the grid is lit only under files, and a drag from the system fires no pointermove.
+	 */
 	let pointer = $state({ x: '50%', y: '40%' });
 
-	function follow(event: PointerEvent | DragEvent): void {
+	function follow(event: DragEvent): void {
 		pointer = { x: `${event.clientX}px`, y: `${event.clientY}px` };
 	}
 </script>
@@ -38,7 +41,6 @@
 	class:is-over={fileDrop.isOver}
 	style:--x={pointer.x}
 	style:--y={pointer.y}
-	onpointermove={follow}
 	ondragover={follow}
 >
 	<div class="watermark" aria-hidden="true"><LogoMark pixels={620} /></div>

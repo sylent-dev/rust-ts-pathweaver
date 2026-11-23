@@ -44,7 +44,8 @@ describe('the first visit', () => {
 	});
 
 	it('leads to a new issue on GitHub from Report a bug, in a new tab', async () => {
-		const link = page.getByRole('link', { name: 'Report a bug' });
+		const link = page.getByRole('link', { name: 'Report a bug (opens in a new tab)' });
+		await expect.element(link).toHaveTextContent('Report a bug');
 		await expect
 			.element(link)
 			.toHaveAttribute('href', 'https://github.com/sylent-dev/rust-ts-pathweaver/issues/new');

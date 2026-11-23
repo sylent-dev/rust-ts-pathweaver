@@ -30,7 +30,11 @@
 		context = element.getContext('2d');
 		context?.setTransform(ratio, 0, 0, ratio, 0, 0);
 		const style = getComputedStyle(element);
-		ink = rgbChannels(style.getPropertyValue('--accent'));
+		const accent = style.getPropertyValue('--accent');
+		ink = rgbChannels(accent);
+		if (ink === undefined) {
+			console.warn('grid-fluid: --accent is not written #rrggbb, the fluid is not drawn', accent);
+		}
 		grid = new FluidGrid(width, height, Number.parseFloat(style.getPropertyValue('--tile')));
 	}
 

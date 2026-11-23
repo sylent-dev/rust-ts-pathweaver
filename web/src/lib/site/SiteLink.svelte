@@ -2,8 +2,10 @@
      of the logo, the full height of its row; on hover, its words turn to the colour of the text and
      a line of 2 pixels sweeps under them, never left drawn. Over the first visit for now (Report a
      bug); the band of the site takes it with its links (4f). It leads out of the website, in a new
-     tab, so that the builds open stay open. -->
+     tab, so that the builds open stay open, which its name says to a screen reader (WCAG G201). -->
 <script lang="ts">
+	import { t } from '#lib/i18n.ts';
+
 	interface Props {
 		href: string;
 		label: string;
@@ -12,10 +14,16 @@
 	let { href, label }: Props = $props();
 </script>
 
-<!-- eslint-disable-next-line svelte/no-navigation-without-resolve -- an address outside the website, which resolve() would put under its path -->
-<a class="link" {href} target="_blank" rel="noopener noreferrer"
-	><span class="label">{label}</span></a
+<!-- eslint-disable svelte/no-navigation-without-resolve -- an address outside the website, which resolve() would put under its path -->
+<a
+	class="link"
+	{href}
+	target="_blank"
+	rel="noopener noreferrer"
+	aria-label={t('site-link-new-tab', { label })}><span class="label">{label}</span></a
 >
+
+<!-- eslint-enable svelte/no-navigation-without-resolve -->
 
 <style>
 	.link {
