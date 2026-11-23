@@ -77,7 +77,7 @@ pub struct Build {
 }
 
 /// The size of a text or of the bytes of a file, as the size of a file is given.
-fn size_of(length: usize) -> u64 {
+fn file_size_of(length: usize) -> u64 {
     u64::try_from(length).unwrap_or(u64::MAX)
 }
 
@@ -91,11 +91,11 @@ impl Build {
     /// When the bytes are more than [`MAX_BYTES`], aren't UTF-8, or their text isn't a build
     /// ([`Build::read`]).
     pub fn read_bytes(bytes: &[u8]) -> Result<Self, ReadError> {
-        if let Some(error) = ReadError::of_size(size_of(bytes.len())) {
+        if let Some(error) = ReadError::of_size(file_size_of(bytes.len())) {
             return Err(error);
         }
         let text = std::str::from_utf8(bytes).map_err(|_| ReadError::NotText)?;
-        Self::read(text)
+        Self::read_measured(text)
     }
 
     /// Reads the text of a `.build` file. A byte order mark at its start, which some editors of
@@ -107,9 +107,14 @@ impl Build {
     /// When the text is larger than [`MAX_BYTES`], isn't JSON, isn't an object with a `name`, or
     /// holds a value of the wrong type or misses a field ([`ReadError`]).
     pub fn read(text: &str) -> Result<Self, ReadError> {
-        if let Some(error) = ReadError::of_size(size_of(text.len())) {
+        if let Some(error) = ReadError::of_size(file_size_of(text.len())) {
             return Err(error);
         }
+        Self::read_measured(text)
+    }
+
+    /// Reads a text whose size was checked: its byte order mark skipped, its JSON, its build.
+    fn read_measured(text: &str) -> Result<Self, ReadError> {
         let text = text.strip_prefix('\u{feff}').unwrap_or(text);
         let value: Value =
             serde_json::from_str(text).map_err(|error| ReadError::of_json(text, &error))?;

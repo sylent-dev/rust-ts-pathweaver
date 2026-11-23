@@ -1,6 +1,6 @@
 <!-- The fluid of the graph paper of the first visit (specs.md, Window layout): a canvas over the
      grid of its parent, where a fluid in the accent, at 80 %, runs along the main lines under the
-     pointer (the owner, 2026-11-23: more discreet; it was white), its rules in grid-fluid.ts. Still,
+     pointer (the owner, 2026-11-23: discreet), its rules in grid-fluid.ts. Still,
      and not drawn, when the system asks for less motion. It reads the tile of its parent (--tile)
      and its ink from the tokens (--accent). -->
 <script lang="ts">
@@ -15,6 +15,8 @@
 	let grid: FluidGrid | undefined;
 	let context: CanvasRenderingContext2D | null = null;
 	let ink: string | undefined;
+	/** The ink last said unreadable, so that a window resized says it once. */
+	let unreadInk: string | undefined;
 	/** Where the pointer was over the canvas, none while it is elsewhere. */
 	let pointer: { x: number; y: number } | undefined;
 	/** The frame asked for, none while the fluid is still. */
@@ -32,7 +34,8 @@
 		const style = getComputedStyle(element);
 		const accent = style.getPropertyValue('--accent');
 		ink = rgbChannels(accent);
-		if (ink === undefined) {
+		if (ink === undefined && accent !== unreadInk) {
+			unreadInk = accent;
 			console.warn('grid-fluid: --accent is not written #rrggbb, the fluid is not drawn', accent);
 		}
 		grid = new FluidGrid(width, height, Number.parseFloat(style.getPropertyValue('--tile')));

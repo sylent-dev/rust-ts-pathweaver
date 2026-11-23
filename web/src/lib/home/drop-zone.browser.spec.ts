@@ -78,7 +78,8 @@ describe('the drop zone', () => {
 		expect(input.value).toBe('');
 	});
 
-	it('says to let go while files are over the page, and how many', async () => {
+	it('says to let go while files are over the page, and how many, in the same elements', async () => {
+		const title = document.querySelector('.zone strong');
 		fileDrop.enter(
 			new DragEvent('dragenter', {
 				dataTransfer: filesTransfer([new File([''], 'a.build'), new File([''], 'b.build')])
@@ -88,5 +89,6 @@ describe('the drop zone', () => {
 		await expect
 			.element(page.getByRole('button', { name: /Let go to open it/ }))
 			.toHaveTextContent('2 files over the page');
+		expect(document.querySelector('.zone strong')).toBe(title);
 	});
 });

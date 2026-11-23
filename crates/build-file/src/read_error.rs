@@ -1,4 +1,4 @@
-//! Why a text isn't a `.build` file the viewer can open (`specs.md`, Opening builds): data the
+//! Why a file or a text isn't a `.build` file the viewer can open (`specs.md`, Opening builds): data the
 //! interface writes as a sentence in each language, never a sentence of the core.
 
 /// The largest file read, in bytes: 1 MB, when the largest file of the corpus is 72 KB. A

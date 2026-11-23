@@ -12,8 +12,8 @@
 /**
  * How much the veins hold the fluid apart from the rest of the grid, and how unevenly it is
  * poured, from 0 (the even fluid of sylent.art) to 1; and how slowly the fluid fades in the
- * veins, a share kept each frame. Tuned by the owner on sliders (2026-11-18), then again less
- * volatile and more discreet (2026-11-23; they were 0.65 and 0.975).
+ * veins, a share kept each frame. Tuned by the owner on sliders (2026-11-18, 2026-11-23: less
+ * volatile and more discreet).
  */
 const VOLATILITY = 0.4;
 const PERSISTENCE = 0.945;

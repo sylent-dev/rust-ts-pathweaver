@@ -21,7 +21,7 @@
 	}
 
 	/* The game, in the grey of the secondary texts, its letters spaced 0.1 em (the owner,
-	   2026-11-23: it was 0.24), rising to its place and fading in; still when the system asks for
+	   2026-11-23), rising to its place and fading in; still when the system asks for
 	   less motion. */
 	.game {
 		position: relative;

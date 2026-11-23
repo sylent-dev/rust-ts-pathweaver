@@ -45,7 +45,7 @@ describe('the fluid', () => {
 		host.remove();
 	});
 
-	it('says in the console when its ink is not written #rrggbb, rather than vanish unsaid', async () => {
+	it('says once in the console when its ink is not written #rrggbb, rather than vanish unsaid', async () => {
 		const warn = vi.spyOn(console, 'warn').mockImplementation(() => {});
 		const host = document.createElement('div');
 		host.style.cssText =
@@ -60,6 +60,9 @@ describe('the fluid', () => {
 				'grid-fluid: --accent is not written #rrggbb, the fluid is not drawn',
 				'rgb(96 165 250)'
 			]);
+		host.style.width = '600px';
+		await new Promise((resolve) => setTimeout(resolve, 100));
+		expect(warn).toHaveBeenCalledTimes(1);
 		host.remove();
 	});
 });

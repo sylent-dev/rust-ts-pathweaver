@@ -9,6 +9,14 @@
 
 	let chooser: HTMLInputElement;
 
+	/** What the line under the title says: the call, or how many files are over the page. */
+	const call = $derived.by(() => {
+		if (!fileDrop.isOver) {
+			return t('drop-zone-call');
+		}
+		return fileDrop.fileCount > 0 ? t('drop-zone-files-over', { count: fileDrop.fileCount }) : '';
+	});
+
 	function choose(event: Event & { currentTarget: HTMLInputElement }): void {
 		const files = [...(event.currentTarget.files ?? [])];
 		// Emptied, so that the same file chosen again opens again.
@@ -37,15 +45,10 @@
 		{/each}
 		<path d="M12 6v12M6 12h12" />
 	</svg>
-	{#if fileDrop.isOver}
-		<strong>{t('drop-zone-let-go')}</strong>
-		{#if fileDrop.fileCount > 0}
-			<span>{t('drop-zone-files-over', { count: fileDrop.fileCount })}</span>
-		{/if}
-	{:else}
-		<strong>{t('drop-zone-title')}</strong>
-		<span>{t('drop-zone-call')}</span>
-	{/if}
+	<!-- The same elements, their words changed in place: an element taken away under the files
+	     would be left unheard, its dragleave never reaching the page (file-drop.svelte.ts). -->
+	<strong>{t(fileDrop.isOver ? 'drop-zone-let-go' : 'drop-zone-title')}</strong>
+	<span hidden={call === ''}>{call}</span>
 </button>
 <input
 	bind:this={chooser}

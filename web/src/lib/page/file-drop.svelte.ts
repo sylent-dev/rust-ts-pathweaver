@@ -12,11 +12,12 @@ function carriesFiles(event: DragEvent): boolean {
 /** The files over the page. */
 export class FileDrop {
 	/**
-	 * The element the files entered last. A drag enters the next element under the pointer before
-	 * it leaves the one before (HTML, drag-and-drop processing model), so the page is left when
-	 * the files leave the element they entered last. The browsers don't all name the element
-	 * next (relatedTarget: none in WebKit), and an element taken away under the pointer is never
-	 * left on the page: neither counts here.
+	 * The element a drag of files entered last. A drag enters the next element under the pointer
+	 * before it leaves the one before (HTML, drag-and-drop processing model), so the page is left
+	 * when the files leave the element they entered last; the browsers don't all name the element
+	 * next (relatedTarget: none in WebKit). An element taken away under the pointer is left
+	 * unheard, its dragleave never reaching the page: the page keeps the elements under the
+	 * pointer while files are over it (DropZone).
 	 */
 	#lastEntered: EventTarget | null = null;
 	#isOver = $state(false);
@@ -57,7 +58,7 @@ export class FileDrop {
 	 * up (Esc): the page is left with the element entered last.
 	 */
 	leave(event: DragEvent): void {
-		if (carriesFiles(event) && event.target === this.#lastEntered) {
+		if (event.target === this.#lastEntered) {
 			this.#lastEntered = null;
 			this.#isOver = false;
 		}

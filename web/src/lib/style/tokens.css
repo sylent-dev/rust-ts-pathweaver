@@ -77,7 +77,7 @@
 
 	/* Text, the one accent (what is new, the links, the markers of the level), the brightest ink (the
      bar under the current tab, a close × on hover, the flash of what was just chosen or what is
-     new, the fluid of the first visit). */
+     new). */
 	--text: #e3eaf5;
 	--weak: #8393ad;
 	--accent: #60a5fa;

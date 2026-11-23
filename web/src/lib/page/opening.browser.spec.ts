@@ -76,7 +76,20 @@ describe('the files opened', () => {
 		await opening.open([broken]);
 		await opening.open([buildA]);
 
-		expect(error).toHaveBeenCalledWith('opening: the files could not be read', expect.any(Error));
+		expect(error).toHaveBeenCalledWith('opening: the files could not be opened', expect.any(Error));
 		expect(openBuilds.shown?.name).toBe('A');
+	});
+
+	it('open the next files after a failure while the files before opened', async () => {
+		vi.spyOn(console, 'error').mockImplementation(() => {});
+		const opening = new Opening();
+		vi.spyOn(openBuilds, 'open').mockImplementationOnce(() => {
+			throw new Error('A bug elsewhere');
+		});
+
+		await opening.open([buildA]);
+		await opening.open([buildB]);
+
+		expect(openBuilds.shown?.name).toBe('B');
 	});
 });
