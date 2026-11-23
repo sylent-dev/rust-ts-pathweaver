@@ -5,3 +5,4 @@ The guides of what only a real browser or a real service shows, run again before
 | Guide | Step | What it checks |
 |---|---|---|
 | [The website online](website-online.md) | 3. Deployment | The address, the core loaded there, the headers of Cloudflare, no request to another site. |
+| [Opening builds](open-builds.md) | 4e. The home page | The files dropped and chosen, the page lit under files, the zone that refuses, Paste JSON. |

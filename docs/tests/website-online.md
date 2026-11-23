@@ -11,13 +11,13 @@ The website is published to Cloudflare at each merge into `main`, at its own dom
 ## The tests
 
 1. **The address**: type `pathweaver.sylent.tools` in the address bar.
-   ✅ The page opens over `https://`, its padlock without a warning; it shows « Pathweaver », « The build viewer and planner of Path of Exile 2. », the box « Drop a .build file here, or choose one. » and, under it, « Core 0.1.0, in Rust. », the version of `Cargo.toml` (the core in WebAssembly loaded), never « The core of Pathweaver could not load. ». On the phone, held upright, one message in place of the page (4e1): the brand at the top, the yellow sticky note with its face, « Pathweaver needs a computer » in large letters on two lines, and two lines under it, nothing cut at the edges.
+   ✅ The page opens over `https://`, its padlock without a warning; it shows « Weave your path to level 100 » and the zone « Add your first build », never « The core of Pathweaver could not load. » under it. On the phone, held upright, one message in place of the page (4e1): the brand at the top, the yellow sticky note with its face, « Pathweaver needs a computer » in large letters on two lines, and two lines under it, nothing cut at the edges.
 
-2. **A build opens**: drop the file of the corpus on the box.
-   ✅ Its Name, Author, Ascendancy and Contents show under the box (« … passives, … skills, … inventory hints »), never « This file can't be read: ».
+2. **A build opens**: drop the file of the corpus on the page.
+   ✅ Its Name, Author, Ascendancy and Link show, then « Core 0.1.0, in Rust. », the version of `Cargo.toml` (the core in WebAssembly loaded), never a line « maxroll-aer0-ice-shot-amazon.build … » that says why it is refused.
 
 3. **The headers**: open the tools of the browser (F12), tab Network, and reload the page.
-   ✅ The response of the page itself (the first line, `/`) has `x-content-type-options: nosniff`, `x-frame-options: DENY` and `referrer-policy: strict-origin-when-cross-origin`; a file of `/_app/immutable/` (a `.js` or the `.wasm`) has `cache-control: public, max-age=31536000, immutable`; the `.wasm` (`pathweaver_bg….wasm`) has `content-type: application/wasm` (with another type the core still loads, more slowly, so the test 1 doesn't show it).
+   ✅ The response of the page itself (the first line, `/`) has `x-content-type-options: nosniff`, `x-frame-options: DENY` and `referrer-policy: strict-origin-when-cross-origin`; a file of `/_app/immutable/` (a `.js` or the `.wasm`) has `cache-control: public, max-age=31536000, immutable`; the `.wasm` (`pathweaver_bg….wasm`) has `content-type: application/wasm` (with another type the core still loads, more slowly, so the test 2 doesn't show it).
 
 4. **Nothing from elsewhere**: in the same tab Network, after the reload, look at the column Domain (in Chromium, right-click the titles of the columns to show it).
    ✅ Every request goes to `pathweaver.sylent.tools`, the two fonts (`manrope-latin….woff2`, `archivo-latin….woff2`) included, none to another site (`cloudflareinsights.com`, `fonts.googleapis.com`, a script), and none has a path under `/cdn-cgi/`, where Cloudflare puts the scripts it adds.
