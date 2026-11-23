@@ -1,8 +1,9 @@
-//! Why a text isn't a `.build` file the viewer can open (`specs.md`, Opening builds): data the
+//! Why a file or a text isn't a `.build` file the viewer can open (`specs.md`, Opening builds): data the
 //! interface writes as a sentence in each language, never a sentence of the core.
 
-/// The largest text read, in bytes: 1 MB, when the largest file of the corpus is 72 KB.
-pub const MAX_BYTES: usize = 1_048_576;
+/// The largest file read, in bytes: 1 MB, when the largest file of the corpus is 72 KB. A
+/// `u64`, as the size of a file is.
+pub const MAX_BYTES: u64 = 1_048_576;
 
 /// The characters of a line of the text kept around a JSON error: a JSON pasted on one line
 /// would otherwise be shown whole.
@@ -11,8 +12,11 @@ const EXCERPT_CHARS: usize = 80;
 /// Why a text isn't a `.build` file.
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub enum ReadError {
-    /// Larger than [`MAX_BYTES`], refused before it is read.
-    TooLarge { bytes: usize },
+    /// Larger than [`MAX_BYTES`], refused before it is read: by its size alone, for a file the
+    /// interface hasn't read yet ([`ReadError::of_size`]).
+    TooLarge { bytes: u64 },
+    /// Not text: bytes that aren't UTF-8, such as an image or an archive.
+    NotText,
     /// Not JSON: the line of the error, from 1, and its text. For a text that ends too soon,
     /// the last line that holds a character other than a space.
     NotJson {
@@ -43,6 +47,7 @@ impl std::fmt::Display for ReadError {
             Self::TooLarge { bytes } => {
                 write!(formatter, "larger than {MAX_BYTES} bytes: {bytes} bytes")
             }
+            Self::NotText => write!(formatter, "not text: bytes that aren't UTF-8"),
             Self::NotJson {
                 line,
                 column,
@@ -61,6 +66,14 @@ impl std::fmt::Display for ReadError {
 impl std::error::Error for ReadError {}
 
 impl ReadError {
+    /// The error of a text of `bytes` bytes, when it is larger than [`MAX_BYTES`]: the one rule
+    /// of the size, which the interface also asks of a file from its size, before its text is
+    /// read (`specs.md`, Opening builds).
+    #[must_use]
+    pub fn of_size(bytes: u64) -> Option<Self> {
+        (bytes > MAX_BYTES).then_some(Self::TooLarge { bytes })
+    }
+
     /// The error of a text `serde_json` couldn't read, at the line of the error
     /// ([`place_of`]); a text of spaces only isn't a build.
     pub(crate) fn of_json(text: &str, error: &serde_json::Error) -> Self {

@@ -1,108 +1,87 @@
-<!-- The first page: a .build file dropped or chosen, read by the core in Rust, and what it is.
-     Replaced by the viewer of the passive tree, the skills and the inventory. -->
+<!-- The home page: the first visit, where .build files are dropped or chosen and read by the core
+     in Rust; once one opens, what it is, until the page of a build (4f). The files refused are
+     said in a line each, until the zone that refuses (4e3) and the notice of the page of a
+     build (4f). -->
 <script lang="ts">
-	import { loadCore, readBuildFile, type BuildFile, type RefusedFile } from '#lib/core.ts';
+	import { loadCore } from '#lib/core.ts';
+	import DropZone from '#lib/home/DropZone.svelte';
+	import FirstVisit from '#lib/home/FirstVisit.svelte';
 	import { t } from '#lib/i18n.ts';
+	import { opening } from '#lib/page/opening.svelte.ts';
+	import { openBuilds } from '#lib/page/open-builds.svelte.ts';
+	import type { FileRefusal } from '#lib/page/read-files.ts';
 
+	/** Loaded at once, so that the first files dropped don't wait for it. */
 	const core = loadCore();
 
-	let opened = $state<BuildFile>();
-	let isDragging = $state(false);
-
-	async function read(file: File | undefined): Promise<void> {
-		if (file === undefined) {
-			return;
-		}
-		await core;
-		opened = readBuildFile(await file.text());
-	}
-
 	/** Why a file is refused, in a sentence. */
-	function reason(error: RefusedFile): string {
-		switch (error.reason) {
+	function reason(refusal: FileRefusal): string {
+		switch (refusal.reason) {
 			case 'tooLarge':
-				return t('refused-too-large', { bytes: error.bytes, limit: error.limit });
+				return t('refused-too-large', { bytes: refusal.bytes, limit: refusal.limit });
+			case 'notText':
+				return t('refused-not-text');
 			case 'notJson':
-				return t('refused-not-json', { line: error.line, excerpt: error.excerpt });
+				return t('refused-not-json', { line: refusal.line, excerpt: refusal.excerpt });
 			case 'notABuild':
 				return t('refused-not-a-build');
 			case 'wrongValue':
-				return t('refused-wrong-value', { field: error.field });
+				return t('refused-wrong-value', { field: refusal.field });
 			case 'missingField':
-				return t('refused-missing-field', { field: error.field });
+				return t('refused-missing-field', { field: refusal.field });
+			case 'unreadable':
+				return t('refused-unreadable');
 		}
-	}
-
-	function drop(event: DragEvent): void {
-		event.preventDefault();
-		isDragging = false;
-		void read(event.dataTransfer?.files[0]);
-	}
-
-	function choose(event: Event & { currentTarget: HTMLInputElement }): void {
-		void read(event.currentTarget.files?.[0]);
 	}
 </script>
 
 <svelte:head>
-	<title>{t('app-name')}</title>
+	<title>{t('app-page-title')}</title>
 </svelte:head>
 
-<main>
-	<h1>{t('app-name')}</h1>
-	<p>{t('app-tagline')}</p>
-	{#await core then { version }}
-		<label
-			class="drop"
-			class:dragging={isDragging}
-			ondragover={(event) => {
-				event.preventDefault();
-				isDragging = true;
-			}}
-			ondragleave={() => (isDragging = false)}
-			ondrop={drop}
-		>
-			{t('drop-build')}
-			<input type="file" accept=".build,application/json" onchange={choose} />
-		</label>
-		{#if opened?.kind === 'build'}
-			{@const build = opened.build}
-			<dl>
-				<dt>{t('build-name')}</dt>
-				<dd>{build.name}</dd>
-				<dt>{t('build-author')}</dt>
-				<dd>{build.author ?? t('build-unknown')}</dd>
-				<dt>{t('build-ascendancy')}</dt>
-				<dd>{build.ascendancy ?? t('build-unknown')}</dd>
-				<dt>{t('build-link')}</dt>
-				<dd>{build.link ?? t('build-unknown')}</dd>
-			</dl>
-		{:else if opened?.kind === 'refused'}
-			<p role="alert">{t('build-unreadable', { reason: reason(opened.error) })}</p>
-		{/if}
-		<p class="version">{t('core-version', { version })}</p>
-	{:catch}
+{#snippet refusals()}
+	{#each opening.refused as refused, index (index)}
+		<p role="alert">
+			{t('build-unreadable', { file: refused.fileName, reason: reason(refused.refusal) })}
+		</p>
+	{/each}
+	{#await core catch}
 		<p role="alert">{t('core-load-failed')}</p>
 	{/await}
-</main>
+{/snippet}
+
+{#if openBuilds.shown}
+	{@const build = openBuilds.shown}
+	<main class="build">
+		<dl>
+			<dt>{t('build-name')}</dt>
+			<dd>{build.name}</dd>
+			<dt>{t('build-author')}</dt>
+			<dd>{build.author ?? t('build-unknown')}</dd>
+			<dt>{t('build-ascendancy')}</dt>
+			<dd>{build.ascendancy ?? t('build-unknown')}</dd>
+			<dt>{t('build-link')}</dt>
+			<dd>{build.link ?? t('build-unknown')}</dd>
+		</dl>
+		{@render refusals()}
+		{#await core then { version }}
+			<p class="version">{t('core-version', { version })}</p>
+		{/await}
+	</main>
+{:else}
+	<FirstVisit>
+		{#snippet zone()}
+			<DropZone />
+		{/snippet}
+		{#snippet below()}
+			{@render refusals()}
+		{/snippet}
+	</FirstVisit>
+{/if}
 
 <style>
-	.drop {
-		display: block;
+	.build {
 		padding: 2rem;
-		border: 2px dashed currentColor;
-		border-radius: 0.5rem;
-		text-align: center;
-		cursor: pointer;
-	}
-
-	.dragging {
-		background: color-mix(in srgb, currentColor 10%, transparent);
-	}
-
-	.drop input {
-		display: block;
-		margin: 1rem auto 0;
 	}
 
 	.version {

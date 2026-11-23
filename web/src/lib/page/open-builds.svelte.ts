@@ -14,26 +14,27 @@ export type OpenBuild = Pick<OpenedBuild, 'contentKey' | 'levels'>;
 export type MarkerSide = 'previous' | 'next';
 
 /**
- * The builds open in the page. A build is named by the key of its content, never by its object
- * nor by its place in the list.
+ * The builds open in the page, each as the core gave it (`Build`: the page keeps its name, its
+ * author…; the state reads its key and its levels only). A build is named by the key of its
+ * content, never by its object nor by its place in the list.
  */
-export class OpenBuilds {
+export class OpenBuilds<Build extends OpenBuild = OpenBuild> {
 	/**
 	 * Replaced whole when a build opens or closes, never changed in place: what the core has read
 	 * is handed back as it is, without a proxy around each of its entries.
 	 */
-	#builds = $state.raw<readonly OpenBuild[]>([]);
+	#builds = $state.raw<readonly Build[]>([]);
 	/** The level each open build is shown at, by the key of its content. */
 	#levels = $state<Record<string, number>>({});
 	#shownKey = $state<string>();
 
 	/** The open builds, in the order they were opened. */
-	get all(): readonly OpenBuild[] {
+	get all(): readonly Build[] {
 		return this.#builds;
 	}
 
 	/** The build shown: none when no build is open, or while the library is shown. */
-	get shown(): OpenBuild | undefined {
+	get shown(): Build | undefined {
 		return this.#builds.find((build) => build.contentKey === this.#shownKey);
 	}
 
@@ -46,7 +47,7 @@ export class OpenBuilds {
 	 * Opens a build and shows it, at the highest level it covers. The same content already open
 	 * isn't added again: the build already open is shown, at the level it was left at.
 	 */
-	open(build: OpenBuild): void {
+	open(build: Build): void {
 		if (!this.#builds.some((open) => open.contentKey === build.contentKey)) {
 			this.#builds = [...this.#builds, build];
 			this.#levels[build.contentKey] = build.levels.highest;
@@ -116,4 +117,4 @@ export class OpenBuilds {
 }
 
 /** The builds open in the page. */
-export const openBuilds = new OpenBuilds();
+export const openBuilds = new OpenBuilds<OpenedBuild>();

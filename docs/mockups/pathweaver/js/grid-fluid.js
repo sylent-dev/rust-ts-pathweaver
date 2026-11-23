@@ -1,6 +1,7 @@
 // The fluid of the graph paper (2l, the owner, 2026-11-18: « like on sylent.art »), after
-// src/scripts/grid-fluid.ts of sylent.art, in white instead of its orange (the owner, 2026-11-18;
-// --home-fluid, css/home-drop.css).
+// src/scripts/grid-fluid.ts of sylent.art, in the accent instead of its orange (the owner,
+// 2026-11-23, among a white, a blue jet turning white, a white in a blue glow and the blue; it was
+// white; --home-fluid, css/home-drop.css).
 //
 // Under the pointer, a fluid runs along the lines of the grid. Each crossing holds some energy:
 // the pointer pours energy into the crossings around it as it moves, the energy spreads to the
@@ -14,8 +15,10 @@
 // it, downstream, in surges at each beat of a heart (lub, dub), and the glow swells with the beat.
 // The persistence sets how slowly the fluid fades in the veins. Tuned by the owner on sliders
 // (2026-11-18): a volatility of 65 %, a persistence of 975; at 0 % and 968, the fluid of sylent.art.
-
-const FLUID_VOLATILITY = 0.65, FLUID_PERSISTENCE = 0.975;
+// Tuned again (the owner, 2026-11-23: « un peu moins volatile, plus discret »): 40 % and 945, drawn
+// at 80 % (css/home-drop.css).
+const FLUID_VOLATILITY = 0.4;
+const FLUID_PERSISTENCE = 0.945;
 
 // A small seeded random, so that the veins are the same at each visit.
 function seededRandom(seed) {

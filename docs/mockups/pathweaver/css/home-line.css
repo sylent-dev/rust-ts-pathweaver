@@ -5,9 +5,9 @@
 
 /* The title: the game, small, in the grey of the secondary texts; the words, large, in sentence
    case, in Archivo at its normal width, 42 px, its letters drawn close (the owner, 2026-11-18,
-   among twelve fonts and four cases). */
+   among twelve fonts and four cases); the game spaced .1 em (the owner, 2026-11-23: it was .24). */
 .home-title { display: flex; flex-direction: column; align-items: center; gap: 14px; max-width: 860px; margin-bottom: 14px; text-align: center; }
-.home-title-game { position: relative; z-index: 0; color: var(--weak); font-family: var(--font-number); font-size: 12px; letter-spacing: .24em; text-transform: uppercase;
+.home-title-game { position: relative; z-index: 0; color: var(--weak); font-family: var(--font-number); font-size: 12px; letter-spacing: .1em; text-transform: uppercase;
   /* As the page loads, the game rises from behind the title to its place, fading in (the owner,
      2026-11-18); still when the system asks for less motion. */
   animation: home-game-rise 1.4s cubic-bezier(.22, 1, .36, 1) .35s both; }

@@ -5,6 +5,7 @@ import { createRawSnippet, flushSync, mount, unmount } from 'svelte';
 import { afterEach, describe, expect, it } from 'vitest';
 import { page, userEvent } from 'vitest/browser';
 import { openBuilds } from '#lib/page/open-builds.svelte.ts';
+import { openedBuild } from '#lib/page/opened-build.test-helper.ts';
 import Layout from './+layout.svelte';
 
 /** The page under the layout, a paragraph that names itself. */
@@ -60,9 +61,21 @@ describe('the layout', () => {
 			.toBe('Pathweaver needs a computer');
 	});
 
+	it('opens the files dropped anywhere on the page', async () => {
+		await showAt(960);
+		const dataTransfer = new DataTransfer();
+		dataTransfer.items.add(new File(['{ "name": "Dropped" }'], 'dropped.build'));
+		const drop = new DragEvent('drop', { dataTransfer, bubbles: true, cancelable: true });
+
+		document.querySelector('p')?.dispatchEvent(drop);
+
+		expect(drop.defaultPrevented).toBe(true);
+		await expect.poll(() => openBuilds.shown?.name).toBe('Dropped');
+	});
+
 	it('hears the keys anywhere on the page', async () => {
 		await showAt(960);
-		openBuilds.open({ contentKey: 'a', levels: { lowest: 1, highest: 100, markers: [10] } });
+		openBuilds.open(openedBuild('a', [10]));
 		await userEvent.keyboard('{ArrowLeft}');
 		expect(openBuilds.level).toBe(10);
 	});
