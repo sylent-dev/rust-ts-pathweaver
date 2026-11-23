@@ -2,7 +2,8 @@
      graph paper of the whole window, without the band of the site, the brand floating at its top
      left and Report a bug at its top right; in the middle, the title, then the drop zone with the
      notes of what a build shows around it; the mark of the brand in a watermark behind; the sources
-     of the files at the foot. What's next comes with its box (4f), My library would lead here. -->
+     of the files at the foot; over the graph paper, a fluid under the pointer. What's next comes
+     with its box (4f); My library would lead here. -->
 <script lang="ts">
 	import type { Snippet } from 'svelte';
 	import Brand from '#lib/brand/Brand.svelte';
@@ -12,6 +13,7 @@
 	import SiteLink from '#lib/site/SiteLink.svelte';
 	import { REPORT_BUG_URL } from '#lib/site/site-links.ts';
 	import FirstVisitTitle from './FirstVisitTitle.svelte';
+	import GridFluid from './GridFluid.svelte';
 	import PlanNotes from './PlanNotes.svelte';
 
 	interface Props {
@@ -40,6 +42,7 @@
 	ondragover={follow}
 >
 	<div class="watermark" aria-hidden="true"><LogoMark pixels={620} /></div>
+	<GridFluid />
 	<div class="top">
 		<Brand markPixels={26} place="first-visit" />
 		<nav class="links"><SiteLink href={REPORT_BUG_URL} label={t('site-report-bug')} /></nav>
