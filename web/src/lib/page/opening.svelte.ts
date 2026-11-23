@@ -12,12 +12,21 @@ export type RefusedRead = Extract<ReadFile, { kind: 'refused' }>;
 /** The files opened, one set after the other. */
 export class Opening {
 	#refused = $state.raw<readonly RefusedRead[]>([]);
+	#openedNone = $state(false);
 	/** The files opened last, or being opened: the next wait for them. Never rejected. */
 	#pending: Promise<void> = Promise.resolve();
 
 	/** The files refused of the last files dropped or chosen, in their order. */
 	get refused(): readonly RefusedRead[] {
 		return this.#refused;
+	}
+
+	/**
+	 * The files refused of the last files dropped or chosen when none of them opened, which the
+	 * drop zone of the first visit says; none when one of them opened, which a notice says (4f).
+	 */
+	get refusedAll(): readonly RefusedRead[] {
+		return this.#openedNone ? this.#refused : [];
 	}
 
 	/**
@@ -47,6 +56,7 @@ export class Opening {
 			}
 		}
 		this.#refused = read.filter((file) => file.kind === 'refused');
+		this.#openedNone = this.#refused.length === read.length;
 	}
 }
 

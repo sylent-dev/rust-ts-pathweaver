@@ -19,7 +19,7 @@
 	interface Props {
 		/** The drop zone, which the notes are drawn around. */
 		zone: Snippet;
-		/** What is said under the zone: the files refused, until the zone says it (4e3). */
+		/** What is said under the zone: the core that can't load. */
 		below?: Snippet;
 	}
 
