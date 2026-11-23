@@ -4,7 +4,7 @@
    under the pointer (js/grid-fluid.js), the light coming back only to light the whole grid while
    a file is over it. */
 
-.home-drop { position: relative; isolation: isolate; --home-fluid: var(--highlight); --home-grid: 48px; --home-spot: 200px; }   /* the light grows at once: a custom property without @property doesn't animate */
+.home-drop { position: relative; isolation: isolate; --home-fluid: var(--accent); --home-grid: 48px; --home-spot: 200px; }   /* the light grows at once: a custom property without @property doesn't animate */
 .home-drop::before, .home-drop::after { content: ""; position: absolute; inset: 0; z-index: -1; pointer-events: none;
   mask-size: var(--home-grid) var(--home-grid), 100% 100%; mask-repeat: repeat, no-repeat; mask-composite: intersect; }
 .home-drop::before { background: var(--texture-colour); opacity: var(--texture-opacity); mask-image: var(--texture), linear-gradient(#000, #000); }
@@ -12,7 +12,8 @@
   mask-image: var(--texture), radial-gradient(circle var(--home-spot) at var(--home-x, 50%) var(--home-y, 40%), #000 0%, transparent 100%); }
 .home-drop:not(.is-drag)::after { display: none; }
 .home-drop.is-drag { --home-spot: 1600px; }
-.home-fluid { position: absolute; inset: 0; z-index: -1; width: 100%; height: 100%; pointer-events: none; }
+/* The fluid, in the accent at 80 %, more discreet (the owner, 2026-11-23). */
+.home-fluid { position: absolute; inset: 0; z-index: -1; width: 100%; height: 100%; pointer-events: none; opacity: 80%; }
 
 /* The watermark: the mark, large, behind the zone, at 3 % (the owner, 2026-11-18). */
 .home-drop-mark { position: absolute; z-index: -1; left: 50%; top: 50%; transform: translate(-50%, -54%); opacity: 3%; pointer-events: none; }

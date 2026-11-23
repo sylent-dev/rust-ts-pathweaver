@@ -12,10 +12,11 @@
 /**
  * How much the veins hold the fluid apart from the rest of the grid, and how unevenly it is
  * poured, from 0 (the even fluid of sylent.art) to 1; and how slowly the fluid fades in the
- * veins, a share kept each frame. Tuned by the owner on sliders (2026-11-18).
+ * veins, a share kept each frame. Tuned by the owner on sliders (2026-11-18), then again less
+ * volatile and more discreet (2026-11-23; they were 0.65 and 0.975).
  */
-const VOLATILITY = 0.65;
-const PERSISTENCE = 0.975;
+const VOLATILITY = 0.4;
+const PERSISTENCE = 0.945;
 
 /** How far around the pointer the fluid is poured, in cells. */
 const POUR_REACH_CELLS = 1.6;
@@ -352,7 +353,7 @@ function drawLine(
 
 /**
  * The channels of a colour written `#rrggbb`, as the token of the ink of the fluid is (its
- * `--highlight`), such as `255 255 255`; none for a colour written otherwise.
+ * `--accent`), such as `96 165 250`; none for a colour written otherwise.
  */
 export function rgbChannels(colour: string): string | undefined {
 	const hex = /^#([0-9a-f]{2})([0-9a-f]{2})([0-9a-f]{2})$/i.exec(colour.trim());

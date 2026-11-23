@@ -20,15 +20,16 @@
 		text-align: center;
 	}
 
-	/* The game, in the grey of the secondary texts, rising to its place and fading in; still when
-	   the system asks for less motion. */
+	/* The game, in the grey of the secondary texts, its letters spaced 0.1 em (the owner,
+	   2026-11-23: it was 0.24), rising to its place and fading in; still when the system asks for
+	   less motion. */
 	.game {
 		position: relative;
 		z-index: 0;
 		color: var(--weak);
 		font-family: var(--font-number);
 		font-size: 12px;
-		letter-spacing: 0.24em;
+		letter-spacing: 0.1em;
 		text-transform: uppercase;
 		animation: rise 1.4s cubic-bezier(0.22, 1, 0.36, 1) 0.35s both;
 	}

@@ -105,7 +105,7 @@ describe('the fluid', () => {
 
 		expect(grid.lineStrength(from, to)).toBe(1);
 		expect(grid.lineStrength(offVein, offVein + 1)).toBe(1);
-		expect(grid.lineStrength(from, across ?? 0)).toBeLessThan(0.5);
+		expect(grid.lineStrength(from, across ?? 0)).toBeLessThan(1);
 	});
 });
 

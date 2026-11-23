@@ -1,7 +1,8 @@
 <!-- The fluid of the graph paper of the first visit (specs.md, Window layout): a canvas over the
-     grid of its parent, where a fluid in white runs along the main lines under the pointer, its
-     rules in grid-fluid.ts. Still, and not drawn, when the system asks for less motion. It reads
-     the tile of its parent (--tile) and its ink from the tokens (--highlight). -->
+     grid of its parent, where a fluid in the accent, at 80 %, runs along the main lines under the
+     pointer (the owner, 2026-11-23: more discreet; it was white), its rules in grid-fluid.ts. Still,
+     and not drawn, when the system asks for less motion. It reads the tile of its parent (--tile)
+     and its ink from the tokens (--accent). -->
 <script lang="ts">
 	import { MediaQuery } from 'svelte/reactivity';
 	import { FluidGrid, heartbeat, rgbChannels } from './grid-fluid.ts';
@@ -28,7 +29,7 @@
 		context = element.getContext('2d');
 		context?.setTransform(ratio, 0, 0, ratio, 0, 0);
 		const style = getComputedStyle(element);
-		ink = rgbChannels(style.getPropertyValue('--highlight'));
+		ink = rgbChannels(style.getPropertyValue('--accent'));
 		grid = new FluidGrid(width, height, Number.parseFloat(style.getPropertyValue('--tile')));
 	}
 
@@ -96,5 +97,6 @@
 		width: 100%;
 		height: 100%;
 		pointer-events: none;
+		opacity: 80%;
 	}
 </style>
