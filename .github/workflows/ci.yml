@@ -98,6 +98,9 @@ jobs:
       - uses: ./.github/actions/setup-web
       - run: npm run lint
       - run: npm run check
+      # The Chromium of the tests that need a page (*.browser.spec.ts), at the version of
+      # Playwright in package-lock.json, without a window.
+      - run: npx playwright install --with-deps --only-shell chromium
       - run: npm test
       - run: npm run build
 

@@ -1,6 +1,7 @@
 import { defineConfig } from 'vitest/config';
 import adapter from '@sveltejs/adapter-static';
 import { sveltekit } from '@sveltejs/kit/vite';
+import { playwright } from '@vitest/browser-playwright';
 
 // The path the website is served from: empty (unset) at the root of its domain,
 // `https://pathweaver.sylent.tools/`, where .github/workflows/deploy.yml builds it; set only to
@@ -32,7 +33,7 @@ export default defineConfig({
 					name: 'server',
 					environment: 'node',
 					include: ['src/**/*.{test,spec}.{js,ts}', 'scripts/**/*.{test,spec}.{js,ts}'],
-					exclude: ['src/**/*.svelte.{test,spec}.{js,ts}']
+					exclude: ['src/**/*.{svelte,browser}.{test,spec}.{js,ts}']
 				}
 			},
 			{
@@ -45,6 +46,22 @@ export default defineConfig({
 					name: 'client',
 					environment: './vitest-node-client.ts',
 					include: ['src/**/*.svelte.{test,spec}.{js,ts}']
+				}
+			},
+			{
+				// The tests named `*.browser.spec.ts`: what needs a page, run in a real Chromium
+				// without a window (docs/technical-choices.md, Tests of the interface): the events
+				// of a browser, the files dropped, the core loaded, the layout.
+				extends: './vite.config.ts',
+				test: {
+					name: 'browser',
+					include: ['src/**/*.browser.{test,spec}.{js,ts}'],
+					browser: {
+						enabled: true,
+						headless: true,
+						provider: playwright(),
+						instances: [{ browser: 'chromium' }]
+					}
 				}
 			}
 		]
