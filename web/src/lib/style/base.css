@@ -3,13 +3,11 @@
    component that needs it comes: the page, the ring of focus, the graph paper. Each rule is no
    stronger than one class (:where() around what scopes it), so that a component can change it. */
 
-/* The page: its light from its top left over its colour, the text at 14 px. The root of the
-   application is the container named window (+layout.svelte): the components ask its width
-   (@container window), never the class of a page. */
+/* The page: its colour, the text at 14 px. Its light is drawn by the window of the application
+   (+layout.svelte), which is 900 pixels wide at least where the body follows the browser. */
 :where(body) {
 	margin: 0;
-	background: var(--page-image), var(--page);
-	background-size: var(--page-image-size);
+	background: var(--page);
 	color: var(--text);
 	font: var(--text-weight) 14px/1.35 var(--font-text);
 }

@@ -6,14 +6,14 @@
 
 	interface Props {
 		/** The side of the mark, in pixels. */
-		markSize: number;
+		markPixels: number;
 	}
 
-	let { markSize }: Props = $props();
+	let { markPixels }: Props = $props();
 </script>
 
 <span class="brand">
-	<LogoMark size={markSize} />
+	<LogoMark pixels={markPixels} />
 	<span class="name">{t('app-name')}</span>
 </span>
 
@@ -25,10 +25,8 @@
 		color: var(--text);
 	}
 
-	/* 1 px below the middle of the mark, by eye (the owner, 2026-11-17). */
+	/* On the middle of the mark; the band of the site sets it 1 px lower (--brand-name-offset). */
 	.name {
-		position: relative;
-		top: var(--brand-name-offset);
 		font-family: var(--brand-font);
 		font-weight: var(--brand-weight);
 		font-size: var(--brand-size);

@@ -6,8 +6,12 @@
 	import { t } from '#lib/i18n.ts';
 </script>
 
+<svelte:head>
+	<title>{t('app-name')}</title>
+</svelte:head>
+
 <main class="phone graph-paper">
-	<div class="top"><Brand markSize={22} /></div>
+	<div class="top"><Brand markPixels={22} /></div>
 	<div class="message">
 		<!-- The face: the sticky note « ? » of an unknown id, turned, two eyes and a mouth in a
 		     slash drawn in its ink (U14, the owner, 2026-11-21). -->
@@ -37,7 +41,9 @@
 	.phone {
 		display: flex;
 		flex-direction: column;
-		min-height: 100vh;
+		/* The height of the phone with the bar of its browser shown, so that the message stays in
+		   the middle of what is seen. */
+		min-height: 100svh;
 		background: var(--page);
 	}
 

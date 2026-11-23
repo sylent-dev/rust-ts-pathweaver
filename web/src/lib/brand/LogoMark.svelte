@@ -5,17 +5,17 @@
 <script lang="ts">
 	interface Props {
 		/** The side of its square, in pixels. */
-		size: number;
+		pixels: number;
 	}
 
-	let { size }: Props = $props();
+	let { pixels }: Props = $props();
 </script>
 
 <svg
 	class="mark"
 	xmlns="http://www.w3.org/2000/svg"
-	width={size}
-	height={size}
+	width={pixels}
+	height={pixels}
 	viewBox="-119.22 -113.97 238.45 238.45"
 	aria-hidden="true"
 >

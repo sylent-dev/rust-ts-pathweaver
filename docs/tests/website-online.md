@@ -11,7 +11,7 @@ The website is published to Cloudflare at each merge into `main`, at its own dom
 ## The tests
 
 1. **The address**: type `pathweaver.sylent.tools` in the address bar.
-   ✅ The page opens over `https://`, its padlock without a warning; it shows « Pathweaver », « The build viewer and planner of Path of Exile 2. », the box « Drop a .build file here, or choose one. » and, under it, « Core 0.1.0, in Rust. », the version of `Cargo.toml` (the core in WebAssembly loaded), never « The core of Pathweaver could not load. ». On the phone, held upright, one message in place of the page (4e1): the brand at the top, the yellow sticky note with its face, « Pathweaver needs a computer », in Archivo, and two lines under it, nothing cut at the edges.
+   ✅ The page opens over `https://`, its padlock without a warning; it shows « Pathweaver », « The build viewer and planner of Path of Exile 2. », the box « Drop a .build file here, or choose one. » and, under it, « Core 0.1.0, in Rust. », the version of `Cargo.toml` (the core in WebAssembly loaded), never « The core of Pathweaver could not load. ». On the phone, held upright, one message in place of the page (4e1): the brand at the top, the yellow sticky note with its face, « Pathweaver needs a computer » in large letters on two lines, and two lines under it, nothing cut at the edges.
 
 2. **A build opens**: drop the file of the corpus on the box.
    ✅ Its Name, Author, Ascendancy and Contents show under the box (« … passives, … skills, … inventory hints »), never « This file can't be read: ».

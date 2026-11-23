@@ -77,13 +77,16 @@ describe('the arrows', () => {
 		expect(openBuilds.level).toBe(15);
 	});
 
-	it('are a shortcut of the browser with a key held, not the level', async () => {
-		showBuild();
-		const kept = nextKeyKeepsItsDefault();
-		await userEvent.keyboard('{Shift>}{ArrowLeft}{/Shift}');
-		expect(await kept).toBe(true);
-		expect(openBuilds.level).toBe(15);
-	});
+	it.each(['Alt', 'Control', 'Meta', 'Shift'])(
+		'are a shortcut of the browser with %s held, not the level',
+		async (held) => {
+			showBuild();
+			const kept = nextKeyKeepsItsDefault();
+			await userEvent.keyboard(`{${held}>}{ArrowLeft}{/${held}}`);
+			expect(await kept).toBe(true);
+			expect(openBuilds.level).toBe(15);
+		}
+	);
 
 	it('stay the browser’s with no build shown, which scroll a narrow window', async () => {
 		const kept = nextKeyKeepsItsDefault();
@@ -103,6 +106,12 @@ describe('the window open', () => {
 	it('stays open on a click in it', async () => {
 		popup.toggle('level-changes');
 		await userEvent.click(element('button', 'Inside'));
+		expect(popup.openName).toBe('level-changes');
+	});
+
+	it('stays open on a click on its trigger, which belongs to it', async () => {
+		popup.toggle('level-changes');
+		await userEvent.click(element('button', '3 changes'));
 		expect(popup.openName).toBe('level-changes');
 	});
 

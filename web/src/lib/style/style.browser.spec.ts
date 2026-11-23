@@ -34,7 +34,7 @@ describe('the fonts', () => {
 		expect(loaded.toSorted()).toEqual(['Archivo 700 800', 'Manrope 400 800']);
 	});
 
-	it('give the numbers figures of one width, so that the levels line up', () => {
+	it('keep, in the file of Manrope the website serves, the figures of one width the levels line up with', () => {
 		const number = { fontFamily: 'Manrope', fontVariantNumeric: 'tabular-nums' };
 		expect(widthOf('111', number)).toBeCloseTo(widthOf('888', number), 1);
 		// Without it, a 1 is narrower: the check above isn't true of any font.
