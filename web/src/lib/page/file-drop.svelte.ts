@@ -16,10 +16,13 @@ function carriesFiles(event: DragEvent): boolean {
 /** The files over the page, and the files refused of the last opened. */
 export class FileDrop {
 	/**
-	 * The elements the files have entered and not left: a drag enters each element under the
-	 * pointer and leaves it for the next, so the page is left when none is left entered.
+	 * The element the files entered last. A drag enters the next element under the pointer before
+	 * it leaves the one before (HTML, drag-and-drop processing model), so the page is left when
+	 * the files leave the element they entered last. The browsers don't all name the element
+	 * next (relatedTarget: none in WebKit), and an element taken away under the pointer is never
+	 * left on the page: neither counts here.
 	 */
-	#entered = 0;
+	#lastEntered: EventTarget | null = null;
 	#isOver = $state(false);
 	#fileCount = $state(0);
 	#refused = $state.raw<readonly RefusedRead[]>([]);
@@ -45,7 +48,7 @@ export class FileDrop {
 			return;
 		}
 		event.preventDefault();
-		this.#entered += 1;
+		this.#lastEntered = event.target;
 		this.#isOver = true;
 		this.#fileCount = [...(event.dataTransfer?.items ?? [])].filter(
 			(item) => item.kind === 'file'
@@ -60,15 +63,14 @@ export class FileDrop {
 	}
 
 	/**
-	 * Files leave an element of the page, for another or out of the window (no element next),
-	 * or the drag is given up (Esc).
+	 * Files leave an element of the page, for another or out of the window, or the drag is given
+	 * up (Esc): the page is left with the element entered last.
 	 */
 	leave(event: DragEvent): void {
-		if (!carriesFiles(event)) {
-			return;
+		if (carriesFiles(event) && event.target === this.#lastEntered) {
+			this.#lastEntered = null;
+			this.#isOver = false;
 		}
-		this.#entered = event.relatedTarget === null ? 0 : Math.max(0, this.#entered - 1);
-		this.#isOver = this.#entered > 0;
 	}
 
 	/** Files dropped anywhere on the page open, rather than the browser showing one of them. */
@@ -77,7 +79,7 @@ export class FileDrop {
 			return;
 		}
 		event.preventDefault();
-		this.#entered = 0;
+		this.#lastEntered = null;
 		this.#isOver = false;
 		void this.open([...(event.dataTransfer?.files ?? [])]);
 	}
