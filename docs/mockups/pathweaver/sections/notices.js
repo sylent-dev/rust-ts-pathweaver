@@ -7,10 +7,11 @@
 
 // A notice: `kind` error (the red of the errors) or info (grey: private browsing isn't an error,
 // Pathweaver works the same); no icon, the shade and the words say it (the owner, 2026-11-18); the
-// files refused, each its name, its reason and the line of the error when there is one, without a
+// files refused, each its name and its reason (no text of the line of the error: the owner,
+// 2026-11-23), without a
 // title that would count them (the owner, 2026-11-18: the list says it); or a title and a note;
 // its close button, a square in the corner.
-const noticeFile = ([name, reason, line]) => `<li>${escapeHtml(name)} <span class="app-notice-reason">${reason}</span>${line ? `<code>${escapeHtml(line)}</code>` : ""}</li>`;
+const noticeFile = ([name, reason]) => `<li>${escapeHtml(name)} <span class="app-notice-reason">${reason}</span></li>`;
 const notice = ({ kind = "error", title = "", files = [], note = "" }) => `<div class="app-notice is-${kind}" role="${kind === "error" ? "alert" : "status"}">
     <div class="app-notice-text">${title ? `<strong>${title}</strong>` : ""}${files.length ? `<ul>${files.map(noticeFile).join("")}</ul>` : ""}${note ? `<span class="app-notice-note">${note}</span>` : ""}</div>
     <button type="button" class="app-notice-close" aria-label="Close" title="Close">${icon(16, ICONS.close)}</button>
@@ -21,9 +22,9 @@ const notices = list => `<div class="app-notices">${list.join("")}</div>`;
 const NOTICES = {
   refused: notice({ files: [
     ["passive-tree.png", "isn't a text file"],
-    ["Ritualist poison.build", "isn't valid JSON at line 12:", '"level": 12,,'],
+    ["Ritualist poison.build", "isn't valid JSON at line 12"],
     ["Mercenary.build", "has a value of the wrong type at skills[2].level"]] }),
-  refusedOne: notice({ files: [["notes.txt", "isn't valid JSON at line 1:", "Act 1: Clearfell, take the Rolling Magma…"]] }),
+  refusedOne: notice({ files: [["notes.txt", "isn't valid JSON at line 1"]] }),
   // Shown at every visit: a private window forgets everything once closed, its close included.
   private: notice({ kind: "info", title: "This browser keeps nothing",
     note: "Private browsing: the builds you open will be gone once it's closed. Download .build keeps the file of a build." }),
