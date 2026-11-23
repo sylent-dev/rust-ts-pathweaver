@@ -3,12 +3,22 @@
      its icon four corners around a +, which close in on it a little on hover and firmly while
      files are over the page, the zone lit then and saying « Let go to open it ». When no file of
      a drop opens, it says why, without its icon, a thin line in the red around it, its call at
-     its foot, until the next files. -->
+     its foot, until the next files. Paste JSON turns it into a field (PasteField). -->
 <script lang="ts">
 	import { t } from '#lib/i18n.ts';
 	import { fileDrop } from '#lib/page/file-drop.svelte.ts';
 	import { opening } from '#lib/page/opening.svelte.ts';
 	import DropZoneRefusal from './DropZoneRefusal.svelte';
+	import PasteField from './PasteField.svelte';
+
+	interface Props {
+		/** Whether the zone is the field of Paste JSON. */
+		isPasting?: boolean;
+		/** Gives the zone back from the field, on Esc. */
+		onback?: () => void;
+	}
+
+	let { isPasting = false, onback = () => {} }: Props = $props();
 
 	let chooser: HTMLInputElement;
 
@@ -32,45 +42,49 @@
 </script>
 
 <div class="zone">
-	<button
-		type="button"
-		class="call"
-		class:is-over={fileDrop.isOver}
-		class:is-refusing={isRefusing}
-		onclick={() => chooser.click()}
-	>
-		<!-- The corners of a zone around the + of the band of the open builds, their ends cut flat
-	     (the owner, 2026-11-18); one corner drawn four times, turned around the centre. -->
-		<svg
-			class="mark"
-			width="56"
-			height="56"
-			viewBox="0 0 24 24"
-			fill="none"
-			stroke="currentColor"
-			stroke-width="1.6"
-			stroke-linecap="butt"
-			stroke-linejoin="miter"
-			aria-hidden="true"
+	{#if isPasting}
+		<PasteField {onback} />
+	{:else}
+		<button
+			type="button"
+			class="call"
+			class:is-over={fileDrop.isOver}
+			class:is-refusing={isRefusing}
+			onclick={() => chooser.click()}
 		>
-			{#each [0, 90, 180, 270] as turn (turn)}
-				<g transform="rotate({turn} 12 12)"><path class="corner" d="M1.5 6.5v-5h5" /></g>
-			{/each}
-			<path d="M12 6v12M6 12h12" />
-		</svg>
-		<!-- The same elements, their words changed in place: an element taken away under the files
+			<!-- The corners of a zone around the + of the band of the open builds, their ends cut flat
+	     (the owner, 2026-11-18); one corner drawn four times, turned around the centre. -->
+			<svg
+				class="mark"
+				width="56"
+				height="56"
+				viewBox="0 0 24 24"
+				fill="none"
+				stroke="currentColor"
+				stroke-width="1.6"
+				stroke-linecap="butt"
+				stroke-linejoin="miter"
+				aria-hidden="true"
+			>
+				{#each [0, 90, 180, 270] as turn (turn)}
+					<g transform="rotate({turn} 12 12)"><path class="corner" d="M1.5 6.5v-5h5" /></g>
+				{/each}
+				<path d="M12 6v12M6 12h12" />
+			</svg>
+			<!-- The same elements, their words changed in place: an element taken away under the files
 	     would be left unheard, its dragleave never reaching the page (file-drop.svelte.ts). -->
-		<strong>{t(fileDrop.isOver ? 'drop-zone-let-go' : 'drop-zone-title')}</strong>
-		<span hidden={call === ''}>{call}</span>
-	</button>
-	<!-- Over the button, which it lets the clicks and the files through to, faded while files are
+			<strong>{t(fileDrop.isOver ? 'drop-zone-let-go' : 'drop-zone-title')}</strong>
+			<span hidden={call === ''}>{call}</span>
+		</button>
+		<!-- Over the button, which it lets the clicks and the files through to, faded while files are
      over the page; drawn again for each drop refused, so that a screen reader says it again. -->
-	{#if opening.refusedAll.length > 0}
-		{#key opening.refusedAll}
-			<div class="reasons" class:is-faded={fileDrop.isOver} role="alert">
-				<DropZoneRefusal refused={opening.refusedAll} />
-			</div>
-		{/key}
+		{#if opening.refusedAll.length > 0}
+			{#key opening.refusedAll}
+				<div class="reasons" class:is-faded={fileDrop.isOver} role="alert">
+					<DropZoneRefusal refused={opening.refusedAll} />
+				</div>
+			{/key}
+		{/if}
 	{/if}
 </div>
 <input

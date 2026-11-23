@@ -1,10 +1,10 @@
-// The files the page opens, dropped anywhere or chosen (specs.md, Opening builds): each build
-// opens and the last is shown, each file refused is kept with its reason until the next files.
-// Apart from the drag (file-drop.svelte.ts): the files chosen and, in 4e3, the JSON pasted open
-// here too, with no drag.
+// The files the page opens, dropped anywhere or chosen, and the JSON of a build pasted (specs.md,
+// Opening builds): each build opens and the last is shown, each file refused is kept with its
+// reason until the next files. Apart from the drag (file-drop.svelte.ts): the files chosen and
+// the text pasted open here too, with no drag.
 
 import { openBuilds } from './open-builds.svelte.ts';
-import { readFiles, type ReadFile } from './read-files.ts';
+import { readFiles, readText, type FileRefusal, type ReadFile } from './read-files.ts';
 
 /** A file refused, its name and why. */
 export type RefusedRead = Extract<ReadFile, { kind: 'refused' }>;
@@ -46,6 +46,31 @@ export class Opening {
 				console.error('opening: the files could not be opened', error);
 			});
 		return this.#pending;
+	}
+
+	/**
+	 * Opens the JSON of a build pasted, after the files given before it: its build opens and is
+	 * shown. Gives why it is refused, which the field that took it says; nothing when it opens or
+	 * when the core can't load, which the page already says (+page.svelte).
+	 */
+	openText(text: string): Promise<FileRefusal | undefined> {
+		const opened = this.#pending.then(() => this.#openTextNow(text));
+		this.#pending = opened.then(
+			() => {},
+			(error: unknown) => {
+				console.error('opening: the text could not be opened', error);
+			}
+		);
+		return opened.catch(() => undefined);
+	}
+
+	async #openTextNow(text: string): Promise<FileRefusal | undefined> {
+		const read = await readText(text);
+		if (read.kind === 'refused') {
+			return read.refusal;
+		}
+		openBuilds.open(read.build);
+		return undefined;
 	}
 
 	async #openNow(files: readonly File[]): Promise<void> {

@@ -1,5 +1,5 @@
 // The files the page is given, dropped or chosen (specs.md, Opening builds), read one by one: a
-// file refused never stops the others.
+// file refused never stops the others; and the JSON of a build pasted.
 
 import { loadCore, readBuildFile, refusedBySize, type OpenedBuild } from '#lib/core.ts';
 import type { RefusedFile } from '#lib/core.ts';
@@ -29,6 +29,21 @@ export async function readFiles(files: Iterable<File>): Promise<ReadFile[]> {
 		read.push(await readFile(file));
 	}
 	return read;
+}
+
+/** What a text pasted gives: its build, or why it is refused. */
+export type ReadText =
+	{ kind: 'build'; build: OpenedBuild } | { kind: 'refused'; refusal: RefusedFile };
+
+/**
+ * Reads a text pasted, once the core is loaded: its bytes in UTF-8, read by the core as those of
+ * a file, so that the same rules hold for both, its size included. Rejects only when the core
+ * can't load.
+ */
+export async function readText(text: string): Promise<ReadText> {
+	await loadCore();
+	const result = readBuildFile(new TextEncoder().encode(text));
+	return result.kind === 'build' ? result : { kind: 'refused', refusal: result.error };
 }
 
 /** Reads one file, the core loaded. */

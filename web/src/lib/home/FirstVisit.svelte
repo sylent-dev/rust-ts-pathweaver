@@ -19,7 +19,7 @@
 	interface Props {
 		/** The drop zone, which the notes are drawn around. */
 		zone: Snippet;
-		/** What is said under the zone: the core that can't load. */
+		/** What is under the zone: Paste JSON, and the core that can't load. */
 		below?: Snippet;
 	}
 

@@ -39,6 +39,20 @@ drop-zone-files-over =
        *[other] { $count } files over the page
     }
 
+## Paste JSON: the drop zone become a field, where the JSON of a build pasted opens at once.
+
+# Under the zone, a link in words.
+paste-json = Paste JSON
+# Under the field, in place of Paste JSON: gives the zone back.
+paste-back = Drop a file instead
+# The name of the field for a screen reader.
+paste-field = The JSON of a build
+paste-title = Paste the JSON of a build
+paste-call = Ctrl+V: it opens at once · Esc: back to the files
+# $reason (String): one of the refused- messages below, never refused-not-text nor
+# refused-unreadable, which a text pasted can't be.
+paste-refused = This text { $reason }
+
 ## The phone page: one message in place of every page, under 600 pixels. One sentence a line.
 
 phone-title = Pathweaver needs a computer
