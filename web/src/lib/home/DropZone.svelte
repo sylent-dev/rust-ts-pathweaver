@@ -5,6 +5,7 @@
 <script lang="ts">
 	import { t } from '#lib/i18n.ts';
 	import { fileDrop } from '#lib/page/file-drop.svelte.ts';
+	import { opening } from '#lib/page/opening.svelte.ts';
 
 	let chooser: HTMLInputElement;
 
@@ -12,7 +13,7 @@
 		const files = [...(event.currentTarget.files ?? [])];
 		// Emptied, so that the same file chosen again opens again.
 		event.currentTarget.value = '';
-		void fileDrop.open(files);
+		void opening.open(files);
 	}
 </script>
 

@@ -7,7 +7,7 @@
 	import DropZone from '#lib/home/DropZone.svelte';
 	import FirstVisit from '#lib/home/FirstVisit.svelte';
 	import { t } from '#lib/i18n.ts';
-	import { fileDrop } from '#lib/page/file-drop.svelte.ts';
+	import { opening } from '#lib/page/opening.svelte.ts';
 	import { openBuilds } from '#lib/page/open-builds.svelte.ts';
 	import type { FileRefusal } from '#lib/page/read-files.ts';
 
@@ -40,7 +40,7 @@
 </svelte:head>
 
 {#snippet refusals()}
-	{#each fileDrop.refused as refused, index (index)}
+	{#each opening.refused as refused, index (index)}
 		<p role="alert">
 			{t('build-unreadable', { file: refused.fileName, reason: reason(refused.refusal) })}
 		</p>

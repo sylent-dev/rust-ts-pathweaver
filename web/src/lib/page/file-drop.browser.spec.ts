@@ -53,7 +53,6 @@ function textDrag(type: string): DragEvent {
 
 const buildA = fileOf('a.build', '{ "name": "A" }');
 const buildB = fileOf('b.build', '{ "name": "B" }');
-const image = new File([new Uint8Array([0x89, 0x50, 0x4e, 0x47])], 'passive-tree.png');
 
 afterEach(() => {
 	zone.remove();
@@ -151,29 +150,5 @@ describe('files dropped', () => {
 		expect(drop.isOver).toBe(false);
 		await expect.poll(() => openBuilds.all.map((build) => build.name)).toEqual(['A', 'B']);
 		expect(openBuilds.shown?.name).toBe('B');
-	});
-
-	it('keep each file refused with its reason, the others opened', async () => {
-		const drop = new FileDrop();
-
-		await drop.open([image, buildA]);
-
-		expect(openBuilds.shown?.name).toBe('A');
-		expect(drop.refused).toEqual([
-			{
-				kind: 'refused',
-				fileName: 'passive-tree.png',
-				refusal: { reason: 'notText' }
-			}
-		]);
-	});
-
-	it('forget the files refused before them', async () => {
-		const drop = new FileDrop();
-		await drop.open([image]);
-
-		await drop.open([buildA]);
-
-		expect(drop.refused).toEqual([]);
 	});
 });
