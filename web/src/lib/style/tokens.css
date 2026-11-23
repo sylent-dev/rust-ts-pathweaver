@@ -1,0 +1,209 @@
+/* The style: tokens only (CSS variables), copied from the mock-up, the reference
+   (docs/mockups/pathweaver/css/tokens.css; specs.md, The style): a change of a value goes there
+   first, then here. The components use nothing else, and the canvas of the tree reads them too.
+   Frost Night, the only style of version 1 (the owner, 2026-11-21); another style, after version 1
+   (docs/backlog.md, Styles), is a block :root[data-theme="…"] that sets the tokens it changes.
+   A token says what it is for, and points to another (var(--text)) when it means the same.
+   Inert in Frost Night, kept for those styles: --title-transform, --page-image-size,
+   --top-band-image, --band-image, --border-width, --portrait-ring, --tree-background, --tree-glow,
+   --tree-glow-colour. */
+
+:root {
+	/* Type: Manrope for every role, the text, the titles and the numbers (2d, the owner, 2026-11-18,
+     among 85 fonts); the numbers in its figures of one width (tabular-nums), so that the levels line
+     up. The code (a pasted JSON, the line of an error) in the monospace font of the system, which
+     costs no download. */
+	--font-text: 'Manrope', sans-serif;
+	--font-title: 'Manrope', sans-serif;
+	--font-number: 'Manrope', sans-serif;
+	--font-code: ui-monospace, monospace;
+	--text-weight: 400;
+	--title-weight: 600;
+	--title-transform: none;
+	--title-spacing: -0.02em;
+	--title-size: 20px;
+
+	/* The brand: the name of Pathweaver in Archivo, in its own weight, tight (the owner, 2026-11-17);
+     the links of the band of the site in Manrope (2e2). */
+	--brand-font: 'Archivo', sans-serif;
+	--brand-weight: 700;
+	--brand-spacing: -0.06em;
+	--brand-mark-size: 24px; /* the mark in the band of the site */
+	--brand-size: 16px; /* the name in the band of the site */
+	--brand-gap: 8px; /* between the mark and the name */
+	--brand-name-offset: 1px; /* the name 1 px below the middle of the mark, by eye (the owner, 2026-11-17) */
+	--site-link-font: var(--font-text);
+	--site-link-weight: 600;
+	--site-link-size: 13px;
+
+	/* Surfaces: the window, the bands at the top, the level band, the tree and the side column. */
+	--page: #0c111b;
+	--page-glow: #172644; /* the light of the page, from its top left; from the right on the drawer of the inventory (2j4) */
+	--page-image: radial-gradient(ellipse 80% 40% at 0% 0%, var(--page-glow) 0%, transparent 70%);
+	--page-image-size: auto;
+	/* the light of the drawer of the inventory and of « Upcoming », from the bottom right at 20 % (2j4, 2k2) */
+	--drawer-image: radial-gradient(
+		ellipse 330px 220px at 100% 100%,
+		color-mix(in srgb, var(--page-glow) 20%, transparent) 0%,
+		transparent 70%
+	);
+	--top-band-image: none;
+	--on-top-band: var(--text);
+	--band: #0f1726;
+	--band-image: none;
+	--on-band: var(--text);
+	--on-band-weak: var(--weak);
+	/* The deep shade, darker than the page: the level band, the heads of the cards, the windows that
+     hang (the changes at a level, the box of Download), the legend and the bars over the tree. */
+	--shade-deep: #070b12;
+	/* The two bands at the top in the deep shade, told apart by the graph paper of the band of the site
+     and the shadow under the band of the open builds (the owner, 2026-11-18). */
+	--site-band: var(--shade-deep);
+	--builds-band: var(--shade-deep);
+	/* the tree in the shade of the level band (2h, the owner, 2026-11-19) */
+	--tree-surface: var(--shade-deep);
+	--side-column: #04070b; /* the right column of the Overview, a shade darker than the tree, not read as part of it (the owner, 2026-11-20) */
+	--portrait-placeholder: #172133; /* behind a portrait while it loads */
+
+	/* Lines and shapes. */
+	--divider: #1f2a40;
+	--border-width: 0; /* no borders: the blocks are told apart by their colours only (the owner, 2026-11-17) */
+	--portrait-radius: 50%;
+	--portrait-ring: none;
+	--build-tab-height: 668px; /* a tab of a build, the window at 960 × 1,080 under its bands */
+	--popover-radius: 3px; /* the windows that hang under a control: the menu, the changes, Download, the cards (the owner, 2026-11-19) */
+	--popover-gap: 3px; /* how far under its control such a window hangs */
+	--note-tilt: -8deg; /* the sticky note « ? », tilted */
+
+	/* Text, the one accent (what is new, the links, the markers of the level), the brightest ink (the
+     bar under the current tab, a close × on hover, the flash of what was just chosen or what is
+     new, the fluid of the first visit). */
+	--text: #e3eaf5;
+	--weak: #8393ad;
+	--accent: #60a5fa;
+	--accent-bright: color-mix(in srgb, var(--accent), #fff 15%); /* the light that sweeps « NEW » */
+	--focus-ring: 2px solid var(--accent); /* the focus of the keyboard, on every control (base.css) */
+	--highlight: #ffffff;
+
+	/* The red of the errors, vivid, apart from the red of the gems of strength, so that an error never
+     reads as strength (the owner, 2026-11-18): a file refused, the bin of the library. */
+	--error: #ef4444;
+	/* The button that confirms a removal, a darker red so that its words read (4.8 to 1). */
+	--error-button: #dc2626;
+	--error-button-hover: #b91c1c;
+	--on-error: #ffffff;
+
+	/* What is laid over a surface: a box sunk into its panel (the path of a file, a tile of the hints to
+     come, the line of an error), the zone of the first visit, the veil under a box over the page, the
+     rows of the library one in two a shade lighter. */
+	--inset: rgb(0 0 0 / 25%);
+	--inset-strong: rgb(0 0 0 / 35%); /* the thumbnail in a tile */
+	--drop-zone: rgb(0 0 0 / 50%);
+	--drop-zone-hover: rgb(0 0 0 / 65%);
+	--veil: rgb(0 0 0 / 50%);
+	--row: rgb(255 255 255 / 5%);
+	--row-even: rgb(255 255 255 / 1.5%);
+	--row-hover: rgb(255 255 255 / 9%);
+	/* a small button under the pointer (the controls over the tree, the weapon sets) */
+	--hover-tile: color-mix(in srgb, var(--text) 8%, transparent);
+	/* The body of a card, a step darker than its head (the cards on hover, the cards of the Skills tab). */
+	--card-body: color-mix(in srgb, var(--shade-deep), #000 60%);
+	/* a thin line between the parts of a text in a card */
+	--card-rule: color-mix(in srgb, var(--on-band) 14%, transparent);
+
+	/* The shadows: the colour of those of a small thing over its panel (a sticky note; the level band,
+     6 px of blur, 2h); under the band of the open builds, 1 px down, 3 px of blur (2e2, the owner,
+     2026-11-18); of a window over its panel (the changes at a level, the card of a passive, the box
+     of Download, the menu of the open builds) and of a box over the page (What's
+     next). */
+	--shadow-colour: rgb(0 0 0 / 45%);
+	--band-shadow: 0 1px 3px var(--shadow-colour);
+	--popover-shadow: 0 8px 18px rgb(0 0 0 / 28%);
+	--dialog-shadow: 0 18px 48px rgb(0 0 0 / 55%);
+
+	/* Motion: the curve that goes a little past its end and comes back (a window that opens, a mark that
+     springs), the soft one that slows to its end, and how long a link takes to change its colour. */
+	--ease-overshoot: cubic-bezier(0.34, 1.56, 0.64, 1);
+	--ease-out-soft: cubic-bezier(0.2, 0.7, 0.2, 1);
+	--hover-fade: 0.3s;
+
+	/* The graph paper behind the blocks (base.css): its lines in pale blue (set aside: the grey
+     of the text, the accent), a tile of 24 px (the owner, 2026-11-19), at 3 % everywhere, the home
+     page included (the owner, 2026-11-18; 23 % behind the blocks and 16 % on the first visit before).
+     The first visit has a tile of its own, 48 px, which its fluid follows (its own style). */
+	--texture-colour: #7aa7f0;
+	--texture-size: 24px;
+	--texture-opacity: 3%;
+
+	/* The level band. */
+	--track: #2a3a5c;
+
+	/* The colours of a change (2g3, the owner, 2026-11-19): what comes, what is replaced, what goes;
+     the rise, the warning and the fall of Exile Market, tuned together on a blue night. */
+	--change-added: #5fcf80;
+	--change-swapped: #f0b85a;
+	--change-gone: #e66a5c;
+
+	/* The gems: a colour per attribute and a shape. The attributes as in the game, those of Exile
+     Market (2g3, the owner, 2026-11-19): a true green for dexterity, apart from the green of what
+     comes; a spirit gem a bright teal, a lineage support a warm grey (2j2, the owner, 2026-11-20). */
+	--gem-str: #e0473f;
+	--gem-dex: #3fbf4f;
+	--gem-int: #5aa7f0;
+	--gem-none: #8393ad;
+	--gem-spirit: #2dd4bf;
+	--gem-lineage: #c2b8a3;
+	--gem-mark-size: 10px; /* the mark of a gem beside a text of 12 px (2g3, the owner, 2026-11-19) */
+
+	/* The inventory. The box of a slot (2j3, B4 at a strength of 25 %, the owner, 2026-11-20): darker
+     than the column with a transparency, and a line of 1 px of the text with a transparency. */
+	--slot-box: rgb(0 0 0 / 17.5%);
+	--slot-line: color-mix(in srgb, var(--text) 7.5%, transparent);
+	/* the pane of the Inventory and About tabs, as dark as a slot (2k2, 2k3) */
+	--pane: var(--slot-box);
+	--unique: #d6a15e; /* the name of a unique item, its gold in the game */
+	/* The sticky note « ? » of an id the game data don't know, on an item or a gem (2j3b, F3, the owner,
+     2026-11-20). */
+	--unknown-note: #ffe066;
+	--unknown-ink: #4a3b00;
+	--unknown-text: var(--unknown-note); /* « Not in the game data » in the cards */
+
+	/* The named colours of the author's markup (specs.md, The author's texts), readable on the cards of
+     the style; « gray » reads as grey. Black the darkest neutral grey at 4.5 to 1 on the band, a little
+     darker than grey, as rgb(0, 0, 0) would be lightened (B2 of three, the owner, 2026-11-22: as written,
+     1.1 to 1, and as grey set aside). */
+	--markup-white: #ffffff;
+	--markup-grey: #8c8c8c;
+	--markup-black: #808080;
+	--markup-red: #e05050;
+	--markup-green: #5fc35f;
+	--markup-blue: #6c8cff;
+	--markup-yellow: #e6d25a;
+	--markup-orange: #e8913c;
+	--markup-gold: #c8a65a;
+	--markup-purple: #a86ce0;
+	--markup-cyan: #4fd2d2;
+	--markup-magenta: #d24fd2;
+
+	/* The tree, read by the canvas: colours, the width of the links taken, a glow (blur in pixels) on
+     what is taken, and a shape per kind (circle, square, diamond, hex, star). The links taken in white
+     (2i, the owner, 2026-11-19). */
+	--tree-background: transparent;
+	--tree-edge: #18223a;
+	--tree-edge-taken: var(--text);
+	--tree-edge-width: 1.8;
+	/* The links of the passives of one weapon set alone, as the game draws them, red for the first and
+     green for the second: Vivid red and Vivid green (2i, the owner, 2026-11-19). */
+	--tree-set-1: #ef4444;
+	--tree-set-2: #22c55e;
+	--tree-node: var(--page);
+	--tree-node-line: #2a3a5c;
+	--tree-taken: var(--text);
+	--tree-later: #4b5f86;
+	--tree-glow: 0;
+	--tree-glow-colour: transparent;
+	--tree-shape-small: circle;
+	--tree-shape-notable: circle;
+	--tree-shape-keystone: diamond;
+	--tree-shape-jewel: diamond;
+}

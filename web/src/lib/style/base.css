@@ -1,0 +1,58 @@
+/* What every component shares (docs/code-quality.md, TypeScript and Svelte), copied from the
+   mock-up (docs/mockups/pathweaver/css/app.css, motion.css, textures.css), each rule as the first
+   component that needs it comes: the page, the ring of focus, the graph paper. Each rule is no
+   stronger than one class (:where() around what scopes it), so that a component can change it. */
+
+/* The page: its light from its top left over its colour, the text at 14 px. The root of the
+   application is the container named window (+layout.svelte): the components ask its width
+   (@container window), never the class of a page. */
+:where(body) {
+	margin: 0;
+	background: var(--page-image), var(--page);
+	background-size: var(--page-image-size);
+	color: var(--text);
+	font: var(--text-weight) 14px/1.35 var(--font-text);
+}
+
+:where(button) {
+	font: inherit;
+	color: inherit;
+}
+
+/* The focus of the keyboard on every control (WCAG 2.4.7): a ring in the accent, inside its box,
+   so that a parent that cuts what overflows never hides it; reached with the keyboard only
+   (:focus-visible), so that a component may draw its own (the cursor of the level, the field of
+   Paste JSON). */
+:where(:focus-visible) {
+	outline: var(--focus-ring);
+	outline-offset: -2px;
+}
+
+/* The graph paper behind a block (specs.md, The style): a layer under its content, in its own
+   stacking context, which a block takes by setting the class on its root, so that each component
+   chooses it for itself. The pattern is a mask: its lines take the colour of the layer, a line
+   every tile and a fainter one every quarter. */
+:root {
+	--texture: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40' preserveAspectRatio='none'%3E%3Cpath d='M0 0H40M0 40H40M0 0V40M40 0V40' fill='none' stroke='black' vector-effect='non-scaling-stroke'/%3E%3Cpath d='M0 10H40M0 20H40M0 30H40M10 0V40M20 0V40M30 0V40' fill='none' stroke='black' stroke-opacity='.4' vector-effect='non-scaling-stroke'/%3E%3C/svg%3E");
+}
+
+/* A block placed otherwise (the drawer, absolute) keeps its own place. */
+:where(.graph-paper) {
+	position: relative;
+	isolation: isolate;
+}
+
+:where(.graph-paper)::before {
+	content: '';
+	position: absolute;
+	inset: 0;
+	z-index: -1;
+	pointer-events: none;
+	background: var(--texture-colour);
+	opacity: var(--texture-opacity);
+	mask-image: var(--texture);
+	mask-size: var(--texture-size) var(--texture-size);
+	/* Shifted by half a small cell (an eighth of the tile), so that no line of the grid falls on
+	   the edge of a block and reads as a border (the owner, 2026-11-18). */
+	mask-position: calc(var(--texture-size) / 8) calc(var(--texture-size) / 8);
+}

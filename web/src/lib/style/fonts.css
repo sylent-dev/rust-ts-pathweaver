@@ -1,0 +1,22 @@
+/* The two fonts, served by the website itself (docs/technical-choices.md, Font of the name, Font
+   of the interface), each under the SIL Open Font License 1.1 kept beside it (fonts/*-ofl.txt):
+   Manrope, variable from 400 to 800, for every role; Archivo, variable from 700 to 800, for the
+   name and the big titles. The Latin subset of Google Fonts, which holds English and French; a
+   character outside it (an arrow, ▾) takes the font of the system, as in the mock-up. `swap`: the
+   text is drawn at once in the font of the system, then in its own once loaded. */
+
+@font-face {
+	font-family: 'Manrope';
+	font-style: normal;
+	font-weight: 400 800;
+	font-display: swap;
+	src: url('./fonts/manrope-latin.woff2') format('woff2');
+}
+
+@font-face {
+	font-family: 'Archivo';
+	font-style: normal;
+	font-weight: 700 800;
+	font-display: swap;
+	src: url('./fonts/archivo-latin.woff2') format('woff2');
+}
