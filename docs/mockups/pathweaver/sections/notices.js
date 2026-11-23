@@ -9,7 +9,9 @@
 // Pathweaver works the same); no icon, the shade and the words say it (the owner, 2026-11-18); the
 // files refused, each its name and its reason (no text of the line of the error: the owner,
 // 2026-11-23), without a
-// title that would count them (the owner, 2026-11-18: the list says it); or a title and a note;
+// title that would count them (the owner, 2026-11-18: the list says it), four at most, from five
+// the first three and « and N more » as in the zone of the first visit (the owner, 2026-11-23);
+// or a title and a note;
 // its close button, a square in the corner.
 const noticeFile = ([name, reason]) => `<li>${escapeHtml(name)} <span class="app-notice-reason">${reason}</span></li>`;
 const notice = ({ kind = "error", title = "", files = [], note = "" }) => `<div class="app-notice is-${kind}" role="${kind === "error" ? "alert" : "status"}">

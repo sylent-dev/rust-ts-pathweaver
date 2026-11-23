@@ -11,10 +11,11 @@
 
 /* The file named in the colour of the text, its reason in the red (sections/home-refused-cases.js). */
 .home-drop-zone .home-drop-file { color: var(--text); }
-/* Several files: the title, then a line each, left aligned, the list scrolling past four, above the call at the foot. */
+/* Several files: the title, then a line each, left aligned, four at most, above the call at the foot. */
 .home-drop-error.is-list { align-self: stretch; align-items: stretch; gap: 12px; margin-bottom: 30px; padding: 0 28px; text-align: left; }
 .home-drop-error.is-list strong { text-align: center; }
-.home-drop-files { display: flex; flex-direction: column; gap: 6px; max-height: 112px; padding: 0 8px 0 0; overflow-y: auto; margin: 0; list-style: none;
-  font-size: 13.5px; scrollbar-width: thin; scrollbar-color: var(--weak) transparent; }
-.home-drop-files li { display: flex; flex-wrap: wrap; align-items: baseline; column-gap: 6px; row-gap: 3px; }
+.home-drop-files { display: flex; flex-direction: column; gap: 6px; margin: 0; padding: 0; list-style: none; font-size: 13.5px; }
+/* One line each, cut by « … » at the width of the zone, so that four always fit. */
+.home-drop-files li { overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
 .home-drop-zone .home-drop-files .home-drop-reason { font-size: 13.5px; }
+.home-drop-files .home-drop-more { color: var(--weak); }

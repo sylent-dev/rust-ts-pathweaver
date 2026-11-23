@@ -1,6 +1,8 @@
 // The zone that refuses, the case the first mock-up didn't draw (4e3a, 2026-11-23): several files
 // dropped, all refused: « These files can't be read », then a line each as in the notice of the
-// page of a build (sections/notices.js), the list scrolling in the zone past four. The reasons are
+// page of a build (sections/notices.js): four listed, and from five the first three and « and N
+// more » (the owner, 2026-11-23: no list that scrolls; whoever drops that many files can drop
+// them again). The reasons are
 // those of the core, which says a file isn't text, not that it is an image; no period at the end
 // of a reason, and no text of the line where a JSON breaks: its number says enough (the owner,
 // 2026-11-23), here and in the notice.
@@ -12,13 +14,17 @@ const refusedOneZone = (title, [name, reason]) => `<div class="home-drop-error">
   </div>
   <span class="home-drop-again">Drop a .build file here, or click to choose it</span>`;
 
-// Several files refused: a line each, the list scrolling past four.
-const refusedListZone = files => `<div class="home-drop-error is-list">
+// Several files refused: a line each, up to four; from five, the first three and how many more.
+const refusedListZone = all => {
+  const files = all.length > 4 ? all.slice(0, 3) : all;
+  const more = all.length - files.length;
+  return `<div class="home-drop-error is-list">
     <strong>These files can't be read</strong>
     <ul class="home-drop-files">${files.map(([name, reason]) => `<li><span class="home-drop-file">${escapeHtml(name)}</span>
-      <span class="home-drop-reason">${reason}</span></li>`).join("")}</ul>
+      <span class="home-drop-reason">${reason}</span></li>`).join("")}${more ? `<li class="home-drop-more">and ${more} more</li>` : ""}</ul>
   </div>
   <span class="home-drop-again">Drop a .build file here, or click to choose it</span>`;
+};
 
 const REFUSED_FILES = [
   ["passive-tree.png", "isn't a text file"],
@@ -37,5 +43,7 @@ addSection(() => ["Home · the zone that refuses: a file whose JSON breaks, and 
     dropHome({ zone: refusedOneZone("That build can't be read", REFUSED_FILES[1]), state: "is-refused" })],
    ["Three files dropped, all refused: a line each, as in the notice",
     dropHome({ zone: refusedListZone(REFUSED_FILES.slice(0, 3)), state: "is-refused" })],
-   ["Seven files refused: the list scrolls in the zone past four (scroll it)",
+   ["Four files refused: the four listed",
+    dropHome({ zone: refusedListZone(REFUSED_FILES.slice(0, 4)), state: "is-refused" })],
+   ["Seven files refused: the first three, and how many more",
     dropHome({ zone: refusedListZone(REFUSED_FILES), state: "is-refused" })]]]);
