@@ -71,4 +71,22 @@ describe('Paste JSON', () => {
 			.element(page.getByRole('alert'))
 			.toHaveTextContent("That isn't a .build file passive-tree.png isn't a text file");
 	});
+
+	it('shows a build pasted without the files refused before it', async () => {
+		await opening.open([new File([new Uint8Array([0x89, 0x50])], 'passive-tree.png')]);
+		await page.getByRole('button', { name: 'Paste JSON' }).click();
+		const clipboardData = new DataTransfer();
+		clipboardData.setData('text/plain', '{ "name": "Pasted" }');
+
+		page
+			.getByRole('textbox')
+			.element()
+			.dispatchEvent(
+				new ClipboardEvent('paste', { clipboardData, bubbles: true, cancelable: true })
+			);
+		await opening.open([]);
+
+		await expect.element(page.getByText('Pasted')).toBeVisible();
+		await expect.element(page.getByRole('alert')).not.toBeInTheDocument();
+	});
 });

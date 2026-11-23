@@ -5,7 +5,7 @@ The home page of the first visit opens builds three ways: files dropped anywhere
 ## Before
 
 1. In the folder of the project, on the branch of the step: `cd web && npm run dev`, then open the address it prints.
-2. Run every test in Firefox, then the tests 1, 4 and 8 again in a Chromium (Chrome, Edge, Brave).
+2. Run every test in Firefox, then the tests 1, 4, 8 and 10 again in a Chromium (Chrome, Edge, Brave).
 3. Reload the page (F5) before each test: until the library (step 8), a reload closes the builds open and gives the first visit back.
 4. The files of `inputs/builds/`: `ggg-titan-warrior-sample.build`, `pob-twobyul-deadeye.build`, `utkarshbehre-spark-comet.build`; any image of the desktop, named `passive-tree.png` here; and a file `broken.build` made in a text editor, of these three lines:
 
@@ -14,6 +14,8 @@ The home page of the first visit opens builds three ways: files dropped anywhere
      "name": "Broken",,
    }
    ```
+
+5. Seven files that aren't builds (images, texts), one of them renamed with a name of more than 80 characters.
 
 ## The tests
 
@@ -35,8 +37,8 @@ The home page of the first visit opens builds three ways: files dropped anywhere
 6. **A broken .build**: drop `broken.build`.
    ✅ « That build can't be read » over « broken.build isn't valid JSON at line 2 », without the text of the line.
 
-7. **Two, then seven files refused**: drop `passive-tree.png` and `broken.build` together; then drop seven files that aren't builds (images, texts) together.
-   ✅ « These files can't be read », then a line each: the two files, each name white and its reason red. For the seven: the first three lines, then « and 4 more » in grey, no list that scrolls; a long name is cut by « … » at the edge of the zone, its whole line in its tooltip.
+7. **Two, then seven files refused**: drop `passive-tree.png` and `broken.build` together; then drop the seven files that aren't builds together, the one of the long name first.
+   ✅ « These files can't be read », then a line each: the two files, each name white and its reason red. For the seven: the first three lines, then « and 4 more » in grey, no list that scrolls; the long name is cut by « … » at the edge of the zone, its line on one line.
 
 8. **A paste from poe.ninja**: on poe.ninja, open a build of Path of Exile 2 and copy its JSON with the button of the page that copies it; on Pathweaver, click **Paste JSON** under the zone, then press Ctrl+V.
    ✅ After the click, the zone becomes a black field in its place, a thin blue line around it, the caret in it, « Paste the JSON of a build » over « Ctrl+V: it opens at once · Esc: back to the files », and the link under it says **Drop a file instead**. After Ctrl+V, the build opens at once, without a button, its name that of poe.ninja; the browser asks no permission.

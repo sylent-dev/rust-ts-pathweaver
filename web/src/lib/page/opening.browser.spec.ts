@@ -50,6 +50,23 @@ describe('the files opened', () => {
 		]);
 	});
 
+	it('forget the files refused before a build pasted, and keep them before a text refused', async () => {
+		const opening = new Opening();
+		await opening.open([image]);
+
+		expect(await opening.openText('{ "name": "Not')).toEqual({
+			reason: 'notJson',
+			line: 1,
+			excerpt: '{ "name": "Not'
+		});
+		expect(opening.refusedAll).toHaveLength(1);
+
+		expect(await opening.openText('{ "name": "Pasted" }')).toBeUndefined();
+		expect(openBuilds.shown?.name).toBe('Pasted');
+		expect(opening.refused).toEqual([]);
+		expect(opening.refusedAll).toEqual([]);
+	});
+
 	it('forget the files refused before them', async () => {
 		const opening = new Opening();
 		await opening.open([image]);

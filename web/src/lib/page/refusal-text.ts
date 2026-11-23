@@ -1,5 +1,6 @@
 // What the page says of the files refused (specs.md, Opening builds, Window layout): the reason of
-// each, written after its name, and the few listed of many. Read by the drop zone of the first
+// each, written after its name, the title of the zone that refuses them, and the few listed of
+// many. Read by the drop zone of the first
 // visit, and by the notice of the page of a build (4f).
 
 import { t } from '#lib/i18n.ts';
@@ -33,6 +34,29 @@ export function refusalReason(refusal: FileRefusal): string {
 			return t('refused-missing-field', { field: refusal.field });
 		case 'unreadable':
 			return t('refused-unreadable');
+	}
+}
+
+/**
+ * What went wrong with the files of a drop, all refused, which the drop zone says over them: a
+ * file that isn't text isn't a .build file at all; a file of another reason is one that can't be
+ * read; several files, whatever their reasons, can't be read.
+ */
+export function refusalTitle(refused: readonly RefusedRead[]): string {
+	const [first, ...others] = refused;
+	if (first === undefined || others.length > 0) {
+		return t('refused-zone-several');
+	}
+	switch (first.refusal.reason) {
+		case 'notText':
+			return t('refused-zone-not-a-build-file');
+		case 'tooLarge':
+		case 'notJson':
+		case 'notABuild':
+		case 'wrongValue':
+		case 'missingField':
+		case 'unreadable':
+			return t('refused-zone-unreadable');
 	}
 }
 

@@ -2,7 +2,7 @@
 
 import { describe, expect, it } from 'vitest';
 import type { RefusedRead } from './opening.svelte.ts';
-import { listedRefusals, refusalReason } from './refusal-text.ts';
+import { listedRefusals, refusalReason, refusalTitle } from './refusal-text.ts';
 
 /** A file refused as not text, named by its number. */
 function refused(number: number): RefusedRead {
@@ -28,6 +28,25 @@ describe('the reason of a file refused', () => {
 			'misses the field passives[0].id',
 			"couldn't be read by the browser"
 		]);
+	});
+});
+
+describe('the title of the files refused', () => {
+	it('says a file that isn’t text isn’t a .build file, and any other can’t be read', () => {
+		const tooLarge: RefusedRead = {
+			kind: 'refused',
+			fileName: 'video.mp4',
+			refusal: { reason: 'tooLarge', bytes: 48_234_112, limit: 1_048_576 }
+		};
+
+		expect([refusalTitle([refused(1)]), refusalTitle([tooLarge])]).toEqual([
+			"That isn't a .build file",
+			"That build can't be read"
+		]);
+	});
+
+	it('says several files can’t be read, whatever their reasons', () => {
+		expect(refusalTitle([refused(1), refused(2)])).toBe("These files can't be read");
 	});
 });
 

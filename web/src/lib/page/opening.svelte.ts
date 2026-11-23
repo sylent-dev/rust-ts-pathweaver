@@ -50,7 +50,7 @@ export class Opening {
 
 	/**
 	 * Opens the JSON of a build pasted, after the files given before it: its build opens and is
-	 * shown. Gives why it is refused, which the field that took it says; nothing when it opens or
+	 * shown, the files refused before it forgotten. Gives why it is refused, which the field that took it says; nothing when it opens or
 	 * when the core can't load, which the page already says (+page.svelte).
 	 */
 	openText(text: string): Promise<FileRefusal | undefined> {
@@ -70,6 +70,9 @@ export class Opening {
 			return read.refusal;
 		}
 		openBuilds.open(read.build);
+		// The files refused before it are no longer those of the build shown.
+		this.#refused = [];
+		this.#openedNone = false;
 		return undefined;
 	}
 

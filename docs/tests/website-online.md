@@ -14,7 +14,7 @@ The website is published to Cloudflare at each merge into `main`, at its own dom
    ✅ The page opens over `https://`, its padlock without a warning; it shows « Weave your path to level 100 » and the zone « Add your first build », never « The core of Pathweaver could not load. » under it. On the phone, held upright, one message in place of the page (4e1): the brand at the top, the yellow sticky note with its face, « Pathweaver needs a computer » in large letters on two lines, and two lines under it, nothing cut at the edges.
 
 2. **A build opens**: drop the file of the corpus on the page.
-   ✅ Its Name, Author, Ascendancy and Link show, then « Core 0.1.0, in Rust. », the version of `Cargo.toml` (the core in WebAssembly loaded), never a line « maxroll-aer0-ice-shot-amazon.build … » that says why it is refused.
+   ✅ Its Name, Author, Ascendancy and Link show, then « Core 0.1.0, in Rust. », the version of `Cargo.toml` (the core in WebAssembly loaded), never the zone saying « That build can't be read ».
 
 3. **The headers**: open the tools of the browser (F12), tab Network, and reload the page.
    ✅ The response of the page itself (the first line, `/`) has `x-content-type-options: nosniff`, `x-frame-options: DENY` and `referrer-policy: strict-origin-when-cross-origin`; a file of `/_app/immutable/` (a `.js` or the `.wasm`) has `cache-control: public, max-age=31536000, immutable`; the `.wasm` (`pathweaver_bg….wasm`) has `content-type: application/wasm` (with another type the core still loads, more slowly, so the test 2 doesn't show it).

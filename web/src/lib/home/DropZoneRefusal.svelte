@@ -4,7 +4,7 @@
 <script lang="ts">
 	import { t } from '#lib/i18n.ts';
 	import type { RefusedRead } from '#lib/page/opening.svelte.ts';
-	import { listedRefusals, refusalReason } from '#lib/page/refusal-text.ts';
+	import { listedRefusals, refusalReason, refusalTitle } from '#lib/page/refusal-text.ts';
 
 	interface Props {
 		/** The files of the drop, all refused: one or more. */
@@ -15,15 +15,7 @@
 
 	const listed = $derived(listedRefusals(refused));
 
-	/** What went wrong: a file that isn't text isn't a .build file; any other can't be read. */
-	const title = $derived.by(() => {
-		if (refused.length > 1) {
-			return t('refused-zone-several');
-		}
-		return refused[0]?.refusal.reason === 'notText'
-			? t('refused-zone-not-a-build-file')
-			: t('refused-zone-unreadable');
-	});
+	const title = $derived(refusalTitle(refused));
 </script>
 
 <div class="refusal" class:is-list={refused.length > 1}>
@@ -31,10 +23,10 @@
 	{#if refused.length > 1}
 		<ul>
 			{#each listed.listed as file, index (index)}
-				{@const reason = refusalReason(file.refusal)}
-				<!-- Cut by « … » at the width of the zone, whole in its tooltip. -->
-				<li title="{file.fileName} {reason}">
-					<span class="file">{file.fileName}</span> <span class="reason">{reason}</span>
+				<!-- Cut by « … » at the width of the zone. -->
+				<li>
+					<span class="file">{file.fileName}</span>
+					<span class="reason">{refusalReason(file.refusal)}</span>
 				</li>
 			{/each}
 			{#if listed.more > 0}
