@@ -3,6 +3,7 @@
 	import '#lib/style/tokens.css';
 	import '#lib/style/base.css';
 	import { MediaQuery } from 'svelte/reactivity';
+	import { fileDrop } from '#lib/page/file-drop.svelte.ts';
 	import { hearClick, hearKey } from '#lib/page/page-events.ts';
 	import PhonePage from '#lib/phone/PhonePage.svelte';
 	import type { LayoutProps } from './$types';
@@ -17,6 +18,13 @@
 </script>
 
 <svelte:document onkeydown={hearKey} onclick={hearClick} />
+<!-- Files dropped anywhere, on any page, open (specs.md, Opening builds). -->
+<svelte:window
+	ondragenter={(event) => fileDrop.enter(event)}
+	ondragover={(event) => fileDrop.over(event)}
+	ondragleave={(event) => fileDrop.leave(event)}
+	ondrop={(event) => fileDrop.drop(event)}
+/>
 
 {#if isPhone.current}
 	<PhonePage />

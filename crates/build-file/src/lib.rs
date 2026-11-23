@@ -86,8 +86,8 @@ impl Build {
     /// When the text is larger than [`MAX_BYTES`], isn't JSON, isn't an object with a `name`, or
     /// holds a value of the wrong type or misses a field ([`ReadError`]).
     pub fn read(text: &str) -> Result<Self, ReadError> {
-        if text.len() > MAX_BYTES {
-            return Err(ReadError::TooLarge { bytes: text.len() });
+        if let Some(error) = ReadError::of_size(u64::try_from(text.len()).unwrap_or(u64::MAX)) {
+            return Err(error);
         }
         let text = text.strip_prefix('\u{feff}').unwrap_or(text);
         let value: Value =

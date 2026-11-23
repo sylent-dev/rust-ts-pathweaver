@@ -5,6 +5,7 @@
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import { userEvent } from 'vitest/browser';
 import { openBuilds } from './open-builds.svelte.ts';
+import { openedBuild } from './opened-build.test-helper.ts';
 import { hearClick, hearKey } from './page-events.ts';
 import { popup } from './popup.svelte.ts';
 
@@ -41,7 +42,7 @@ function nextKeyKeepsItsDefault(): Promise<boolean> {
 
 /** A build from level 1 to 100, with markers at 10 and 20, shown at level 15. */
 function showBuild(): void {
-	openBuilds.open({ contentKey: 'a', levels: { lowest: 1, highest: 100, markers: [10, 20] } });
+	openBuilds.open(openedBuild('a', [10, 20]));
 	openBuilds.showLevel(15);
 }
 

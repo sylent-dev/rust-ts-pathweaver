@@ -23,11 +23,13 @@ export async function loadCore(): Promise<Core> {
 }
 
 /**
- * The build of the text of a file, or why it is refused (see crates/wasm/src/read.rs), to call
- * once `loadCore` has resolved. A file that isn't a build is a result, never an exception.
+ * The build of the text of a file, or why it is refused, and why a file is refused from its size
+ * alone (see crates/wasm/src/read.rs), to call once `loadCore` has resolved. A file that isn't a
+ * build is a result, never an exception.
  */
 export {
 	readBuildFile,
+	refusedBySize,
 	type BuildFile,
 	type OpenedBuild,
 	type RefusedFile

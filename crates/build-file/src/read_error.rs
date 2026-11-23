@@ -11,8 +11,9 @@ const EXCERPT_CHARS: usize = 80;
 /// Why a text isn't a `.build` file.
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub enum ReadError {
-    /// Larger than [`MAX_BYTES`], refused before it is read.
-    TooLarge { bytes: usize },
+    /// Larger than [`MAX_BYTES`], refused before it is read: by its size alone, for a file the
+    /// interface hasn't read yet ([`ReadError::of_size`]).
+    TooLarge { bytes: u64 },
     /// Not JSON: the line of the error, from 1, and its text. For a text that ends too soon,
     /// the last line that holds a character other than a space.
     NotJson {
@@ -61,6 +62,15 @@ impl std::fmt::Display for ReadError {
 impl std::error::Error for ReadError {}
 
 impl ReadError {
+    /// The error of a text of `bytes` bytes, when it is larger than [`MAX_BYTES`]: the one rule
+    /// of the size, which the interface also asks of a file from its size, before its text is
+    /// read (`specs.md`, Opening builds).
+    #[must_use]
+    pub fn of_size(bytes: u64) -> Option<Self> {
+        let limit = u64::try_from(MAX_BYTES).unwrap_or(u64::MAX);
+        (bytes > limit).then_some(Self::TooLarge { bytes })
+    }
+
     /// The error of a text `serde_json` couldn't read, at the line of the error
     /// ([`place_of`]); a text of spaces only isn't a build.
     pub(crate) fn of_json(text: &str, error: &serde_json::Error) -> Self {

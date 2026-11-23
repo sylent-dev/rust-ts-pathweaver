@@ -63,7 +63,7 @@ impl From<&Build> for BuildLevels {
 )]
 pub enum RefusedFile {
     /// Larger than the limit of the core, in bytes.
-    TooLarge { bytes: usize, limit: usize },
+    TooLarge { bytes: u64, limit: usize },
     /// The line of the error, from 1, and its text cut to 80 characters around the error;
     /// for a text that ends too soon, its last line with a character other than a space. The
     /// column of the core, in bytes, means nothing to JavaScript, which counts in UTF-16.
@@ -89,6 +89,27 @@ impl From<ReadError> for RefusedFile {
             ReadError::MissingField { field } => Self::MissingField { field },
         }
     }
+}
+
+/// Why a file of `bytes` bytes is refused from its size alone, before its text is read; none
+/// when the core reads a file of that size. In plain Rust for `cargo test`.
+#[must_use]
+pub fn refused_by_size(bytes: u64) -> Option<RefusedFile> {
+    ReadError::of_size(bytes).map(RefusedFile::from)
+}
+
+/// Why a file of `bytes` bytes is refused from its size alone, so that the page never reads
+/// the text of a file the core would refuse (`specs.md`, Opening builds): the rule of the core,
+/// not a copy of its limit. A `bigint`, since a file may be larger than a `number` of 32 bits.
+///
+/// # Errors
+///
+/// When the result can't be made a JavaScript object, which it never is.
+#[wasm_bindgen(js_name = refusedBySize)]
+pub fn refused_by_size_of_file(bytes: u64) -> Result<Option<Ts<RefusedFile>>, JsError> {
+    Ok(refused_by_size(bytes)
+        .map(|refused| Ts::from_rust(&refused))
+        .transpose()?)
 }
 
 /// The build of the text of a file, or why it is refused, in plain Rust for `cargo test`.
@@ -175,7 +196,7 @@ mod tests {
             (
                 too_large.as_str(),
                 RefusedFile::TooLarge {
-                    bytes: pathweaver_build_file::MAX_BYTES + 1,
+                    bytes: u64::try_from(pathweaver_build_file::MAX_BYTES + 1).unwrap(),
                     limit: pathweaver_build_file::MAX_BYTES,
                 },
             ),
@@ -204,5 +225,20 @@ mod tests {
         for (text, error) in cases {
             assert_eq!(read_file(text), BuildFile::Refused { error });
         }
+    }
+
+    #[test]
+    fn a_size_is_refused_by_the_rule_of_the_core_with_its_limit() {
+        let limit = pathweaver_build_file::MAX_BYTES;
+        let larger = u64::try_from(limit + 1).unwrap();
+
+        assert_eq!(refused_by_size(u64::try_from(limit).unwrap()), None);
+        assert_eq!(
+            refused_by_size(larger),
+            Some(RefusedFile::TooLarge {
+                bytes: larger,
+                limit
+            })
+        );
     }
 }

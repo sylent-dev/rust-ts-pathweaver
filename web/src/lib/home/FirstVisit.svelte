@@ -8,6 +8,7 @@
 	import Brand from '#lib/brand/Brand.svelte';
 	import LogoMark from '#lib/brand/LogoMark.svelte';
 	import { t } from '#lib/i18n.ts';
+	import { fileDrop } from '#lib/page/file-drop.svelte.ts';
 	import SiteLink from '#lib/site/SiteLink.svelte';
 	import { REPORT_BUG_URL } from '#lib/site/site-links.ts';
 	import FirstVisitTitle from './FirstVisitTitle.svelte';
@@ -16,12 +17,28 @@
 	interface Props {
 		/** The drop zone, which the notes are drawn around. */
 		zone: Snippet;
+		/** What is said under the zone: the files refused, until the zone says it (4e3). */
+		below?: Snippet;
 	}
 
-	let { zone }: Props = $props();
+	let { zone, below }: Props = $props();
+
+	/** Where the pointer was last over the page, which the grid is lit around. */
+	let pointer = $state({ x: '50%', y: '40%' });
+
+	function follow(event: PointerEvent | DragEvent): void {
+		pointer = { x: `${event.clientX}px`, y: `${event.clientY}px` };
+	}
 </script>
 
-<main class="first-visit">
+<main
+	class="first-visit"
+	class:is-over={fileDrop.isOver}
+	style:--x={pointer.x}
+	style:--y={pointer.y}
+	onpointermove={follow}
+	ondragover={follow}
+>
 	<div class="watermark" aria-hidden="true"><LogoMark pixels={620} /></div>
 	<div class="top">
 		<Brand markPixels={26} place="first-visit" />
@@ -33,6 +50,7 @@
 			{@render zone()}
 			<PlanNotes />
 		</div>
+		{@render below?.()}
 	</div>
 	<p class="foot">{t('first-visit-foot')}</p>
 </main>
@@ -59,6 +77,28 @@
 		opacity: var(--texture-opacity);
 		mask-image: var(--texture);
 		mask-size: var(--tile) var(--tile);
+	}
+
+	/* While files are over the page, the whole grid lights up in the accent, from the pointer. */
+	.first-visit::after {
+		content: '';
+		position: absolute;
+		inset: 0;
+		z-index: -1;
+		display: none;
+		pointer-events: none;
+		background: var(--accent);
+		mask-image:
+			var(--texture), radial-gradient(circle 1600px at var(--x) var(--y), #000 0%, transparent 100%);
+		mask-size:
+			var(--tile) var(--tile),
+			100% 100%;
+		mask-repeat: repeat, no-repeat;
+		mask-composite: intersect;
+	}
+
+	.is-over::after {
+		display: block;
 	}
 
 	/* The mark, large, behind the zone, at 3 % (the owner, 2026-11-18), its P in the text. */
@@ -96,8 +136,21 @@
 		padding: 0 40px 64px;
 	}
 
+	/* The zone grows a little with its notes while files are over the page, so that their lines
+	   still reach its edges. */
 	.stage {
 		position: relative;
+		transition: transform 0.3s var(--ease-overshoot);
+	}
+
+	.is-over .stage {
+		transform: scale(1.03);
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.stage {
+			transition: none;
+		}
 	}
 
 	.foot {

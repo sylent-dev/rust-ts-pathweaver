@@ -307,8 +307,38 @@ fn a_text_of_1_mb_is_read_and_a_larger_one_refused() {
     assert_eq!(
         error_of(&build_of(MAX_BYTES + 1)),
         ReadError::TooLarge {
-            bytes: MAX_BYTES + 1
+            bytes: bytes_of(MAX_BYTES + 1)
         }
+    );
+}
+
+/// A count of bytes as the size of a file gives it.
+fn bytes_of(count: usize) -> u64 {
+    u64::try_from(count).unwrap()
+}
+
+#[test]
+fn a_size_of_1_mb_is_read_and_a_larger_one_refused_before_its_text_is() {
+    assert_eq!(ReadError::of_size(0), None);
+    assert_eq!(ReadError::of_size(bytes_of(MAX_BYTES)), None);
+    assert_eq!(
+        ReadError::of_size(bytes_of(MAX_BYTES + 1)),
+        Some(ReadError::TooLarge {
+            bytes: bytes_of(MAX_BYTES + 1)
+        })
+    );
+}
+
+#[test]
+fn a_size_past_what_the_memory_of_the_page_holds_is_refused_with_its_size() {
+    // A file of 5 GB, more than the 4 GB a WebAssembly module addresses.
+    let five_gigabytes = 5 * 1024 * 1024 * 1024;
+
+    assert_eq!(
+        ReadError::of_size(five_gigabytes),
+        Some(ReadError::TooLarge {
+            bytes: five_gigabytes
+        })
     );
 }
 
@@ -319,7 +349,7 @@ fn a_larger_text_is_refused_before_it_is_read() {
     assert_eq!(
         error_of(&text),
         ReadError::TooLarge {
-            bytes: MAX_BYTES + 4
+            bytes: bytes_of(MAX_BYTES + 4)
         }
     );
 }
