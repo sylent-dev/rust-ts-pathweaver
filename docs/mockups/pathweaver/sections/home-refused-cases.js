@@ -3,7 +3,8 @@
 // line of code reads left to right whatever the language of the sentence); and several files
 // dropped, all refused: « These files can't be read », then a line each as in the notice of the
 // page of a build (sections/notices.js), the list scrolling in the zone past four. The reasons are
-// those of the core, which says a file isn't text, not that it is an image.
+// those of the core, which says a file isn't text, not that it is an image; no period at the end
+// of a reason (the owner, 2026-11-23), here and in the notice.
 
 // One file refused: its title, its name and its reason, and the line of its JSON when it breaks.
 const refusedOneZone = (title, [name, reason, line = ""]) => `<div class="home-drop-error">
@@ -22,13 +23,13 @@ const refusedListZone = files => `<div class="home-drop-error is-list">
   <span class="home-drop-again">Drop a .build file here, or click to choose it</span>`;
 
 const REFUSED_FILES = [
-  ["passive-tree.png", "isn't a text file."],
+  ["passive-tree.png", "isn't a text file"],
   ["Ritualist poison.build", "isn't valid JSON at line 12:", '"level": 12,,'],
-  ["Mercenary.build", "has a value of the wrong type at skills[2].level."],
+  ["Mercenary.build", "has a value of the wrong type at skills[2].level"],
   ["notes.txt", "isn't valid JSON at line 1:", "Act 1: Clearfell, take the Rolling Magma…"],
-  ["Monk invoker.build", "misses the field passives[0].id."],
-  ["video.mp4", "is 48,234,112 bytes, larger than 1,048,576."],
-  ["Witch.build", "isn't a build: an object with a name."],
+  ["Monk invoker.build", "misses the field passives[0].id"],
+  ["video.mp4", "is 48,234,112 bytes, larger than 1,048,576"],
+  ["Witch.build", "isn't a build: an object with a name"],
 ];
 
 addSection(() => ["Home · the zone that refuses: the line where a JSON breaks, and several files at once",

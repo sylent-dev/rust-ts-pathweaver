@@ -20,10 +20,10 @@ const notices = list => `<div class="app-notices">${list.join("")}</div>`;
 
 const NOTICES = {
   refused: notice({ files: [
-    ["passive-tree.png", "is an image, not a build."],
+    ["passive-tree.png", "isn't a text file"],
     ["Ritualist poison.build", "isn't valid JSON at line 12:", '"level": 12,,'],
-    ["Mercenary.build", "has a text where a number goes, in skills › 3 › level."]] }),
-  refusedOne: notice({ files: [["notes.txt", "isn't JSON: it starts with “Act 1”.", ""]] }),
+    ["Mercenary.build", "has a value of the wrong type at skills[2].level"]] }),
+  refusedOne: notice({ files: [["notes.txt", "isn't valid JSON at line 1:", "Act 1: Clearfell, take the Rolling Magma…"]] }),
   // Shown at every visit: a private window forgets everything once closed, its close included.
   private: notice({ kind: "info", title: "This browser keeps nothing",
     note: "Private browsing: the builds you open will be gone once it's closed. Download .build keeps the file of a build." }),
