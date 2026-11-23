@@ -8,3 +8,17 @@
 .home-drop-error { display: flex; flex-direction: column; align-items: center; gap: 8px; text-align: center; }
 .home-drop-zone .home-drop-reason { color: var(--error); font-size: 14.5px; }
 .home-drop-zone .home-drop-again { position: absolute; left: 0; right: 0; bottom: 22px; text-align: center; }
+
+/* The file named in the colour of the text, its reason in the red (sections/home-refused-cases.js). */
+.home-drop-zone .home-drop-file { color: var(--text); }
+/* The text of the line where a JSON breaks: monospaced, on an inset, cut to the width of the zone. */
+.home-drop-zone .home-drop-line { display: block; max-width: calc(100% - 44px); overflow: hidden; padding: 2px 8px; background: var(--inset);
+  color: var(--text); font-family: var(--font-code); font-size: 12px; text-overflow: ellipsis; white-space: nowrap; }
+/* Several files: the title, then a line each, left aligned, the list scrolling past four, above the call at the foot. */
+.home-drop-error.is-list { align-self: stretch; align-items: stretch; gap: 12px; margin-bottom: 30px; padding: 0 28px; text-align: left; }
+.home-drop-error.is-list strong { text-align: center; }
+.home-drop-files { display: flex; flex-direction: column; gap: 6px; max-height: 112px; padding: 0 8px 0 0; overflow-y: auto; margin: 0; list-style: none;
+  font-size: 13.5px; scrollbar-width: thin; scrollbar-color: var(--weak) transparent; }
+.home-drop-files li { display: flex; flex-wrap: wrap; align-items: baseline; column-gap: 6px; row-gap: 3px; }
+.home-drop-zone .home-drop-files .home-drop-reason { font-size: 13.5px; }
+.home-drop-files .home-drop-line { flex-basis: 100%; max-width: 100%; box-sizing: border-box; font-size: 11.5px; }
