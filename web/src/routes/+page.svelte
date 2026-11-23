@@ -1,7 +1,8 @@
-<!-- The first page: a .build file dropped or chosen, read by the core in Rust, and what it is.
-     Replaced by the viewer of the passive tree, the skills and the inventory. -->
+<!-- The home page: the first visit, where a .build file is dropped or chosen and read by the core
+     in Rust; once one opens, what it is, until the page of a build (4f). -->
 <script lang="ts">
 	import { loadCore, readBuildFile, type BuildFile, type RefusedFile } from '#lib/core.ts';
+	import FirstVisit from '#lib/home/FirstVisit.svelte';
 	import { t } from '#lib/i18n.ts';
 
 	const core = loadCore();
@@ -45,46 +46,51 @@
 </script>
 
 <svelte:head>
-	<title>{t('app-name')}</title>
+	<title>{t('app-page-title')}</title>
 </svelte:head>
 
-<main>
-	<h1>{t('app-name')}</h1>
-	<p>{t('app-tagline')}</p>
-	{#await core then { version }}
-		<label
-			class="drop"
-			class:dragging={isDragging}
-			ondragover={(event) => {
-				event.preventDefault();
-				isDragging = true;
-			}}
-			ondragleave={() => (isDragging = false)}
-			ondrop={drop}
-		>
-			{t('drop-build')}
-			<input type="file" accept=".build,application/json" onchange={choose} />
-		</label>
-		{#if opened?.kind === 'build'}
-			{@const build = opened.build}
-			<dl>
-				<dt>{t('build-name')}</dt>
-				<dd>{build.name}</dd>
-				<dt>{t('build-author')}</dt>
-				<dd>{build.author ?? t('build-unknown')}</dd>
-				<dt>{t('build-ascendancy')}</dt>
-				<dd>{build.ascendancy ?? t('build-unknown')}</dd>
-				<dt>{t('build-link')}</dt>
-				<dd>{build.link ?? t('build-unknown')}</dd>
-			</dl>
-		{:else if opened?.kind === 'refused'}
-			<p role="alert">{t('build-unreadable', { reason: reason(opened.error) })}</p>
-		{/if}
-		<p class="version">{t('core-version', { version })}</p>
-	{:catch}
-		<p role="alert">{t('core-load-failed')}</p>
-	{/await}
-</main>
+{#if opened?.kind === 'build'}
+	{@const build = opened.build}
+	<main class="build">
+		<dl>
+			<dt>{t('build-name')}</dt>
+			<dd>{build.name}</dd>
+			<dt>{t('build-author')}</dt>
+			<dd>{build.author ?? t('build-unknown')}</dd>
+			<dt>{t('build-ascendancy')}</dt>
+			<dd>{build.ascendancy ?? t('build-unknown')}</dd>
+			<dt>{t('build-link')}</dt>
+			<dd>{build.link ?? t('build-unknown')}</dd>
+		</dl>
+		{#await core then { version }}
+			<p class="version">{t('core-version', { version })}</p>
+		{/await}
+	</main>
+{:else}
+	<FirstVisit>
+		{#snippet zone()}
+			<label
+				class="drop"
+				class:dragging={isDragging}
+				ondragover={(event) => {
+					event.preventDefault();
+					isDragging = true;
+				}}
+				ondragleave={() => (isDragging = false)}
+				ondrop={drop}
+			>
+				{t('drop-build')}
+				<input type="file" accept=".build,application/json" onchange={choose} />
+			</label>
+			{#if opened?.kind === 'refused'}
+				<p role="alert">{t('build-unreadable', { reason: reason(opened.error) })}</p>
+			{/if}
+			{#await core catch}
+				<p role="alert">{t('core-load-failed')}</p>
+			{/await}
+		{/snippet}
+	</FirstVisit>
+{/if}
 
 <style>
 	.drop {
@@ -103,6 +109,10 @@
 	.drop input {
 		display: block;
 		margin: 1rem auto 0;
+	}
+
+	.build {
+		padding: 2rem;
 	}
 
 	.version {

@@ -2,7 +2,27 @@
 # the same messages. The syntax is Fluent's: https://projectfluent.org/fluent/guide/
 
 app-name = Pathweaver
-app-tagline = The build viewer and planner of Path of Exile 2.
+# The title of the page in the browser, its tab and its bookmarks.
+app-page-title = { app-name } · Build viewer and planner for Path of Exile 2
+
+## The band of the site, and the links that float over the first visit.
+
+# Opens a new issue on GitHub.
+site-report-bug = Report a bug
+
+## The home page at the first visit.
+
+# The game, small, in capitals, over the title.
+first-visit-game = Path of Exile 2
+first-visit-title = Weave your path to level 100
+# The three things a build shows, around the drop zone, in capitals.
+first-visit-shows-tree = The passive tree
+first-visit-shows-skills = The skills
+first-visit-shows-gear = The gear
+# The sites and the tools the .build files come from: brand names, never translated.
+first-visit-sources = From Mobalytics · Maxroll · poe.ninja · Path of Building
+first-visit-stays = Your builds stay in this browser. Nothing is sent anywhere.
+first-visit-foot = { first-visit-sources } · { first-visit-stays }
 
 ## The phone page: one message in place of every page, under 600 pixels. One sentence a line.
 
