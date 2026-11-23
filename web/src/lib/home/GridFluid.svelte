@@ -9,7 +9,8 @@
 
 	const lessMotion = new MediaQuery('(prefers-reduced-motion: reduce)');
 
-	let canvas = $state<HTMLCanvasElement>();
+	/** The canvas, null while it isn't drawn: Svelte sets it back to null when it is taken away. */
+	let canvas = $state<HTMLCanvasElement | null>(null);
 	/** The grid of the size of the canvas, made again when it changes. */
 	let grid: FluidGrid | undefined;
 	let context: CanvasRenderingContext2D | null = null;
@@ -35,7 +36,7 @@
 
 	$effect(() => {
 		const element = canvas;
-		if (element === undefined) {
+		if (element === null) {
 			return;
 		}
 		const observer = new ResizeObserver(() => resize(element));
@@ -51,7 +52,7 @@
 
 	/** Pours the fluid under the pointer as it moves, and runs it. */
 	function pour(event: PointerEvent): void {
-		if (canvas === undefined || grid === undefined) {
+		if (canvas === null || grid === undefined) {
 			return;
 		}
 		const box = canvas.getBoundingClientRect();
@@ -70,7 +71,7 @@
 	/** One frame of the fluid; it stops once the fluid is gone, until the pointer moves again. */
 	function run(): void {
 		frame = undefined;
-		if (grid === undefined || context === null || ink === undefined || canvas === undefined) {
+		if (grid === undefined || context === null || ink === undefined || canvas === null) {
 			return;
 		}
 		const pulse = heartbeat(performance.now() / 1000);
