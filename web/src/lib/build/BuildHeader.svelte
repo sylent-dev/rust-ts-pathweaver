@@ -8,7 +8,7 @@
 	import type { OpenedBuild } from '#lib/core.ts';
 	import { t } from '#lib/i18n.ts';
 	import { pageGameData } from '#lib/page/game-data.svelte.ts';
-	import { namedAscendancy } from './named-ascendancy.ts';
+	import { pageAscendancy } from './named-ascendancy.ts';
 
 	interface Props {
 		build: OpenedBuild;
@@ -22,12 +22,7 @@
 	// The game data of the page: a failure is written to the console, the ascendancy named by its id.
 	pageGameData.load().catch(() => undefined);
 
-	const ascendancy = $derived.by(() => {
-		const { state } = pageGameData;
-		return state.kind === 'loading'
-			? undefined
-			: namedAscendancy(build.ascendancy, state.kind === 'loaded' ? state.gameData : undefined, 88);
-	});
+	const ascendancy = $derived(pageAscendancy(build.ascendancy, 88));
 	const portrait = $derived(ascendancy?.kind === 'known' ? ascendancy.portrait : undefined);
 </script>
 

@@ -59,6 +59,13 @@ phone-title = Pathweaver needs a computer
 phone-why-computer = It is made for a computer next to the game:
 phone-why-screen = its passive tree needs a large screen.
 
+## The band of the open builds, under the band of the site.
+
+# The name a screen reader gives the band.
+builds-band = Open builds
+# The close button of a tab. $name (String): the name of the build, as its file writes it.
+builds-close = Close { $name }
+
 ## The header of a build.
 
 # Before the ascendancy, after a « · ». $author (String): as the file writes it.
