@@ -42,8 +42,12 @@ const abLink = url => {
     : `<a class="ab-chip" href="${url}" target="_blank" rel="noopener noreferrer" title="${url}">${escapeHtml(site)}</a>`;
 };
 const abLinked = html => html.replace(AB_URL, abLink);
+// A description cut by the core at 1,000 pieces (4g3b, sections/cut-text.js) ends with « … » in the weak grey, a
+// space after its last piece (the owner, 2026-11-24), one that never leaves it alone on a line; none after a line
+// break, where it would only indent « … » (4g3b, its review).
+const AB_CUT = '&nbsp;<span class="app-weak">…</span>';
 const abDescription = about => (about.description
-  ? `<div class="ab-desc">${abLinked(markupHtml(about.description.replace(/\r/g, "")))}</div>`
+  ? `<div class="ab-desc">${abLinked(markupHtml(about.description.replace(/\r/g, "")))}${about.isCut ? AB_CUT : ""}</div>`
   : '<p class="ab-none app-weak">The author wrote no description.</p>');
 // A link of the guide in the look of « Download .build » (the owner, 2026-11-21: no icon, the same hover): its
 // site alone in the accent, turning to the colour of the text on hover; its whole address in its tooltip (the

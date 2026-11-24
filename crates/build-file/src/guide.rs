@@ -1,6 +1,7 @@
 //! The guide of a build (`specs.md`, The header of a build): one link, the `link` of its file,
-//! the one its author named; when it has none, the first address of its description (the
-//! owner, 2026-11-21: one guide, not two links to the same site).
+//! the one its author named; when it has none, the first address of its description among its
+//! pieces shown (the owner, 2026-11-21: one guide, not two links to the same site; 2026-11-24: a
+//! link the page doesn't show never becomes the guide).
 
 use crate::Markup;
 use crate::markup::is_address;
@@ -13,7 +14,8 @@ pub enum Guide<'a> {
     Link(&'a str),
     /// The `link` of the file, a text that isn't one address whole, shown as it is.
     Text(&'a str),
-    /// The first address of the description, for a file without a `link`.
+    /// The first address of the description among its pieces shown, for a file without a
+    /// `link`.
     FromDescription(&'a str),
 }
 
@@ -103,6 +105,20 @@ mod tests {
                 "{link:?}"
             );
         }
+    }
+
+    #[test]
+    fn the_guide_is_the_first_address_among_the_pieces_shown() {
+        let past_the_cut = Markup::of_description(&("x\n".repeat(600) + "https://a.com"));
+        assert!(past_the_cut.is_cut());
+        assert_eq!(Guide::of(None, Some(&past_the_cut)), None);
+        let before_the_cut =
+            Markup::of_description(&("https://a.com\n".to_owned() + &"x\n".repeat(600)));
+        assert!(before_the_cut.is_cut());
+        assert_eq!(
+            Guide::of(None, Some(&before_the_cut)),
+            Some(Guide::FromDescription("https://a.com"))
+        );
     }
 
     #[test]

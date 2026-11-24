@@ -36,7 +36,7 @@
 		<p class="line">{t(`${update.messages}-line`)}</p>
 		<ul class="items">
 			{#each update.items as item (item)}
-				<li>{t(item)}</li>
+				<li><span class="diamond" aria-hidden="true"></span>{t(item)}</li>
 			{/each}
 		</ul>
 	</div>
@@ -109,18 +109,19 @@
 	}
 
 	.items li {
-		position: relative;
 		padding: 2px 0 2px 14px;
 	}
 
-	/* A small diamond of the accent. */
-	.items li::before {
-		content: '';
-		position: absolute;
-		left: 1px;
-		top: 0.62em;
+	/* A small diamond of the accent, in the margin of its item, 1 pixel from its edge: its middle
+	   on that of the small letters of the first line (vertical-align: middle), whatever the font
+	   (the owner, 2026-11-24: a top in em drew it above them). An element, not a ::before, so
+	   that a test measures where it is drawn. */
+	.diamond {
+		display: inline-block;
 		width: 5px;
 		height: 5px;
+		margin: 0 8px 0 -13px;
+		vertical-align: middle;
 		background: var(--accent);
 		transform: rotate(45deg);
 	}

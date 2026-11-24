@@ -24,7 +24,7 @@
 			{#if build.description === undefined}
 				<p class="none">{t('about-no-description')}</p>
 			{:else}
-				<div class="description"><AuthorText pieces={build.description} /></div>
+				<div class="description"><AuthorText text={build.description} /></div>
 			{/if}
 		</div>
 	</div>

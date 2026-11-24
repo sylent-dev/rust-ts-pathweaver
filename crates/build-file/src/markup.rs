@@ -7,7 +7,7 @@
 //! The text of a stranger may be made to cost: it is read in two passes over its tokens,
 //! without recursion, so that a nesting a million deep neither overflows the stack nor takes a
 //! time that grows as its square, and the result is a flat list of pieces, which neither its
-//! drop nor the bridge walks as a tree.
+//! drop nor the bridge walks as a tree, bounded to [`PIECES_KEPT`].
 
 mod addresses;
 #[cfg(test)]
@@ -17,9 +17,20 @@ mod tests;
 
 pub(crate) use addresses::is_address;
 
-/// An author's text read: its pieces in order, each text with the style of the tags around it.
+/// The pieces an author's text keeps at most, a description or a note (4g3b, the owner,
+/// 2026-11-24): the page drew a megabyte of a letter and a line break, 699,028 pieces, in 3.5
+/// seconds, about 5 µs a piece (`web/src/lib/about/description-cost.browser.spec.ts`), where
+/// the longest description of the corpus has 27.
+const PIECES_KEPT: usize = 1_000;
+
+/// An author's text read: its pieces in order, each text with the style of the tags around it,
+/// up to [`PIECES_KEPT`].
 #[derive(Debug, Clone, PartialEq, Eq, Default)]
-pub struct Markup(Vec<Piece>);
+pub struct Markup {
+    pieces: Vec<Piece>,
+    /// Whether the text goes on past its pieces kept, the page drawing « … » after them.
+    is_cut: bool,
+}
 
 /// A piece of an author's text.
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -344,12 +355,15 @@ impl Markup {
         let mut markup = Self::default();
         let mut groups: Vec<Group> = Vec::new();
         for token in (Tokens { rest: text }) {
+            if markup.is_cut {
+                break;
+            }
             let style = groups
                 .last()
                 .map_or_else(Style::default, |group| group.style);
             match token {
                 Token::Text(text) => markup.write(text, style),
-                Token::LineBreak => markup.0.push(Piece::LineBreak),
+                Token::LineBreak => markup.push(Piece::LineBreak),
                 Token::Open { written, tag } => match (is_closed.next().unwrap_or(false), tag) {
                     (true, Some(tag)) => groups.push(Group {
                         style: style.within(tag),
@@ -379,24 +393,39 @@ impl Markup {
         markup
     }
 
-    /// Reads the description of a build: its markup, and its addresses as links.
+    /// Reads the description of a build: its markup, and its addresses as links. Each piece of
+    /// the markup gives its own links, an address never across two of them, so the pieces kept
+    /// of the markup give those kept of the description.
     #[must_use]
     pub fn of_description(text: &str) -> Self {
-        let mut pieces = Vec::new();
-        for piece in Self::of(text) {
+        let markup = Self::of(text);
+        let is_markup_cut = markup.is_cut;
+        let mut linked = Self::default();
+        for piece in markup {
+            // Past the cut, `push` keeps nothing: stopping only saves the work.
+            if linked.is_cut {
+                break;
+            }
             match piece {
-                Piece::Text { text, style } => push_linked(text, style, &mut pieces),
-                Piece::Link { .. } | Piece::LineBreak => pieces.push(piece),
+                Piece::Text { text, style } => linked.push_linked(text, style),
+                Piece::Link { .. } | Piece::LineBreak => linked.push(piece),
             }
         }
-        Self(pieces)
+        linked.is_cut |= is_markup_cut;
+        linked
+    }
+
+    /// Whether the text goes on past its pieces kept, [`PIECES_KEPT`].
+    #[must_use]
+    pub fn is_cut(&self) -> bool {
+        self.is_cut
     }
 
     /// The first address of a description read with its links, where the guide of a build
     /// without a link of its own comes from.
     #[must_use]
     pub fn first_address(&self) -> Option<&str> {
-        self.0.iter().find_map(|piece| match piece {
+        self.pieces.iter().find_map(|piece| match piece {
             Piece::Link { address, .. } => Some(address.as_str()),
             Piece::Text { .. } | Piece::LineBreak => None,
         })
@@ -410,16 +439,61 @@ impl Markup {
         if let Some(Piece::Text {
             text: last,
             style: last_style,
-        }) = self.0.last_mut()
+        }) = self.pieces.last_mut()
             && *last_style == style
         {
             last.push_str(text);
             return;
         }
-        self.0.push(Piece::Text {
+        self.push(Piece::Text {
             text: text.to_owned(),
             style,
         });
+    }
+
+    /// Adds a piece, or marks the text cut when it holds its pieces kept already: the reading
+    /// stops there, so that the last piece kept is whole, a text no other would have grown.
+    fn push(&mut self, piece: Piece) {
+        if self.pieces.len() < PIECES_KEPT {
+            self.pieces.push(piece);
+        } else {
+            self.is_cut = true;
+        }
+    }
+
+    /// Adds a text in a style, its addresses as links.
+    fn push_linked(&mut self, text: String, style: Style) {
+        // The text moves whole when it holds no address, the most usual case.
+        if addresses::of(&text).next().is_none() {
+            self.push(Piece::Text { text, style });
+            return;
+        }
+        let piece_of =
+            |range: std::ops::Range<usize>| text.get(range).unwrap_or_default().to_owned();
+        let mut written = 0;
+        for address in addresses::of(&text) {
+            // Past the cut, `push` keeps nothing: stopping only saves the copies of the pieces.
+            if self.is_cut {
+                return;
+            }
+            if written < address.start {
+                self.push(Piece::Text {
+                    text: piece_of(written..address.start),
+                    style,
+                });
+            }
+            written = address.end;
+            self.push(Piece::Link {
+                address: piece_of(address),
+                style,
+            });
+        }
+        if written < text.len() {
+            self.push(Piece::Text {
+                text: piece_of(written..text.len()),
+                style,
+            });
+        }
     }
 }
 
@@ -439,41 +513,11 @@ impl crate::Build {
     }
 }
 
-/// Pushes a text in a style, its addresses as links.
-fn push_linked(text: String, style: Style, pieces: &mut Vec<Piece>) {
-    // The text moves whole when it holds no address, the most usual case.
-    if addresses::of(&text).next().is_none() {
-        pieces.push(Piece::Text { text, style });
-        return;
-    }
-    let piece_of = |range: std::ops::Range<usize>| text.get(range).unwrap_or_default().to_owned();
-    let mut written = 0;
-    for address in addresses::of(&text) {
-        if written < address.start {
-            pieces.push(Piece::Text {
-                text: piece_of(written..address.start),
-                style,
-            });
-        }
-        written = address.end;
-        pieces.push(Piece::Link {
-            address: piece_of(address),
-            style,
-        });
-    }
-    if written < text.len() {
-        pieces.push(Piece::Text {
-            text: piece_of(written..text.len()),
-            style,
-        });
-    }
-}
-
 impl IntoIterator for Markup {
     type Item = Piece;
     type IntoIter = std::vec::IntoIter<Piece>;
 
     fn into_iter(self) -> Self::IntoIter {
-        self.0.into_iter()
+        self.pieces.into_iter()
     }
 }

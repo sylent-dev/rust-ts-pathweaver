@@ -2,7 +2,7 @@
 
 import { flushSync, mount, unmount } from 'svelte';
 import { afterEach, describe, expect, it } from 'vitest';
-import type { MarkupColourName, MarkupPiece, MarkupStyle } from '#lib/core.ts';
+import type { MarkupColourName, MarkupPiece, MarkupStyle, MarkupText } from '#lib/core.ts';
 import '#lib/style/tokens.css';
 import AuthorText from './AuthorText.svelte';
 import { markupSurface, rgbOf } from './markup-surface.ts';
@@ -62,14 +62,17 @@ const text = (words: string, style: Partial<MarkupStyle> = {}): MarkupPiece => (
 });
 
 /** The author's text drawn at 20 pixels, so that its sizes read as whole pixels. */
-function drawn(pieces: MarkupPiece[]): HTMLElement {
+function drawnText(text: MarkupText): HTMLElement {
 	const target = document.createElement('div');
 	target.style.fontSize = '20px';
 	document.body.replaceChildren(target);
-	shown = mount(AuthorText, { target, props: { pieces } });
+	shown = mount(AuthorText, { target, props: { text } });
 	flushSync();
 	return target;
 }
+
+/** The pieces of a text the core didn't cut, drawn. */
+const drawn = (pieces: MarkupPiece[]): HTMLElement => drawnText({ pieces, isCut: false });
 
 /** What the browser computed for the text of each piece drawn. */
 function computed(target: HTMLElement): CSSStyleDeclaration[] {
@@ -91,6 +94,33 @@ describe('an author’s text', () => {
 			'<img src=x onerror=alert(1)>end',
 			null
 		]);
+	});
+
+	it('ends a text the core cut with « … » in the weak grey, a space after its last piece', () => {
+		const target = drawnText({ pieces: [text('Step 334:', { isBold: true })], isCut: true });
+		const cut = target.querySelector('.cut');
+		if (cut === null) {
+			throw new Error('no « … »');
+		}
+		const { color, fontWeight, fontSize } = getComputedStyle(cut);
+		const weak = document.createElement('span');
+		weak.style.color = 'var(--weak)';
+		target.append(weak);
+		expect([target.textContent, color, fontWeight, fontSize]).toEqual([
+			'Step 334:\u00a0…',
+			getComputedStyle(weak).color,
+			'400',
+			'20px'
+		]);
+	});
+
+	it('starts the line of « … » without a space when the last piece is a line break', () => {
+		const target = drawnText({ pieces: [text('a'), { kind: 'lineBreak' }], isCut: true });
+		expect(target.textContent).toBe('a…');
+	});
+
+	it('draws no « … » after a text the core didn’t cut', () => {
+		expect(drawn([text('Step 1:', { isBold: true })]).textContent).toBe('Step 1:');
 	});
 
 	it('draws the fonts of the markup, alone or together', () => {

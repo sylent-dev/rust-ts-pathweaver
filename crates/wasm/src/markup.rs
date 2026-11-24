@@ -1,9 +1,20 @@
 //! An author's text as the interface draws it (`specs.md`, The author's texts): the pieces the
-//! core read, flat, each text with its style; and the guide of a build.
+//! core read, flat, each text with its style, and whether it goes on past them; and the guide
+//! of a build.
 
 use pathweaver_build_file::{Colour, Guide, Markup, NamedColour, Piece, Size, Style};
 use serde::Serialize;
 use tsify::Tsify;
+
+/// An author's text, [`Markup`] as the interface reads it.
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Tsify)]
+#[serde(rename_all = "camelCase")]
+pub struct MarkupText {
+    /// Its pieces kept, in order.
+    pub pieces: Vec<MarkupPiece>,
+    /// Whether it goes on past them, « … » drawn after them.
+    pub is_cut: bool,
+}
 
 /// A piece of an author's text, [`Piece`] as the interface reads it.
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Tsify)]
@@ -90,10 +101,14 @@ pub enum BuildGuide {
     FromDescription { address: String },
 }
 
-/// The pieces of an author's text, in order.
-#[must_use]
-pub fn pieces_of(markup: Markup) -> Vec<MarkupPiece> {
-    markup.into_iter().map(MarkupPiece::from).collect()
+impl From<Markup> for MarkupText {
+    fn from(markup: Markup) -> Self {
+        let is_cut = markup.is_cut();
+        Self {
+            pieces: markup.into_iter().map(MarkupPiece::from).collect(),
+            is_cut,
+        }
+    }
 }
 
 impl From<Piece> for MarkupPiece {

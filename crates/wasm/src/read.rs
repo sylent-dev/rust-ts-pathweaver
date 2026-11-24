@@ -6,7 +6,7 @@ use serde::Serialize;
 use tsify::{Ts, Tsify};
 use wasm_bindgen::prelude::{JsError, wasm_bindgen};
 
-use crate::markup::{BuildGuide, MarkupPiece, pieces_of};
+use crate::markup::{BuildGuide, MarkupText};
 
 /// What a file gives: its build, or why it is refused. Not an exception: a file of a stranger
 /// that isn't a build is expected.
@@ -29,8 +29,9 @@ pub struct OpenedBuild {
     pub ascendancy: Option<String>,
     /// Its description with the markup of the game and its addresses as links; none when the
     /// author wrote none.
-    pub description: Option<Vec<MarkupPiece>>,
-    /// Its guide: the `link` of the file, else the first address of its description.
+    pub description: Option<MarkupText>,
+    /// Its guide: the `link` of the file, else the first address of its description among its
+    /// pieces shown.
     pub guide: Option<BuildGuide>,
     pub levels: BuildLevels,
 }
@@ -133,7 +134,7 @@ pub fn read_file(bytes: &[u8]) -> BuildFile {
                 build: OpenedBuild {
                     content_key: build.content_key(),
                     levels: BuildLevels::from(&build),
-                    description: description.map(pieces_of),
+                    description: description.map(MarkupText::from),
                     guide,
                     name: build.name,
                     author: build.author.into_option(),
@@ -162,7 +163,15 @@ pub fn read_build_file(bytes: &[u8]) -> Result<Ts<BuildFile>, JsError> {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::markup::{MarkupColour, MarkupColourName, MarkupSize, MarkupStyle};
+    use crate::markup::{MarkupColour, MarkupColourName, MarkupPiece, MarkupSize, MarkupStyle};
+
+    /// A text that goes on no further than its pieces.
+    fn whole(pieces: Vec<MarkupPiece>) -> MarkupText {
+        MarkupText {
+            pieces,
+            is_cut: false,
+        }
+    }
 
     #[test]
     fn a_build_gives_its_key_and_what_the_page_shows_of_it() {
@@ -176,10 +185,10 @@ mod tests {
                     name: "Every Field".to_owned(),
                     author: Some("Pathweaver".to_owned()),
                     ascendancy: Some("Warrior1".to_owned()),
-                    description: Some(vec![MarkupPiece::Text {
+                    description: Some(whole(vec![MarkupPiece::Text {
                         text: "A build written for the tests: every field of version 1 of the format, in both of its forms.".to_owned(),
                         style: MarkupStyle::default(),
-                    }]),
+                    }])),
                     guide: Some(BuildGuide::Link {
                         address: "https://example.com/guides/every-field".to_owned(),
                     }),
@@ -213,7 +222,7 @@ mod tests {
         let plain = MarkupStyle::default();
         assert_eq!(
             build.description,
-            Some(vec![
+            Some(whole(vec![
                 MarkupPiece::Text {
                     text: "Guide".to_owned(),
                     style: green,
@@ -231,13 +240,40 @@ mod tests {
                     text: ".".to_owned(),
                     style: plain,
                 },
-            ])
+            ]))
         );
         assert_eq!(
             build.guide,
             Some(BuildGuide::FromDescription {
                 address: "https://maxroll.gg/a".to_owned(),
             })
+        );
+    }
+
+    #[test]
+    fn a_description_cut_by_the_core_crosses_cut() {
+        let text = format!(
+            r#"{{ "name": "Steps", "description": "{}" }}"#,
+            "x\\n".repeat(501)
+        );
+
+        let BuildFile::Build { build } = read_file(text.as_bytes()) else {
+            panic!("the text is a build");
+        };
+        let step = [
+            MarkupPiece::Text {
+                text: "x".to_owned(),
+                style: MarkupStyle::default(),
+            },
+            MarkupPiece::LineBreak,
+        ];
+        let Some(description) = build.description else {
+            panic!("a description");
+        };
+        assert!(description.is_cut);
+        assert!(
+            description.pieces == step.iter().cycle().take(1_000).cloned().collect::<Vec<_>>(),
+            "x and a line break, 500 times"
         );
     }
 
@@ -265,14 +301,14 @@ mod tests {
         };
         assert_eq!(
             build.description,
-            Some(vec![
+            Some(whole(vec![
                 piece("a", italic_underlined(MarkupSize::Small)),
                 piece("b", italic_underlined(MarkupSize::Medium)),
                 piece("c", italic_underlined(MarkupSize::Large)),
                 piece("d", named(MarkupColourName::Gold)),
                 piece("e", named(MarkupColourName::Grey)),
                 piece("f", named(MarkupColourName::Unique)),
-            ])
+            ]))
         );
         assert_eq!(build.guide, None);
     }
@@ -292,7 +328,11 @@ mod tests {
             let BuildFile::Build { build } = read_file(text.as_bytes()) else {
                 panic!("the text is a build");
             };
-            let Some([MarkupPiece::Text { style, .. }]) = build.description.as_deref() else {
+            let Some([MarkupPiece::Text { style, .. }]) = build
+                .description
+                .as_ref()
+                .map(|description| description.pieces.as_slice())
+            else {
                 panic!("one text: {:?}", build.description);
             };
             assert_eq!(
