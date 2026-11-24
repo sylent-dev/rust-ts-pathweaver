@@ -14,7 +14,8 @@ pub enum MarkupPiece {
         text: String,
         style: MarkupStyle,
     },
-    /// An address of a description, a link where it is.
+    /// An address of a description, a link where it is, drawn as a chip of its site; its
+    /// style draws it only when the interface can't read its site and shows it as text.
     Link {
         address: String,
         style: MarkupStyle,

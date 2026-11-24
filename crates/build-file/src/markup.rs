@@ -26,9 +26,10 @@ pub struct Markup(Vec<Piece>);
 pub enum Piece {
     /// A text in one style, never empty; two texts side by side never share a style.
     Text { text: String, style: Style },
-    /// An address of a description that starts with `https://`, a link where it is, in the
-    /// style of the text around it (`specs.md`, The header of a build); never in a hint, whose
-    /// card on hover can't be clicked.
+    /// An address of a description that starts with `https://`, a link where it is, drawn by
+    /// the interface as a chip of its site (`specs.md`, The header of a build); never in a hint,
+    /// whose card on hover can't be clicked. Its style, that of the text around it, draws it
+    /// only when the interface can't read its site and shows it as text.
     Link { address: String, style: Style },
     /// A line break of the author, `\n` or `\r\n`.
     LineBreak,

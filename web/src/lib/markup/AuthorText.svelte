@@ -2,9 +2,10 @@
      core read: each text in its font, its size and its colour, a line break where the author
      wrote one, an address of a description a chip of its site that opens it in a new tab, its
      whole address in its tooltip, never the letters of the author, which a space of one pixel or
-     a tag that changes nothing on screen could make read as another address. Its texts are written as text, never read as HTML: a file from someone else is
-     untrusted. Its sizes are factors of the size of the text around it, which its parent sets;
-     the description of the About tab, the notes of the cards on hover (4j, 5c, 6). -->
+     a tag that changes nothing on screen could make read as another address. Its texts are
+     written as text, never read as HTML: a file from someone else is untrusted. Its sizes are
+     factors of the size of the text around it, which its parent sets; the description of the
+     About tab, the notes of the cards on hover (4j, 5c, 6). -->
 <script lang="ts" module>
 	import type { MarkupColourName, MarkupPiece, MarkupStyle } from '#lib/core.ts';
 	import { markupSurface } from './markup-surface.ts';
@@ -118,8 +119,6 @@
 		font-size: calc(var(--markup-large) * 1em);
 	}
 
-	/* An address of the author in the words, colours and styles of the author, underlined on
-	   hover. */
 	/* An address of the description as a chip of its site (4g3, the owner, 2026-11-24: no arrow,
 	   not bold), the page's and not the author's: in the accent on a tint of it, so that it reads
 	   apart from the words around it whatever they are, the colour of the text on hover; never cut

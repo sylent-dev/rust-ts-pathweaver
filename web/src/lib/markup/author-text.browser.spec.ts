@@ -73,9 +73,7 @@ function drawn(pieces: MarkupPiece[]): HTMLElement {
 
 /** What the browser computed for the text of each piece drawn. */
 function computed(target: HTMLElement): CSSStyleDeclaration[] {
-	return [...target.querySelectorAll('.author-text > span, .author-text > a > span')].map((span) =>
-		getComputedStyle(span)
-	);
+	return [...target.querySelectorAll('.author-text > span')].map((span) => getComputedStyle(span));
 }
 
 /** The left of a letter of a text drawn, in the page: where a mark of direction put it. */
@@ -206,10 +204,23 @@ describe('an author’s text', () => {
 	});
 
 	it('shows the site a click opens, whatever the address holds to read as another', () => {
-		const target = drawn([
-			{ kind: 'link', address: 'https://pathofexile.com@evil.io/forum', style: PLAIN }
+		const traps = [
+			'https://pathofexile.com@evil.io/forum',
+			'https://evil.io\\@pathofexile.com/forum',
+			'https://%65vil.io/forum',
+			'https://EVIL.io:8443/forum',
+			'https://%D7%90.com/forum'
+		];
+		const target = drawn(traps.map((address) => ({ kind: 'link', address, style: PLAIN })));
+		const chips = [...target.querySelectorAll('a')];
+		expect(chips.map((chip) => chip.textContent)).toEqual(chips.map((chip) => chip.host));
+		expect(chips.map((chip) => chip.host)).toEqual([
+			'evil.io',
+			'evil.io',
+			'evil.io',
+			'evil.io:8443',
+			'xn--4db.com'
 		]);
-		expect(target.querySelector('a')?.textContent).toBe('evil.io');
 	});
 
 	it('writes as text an address whose site the browser can’t read', () => {

@@ -26,8 +26,8 @@ export function rgbOf(computed: string): Rgb | undefined {
  * The surface an author's colour is read on, read from the page the first time; none, and a
  * message in the console, when the browser gives it in a form this doesn't read (a colour
  * see-through or of another space) or the token isn't there yet, which is said once and read
- * again the next time: the author's colours are then shown as written. A token missing would give the colour
- * the probe inherits, read as a surface.
+ * again the next time: the author's colours are then shown as written. A token missing would
+ * give the colour the probe inherits, read as a surface.
  */
 export function markupSurface(): Rgb | undefined {
 	if (read !== undefined) {
