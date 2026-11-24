@@ -437,30 +437,48 @@ def library_row(build, ascendancies):
             "levels": level_range(build)}
 
 
+def held_levels(entry):
+    """The levels an entry applies at, as the core reads them (LevelRange): [min, max] or a single number
+    from it to 100, 0 counting as 1 and a max above 100 stopping at 100; none for an invalid interval (a min
+    above its max or above 100, a list that isn't two numbers)."""
+    value = entry.get("level_interval")
+    if value is None:
+        return (1, 100)
+    if isinstance(value, int):
+        low, high = value, 100
+    elif isinstance(value, list) and len(value) == 2:
+        low, high = value
+    else:
+        return None
+    low, high = max(low, 1), min(max(high, 1), 100)
+    return (low, high) if low <= high else None
+
+
 def held_counts(build):
     """How many things a build holds over its levels, each once, as the core counts them (4g4a, specs.md,
     The level: what the build holds is read thing by thing): a passive by its id and its weapon set, a skill
-    by its id, a support by its id and its skill, a hint by its slot and its item; what applies at no level
-    counts nothing. The entries of the file say more where a tool lists a thing again."""
+    by its id, a support by its id and its skill, a hint by its slot and its item, its unique or else the first
+    line of its text; what applies at no level counts nothing. The entries of the file say more where a tool
+    lists a thing again."""
     entry = lambda item: item if isinstance(item, dict) else {"id": item}
-    levels = lambda item: (lambda low, high: (low, min(high, 100)) if low <= min(high, 100) else None)(*interval(item))
     passives, skill_ids, supports, hints = set(), set(), set(), set()
     for passive in map(entry, build.get("passives") or []):
-        if levels(passive):
+        if held_levels(passive):
             passives.add((passive["id"], passive.get("weapon_set") if passive.get("weapon_set") in (1, 2) else 0))
     for skill in map(entry, build.get("skills") or []):
-        skill_levels = levels(skill)
+        skill_levels = held_levels(skill)
         if not skill_levels:
             continue
         skill_ids.add(skill["id"])
         for support in map(entry, skill.get("support_skills") or []):
-            support_levels = levels(support)
-            if support_levels and support_levels[0] <= skill_levels[1] and skill_levels[0] <= support_levels[1]:
+            levels = held_levels(support)
+            if levels and levels[0] <= skill_levels[1] and skill_levels[0] <= levels[1]:
                 supports.add((support["id"], skill["id"]))
     for hint in build.get("inventory_slots") or []:
-        if levels(hint):
+        if held_levels(hint):
+            unique = (hint.get("unique_name") or "").strip()
             text = (hint.get("additional_text") or "").strip()
-            item = (hint.get("unique_name") or "").strip() or (text.splitlines()[0].rstrip() if text else None)
+            item = ("unique", unique) if unique else ("named", text.split("\n")[0].rstrip()) if text else None
             hints.add((hint.get("inventory_id"), item))
     return {"passives": len(passives), "skills": len(skill_ids), "supports": len(supports), "hints": len(hints)}
 
