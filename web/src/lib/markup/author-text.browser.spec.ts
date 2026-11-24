@@ -12,7 +12,7 @@ import { contrastRatio, READABLE_CONTRAST } from './readable-colour.ts';
  * The fourteen colours the game names, each as the browser computes its token
  * (css/tokens.css of the mock-up, 4g1), in the order of the documentation of Grinding Gear Games.
  */
-const NAMED_COLOURS: Record<MarkupColourName, string> = {
+const COLOURS_DRAWN: Record<MarkupColourName, string> = {
 	white: 'rgb(255, 255, 255)',
 	grey: 'rgb(140, 140, 140)',
 	black: 'rgb(128, 128, 128)',
@@ -29,9 +29,9 @@ const NAMED_COLOURS: Record<MarkupColourName, string> = {
 	unique: 'rgb(214, 161, 94)'
 };
 
-/** Whether a key of NAMED_COLOURS is a colour the game names, which all are. */
+/** Whether a key of COLOURS_DRAWN is a colour the game names, which all are. */
 function isColourName(name: string): name is MarkupColourName {
-	return name in NAMED_COLOURS;
+	return name in COLOURS_DRAWN;
 }
 
 let shown: ReturnType<typeof mount> | undefined;
@@ -126,12 +126,12 @@ describe('an author’s text', () => {
 
 	it('draws each colour the game names in its token, readable on the surface of the author’s texts', () => {
 		const target = drawn(
-			Object.keys(NAMED_COLOURS)
+			Object.keys(COLOURS_DRAWN)
 				.filter((name) => isColourName(name))
 				.map((name) => text(name, { colour: { kind: 'named', name } }))
 		);
 		const colours = computed(target).map((style) => style.color);
-		expect(colours).toEqual(Object.values(NAMED_COLOURS));
+		expect(colours).toEqual(Object.values(COLOURS_DRAWN));
 		const surface = markupSurface();
 		if (surface === undefined) {
 			throw new Error('no surface');
