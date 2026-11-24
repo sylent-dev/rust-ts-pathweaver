@@ -22,8 +22,10 @@
 //
 //     line breaks alone: none, read 11 ms, drawn 3 ms, closed 0 ms
 //     a letter and a line break: 1,000 pieces (cut), read 15 ms, drawn 11 ms, closed 1 ms
-//     <b>{a}a: 1,000 pieces (cut), read 8 ms, drawn 9 ms, closed 1 ms
-//     <rgb(0,0,0)>{a}a: 1,000 pieces (cut), read 8 ms, drawn 11 ms, closed 1 ms
+//     <b>{a}a: 1,000 pieces (cut), read 8 ms, drawn 10 ms, closed 1 ms
+//     <rgb(0,0,0)>{a}a: 1,000 pieces (cut), read 9 ms, drawn 10 ms, closed 1 ms
+//     an address and a space: 1,000 pieces (cut), read 5 ms, drawn 11 ms, closed 2 ms
+//     a letter and a space: 1 piece, read 5 ms, drawn 161 ms, closed 0 ms
 
 import { flushSync, mount, unmount } from 'svelte';
 import { describe, expect, it } from 'vitest';
@@ -62,13 +64,16 @@ function nextFrame(): Promise<void> {
  * The cases, each a unit of the description as the JSON of the file writes it: line breaks
  * alone (4g2's review), which the core reads as no description; a letter between them, the most
  * pieces a byte, a text and a line break each; a bold letter and a plain one, a span a piece; a
- * colour too dark, lightened for each piece.
+ * colour too dark, lightened for each piece; since the bound of 4g3b (its review), the costliest
+ * left: an address and a space, a chip a piece whose site is read, and one text of a megabyte.
  */
 const CASES = {
 	'line breaks alone': String.raw`\n`,
 	'a letter and a line break': String.raw`a\n`,
 	'<b>{a}a': '<b>{a}a',
-	'<rgb(0,0,0)>{a}a': '<rgb(0,0,0)>{a}a'
+	'<rgb(0,0,0)>{a}a': '<rgb(0,0,0)>{a}a',
+	'an address and a space': 'https://a.com ',
+	'a letter and a space': 'a '
 };
 
 describe.skipIf(import.meta.env.VITE_MEASURE !== '1')('the descriptions that cost most', () => {

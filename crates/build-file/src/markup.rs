@@ -18,7 +18,8 @@ mod tests;
 pub(crate) use addresses::is_address;
 
 /// The pieces an author's text keeps at most, a description or a note (4g3b, the owner,
-/// 2026-11-24): the page drew a megabyte of line breaks, 699,028 pieces, in 3.5 seconds, about
+/// 2026-11-24): the page drew a megabyte of a letter and a line break, 699,028 pieces, in 3.5
+/// seconds, about
 /// 5 µs a piece (`web/src/lib/about/description-cost.browser.spec.ts`), where the longest
 /// description of the corpus has 27.
 const PIECES_KEPT: usize = 1_000;
@@ -402,6 +403,7 @@ impl Markup {
         let is_markup_cut = markup.is_cut;
         let mut linked = Self::default();
         for piece in markup {
+            // Past the cut, `push` keeps nothing: stopping only saves the work.
             if linked.is_cut {
                 break;
             }
@@ -471,6 +473,7 @@ impl Markup {
             |range: std::ops::Range<usize>| text.get(range).unwrap_or_default().to_owned();
         let mut written = 0;
         for address in addresses::of(&text) {
+            // Past the cut, `push` keeps nothing: stopping only saves the copies of the pieces.
             if self.is_cut {
                 return;
             }

@@ -85,11 +85,12 @@ describe("What's next", () => {
 		await expect.element(box).toBeVisible();
 		const offsets = [...box.element().querySelectorAll('li')].map((item) => {
 			const diamond = item.querySelector('.diamond')?.getBoundingClientRect();
-			// The baseline of the item and a height of 1ex, from two boxes of its font.
+			// The baseline of the line of the diamond and a height of 1ex, from two boxes of its
+			// font set just after it.
 			const probe = document.createElement('span');
 			probe.innerHTML =
 				'<span style="display:inline-block;height:0"></span><span style="display:inline-block;height:1ex"></span>';
-			item.append(probe);
+			item.querySelector('.diamond')?.after(probe);
 			const [baseline, ex] = [...probe.children].map((box) => box.getBoundingClientRect());
 			probe.remove();
 			if (diamond === undefined || baseline === undefined || ex === undefined) {

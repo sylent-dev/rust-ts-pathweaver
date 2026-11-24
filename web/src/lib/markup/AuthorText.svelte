@@ -6,7 +6,7 @@
      written as text, never read as HTML: a file from someone else is untrusted. Its sizes are
      factors of the size of the text around it, which its parent sets. A text the core cut ends
      with « … » in the weak grey, a space after its last piece that never leaves it alone on a
-     line. The description of the About tab,
+     line, none after a line break, which would only indent it. The description of the About tab,
      the notes of the cards on hover (4j, 5c, 6). -->
 <script lang="ts" module>
 	import type { MarkupColourName, MarkupStyle, MarkupText } from '#lib/core.ts';
@@ -85,7 +85,10 @@
 			/>{:else if piece.kind === 'link'}{@render link(
 				piece.address,
 				piece.style
-			)}{:else}{@render styled(piece.text, piece.style)}{/if}{/each}{#if text.isCut}&nbsp;<span
+			)}{:else}{@render styled(
+				piece.text,
+				piece.style
+			)}{/if}{/each}{#if text.isCut}{#if text.pieces.at(-1)?.kind !== 'lineBreak'}&nbsp;{/if}<span
 			class="cut">{t('author-text-cut')}</span
 		>{/if}</span
 >

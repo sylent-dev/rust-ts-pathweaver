@@ -605,10 +605,8 @@ fn the_last_piece_kept_is_whole() {
 fn what_adds_no_piece_after_the_last_one_kept_cuts_nothing() {
     let markup = Markup::of(&(line_breaks(1_000) + "<b>{}"));
     assert!(!markup.is_cut(), "an empty tag");
-    let pieces: Vec<Piece> = Markup::of(&(line_breaks(1_000) + "\u{202e}"))
-        .into_iter()
-        .collect();
-    assert_eq!(pieces.len(), 1_000, "a mark of direction, removed");
+    let after_a_mark = Markup::of(&(line_breaks(1_000) + "\u{202e}"));
+    assert!(!after_a_mark.is_cut(), "a mark of direction, removed");
 }
 
 #[test]
@@ -632,6 +630,8 @@ fn a_description_cut_by_its_markup_is_cut() {
 
 #[test]
 fn a_megabyte_of_addresses_past_the_pieces_kept_is_read_in_time() {
+    // A guard against a reading that grows as its square (the addresses read again from the
+    // start at each piece), not against the early returns after the cut, which change no result.
     let start = Instant::now();
     let addresses = "https://a.com ".repeat(75_000);
     let description = Markup::of_description(&addresses);

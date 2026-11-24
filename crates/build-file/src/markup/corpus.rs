@@ -139,6 +139,38 @@ fn links_of(corpus: &BTreeMap<String, Build>) -> Vec<(&str, Vec<String>)> {
 
 #[test]
 #[ignore = "reads the corpus, kept out of Git"]
+fn the_longest_texts_of_the_corpus_are_far_from_the_pieces_kept() {
+    let corpus = corpus();
+    let descriptions: Vec<Markup> = corpus
+        .values()
+        .filter_map(Build::description_markup)
+        .collect();
+    let notes: Vec<Markup> = corpus
+        .values()
+        .flat_map(|build| {
+            texts(build)
+                .into_iter()
+                .skip(usize::from(build.description.as_deref().is_some()))
+        })
+        .map(Markup::of)
+        .collect();
+    let longest = |texts: &[Markup]| {
+        texts
+            .iter()
+            .map(|text| text.clone().into_iter().count())
+            .max()
+    };
+    // Measured on 2026-11-24, on the 32 files of 2026-11-16: the longest description, a build of
+    // Maxroll, and the longest note, in pieces; none cut by the bound of 1,000.
+    assert_eq!(
+        (longest(&descriptions), longest(&notes)),
+        (Some(27), Some(31))
+    );
+    assert!(descriptions.iter().chain(&notes).all(|text| !text.is_cut()));
+}
+
+#[test]
+#[ignore = "reads the corpus, kept out of Git"]
 fn the_links_and_the_guides_of_the_corpus() {
     let corpus = corpus();
     // Measured on 2026-11-24: one description writes addresses, the Amazon of Maxroll, its guide

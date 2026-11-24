@@ -114,6 +114,11 @@ describe('an author’s text', () => {
 		]);
 	});
 
+	it('starts the line of « … » without a space when the last piece is a line break', () => {
+		const target = drawnText({ pieces: [text('a'), { kind: 'lineBreak' }], isCut: true });
+		expect(target.textContent).toBe('a…');
+	});
+
 	it('draws no « … » after a text the core didn’t cut', () => {
 		expect(drawn([text('Step 1:', { isBold: true })]).textContent).toBe('Step 1:');
 	});

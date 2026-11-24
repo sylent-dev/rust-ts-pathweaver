@@ -1,6 +1,7 @@
 //! The guide of a build (`specs.md`, The header of a build): one link, the `link` of its file,
-//! the one its author named; when it has none, the first address of its description (the
-//! owner, 2026-11-21: one guide, not two links to the same site).
+//! the one its author named; when it has none, the first address of its description among its
+//! pieces shown (the owner, 2026-11-21: one guide, not two links to the same site; 2026-11-24: a
+//! link the page doesn't show never becomes the guide).
 
 use crate::Markup;
 use crate::markup::is_address;
@@ -103,6 +104,13 @@ mod tests {
                 "{link:?}"
             );
         }
+    }
+
+    #[test]
+    fn the_guide_is_never_an_address_past_the_pieces_shown() {
+        let description = Markup::of_description(&("x\n".repeat(600) + "https://a.com"));
+        assert!(description.is_cut());
+        assert_eq!(Guide::of(None, Some(&description)), None);
     }
 
     #[test]
