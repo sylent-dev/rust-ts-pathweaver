@@ -16,7 +16,7 @@
 <main class="build-page">
 	<BuildHeader {build} />
 	<BuildTabs panelId="build-tab-panel" />
-	<BuildTabPanel id="build-tab-panel" />
+	<BuildTabPanel id="build-tab-panel" {build} />
 </main>
 
 <style>
