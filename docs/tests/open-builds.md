@@ -1,6 +1,6 @@
 # Opening builds: the tests (4e, 4f)
 
-The home page of the first visit opens builds three ways: files dropped anywhere on the page, files chosen with a click on the zone, and the JSON of a build pasted in the zone become a field; when nothing opens, the zone says why. These tests check what only a real browser shows: the files of the desktop, the clipboard, the page lit under files. Since 4f1, a build opened shows its page: its header and its five tabs, their panels still empty; since 4f2, the band of the open builds over it, a tab per build and +, which chooses more. Run the tests in a row. A ✅ is enough when it works; detail only what goes wrong.
+The home page of the first visit opens builds three ways: files dropped anywhere on the page, files chosen with a click on the zone, and the JSON of a build pasted in the zone become a field; when nothing opens, the zone says why. These tests check what only a real browser shows: the files of the desktop, the clipboard, the page lit under files. Since 4f1, a build opened shows its page: its header and its five tabs, their panels still empty; since 4f2, the band of the open builds over it, a tab per build and +, which chooses more; since 4f3, the band of the site over both, and between them the notice of the files refused. Run the tests in a row. A ✅ is enough when it works; detail only what goes wrong.
 
 ## Before
 
@@ -22,8 +22,8 @@ The home page of the first visit opens builds three ways: files dropped anywhere
 1. **Several files dropped**: select the three `.build` files in the file manager and drop them together anywhere on the page, outside the zone.
    ✅ The first visit gives way to a build at once, without a button: one of the three (the last in the order the system gives them, « Titan Warrior », « TwobyulDeadeye » or « Spark - Comet »), its header: its name, its portrait on the left, and under it « by Grinding Gear Games · Titan Warrior », « Deadeye Ranger » alone for TwobyulDeadeye, which names no author, or « by UtkarshBehre · Stormweaver Sorceress »; under the header the five tabs, **Overview** in white over its bar.
 
-2. **A build and an image dropped together**: drop `ggg-titan-warrior-sample.build` and `passive-tree.png` together.
-   ✅ « Titan Warrior » shows, and under it, in a line of its own, « passive-tree.png isn't a text file », without a period.
+2. **A build and an image dropped together**: drop `ggg-titan-warrior-sample.build` and `passive-tree.png` together; hover the red × on the right of the notice, then click it. Drop `passive-tree.png` alone on the page of the build.
+   ✅ « Titan Warrior » shows. At the top, the band of the site: the mark and « Pathweaver » on the left, **Report a bug** on the right, in blue, white on hover with a line that sweeps under it. Under that band, a band in a dark red shade, the whole width of the window, says « passive-tree.png isn't a text file », the name white and the reason red, without a period; under it, the band of the open builds. On hover the × turns white and grows a little; the click takes the notice away, the tab of « Titan Warrior » touching the band of the site again, and Tab then goes on from that tab. The image dropped alone brings the notice back, the build still shown.
 
 3. **Choose files**: click the zone, choose `utkarshbehre-spark-comet.build` in the dialog of the system, open it.
    ✅ The dialog lets several files be chosen; « Spark - Comet » shows at once.
