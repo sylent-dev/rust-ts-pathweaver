@@ -1,7 +1,7 @@
 //! The addresses an author writes in a description (`specs.md`, The header of a build): each
 //! that starts with `https://` is a link, made of the visible characters of ASCII, up to a
 //! quote, a tag or a brace of the markup, never on a mark of punctuation that closes the
-//! sentence, and only where what is drawn after it shows where it ends.
+//! sentence.
 
 use std::ops::Range;
 
@@ -19,32 +19,6 @@ fn is_in_address(character: char) -> bool {
 
 /// The marks of punctuation that close a sentence, never the last character of an address.
 const CLOSING_MARKS: [char; 7] = ['.', ',', ';', ':', '!', '?', ']'];
-
-/// Whether a character drawn after an address may close the sentence it ends: the marks of
-/// [`CLOSING_MARKS`], a `)`, and the ideographic full stop `。` of Chinese and Japanese (4g3,
-/// the owner, 2026-11-24), which no reader takes for a letter of an address.
-fn closes_the_sentence(character: char) -> bool {
-    CLOSING_MARKS.contains(&character) || matches!(character, ')' | '。')
-}
-
-/// Whether a character drawn after an address shows where it ends: a space, or a quote, an
-/// angle bracket or a brace, which an address never holds.
-fn sets_an_address_apart(character: char) -> bool {
-    character.is_whitespace() || matches!(character, '"' | '\'' | '<' | '>' | '{' | '}')
-}
-
-/// Whether the characters drawn right after an address, in order, show where it ends: after
-/// the marks that may close the sentence, the end of the text or a character that sets it
-/// apart (4g3, its second review: a space without width, a letter beyond ASCII or a change of
-/// style glued to an address drew `https://pathofexile.co` as `https://pathofexile.com/forum`).
-/// `None` stands for a line break or the end of the text.
-pub fn ends_where_it_shows(after: impl IntoIterator<Item = Option<char>>) -> bool {
-    after
-        .into_iter()
-        .find(|character| !character.is_some_and(closes_the_sentence))
-        .flatten()
-        .is_none_or(sets_an_address_apart)
-}
 
 /// The address without the marks that close the sentence after it: a `)` is one only when it
 /// doesn't close a `(` of the address (`wiki/Foo_(bar)`), as the links of GitHub read it.

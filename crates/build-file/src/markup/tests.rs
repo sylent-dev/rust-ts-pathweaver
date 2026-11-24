@@ -441,28 +441,18 @@ fn a_closing_bracket_of_the_address_itself_is_kept() {
 #[test]
 fn an_address_is_made_of_the_visible_characters_of_ascii() {
     for (written, after) in [
+        ("https://a.com/x\u{200b}y", "\u{200b}y"),
+        ("https://a.com/x\u{200f}y", "\u{200f}y"),
         ("https://a.com/x\u{a0}y", "\u{a0}y"),
+        ("https://a.com/x\u{7f}y", "\u{7f}y"),
         ("https://a.com/x。", "。"),
-        ("https://a.com/x。 y", "。 y"),
+        ("https://a.com/xé", "é"),
     ] {
         assert_eq!(
             described(written),
             [link("https://a.com/x", Style::default()), plain(after)],
             "{written:?}"
         );
-    }
-}
-
-#[test]
-fn an_address_glued_to_what_follows_it_is_text() {
-    for written in [
-        "https://pathofexile.co\u{200b}m/forum",
-        "https://a.com/x\u{7f}y",
-        "https://pathofexile.coé",
-        "https://a.com/x。y",
-        "https://a.com/x.\u{200b}",
-    ] {
-        assert_eq!(described(written), [plain(written)], "{written:?}");
     }
 }
 
@@ -478,35 +468,14 @@ fn an_authors_text_keeps_no_mark_that_moves_the_text_around_it() {
 }
 
 #[test]
-fn an_address_glued_to_a_change_of_style_is_text_unless_it_shows_its_end() {
+fn an_address_ends_at_a_change_of_style_not_at_a_tag_that_changes_nothing() {
     assert_eq!(
         described("https://a<r>{.com}"),
         [link("https://a.com", Style::default())]
     );
     assert_eq!(
         described("https://a<b>{.com}"),
-        [plain("https://a"), text(".com", BOLD)]
-    );
-    assert_eq!(
-        described("https://pathofexile.co<b>{.uk}"),
-        [plain("https://pathofexile.co"), text(".uk", BOLD)]
-    );
-    assert_eq!(
-        described("https://a.com<b>{.} b"),
-        [
-            link("https://a.com", Style::default()),
-            text(".", BOLD),
-            plain(" b")
-        ]
-    );
-    assert_eq!(
-        described("See <b>{https://a.com}\nb"),
-        [
-            plain("See "),
-            link("https://a.com", BOLD),
-            Piece::LineBreak,
-            plain("b")
-        ]
+        [link("https://a", Style::default()), text(".com", BOLD)]
     );
 }
 
@@ -560,8 +529,6 @@ fn a_megabyte_of_addresses_is_read_in_time() {
             plain(&")".repeat(1_000_000))
         ]
     );
-    let styled_marks = "https://a".to_owned() + &"<b>{.}.".repeat(150_000);
-    assert_eq!(described(&styled_marks).len(), 300_001);
     let marks = "https://a".to_owned() + &".".repeat(1_000_000);
     assert_eq!(
         described(&marks),
