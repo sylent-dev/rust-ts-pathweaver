@@ -17,12 +17,11 @@ fn is_in_address(character: char) -> bool {
     character.is_ascii_graphic() && !matches!(character, '"' | '\'' | '<' | '>' | '{' | '}')
 }
 
-/// The marks of punctuation that close a sentence, never the last character of an address; a
-/// `)` is one only when it doesn't close a `(` of the address (`wiki/Foo_(bar)`), as the
-/// links of GitHub read it.
+/// The marks of punctuation that close a sentence, never the last character of an address.
 const CLOSING_MARKS: [char; 7] = ['.', ',', ';', ':', '!', '?', ']'];
 
-/// The address without the marks that close the sentence after it.
+/// The address without the marks that close the sentence after it: a `)` is one only when it
+/// doesn't close a `(` of the address (`wiki/Foo_(bar)`), as the links of GitHub read it.
 fn without_closing_marks(address: &str) -> &str {
     let opening = address.matches('(').count();
     let mut closing = address.matches(')').count();

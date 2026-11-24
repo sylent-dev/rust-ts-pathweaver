@@ -12,10 +12,10 @@
 mod addresses;
 #[cfg(test)]
 mod corpus;
-
-pub(crate) use addresses::is_address;
 #[cfg(test)]
 mod tests;
+
+pub(crate) use addresses::is_address;
 
 /// An author's text read: its pieces in order, each text with the style of the tags around it.
 #[derive(Debug, Clone, PartialEq, Eq, Default)]

@@ -56,10 +56,30 @@ mod tests {
             "mobalytics.gg/a",
             "HTTPS://a.com",
             "https://",
+            "https://.",
+            "https://a.com.",
+            "https://a.com and its guide",
+            "https://a\u{200b}.com",
+            "see https://a.com",
         ] {
             assert_eq!(
                 Guide::of(Some(link), Some(&description)),
                 Some(Guide::Text(link)),
+                "{link}"
+            );
+        }
+    }
+
+    #[test]
+    fn a_link_that_is_one_address_whole_is_a_link() {
+        for link in [
+            "https://a.com",
+            "https://w.org/Foo_(bar)",
+            "https://a.com/x?y=1&z=2#c",
+        ] {
+            assert_eq!(
+                Guide::of(Some(link), None),
+                Some(Guide::Link(link)),
                 "{link}"
             );
         }
