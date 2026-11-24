@@ -7,6 +7,7 @@
 <script lang="ts">
 	import { t } from '#lib/i18n.ts';
 	import { fileDrop } from '#lib/page/file-drop.svelte.ts';
+	import FileChooser from '#lib/page/FileChooser.svelte';
 	import { opening } from '#lib/page/opening.svelte.ts';
 	import DropZoneRefusal from './DropZoneRefusal.svelte';
 	import PasteField from './PasteField.svelte';
@@ -20,7 +21,7 @@
 
 	let { isPasting = false, onback = () => {} }: Props = $props();
 
-	let chooser: HTMLInputElement;
+	let chooser: FileChooser;
 
 	/** What the line under the title says: the call, or how many files are over the page. */
 	const call = $derived.by(() => {
@@ -32,13 +33,6 @@
 
 	/** Whether the zone says why the files of the last drop were refused: not while files are over. */
 	const isRefusing = $derived(opening.refusedAll.length > 0 && !fileDrop.isOver);
-
-	function choose(event: Event & { currentTarget: HTMLInputElement }): void {
-		const files = [...(event.currentTarget.files ?? [])];
-		// Emptied, so that the same file chosen again opens again.
-		event.currentTarget.value = '';
-		void opening.open(files);
-	}
 </script>
 
 <div class="zone">
@@ -50,7 +44,7 @@
 			class="call"
 			class:is-over={fileDrop.isOver}
 			class:is-refusing={isRefusing}
-			onclick={() => chooser.click()}
+			onclick={() => chooser.open()}
 		>
 			<!-- The corners of a zone around the + of the band of the open builds, their ends cut flat
 	     (the owner, 2026-11-18); one corner drawn four times, turned around the centre. -->
@@ -87,14 +81,7 @@
 		{/if}
 	{/if}
 </div>
-<input
-	bind:this={chooser}
-	type="file"
-	accept=".build,application/json"
-	multiple
-	hidden
-	onchange={choose}
-/>
+<FileChooser bind:this={chooser} />
 
 <style>
 	/* Narrower below 960 pixels, so that the notes around it keep at 900 the margin they have at

@@ -26,10 +26,11 @@
 </main>
 
 <style>
-	/* The whole height of the window, the panel of the tab taking what the bands leave. */
+	/* What the bands leave of the height of the window, the panel of the tab taking what the
+	   header and the row of the tabs leave. */
 	.build-page {
+		flex: 1;
 		display: flex;
 		flex-direction: column;
-		min-height: 100vh;
 	}
 </style>

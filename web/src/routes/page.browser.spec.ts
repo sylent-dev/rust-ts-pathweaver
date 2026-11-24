@@ -1,4 +1,5 @@
-// The home page in a real browser: Paste JSON turns the drop zone into a field and back.
+// The home page in a real browser: Paste JSON turns the drop zone into a field and back, and the
+// page given back once every build is closed.
 
 import { flushSync, mount, unmount } from 'svelte';
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
@@ -86,7 +87,25 @@ describe('Paste JSON', () => {
 			);
 		await opening.open([]);
 
-		await expect.element(page.getByText('Pasted')).toBeVisible();
+		await expect.element(page.getByRole('heading', { name: 'Pasted' })).toBeVisible();
 		await expect.element(page.getByRole('alert')).not.toBeInTheDocument();
+	});
+
+	it('gives the zone back, not the field, once the build pasted is closed', async () => {
+		await page.getByRole('button', { name: 'Paste JSON' }).click();
+		const clipboardData = new DataTransfer();
+		clipboardData.setData('text/plain', '{ "name": "Pasted" }');
+		page
+			.getByRole('textbox')
+			.element()
+			.dispatchEvent(
+				new ClipboardEvent('paste', { clipboardData, bubbles: true, cancelable: true })
+			);
+		await opening.open([]);
+
+		await page.getByRole('button', { name: 'Close Pasted' }).click();
+
+		await expect.element(page.getByRole('button', { name: /Add your first build/ })).toBeVisible();
+		await expect.element(page.getByRole('textbox')).not.toBeInTheDocument();
 	});
 });

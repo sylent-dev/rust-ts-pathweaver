@@ -54,3 +54,13 @@
 	   the edge of a block and reads as a border (the owner, 2026-11-18). */
 	mask-position: calc(var(--texture-size) / 8) calc(var(--texture-size) / 8);
 }
+
+/* How a window or a menu shows itself when it opens (2e2, the owner, 2026-11-18): it grows from
+   its trigger and goes a little past its size before it settles, with the curve that does
+   (--ease-overshoot); the menu of « +N ▾ », the window of what changes at a level. */
+@keyframes reveal-pop {
+	from {
+		opacity: 0;
+		transform: scale(0.85);
+	}
+}

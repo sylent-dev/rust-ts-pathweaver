@@ -4,6 +4,7 @@
 
 import type { GameData } from '#lib/game-data/game-data.ts';
 import type { PortraitSide } from '#lib/game-data/format.ts';
+import { pageGameData } from '#lib/page/game-data.svelte.ts';
 
 /** An ascendancy the game data know, or the id of one they don't, shown as the file writes it. */
 export type NamedAscendancy =
@@ -32,4 +33,18 @@ export function namedAscendancy(
 		characterClass: ascendancy.characterClass,
 		portrait: gameData.portrait(id, side)
 	};
+}
+
+/**
+ * The ascendancy of a build, named by the game data of the page once they have loaded or failed
+ * (read in a `$derived`, it follows their load); none while they load or when the build has none.
+ */
+export function pageAscendancy(
+	id: string | undefined,
+	side: PortraitSide
+): NamedAscendancy | undefined {
+	const { state } = pageGameData;
+	return state.kind === 'loading'
+		? undefined
+		: namedAscendancy(id, state.kind === 'loaded' ? state.gameData : undefined, side);
 }

@@ -1,11 +1,11 @@
 # Opening builds: the tests (4e, 4f)
 
-The home page of the first visit opens builds three ways: files dropped anywhere on the page, files chosen with a click on the zone, and the JSON of a build pasted in the zone become a field; when nothing opens, the zone says why. These tests check what only a real browser shows: the files of the desktop, the clipboard, the page lit under files. Since 4f1, a build opened shows its page: its header and its five tabs, their panels still empty. Run the tests in a row. A ✅ is enough when it works; detail only what goes wrong.
+The home page of the first visit opens builds three ways: files dropped anywhere on the page, files chosen with a click on the zone, and the JSON of a build pasted in the zone become a field; when nothing opens, the zone says why. These tests check what only a real browser shows: the files of the desktop, the clipboard, the page lit under files. Since 4f1, a build opened shows its page: its header and its five tabs, their panels still empty; since 4f2, the band of the open builds over it, a tab per build and +, which chooses more. Run the tests in a row. A ✅ is enough when it works; detail only what goes wrong.
 
 ## Before
 
 1. In the folder of the project, on the branch of the step: `cd web && npm run dev`, then open the address it prints.
-2. Run every test in Firefox, then the tests 1, 4, 8 and 10 again in a Chromium (Chrome, Edge, Brave).
+2. Run every test in Firefox, then the tests 1, 4, 8, 10, 11 and 12 again in a Chromium (Chrome, Edge, Brave).
 3. Reload the page (F5) before each test: until the library (step 8), a reload closes the builds open and gives the first visit back.
 4. The files of `inputs/builds/`: `ggg-titan-warrior-sample.build`, `pob-twobyul-deadeye.build`, `utkarshbehre-spark-comet.build`; any image of the desktop, named `passive-tree.png` here; and a file `broken.build` made in a text editor, of these three lines:
 
@@ -49,7 +49,13 @@ The home page of the first visit opens builds three ways: files dropped anywhere
 10. **A text refused**: copy the three lines of `broken.build`, click **Paste JSON** and paste them; then drop `passive-tree.png` on the field.
     ✅ The text stays in the field, in grey, a thin red line around it, and « This text isn't valid JSON at line 2 » in red at its foot, under the text. The image dropped gives the zone back, which says « That isn't a .build file » (test 5).
 
-11. **Your own scenarios**: whatever else you want to try.
+11. **+ in the band**: drop `ggg-titan-warrior-sample.build`; click the white **+** at the end of the band over its header, choose `pob-twobyul-deadeye.build` and `utkarshbehre-spark-comet.build` together in the dialog of the system, open them; then click **+** again and choose `pob-twobyul-deadeye.build` alone.
+    ✅ The dialog opens at once and lets several files be chosen; the page stays, with three tabs side by side, one of the two chosen shown (the one the dialog lists last): its tab in white, its portrait the only one in colour, the two others grey and dimmed. Chosen again, « TwobyulDeadeye » isn't added a fourth time: its tab is shown.
+
+12. **Six builds in a narrow window**: make the window of the browser 900 pixels wide (half of a screen of 1,920); drop together the first six `.build` files of `inputs/builds/` in the order of the file manager. Click **+2 ▾**, then a build of its menu. Make the window as wide as the screen, click the sixth tab, then make the window 900 pixels wide again. Open the menu with the keyboard (Tab to **+2 ▾**, Enter), Tab to a build, press Esc; open it again and click outside it; open it again and drop `passive-tree.png`, then `ggg-titan-warrior-sample.build`.
+    ✅ Four tabs, the build shown in the last of them, then **+2 ▾** in blue, then **+**. The click opens a menu under the band, which grows out of **+2 ▾** and settles; the two builds without a tab are listed, each its portrait in colour, its name over its ascendancy. The build clicked shows at once, its tab in the place of the last one, whose build goes first into the menu; the menu is closed. As wide as the screen, every build has a tab and **+2 ▾** leaves; at 900 pixels again, the sixth build moves to the place of the fourth tab, whose build goes first into the menu, and stays there. Esc closes the menu, the keyboard back on **+2 ▾**; a click outside closes it; `passive-tree.png` dropped alone leaves it open, the `.build` file dropped closes it.
+
+13. **Your own scenarios**: whatever else you want to try.
 
 ## Results
 
@@ -65,4 +71,6 @@ The home page of the first visit opens builds three ways: files dropped anywhere
 | 8. A paste from poe.ninja | | |
 | 9. Back to the files | | |
 | 10. A text refused | | |
-| 11. Your own scenarios | | |
+| 11. + in the band | | |
+| 12. Six builds in a narrow window | | |
+| 13. Your own scenarios | | |
