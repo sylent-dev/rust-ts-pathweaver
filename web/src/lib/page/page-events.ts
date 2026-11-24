@@ -14,6 +14,11 @@ function isInField(target: EventTarget | null): boolean {
 	return target instanceof Element && target.closest(FIELDS) !== null;
 }
 
+/** Whether an event comes from a box over the page, a modal dialog. */
+function isInBox(target: EventTarget | null): boolean {
+	return target instanceof Element && target.closest('dialog') !== null;
+}
+
 /** Whether an element is marked as belonging to a window or a menu (`popupArea`). */
 function isPopupArea(node: EventTarget): node is HTMLElement {
 	return node instanceof HTMLElement && node.dataset.popup !== undefined;
@@ -24,7 +29,8 @@ export function hearKey(event: KeyboardEvent): void {
 	const command = commandOf({
 		key: event.key,
 		isModified: event.altKey || event.ctrlKey || event.metaKey || event.shiftKey,
-		isInField: isInField(event.target)
+		isInField: isInField(event.target),
+		isInBox: isInBox(event.target)
 	});
 	if (command === undefined) {
 		return;

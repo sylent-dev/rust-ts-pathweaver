@@ -4,9 +4,10 @@
 
 /**
  * A window or a menu that opens over the page: the menu of the open builds that the band has no
- * room for (« +N ▾ »), the window of what changes at the level (« N changes »).
+ * room for (« +N ▾ »), the window of what changes at the level (« N changes »), the box of What's
+ * next.
  */
-export type PopupName = 'builds-menu' | 'level-changes';
+export type PopupName = 'builds-menu' | 'level-changes' | 'whats-next';
 
 /**
  * What marks an element as belonging to a window or a menu, its trigger as its window, to

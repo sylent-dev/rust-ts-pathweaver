@@ -5,6 +5,7 @@ import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import { page } from 'vitest/browser';
 import '#lib/style/tokens.css';
 import '#lib/style/base.css';
+import { popup } from '#lib/page/popup.svelte.ts';
 import FirstVisit from './FirstVisit.svelte';
 
 /** The zone given to the page, a button that names itself. */
@@ -19,6 +20,8 @@ beforeEach(async () => {
 });
 
 afterEach(() => {
+	popup.close();
+	flushSync();
 	if (shown !== undefined) {
 		void unmount(shown);
 		shown = undefined;
@@ -50,6 +53,12 @@ describe('the first visit', () => {
 			.element(link)
 			.toHaveAttribute('href', 'https://github.com/sylent-dev/rust-ts-pathweaver/issues/new');
 		await expect.element(link).toHaveAttribute('target', '_blank');
+	});
+
+	it("opens the box of What's next from its link", async () => {
+		await page.getByRole('button', { name: "What's next" }).click();
+
+		await expect.element(page.getByRole('dialog', { name: "What's next" })).toBeVisible();
 	});
 
 	it('names the sources of the files at its foot, and that nothing leaves the browser', async () => {

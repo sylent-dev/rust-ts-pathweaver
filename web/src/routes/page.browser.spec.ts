@@ -127,7 +127,7 @@ describe('the bands of the page of a build', () => {
 		expect(site.compareDocumentPosition(builds) & Node.DOCUMENT_POSITION_FOLLOWING).not.toBe(0);
 	});
 
-	it('gives the band of the site the brand and Report a bug, which opens a new issue in a new tab', async () => {
+	it("gives the band of the site the brand, Report a bug, which opens a new issue in a new tab, and What's next", async () => {
 		await opening.open([new File(['{ "name": "Ember" }'], 'ember.build')]);
 
 		const band = page.getByRole('banner');
@@ -137,6 +137,7 @@ describe('the bands of the page of a build', () => {
 			.element(report)
 			.toHaveAttribute('href', 'https://github.com/sylent-dev/rust-ts-pathweaver/issues/new');
 		await expect.element(report).toHaveAttribute('target', '_blank');
+		await expect.element(band.getByRole('button', { name: "What's next" })).toBeVisible();
 	});
 });
 

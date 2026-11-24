@@ -11,6 +11,8 @@ app-page-title = { app-name } · Build viewer and planner for Path of Exile 2
 site-band = Site
 # Opens a new issue on GitHub.
 site-report-bug = Report a bug
+# Opens the box of what the next versions bring, and names it.
+site-whats-next = What's next
 # The name a screen reader gives a link of the site, which opens in a new tab. $label (String): its words.
 site-link-new-tab = { $label } (opens in a new tab)
 
@@ -125,3 +127,24 @@ core-load-failed = The core of Pathweaver could not load.
 
 # The close button of a notice.
 notice-close = Close
+
+## The box of What's next: a card for each update to come, its version, its name, a line, then
+## what it brings, a line each.
+
+# The close button of the box.
+next-close = Close
+# Small, in capitals, over the name of an update. $version (Number): the version, such as 2.
+next-version = Version { $version }
+next-editor-name = The Editor Update
+next-editor-line = Plan your own build
+next-editor-tree = Passives allocated on the tree
+next-editor-gems = Gems and their supports chosen
+next-editor-hints = Your hints, level by level
+next-editor-export = Exported as a .build for the game
+next-community-name = The Community Update
+next-community-line = Share it with every exile
+next-community-publish = Your builds published
+next-community-links = Short links, for a chat
+next-community-search = Votes and search, by ascendancy
+next-community-versions = The versions of a build
+next-community-french = In French too

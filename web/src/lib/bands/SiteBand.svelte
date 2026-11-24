@@ -8,12 +8,14 @@
 	import { t } from '#lib/i18n.ts';
 	import { REPORT_BUG_URL } from '#lib/site/site-links.ts';
 	import SiteLink from '#lib/site/SiteLink.svelte';
+	import WhatsNext from '#lib/whats-next/WhatsNext.svelte';
 </script>
 
 <header class="band graph-paper">
 	<Brand markPixels={24} place="band" />
 	<nav class="links" aria-label={t('site-band')}>
 		<SiteLink href={REPORT_BUG_URL} label={t('site-report-bug')} />
+		<WhatsNext />
 	</nav>
 </header>
 
