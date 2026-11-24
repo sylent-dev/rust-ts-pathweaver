@@ -43,6 +43,9 @@ afterEach(() => {
 	}
 });
 
+/** The accent of the style, `--accent`, as the browser computes it. */
+const ACCENT = 'rgb(96, 165, 250)';
+
 const PLAIN: MarkupStyle = {
 	isBold: false,
 	isItalic: false,
@@ -161,31 +164,70 @@ describe('an author’s text', () => {
 		);
 	});
 
-	it('opens an address in a new tab that keeps no hold on the page, whole in its tooltip', () => {
+	it('draws an address as a chip of its site, opened in a new tab, whole in its tooltip', () => {
 		const address = 'https://mobalytics.gg/poe-2/builds/spark-stormweaver';
-		const target = drawn([
-			{ kind: 'link', address, style: { ...PLAIN, colour: { kind: 'named', name: 'blue' } } }
-		]);
+		const target = drawn([text('Guide: '), { kind: 'link', address, style: PLAIN }]);
 		const link = target.querySelector('a');
 		expect([
 			link?.getAttribute('href'),
 			link?.target,
 			link?.rel,
 			link?.title,
-			link?.textContent,
-			computed(target)[0]?.color
-		]).toEqual([address, '_blank', 'noopener noreferrer', address, address, 'rgb(108, 140, 255)']);
+			link?.textContent
+		]).toEqual([address, '_blank', 'noopener noreferrer', address, 'mobalytics.gg']);
 	});
 
-	it('draws an address in the order of its letters, whatever mark of direction comes before it', () => {
-		const address = 'https://evil.io/moc.elgoog//:sptth';
-		// U+202E, RIGHT-TO-LEFT OVERRIDE, the end of the text before the link.
-		const target = drawn([text('Guide: \u202E'), { kind: 'link', address, style: PLAIN }]);
-		const letters = target.querySelector('a > span')?.firstChild;
-		if (letters === null || letters === undefined) {
-			throw new Error('no address drawn');
+	it('draws the chip in the style of the page, never in the author’s', () => {
+		const target = drawn([
+			{
+				kind: 'link',
+				address: 'https://maxroll.gg/poe2/planner/0pgpe000',
+				style: {
+					isBold: true,
+					isItalic: true,
+					isUnderlined: true,
+					size: 'large',
+					colour: { kind: 'named', name: 'red' }
+				}
+			}
+		]);
+		const link = target.querySelector('a');
+		if (link === null) {
+			throw new Error('no chip');
 		}
-		expect(leftOf(letters, 0)).toBeLessThan(leftOf(letters, address.length - 1));
+		const style = getComputedStyle(link);
+		expect([
+			style.color,
+			style.fontWeight,
+			style.fontStyle,
+			style.textDecorationLine,
+			style.fontSize
+		]).toEqual([ACCENT, '400', 'normal', 'none', '20px']);
+	});
+
+	it('shows the site a click opens, whatever the address holds to read as another', () => {
+		const target = drawn([
+			{ kind: 'link', address: 'https://pathofexile.com@evil.io/forum', style: PLAIN }
+		]);
+		expect(target.querySelector('a')?.textContent).toBe('evil.io');
+	});
+
+	it('writes as text an address whose site the browser can’t read', () => {
+		const target = drawn([{ kind: 'link', address: 'https://[', style: PLAIN }]);
+		expect([target.textContent, target.querySelector('a')]).toEqual(['https://[', null]);
+	});
+
+	it('draws a chip in the order of its letters, whatever mark of direction comes before it', () => {
+		// U+202E, RIGHT-TO-LEFT OVERRIDE, the end of the text before the link.
+		const target = drawn([
+			text('Guide: \u202E'),
+			{ kind: 'link', address: 'https://evil.io/x', style: PLAIN }
+		]);
+		const letters = target.querySelector('a')?.firstChild;
+		if (letters === null || letters === undefined) {
+			throw new Error('no chip drawn');
+		}
+		expect(leftOf(letters, 0)).toBeLessThan(leftOf(letters, 'evil.io'.length - 1));
 	});
 
 	it('keeps a mark of direction of the author out of the words drawn after it', () => {

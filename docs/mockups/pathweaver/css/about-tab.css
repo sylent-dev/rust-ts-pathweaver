@@ -33,9 +33,9 @@
 .ab-none { margin: 0; font-size: 12.5px; }
 /* An address of the description as a chip of its site (4g3, the owner, 2026-11-24: no arrow, not bold): in the
    accent, on a tint of the accent, so that it reads apart from the words of the author whatever they are; the
-   colour of the text on hover; never the author's italic nor underline, never broken across two lines. */
+   colour of the text on hover; never the author's italic, underline nor size, never broken across two lines. */
 .ab-chip { display: inline-block; margin: 0 1px; padding: 0 5px; border-radius: 3px;
-  background: color-mix(in srgb, var(--accent) 14%, transparent); color: var(--accent); font-style: normal;
+  background: color-mix(in srgb, var(--accent) 14%, transparent); color: var(--accent); font-size: 13.5px; font-style: normal;
   text-decoration: none; white-space: nowrap; transition: color var(--hover-fade); }
 .ab-chip:hover { color: var(--text); }
 
