@@ -1,7 +1,7 @@
 // What's next in a real browser: its link opens the box over the page, with its two cards and
-// their portraits; ×,
-// Esc and a click on the veil close it, the keyboard back on the link; the arrows leave the level
-// as it is under it.
+// their portraits, each item after a diamond on the middle of its small letters; ×, Esc and a
+// click on the veil close it, the keyboard back on the link; the arrows leave the level as it is
+// under it.
 
 import { flushSync, mount, unmount } from 'svelte';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
@@ -77,6 +77,30 @@ describe("What's next", () => {
 				]
 			]
 		]);
+	});
+
+	it('sets each diamond on the middle of the small letters of its item', async () => {
+		await link.click();
+
+		await expect.element(box).toBeVisible();
+		const offsets = [...box.element().querySelectorAll('li')].map((item) => {
+			const diamond = item.querySelector('.diamond')?.getBoundingClientRect();
+			// The baseline of the item and a height of 1ex, from two boxes of its font.
+			const probe = document.createElement('span');
+			probe.innerHTML =
+				'<span style="display:inline-block;height:0"></span><span style="display:inline-block;height:1ex"></span>';
+			item.append(probe);
+			const [baseline, ex] = [...probe.children].map((box) => box.getBoundingClientRect());
+			probe.remove();
+			if (diamond === undefined || baseline === undefined || ex === undefined) {
+				return Number.NaN;
+			}
+			return Math.abs(diamond.top + diamond.height / 2 - (baseline.top - ex.height / 2));
+		});
+		expect(offsets).toHaveLength(9);
+		for (const offset of offsets) {
+			expect(offset).toBeLessThan(1);
+		}
 	});
 
 	it('heads each card with its portraits, from the game data', async () => {
