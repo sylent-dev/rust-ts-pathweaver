@@ -3,6 +3,8 @@
 //! the builds, to record again when the corpus changes. Run it with
 //! `cargo test -p pathweaver-build-file markup::corpus -- --ignored`.
 
+use std::collections::BTreeMap;
+
 use super::{Colour, Markup, Piece, Tag, Token, Tokens};
 use crate::fixtures::corpus;
 use crate::{Build, Guide};
@@ -29,7 +31,12 @@ fn texts(build: &Build) -> Vec<&str> {
 fn name_of(written: &str, tag: Tag) -> String {
     match tag {
         Tag::Colour(Colour::Rgb { .. }) => "rgb".to_owned(),
-        _ => written
+        Tag::Regular
+        | Tag::Bold
+        | Tag::Italic
+        | Tag::Underlined
+        | Tag::Size(_)
+        | Tag::Colour(Colour::Named(_)) => written
             .trim_start_matches('<')
             .trim_end_matches(['>', '{'])
             .trim()
@@ -112,14 +119,43 @@ fn the_tags_of_the_corpus_are_all_known_and_closed() {
     );
 }
 
+/// The addresses of the descriptions of a corpus, by file, for those that hold any.
+fn links_of(corpus: &BTreeMap<String, Build>) -> Vec<(&str, Vec<String>)> {
+    corpus
+        .iter()
+        .filter_map(|(name, build)| {
+            let links: Vec<String> = build
+                .description_markup()?
+                .into_iter()
+                .filter_map(|piece| match piece {
+                    Piece::Link { address, .. } => Some(address),
+                    Piece::Text { .. } | Piece::LineBreak => None,
+                })
+                .collect();
+            (!links.is_empty()).then_some((name.as_str(), links))
+        })
+        .collect()
+}
+
 #[test]
 #[ignore = "reads the corpus, kept out of Git"]
-fn the_guides_of_the_corpus() {
+fn the_links_and_the_guides_of_the_corpus() {
     let corpus = corpus();
-    let descriptions: Vec<Option<Markup>> = corpus
-        .values()
-        .map(|build| build.description.as_deref().map(Markup::of_description))
-        .collect();
+    // Measured on 2026-11-24: one description writes addresses, the Amazon of Maxroll, its guide
+    // then its planner, each closed by the braces of its tags.
+    assert_eq!(
+        links_of(&corpus),
+        [(
+            "maxroll-aer0-ice-shot-amazon.build",
+            vec![
+                "https://maxroll.gg/poe2/build-guides/ice-shot-amazon-build-guide".to_owned(),
+                "https://maxroll.gg/poe2/planner/0pgpe000".to_owned(),
+            ]
+        )]
+    );
+
+    let descriptions: Vec<Option<Markup>> =
+        corpus.values().map(Build::description_markup).collect();
     let guides: Vec<(&str, Guide<'_>)> = corpus
         .iter()
         .zip(&descriptions)
@@ -137,8 +173,7 @@ fn the_guides_of_the_corpus() {
         .filter(|(_, guide)| !matches!(guide, Guide::Link(_)))
         .collect();
     // Measured on 2026-11-24: 19 builds of 32 have a guide, 18 their link, none a link that
-    // isn't an address, and the Amazon of Maxroll the first address of its description, its
-    // guide before its planner.
+    // isn't one address, and the Amazon of Maxroll the first address of its description.
     assert_eq!(links, 18, "the links of the files");
     assert_eq!(
         others,
