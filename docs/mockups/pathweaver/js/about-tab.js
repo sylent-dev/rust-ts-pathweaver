@@ -20,7 +20,13 @@ const abTitle = text => `<h3 class="ab-title app-title">${text}</h3>`;
 // An address ends at a space, a quote, a tag or a brace of the markup (« <u>{https://…} »), never on a mark of
 // punctuation that closes the sentence.
 const AB_URL = /https:\/\/[^\s<>"'{}]+[^\s<>"'{}.,;:!?)]/g;
-const abLinked = html => html.replace(AB_URL, url => `<a class="ab-inline-link" href="${url}" target="_blank" rel="noopener noreferrer" title="${url}">${url}</a>`);
+// An address of the description as a chip of its site (4g3, its third review; the owner, 2026-11-24: its letters
+// in the text, which a space of one pixel or a tag that changes nothing on screen made to read as another address
+// than the one opened, and plain text set aside), computed from the address it opens, so that no text around it
+// can lengthen or change what it reads; its whole address in its tooltip.
+const abSite = url => { try { return new URL(url).host.replace(/^www\./, ""); } catch { return url; } };
+const abLink = url => `<a class="ab-chip" href="${url}" target="_blank" rel="noopener noreferrer" title="${url}">${escapeHtml(abSite(url))}</a>`;
+const abLinked = html => html.replace(AB_URL, abLink);
 const abDescription = about => (about.description
   ? `<div class="ab-desc">${abLinked(markupHtml(about.description.replace(/\r/g, "")))}</div>`
   : '<p class="ab-none app-weak">The author wrote no description.</p>');

@@ -1,0 +1,7 @@
+/* The descriptions of a stranger (sections/description-links.js, 4g3): each on the surface of the About tab, its
+   label over it and what a click opens under it. */
+.dl-cases { display: flex; flex-direction: column; gap: 10px; width: 600px; }
+.dl-case { padding: 12px 16px; background: var(--side-column); }
+.dl-label, .dl-opens { margin: 0; color: var(--weak); font-size: 11px; }
+.dl-label { margin-bottom: 6px; }
+.dl-opens { margin-top: 6px; font-family: var(--font-code); }
