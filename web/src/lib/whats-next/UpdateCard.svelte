@@ -1,8 +1,10 @@
 <!-- The card of an update in the box of What's next (specs.md, Window layout; 2k6 of the mock-up):
-     « Version N » small, in capitals and the accent, its name in the title font, a line in the weak
+     its portraits at its top, one large or several side by side, fading into the panel, drawn once
+     the game data are loaded; then « Version N » small, in capitals and the accent, its name in the title font, a line in the weak
      grey, then what it brings, each line after a small diamond of the accent. -->
 <script lang="ts">
 	import { t } from '#lib/i18n.ts';
+	import { pageGameData } from '#lib/page/game-data.svelte.ts';
 	import type { Update } from './updates.ts';
 
 	interface Props {
@@ -10,9 +12,23 @@
 	}
 
 	let { update }: Props = $props();
+
+	/** The addresses of its portraits, none until the game data are loaded or when one has none. */
+	const portraits = $derived.by(() => {
+		const state = pageGameData.state;
+		if (state.kind !== 'loaded') {
+			return [];
+		}
+		return update.portraits.flatMap((id) => state.gameData.portrait(id, 520) ?? []);
+	});
 </script>
 
 <article class="card">
+	<div class="art" class:is-many={update.portraits.length > 1}>
+		{#each portraits as portrait (portrait)}
+			<img src={portrait} alt="" />
+		{/each}
+	</div>
 	<div class="body">
 		<p class="version">{t('next-version', { version: update.version })}</p>
 		<h2 class="name">{t(`${update.messages}-name`)}</h2>
@@ -32,9 +48,30 @@
 		width: 320px;
 	}
 
+	/* The portraits fading into the panel from the middle of their height. */
+	.art {
+		display: flex;
+		height: 190px;
+		mask-image: linear-gradient(#000 45%, transparent);
+	}
+
+	.art img {
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+		object-position: 50% 22%;
+	}
+
+	.is-many img {
+		width: 25%;
+		object-position: 50% 30%;
+	}
+
+	/* Its words over the foot of the portraits. */
 	.body {
 		position: relative;
-		padding: 16px;
+		margin-top: -36px;
+		padding: 0 16px 16px;
 	}
 
 	.version {

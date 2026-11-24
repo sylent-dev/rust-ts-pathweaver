@@ -1,4 +1,5 @@
-// What's next in a real browser: its link opens the box over the page, with its two cards; ×,
+// What's next in a real browser: its link opens the box over the page, with its two cards and
+// their portraits; ×,
 // Esc and a click on the veil close it, the keyboard back on the link; the arrows leave the level
 // as it is under it.
 
@@ -56,6 +57,19 @@ describe("What's next", () => {
 			['Version 2', 'The Editor Update', 4],
 			['Version 3', 'The Community Update', 5]
 		]);
+	});
+
+	it('heads each card with its portraits, from the game data', async () => {
+		await link.click();
+
+		await expect.poll(() => box.element().querySelectorAll('img').length).toBe(5);
+		expect(
+			[...box.element().querySelectorAll('article')].map((card) =>
+				[...card.querySelectorAll('img')].map((image) =>
+					/\/(\w+)-520[.-]/.exec(image.getAttribute('src') ?? '')?.at(1)
+				)
+			)
+		).toEqual([['sorceress1'], ['huntress1', 'sorceress3', 'warrior2', 'sorceress1']]);
 	});
 
 	it('closes with ×, the keyboard back on its link', async () => {
