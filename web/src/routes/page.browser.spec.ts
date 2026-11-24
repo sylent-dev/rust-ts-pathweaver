@@ -170,6 +170,17 @@ describe('the notice of the files refused', () => {
 			.toHaveTextContent("passive-tree.png isn't a text file");
 	});
 
+	it('leaves with the last build closed, the first visit refusing nothing', async () => {
+		await opening.open([new File(['{ "name": "Ember" }'], 'ember.build')]);
+		drop([image]);
+		await opening.open([]);
+
+		await page.getByRole('button', { name: 'Close Ember' }).click();
+
+		await expect.element(page.getByRole('button', { name: /Add your first build/ })).toBeVisible();
+		await expect.element(page.getByRole('alert')).not.toBeInTheDocument();
+	});
+
 	it('closes, the keyboard on the tab of the build shown', async () => {
 		drop([image, new File(['{ "name": "Ember" }'], 'ember.build')]);
 		await opening.open([]);

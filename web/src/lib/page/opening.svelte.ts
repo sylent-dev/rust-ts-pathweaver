@@ -13,7 +13,12 @@ export type RefusedRead = Extract<ReadFile, { kind: 'refused' }>;
 /** The files opened, one set after the other. */
 export class Opening {
 	#refused = $state.raw<readonly RefusedRead[]>([]);
-	#openedNone = $state(false);
+	/**
+	 * Whether the files refused are the drop zone's to say: none of the files opened, and no build
+	 * was open, so that the first visit given back once the builds are closed says nothing of the
+	 * files dropped on the page of a build.
+	 */
+	#isOnFirstVisit = $state(false);
 	/** The files opened last, or being opened: the next wait for them. Never rejected. */
 	#pending: Promise<void> = Promise.resolve();
 
@@ -23,12 +28,12 @@ export class Opening {
 	}
 
 	/**
-	 * The files refused of the last files dropped or chosen when none of them opened, which the
-	 * drop zone of the first visit says; none when one of them opened, which the notice of the page
-	 * of a build says.
+	 * The files refused of the last files dropped or chosen on the first visit when none of them
+	 * opened, which its drop zone says; none when one of them opened or a build was open, which the
+	 * notice of the page of a build says.
 	 */
 	get refusedAll(): readonly RefusedRead[] {
-		return this.#openedNone ? this.#refused : [];
+		return this.#isOnFirstVisit ? this.#refused : [];
 	}
 
 	/**
@@ -88,12 +93,13 @@ export class Opening {
 
 	async #openNow(files: readonly File[]): Promise<void> {
 		const read = await readFiles(files);
-		openBuilds.openAll(read.flatMap((file) => (file.kind === 'build' ? [file.build] : [])));
+		const builds = read.flatMap((file) => (file.kind === 'build' ? [file.build] : []));
+		this.#isOnFirstVisit = builds.length === 0 && openBuilds.all.length === 0;
+		openBuilds.openAll(builds);
 		this.#refused = read.filter((file) => file.kind === 'refused');
-		this.#openedNone = this.#refused.length === read.length;
 		// The build shown changed without a click, which would have closed the window or the menu
 		// open over the page (docs/technical-choices.md, State of the interface).
-		if (!this.#openedNone) {
+		if (builds.length > 0) {
 			popup.close();
 		}
 	}
