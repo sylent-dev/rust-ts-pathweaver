@@ -2,9 +2,37 @@
 
 import { flushSync, mount, unmount } from 'svelte';
 import { afterEach, describe, expect, it } from 'vitest';
-import type { MarkupPiece, MarkupStyle } from '#lib/core.ts';
+import type { MarkupColourName, MarkupPiece, MarkupStyle } from '#lib/core.ts';
 import '#lib/style/tokens.css';
 import AuthorText from './AuthorText.svelte';
+import { markupSurface, rgbOf } from './markup-surface.ts';
+import { contrastRatio, READABLE_CONTRAST } from './readable-colour.ts';
+
+/**
+ * The fourteen colours the game names, each as the browser computes its token
+ * (css/tokens.css of the mock-up, 4g1), in the order of the documentation of Grinding Gear Games.
+ */
+const NAMED_COLOURS: Record<MarkupColourName, string> = {
+	white: 'rgb(255, 255, 255)',
+	grey: 'rgb(140, 140, 140)',
+	black: 'rgb(128, 128, 128)',
+	red: 'rgb(224, 80, 80)',
+	orange: 'rgb(232, 145, 60)',
+	yellow: 'rgb(230, 210, 90)',
+	green: 'rgb(95, 195, 95)',
+	blue: 'rgb(108, 140, 255)',
+	indigo: 'rgb(127, 120, 240)',
+	violet: 'rgb(168, 108, 224)',
+	bronze: 'rgb(184, 124, 80)',
+	silver: 'rgb(169, 177, 189)',
+	gold: 'rgb(200, 166, 90)',
+	unique: 'rgb(214, 161, 94)'
+};
+
+/** Whether a key of NAMED_COLOURS is a colour the game names, which all are. */
+function isColourName(name: string): name is MarkupColourName {
+	return name in NAMED_COLOURS;
+}
 
 let shown: ReturnType<typeof mount> | undefined;
 
@@ -81,7 +109,7 @@ describe('an author’s text', () => {
 		]);
 	});
 
-	it('draws each size as a factor of the text around it, a size inside a size not again', () => {
+	it('draws each size as a factor of the text around it', () => {
 		const target = drawn([
 			text('s', { size: 'small' }),
 			text('m', { size: 'medium' }),
@@ -96,17 +124,23 @@ describe('an author’s text', () => {
 		]);
 	});
 
-	it('draws a named colour in its token, gray as grey', () => {
-		const target = drawn([
-			text('gold', { colour: { kind: 'named', name: 'gold' } }),
-			text('grey', { colour: { kind: 'named', name: 'grey' } }),
-			text('black', { colour: { kind: 'named', name: 'black' } })
-		]);
-		expect(computed(target).map((style) => style.color)).toEqual([
-			'rgb(200, 166, 90)',
-			'rgb(140, 140, 140)',
-			'rgb(128, 128, 128)'
-		]);
+	it('draws each colour the game names in its token, readable on the surface of the author’s texts', () => {
+		const target = drawn(
+			Object.keys(NAMED_COLOURS)
+				.filter((name) => isColourName(name))
+				.map((name) => text(name, { colour: { kind: 'named', name } }))
+		);
+		const colours = computed(target).map((style) => style.color);
+		expect(colours).toEqual(Object.values(NAMED_COLOURS));
+		const surface = markupSurface();
+		if (surface === undefined) {
+			throw new Error('no surface');
+		}
+		const unreadable = colours.filter((colour) => {
+			const rgb = rgbOf(colour);
+			return rgb === undefined || contrastRatio(rgb, surface) < READABLE_CONTRAST;
+		});
+		expect(unreadable).toEqual([]);
 	});
 
 	it('draws a colour rgb as written when readable on the band, else lightened just enough', () => {
