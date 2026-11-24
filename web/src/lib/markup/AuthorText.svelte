@@ -82,6 +82,12 @@
 >
 
 <style>
+	/* A mark of direction of the author ends with the text: the words drawn after it, in a card
+	   or a line, keep their own order. */
+	.author-text {
+		unicode-bidi: isolate;
+	}
+
 	/* The fonts of the markup; a text without them in those of the text around it. */
 	.bold {
 		font-weight: 700;
@@ -114,6 +120,10 @@
 	.link {
 		color: inherit;
 		text-decoration: none;
+		/* An address in the order of its letters, whatever mark of direction the author wrote
+		   before it: an address turned could read as another site than the one it opens. */
+		unicode-bidi: isolate;
+		direction: ltr;
 	}
 
 	.link:hover {

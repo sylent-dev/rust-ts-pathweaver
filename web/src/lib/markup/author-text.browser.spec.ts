@@ -47,6 +47,14 @@ function computed(target: HTMLElement): CSSStyleDeclaration[] {
 	);
 }
 
+/** The left of a letter of a text drawn, in the page: where a mark of direction put it. */
+function leftOf(letters: Node, index: number): number {
+	const range = document.createRange();
+	range.setStart(letters, index);
+	range.setEnd(letters, index + 1);
+	return range.getBoundingClientRect().left;
+}
+
 describe('an author’s text', () => {
 	it('writes its texts as text, never as HTML, without a space between its pieces', () => {
 		const target = drawn([text('<img src=x onerror=alert(1)>'), text('end', { isBold: true })]);
@@ -133,5 +141,28 @@ describe('an author’s text', () => {
 			link?.textContent,
 			computed(target)[0]?.color
 		]).toEqual([address, '_blank', 'noopener noreferrer', address, address, 'rgb(108, 140, 255)']);
+	});
+
+	it('draws an address in the order of its letters, whatever mark of direction comes before it', () => {
+		const address = 'https://evil.io/moc.elgoog//:sptth';
+		// U+202E, RIGHT-TO-LEFT OVERRIDE, the end of the text before the link.
+		const target = drawn([text('Guide: \u202E'), { kind: 'link', address, style: PLAIN }]);
+		const letters = target.querySelector('a > span')?.firstChild;
+		if (letters === null || letters === undefined) {
+			throw new Error('no address drawn');
+		}
+		expect(leftOf(letters, 0)).toBeLessThan(leftOf(letters, address.length - 1));
+	});
+
+	it('keeps a mark of direction of the author out of the words drawn after it', () => {
+		const target = drawn([text('\u202Eabc')]);
+		const after = document.createElement('span');
+		after.textContent = 'xyz';
+		target.append(after);
+		const letters = after.firstChild;
+		if (letters === null) {
+			throw new Error('no words after');
+		}
+		expect(leftOf(letters, 0)).toBeLessThan(leftOf(letters, 2));
 	});
 });
