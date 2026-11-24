@@ -35,6 +35,7 @@ mod level_interval;
 mod levels;
 mod markup;
 mod nullable;
+mod plain_text;
 mod read_error;
 
 use serde::{Deserialize, Serialize};

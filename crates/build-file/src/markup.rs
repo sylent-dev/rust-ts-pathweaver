@@ -288,7 +288,7 @@ fn text(rest: &str) -> (Token<'_>, usize) {
 /// review: U+202B before a link drew the text before it at its right, U+2069 closed the isolate
 /// the page puts around the text). The strong marks U+200E, U+200F and U+061C stay: invisible
 /// letters, they turn no Latin letter.
-fn moves_the_text_around(character: char) -> bool {
+pub(crate) fn moves_the_text_around(character: char) -> bool {
     matches!(
         character,
         '\u{202a}'..='\u{202e}' | '\u{2066}'..='\u{2069}' | '\u{2029}' | '\u{85}' | '\u{1c}'..='\u{1e}'
@@ -297,7 +297,7 @@ fn moves_the_text_around(character: char) -> bool {
 
 /// An author's text without the characters that move the text around it; borrowed when it holds
 /// none, the most usual case (the corpus holds none).
-fn without_characters_that_move_the_text(text: &str) -> std::borrow::Cow<'_, str> {
+pub(crate) fn without_characters_that_move_the_text(text: &str) -> std::borrow::Cow<'_, str> {
     if text.contains(moves_the_text_around) {
         text.chars()
             .filter(|character| !moves_the_text_around(*character))
@@ -497,6 +497,13 @@ impl Markup {
     }
 }
 
+/// Whether a text of the file shows nothing: spaces and marks that move the text around them
+/// only, or empty.
+pub(crate) fn is_blank(text: &str) -> bool {
+    text.chars()
+        .all(|character| character.is_whitespace() || moves_the_text_around(character))
+}
+
 impl crate::Build {
     /// The description of the build read with its markup and its links; none when its file has
     /// none, or one of spaces and marks of direction only (« The author wrote no description. »).
@@ -504,11 +511,7 @@ impl crate::Build {
     pub fn description_markup(&self) -> Option<Markup> {
         self.description
             .as_deref()
-            .filter(|description| {
-                !description
-                    .chars()
-                    .all(|character| character.is_whitespace() || moves_the_text_around(character))
-            })
+            .filter(|description| !is_blank(description))
             .map(Markup::of_description)
     }
 }

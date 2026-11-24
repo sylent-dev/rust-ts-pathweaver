@@ -1,6 +1,8 @@
 //! A file opened in the page (`specs.md`, Opening builds): the build it holds, or why it is
 //! refused, as data the interface writes in each language.
 
+use std::borrow::Cow;
+
 use pathweaver_build_file::{Build, Guide, HeldTotals, ReadError};
 use serde::Serialize;
 use tsify::{Ts, Tsify};
@@ -23,7 +25,10 @@ pub enum BuildFile {
 pub struct OpenedBuild {
     /// The key of its content: two files of the same build have the same key.
     pub content_key: String,
+    /// Its name, without the characters that move the text around it.
     pub name: String,
+    /// Its author, without the characters that move the text around it; none when nothing is
+    /// left.
     pub author: Option<String>,
     /// The id of the ascendancy, such as `Warrior1`.
     pub ascendancy: Option<String>,
@@ -168,8 +173,8 @@ pub fn read_file(bytes: &[u8]) -> BuildFile {
                     totals: build.held_totals().into(),
                     description: description.map(MarkupText::from),
                     guide,
-                    name: build.name,
-                    author: build.author.into_option(),
+                    name: build.shown_name().into_owned(),
+                    author: build.shown_author().map(Cow::into_owned),
                     ascendancy: build.ascendancy.into_option(),
                 },
             }
@@ -405,6 +410,26 @@ mod tests {
             serde_json::json!({ "kind": "fromDescription", "address": "https://b.com" })
         );
         assert_eq!(guide_of("", "none"), serde_json::Value::Null);
+    }
+
+    #[test]
+    fn the_name_the_author_and_a_link_of_text_cross_without_what_moves_the_text_around_them() {
+        let text = r#"{ "name": "\u202bIce Shot\u2069", "author": "\u202e ",
+            "link": "my \u2066guide" }"#;
+
+        let BuildFile::Build { build } = read_file(text.as_bytes()) else {
+            panic!("the text is a build");
+        };
+        assert_eq!(
+            (build.name.as_str(), build.author, build.guide),
+            (
+                "Ice Shot",
+                None,
+                Some(BuildGuide::Text {
+                    text: "my guide".to_owned()
+                })
+            )
+        );
     }
 
     #[test]

@@ -3,17 +3,21 @@
 //! pieces shown (the owner, 2026-11-21: one guide, not two links to the same site; 2026-11-24: a
 //! link the page doesn't show never becomes the guide).
 
+use std::borrow::Cow;
+
 use crate::Markup;
 use crate::markup::is_address;
+use crate::plain_text::plain_text;
 
 /// Where the guide of a build leads.
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub enum Guide<'a> {
     /// The `link` of the file, one address whole by the rule of the addresses of a
     /// description.
     Link(&'a str),
-    /// The `link` of the file, a text that isn't one address whole, shown as it is.
-    Text(&'a str),
+    /// The `link` of the file, a text that isn't one address whole, shown as it is, without the
+    /// characters that move the text around it.
+    Text(Cow<'a, str>),
     /// The first address of the description among its pieces shown, for a file without a
     /// `link`.
     FromDescription(&'a str),
@@ -21,12 +25,15 @@ pub enum Guide<'a> {
 
 impl<'a> Guide<'a> {
     /// The guide of a build of this `link` and this description read with its links; none
-    /// when the link is empty or of spaces only and the description holds no address.
+    /// when the link shows nothing (empty, of spaces and marks that move the text only) and the
+    /// description holds no address. The link is read as an address before any character is
+    /// taken from it: one with a hidden character is a text.
     #[must_use]
     pub fn of(link: Option<&'a str>, description: Option<&'a Markup>) -> Option<Self> {
-        match link.map(str::trim).filter(|link| !link.is_empty()) {
-            Some(link) if is_address(link) => Some(Self::Link(link)),
-            Some(link) => Some(Self::Text(link)),
+        let link = link.and_then(|link| Some((link.trim(), plain_text(link)?)));
+        match link {
+            Some((link, _)) if is_address(link) => Some(Self::Link(link)),
+            Some((_, text)) => Some(Self::Text(text)),
             None => description
                 .and_then(Markup::first_address)
                 .map(Self::FromDescription),
@@ -66,10 +73,22 @@ mod tests {
         ] {
             assert_eq!(
                 Guide::of(Some(link), Some(&description)),
-                Some(Guide::Text(link)),
+                Some(Guide::Text(link.into())),
                 "{link}"
             );
         }
+    }
+
+    #[test]
+    fn a_link_shown_as_text_loses_what_moves_the_text_around_it() {
+        assert_eq!(
+            Guide::of(Some(" \u{202e}my guide\u{2069} "), None),
+            Some(Guide::Text("my guide".into()))
+        );
+        assert_eq!(
+            Guide::of(Some("https://a.com\u{202e}"), None),
+            Some(Guide::Text("https://a.com".into()))
+        );
     }
 
     #[test]
@@ -98,7 +117,7 @@ mod tests {
     #[test]
     fn without_a_link_the_guide_is_the_first_address_of_the_description() {
         let description = Markup::of_description(DESCRIPTION);
-        for link in [None, Some(""), Some("  ")] {
+        for link in [None, Some(""), Some("  "), Some(" \u{202e}\u{2069} ")] {
             assert_eq!(
                 Guide::of(link, Some(&description)),
                 Some(Guide::FromDescription("https://maxroll.gg/guide")),
