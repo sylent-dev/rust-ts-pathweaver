@@ -52,6 +52,11 @@ impl LevelRange {
         self.first <= level && level <= self.last
     }
 
+    /// Whether the two ranges share a level.
+    pub(crate) fn meets(self, other: Self) -> bool {
+        self.first <= other.last && other.first <= self.last
+    }
+
     /// The levels from the lowest of both to the highest of both.
     fn stretched_to(self, other: Self) -> Self {
         Self {

@@ -1,7 +1,7 @@
 //! A file opened in the page (`specs.md`, Opening builds): the build it holds, or why it is
 //! refused, as data the interface writes in each language.
 
-use pathweaver_build_file::{Build, Guide, ReadError};
+use pathweaver_build_file::{Build, Guide, HeldTotals, ReadError};
 use serde::Serialize;
 use tsify::{Ts, Tsify};
 use wasm_bindgen::prelude::{JsError, wasm_bindgen};
@@ -34,6 +34,8 @@ pub struct OpenedBuild {
     /// pieces shown.
     pub guide: Option<BuildGuide>,
     pub levels: BuildLevels,
+    /// How many things it holds over its levels, each once: the entries of its colophon.
+    pub totals: BuildTotals,
 }
 
 /// The levels of a build, as far as the page moves among them (`specs.md`, The level).
@@ -56,6 +58,35 @@ impl From<&Build> for BuildLevels {
             lowest: levels.first(),
             highest: levels.last(),
             markers: build.markers(),
+        }
+    }
+}
+
+/// How many things a build holds over its levels, each once, [`HeldTotals`] as the interface
+/// reads it.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Tsify)]
+#[serde(rename_all = "camelCase")]
+pub struct BuildTotals {
+    pub passives: usize,
+    pub skills: usize,
+    pub supports: usize,
+    /// The hints of the inventory, the items of the colophon.
+    pub hints: usize,
+}
+
+impl From<HeldTotals> for BuildTotals {
+    fn from(totals: HeldTotals) -> Self {
+        let HeldTotals {
+            passives,
+            skills,
+            supports,
+            hints,
+        } = totals;
+        Self {
+            passives,
+            skills,
+            supports,
+            hints,
         }
     }
 }
@@ -134,6 +165,7 @@ pub fn read_file(bytes: &[u8]) -> BuildFile {
                 build: OpenedBuild {
                     content_key: build.content_key(),
                     levels: BuildLevels::from(&build),
+                    totals: build.held_totals().into(),
                     description: description.map(MarkupText::from),
                     guide,
                     name: build.name,
@@ -196,6 +228,12 @@ mod tests {
                         lowest: 1,
                         highest: 100,
                         markers: vec![30, 51, 60],
+                    },
+                    totals: BuildTotals {
+                        passives: 3,
+                        skills: 2,
+                        supports: 2,
+                        hints: 2,
                     },
                 },
             }

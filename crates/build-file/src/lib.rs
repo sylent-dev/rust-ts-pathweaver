@@ -30,6 +30,7 @@ mod entries;
 mod fixtures;
 mod guide;
 mod held;
+mod held_totals;
 mod level_interval;
 mod levels;
 mod markup;
@@ -45,6 +46,7 @@ pub use guide::Guide;
 pub use held::{
     BuildAtLevel, Held, HintItem, HintOnSlot, Notes, PassiveInSet, SupportOnSkill, WeaponSet,
 };
+pub use held_totals::HeldTotals;
 pub use level_interval::LevelInterval;
 pub use levels::{EntryName, HIGHEST_LEVEL, InvalidInterval, LOWEST_LEVEL, LevelRange};
 pub use markup::{Colour, Markup, NamedColour, Piece, Size, Style};
