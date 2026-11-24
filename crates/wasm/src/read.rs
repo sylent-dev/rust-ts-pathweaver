@@ -278,6 +278,58 @@ mod tests {
     }
 
     #[test]
+    fn each_named_colour_crosses_under_the_name_of_its_tag() {
+        let names = [
+            "white", "grey", "black", "red", "orange", "yellow", "green", "blue", "indigo",
+            "violet", "bronze", "silver", "gold", "unique",
+        ];
+        for (written, name) in names
+            .map(|name| (name, name))
+            .into_iter()
+            .chain([("gray", "grey")])
+        {
+            let text = format!(r#"{{ "name": "Colours", "description": "<{written}>{{x}}" }}"#);
+            let BuildFile::Build { build } = read_file(text.as_bytes()) else {
+                panic!("the text is a build");
+            };
+            let Some([MarkupPiece::Text { style, .. }]) = build.description.as_deref() else {
+                panic!("one text: {:?}", build.description);
+            };
+            assert_eq!(
+                serde_json::to_value(style.colour).unwrap(),
+                serde_json::json!({ "kind": "named", "name": name }),
+                "{written}"
+            );
+        }
+    }
+
+    #[test]
+    fn each_guide_crosses_as_the_core_read_it() {
+        let guide_of = |link: &str, description: &str| {
+            let text = format!(
+                r#"{{ "name": "Guide", "link": "{link}", "description": "{description}" }}"#
+            );
+            let BuildFile::Build { build } = read_file(text.as_bytes()) else {
+                panic!("the text is a build");
+            };
+            serde_json::to_value(build.guide).unwrap()
+        };
+        assert_eq!(
+            guide_of("https://a.com", ""),
+            serde_json::json!({ "kind": "link", "address": "https://a.com" })
+        );
+        assert_eq!(
+            guide_of("mobalytics.gg/a", ""),
+            serde_json::json!({ "kind": "text", "text": "mobalytics.gg/a" })
+        );
+        assert_eq!(
+            guide_of("", "See https://b.com"),
+            serde_json::json!({ "kind": "fromDescription", "address": "https://b.com" })
+        );
+        assert_eq!(guide_of("", "none"), serde_json::Value::Null);
+    }
+
+    #[test]
     fn a_build_gives_the_levels_it_covers_and_its_markers() {
         let guide_of_the_maps = r#"{ "name": "Maps", "skills": [
             { "id": "Spark", "level_interval": [65, 89] },

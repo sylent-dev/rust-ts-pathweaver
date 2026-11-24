@@ -23,3 +23,7 @@ wasm-bindgen.workspace = true
 
 [lints]
 workspace = true
+
+[dev-dependencies]
+# The names the types of the bridge are written under in JavaScript, compared in the tests.
+serde_json.workspace = true
