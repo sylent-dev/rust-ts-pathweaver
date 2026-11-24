@@ -52,6 +52,7 @@ fn each_thing_counts_once_however_many_entries_set_it() {
         ]
     }));
 
+    assert_eq!(build.held_totals(), held_over_every_level(&build));
     assert_eq!(
         build.held_totals(),
         HeldTotals {
@@ -88,6 +89,7 @@ fn what_applies_at_no_level_counts_nothing() {
         ]
     }));
 
+    assert_eq!(build.held_totals(), held_over_every_level(&build));
     assert_eq!(
         build.held_totals(),
         HeldTotals {

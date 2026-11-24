@@ -288,7 +288,7 @@ fn text(rest: &str) -> (Token<'_>, usize) {
 /// review: U+202B before a link drew the text before it at its right, U+2069 closed the isolate
 /// the page puts around the text). The strong marks U+200E, U+200F and U+061C stay: invisible
 /// letters, they turn no Latin letter.
-pub(crate) fn moves_the_text_around(character: char) -> bool {
+fn moves_the_text_around(character: char) -> bool {
     matches!(
         character,
         '\u{202a}'..='\u{202e}' | '\u{2066}'..='\u{2069}' | '\u{2029}' | '\u{85}' | '\u{1c}'..='\u{1e}'

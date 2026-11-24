@@ -143,3 +143,22 @@ fn the_totals_of_the_corpus_are_what_each_build_holds_at_one_level_at_least() {
         assert_eq!(build.held_totals(), held_over_every_level(&build), "{name}");
     }
 }
+
+#[test]
+#[ignore = "reads the corpus of inputs/builds, kept out of Git"]
+fn the_passives_of_the_files_quoted_are_fewer_than_their_entries() {
+    let corpus = corpus();
+    let passives = |name: &str| {
+        let build = &corpus[name];
+        let entries = build.passives.get().map_or(0, Vec::len);
+        (entries, build.held_totals().passives)
+    };
+
+    assert_eq!(
+        [
+            passives("mobalytics-animeprincess-coc-comet-annotated.build"),
+            passives("poe2-tools-fubgun-ice-shot-campaign.build"),
+        ],
+        [(189, 164), (383, 138)]
+    );
+}

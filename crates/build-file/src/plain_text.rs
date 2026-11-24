@@ -53,6 +53,15 @@ mod tests {
     }
 
     #[test]
+    fn the_spaces_left_by_a_mark_that_moves_the_text_are_taken_off_too() {
+        let mut build = build(json!({ "author": "\u{202e} Fubgun \u{2069}" }));
+        build.name = "\u{2066} Ice Shot \u{2069}".to_owned();
+
+        assert_eq!(build.shown_name(), "Ice Shot");
+        assert_eq!(build.shown_author().as_deref(), Some("Fubgun"));
+    }
+
+    #[test]
     fn a_text_without_such_characters_is_borrowed_as_it_is_but_its_spaces() {
         let mut build = build(json!({ "author": "Fubgun" }));
         build.name = "  Ice Shot  ".to_owned();
