@@ -12,12 +12,10 @@
 mod addresses;
 #[cfg(test)]
 mod corpus;
+
+pub(crate) use addresses::is_address;
 #[cfg(test)]
 mod tests;
-
-/// The start of an address that is a link, in lower case only (`specs.md`, The header of a
-/// build).
-pub(crate) const SCHEME: &str = "https://";
 
 /// An author's text read: its pieces in order, each text with the style of the tags around it.
 #[derive(Debug, Clone, PartialEq, Eq, Default)]

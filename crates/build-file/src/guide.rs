@@ -3,14 +3,15 @@
 //! owner, 2026-11-21: one guide, not two links to the same site).
 
 use crate::Markup;
-use crate::markup::SCHEME;
+use crate::markup::is_address;
 
 /// Where the guide of a build leads.
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum Guide<'a> {
-    /// The `link` of the file, an address that starts with `https://`.
+    /// The `link` of the file, one address whole by the rule of the addresses of a
+    /// description.
     Link(&'a str),
-    /// The `link` of the file, a text that isn't such an address, shown as it is.
+    /// The `link` of the file, a text that isn't one address whole, shown as it is.
     Text(&'a str),
     /// The first address of the description, for a file without a `link`.
     FromDescription(&'a str),
@@ -22,9 +23,7 @@ impl<'a> Guide<'a> {
     #[must_use]
     pub fn of(link: Option<&'a str>, description: Option<&'a Markup>) -> Option<Self> {
         match link.map(str::trim).filter(|link| !link.is_empty()) {
-            Some(link) if link.len() > SCHEME.len() && link.starts_with(SCHEME) => {
-                Some(Self::Link(link))
-            }
+            Some(link) if is_address(link) => Some(Self::Link(link)),
             Some(link) => Some(Self::Text(link)),
             None => description
                 .and_then(Markup::first_address)

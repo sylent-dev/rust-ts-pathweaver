@@ -401,7 +401,7 @@ fn an_address_ends_at_a_space_a_quote_a_tag_or_a_brace() {
 
 #[test]
 fn an_address_never_ends_on_a_mark_that_closes_the_sentence() {
-    for mark in [".", ",", ";", ":", "!", "?", ")", "?!", ")."] {
+    for mark in [".", ",", ";", ":", "!", "?", "]", ")", "?!", ").", "))"] {
         assert_eq!(
             described(&format!("https://a.com/x{mark}")),
             [link("https://a.com/x", Style::default()), plain(mark)],
@@ -415,6 +415,56 @@ fn an_address_never_ends_on_a_mark_that_closes_the_sentence() {
             link("https://a.com/x?y=1&z=2#c.d", Style::default()),
             plain(")"),
         ]
+    );
+}
+
+#[test]
+fn a_closing_bracket_of_the_address_itself_is_kept() {
+    assert_eq!(
+        described("(https://w.org/Foo_(bar))."),
+        [
+            plain("("),
+            link("https://w.org/Foo_(bar)", Style::default()),
+            plain(")."),
+        ]
+    );
+    assert_eq!(
+        described("[https://a.com]"),
+        [
+            plain("["),
+            link("https://a.com", Style::default()),
+            plain("]")
+        ]
+    );
+}
+
+#[test]
+fn an_address_is_made_of_the_visible_characters_of_ascii() {
+    for (written, after) in [
+        ("https://a.com/x\u{200b}y", "\u{200b}y"),
+        ("https://a.com/x\u{202e}y", "\u{202e}y"),
+        ("https://a.com/x\u{a0}y", "\u{a0}y"),
+        ("https://a.com/x\u{7f}y", "\u{7f}y"),
+        ("https://a.com/x。", "。"),
+        ("https://a.com/xé", "é"),
+    ] {
+        assert_eq!(
+            described(written),
+            [link("https://a.com/x", Style::default()), plain(after)],
+            "{written:?}"
+        );
+    }
+}
+
+#[test]
+fn an_address_ends_at_a_change_of_style_not_at_a_tag_that_changes_nothing() {
+    assert_eq!(
+        described("https://a<r>{.com}"),
+        [link("https://a.com", Style::default())]
+    );
+    assert_eq!(
+        described("https://a<b>{.com}"),
+        [link("https://a", Style::default()), text(".com", BOLD)]
     );
 }
 
@@ -460,6 +510,14 @@ fn a_megabyte_of_addresses_is_read_in_time() {
     let start = Instant::now();
     let schemes = "https:// ".repeat(110_000);
     assert_eq!(described(&schemes), [plain(&schemes)]);
+    let brackets = "https://a".to_owned() + &")".repeat(1_000_000);
+    assert_eq!(
+        described(&brackets),
+        [
+            link("https://a", Style::default()),
+            plain(&")".repeat(1_000_000))
+        ]
+    );
     let marks = "https://a".to_owned() + &".".repeat(1_000_000);
     assert_eq!(
         described(&marks),
