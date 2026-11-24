@@ -59,13 +59,11 @@ phone-title = Pathweaver needs a computer
 phone-why-computer = It is made for a computer next to the game:
 phone-why-screen = its passive tree needs a large screen.
 
-## What a build opened is, until the page of a build.
+## The header of a build.
 
-build-name = Name
-build-author = Author
-build-ascendancy = Ascendancy
-build-link = Link
-build-unknown = Not given
+# Before the ascendancy, after a « · ». $author (String): as the file writes it.
+build-by = by { $author }
+
 ## Why a file is refused, written after its name, which the page shows in the colour of the text
 ## and the reason in the red; without a period at its end (the owner, 2026-11-23).
 
@@ -94,6 +92,4 @@ refused-zone-not-a-build-file = That isn't a .build file
 refused-zone-unreadable = That build can't be read
 refused-zone-several = These files can't be read
 
-# $version (String): the version of the core, as the WebAssembly module gives it.
-core-version = Core { $version }, in Rust.
 core-load-failed = The core of Pathweaver could not load.
