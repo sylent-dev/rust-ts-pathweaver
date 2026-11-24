@@ -40,6 +40,15 @@ function middle(element: Element): number {
 }
 
 describe('the tabs of a build', () => {
+	it('name the five views, in their order', () => {
+		expect(
+			page
+				.getByRole('button')
+				.elements()
+				.map((button) => button.textContent.trim())
+		).toEqual(['Overview', 'Skills', 'Tree', 'Inventory', 'About']);
+	});
+
 	it('show the Overview at first, the one marked current', async () => {
 		await expect
 			.element(page.getByRole('button', { name: 'Overview' }))
@@ -60,6 +69,14 @@ describe('the tabs of a build', () => {
 			throw new Error('no bar');
 		}
 		await expect.poll(() => Math.round(middle(bar))).toBe(Math.round(middle(skills.element())));
+	});
+
+	it('are reached by Tab and shown by Enter, as any button', async () => {
+		await userEvent.keyboard('{Tab}{Tab}{Enter}');
+		await expect
+			.element(page.getByRole('button', { name: 'Skills' }))
+			.toHaveAttribute('aria-current', 'true');
+		expect(shownTab.current).toBe('skills');
 	});
 
 	it('leave ← and → to the level while one of them has the focus', async () => {

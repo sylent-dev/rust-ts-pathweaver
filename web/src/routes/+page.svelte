@@ -38,14 +38,8 @@
 	<title>{t('app-page-title')}</title>
 </svelte:head>
 
-{#snippet coreFailure()}
-	{#await core catch}
-		<p role="alert">{t('core-load-failed')}</p>
-	{/await}
-{/snippet}
-
 {#if openBuilds.shown}
-	<BuildPage build={openBuilds.shown} {coreFailure} />
+	<BuildPage build={openBuilds.shown} />
 {:else}
 	<FirstVisit>
 		{#snippet zone()}
@@ -58,7 +52,10 @@
 				label={t(isPasting ? 'paste-back' : 'paste-json')}
 				onclick={() => (isPasting ? backToFiles() : (isPasting = true))}
 			/>
-			{@render coreFailure()}
+			<!-- Only here: a build shown was read by the core, loaded by then. -->
+			{#await core catch}
+				<p role="alert">{t('core-load-failed')}</p>
+			{/await}
 		{/snippet}
 	</FirstVisit>
 {/if}

@@ -2,8 +2,8 @@
 
 import { flushSync, mount, unmount } from 'svelte';
 import { afterEach, describe, expect, it } from 'vitest';
-import { page } from 'vitest/browser';
 import type { OpenedBuild } from '#lib/core.ts';
+import { pageGameData } from '#lib/page/game-data.svelte.ts';
 import { openedBuild } from '#lib/page/opened-build.test-helper.ts';
 import BuildHeader from './BuildHeader.svelte';
 
@@ -18,17 +18,16 @@ afterEach(() => {
 
 /** The header of a build, once the game data have named its ascendancy. */
 async function header(build: Partial<OpenedBuild>): Promise<HTMLElement> {
+	await pageGameData.load();
 	shown = mount(BuildHeader, {
 		target: document.body,
 		props: { build: { ...openedBuild('key'), name: 'Spark Stormweaver', ...build } }
 	});
 	flushSync();
-	await expect.element(page.getByRole('heading', { name: 'Spark Stormweaver' })).toBeVisible();
 	const element = document.querySelector('header');
 	if (element === null) {
 		throw new Error('no header');
 	}
-	await expect.poll(() => element.querySelector('p')?.textContent?.trim()).toBeTruthy();
 	return element;
 }
 
@@ -40,7 +39,8 @@ function byLine(element: HTMLElement): string | undefined {
 describe('the header of a build', () => {
 	it('names the build, its author, its ascendancy and its class, by its portrait', async () => {
 		const element = await header({ author: 'Lolcohol', ascendancy: 'Sorceress1' });
-		await expect.poll(() => byLine(element)).toBe('by Lolcohol · Stormweaver Sorceress');
+		expect(element.querySelector('h1')?.textContent).toBe('Spark Stormweaver');
+		expect(byLine(element)).toBe('by Lolcohol · Stormweaver Sorceress');
 		expect(element.querySelector('img')?.getAttribute('src')).toMatch(/sorceress1-88/);
 	});
 
@@ -59,6 +59,6 @@ describe('the header of a build', () => {
 
 	it('writes the ascendancy alone without an author', async () => {
 		const ascendancyAlone = await header({ ascendancy: 'Witch3b' });
-		await expect.poll(() => byLine(ascendancyAlone)).toBe('Abyssal Lich Witch');
+		expect(byLine(ascendancyAlone)).toBe('Abyssal Lich Witch');
 	});
 });

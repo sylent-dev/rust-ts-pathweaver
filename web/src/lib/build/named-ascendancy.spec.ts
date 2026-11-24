@@ -9,9 +9,8 @@ describe('namedAscendancy', () => {
 			kind: 'known',
 			name: 'Abyssal Lich',
 			characterClass: 'Witch',
-			portrait: gameData.portrait('Witch3b', 88)
+			portrait: expect.stringMatching(/witch3b-88\.webp$/)
 		});
-		expect(gameData.portrait('Witch3b', 88)).toMatch(/witch3b-88/);
 	});
 
 	it('gives the id of the file when the game data know it not, or could not load', async () => {

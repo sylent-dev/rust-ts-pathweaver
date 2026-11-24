@@ -66,7 +66,12 @@
 		</button>
 	{/each}
 	{#if barPixels !== undefined}
-		<span class="bar" class:is-sliding={isSliding} style:--bar-x="{barPixels}px" aria-hidden="true"
+		<span
+			class="bar"
+			class:is-sliding={isSliding}
+			style:--bar-x="{barPixels}px"
+			style:--bar-width="{BAR_WIDTH_PIXELS}px"
+			aria-hidden="true"
 		></span>
 	{/if}
 </div>
@@ -102,7 +107,7 @@
 		position: absolute;
 		left: 0;
 		bottom: 0;
-		width: 28px;
+		width: var(--bar-width);
 		height: 4px;
 		background: var(--highlight);
 		transform: translateX(var(--bar-x));

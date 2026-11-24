@@ -6,9 +6,8 @@
      right. -->
 <script lang="ts">
 	import type { OpenedBuild } from '#lib/core.ts';
-	import type { GameData } from '#lib/game-data/game-data.ts';
 	import { t } from '#lib/i18n.ts';
-	import { pageGameData } from '#lib/page/game-data.ts';
+	import { pageGameData } from '#lib/page/game-data.svelte.ts';
 	import { namedAscendancy } from './named-ascendancy.ts';
 
 	interface Props {
@@ -17,28 +16,18 @@
 
 	let { build }: Props = $props();
 
-	/** What parts the author from the ascendancy, a mark of punctuation the same in every language. */
+	/** What parts the author from the ascendancy, written here until French (docs/backlog.md). */
 	const SEPARATOR = ' · ';
 
-	/** The game data once loaded, or `undefined` when they couldn't (their failure is logged). */
-	let gameData = $state<GameData>();
-	/** Whether the game data are loaded, or failed: until then, the ascendancy isn't named. */
-	let isSettled = $state(false);
+	// The game data of the page: a failure is written to the console, the ascendancy named by its id.
+	pageGameData.load().catch(() => undefined);
 
-	void pageGameData()
-		.then(
-			(loaded) => {
-				gameData = loaded;
-			},
-			() => undefined
-		)
-		.finally(() => {
-			isSettled = true;
-		});
-
-	const ascendancy = $derived(
-		isSettled ? namedAscendancy(build.ascendancy, gameData, 88) : undefined
-	);
+	const ascendancy = $derived.by(() => {
+		const { state } = pageGameData;
+		return state.kind === 'loading'
+			? undefined
+			: namedAscendancy(build.ascendancy, state.kind === 'loaded' ? state.gameData : undefined, 88);
+	});
 	const portrait = $derived(ascendancy?.kind === 'known' ? ascendancy.portrait : undefined);
 </script>
 

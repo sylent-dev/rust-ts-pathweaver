@@ -1,8 +1,7 @@
 <!-- The page of a build (specs.md, Window layout), from top to bottom: its header, the level band
-     (4h), the row of its tabs and the panel of the one shown. Until their notice (4f3), the files refused with the build
-     shown are a line each. -->
+     (4h), the row of its tabs and the panel of the one shown. Until their notice (4f3), the files
+     refused with the build shown are a line each. -->
 <script lang="ts">
-	import type { Snippet } from 'svelte';
 	import type { OpenedBuild } from '#lib/core.ts';
 	import { opening } from '#lib/page/opening.svelte.ts';
 	import { refusalReason } from '#lib/page/refusal-text.ts';
@@ -12,11 +11,9 @@
 
 	interface Props {
 		build: OpenedBuild;
-		/** What the page says when the core can't load. */
-		coreFailure: Snippet;
 	}
 
-	let { build, coreFailure }: Props = $props();
+	let { build }: Props = $props();
 </script>
 
 <main class="build-page">
@@ -25,7 +22,6 @@
 	{#each opening.refused as refused, index (index)}
 		<p role="alert">{refused.fileName} {refusalReason(refused.refusal)}</p>
 	{/each}
-	{@render coreFailure()}
 	<BuildTabPanel id="build-tab-panel" />
 </main>
 
