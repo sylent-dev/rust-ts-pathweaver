@@ -1,25 +1,19 @@
 // The core of Pathweaver, compiled to WebAssembly by `npm run wasm` (see
 // scripts/build-wasm.ts).
 
-import init, { coreVersion } from '#lib/wasm/pathweaver.js';
-
-/** What the interface reads from the core once it is loaded. */
-export interface Core {
-	version: string;
-}
+import init from '#lib/wasm/pathweaver.js';
 
 /**
  * Loads the WebAssembly module, fetched once whatever the number of calls. A failure is written
  * to the console with its cause, then passed on to the page, which says it.
  */
-export async function loadCore(): Promise<Core> {
+export async function loadCore(): Promise<void> {
 	try {
 		await init();
 	} catch (error) {
 		console.error('core: the WebAssembly module could not load', error);
 		throw error;
 	}
-	return { version: coreVersion() };
 }
 
 /**

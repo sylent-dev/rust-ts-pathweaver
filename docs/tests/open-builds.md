@@ -1,6 +1,6 @@
-# Opening builds: the tests (4e)
+# Opening builds: the tests (4e, 4f)
 
-The home page of the first visit opens builds three ways: files dropped anywhere on the page, files chosen with a click on the zone, and the JSON of a build pasted in the zone become a field; when nothing opens, the zone says why. These tests check what only a real browser shows: the files of the desktop, the clipboard, the page lit under files. Until the page of a build (4f), a build opened shows its name, its author, its ascendancy and its link, in plain text. Run the tests in a row. A ✅ is enough when it works; detail only what goes wrong.
+The home page of the first visit opens builds three ways: files dropped anywhere on the page, files chosen with a click on the zone, and the JSON of a build pasted in the zone become a field; when nothing opens, the zone says why. These tests check what only a real browser shows: the files of the desktop, the clipboard, the page lit under files. Since 4f1, a build opened shows its page: its header and its five tabs, their panels still empty. Run the tests in a row. A ✅ is enough when it works; detail only what goes wrong.
 
 ## Before
 
@@ -20,7 +20,7 @@ The home page of the first visit opens builds three ways: files dropped anywhere
 ## The tests
 
 1. **Several files dropped**: select the three `.build` files in the file manager and drop them together anywhere on the page, outside the zone.
-   ✅ The first visit gives way to a build at once, without a button: one of the three (the last in the order the system gives them, « Titan Warrior », « TwobyulDeadeye » or « Spark - Comet »), its Name, Author (« Not given » for TwobyulDeadeye), Ascendancy and Link, then « Core 0.1.0, in Rust. ».
+   ✅ The first visit gives way to a build at once, without a button: one of the three (the last in the order the system gives them, « Titan Warrior », « TwobyulDeadeye » or « Spark - Comet »), its header: its name, its portrait on the left, and under it « by Grinding Gear Games · Titan Warrior », « Deadeye Ranger » alone for TwobyulDeadeye, which names no author, or « by UtkarshBehre · Stormweaver Sorceress »; under the header the five tabs, **Overview** in white over its bar.
 
 2. **A build and an image dropped together**: drop `ggg-titan-warrior-sample.build` and `passive-tree.png` together.
    ✅ « Titan Warrior » shows, and under it, in a line of its own, « passive-tree.png isn't a text file », without a period.
