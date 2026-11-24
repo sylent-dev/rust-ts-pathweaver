@@ -350,7 +350,9 @@ impl Markup {
         markup
     }
 
-    /// Reads the description of a build: its markup, and its addresses as links.
+    /// Reads the description of a build: its markup, and its addresses as links, each only
+    /// where what is drawn right after it shows where it ends; an address glued to what follows
+    /// it stays text, so that what reads as its address is the one it opens.
     #[must_use]
     pub fn of_description(text: &str) -> Self {
         let mut pieces = Vec::new();
@@ -360,7 +362,24 @@ impl Markup {
                 Piece::Link { .. } | Piece::LineBreak => pieces.push(piece),
             }
         }
-        Self(pieces)
+        // Only the links look ahead, each up to the first character that isn't a closing mark,
+        // which the next link starts with: each character is looked at once at most.
+        let is_set_apart: Vec<bool> = (0..pieces.len())
+            .map(|index| {
+                let after = pieces.get(index.saturating_add(1)..).unwrap_or_default();
+                !matches!(pieces.get(index), Some(Piece::Link { .. }))
+                    || addresses::ends_where_it_shows(characters_of(after))
+            })
+            .collect();
+        let mut markup = Self::default();
+        for (piece, is_set_apart) in pieces.into_iter().zip(is_set_apart) {
+            match piece {
+                Piece::Link { address, style } if !is_set_apart => markup.write(&address, style),
+                Piece::Text { text, style } => markup.write(&text, style),
+                Piece::Link { .. } | Piece::LineBreak => markup.0.push(piece),
+            }
+        }
+        markup
     }
 
     /// The first address of a description read with its links, where the guide of a build
@@ -404,6 +423,21 @@ impl crate::Build {
             .filter(|description| !description.trim().is_empty())
             .map(Markup::of_description)
     }
+}
+
+/// The characters drawn by pieces, in order, up to the first line break, `None` standing for it:
+/// what follows an address on its line.
+fn characters_of(pieces: &[Piece]) -> impl Iterator<Item = Option<char>> + '_ {
+    pieces
+        .iter()
+        .map_while(|piece| match piece {
+            Piece::Text { text, .. } => Some(text.as_str()),
+            Piece::Link { address, .. } => Some(address.as_str()),
+            Piece::LineBreak => None,
+        })
+        .flat_map(str::chars)
+        .map(Some)
+        .chain(std::iter::once(None))
 }
 
 /// Pushes a text in a style, its addresses as links.
