@@ -9,14 +9,13 @@
 	import { t } from '#lib/i18n.ts';
 	import FileChooser from '#lib/page/FileChooser.svelte';
 	import { openBuilds } from '#lib/page/open-builds.svelte.ts';
-	import { TAB_WIDTH_PIXELS } from './band-layout.ts';
+	import { ADD_WIDTH_PIXELS, END_PADDING_PIXELS, TAB_WIDTH_PIXELS } from './band-layout.ts';
 	import MoreBuilds from './MoreBuilds.svelte';
 	import OpenBuildTab from './OpenBuildTab.svelte';
 
-	/** The tabs drawn, by the key of the content of their build. */
-	const tabs: Record<string, OpenBuildTab | null> = {};
 	let chooser: FileChooser;
-	let band: HTMLElement;
+	/** None once the band leaves the page, its last build closed. */
+	let band: HTMLElement | null = $state(null);
 
 	/** Every build has a tab until the band is measured. */
 	const layout = $derived(
@@ -30,18 +29,22 @@
 
 	// The band follows the width of the window: the open builds read it.
 	$effect(() => {
-		const observer = new ResizeObserver(() => openBuilds.measureBand(band.clientWidth));
-		observer.observe(band);
+		if (band === null) {
+			return;
+		}
+		const measured = band;
+		const observer = new ResizeObserver(() => openBuilds.measureBand(measured.clientWidth));
+		observer.observe(measured);
 		return () => observer.disconnect();
 	});
 
-	/** Puts the keyboard on the tab of the build shown, if any, once it is drawn. */
+	/**
+	 * Puts the keyboard on the tab of the build shown, once it is drawn; nowhere when the last
+	 * build was closed, which takes the band off the page.
+	 */
 	async function focusShownTab(): Promise<void> {
 		await tick();
-		const shown = openBuilds.shown;
-		if (shown !== undefined) {
-			tabs[shown.contentKey]?.focus();
-		}
+		band?.querySelector<HTMLButtonElement>('[aria-current="true"]')?.focus();
 	}
 
 	/** Closes a build, the keyboard on the tab of the build shown then (the owner, 2026-11-24). */
@@ -57,11 +60,15 @@
 	}
 </script>
 
-<nav bind:this={band} class="band" aria-label={t('builds-band')}>
+<nav
+	bind:this={band}
+	class="band"
+	aria-label={t('builds-band')}
+	style:padding-right="{END_PADDING_PIXELS}px"
+>
 	<div class="tabs" style:--tab-width="{layout.tabWidthPixels}px">
 		{#each tabBuilds as build (build.contentKey)}
 			<OpenBuildTab
-				bind:this={tabs[build.contentKey]}
 				{build}
 				isCurrent={build.contentKey === openBuilds.shown?.contentKey}
 				onshow={() => openBuilds.show(build.contentKey)}
@@ -75,6 +82,7 @@
 	<button
 		type="button"
 		class="add"
+		style:width="{ADD_WIDTH_PIXELS}px"
 		title={t('builds-add')}
 		aria-label={t('builds-add')}
 		onclick={() => chooser.open()}
@@ -91,7 +99,6 @@
 		z-index: 6;
 		display: flex;
 		height: 44px;
-		padding-right: 12px;
 		background: var(--top-band-image), var(--builds-band);
 		color: var(--on-top-band);
 		box-shadow: var(--band-shadow);
@@ -109,7 +116,6 @@
 		display: grid;
 		place-items: center;
 		flex: none;
-		width: 44px;
 		padding: 0;
 		border: none;
 		background: var(--on-top-band);

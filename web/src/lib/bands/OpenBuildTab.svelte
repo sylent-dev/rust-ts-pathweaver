@@ -19,23 +19,10 @@
 	}
 
 	let { build, isCurrent, onshow, onclose }: Props = $props();
-
-	let showButton: HTMLButtonElement;
-
-	/** Puts the keyboard on the button that shows the build. */
-	export function focus(): void {
-		showButton.focus();
-	}
 </script>
 
 <div class="tab" class:is-current={isCurrent}>
-	<button
-		bind:this={showButton}
-		type="button"
-		class="show"
-		aria-current={isCurrent}
-		onclick={onshow}
-	>
+	<button type="button" class="show" aria-current={isCurrent} onclick={onshow}>
 		<BuildLabel {build} />
 	</button>
 	<button
@@ -49,12 +36,13 @@
 </div>
 
 <style>
-	/* The full height of the band, its width the band's to set (--tab-width), square corners. */
+	/* The full height of the band, its width the band's to set (--tab-width, band-layout.ts),
+	   square corners. */
 	.tab {
 		display: flex;
 		align-items: center;
 		gap: 8px;
-		width: var(--tab-width, 184px);
+		width: var(--tab-width);
 		box-sizing: border-box;
 		padding-right: 6px;
 		color: color-mix(in srgb, var(--on-top-band) 68%, transparent);

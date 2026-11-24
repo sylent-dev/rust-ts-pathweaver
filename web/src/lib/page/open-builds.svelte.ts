@@ -65,11 +65,28 @@ export class OpenBuilds<Build extends OpenBuild = OpenBuild> {
 	 * isn't added again: the build already open is shown, at the level it was left at.
 	 */
 	open(build: Build): void {
-		if (!this.#builds.some((open) => open.contentKey === build.contentKey)) {
-			this.#builds = [...this.#builds, build];
-			this.#levels[build.contentKey] = build.levels.highest;
+		this.openAll([build]);
+	}
+
+	/**
+	 * Opens builds, dropped or chosen together, in their order, each at the highest level it
+	 * covers, and shows the last; the same content already open isn't added again. Only the build
+	 * shown moves to a tab, once: the others keep their order, whether the band is measured or not.
+	 */
+	openAll(builds: readonly Build[]): void {
+		const added = [...this.#builds];
+		for (const build of builds) {
+			if (!added.some((open) => open.contentKey === build.contentKey)) {
+				added.push(build);
+				this.#levels[build.contentKey] = build.levels.highest;
+			}
 		}
-		this.#shownKey = build.contentKey;
+		const last = builds.at(-1);
+		if (last === undefined) {
+			return;
+		}
+		this.#builds = added;
+		this.#shownKey = last.contentKey;
 		this.#keepShownInTabs();
 	}
 

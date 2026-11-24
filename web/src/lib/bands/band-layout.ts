@@ -6,8 +6,12 @@
 export const TAB_WIDTH_PIXELS = 184;
 /** The widest a tab grows while they all fit, in pixels. */
 export const TAB_MAX_WIDTH_PIXELS = 240;
-/** What the band keeps at its right end: its margin (12) and + (44), in pixels. */
-const END_PIXELS = 12 + 44;
+/** The margin of the band at its right end, in pixels; the band sets it from here. */
+export const END_PADDING_PIXELS = 12;
+/** The width of +, square, the height of the band, in pixels; the band sets it from here. */
+export const ADD_WIDTH_PIXELS = 44;
+/** What the band keeps at its right end: its margin and +, in pixels. */
+const END_PIXELS = END_PADDING_PIXELS + ADD_WIDTH_PIXELS;
 /** The same, « +N ▾ » before + (66, the width the mock-up gives it), in pixels. */
 const END_WITH_MENU_PIXELS = END_PIXELS + 66;
 

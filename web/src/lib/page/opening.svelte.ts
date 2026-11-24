@@ -80,11 +80,7 @@ export class Opening {
 
 	async #openNow(files: readonly File[]): Promise<void> {
 		const read = await readFiles(files);
-		for (const file of read) {
-			if (file.kind === 'build') {
-				openBuilds.open(file.build);
-			}
-		}
+		openBuilds.openAll(read.flatMap((file) => (file.kind === 'build' ? [file.build] : [])));
 		this.#refused = read.filter((file) => file.kind === 'refused');
 		this.#openedNone = this.#refused.length === read.length;
 		// The build shown changed without a click, which would have closed the window or the menu

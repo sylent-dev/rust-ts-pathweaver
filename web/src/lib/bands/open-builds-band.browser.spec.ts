@@ -4,9 +4,10 @@
 
 import { flushSync, mount, unmount } from 'svelte';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import { page } from 'vitest/browser';
+import { page, userEvent } from 'vitest/browser';
 import { openBuilds } from '#lib/page/open-builds.svelte.ts';
 import { opening } from '#lib/page/opening.svelte.ts';
+import { hearKey } from '#lib/page/page-events.ts';
 import { popup } from '#lib/page/popup.svelte.ts';
 import { openedBuild } from '#lib/page/opened-build.test-helper.ts';
 import OpenBuildsBand from './OpenBuildsBand.svelte';
@@ -108,10 +109,10 @@ describe('« +N ▾ »', () => {
 	it('lists the builds without a tab, in the order of the band', async () => {
 		await sixInNarrowWindow();
 
-		await page.getByRole('button', { name: '2 more builds' }).click();
+		await page.getByRole('button', { name: '+2 more builds' }).click();
 
 		await expect.element(page.getByRole('list')).toHaveTextContent(/^\s*Blood\s*Venom\s*$/);
-		expect(page.getByRole('button', { name: '2 more builds' }).element()).toHaveAttribute(
+		expect(page.getByRole('button', { name: '+2 more builds' }).element()).toHaveAttribute(
 			'aria-expanded',
 			'true'
 		);
@@ -119,7 +120,7 @@ describe('« +N ▾ »', () => {
 
 	it('gives a build chosen the place of the last tab, the keyboard on it, the menu closed', async () => {
 		await sixInNarrowWindow();
-		await page.getByRole('button', { name: '2 more builds' }).click();
+		await page.getByRole('button', { name: '+2 more builds' }).click();
 
 		await page.getByRole('button', { name: 'Blood' }).click();
 
@@ -130,9 +131,27 @@ describe('« +N ▾ »', () => {
 		]);
 	});
 
+	it('gives the keyboard back to « +N ▾ » on Esc from a build of its menu', async () => {
+		await sixInNarrowWindow();
+		document.addEventListener('keydown', hearKey);
+		try {
+			await page.getByRole('button', { name: '+2 more builds' }).click();
+			page.getByRole('button', { name: 'Blood' }).element().focus();
+
+			await userEvent.keyboard('{Escape}');
+
+			expect([document.activeElement?.getAttribute('aria-label'), popup.openName]).toEqual([
+				'+2 more builds',
+				undefined
+			]);
+		} finally {
+			document.removeEventListener('keydown', hearKey);
+		}
+	});
+
 	it('leaves the page with its menu closed once every tab fits', async () => {
 		await sixInNarrowWindow();
-		await page.getByRole('button', { name: '2 more builds' }).click();
+		await page.getByRole('button', { name: '+2 more builds' }).click();
 
 		await page.viewport(1280, 600);
 

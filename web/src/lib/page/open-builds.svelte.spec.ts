@@ -329,3 +329,34 @@ describe('the build shown in the band', () => {
 		]);
 	});
 });
+
+describe('builds opened together', () => {
+	/** Builds of these keys. */
+	function builds(...contentKeys: string[]): OpenBuild[] {
+		return contentKeys.map((key) => build(key));
+	}
+
+	it('open in their order, the last shown in the last tab, the others in their order', () => {
+		const openBuilds = opened(build('x'));
+		openBuilds.measureBand(900);
+		openBuilds.openAll(builds('a', 'b', 'c', 'd', 'e', 'f'));
+		expect([keys(openBuilds), openBuilds.shown?.contentKey]).toEqual([
+			['x', 'a', 'b', 'f', 'c', 'd', 'e'],
+			'f'
+		]);
+	});
+
+	it('take the same order whether the band is measured before or after', () => {
+		const openBuilds = opened(build('x'));
+		openBuilds.openAll(builds('a', 'b', 'c', 'd', 'e', 'f'));
+		openBuilds.measureBand(900);
+		expect(keys(openBuilds)).toEqual(['x', 'a', 'b', 'f', 'c', 'd', 'e']);
+	});
+
+	it('add a content already open once, the last shown, and nothing when there are none', () => {
+		const openBuilds = opened(build('a'));
+		openBuilds.openAll(builds('b', 'a', 'b'));
+		openBuilds.openAll([]);
+		expect([keys(openBuilds), openBuilds.shown?.contentKey]).toEqual([['a', 'b'], 'b']);
+	});
+});

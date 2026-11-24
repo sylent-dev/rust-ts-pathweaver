@@ -2,8 +2,9 @@
      (specs.md, Window layout): its portrait square, the full height of its parent, and its name
      over the name of its ascendancy, smaller and weaker, each cut to fit. An ascendancy the game
      data don't know is its id, as the file writes it; a build without one has its square empty and
-     its name alone. Its parent sets how it looks: the gap (--label-gap), the filter and the
-     opacity of the portrait (--portrait-filter, --portrait-opacity). -->
+     its name alone. Its parent sets how it looks (docs/code-quality.md, TypeScript and Svelte):
+     the gap (--label-gap, 8px), the filter and the opacity of the portrait (--portrait-filter,
+     none; --portrait-opacity, 1). -->
 <script lang="ts">
 	import type { OpenedBuild } from '#lib/core.ts';
 	import { pageAscendancy } from '#lib/build/named-ascendancy.ts';

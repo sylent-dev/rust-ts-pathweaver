@@ -21,10 +21,21 @@
 	let { builds, onshow }: Props = $props();
 
 	const isOpen = $derived(popup.isOpen('builds-menu'));
+	let trigger: HTMLButtonElement;
 
 	function show(contentKey: string): void {
 		popup.close();
 		onshow(contentKey);
+	}
+
+	/**
+	 * Esc on a build of the menu gives the keyboard back to « +N ▾ »: the page closes the menu
+	 * (page-keys.ts), which would take the button that has the keyboard off the page.
+	 */
+	function backToTrigger(event: KeyboardEvent): void {
+		if (event.key === 'Escape') {
+			trigger.focus();
+		}
 	}
 
 	// Its trigger gone, the menu would stay open with nothing to close it from.
@@ -37,6 +48,7 @@
 
 <div class="more" {...popupArea('builds-menu')}>
 	<button
+		bind:this={trigger}
 		type="button"
 		class="trigger"
 		class:is-open={isOpen}
@@ -50,7 +62,12 @@
 		<ul class="menu">
 			{#each builds as build (build.contentKey)}
 				<li>
-					<button type="button" class="item" onclick={() => show(build.contentKey)}>
+					<button
+						type="button"
+						class="item"
+						onclick={() => show(build.contentKey)}
+						onkeydown={backToTrigger}
+					>
 						<BuildLabel {build} />
 					</button>
 				</li>
