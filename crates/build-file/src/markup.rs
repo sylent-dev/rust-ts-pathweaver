@@ -9,6 +9,8 @@
 //! drop nor the bridge walks as a tree.
 
 #[cfg(test)]
+mod corpus;
+#[cfg(test)]
 mod tests;
 
 /// An author's text read: its pieces in order, each text with the style of the tags around it.

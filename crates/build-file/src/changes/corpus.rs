@@ -3,30 +3,10 @@
 //! record again when the rules of the levels or the corpus change. Run it with
 //! `cargo test -p pathweaver-build-file corpus -- --ignored`.
 
-use std::collections::BTreeMap;
-use std::path::Path;
 use std::time::Instant;
 
+use crate::fixtures::corpus;
 use crate::{Build, Change, Entry, LevelRange, Passive, WeaponSet};
-
-/// The builds of the corpus, by the name of their file.
-fn corpus() -> BTreeMap<String, Build> {
-    let folder = Path::new(env!("CARGO_MANIFEST_DIR")).join("../../inputs/builds");
-    let files = std::fs::read_dir(folder)
-        .unwrap()
-        .map(|file| file.unwrap().path());
-    files
-        .filter(|path| {
-            path.extension()
-                .is_some_and(|extension| extension == "build")
-        })
-        .map(|path| {
-            let name = path.file_name().unwrap().to_str().unwrap().to_owned();
-            let build = Build::read(&std::fs::read_to_string(&path).unwrap()).unwrap();
-            (name, build)
-        })
-        .collect()
-}
 
 /// The levels of a build in numbers: the lowest and the highest it covers, how many have a
 /// change, how many are markers, and its changes in all.
