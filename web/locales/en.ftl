@@ -67,6 +67,13 @@ builds-band = Open builds
 builds-close = Close { $name }
 # The + at the end of the band: opens the choice of files of the system.
 builds-add = Open .build files
+# The name a screen reader gives « +N ▾ », which lists the builds the band has no tab for.
+# $count (Number): those builds, from 1.
+builds-more =
+    { $count ->
+        [one] 1 more build
+       *[other] { $count } more builds
+    }
 
 ## The header of a build.
 

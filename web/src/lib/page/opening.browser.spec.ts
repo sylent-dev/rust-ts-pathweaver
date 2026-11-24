@@ -3,6 +3,7 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { openBuilds } from './open-builds.svelte.ts';
 import { Opening } from './opening.svelte.ts';
+import { popup } from './popup.svelte.ts';
 
 /** A file of this text. */
 function fileOf(name: string, text: string): File {
@@ -21,6 +22,17 @@ afterEach(() => {
 });
 
 describe('the files opened', () => {
+	it('close the menu open when a build opens, not when every file is refused', async () => {
+		const opening = new Opening();
+		popup.toggle('builds-menu');
+
+		await opening.open([image]);
+		const afterRefused = popup.openName;
+		await opening.open([buildA]);
+
+		expect([afterRefused, popup.openName]).toEqual(['builds-menu', undefined]);
+	});
+
 	it('keep each file refused with its reason, the others opened', async () => {
 		const opening = new Opening();
 

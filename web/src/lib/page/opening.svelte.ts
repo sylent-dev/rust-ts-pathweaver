@@ -4,6 +4,7 @@
 // the text pasted open here too, with no drag.
 
 import { openBuilds } from './open-builds.svelte.ts';
+import { popup } from './popup.svelte.ts';
 import { readFiles, readText, type FileRefusal, type ReadFile } from './read-files.ts';
 
 /** A file refused, its name and why. */
@@ -33,8 +34,9 @@ export class Opening {
 	 * Opens the files dropped or chosen: each build opens and the last is shown, each file
 	 * refused is kept, in place of those of the files before. Files given while others are still
 	 * read open after them, so that the last given are the last shown, however long each takes
-	 * to read. When the core can't load, the page already says it (+page.svelte), and nothing
-	 * opens; any failure is written to the console, and the files after open still.
+	 * to read; a build opened closes the window or the menu open. When the core can't load, the
+	 * page already says it (FirstVisitPage), and nothing opens; any failure is written to the
+	 * console, and the files after open still.
 	 */
 	open(files: readonly File[]): Promise<void> {
 		if (files.length === 0) {
@@ -51,7 +53,7 @@ export class Opening {
 	/**
 	 * Opens the JSON of a build pasted, after the files given before it: its build opens and is
 	 * shown, the files refused before it forgotten. Gives why it is refused, which the field that took it says; nothing when it opens or
-	 * when the core can't load, which the page already says (+page.svelte).
+	 * when the core can't load, which the page already says (FirstVisitPage).
 	 */
 	openText(text: string): Promise<FileRefusal | undefined> {
 		const opened = this.#pending.then(() => this.#openTextNow(text));
@@ -85,6 +87,11 @@ export class Opening {
 		}
 		this.#refused = read.filter((file) => file.kind === 'refused');
 		this.#openedNone = this.#refused.length === read.length;
+		// The build shown changed without a click, which would have closed the window or the menu
+		// open over the page (docs/technical-choices.md, State of the interface).
+		if (!this.#openedNone) {
+			popup.close();
+		}
 	}
 }
 

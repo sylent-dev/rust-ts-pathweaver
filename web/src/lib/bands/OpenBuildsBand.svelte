@@ -1,6 +1,7 @@
 <!-- The band of the open builds (specs.md, Window layout; 2e of the mock-up), under the band of the
      site, while a build is open: their tabs, the full height of the band, side by side, in the order
-     of the list, then +, which opens the choice of files of the system at once (the owner,
+     of the list, as many as fit (band-layout.ts), the build shown always among them; « +N ▾ » for
+     the others; then +, which opens the choice of files of the system at once (the owner,
      2026-11-18). In the shade of the band of the site, a very light shadow under it. -->
 <script lang="ts">
 	import { tick } from 'svelte';
@@ -8,35 +9,69 @@
 	import { t } from '#lib/i18n.ts';
 	import FileChooser from '#lib/page/FileChooser.svelte';
 	import { openBuilds } from '#lib/page/open-builds.svelte.ts';
+	import { TAB_WIDTH_PIXELS } from './band-layout.ts';
+	import MoreBuilds from './MoreBuilds.svelte';
 	import OpenBuildTab from './OpenBuildTab.svelte';
 
 	/** The tabs drawn, by the key of the content of their build. */
 	const tabs: Record<string, OpenBuildTab | null> = {};
 	let chooser: FileChooser;
+	let band: HTMLElement;
 
-	/** Closes a build, the keyboard on the tab of the build shown then, if any (the owner, 2026-11-24). */
-	async function close(contentKey: string): Promise<void> {
-		openBuilds.close(contentKey);
+	/** Every build has a tab until the band is measured. */
+	const layout = $derived(
+		openBuilds.bandLayout ?? {
+			tabCount: openBuilds.all.length,
+			tabWidthPixels: TAB_WIDTH_PIXELS
+		}
+	);
+	const tabBuilds = $derived(openBuilds.all.slice(0, layout.tabCount));
+	const menuBuilds = $derived(openBuilds.all.slice(layout.tabCount));
+
+	// The band follows the width of the window: the open builds read it.
+	$effect(() => {
+		const observer = new ResizeObserver(() => openBuilds.measureBand(band.clientWidth));
+		observer.observe(band);
+		return () => observer.disconnect();
+	});
+
+	/** Puts the keyboard on the tab of the build shown, if any, once it is drawn. */
+	async function focusShownTab(): Promise<void> {
 		await tick();
 		const shown = openBuilds.shown;
 		if (shown !== undefined) {
 			tabs[shown.contentKey]?.focus();
 		}
 	}
+
+	/** Closes a build, the keyboard on the tab of the build shown then (the owner, 2026-11-24). */
+	function close(contentKey: string): void {
+		openBuilds.close(contentKey);
+		void focusShownTab();
+	}
+
+	/** Shows a build chosen in « +N ▾ », which takes the place of the last tab, the keyboard on it. */
+	function showFromMenu(contentKey: string): void {
+		openBuilds.show(contentKey);
+		void focusShownTab();
+	}
 </script>
 
-<nav class="band" aria-label={t('builds-band')}>
-	<div class="tabs">
-		{#each openBuilds.all as build (build.contentKey)}
+<nav bind:this={band} class="band" aria-label={t('builds-band')}>
+	<div class="tabs" style:--tab-width="{layout.tabWidthPixels}px">
+		{#each tabBuilds as build (build.contentKey)}
 			<OpenBuildTab
 				bind:this={tabs[build.contentKey]}
 				{build}
 				isCurrent={build.contentKey === openBuilds.shown?.contentKey}
 				onshow={() => openBuilds.show(build.contentKey)}
-				onclose={() => void close(build.contentKey)}
+				onclose={() => close(build.contentKey)}
 			/>
 		{/each}
 	</div>
+	{#if menuBuilds.length > 0}
+		<MoreBuilds builds={menuBuilds} onshow={showFromMenu} />
+	{/if}
 	<button
 		type="button"
 		class="add"
@@ -50,7 +85,7 @@
 </nav>
 
 <style>
-	/* 44 pixels, over what is under it, so that its menu hangs over the level band. */
+	/* 44 pixels, over what is under it, so that the menu of « +N ▾ » hangs over the level band. */
 	.band {
 		position: relative;
 		z-index: 6;

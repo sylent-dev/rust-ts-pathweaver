@@ -5,7 +5,7 @@ The home page of the first visit opens builds three ways: files dropped anywhere
 ## Before
 
 1. In the folder of the project, on the branch of the step: `cd web && npm run dev`, then open the address it prints.
-2. Run every test in Firefox, then the tests 1, 4, 8, 10 and 11 again in a Chromium (Chrome, Edge, Brave).
+2. Run every test in Firefox, then the tests 1, 4, 8, 10, 11 and 12 again in a Chromium (Chrome, Edge, Brave).
 3. Reload the page (F5) before each test: until the library (step 8), a reload closes the builds open and gives the first visit back.
 4. The files of `inputs/builds/`: `ggg-titan-warrior-sample.build`, `pob-twobyul-deadeye.build`, `utkarshbehre-spark-comet.build`; any image of the desktop, named `passive-tree.png` here; and a file `broken.build` made in a text editor, of these three lines:
 
@@ -52,7 +52,10 @@ The home page of the first visit opens builds three ways: files dropped anywhere
 11. **+ in the band**: drop `ggg-titan-warrior-sample.build`; click the white **+** at the end of the band over its header, choose `pob-twobyul-deadeye.build` and `utkarshbehre-spark-comet.build` together in the dialog of the system, open them; then click **+** again and choose `pob-twobyul-deadeye.build` alone.
     ✅ The dialog opens at once and lets several files be chosen; the page stays, with three tabs side by side, the last of the two chosen shown: its tab in white, its portrait the only one in colour, the two others grey and dimmed. Chosen again, « TwobyulDeadeye » isn't added a fourth time: its tab is shown.
 
-12. **Your own scenarios**: whatever else you want to try.
+12. **Six builds in a narrow window**: make the window of the browser 900 pixels wide (half of a screen of 1,920); drop together the first six `.build` files of `inputs/builds/` in the order of the file manager. Click **+2 ▾**, then a build of its menu; then make the window wider, as wide as the screen, then 900 pixels again.
+    ✅ Four tabs, the build shown in the last of them, then **+2 ▾** in blue, then **+**. The click opens a menu under the band, which grows out of **+2 ▾** and settles; the two builds without a tab are listed, each its portrait in colour, its name over its ascendancy. The build clicked shows at once, its tab in the place of the last one, whose build goes into the menu; the menu is closed. Made wider, the band gives each build a tab and **+2 ▾** leaves; at 900 pixels again, the build shown keeps its tab. Esc, a click outside the menu, or files dropped while it is open close it.
+
+13. **Your own scenarios**: whatever else you want to try.
 
 ## Results
 
@@ -69,4 +72,5 @@ The home page of the first visit opens builds three ways: files dropped anywhere
 | 9. Back to the files | | |
 | 10. A text refused | | |
 | 11. + in the band | | |
-| 12. Your own scenarios | | |
+| 12. Six builds in a narrow window | | |
+| 13. Your own scenarios | | |

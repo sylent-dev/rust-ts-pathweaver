@@ -264,3 +264,68 @@ describe('whoever reads the open builds', () => {
 		expect(seen).toEqual([['a'], ['a', 'b'], ['b']]);
 	});
 });
+
+describe('the build shown in the band', () => {
+	/** A band of 900 pixels: four tabs once some builds don't fit (band-layout.ts). */
+	const NARROW_PIXELS = 900;
+
+	/** These builds opened, in their order, in a band of 900 pixels, the first shown. */
+	function inNarrowBand(...contentKeys: string[]): OpenBuilds {
+		const openBuilds = opened(...contentKeys.map((key) => build(key)));
+		openBuilds.show(contentKeys[0] ?? '');
+		openBuilds.measureBand(NARROW_PIXELS);
+		return openBuilds;
+	}
+
+	it('moves a build chosen in « +N ▾ » to the place of the last tab, for good', () => {
+		const openBuilds = inNarrowBand('a', 'b', 'c', 'd', 'e', 'f');
+		openBuilds.show('f');
+		openBuilds.show('b');
+		expect([keys(openBuilds), openBuilds.bandLayout?.tabCount]).toEqual([
+			['a', 'b', 'c', 'f', 'd', 'e'],
+			4
+		]);
+	});
+
+	it('gives a tab to a build opened while every tab is taken', () => {
+		const openBuilds = inNarrowBand('a', 'b', 'c', 'd');
+		openBuilds.open(build('e'));
+		expect(keys(openBuilds)).toEqual(['a', 'b', 'c', 'e', 'd']);
+	});
+
+	it('gives a tab to a build opened again while in « +N ▾ »', () => {
+		const openBuilds = inNarrowBand('a', 'b', 'c', 'd', 'e', 'f');
+		openBuilds.open(build('e'));
+		expect([keys(openBuilds), openBuilds.shown?.contentKey]).toEqual([
+			['a', 'b', 'c', 'e', 'd', 'f'],
+			'e'
+		]);
+	});
+
+	it('keeps the build shown in a tab when the band is made narrower, and moves nothing back', () => {
+		const openBuilds = opened(...['a', 'b', 'c', 'd', 'e', 'f'].map((key) => build(key)));
+		openBuilds.measureBand(1280);
+		openBuilds.measureBand(NARROW_PIXELS);
+		const narrowed = keys(openBuilds);
+		openBuilds.measureBand(1280);
+		expect([narrowed, keys(openBuilds)]).toEqual([
+			['a', 'b', 'c', 'f', 'd', 'e'],
+			['a', 'b', 'c', 'f', 'd', 'e']
+		]);
+	});
+
+	it('shows the build after the one closed in the order of the band', () => {
+		const openBuilds = inNarrowBand('a', 'b', 'c', 'd', 'e', 'f');
+		openBuilds.show('f');
+		openBuilds.close('f');
+		expect(openBuilds.shown?.contentKey).toBe('d');
+	});
+
+	it('moves nothing before the band is measured', () => {
+		const openBuilds = opened(...['a', 'b', 'c', 'd', 'e', 'f'].map((key) => build(key)));
+		expect([keys(openBuilds), openBuilds.bandLayout]).toEqual([
+			['a', 'b', 'c', 'd', 'e', 'f'],
+			undefined
+		]);
+	});
+});
