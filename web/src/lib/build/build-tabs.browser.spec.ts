@@ -16,7 +16,10 @@ const shown: ReturnType<typeof mount>[] = [];
 beforeEach(() => {
 	shown.push(
 		mount(BuildTabs, { target: document.body, props: { panelId: 'panel' } }),
-		mount(BuildTabPanel, { target: document.body, props: { id: 'panel' } })
+		mount(BuildTabPanel, {
+			target: document.body,
+			props: { id: 'panel', build: openedBuild('key') }
+		})
 	);
 	flushSync();
 	document.addEventListener('keydown', hearKey);

@@ -148,3 +148,8 @@ next-community-links = Short links, for a chat
 next-community-search = Votes and search, by ascendancy
 next-community-versions = The versions of a build
 next-community-french = In French too
+
+## The About tab: what the file says of the build besides its levels.
+
+# In the weak grey, in place of the description of a file that has none.
+about-no-description = The author wrote no description.
