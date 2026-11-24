@@ -31,6 +31,7 @@ mod fixtures;
 mod held;
 mod level_interval;
 mod levels;
+mod markup;
 mod nullable;
 mod read_error;
 
@@ -44,6 +45,7 @@ pub use held::{
 };
 pub use level_interval::LevelInterval;
 pub use levels::{EntryName, HIGHEST_LEVEL, InvalidInterval, LOWEST_LEVEL, LevelRange};
+pub use markup::{Colour, Markup, NamedColour, Piece, Size, Style};
 pub use nullable::Nullable;
 pub use read_error::{MAX_BYTES, ReadError};
 
