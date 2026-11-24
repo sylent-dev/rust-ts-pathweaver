@@ -322,3 +322,152 @@ fn a_megabyte_of_braces_left_open_or_never_opened_is_read() {
         assert_eq!(read_in_time(&written), [plain(&written)]);
     }
 }
+
+fn described(text: &str) -> Vec<Piece> {
+    Markup::of_description(text).into_iter().collect()
+}
+
+fn link(address: &str, style: Style) -> Piece {
+    Piece::Link {
+        address: address.to_owned(),
+        style,
+    }
+}
+
+#[test]
+fn an_address_of_a_description_is_a_link_where_it_is() {
+    assert_eq!(
+        described("Guide: https://maxroll.gg/poe2/a and the planner"),
+        [
+            plain("Guide: "),
+            link("https://maxroll.gg/poe2/a", Style::default()),
+            plain(" and the planner"),
+        ]
+    );
+    assert_eq!(
+        described("https://a.com"),
+        [link("https://a.com", Style::default())]
+    );
+}
+
+#[test]
+fn a_link_keeps_the_style_of_its_text() {
+    let gold = coloured(Colour::Named(NamedColour::Gold));
+    assert_eq!(
+        described("<gold>{see https://a.com now}"),
+        [
+            text("see ", gold),
+            link("https://a.com", gold),
+            text(" now", gold)
+        ]
+    );
+}
+
+#[test]
+fn an_address_ends_at_a_space_a_quote_a_tag_or_a_brace() {
+    let underlined = Style {
+        is_underlined: true,
+        ..Style::default()
+    };
+    assert_eq!(
+        described("<u>{https://a.com}"),
+        [link("https://a.com", underlined)]
+    );
+    for (written, after) in [
+        ("https://a.com/x y", " y"),
+        ("https://a.com/x\ty", "\ty"),
+        ("https://a.com/x\"y", "\"y"),
+        ("https://a.com/x'y", "'y"),
+        ("https://a.com/x<y", "<y"),
+        ("https://a.com/x>y", ">y"),
+        ("https://a.com/x{y", "{y"),
+        ("https://a.com/x}y", "}y"),
+    ] {
+        assert_eq!(
+            described(written),
+            [link("https://a.com/x", Style::default()), plain(after)],
+            "{written:?}"
+        );
+    }
+    assert_eq!(
+        described("https://a.com\nb"),
+        [
+            link("https://a.com", Style::default()),
+            Piece::LineBreak,
+            plain("b")
+        ]
+    );
+}
+
+#[test]
+fn an_address_never_ends_on_a_mark_that_closes_the_sentence() {
+    for mark in [".", ",", ";", ":", "!", "?", ")", "?!", ")."] {
+        assert_eq!(
+            described(&format!("https://a.com/x{mark}")),
+            [link("https://a.com/x", Style::default()), plain(mark)],
+            "{mark}"
+        );
+    }
+    assert_eq!(
+        described("(https://a.com/x?y=1&z=2#c.d)"),
+        [
+            plain("("),
+            link("https://a.com/x?y=1&z=2#c.d", Style::default()),
+            plain(")"),
+        ]
+    );
+}
+
+#[test]
+fn only_an_address_of_https_with_more_than_its_scheme_is_a_link() {
+    for written in [
+        "http://a.com",
+        "HTTPS://a.com",
+        "https:/a.com",
+        "https://",
+        "https://.",
+        "https:// a",
+    ] {
+        assert_eq!(described(written), [plain(written)], "{written}");
+    }
+}
+
+#[test]
+fn every_address_of_a_description_is_a_link() {
+    assert_eq!(
+        described("https://a.com, https://b.com"),
+        [
+            link("https://a.com", Style::default()),
+            plain(", "),
+            link("https://b.com", Style::default()),
+        ]
+    );
+    assert_eq!(
+        Markup::of_description("https://. then https://b.com, https://c.com").first_address(),
+        Some("https://b.com")
+    );
+    assert_eq!(Markup::of_description("none").first_address(), None);
+}
+
+#[test]
+fn the_addresses_of_a_hint_stay_text() {
+    assert_eq!(pieces("See https://a.com"), [plain("See https://a.com")]);
+    assert_eq!(Markup::of("See https://a.com").first_address(), None);
+}
+
+#[test]
+fn a_megabyte_of_addresses_is_read_in_time() {
+    let start = Instant::now();
+    let schemes = "https:// ".repeat(110_000);
+    assert_eq!(described(&schemes), [plain(&schemes)]);
+    let marks = "https://a".to_owned() + &".".repeat(1_000_000);
+    assert_eq!(
+        described(&marks),
+        [
+            link("https://a", Style::default()),
+            plain(&".".repeat(1_000_000))
+        ]
+    );
+    let elapsed = start.elapsed();
+    assert!(elapsed < Duration::from_secs(10), "{elapsed:?}");
+}

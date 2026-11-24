@@ -28,6 +28,7 @@ mod content_key;
 mod entries;
 #[cfg(test)]
 mod fixtures;
+mod guide;
 mod held;
 mod level_interval;
 mod levels;
@@ -40,6 +41,7 @@ use serde_json::{Map, Value};
 
 pub use changes::{Change, LevelChanges};
 pub use entries::{Entry, InventorySlot, Passive, Skill, Support};
+pub use guide::Guide;
 pub use held::{
     BuildAtLevel, Held, HintItem, HintOnSlot, Notes, PassiveInSet, SupportOnSkill, WeaponSet,
 };

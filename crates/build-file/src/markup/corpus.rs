@@ -1,11 +1,11 @@
 //! The markup of the author's texts of the corpus (`docs/build-files-in-the-wild.md`), whose
-//! files are kept out of Git in `inputs/builds/`: the tags `specs.md` quotes, to record again
-//! when the corpus changes. Run it with
+//! files are kept out of Git in `inputs/builds/`: the tags `specs.md` quotes and the guides of
+//! the builds, to record again when the corpus changes. Run it with
 //! `cargo test -p pathweaver-build-file markup::corpus -- --ignored`.
 
 use super::{Colour, Markup, Piece, Tag, Token, Tokens};
-use crate::Build;
 use crate::fixtures::corpus;
+use crate::{Build, Guide};
 
 /// The author's texts of a build: its description, then the notes of its entries.
 fn texts(build: &Build) -> Vec<&str> {
@@ -101,7 +101,7 @@ fn the_tags_of_the_corpus_are_all_known_and_closed() {
         .filter(|text| {
             Markup::of(text).into_iter().any(|piece| match piece {
                 Piece::Text { text, .. } => text.contains(['{', '}']),
-                Piece::LineBreak => false,
+                Piece::Link { .. } | Piece::LineBreak => false,
             })
         })
         .collect();
@@ -109,5 +109,44 @@ fn the_tags_of_the_corpus_are_all_known_and_closed() {
         written_braces,
         Vec::<&str>::new(),
         "a brace written as text"
+    );
+}
+
+#[test]
+#[ignore = "reads the corpus, kept out of Git"]
+fn the_guides_of_the_corpus() {
+    let corpus = corpus();
+    let descriptions: Vec<Option<Markup>> = corpus
+        .values()
+        .map(|build| build.description.as_deref().map(Markup::of_description))
+        .collect();
+    let guides: Vec<(&str, Guide<'_>)> = corpus
+        .iter()
+        .zip(&descriptions)
+        .filter_map(|((name, build), description)| {
+            let guide = Guide::of(build.link.as_deref(), description.as_ref())?;
+            Some((name.as_str(), guide))
+        })
+        .collect();
+    let links = guides
+        .iter()
+        .filter(|(_, guide)| matches!(guide, Guide::Link(_)))
+        .count();
+    let others: Vec<(&str, Guide<'_>)> = guides
+        .into_iter()
+        .filter(|(_, guide)| !matches!(guide, Guide::Link(_)))
+        .collect();
+    // Measured on 2026-11-24: 19 builds of 32 have a guide, 18 their link, none a link that
+    // isn't an address, and the Amazon of Maxroll the first address of its description, its
+    // guide before its planner.
+    assert_eq!(links, 18, "the links of the files");
+    assert_eq!(
+        others,
+        [(
+            "maxroll-aer0-ice-shot-amazon.build",
+            Guide::FromDescription(
+                "https://maxroll.gg/poe2/build-guides/ice-shot-amazon-build-guide"
+            )
+        )]
     );
 }

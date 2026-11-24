@@ -1,17 +1,23 @@
 //! The markup of the game in the author's texts, the description and the hints (`specs.md`,
 //! The author's texts): `<tag>{text}`, nested, as the documentation of Grinding Gear Games
 //! writes it (<https://www.pathofexile.com/developer/docs/game#buildplanner>, read on
-//! 2026-11-24). A tag it doesn't know, or a brace left open, is plain text, as written.
+//! 2026-11-24). A tag it doesn't know, or a brace left open, is plain text, as written. The
+//! addresses of a description are links.
 //!
 //! The text of a stranger may be made to cost: it is read in two passes over its tokens,
 //! without recursion, so that a nesting a million deep neither overflows the stack nor takes a
 //! time that grows as its square, and the result is a flat list of pieces, which neither its
 //! drop nor the bridge walks as a tree.
 
+mod addresses;
 #[cfg(test)]
 mod corpus;
 #[cfg(test)]
 mod tests;
+
+/// The start of an address that is a link, in lower case only (`specs.md`, The header of a
+/// build).
+pub(crate) const SCHEME: &str = "https://";
 
 /// An author's text read: its pieces in order, each text with the style of the tags around it.
 #[derive(Debug, Clone, PartialEq, Eq, Default)]
@@ -22,6 +28,10 @@ pub struct Markup(Vec<Piece>);
 pub enum Piece {
     /// A text in one style, never empty; two texts side by side never share a style.
     Text { text: String, style: Style },
+    /// An address of a description that starts with `https://`, a link where it is, in the
+    /// style of the text around it (`specs.md`, The header of a build); never in a hint, whose
+    /// card on hover can't be clicked.
+    Link { address: String, style: Style },
     /// A line break of the author, `\n` or `\r\n`.
     LineBreak,
 }
@@ -342,6 +352,29 @@ impl Markup {
         markup
     }
 
+    /// Reads the description of a build: its markup, and its addresses as links.
+    #[must_use]
+    pub fn of_description(text: &str) -> Self {
+        let mut pieces = Vec::new();
+        for piece in Self::of(text) {
+            match piece {
+                Piece::Text { text, style } => push_linked(text, style, &mut pieces),
+                Piece::Link { .. } | Piece::LineBreak => pieces.push(piece),
+            }
+        }
+        Self(pieces)
+    }
+
+    /// The first address of a description read with its links, where the guide of a build
+    /// without a link of its own comes from.
+    #[must_use]
+    pub fn first_address(&self) -> Option<&str> {
+        self.0.iter().find_map(|piece| match piece {
+            Piece::Link { address, .. } => Some(address.as_str()),
+            Piece::Text { .. } | Piece::LineBreak => None,
+        })
+    }
+
     /// The pieces of the text, in order.
     #[must_use]
     pub fn pieces(&self) -> &[Piece] {
@@ -364,6 +397,33 @@ impl Markup {
         }
         self.0.push(Piece::Text {
             text: text.to_owned(),
+            style,
+        });
+    }
+}
+
+/// Pushes a text in a style, its addresses as links.
+fn push_linked(text: String, style: Style, pieces: &mut Vec<Piece>) {
+    let piece_of = |range: std::ops::Range<usize>| text.get(range).unwrap_or_default().to_owned();
+    let mut written = 0;
+    for address in addresses::of(&text) {
+        if written < address.start {
+            pieces.push(Piece::Text {
+                text: piece_of(written..address.start),
+                style,
+            });
+        }
+        written = address.end;
+        pieces.push(Piece::Link {
+            address: piece_of(address),
+            style,
+        });
+    }
+    if written == 0 {
+        pieces.push(Piece::Text { text, style });
+    } else if written < text.len() {
+        pieces.push(Piece::Text {
+            text: piece_of(written..text.len()),
             style,
         });
     }
