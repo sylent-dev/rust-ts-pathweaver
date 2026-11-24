@@ -558,6 +558,10 @@ fn a_description_of_spaces_only_is_no_description() {
         None
     );
     assert_eq!(
+        description_of(serde_json::json!({ "description": "\u{200b}\u{feff} \u{200f}\u{3164}" })),
+        None
+    );
+    assert_eq!(
         description_of(serde_json::json!({ "description": "<b>{x} https://a.com" })),
         Some(Markup::of_description("<b>{x} https://a.com"))
     );

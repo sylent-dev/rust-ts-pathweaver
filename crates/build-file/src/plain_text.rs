@@ -10,14 +10,14 @@ use crate::markup::{is_blank, without_characters_that_move_the_text};
 
 impl Build {
     /// The name of the build as the page shows it: without the characters that move the text
-    /// around it, nor the spaces around it; empty when nothing is left.
+    /// around it, nor the spaces around it; empty when it shows nothing.
     #[must_use]
     pub fn shown_name(&self) -> Cow<'_, str> {
         plain_text(&self.name).unwrap_or_default()
     }
 
     /// The author of the build as the page shows it: without the characters that move the text
-    /// around it, nor the spaces around it; none when the file has none or nothing is left.
+    /// around it, nor the spaces around it; none when the file has none or it shows nothing.
     #[must_use]
     pub fn shown_author(&self) -> Option<Cow<'_, str>> {
         self.author.get().and_then(|author| plain_text(author))
@@ -25,7 +25,8 @@ impl Build {
 }
 
 /// A text of the file shown as it is: without the characters that move the text around it,
-/// nor the spaces around it; none when nothing is left.
+/// nor the spaces around it; none when it shows nothing: spaces, marks that move the text and
+/// characters without a glyph only.
 pub(crate) fn plain_text(text: &str) -> Option<Cow<'_, str>> {
     if is_blank(text) {
         return None;
@@ -62,6 +63,16 @@ mod tests {
     }
 
     #[test]
+    fn a_character_drawn_as_nothing_stays_inside_a_text() {
+        let build = build(json!({ "author": "Fub\u{200b}gun\u{200f}" }));
+
+        assert_eq!(
+            build.shown_author().as_deref(),
+            Some("Fub\u{200b}gun\u{200f}")
+        );
+    }
+
+    #[test]
     fn a_text_without_such_characters_is_borrowed_as_it_is_but_its_spaces() {
         let mut build = build(json!({ "author": "Fubgun" }));
         build.name = "  Ice Shot  ".to_owned();
@@ -74,8 +85,14 @@ mod tests {
     }
 
     #[test]
-    fn an_author_of_spaces_and_such_characters_only_is_none() {
-        for author in [json!(""), json!(" \u{202e} \u{2069}"), json!(null)] {
+    fn an_author_that_shows_nothing_is_none() {
+        for author in [
+            json!(""),
+            json!(" \u{202e} \u{2069}"),
+            json!("\u{200b}"),
+            json!("\u{200f}\u{ad}\u{2800}"),
+            json!(null),
+        ] {
             let build = build(json!({ "author": author }));
 
             assert_eq!(build.shown_author(), None, "{author}");

@@ -497,16 +497,40 @@ impl Markup {
     }
 }
 
-/// Whether a text of the file shows nothing: spaces and marks that move the text around them
-/// only, or empty.
+/// Whether a text of the file shows nothing: spaces, marks that move the text around them and
+/// characters without a glyph only, or empty.
 pub(crate) fn is_blank(text: &str) -> bool {
-    text.chars()
-        .all(|character| character.is_whitespace() || moves_the_text_around(character))
+    text.chars().all(|character| {
+        character.is_whitespace() || moves_the_text_around(character) || is_invisible(character)
+    })
+}
+
+/// Whether a character is drawn as nothing, neither a space nor a mark that moves the text (4g4a,
+/// its review: an author of U+200B alone showed « by  · Deadeye »): the joiners and the strong
+/// marks of direction, the invisible operators, the mark of the order of bytes, the soft hyphen,
+/// the separator of Mongolian vowels, the fillers of Hangul and the blank of Braille, which
+/// games take for a name that looks empty.
+fn is_invisible(character: char) -> bool {
+    matches!(
+        character,
+        '\u{ad}'
+            | '\u{34f}'
+            | '\u{61c}'
+            | '\u{115f}'
+            | '\u{1160}'
+            | '\u{180e}'
+            | '\u{200b}'..='\u{200f}'
+            | '\u{2060}'..='\u{2064}'
+            | '\u{2800}'
+            | '\u{3164}'
+            | '\u{feff}'
+            | '\u{ffa0}'
+    )
 }
 
 impl crate::Build {
     /// The description of the build read with its markup and its links; none when its file has
-    /// none, or one of spaces and marks of direction only (« The author wrote no description. »).
+    /// none, or one that shows nothing (« The author wrote no description. »).
     #[must_use]
     pub fn description_markup(&self) -> Option<Markup> {
         self.description
