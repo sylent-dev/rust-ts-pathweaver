@@ -4,7 +4,7 @@
 
 import { openBuilds } from './open-builds.svelte.ts';
 import { commandOf } from './page-keys.ts';
-import { popup } from './popup.svelte.ts';
+import { coversPage, popup } from './popup.svelte.ts';
 
 /** The elements a text is typed or a value chosen in: the arrows are theirs. */
 const FIELDS = 'input, textarea, select, [contenteditable]';
@@ -12,11 +12,6 @@ const FIELDS = 'input, textarea, select, [contenteditable]';
 /** Whether an event comes from a field. */
 function isInField(target: EventTarget | null): boolean {
 	return target instanceof Element && target.closest(FIELDS) !== null;
-}
-
-/** Whether an event comes from a box over the page, a modal dialog. */
-function isInBox(target: EventTarget | null): boolean {
-	return target instanceof Element && target.closest('dialog') !== null;
 }
 
 /** Whether an element is marked as belonging to a window or a menu (`popupArea`). */
@@ -30,7 +25,7 @@ export function hearKey(event: KeyboardEvent): void {
 		key: event.key,
 		isModified: event.altKey || event.ctrlKey || event.metaKey || event.shiftKey,
 		isInField: isInField(event.target),
-		isInBox: isInBox(event.target)
+		isUnderBox: popup.openName !== undefined && coversPage(popup.openName)
 	});
 	if (command === undefined) {
 		return;

@@ -1,6 +1,6 @@
 // The updates the box of What's next tells of (specs.md, Window layout: the band of the site), in
-// the order of their versions: what each brings, the portraits of its card and the messages of its words (locales/en.ftl, The
-// box of What's next).
+// the order of their versions: what each brings, the portraits of its card and the messages of its
+// words (locales/en.ftl, The box of What's next).
 
 /** An update to come. */
 export interface Update {

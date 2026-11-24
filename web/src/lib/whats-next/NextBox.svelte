@@ -4,7 +4,7 @@
      fading in from 40 pixels above, the right one from 40 pixels below, over a veil that fades in;
      when the system asks for less motion, a plain fade. A modal dialog of the browser, drawn
      while it is open: the keyboard stays in it, the page under it can't be reached. ×, Esc and a
-     click on the veil close it, which `onclose` does. -->
+     click on the veil close it, which `onclose` does, as when the browser closes it itself. -->
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import Icon from '#lib/icons/Icon.svelte';
@@ -22,16 +22,27 @@
 	let dialog: HTMLDialogElement;
 
 	// Over the page from the moment it is drawn, the keyboard on its first button; the portraits
-	// of the cards come with the game data, which a failure leaves out: the page already says it
-	// on the page of a build, and the console has its cause.
+	// of the cards come with the game data, which a failure leaves out: the console has its cause
+	// (game-data.ts), and the cards read without them.
 	onMount(() => {
 		dialog.showModal();
 		pageGameData.load().catch(() => {});
 	});
 
-	/** A click on the veil, which the dialog takes: its cards cover the whole panel. */
+	/**
+	 * Whether the last press began on the veil, which the dialog takes: its cards cover the whole
+	 * panel. A press in the panel released on the veil sends its click to the dialog too, the
+	 * parent of both ends, and must not close it (a line of a card selected to be copied).
+	 */
+	let isPressOnVeil = false;
+
+	function notePress(event: PointerEvent): void {
+		isPressOnVeil = event.target === dialog;
+	}
+
+	/** A click begun and ended on the veil. */
 	function closeOnVeil(event: MouseEvent): void {
-		if (event.target === dialog) {
+		if (isPressOnVeil && event.target === dialog) {
 			onclose();
 		}
 	}
@@ -42,6 +53,7 @@
 	bind:this={dialog}
 	class="box"
 	aria-label={t('site-whats-next')}
+	onpointerdown={notePress}
 	onclick={closeOnVeil}
 	{onclose}
 >
@@ -109,6 +121,7 @@
 	}
 
 	@media (prefers-reduced-motion: reduce) {
+		.box,
 		.box::backdrop,
 		.entering {
 			animation: fade-in 200ms ease-out both;

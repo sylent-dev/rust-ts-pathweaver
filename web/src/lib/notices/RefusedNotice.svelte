@@ -36,7 +36,7 @@
 		title={t('notice-close')}
 		onclick={onclose}
 	>
-		<span class="close-mark"><Icon name="close" size={16} /></span>
+		<span class="grows-on-hover"><Icon name="close" size={16} /></span>
 	</button>
 </div>
 
@@ -77,9 +77,9 @@
 		color: var(--weak);
 	}
 
-	/* A square of 44 pixels, its × in the vivid red of the errors, turning white and growing like
-	   the + of the band of the open builds on hover, without turning; at once when the system asks
-	   for less motion. */
+	/* A square of 44 pixels, its × in the vivid red of the errors, turning white on hover and
+	   growing like the + of the band of the open builds (.grows-on-hover, base.css); its colour at
+	   once when the system asks for less motion. */
 	.close {
 		display: grid;
 		place-items: center;
@@ -98,18 +98,8 @@
 		color: var(--highlight);
 	}
 
-	.close-mark {
-		display: grid;
-		transition: transform 0.2s var(--ease-overshoot);
-	}
-
-	.close:hover .close-mark {
-		transform: scale(1.3);
-	}
-
 	@media (prefers-reduced-motion: reduce) {
-		.close,
-		.close-mark {
+		.close {
 			transition: none;
 		}
 	}

@@ -1,7 +1,7 @@
 // The files the page opens, dropped anywhere or chosen, and the JSON of a build pasted (specs.md,
 // Opening builds): each build opens and the last is shown, each file refused is kept with its
-// reason until the next files or until its notice is closed. Apart from the drag (file-drop.svelte.ts): the files chosen and
-// the text pasted open here too, with no drag.
+// reason until the next files or until its notice is closed. Apart from the drag
+// (file-drop.svelte.ts): the files chosen and the text pasted open here too, with no drag.
 
 import { openBuilds } from './open-builds.svelte.ts';
 import { popup } from './popup.svelte.ts';
@@ -31,10 +31,12 @@ export class Opening {
 		return this.#openedNone ? this.#refused : [];
 	}
 
-	/** Forgets the files refused, whose notice is closed. */
+	/**
+	 * Forgets the files refused: their notice is closed, or a build pasted opened, which they don't
+	 * go with.
+	 */
 	dismissRefused(): void {
 		this.#refused = [];
-		this.#openedNone = false;
 	}
 
 	/**
@@ -59,8 +61,9 @@ export class Opening {
 
 	/**
 	 * Opens the JSON of a build pasted, after the files given before it: its build opens and is
-	 * shown, the files refused before it forgotten. Gives why it is refused, which the field that took it says; nothing when it opens or
-	 * when the core can't load, which the page already says (FirstVisitPage).
+	 * shown, the files refused before it forgotten. Gives why it is refused, which the field that
+	 * took it says; nothing when it opens or when the core can't load, which the page already says
+	 * (FirstVisitPage).
 	 */
 	openText(text: string): Promise<FileRefusal | undefined> {
 		const opened = this.#pending.then(() => this.#openTextNow(text));
@@ -79,9 +82,7 @@ export class Opening {
 			return read.refusal;
 		}
 		openBuilds.open(read.build);
-		// The files refused before it are no longer those of the build shown.
-		this.#refused = [];
-		this.#openedNone = false;
+		this.dismissRefused();
 		return undefined;
 	}
 

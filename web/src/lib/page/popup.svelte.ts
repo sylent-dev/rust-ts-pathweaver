@@ -10,6 +10,20 @@
 export type PopupName = 'builds-menu' | 'level-changes' | 'whats-next';
 
 /**
+ * Whether this one covers the page with a veil, under which the keys of the page don't reach: the
+ * box of What's next, not a menu or a window that hangs from its trigger.
+ */
+export function coversPage(name: PopupName): boolean {
+	switch (name) {
+		case 'whats-next':
+			return true;
+		case 'builds-menu':
+		case 'level-changes':
+			return false;
+	}
+}
+
+/**
  * What marks an element as belonging to a window or a menu, its trigger as its window, to
  * spread on it (`{...popupArea('level-changes')}`): a click under it doesn't close it
  * (page-events.ts reads the attribute).

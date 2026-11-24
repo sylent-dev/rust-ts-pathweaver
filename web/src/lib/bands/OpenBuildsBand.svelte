@@ -87,7 +87,7 @@
 		aria-label={t('builds-add')}
 		onclick={() => chooser.open()}
 	>
-		<span class="add-mark"><Icon name="add" size={14} /></span>
+		<span class="grows-on-hover"><Icon name="add" size={14} /></span>
 	</button>
 	<FileChooser bind:this={chooser} />
 </nav>
@@ -110,8 +110,8 @@
 	}
 
 	/* The button that matters most: the colour of the band on the colour of its text, the full
-	   height of the band, square; that colour a little dimmed and the + a little larger on hover,
-	   with the small bounce of the motions, none when the system asks for less motion. */
+	   height of the band, square; that colour a little dimmed on hover, the + growing a little
+	   (.grows-on-hover, base.css). */
 	.add {
 		display: grid;
 		place-items: center;
@@ -126,20 +126,5 @@
 
 	.add:hover {
 		background: color-mix(in srgb, var(--on-top-band) 82%, transparent);
-	}
-
-	.add-mark {
-		display: grid;
-		transition: transform 0.2s var(--ease-overshoot);
-	}
-
-	.add:hover .add-mark {
-		transform: scale(1.3);
-	}
-
-	@media (prefers-reduced-motion: reduce) {
-		.add-mark {
-			transition: none;
-		}
 	}
 </style>

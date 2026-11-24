@@ -49,13 +49,33 @@ describe("What's next", () => {
 		await expect.element(link).toHaveAttribute('aria-expanded', 'true');
 		expect(
 			[...box.element().querySelectorAll('article')].map((card) => [
-				card.querySelector('p')?.textContent,
-				card.querySelector('h2')?.textContent,
-				card.querySelectorAll('li').length
+				...[...card.querySelectorAll('p, h2')].map((text) => text.textContent),
+				[...card.querySelectorAll('li')].map((item) => item.textContent)
 			])
 		).toEqual([
-			['Version 2', 'The Editor Update', 4],
-			['Version 3', 'The Community Update', 5]
+			[
+				'Version 2',
+				'The Editor Update',
+				'Plan your own build',
+				[
+					'Passives allocated on the tree',
+					'Gems and their supports chosen',
+					'Your hints, level by level',
+					'Exported as a .build for the game'
+				]
+			],
+			[
+				'Version 3',
+				'The Community Update',
+				'Share it with every exile',
+				[
+					'Your builds published',
+					'Short links, for a chat',
+					'Votes and search, by ascendancy',
+					'The versions of a build',
+					'In French too'
+				]
+			]
 		]);
 	});
 
@@ -101,6 +121,42 @@ describe("What's next", () => {
 
 		expect(afterInside).toBe('whats-next');
 		await expect.element(box).not.toBeInTheDocument();
+	});
+
+	it('keeps the box open when a press in it ends on the veil', async () => {
+		await link.click();
+		const dialog = box.element();
+		const title = box.getByRole('heading', { name: 'The Editor Update' }).element();
+
+		// A drag out of the panel: the click goes to the dialog, the parent of both ends.
+		title.dispatchEvent(new PointerEvent('pointerdown', { bubbles: true }));
+		dialog.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+		flushSync();
+
+		await expect.element(box).toBeVisible();
+	});
+
+	it('follows the box closed by the browser itself', async () => {
+		await link.click();
+		const dialog = box.element();
+		if (!(dialog instanceof HTMLDialogElement)) {
+			throw new Error('the box is not a dialog');
+		}
+
+		dialog.close();
+
+		await expect.element(box).not.toBeInTheDocument();
+		await expect.element(link).toHaveAttribute('aria-expanded', 'false');
+	});
+
+	it('leaves the level of the build shown as it is under the box, wherever the keyboard is', async () => {
+		openBuilds.open(openedBuild('Ember'));
+		const showMarker = vi.spyOn(openBuilds, 'showMarker');
+		await link.click();
+
+		document.body.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowRight', bubbles: true }));
+
+		expect(showMarker).not.toHaveBeenCalled();
 	});
 
 	it('leaves the level of the build shown as it is under the box', async () => {

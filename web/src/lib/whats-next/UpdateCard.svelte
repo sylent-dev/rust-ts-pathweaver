@@ -1,7 +1,8 @@
 <!-- The card of an update in the box of What's next (specs.md, Window layout; 2k6 of the mock-up):
      its portraits at its top, one large or several side by side, fading into the panel, drawn once
-     the game data are loaded; then « Version N » small, in capitals and the accent, its name in the title font, a line in the weak
-     grey, then what it brings, each line after a small diamond of the accent. -->
+     the game data are loaded; then « Version N » small, in capitals and the accent, its name in the
+     title font, a line in the weak grey, then what it brings, each line after a small diamond of
+     the accent. -->
 <script lang="ts">
 	import { t } from '#lib/i18n.ts';
 	import { pageGameData } from '#lib/page/game-data.svelte.ts';
