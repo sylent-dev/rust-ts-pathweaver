@@ -4,7 +4,7 @@
 
 import { openBuilds } from './open-builds.svelte.ts';
 import { commandOf } from './page-keys.ts';
-import { popup } from './popup.svelte.ts';
+import { coversPage, popup } from './popup.svelte.ts';
 
 /** The elements a text is typed or a value chosen in: the arrows are theirs. */
 const FIELDS = 'input, textarea, select, [contenteditable]';
@@ -24,7 +24,8 @@ export function hearKey(event: KeyboardEvent): void {
 	const command = commandOf({
 		key: event.key,
 		isModified: event.altKey || event.ctrlKey || event.metaKey || event.shiftKey,
-		isInField: isInField(event.target)
+		isInField: isInField(event.target),
+		isUnderBox: popup.openName !== undefined && coversPage(popup.openName)
 	});
 	if (command === undefined) {
 		return;

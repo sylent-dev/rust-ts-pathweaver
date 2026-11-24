@@ -1,7 +1,7 @@
 // The files the page opens, dropped anywhere or chosen, and the JSON of a build pasted (specs.md,
 // Opening builds): each build opens and the last is shown, each file refused is kept with its
-// reason until the next files. Apart from the drag (file-drop.svelte.ts): the files chosen and
-// the text pasted open here too, with no drag.
+// reason until the next files or until its notice is closed. Apart from the drag
+// (file-drop.svelte.ts): the files chosen and the text pasted open here too, with no drag.
 
 import { openBuilds } from './open-builds.svelte.ts';
 import { popup } from './popup.svelte.ts';
@@ -13,7 +13,12 @@ export type RefusedRead = Extract<ReadFile, { kind: 'refused' }>;
 /** The files opened, one set after the other. */
 export class Opening {
 	#refused = $state.raw<readonly RefusedRead[]>([]);
-	#openedNone = $state(false);
+	/**
+	 * Whether the files refused are the drop zone's to say: none of the files opened, and no build
+	 * was open, so that the first visit given back once the builds are closed says nothing of the
+	 * files dropped on the page of a build.
+	 */
+	#isOnFirstVisit = $state(false);
 	/** The files opened last, or being opened: the next wait for them. Never rejected. */
 	#pending: Promise<void> = Promise.resolve();
 
@@ -23,11 +28,20 @@ export class Opening {
 	}
 
 	/**
-	 * The files refused of the last files dropped or chosen when none of them opened, which the
-	 * drop zone of the first visit says; none when one of them opened, which a notice says (4f).
+	 * The files refused of the last files dropped or chosen on the first visit when none of them
+	 * opened, which its drop zone says; none when one of them opened or a build was open, which the
+	 * notice of the page of a build says.
 	 */
 	get refusedAll(): readonly RefusedRead[] {
-		return this.#openedNone ? this.#refused : [];
+		return this.#isOnFirstVisit ? this.#refused : [];
+	}
+
+	/**
+	 * Forgets the files refused: their notice is closed, or a build pasted opened, which they don't
+	 * go with.
+	 */
+	dismissRefused(): void {
+		this.#refused = [];
 	}
 
 	/**
@@ -52,8 +66,9 @@ export class Opening {
 
 	/**
 	 * Opens the JSON of a build pasted, after the files given before it: its build opens and is
-	 * shown, the files refused before it forgotten. Gives why it is refused, which the field that took it says; nothing when it opens or
-	 * when the core can't load, which the page already says (FirstVisitPage).
+	 * shown, the files refused before it forgotten. Gives why it is refused, which the field that
+	 * took it says; nothing when it opens or when the core can't load, which the page already says
+	 * (FirstVisitPage).
 	 */
 	openText(text: string): Promise<FileRefusal | undefined> {
 		const opened = this.#pending.then(() => this.#openTextNow(text));
@@ -72,20 +87,19 @@ export class Opening {
 			return read.refusal;
 		}
 		openBuilds.open(read.build);
-		// The files refused before it are no longer those of the build shown.
-		this.#refused = [];
-		this.#openedNone = false;
+		this.dismissRefused();
 		return undefined;
 	}
 
 	async #openNow(files: readonly File[]): Promise<void> {
 		const read = await readFiles(files);
-		openBuilds.openAll(read.flatMap((file) => (file.kind === 'build' ? [file.build] : [])));
+		const builds = read.flatMap((file) => (file.kind === 'build' ? [file.build] : []));
+		this.#isOnFirstVisit = builds.length === 0 && openBuilds.all.length === 0;
+		openBuilds.openAll(builds);
 		this.#refused = read.filter((file) => file.kind === 'refused');
-		this.#openedNone = this.#refused.length === read.length;
 		// The build shown changed without a click, which would have closed the window or the menu
 		// open over the page (docs/technical-choices.md, State of the interface).
-		if (!this.#openedNone) {
+		if (builds.length > 0) {
 			popup.close();
 		}
 	}

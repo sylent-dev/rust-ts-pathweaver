@@ -1,9 +1,9 @@
 <!-- The home page at the first visit (specs.md, Window layout; the owner's E1b, 2026-11-18): on the
      graph paper of the whole window, without the band of the site, the brand floating at its top
-     left and Report a bug at its top right; in the middle, the title, then the drop zone with the
+     left, Report a bug and What's next at its top right; in the middle, the title, then the drop zone with the
      notes of what a build shows around it; the mark of the brand in a watermark behind; the sources
-     of the files at the foot; over the graph paper, a fluid under the pointer. What's next comes
-     with its box (4f); My library would lead here. -->
+     of the files at the foot; over the graph paper, a fluid under the pointer. My library would
+     lead here. -->
 <script lang="ts">
 	import type { Snippet } from 'svelte';
 	import Brand from '#lib/brand/Brand.svelte';
@@ -12,6 +12,7 @@
 	import { fileDrop } from '#lib/page/file-drop.svelte.ts';
 	import SiteLink from '#lib/site/SiteLink.svelte';
 	import { REPORT_BUG_URL } from '#lib/site/site-links.ts';
+	import WhatsNext from '#lib/whats-next/WhatsNext.svelte';
 	import FirstVisitTitle from './FirstVisitTitle.svelte';
 	import GridFluid from './GridFluid.svelte';
 	import PlanNotes from './PlanNotes.svelte';
@@ -47,7 +48,10 @@
 	<GridFluid />
 	<div class="top">
 		<Brand markPixels={26} place="first-visit" />
-		<nav class="links"><SiteLink href={REPORT_BUG_URL} label={t('site-report-bug')} /></nav>
+		<nav class="links">
+			<SiteLink href={REPORT_BUG_URL} label={t('site-report-bug')} />
+			<WhatsNext />
+		</nav>
 	</div>
 	<div class="middle">
 		<FirstVisitTitle />

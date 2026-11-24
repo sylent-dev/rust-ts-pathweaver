@@ -4,9 +4,24 @@
 
 /**
  * A window or a menu that opens over the page: the menu of the open builds that the band has no
- * room for (« +N ▾ »), the window of what changes at the level (« N changes »).
+ * room for (« +N ▾ »), the window of what changes at the level (« N changes »), the box of What's
+ * next.
  */
-export type PopupName = 'builds-menu' | 'level-changes';
+export type PopupName = 'builds-menu' | 'level-changes' | 'whats-next';
+
+/**
+ * Whether this one covers the page with a veil, under which the keys of the page don't reach: the
+ * box of What's next, not a menu or a window that hangs from its trigger.
+ */
+export function coversPage(name: PopupName): boolean {
+	switch (name) {
+		case 'whats-next':
+			return true;
+		case 'builds-menu':
+		case 'level-changes':
+			return false;
+	}
+}
 
 /**
  * What marks an element as belonging to a window or a menu, its trigger as its window, to

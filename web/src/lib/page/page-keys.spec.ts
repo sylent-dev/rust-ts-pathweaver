@@ -1,9 +1,9 @@
 import { describe, expect, it } from 'vitest';
 import { commandOf, type KeyPress } from './page-keys.ts';
 
-/** A key pressed on the page, outside a field and with no key held unless said. */
+/** A key pressed on the page, outside a field, no box over it and no key held unless said. */
 function press(key: string, where: Partial<KeyPress> = {}): KeyPress {
-	return { key, isModified: false, isInField: false, ...where };
+	return { key, isModified: false, isInField: false, isUnderBox: false, ...where };
 }
 
 describe('commandOf', () => {
@@ -17,14 +17,20 @@ describe('commandOf', () => {
 		expect(commandOf(press('ArrowRight', { isInField: true }))).toBeUndefined();
 	});
 
+	it('leaves the level as it is under a box over the page', () => {
+		expect(commandOf(press('ArrowLeft', { isUnderBox: true }))).toBeUndefined();
+		expect(commandOf(press('ArrowRight', { isUnderBox: true }))).toBeUndefined();
+	});
+
 	it('leaves the arrows to the browser with a key held', () => {
 		expect(commandOf(press('ArrowLeft', { isModified: true }))).toBeUndefined();
 		expect(commandOf(press('ArrowRight', { isModified: true }))).toBeUndefined();
 	});
 
-	it('closes the window or the menu open with Esc, in a field too', () => {
+	it('closes the window, the menu or the box open with Esc, in a field and under a box too', () => {
 		expect(commandOf(press('Escape'))).toEqual({ kind: 'close-popup' });
 		expect(commandOf(press('Escape', { isInField: true }))).toEqual({ kind: 'close-popup' });
+		expect(commandOf(press('Escape', { isUnderBox: true }))).toEqual({ kind: 'close-popup' });
 	});
 
 	it('asks nothing for the other keys', () => {

@@ -1,6 +1,6 @@
 import { flushSync } from 'svelte';
 import { describe, expect, it } from 'vitest';
-import { Popup, popupArea } from './popup.svelte.ts';
+import { coversPage, Popup, popupArea } from './popup.svelte.ts';
 
 describe('the window or the menu open over the page', () => {
 	it('is none at first', () => {
@@ -125,5 +125,13 @@ describe('isOpen', () => {
 describe('popupArea', () => {
 	it('marks an element with the name of its window or menu', () => {
 		expect(popupArea('builds-menu')).toEqual({ 'data-popup': 'builds-menu' });
+	});
+});
+
+describe('coversPage', () => {
+	it("covers the page with the box of What's next only, not with a menu or a window", () => {
+		expect(
+			(['whats-next', 'builds-menu', 'level-changes'] as const).map((name) => coversPage(name))
+		).toEqual([true, false, false]);
 	});
 });

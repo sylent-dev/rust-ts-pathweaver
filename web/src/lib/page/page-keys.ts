@@ -14,18 +14,21 @@ export interface KeyPress {
 	isModified: boolean;
 	/** Whether it was pressed in a field. */
 	isInField: boolean;
+	/** Whether a box covers the page (`coversPage`), which hides the level. */
+	isUnderBox: boolean;
 }
 
 /**
- * What a key asks of the page, nothing for most. Esc closes the window or the menu open. ← and →
- * go to the marker before and after the level, but in a field, where they move the caret, and
- * with a key held, where they are a shortcut of the browser (Alt and ←: the page before).
+ * What a key asks of the page, nothing for most. Esc closes the window, the menu or the box open.
+ * ← and → go to the marker before and after the level, but in a field, where they move the caret,
+ * under a box over the page, which hides the level, and with a key held, where they are a shortcut
+ * of the browser (Alt and ←: the page before).
  */
 export function commandOf(press: KeyPress): PageCommand | undefined {
 	if (press.key === 'Escape') {
 		return { kind: 'close-popup' };
 	}
-	if (press.isModified || press.isInField) {
+	if (press.isModified || press.isInField || press.isUnderBox) {
 		return undefined;
 	}
 	switch (press.key) {

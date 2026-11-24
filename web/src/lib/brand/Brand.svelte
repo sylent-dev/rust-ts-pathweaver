@@ -1,5 +1,6 @@
-<!-- The brand: the mark and the name of Pathweaver, in Archivo (specs.md, The brand), as in the
-     band of the site, which the phone page copies; larger over the first visit, which has no band. -->
+<!-- The brand: the mark and the name of Pathweaver, in Archivo (specs.md, The brand), in the band
+     of the site, its name 1 pixel below the middle of the mark; at the top of the phone page in the
+     same size, on the middle; larger over the first visit, which has no band. -->
 <script lang="ts">
 	import { t } from '#lib/i18n.ts';
 	import LogoMark from './LogoMark.svelte';
@@ -7,14 +8,14 @@
 	interface Props {
 		/** The side of the mark, in pixels. */
 		markPixels: number;
-		/** Where it is drawn: the band of the site (the default), or over the first visit. */
-		place?: 'band' | 'first-visit';
+		/** Where it is drawn: the band of the site, the phone page or over the first visit. */
+		place: 'band' | 'phone' | 'first-visit';
 	}
 
-	let { markPixels, place = 'band' }: Props = $props();
+	let { markPixels, place }: Props = $props();
 </script>
 
-<span class="brand" class:first-visit={place === 'first-visit'}>
+<span class="brand" class:band={place === 'band'} class:first-visit={place === 'first-visit'}>
 	<LogoMark pixels={markPixels} />
 	<span class="name">{t('app-name')}</span>
 </span>
@@ -27,7 +28,7 @@
 		color: var(--text);
 	}
 
-	/* On the middle of the mark; the band of the site sets it 1 px lower (--brand-name-offset). */
+	/* On the middle of the mark, but in the band of the site. */
 	.name {
 		font-family: var(--brand-font);
 		font-weight: var(--brand-weight);
@@ -35,6 +36,12 @@
 		line-height: 1.15;
 		letter-spacing: var(--brand-spacing);
 		white-space: nowrap;
+	}
+
+	/* In the band of the site, 1 px below the middle of the mark, by eye (the owner, 2026-11-17). */
+	.band .name {
+		position: relative;
+		top: var(--brand-name-offset);
 	}
 
 	/* Over the first visit, the name larger and a little further from the mark (2l, the mock-up). */

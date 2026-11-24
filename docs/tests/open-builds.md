@@ -1,11 +1,11 @@
 # Opening builds: the tests (4e, 4f)
 
-The home page of the first visit opens builds three ways: files dropped anywhere on the page, files chosen with a click on the zone, and the JSON of a build pasted in the zone become a field; when nothing opens, the zone says why. These tests check what only a real browser shows: the files of the desktop, the clipboard, the page lit under files. Since 4f1, a build opened shows its page: its header and its five tabs, their panels still empty; since 4f2, the band of the open builds over it, a tab per build and +, which chooses more. Run the tests in a row. A ✅ is enough when it works; detail only what goes wrong.
+The home page of the first visit opens builds three ways: files dropped anywhere on the page, files chosen with a click on the zone, and the JSON of a build pasted in the zone become a field; when nothing opens, the zone says why. These tests check what only a real browser shows: the files of the desktop, the clipboard, the page lit under files. Since 4f1, a build opened shows its page: its header and its five tabs, their panels still empty; since 4f2, the band of the open builds over it, a tab per build and +, which chooses more; since 4f3, the band of the site over both, and between them the notice of the files refused; since 4f4, the box of What's next. Run the tests in a row. A ✅ is enough when it works; detail only what goes wrong.
 
 ## Before
 
 1. In the folder of the project, on the branch of the step: `cd web && npm run dev`, then open the address it prints.
-2. Run every test in Firefox, then the tests 1, 4, 8, 10, 11 and 12 again in a Chromium (Chrome, Edge, Brave).
+2. Run every test in Firefox, then the tests 1, 4, 8, 10, 11, 12 and 13 again in a Chromium (Chrome, Edge, Brave).
 3. Reload the page (F5) before each test: until the library (step 8), a reload closes the builds open and gives the first visit back.
 4. The files of `inputs/builds/`: `ggg-titan-warrior-sample.build`, `pob-twobyul-deadeye.build`, `utkarshbehre-spark-comet.build`; any image of the desktop, named `passive-tree.png` here; and a file `broken.build` made in a text editor, of these three lines:
 
@@ -22,8 +22,8 @@ The home page of the first visit opens builds three ways: files dropped anywhere
 1. **Several files dropped**: select the three `.build` files in the file manager and drop them together anywhere on the page, outside the zone.
    ✅ The first visit gives way to a build at once, without a button: one of the three (the last in the order the system gives them, « Titan Warrior », « TwobyulDeadeye » or « Spark - Comet »), its header: its name, its portrait on the left, and under it « by Grinding Gear Games · Titan Warrior », « Deadeye Ranger » alone for TwobyulDeadeye, which names no author, or « by UtkarshBehre · Stormweaver Sorceress »; under the header the five tabs, **Overview** in white over its bar.
 
-2. **A build and an image dropped together**: drop `ggg-titan-warrior-sample.build` and `passive-tree.png` together.
-   ✅ « Titan Warrior » shows, and under it, in a line of its own, « passive-tree.png isn't a text file », without a period.
+2. **A build and an image dropped together**: drop `ggg-titan-warrior-sample.build` and `passive-tree.png` together; hover the red × on the right of the notice, then click it. Drop `passive-tree.png` alone on the page of the build.
+   ✅ « Titan Warrior » shows. At the top, the band of the site: the mark and « Pathweaver » on the left, **Report a bug** on the right, in blue, white on hover with a line that sweeps under it. Under that band, a band in a dark red shade, the whole width of the window, says « passive-tree.png isn't a text file », the name white and the reason red, without a period; under it, the band of the open builds. On hover the × turns white and grows a little; the click takes the notice away, the tab of « Titan Warrior » touching the band of the site again; Tab then shows the ring of the keyboard on the × of that tab, not on **Report a bug**. The image dropped alone brings the notice back, the build still shown.
 
 3. **Choose files**: click the zone, choose `utkarshbehre-spark-comet.build` in the dialog of the system, open it.
    ✅ The dialog lets several files be chosen; « Spark - Comet » shows at once.
@@ -55,7 +55,10 @@ The home page of the first visit opens builds three ways: files dropped anywhere
 12. **Six builds in a narrow window**: make the window of the browser 900 pixels wide (half of a screen of 1,920); drop together the first six `.build` files of `inputs/builds/` in the order of the file manager. Click **+2 ▾**, then a build of its menu. Make the window as wide as the screen, click the sixth tab, then make the window 900 pixels wide again. Open the menu with the keyboard (Tab to **+2 ▾**, Enter), Tab to a build, press Esc; open it again and click outside it; open it again and drop `passive-tree.png`, then `ggg-titan-warrior-sample.build`.
     ✅ Four tabs, the build shown in the last of them, then **+2 ▾** in blue, then **+**. The click opens a menu under the band, which grows out of **+2 ▾** and settles; the two builds without a tab are listed, each its portrait in colour, its name over its ascendancy. The build clicked shows at once, its tab in the place of the last one, whose build goes first into the menu; the menu is closed. As wide as the screen, every build has a tab and **+2 ▾** leaves; at 900 pixels again, the sixth build moves to the place of the fourth tab, whose build goes first into the menu, and stays there. Esc closes the menu, the keyboard back on **+2 ▾**; a click outside closes it; `passive-tree.png` dropped alone leaves it open, the `.build` file dropped closes it.
 
-13. **Your own scenarios**: whatever else you want to try.
+13. **What's next**: on the first visit, click **What's next** at the top right; close the box with its ×. Drop `ggg-titan-warrior-sample.build`, click **What's next** in the band of the site; close with Esc. Open it again, press the mouse button on a line of a card, move to the dark veil and let go there; then click on the dark veil, outside the box. Then turn on the reduced motion of the system (GNOME: Settings, Accessibility, Seeing, Reduced Animation; Windows: Settings, Accessibility, Visual effects, Animation effects off; macOS: Accessibility, Display, Reduce motion), reload, and open the box once more.
+    ✅ The page darkens and a panel opens in its middle, two cards side by side, a thin grey line between them: the left one, « Version 2 · The Editor Update », a large portrait of a sorceress at its top, comes down from a little above; the right one, « Version 3 · The Community Update », four portraits side by side, comes up from a little below. Their portraits fade into the panel under their names; each line after a small blue diamond. While it is open, **What's next** stays white. ×, Esc and the click on the veil each close it; after each, Tab shows the ring of the keyboard on the drop zone on the first visit, on the tab of « Titan Warrior » on the page of the build. The press begun on a card and let go on the veil leaves the box open. With less motion, the box and its veil only fade in, the cards in place.
+
+14. **Your own scenarios**: whatever else you want to try.
 
 ## Results
 
@@ -73,4 +76,5 @@ The home page of the first visit opens builds three ways: files dropped anywhere
 | 10. A text refused | | |
 | 11. + in the band | | |
 | 12. Six builds in a narrow window | | |
-| 13. Your own scenarios | | |
+| 13. What's next | | |
+| 14. Your own scenarios | | |

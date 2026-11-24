@@ -44,21 +44,43 @@ describe('the files opened', () => {
 		]);
 	});
 
-	it('say the files refused all refused only when none of them opened', async () => {
+	it('forget the files refused once their notice is closed', async () => {
+		const opening = new Opening();
+		await opening.open([image]);
+
+		opening.dismissRefused();
+
+		expect([opening.refused, opening.refusedAll]).toEqual([[], []]);
+	});
+
+	it('say the files refused all refused only when none of them opened, no build open', async () => {
 		const opening = new Opening();
 		const notJson = fileOf('notes.txt', 'Act 1');
 
-		await opening.open([image, buildA]);
-		expect(opening.refusedAll).toEqual([]);
-
 		await opening.open([image, notJson]);
-		expect(opening.refusedAll).toEqual([
-			{ kind: 'refused', fileName: 'passive-tree.png', refusal: { reason: 'notText' } },
-			{
-				kind: 'refused',
-				fileName: 'notes.txt',
-				refusal: { reason: 'notJson', line: 1, excerpt: 'Act 1' }
-			}
+		const onFirstVisit = opening.refusedAll;
+		await opening.open([image, buildA]);
+		const withABuild = opening.refusedAll;
+		await opening.open([notJson]);
+
+		expect([onFirstVisit, withABuild, opening.refusedAll, opening.refused]).toEqual([
+			[
+				{ kind: 'refused', fileName: 'passive-tree.png', refusal: { reason: 'notText' } },
+				{
+					kind: 'refused',
+					fileName: 'notes.txt',
+					refusal: { reason: 'notJson', line: 1, excerpt: 'Act 1' }
+				}
+			],
+			[],
+			[],
+			[
+				{
+					kind: 'refused',
+					fileName: 'notes.txt',
+					refusal: { reason: 'notJson', line: 1, excerpt: 'Act 1' }
+				}
+			]
 		]);
 	});
 
