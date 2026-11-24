@@ -5,14 +5,21 @@
 // construction of every card on hover (js/hover-card.js).
 
 // The markup of the game in the author's texts (specs.md, The author's texts): `<tag>{text}`, nested;
-// a tag is a font (b, i, u, and r, s, m, l, whose look is decided at step 4), a named colour or
-// rgb(r, g, b). A tag it doesn't know, or a brace left open, stays plain text. Every text is escaped:
+// a tag is a font (r regular, b, i, u), a size (s small, m medium, l large), a named colour of the
+// documentation of Grinding Gear Games or rgb(r, g, b). A tag it doesn't know, or a brace left open, stays plain text. Every text is escaped:
 // the hints come from files of strangers.
-const MARKUP_FONTS = { b: "font-weight:700", i: "font-style:italic", u: "text-decoration:underline", r: "", s: "", m: "", l: "" };
+// A size is a factor of the size of the text around the whole author's text (--markup-base, css/app.css),
+// so that a size inside a size doesn't grow again.
+const markupSize = factor => `font-size:calc(var(--markup-base) * var(--markup-${factor}))`;
+const MARKUP_FONTS = {
+  r: "font-weight:var(--text-weight);font-style:normal", b: "font-weight:700", i: "font-style:italic", u: "text-decoration:underline",
+  s: markupSize("small"), m: markupSize("medium"), l: markupSize("large"),
+};
 // The named colours are tokens of the style (css/tokens.css, --markup-…): readable on its cards.
 const MARKUP_COLOURS = {
-  white: "white", grey: "grey", gray: "grey", black: "black", red: "red", green: "green",
-  blue: "blue", yellow: "yellow", orange: "orange", gold: "gold", purple: "purple", cyan: "cyan", magenta: "magenta",
+  white: "white", grey: "grey", gray: "grey", black: "black", red: "red", orange: "orange", yellow: "yellow",
+  green: "green", blue: "blue", indigo: "indigo", violet: "violet", bronze: "bronze", silver: "silver",
+  gold: "gold", unique: "unique",
 };
 function styleOfTag(tag) {
   const name = tag.trim().toLowerCase();
@@ -49,7 +56,7 @@ function readMarkup(text, at, inBraces) {
   flush();
   return [html, at];
 }
-const markupHtml = text => readMarkup(text, 0, false)[0];
+const markupHtml = text => `<span class="app-markup">${readMarkup(text, 0, false)[0]}</span>`;
 
 // The passives near a point, found through a grid of cells of 400 units, built once per graph.
 const HOVER_CELL = 400;

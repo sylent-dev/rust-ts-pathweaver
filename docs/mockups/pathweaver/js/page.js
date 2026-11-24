@@ -18,6 +18,12 @@ const VARIANTS = {
   // The width of the windows of the home page (2l): the minimum of specs.md, half a 1920-pixel screen, and a wide
   // window of the owner's screen.
   homeWidth: { label: "Home width", options: { 900: "900 px", 960: "960 px", 1600: "1,600 px" }, fallback: "960" },
+  // The sizes of the markup (4g1, sections/markup-sizes.js): each a factor of the size of the text around the
+  // author's text. The authors of the corpus write their heads in m over a text in s (Maxroll) or without a
+  // size (Mobalytics, Grinding Gear Games): s the text, m a step above, l two.
+  markupSmall: { label: "Markup s", range: { min: 0.7, max: 1.2, step: 0.05 }, variable: "--markup-small", fallback: "1" },
+  markupMedium: { label: "Markup m", range: { min: 0.9, max: 1.6, step: 0.05 }, variable: "--markup-medium", fallback: "1.15" },
+  markupLarge: { label: "Markup l", range: { min: 1, max: 2, step: 0.05 }, variable: "--markup-large", fallback: "1.35" },
 };
 
 const SECTIONS = [];
