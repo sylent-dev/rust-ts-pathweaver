@@ -11,6 +11,14 @@ use crate::{Build, Guide};
 
 /// The author's texts of a build: its description, then the notes of its entries.
 fn texts(build: &Build) -> Vec<&str> {
+    std::iter::once(build.description.as_deref())
+        .flatten()
+        .chain(notes(build))
+        .collect()
+}
+
+/// The notes of the entries of a build, its hints.
+fn notes(build: &Build) -> Vec<&str> {
     let passives = build.passives.get().into_iter().flatten();
     let skills = build.skills.get().into_iter().flatten();
     let slots = build.inventory_slots.get().into_iter().flatten();
@@ -21,10 +29,7 @@ fn texts(build: &Build) -> Vec<&str> {
                 .chain(skill.supports().iter().map(crate::Entry::additional_text))
         }))
         .chain(slots.map(|slot| slot.additional_text.as_deref()));
-    std::iter::once(build.description.as_deref())
-        .chain(notes)
-        .flatten()
-        .collect()
+    notes.flatten().collect()
 }
 
 /// The name of a tag in the counts: its own, `rgb` for every colour `rgb(…)`.
@@ -141,32 +146,31 @@ fn links_of(corpus: &BTreeMap<String, Build>) -> Vec<(&str, Vec<String>)> {
 #[ignore = "reads the corpus, kept out of Git"]
 fn the_longest_texts_of_the_corpus_are_far_from_the_pieces_kept() {
     let corpus = corpus();
-    let descriptions: Vec<Markup> = corpus
+    // Whether a text is cut, and its pieces.
+    let measured = |markup: Markup| (markup.is_cut(), markup.into_iter().count());
+    let descriptions: Vec<(bool, usize)> = corpus
         .values()
         .filter_map(Build::description_markup)
+        .map(measured)
         .collect();
-    let notes: Vec<Markup> = corpus
+    let measured_notes: Vec<(bool, usize)> = corpus
         .values()
-        .flat_map(|build| {
-            texts(build)
-                .into_iter()
-                .skip(usize::from(build.description.as_deref().is_some()))
-        })
-        .map(Markup::of)
+        .flat_map(notes)
+        .map(|note| measured(Markup::of(note)))
         .collect();
-    let longest = |texts: &[Markup]| {
-        texts
-            .iter()
-            .map(|text| text.clone().into_iter().count())
-            .max()
-    };
+    let longest = |texts: &[(bool, usize)]| texts.iter().map(|(_, pieces)| *pieces).max();
     // Measured on 2026-11-24, on the 32 files of 2026-11-16: the longest description, a build of
     // Maxroll, and the longest note, in pieces; none cut by the bound of 1,000.
     assert_eq!(
-        (longest(&descriptions), longest(&notes)),
+        (longest(&descriptions), longest(&measured_notes)),
         (Some(27), Some(31))
     );
-    assert!(descriptions.iter().chain(&notes).all(|text| !text.is_cut()));
+    assert!(
+        descriptions
+            .iter()
+            .chain(&measured_notes)
+            .all(|(is_cut, _)| !is_cut)
+    );
 }
 
 #[test]

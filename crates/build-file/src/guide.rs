@@ -14,7 +14,8 @@ pub enum Guide<'a> {
     Link(&'a str),
     /// The `link` of the file, a text that isn't one address whole, shown as it is.
     Text(&'a str),
-    /// The first address of the description, for a file without a `link`.
+    /// The first address of the description among its pieces shown, for a file without a
+    /// `link`.
     FromDescription(&'a str),
 }
 
@@ -107,10 +108,17 @@ mod tests {
     }
 
     #[test]
-    fn the_guide_is_never_an_address_past_the_pieces_shown() {
-        let description = Markup::of_description(&("x\n".repeat(600) + "https://a.com"));
-        assert!(description.is_cut());
-        assert_eq!(Guide::of(None, Some(&description)), None);
+    fn the_guide_is_the_first_address_among_the_pieces_shown() {
+        let past_the_cut = Markup::of_description(&("x\n".repeat(600) + "https://a.com"));
+        assert!(past_the_cut.is_cut());
+        assert_eq!(Guide::of(None, Some(&past_the_cut)), None);
+        let before_the_cut =
+            Markup::of_description(&("https://a.com\n".to_owned() + &"x\n".repeat(600)));
+        assert!(before_the_cut.is_cut());
+        assert_eq!(
+            Guide::of(None, Some(&before_the_cut)),
+            Some(Guide::FromDescription("https://a.com"))
+        );
     }
 
     #[test]

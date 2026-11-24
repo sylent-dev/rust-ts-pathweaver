@@ -30,7 +30,8 @@ pub struct OpenedBuild {
     /// Its description with the markup of the game and its addresses as links; none when the
     /// author wrote none.
     pub description: Option<MarkupText>,
-    /// Its guide: the `link` of the file, else the first address of its description.
+    /// Its guide: the `link` of the file, else the first address of its description among its
+    /// pieces shown.
     pub guide: Option<BuildGuide>,
     pub levels: BuildLevels,
 }

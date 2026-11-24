@@ -19,9 +19,8 @@ pub(crate) use addresses::is_address;
 
 /// The pieces an author's text keeps at most, a description or a note (4g3b, the owner,
 /// 2026-11-24): the page drew a megabyte of a letter and a line break, 699,028 pieces, in 3.5
-/// seconds, about
-/// 5 µs a piece (`web/src/lib/about/description-cost.browser.spec.ts`), where the longest
-/// description of the corpus has 27.
+/// seconds, about 5 µs a piece (`web/src/lib/about/description-cost.browser.spec.ts`), where
+/// the longest description of the corpus has 27.
 const PIECES_KEPT: usize = 1_000;
 
 /// An author's text read: its pieces in order, each text with the style of the tags around it,
