@@ -4,10 +4,13 @@
      whole address in its tooltip, never the letters of the author, which a space of one pixel or
      a tag that changes nothing on screen could make read as another address. Its texts are
      written as text, never read as HTML: a file from someone else is untrusted. Its sizes are
-     factors of the size of the text around it, which its parent sets; the description of the
-     About tab, the notes of the cards on hover (4j, 5c, 6). -->
+     factors of the size of the text around it, which its parent sets. A text the core cut ends
+     with « … » in the weak grey, a space after its last piece that never leaves it alone on a
+     line. The description of the About tab,
+     the notes of the cards on hover (4j, 5c, 6). -->
 <script lang="ts" module>
-	import type { MarkupColourName, MarkupPiece, MarkupStyle } from '#lib/core.ts';
+	import type { MarkupColourName, MarkupStyle, MarkupText } from '#lib/core.ts';
+	import { t } from '#lib/i18n.ts';
 	import { markupSurface } from './markup-surface.ts';
 	import { readableOn } from './readable-colour.ts';
 	import { siteOf } from './site.ts';
@@ -52,18 +55,18 @@
 <script lang="ts">
 	interface Props {
 		/** The text, as the core read it. */
-		pieces: MarkupPiece[];
+		text: MarkupText;
 	}
 
-	let { pieces }: Props = $props();
+	let { text }: Props = $props();
 </script>
 
-{#snippet styled(text: string, style: MarkupStyle)}<span
+{#snippet styled(words: string, style: MarkupStyle)}<span
 		class={[
 			style.size,
 			{ bold: style.isBold, italic: style.isItalic, underlined: style.isUnderlined }
 		]}
-		style:color={colourOf(style)}>{text}</span
+		style:color={colourOf(style)}>{words}</span
 	>{/snippet}
 
 <!-- eslint-disable svelte/no-navigation-without-resolve -- an address outside the website, which resolve() would put under its path -->
@@ -78,11 +81,13 @@
 <!-- eslint-enable svelte/no-navigation-without-resolve -->
 
 <span class="author-text"
-	>{#each pieces as piece, index (index)}{#if piece.kind === 'lineBreak'}<br
+	>{#each text.pieces as piece, index (index)}{#if piece.kind === 'lineBreak'}<br
 			/>{:else if piece.kind === 'link'}{@render link(
 				piece.address,
 				piece.style
-			)}{:else}{@render styled(piece.text, piece.style)}{/if}{/each}</span
+			)}{:else}{@render styled(piece.text, piece.style)}{/if}{/each}{#if text.isCut}&nbsp;<span
+			class="cut">{t('author-text-cut')}</span
+		>{/if}</span
 >
 
 <style>
@@ -90,6 +95,12 @@
 	   or a line, keep their own order. */
 	.author-text {
 		unicode-bidi: isolate;
+	}
+
+	/* The mark of a text cut, the page's and not the author's: in the size and the font of the
+	   text around it. */
+	.cut {
+		color: var(--weak);
 	}
 
 	/* The fonts of the markup; a text without them in those of the text around it. */

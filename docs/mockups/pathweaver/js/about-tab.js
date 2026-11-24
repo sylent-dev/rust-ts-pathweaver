@@ -43,8 +43,8 @@ const abLink = url => {
 };
 const abLinked = html => html.replace(AB_URL, abLink);
 // A description cut by the core at 1,000 pieces (4g3b, sections/cut-text.js) ends with « … » in the weak grey, a
-// space after its last piece (the owner, 2026-11-24).
-const AB_CUT = ' <span class="app-weak">…</span>';
+// space after its last piece (the owner, 2026-11-24), one that never leaves it alone on a line.
+const AB_CUT = '&nbsp;<span class="app-weak">…</span>';
 const abDescription = about => (about.description
   ? `<div class="ab-desc">${abLinked(markupHtml(about.description.replace(/\r/g, "")))}${about.isCut ? AB_CUT : ""}</div>`
   : '<p class="ab-none app-weak">The author wrote no description.</p>');

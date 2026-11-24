@@ -153,3 +153,8 @@ next-community-french = In French too
 
 # In the weak grey, in place of the description of a file that has none.
 about-no-description = The author wrote no description.
+
+## An author's text: a description or a note, with the markup of the game.
+
+# In the weak grey, a space after the last piece of a text the core cut (1,000 pieces kept).
+author-text-cut = …

@@ -16,6 +16,14 @@
 //         closed 373 ms
 //     <b>{a}a: 299,582 pieces, read 157 ms, drawn 2,128 ms (website 1,934), closed 187 ms
 //     <rgb(0,0,0)>{a}a: 131,066 pieces, read 89 ms, drawn 990 ms (website 1,065), closed 94 ms
+//
+// Since 4g3b the core keeps 1,000 pieces of a text (`PIECES_KEPT` of
+// crates/build-file/src/markup.rs). Measured on 2026-11-24, the same way, the page of the tests:
+//
+//     line breaks alone: none, read 11 ms, drawn 3 ms, closed 0 ms
+//     a letter and a line break: 1,000 pieces (cut), read 15 ms, drawn 11 ms, closed 1 ms
+//     <b>{a}a: 1,000 pieces (cut), read 8 ms, drawn 9 ms, closed 1 ms
+//     <rgb(0,0,0)>{a}a: 1,000 pieces (cut), read 8 ms, drawn 11 ms, closed 1 ms
 
 import { flushSync, mount, unmount } from 'svelte';
 import { describe, expect, it } from 'vitest';
@@ -93,7 +101,7 @@ describe.skipIf(import.meta.env.VITE_MEASURE !== '1')('the descriptions that cos
 				flushSync();
 			});
 			lines.push(
-				`${name}: ${String(build.description?.length)} pieces, read ${read.toFixed(0)} ms, drawn ${drawn.toFixed(0)} ms, closed ${closed.toFixed(0)} ms`
+				`${name}: ${build.description === undefined ? 'none' : `${String(build.description.pieces.length)} pieces${build.description.isCut ? ' (cut)' : ''}`}, read ${read.toFixed(0)} ms, drawn ${drawn.toFixed(0)} ms, closed ${closed.toFixed(0)} ms`
 			);
 		}
 		await annotate(lines.join('\n'));

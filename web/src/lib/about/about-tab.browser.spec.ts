@@ -35,20 +35,23 @@ function aboutTab(build: Partial<OpenedBuild>): HTMLElement {
 describe('the About tab', () => {
 	it('shows the description of the author with its markup, over its watermark', () => {
 		const panel = aboutTab({
-			description: [
-				{
-					kind: 'text',
-					text: 'Guide',
-					style: {
-						isBold: true,
-						isItalic: false,
-						isUnderlined: false,
-						size: undefined,
-						colour: undefined
-					}
-				},
-				{ kind: 'lineBreak' }
-			]
+			description: {
+				pieces: [
+					{
+						kind: 'text',
+						text: 'Guide',
+						style: {
+							isBold: true,
+							isItalic: false,
+							isUnderlined: false,
+							size: undefined,
+							colour: undefined
+						}
+					},
+					{ kind: 'lineBreak' }
+				],
+				isCut: false
+			}
 		});
 		expect([
 			panel.querySelector('.description')?.textContent,
