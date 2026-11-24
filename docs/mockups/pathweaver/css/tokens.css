@@ -176,7 +176,8 @@
   --markup-indigo: #7f78f0; --markup-violet: #a86ce0; --markup-bronze: #b87c50; --markup-silver: #a9b1bd;
   --markup-gold: #c8a65a; --markup-unique: var(--unique);
   /* The sizes of the markup, small, medium and large, each a factor of the size of the text around the
-     author's text (4g1, open: the sliders Markup s, m, l of the page). */
+     author's text (4g1, the owner, 2026-11-24): the authors of the corpus write a head in m over a text in s
+     or without a size, so s is the text; m a step above, under the 14 pixels of the title of a card. */
   --markup-small: 1; --markup-medium: 1.15; --markup-large: 1.35;
 
   /* The tree, read by the canvas: colours, the width of the links taken, a glow (blur in pixels) on

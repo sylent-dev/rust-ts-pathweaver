@@ -1,6 +1,6 @@
 // The markup of the author's texts as the documentation of Grinding Gear Games writes it (4g1, read on
-// 2026-11-24; specs.md, The author's texts): the sizes s, m and l, small, medium and large, on the sliders
-// Markup s, m, l of the page, and its fourteen named colours on Frost Night, each at 4.5 to 1 or more on the
+// 2026-11-24; specs.md, The author's texts): the sizes s, m and l, small, medium and large (css/tokens.css),
+// and its fourteen named colours on Frost Night, each at 4.5 to 1 or more on the
 // band, black a grey (2n4), unique the gold of a unique item; purple, cyan and magenta, which it doesn't
 // name, as plain text. The notes are those of the corpus, as their authors wrote them.
 
@@ -13,7 +13,7 @@ const MARKUP_RATIOS = {
 addSection(() => {
   const colours = Object.entries(MARKUP_RATIOS).map(([name, ratio]) => `<${name}>{${name} · ${ratio} to 1: hold the skill on bosses}`).join("\n");
   const unnamed = ["purple", "cyan", "magenta"].map(name => `<${name}>{${name}: not named by Grinding Gear Games}`).join("\n");
-  return ["The markup of Grinding Gear Games: the sizes s, m and l on the sliders, and its fourteen named colours", [
+  return ["The markup of Grinding Gear Games: the sizes s, m and l, and its fourteen named colours", [
     ["Maxroll: a head in b and m, its text in s and i", staticNoteCard({ head: "Skill Gem Quality", text: "<b>{<m>{Allocation Step #1}}\r\n<s>{- }<i>{<s>{Next node: Skill Gem Quality}}" })],
     ["Mobalytics: a head in m and gold over a text without a size", staticNoteCard({ head: "Comet", text: "<m>{<gold>{THE NUKE - Set 1}}\n<gold>{91 spirit qualitied. Level Comet max. For rares/bosses/juice - not for white packs.}" })],
     ["Grinding Gear Games, its sample: a whole note in m", staticNoteCard({ head: "Strength", text: "<m>{<red>{Strength +5 is recommended}}" })],
