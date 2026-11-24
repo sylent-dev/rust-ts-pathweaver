@@ -34,8 +34,8 @@ function luminance({ red, green, blue }: Rgb): number {
 
 /** The contrast of two colours, from 1 to 21, whichever is the lighter. */
 export function contrastRatio(one: Rgb, other: Rgb): number {
-	const [lighter, darker] = [luminance(one), luminance(other)].sort((a, b) => b - a);
-	return ((lighter ?? 0) + 0.05) / ((darker ?? 0) + 0.05);
+	const [first, second] = [luminance(one), luminance(other)];
+	return (Math.max(first, second) + 0.05) / (Math.min(first, second) + 0.05);
 }
 
 /**
@@ -63,15 +63,13 @@ export function readableOn(colour: Rgb, surface: Rgb): Rgb {
 	}
 	const move: Move =
 		contrastRatio(WHITE, surface) >= contrastRatio(BLACK, surface) ? 'lighten' : 'darken';
-	// Past the light of the surface on the side it moves to: a colour darker than a dark surface
-	// first loses contrast as it is lightened, then gains.
-	const isReadable = (candidate: Rgb) =>
-		contrastRatio(candidate, surface) >= READABLE_CONTRAST &&
-		(move === 'lighten') === luminance(candidate) > luminance(surface);
+	// The contrast alone is unreadable, then readable, along the way: a colour on the wrong side
+	// of the surface (darker than a dark one) first loses contrast down to 1, from under 4.5, so it
+	// can't be readable before it has passed the surface. The search halves the way each step.
 	let [least, most] = [0, 1];
 	for (let step = 0; step < SEARCH_STEPS; step += 1) {
 		const share = (least + most) / 2;
-		if (isReadable(moved(colour, move, share))) {
+		if (contrastRatio(moved(colour, move, share), surface) >= READABLE_CONTRAST) {
 			most = share;
 		} else {
 			least = share;

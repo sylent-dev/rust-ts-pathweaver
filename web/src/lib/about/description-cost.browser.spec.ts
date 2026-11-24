@@ -6,13 +6,16 @@
 //     npm run wasm -- --release
 //     VITE_MEASURE=1 npx vitest --run --project browser description-cost
 //
-// The page of the tests compiles Svelte for development; the website, measured the same way by
-// hand, took as long. Measured on 2026-11-24 (4g3), headless Chromium on the owner's machine:
+// The page of the tests compiles Svelte for development. The website took as long: built
+// (`npm run build`, then `npx vite preview`) and driven by Playwright, the file chosen, the time
+// from the click on About to the next frame. Measured on 2026-11-24 (4g3), headless Chromium on
+// the owner's machine:
 //
 //     line breaks alone: none (a description of spaces alone is none), read 11 ms
-//     a letter and a line break: 699,028 pieces, read 281 ms, drawn 3,150 ms (website 3,498)
-//     <b>{a}a: 299,582 pieces, read 157 ms, drawn 2,128 ms (website 1,934)
-//     <rgb(0,0,0)>{a}a: 131,066 pieces, read 89 ms, drawn 990 ms (website 1,065)
+//     a letter and a line break: 699,028 pieces, read 281 ms, drawn 3,150 ms (website 3,498),
+//         closed 373 ms
+//     <b>{a}a: 299,582 pieces, read 157 ms, drawn 2,128 ms (website 1,934), closed 187 ms
+//     <rgb(0,0,0)>{a}a: 131,066 pieces, read 89 ms, drawn 990 ms (website 1,065), closed 94 ms
 
 import { flushSync, mount, unmount } from 'svelte';
 import { describe, expect, it } from 'vitest';
