@@ -28,9 +28,11 @@ mod content_key;
 mod entries;
 #[cfg(test)]
 mod fixtures;
+mod guide;
 mod held;
 mod level_interval;
 mod levels;
+mod markup;
 mod nullable;
 mod read_error;
 
@@ -39,11 +41,13 @@ use serde_json::{Map, Value};
 
 pub use changes::{Change, LevelChanges};
 pub use entries::{Entry, InventorySlot, Passive, Skill, Support};
+pub use guide::Guide;
 pub use held::{
     BuildAtLevel, Held, HintItem, HintOnSlot, Notes, PassiveInSet, SupportOnSkill, WeaponSet,
 };
 pub use level_interval::LevelInterval;
 pub use levels::{EntryName, HIGHEST_LEVEL, InvalidInterval, LOWEST_LEVEL, LevelRange};
+pub use markup::{Colour, Markup, NamedColour, Piece, Size, Style};
 pub use nullable::Nullable;
 pub use read_error::{MAX_BYTES, ReadError};
 

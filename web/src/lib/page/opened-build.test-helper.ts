@@ -9,7 +9,8 @@ export function openedBuild(contentKey: string, markers: number[] = []): OpenedB
 		name: contentKey,
 		author: undefined,
 		ascendancy: undefined,
-		link: undefined,
+		description: undefined,
+		guide: undefined,
 		levels: { lowest: 1, highest: 100, markers }
 	};
 }

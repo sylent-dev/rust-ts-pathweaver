@@ -46,6 +46,8 @@ jobs:
             web:
               - *rust
               - 'web/**'
+              # Read by the test of the tokens, which keeps those of the application the mock-up's.
+              - 'docs/mockups/pathweaver/css/tokens.css'
 
   check:
     name: Rust
