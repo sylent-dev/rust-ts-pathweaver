@@ -37,7 +37,6 @@ The owner, 2026-11-21, at step 2k5: set aside from version 1, the first item onc
 - **An image pasted in the field of Paste JSON** (an edge case, noted on 2026-11-23 at the review of 4e3; depends on: nothing): a paste without text, an image copied, is read as an empty text and refused as « This text isn't a build: an object with a name ». A paste without text could say nothing, or say that it holds no text.
 - **A Ctrl+V anywhere on the first visit** (polish, noted on 2026-11-23 at step 4e3; depends on: the field of Paste JSON, 4e3b): a JSON pasted on the page, without a click on Paste JSON first, would open as it does in the field; the paste of the keyboard asks the browser no permission there either. Not in `specs.md`: a paste in a field of the page (later, the editor) must stay the field's.
 - **The meaning of a single-number `level_interval`.** Read as « from that level to 100 » until checked in the game.
-- **Three tags of the markup the mock-up doesn't know** (found at 2j5, 2026-11-20): `silver` (11 tags in 3 files of the corpus), `unique` (11, in 1) and `bronze` (3, in 1), shown as plain text with their brackets. Check in the game which colour or font each one is, and add them to the markup of the author's texts (step 4). Depends on: nothing.
 
 ## The level band
 

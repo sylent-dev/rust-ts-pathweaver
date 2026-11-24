@@ -5,6 +5,11 @@
 /* A container, named window: the components ask its width (@container window), never the class of a page. */
 .app-window { container: window / inline-size; position: relative; overflow: hidden; background: var(--page-image), var(--page); background-size: var(--page-image-size); color: var(--text); font: var(--text-weight) 14px/1.35 var(--font-text); }
 :where(.app-window) button { font: inherit; color: inherit; }   /* weaker than any class of a block */
+/* An author's text (markupHtml, js/tree-hover.js): its sizes s, m and l are factors of the size of the text
+   around it, kept in pixels where it starts (a registered length), so that a size inside a size doesn't
+   grow again. */
+@property --markup-base { syntax: "<length>"; inherits: true; initial-value: 14px; }
+.app-markup { --markup-base: 1em; }
 /* The focus of the keyboard on every control (WCAG 2.4.7): a ring in the accent, inside its box, so that a parent
    that cuts what overflows (the menu of the builds, the right column, the box of What's next) never hides it;
    reached with the keyboard only (:focus-visible), and no stronger than a class, so that a component may draw
