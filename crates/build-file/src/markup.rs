@@ -270,6 +270,32 @@ fn text(rest: &str) -> (Token<'_>, usize) {
     (Token::Text(rest.get(..length).unwrap_or(rest)), length)
 }
 
+/// Whether a character moves the text around it, the words before it or after the author's
+/// text, which no style of the page contains: the embeddings, overrides and isolates of
+/// Unicode, and the separators of paragraphs of its algorithm of direction (4g3, its second
+/// review: U+202B before a link drew the text before it at its right, U+2069 closed the isolate
+/// the page puts around the text). The strong marks U+200E, U+200F and U+061C stay: invisible
+/// letters, they turn no Latin letter.
+fn moves_the_text_around(character: char) -> bool {
+    matches!(
+        character,
+        '\u{202a}'..='\u{202e}' | '\u{2066}'..='\u{2069}' | '\u{2029}' | '\u{85}' | '\u{1c}'..='\u{1e}'
+    )
+}
+
+/// An author's text without the characters that move the text around it; borrowed when it holds
+/// none, the most usual case (the corpus holds none).
+fn without_marks_of_direction(text: &str) -> std::borrow::Cow<'_, str> {
+    if text.contains(moves_the_text_around) {
+        text.chars()
+            .filter(|character| !moves_the_text_around(*character))
+            .collect::<String>()
+            .into()
+    } else {
+        text.into()
+    }
+}
+
 /// Whether each opening brace of a text, in order, has its closing brace: each closing brace
 /// closes the last brace still open, and one with no brace open closes nothing.
 fn closed_braces(text: &str) -> Vec<bool> {
@@ -308,6 +334,8 @@ impl Markup {
     /// is.
     #[must_use]
     pub fn of(text: &str) -> Self {
+        let text = without_marks_of_direction(text);
+        let text = text.as_ref();
         // A brace never closed is never inside a pair: whatever opens after it and closes,
         // closes before the brace under it would. So the stack of groups is the stack of the
         // first pass without the braces never closed, and both pop the same brace at each `}`.
@@ -415,12 +443,12 @@ impl Markup {
 
 impl crate::Build {
     /// The description of the build read with its markup and its links; none when its file has
-    /// none, or one of spaces only (« The author wrote no description. »).
+    /// none, or one of spaces and marks of direction only (« The author wrote no description. »).
     #[must_use]
     pub fn description_markup(&self) -> Option<Markup> {
         self.description
             .as_deref()
-            .filter(|description| !description.trim().is_empty())
+            .filter(|description| !without_marks_of_direction(description).trim().is_empty())
             .map(Markup::of_description)
     }
 }

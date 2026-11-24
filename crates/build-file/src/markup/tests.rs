@@ -457,7 +457,6 @@ fn an_address_is_made_of_the_visible_characters_of_ascii() {
 fn an_address_glued_to_what_follows_it_is_text() {
     for written in [
         "https://pathofexile.co\u{200b}m/forum",
-        "https://a.com/x\u{202e}y",
         "https://a.com/x\u{7f}y",
         "https://pathofexile.coé",
         "https://a.com/x。y",
@@ -465,6 +464,17 @@ fn an_address_glued_to_what_follows_it_is_text() {
     ] {
         assert_eq!(described(written), [plain(written)], "{written:?}");
     }
+}
+
+#[test]
+fn an_authors_text_keeps_no_mark_that_moves_the_text_around_it() {
+    let written =
+        "a\u{202a}\u{202b}b\u{2066}\u{2069}c\u{2029}\u{85}d\u{1c}\u{1e}\u{202e}e\u{200f}f";
+    assert_eq!(pieces(written), [plain("abcde\u{200f}f")]);
+    assert_eq!(
+        described("Guide: \u{202e}https://a.com/x\u{202b}y"),
+        [plain("Guide: "), link("https://a.com/xy", Style::default())]
+    );
 }
 
 #[test]
@@ -574,6 +584,10 @@ fn a_description_of_spaces_only_is_no_description() {
     );
     assert_eq!(
         description_of(serde_json::json!({ "description": " \n " })),
+        None
+    );
+    assert_eq!(
+        description_of(serde_json::json!({ "description": "\u{202e} \n\u{2069}" })),
         None
     );
     assert_eq!(
