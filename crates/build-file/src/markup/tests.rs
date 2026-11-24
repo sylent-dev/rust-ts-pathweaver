@@ -471,3 +471,21 @@ fn a_megabyte_of_addresses_is_read_in_time() {
     let elapsed = start.elapsed();
     assert!(elapsed < Duration::from_secs(10), "{elapsed:?}");
 }
+
+#[test]
+fn a_description_of_spaces_only_is_no_description() {
+    let description_of = |fields| crate::fixtures::build(fields).description_markup();
+    assert_eq!(description_of(serde_json::json!({})), None);
+    assert_eq!(
+        description_of(serde_json::json!({ "description": null })),
+        None
+    );
+    assert_eq!(
+        description_of(serde_json::json!({ "description": " \n " })),
+        None
+    );
+    assert_eq!(
+        description_of(serde_json::json!({ "description": "<b>{x} https://a.com" })),
+        Some(Markup::of_description("<b>{x} https://a.com"))
+    );
+}

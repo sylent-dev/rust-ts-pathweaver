@@ -402,6 +402,18 @@ impl Markup {
     }
 }
 
+impl crate::Build {
+    /// The description of the build read with its markup and its links; none when its file has
+    /// none, or one of spaces only (« The author wrote no description. »).
+    #[must_use]
+    pub fn description_markup(&self) -> Option<Markup> {
+        self.description
+            .as_deref()
+            .filter(|description| !description.trim().is_empty())
+            .map(Markup::of_description)
+    }
+}
+
 /// Pushes a text in a style, its addresses as links.
 fn push_linked(text: String, style: Style, pieces: &mut Vec<Piece>) {
     let piece_of = |range: std::ops::Range<usize>| text.get(range).unwrap_or_default().to_owned();

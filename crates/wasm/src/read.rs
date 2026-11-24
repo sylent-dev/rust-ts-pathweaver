@@ -1,10 +1,12 @@
 //! A file opened in the page (`specs.md`, Opening builds): the build it holds, or why it is
 //! refused, as data the interface writes in each language.
 
-use pathweaver_build_file::{Build, ReadError};
+use pathweaver_build_file::{Build, Guide, ReadError};
 use serde::Serialize;
 use tsify::{Ts, Tsify};
 use wasm_bindgen::prelude::{JsError, wasm_bindgen};
+
+use crate::markup::{BuildGuide, MarkupPiece, pieces_of};
 
 /// What a file gives: its build, or why it is refused. Not an exception: a file of a stranger
 /// that isn't a build is expected.
@@ -25,8 +27,11 @@ pub struct OpenedBuild {
     pub author: Option<String>,
     /// The id of the ascendancy, such as `Warrior1`.
     pub ascendancy: Option<String>,
-    /// Usually the page of its guide; any text, not always an address.
-    pub link: Option<String>,
+    /// Its description with the markup of the game and its addresses as links; none when the
+    /// author wrote none.
+    pub description: Option<Vec<MarkupPiece>>,
+    /// Its guide: the `link` of the file, else the first address of its description.
+    pub guide: Option<BuildGuide>,
     pub levels: BuildLevels,
 }
 
@@ -120,16 +125,22 @@ pub fn refused_by_size_of_file(bytes: u64) -> Result<Option<Ts<RefusedFile>>, Js
 #[must_use]
 pub fn read_file(bytes: &[u8]) -> BuildFile {
     match Build::read_bytes(bytes) {
-        Ok(build) => BuildFile::Build {
-            build: OpenedBuild {
-                content_key: build.content_key(),
-                levels: BuildLevels::from(&build),
-                name: build.name,
-                author: build.author.into_option(),
-                ascendancy: build.ascendancy.into_option(),
-                link: build.link.into_option(),
-            },
-        },
+        Ok(build) => {
+            let description = build.description_markup();
+            let guide =
+                Guide::of(build.link.as_deref(), description.as_ref()).map(BuildGuide::from);
+            BuildFile::Build {
+                build: OpenedBuild {
+                    content_key: build.content_key(),
+                    levels: BuildLevels::from(&build),
+                    description: description.map(pieces_of),
+                    guide,
+                    name: build.name,
+                    author: build.author.into_option(),
+                    ascendancy: build.ascendancy.into_option(),
+                },
+            }
+        }
         Err(error) => BuildFile::Refused {
             error: error.into(),
         },
@@ -151,6 +162,7 @@ pub fn read_build_file(bytes: &[u8]) -> Result<Ts<BuildFile>, JsError> {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use crate::markup::{MarkupColour, MarkupColourName, MarkupSize, MarkupStyle};
 
     #[test]
     fn a_build_gives_its_key_and_what_the_page_shows_of_it() {
@@ -164,7 +176,13 @@ mod tests {
                     name: "Every Field".to_owned(),
                     author: Some("Pathweaver".to_owned()),
                     ascendancy: Some("Warrior1".to_owned()),
-                    link: Some("https://example.com/guides/every-field".to_owned()),
+                    description: Some(vec![MarkupPiece::Text {
+                        text: "A build written for the tests: every field of version 1 of the format, in both of its forms.".to_owned(),
+                        style: MarkupStyle::default(),
+                    }]),
+                    guide: Some(BuildGuide::Link {
+                        address: "https://example.com/guides/every-field".to_owned(),
+                    }),
                     levels: BuildLevels {
                         lowest: 1,
                         highest: 100,
@@ -173,6 +191,90 @@ mod tests {
                 },
             }
         );
+    }
+
+    #[test]
+    fn a_description_crosses_with_its_styles_and_its_links_and_gives_the_guide() {
+        let text = r#"{ "name": "Amazon", "link": "",
+            "description": "<b>{<rgb(134, 189, 163)>{Guide}}:\r\nhttps://maxroll.gg/a." }"#;
+
+        let BuildFile::Build { build } = read_file(text.as_bytes()) else {
+            panic!("the text is a build");
+        };
+        let green = MarkupStyle {
+            is_bold: true,
+            colour: Some(MarkupColour::Rgb {
+                red: 134,
+                green: 189,
+                blue: 163,
+            }),
+            ..MarkupStyle::default()
+        };
+        let plain = MarkupStyle::default();
+        assert_eq!(
+            build.description,
+            Some(vec![
+                MarkupPiece::Text {
+                    text: "Guide".to_owned(),
+                    style: green,
+                },
+                MarkupPiece::Text {
+                    text: ":".to_owned(),
+                    style: plain,
+                },
+                MarkupPiece::LineBreak,
+                MarkupPiece::Link {
+                    address: "https://maxroll.gg/a".to_owned(),
+                    style: plain,
+                },
+                MarkupPiece::Text {
+                    text: ".".to_owned(),
+                    style: plain,
+                },
+            ])
+        );
+        assert_eq!(
+            build.guide,
+            Some(BuildGuide::FromDescription {
+                address: "https://maxroll.gg/a".to_owned(),
+            })
+        );
+    }
+
+    #[test]
+    fn each_style_and_colour_crosses_as_the_core_read_it() {
+        let text = r#"{ "name": "Styles", "description":
+            "<i>{<u>{<s>{a}<m>{b}<l>{c}}}<gold>{d}<gray>{e}<unique>{f}" }"#;
+
+        let BuildFile::Build { build } = read_file(text.as_bytes()) else {
+            panic!("the text is a build");
+        };
+        let italic_underlined = |size| MarkupStyle {
+            is_italic: true,
+            is_underlined: true,
+            size: Some(size),
+            ..MarkupStyle::default()
+        };
+        let named = |name| MarkupStyle {
+            colour: Some(MarkupColour::Named { name }),
+            ..MarkupStyle::default()
+        };
+        let piece = |text: &str, style| MarkupPiece::Text {
+            text: text.to_owned(),
+            style,
+        };
+        assert_eq!(
+            build.description,
+            Some(vec![
+                piece("a", italic_underlined(MarkupSize::Small)),
+                piece("b", italic_underlined(MarkupSize::Medium)),
+                piece("c", italic_underlined(MarkupSize::Large)),
+                piece("d", named(MarkupColourName::Gold)),
+                piece("e", named(MarkupColourName::Grey)),
+                piece("f", named(MarkupColourName::Unique)),
+            ])
+        );
+        assert_eq!(build.guide, None);
     }
 
     #[test]
