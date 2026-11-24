@@ -44,6 +44,15 @@ describe('the files opened', () => {
 		]);
 	});
 
+	it('forget the files refused once their notice is closed', async () => {
+		const opening = new Opening();
+		await opening.open([image]);
+
+		opening.dismissRefused();
+
+		expect([opening.refused, opening.refusedAll]).toEqual([[], []]);
+	});
+
 	it('say the files refused all refused only when none of them opened', async () => {
 		const opening = new Opening();
 		const notJson = fileOf('notes.txt', 'Act 1');

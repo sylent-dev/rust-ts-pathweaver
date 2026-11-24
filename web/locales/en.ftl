@@ -120,3 +120,8 @@ refused-zone-unreadable = That build can't be read
 refused-zone-several = These files can't be read
 
 core-load-failed = The core of Pathweaver could not load.
+
+## The notices, between the band of the site and the band of the open builds.
+
+# The close button of a notice.
+notice-close = Close

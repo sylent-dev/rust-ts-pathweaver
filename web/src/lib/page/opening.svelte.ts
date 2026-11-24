@@ -1,6 +1,6 @@
 // The files the page opens, dropped anywhere or chosen, and the JSON of a build pasted (specs.md,
 // Opening builds): each build opens and the last is shown, each file refused is kept with its
-// reason until the next files. Apart from the drag (file-drop.svelte.ts): the files chosen and
+// reason until the next files or until its notice is closed. Apart from the drag (file-drop.svelte.ts): the files chosen and
 // the text pasted open here too, with no drag.
 
 import { openBuilds } from './open-builds.svelte.ts';
@@ -24,10 +24,17 @@ export class Opening {
 
 	/**
 	 * The files refused of the last files dropped or chosen when none of them opened, which the
-	 * drop zone of the first visit says; none when one of them opened, which a notice says (4f).
+	 * drop zone of the first visit says; none when one of them opened, which the notice of the page
+	 * of a build says.
 	 */
 	get refusedAll(): readonly RefusedRead[] {
 		return this.#openedNone ? this.#refused : [];
+	}
+
+	/** Forgets the files refused, whose notice is closed. */
+	dismissRefused(): void {
+		this.#refused = [];
+		this.#openedNone = false;
 	}
 
 	/**

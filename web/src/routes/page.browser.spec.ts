@@ -1,5 +1,6 @@
-// The home page in a real browser: Paste JSON turns the drop zone into a field and back, and the
-// page given back once every build is closed.
+// The home page in a real browser: Paste JSON turns the drop zone into a field and back, the page
+// given back once every build is closed, the two bands of the page of a build and the notice of the
+// files refused between them.
 
 import { flushSync, mount, unmount } from 'svelte';
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
@@ -136,5 +137,56 @@ describe('the bands of the page of a build', () => {
 			.element(report)
 			.toHaveAttribute('href', 'https://github.com/sylent-dev/rust-ts-pathweaver/issues/new');
 		await expect.element(report).toHaveAttribute('target', '_blank');
+	});
+});
+
+describe('the notice of the files refused', () => {
+	const image = new File([new Uint8Array([0x89, 0x50])], 'passive-tree.png');
+
+	it('names the files refused with a build opened, between the two bands', async () => {
+		drop([image, new File(['{ "name": "Ember" }'], 'ember.build')]);
+		await opening.open([]);
+
+		await expect.element(page.getByRole('heading', { name: 'Ember' })).toBeVisible();
+		const notice = page.getByRole('alert').element();
+		const site = page.getByRole('banner').element();
+		const builds = page.getByRole('navigation', { name: 'Open builds' }).element();
+		expect([
+			notice.textContent.trim(),
+			site.nextElementSibling === notice,
+			notice.nextElementSibling === builds
+		]).toEqual(["passive-tree.png isn't a text file", true, true]);
+	});
+
+	it('names the files of a drop all refused on the page of a build', async () => {
+		await opening.open([new File(['{ "name": "Ember" }'], 'ember.build')]);
+
+		drop([image]);
+		await opening.open([]);
+
+		await expect
+			.element(page.getByRole('alert'))
+			.toHaveTextContent("passive-tree.png isn't a text file");
+	});
+
+	it('closes, the keyboard on the tab of the build shown', async () => {
+		drop([image, new File(['{ "name": "Ember" }'], 'ember.build')]);
+		await opening.open([]);
+
+		await page.getByRole('button', { name: 'Close', exact: true }).click();
+
+		await expect.element(page.getByRole('alert')).not.toBeInTheDocument();
+		await expect.element(page.getByRole('button', { name: 'Ember', exact: true })).toHaveFocus();
+	});
+
+	it('leaves once the next files open without a refusal', async () => {
+		drop([image, new File(['{ "name": "Ember" }'], 'ember.build')]);
+		await opening.open([]);
+
+		drop([new File(['{ "name": "Frost" }'], 'frost.build')]);
+		await opening.open([]);
+
+		await expect.element(page.getByRole('heading', { name: 'Frost' })).toBeVisible();
+		await expect.element(page.getByRole('alert')).not.toBeInTheDocument();
 	});
 });

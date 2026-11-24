@@ -39,10 +39,10 @@
 	});
 
 	/**
-	 * Puts the keyboard on the tab of the build shown, once it is drawn; nowhere when the last
-	 * build was closed, which takes the band off the page.
+	 * Puts the keyboard on the tab of the build shown, once it is drawn, as when the notice over
+	 * the band is closed; nowhere when the last build was closed, which takes the band off the page.
 	 */
-	async function focusShownTab(): Promise<void> {
+	export async function focusShownTab(): Promise<void> {
 		await tick();
 		band?.querySelector<HTMLButtonElement>('[aria-current="true"]')?.focus();
 	}
