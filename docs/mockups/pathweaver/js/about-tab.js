@@ -24,8 +24,23 @@ const AB_URL = /https:\/\/[^\s<>"'{}]+[^\s<>"'{}.,;:!?)]/g;
 // in the text, which a space of one pixel or a tag that changes nothing on screen made to read as another address
 // than the one opened, and plain text set aside), computed from the address it opens, so that no text around it
 // can lengthen or change what it reads; its whole address in its tooltip.
-const abSite = url => { try { return new URL(url).host.replace(/^www\./, ""); } catch { return url; } };
-const abLink = url => `<a class="ab-chip" href="${url}" target="_blank" rel="noopener noreferrer" title="${url}">${escapeHtml(abSite(url))}</a>`;
+// The site is the host the browser reads, without `www.` when a name with a dot follows it (www.com stays whole);
+// past 40 characters, its end only, after an ellipsis, as the address bar of a browser cuts a long site: its true
+// domain is at its end, and its start may be chosen to read as another (4g3, its fourth review, the owner,
+// 2026-11-24: an ellipsis at its end hid the domain, and a chip on several lines crowded the guide). An address
+// whose site the browser can't read stays text.
+const AB_SITE_KEPT = 40;
+function abSite(url) {
+  if (!URL.canParse(url)) return undefined;
+  const { host } = new URL(url);
+  const site = host.startsWith("www.") && host.slice(4).includes(".") ? host.slice(4) : host;
+  return site.length > AB_SITE_KEPT ? `…${site.slice(-(AB_SITE_KEPT - 1))}` : site;
+}
+const abLink = url => {
+  const site = abSite(url);
+  return site === undefined ? url
+    : `<a class="ab-chip" href="${url}" target="_blank" rel="noopener noreferrer" title="${url}">${escapeHtml(site)}</a>`;
+};
 const abLinked = html => html.replace(AB_URL, abLink);
 const abDescription = about => (about.description
   ? `<div class="ab-desc">${abLinked(markupHtml(about.description.replace(/\r/g, "")))}</div>`

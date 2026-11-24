@@ -23,4 +23,16 @@ describe('the site of an address', () => {
 	it('is none when the browser can’t read the address', () => {
 		expect([siteOf('https://['), siteOf('https://a b')]).toEqual([undefined, undefined]);
 	});
+
+	it('is its end only past 40 characters, its true domain kept after an ellipsis', () => {
+		const forty = `${'a'.repeat(32)}.evil.io`;
+		const longer = `pathofexile.com.${'forum-view-thread'.repeat(4)}.evil.io`;
+		expect([
+			siteOf(`https://${forty}/x`),
+			siteOf(`https://www.${forty}/x`),
+			siteOf(`https://${longer}/x`)
+		]).toEqual([forty, forty, `…${longer.slice(-39)}`]);
+		expect(siteOf(`https://${longer}/x`)?.endsWith('.evil.io')).toBe(true);
+		expect(siteOf(`https://${longer}/x`)).toHaveLength(40);
+	});
 });
