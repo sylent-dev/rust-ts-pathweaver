@@ -64,6 +64,14 @@ phone-why-screen = its passive tree needs a large screen.
 # Before the ascendancy, after a « · ». $author (String): as the file writes it.
 build-by = by { $author }
 
+## The tabs of the page of a build.
+
+tab-overview = Overview
+tab-skills = Skills
+tab-tree = Tree
+tab-inventory = Inventory
+tab-about = About
+
 ## Why a file is refused, written after its name, which the page shows in the colour of the text
 ## and the reason in the red; without a period at its end (the owner, 2026-11-23).
 
