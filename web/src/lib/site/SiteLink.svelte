@@ -1,7 +1,8 @@
 <!-- A link in words, as on the band of the site (specs.md, Window layout): in the colour of the frame
      of the logo, the full height of its row; on hover, its words turn to the colour of the text and
-     a line of 2 pixels sweeps under them, never left drawn. Over the first visit for now (Report a
-     bug, Paste JSON); the band of the site takes it with its links (4f). Given an address, it leads
+     a line of 2 pixels sweeps under them, never left drawn: in the band of the site and over the
+     first visit (Report a bug, Paste JSON). Its parent may set the colour of its words on hover,
+     `--site-link-hover` (the colour of the text by default). Given an address, it leads
      out of the website, in a new tab, so that the builds open stay open, which its name says to a
      screen reader (WCAG G201); given an action of the page, it is a button. Compact, 32 pixels high
      and its words almost to its edges: under the zone of the first visit. -->
@@ -68,7 +69,7 @@
 	}
 
 	.link:hover {
-		color: var(--text);
+		color: var(--site-link-hover, var(--text));
 	}
 
 	.label {

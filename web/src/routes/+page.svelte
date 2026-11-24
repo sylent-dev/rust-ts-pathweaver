@@ -1,8 +1,9 @@
 <!-- The home page: the first visit, where .build files are dropped or chosen, or the JSON of a
-     build pasted, and read by the core in Rust; once one opens, the band of the open builds and
-     the page of the build shown. -->
+     build pasted, and read by the core in Rust; once one opens, the two bands, the site above the
+     open builds, and the page of the build shown. -->
 <script lang="ts">
 	import OpenBuildsBand from '#lib/bands/OpenBuildsBand.svelte';
+	import SiteBand from '#lib/bands/SiteBand.svelte';
 	import BuildPage from '#lib/build/BuildPage.svelte';
 	import { loadCore } from '#lib/core.ts';
 	import FirstVisitPage from '#lib/home/FirstVisitPage.svelte';
@@ -19,6 +20,7 @@
 
 {#if openBuilds.shown}
 	<div class="build-view">
+		<SiteBand />
 		<OpenBuildsBand />
 		<BuildPage build={openBuilds.shown} />
 	</div>
@@ -27,7 +29,7 @@
 {/if}
 
 <style>
-	/* The whole height of the window, the page of the build taking what the band leaves. */
+	/* The whole height of the window, the page of the build taking what the bands leave. */
 	.build-view {
 		display: flex;
 		flex-direction: column;

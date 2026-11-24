@@ -11,7 +11,7 @@
 </svelte:head>
 
 <main class="phone graph-paper">
-	<div class="top"><Brand markPixels={22} /></div>
+	<div class="top"><Brand markPixels={22} place="phone" /></div>
 	<div class="message">
 		<!-- The face: the sticky note « ? » of an unknown id, turned, two eyes and a mouth in a
 		     slash drawn in its ink (U14, the owner, 2026-11-21). -->
