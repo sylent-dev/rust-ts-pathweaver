@@ -20,22 +20,3 @@
 )]
 
 mod read;
-
-use wasm_bindgen::prelude::wasm_bindgen;
-
-/// The version of the core, so that the interface can check which module it loaded.
-#[wasm_bindgen(js_name = coreVersion)]
-#[must_use]
-pub fn core_version() -> String {
-    env!("CARGO_PKG_VERSION").to_owned()
-}
-
-#[cfg(test)]
-mod tests {
-    use super::*;
-
-    #[test]
-    fn the_bridge_gives_the_version_of_the_workspace() {
-        assert_eq!(core_version(), "0.1.0");
-    }
-}
