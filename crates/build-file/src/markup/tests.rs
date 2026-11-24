@@ -308,7 +308,7 @@ fn a_nesting_a_million_deep_is_read() {
 }
 
 #[test]
-fn a_megabyte_of_braces_left_open_or_never_opened_is_read() {
+fn a_megabyte_of_tags_and_braces_never_paired_is_read() {
     let written = [
         "<b>{".repeat(250_000),
         "{".repeat(1_000_000),

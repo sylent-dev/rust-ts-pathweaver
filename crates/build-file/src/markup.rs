@@ -308,9 +308,9 @@ impl Markup {
     /// is.
     #[must_use]
     pub fn of(text: &str) -> Self {
-        // A closing brace closes a group exactly when the first pass found it a brace to close:
-        // the braces never closed are never pushed, and every brace after one of them that a
-        // closing brace closes was opened after it.
+        // A brace never closed is never inside a pair: whatever opens after it and closes,
+        // closes before the brace under it would. So the stack of groups is the stack of the
+        // first pass without the braces never closed, and both pop the same brace at each `}`.
         let mut is_closed = closed_braces(text).into_iter();
         let mut markup = Self::default();
         let mut groups: Vec<Group> = Vec::new();
@@ -373,12 +373,6 @@ impl Markup {
         })
     }
 
-    /// The pieces of the text, in order.
-    #[must_use]
-    pub fn pieces(&self) -> &[Piece] {
-        &self.0
-    }
-
     /// Adds a text in a style, to the text before it when it has the same style.
     fn write(&mut self, text: &str, style: Style) {
         if text.is_empty() {
@@ -414,6 +408,11 @@ impl crate::Build {
 
 /// Pushes a text in a style, its addresses as links.
 fn push_linked(text: String, style: Style, pieces: &mut Vec<Piece>) {
+    // The text moves whole when it holds no address, the most usual case.
+    if addresses::of(&text).next().is_none() {
+        pieces.push(Piece::Text { text, style });
+        return;
+    }
     let piece_of = |range: std::ops::Range<usize>| text.get(range).unwrap_or_default().to_owned();
     let mut written = 0;
     for address in addresses::of(&text) {
@@ -429,9 +428,7 @@ fn push_linked(text: String, style: Style, pieces: &mut Vec<Piece>) {
             style,
         });
     }
-    if written == 0 {
-        pieces.push(Piece::Text { text, style });
-    } else if written < text.len() {
+    if written < text.len() {
         pieces.push(Piece::Text {
             text: piece_of(written..text.len()),
             style,
