@@ -168,22 +168,31 @@
 	--unknown-ink: #4a3b00;
 	--unknown-text: var(--unknown-note); /* « Not in the game data » in the cards */
 
-	/* The named colours of the author's markup (specs.md, The author's texts), readable on the cards of
-     the style; « gray » reads as grey. Black the darkest neutral grey at 4.5 to 1 on the band, a little
-     darker than grey, as rgb(0, 0, 0) would be lightened (B2 of three, the owner, 2026-11-22: as written,
-     1.1 to 1, and as grey set aside). */
+	/* The named colours of the author's markup (specs.md, The author's texts), those of the documentation of
+     Grinding Gear Games (read on 2026-11-24), readable on the cards of the style; « gray » reads as grey.
+     Black the darkest neutral grey at 4.5 to 1 on the band, a little darker than grey, as rgb(0, 0, 0)
+     would be lightened (B2 of three, the owner, 2026-11-22: as written, 1.1 to 1, and as grey set aside);
+     unique the gold of a unique item. */
 	--markup-white: #ffffff;
 	--markup-grey: #8c8c8c;
 	--markup-black: #808080;
 	--markup-red: #e05050;
+	--markup-orange: #e8913c;
+	--markup-yellow: #e6d25a;
 	--markup-green: #5fc35f;
 	--markup-blue: #6c8cff;
-	--markup-yellow: #e6d25a;
-	--markup-orange: #e8913c;
+	--markup-indigo: #7f78f0;
+	--markup-violet: #a86ce0;
+	--markup-bronze: #b87c50;
+	--markup-silver: #a9b1bd;
 	--markup-gold: #c8a65a;
-	--markup-purple: #a86ce0;
-	--markup-cyan: #4fd2d2;
-	--markup-magenta: #d24fd2;
+	--markup-unique: var(--unique);
+	/* The sizes of the markup, small, medium and large, each a factor of the size of the text around the
+     author's text (4g1, the owner, 2026-11-24): the authors of the corpus write a head in m over a text in s
+     or without a size, so s is the text; m a step above, under the 14 pixels of the title of a card. */
+	--markup-small: 1;
+	--markup-medium: 1.15;
+	--markup-large: 1.35;
 
 	/* The tree, read by the canvas: colours, the width of the links taken, a glow (blur in pixels) on
      what is taken, and a shape per kind (circle, square, diamond, hex, star). The links taken in white
