@@ -1,10 +1,11 @@
 // The band of the open builds in a real browser: a tab shows its build, its close button closes it
-// and puts the keyboard on the tab of the build shown then.
+// and puts the keyboard on the tab of the build shown then; + chooses files.
 
 import { flushSync, mount, unmount } from 'svelte';
-import { afterEach, beforeEach, describe, expect, it } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { page } from 'vitest/browser';
 import { openBuilds } from '#lib/page/open-builds.svelte.ts';
+import { opening } from '#lib/page/opening.svelte.ts';
 import { openedBuild } from '#lib/page/opened-build.test-helper.ts';
 import OpenBuildsBand from './OpenBuildsBand.svelte';
 
@@ -64,4 +65,34 @@ describe('the band of the open builds', () => {
 		await expect.poll(() => document.activeElement?.textContent.trim()).toBe('Storm');
 		expect(tabNames()).toEqual(['Frost', 'Storm*']);
 	});
+
+	it('opens the chooser of files, several at once, on a click of +', async () => {
+		const click = vi.spyOn(chooser(), 'click').mockImplementation(() => {});
+
+		await page.getByRole('button', { name: 'Open .build files' }).click();
+
+		expect([click.mock.calls.length, chooser().multiple]).toEqual([1, true]);
+	});
+
+	it('opens the builds chosen with +, the last shown', async () => {
+		const files = new DataTransfer();
+		files.items.add(new File(['{ "name": "Venom" }'], 'venom.build'));
+		files.items.add(new File(['{ "name": "Blood" }'], 'blood.build'));
+		const input = chooser();
+		input.files = files.files;
+		input.dispatchEvent(new Event('change', { bubbles: true }));
+		await opening.open([]);
+		flushSync();
+
+		expect(tabNames()).toEqual(['Ember', 'Frost', 'Storm', 'Venom', 'Blood*']);
+	});
 });
+
+/** The chooser of files + opens. */
+function chooser(): HTMLInputElement {
+	const input = document.querySelector('nav input[type="file"]');
+	if (!(input instanceof HTMLInputElement)) {
+		throw new Error('the band has no chooser of files');
+	}
+	return input;
+}

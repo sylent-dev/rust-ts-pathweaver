@@ -65,6 +65,8 @@ phone-why-screen = its passive tree needs a large screen.
 builds-band = Open builds
 # The close button of a tab. $name (String): the name of the build, as its file writes it.
 builds-close = Close { $name }
+# The + at the end of the band: opens the choice of files of the system.
+builds-add = Open .build files
 
 ## The header of a build.
 
