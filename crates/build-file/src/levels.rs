@@ -52,9 +52,9 @@ impl LevelRange {
         self.first <= level && level <= self.last
     }
 
-    /// Whether the two ranges share a level.
-    pub(crate) fn meets(self, other: Self) -> bool {
-        self.first <= other.last && other.first <= self.last
+    /// The levels both ranges hold; none when they share no level.
+    pub(crate) fn shared_with(self, other: Self) -> Option<Self> {
+        Self::between(self.first.max(other.first), self.last.min(other.last))
     }
 
     /// The levels from the lowest of both to the highest of both.

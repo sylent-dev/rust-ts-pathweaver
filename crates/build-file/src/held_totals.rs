@@ -5,7 +5,7 @@
 
 use std::collections::BTreeSet;
 
-use crate::{Build, PassiveInSet, SupportOnSkill};
+use crate::{Build, Entry, InventorySlot};
 
 /// How many things a build holds at one level at least: what applies at no level (an entry
 /// with an invalid interval, a support whose levels never meet those of its skill) counts
@@ -22,36 +22,24 @@ pub struct HeldTotals {
 impl Build {
     /// How many things the build holds over its levels, each once, however many entries set it
     /// and at however many levels: the same passive listed twice, or a gem listed again from
-    /// level to level, is one thing.
+    /// level to level, is one thing. Counted from the levels of each entry, never by reading
+    /// [`Build::at_level`] at each level: on a file of 1 MB of 115,965 passives, 6 ms against
+    /// 1.2 s (`changes/large_files.rs`, measured on 2026-11-24).
     #[must_use]
     pub fn held_totals(&self) -> HeldTotals {
         let skills = self.skills.get().into_iter().flatten();
-        let skills = skills.filter_map(|skill| skill.levels().map(|levels| (skill, levels)));
-        let skills: Vec<_> = skills.collect();
-        let supports = skills.iter().flat_map(|(skill, skill_levels)| {
-            let supports = skill.supports().iter();
-            let supports = supports.filter(|support| {
-                support
-                    .levels()
-                    .is_some_and(|levels| levels.meets(*skill_levels))
-            });
-            supports.map(|support| SupportOnSkill {
-                id: support.id(),
-                skill: skill.id(),
-            })
-        });
+        let skills = skills.filter(|skill| skill.levels().is_some());
+        let supports = self.supports_on_skills();
+        let supports = supports.filter(|support| support.levels.is_some());
         let passives = self.passives.get().into_iter().flatten();
         let passives = passives.filter(|passive| passive.levels().is_some());
         let hints = self.inventory_slots.get().into_iter().flatten();
         let hints = hints.filter(|hint| hint.levels().is_some());
         HeldTotals {
-            passives: distinct(passives.map(|passive| PassiveInSet {
-                id: passive.id(),
-                weapon_set: passive.weapon_set(),
-            })),
-            skills: distinct(skills.iter().map(|(skill, _)| skill.id())),
-            supports: distinct(supports),
-            hints: distinct(hints.map(|hint| hint.on_slot())),
+            passives: distinct(passives.map(Entry::in_set)),
+            skills: distinct(skills.map(Entry::id)),
+            supports: distinct(supports.map(|support| support.on_skill)),
+            hints: distinct(hints.map(InventorySlot::on_slot)),
         }
     }
 }
