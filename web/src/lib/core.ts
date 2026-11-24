@@ -19,12 +19,17 @@ export async function loadCore(): Promise<void> {
 /**
  * The build of the text of a file, or why it is refused, and why a file is refused from its size
  * alone (see crates/wasm/src/read.rs), to call once `loadCore` has resolved. A file that isn't a
- * build is a result, never an exception.
+ * build is a result, never an exception. An author's text crosses as its pieces, each with its
+ * style (see crates/wasm/src/markup.rs).
  */
 export {
 	readBuildFile,
 	refusedBySize,
 	type BuildFile,
+	type BuildGuide,
+	type MarkupColourName,
+	type MarkupPiece,
+	type MarkupStyle,
 	type OpenedBuild,
 	type RefusedFile
 } from '#lib/wasm/pathweaver.js';
