@@ -562,3 +562,81 @@ fn a_description_of_spaces_only_is_no_description() {
         Some(Markup::of_description("<b>{x} https://a.com"))
     );
 }
+
+/// `count` line breaks, `count` pieces.
+fn line_breaks(count: usize) -> String {
+    "\n".repeat(count)
+}
+
+#[test]
+fn a_text_keeps_its_first_thousand_pieces_and_is_cut_past_them() {
+    let markup = Markup::of(&line_breaks(1_000_000));
+    assert!(markup.is_cut());
+    assert_eq!(
+        markup.into_iter().collect::<Vec<_>>(),
+        vec![Piece::LineBreak; 1_000]
+    );
+}
+
+#[test]
+fn a_text_of_a_thousand_pieces_is_not_cut() {
+    let exactly = Markup::of(&line_breaks(1_000));
+    assert!(!exactly.is_cut());
+    assert_eq!(exactly.into_iter().count(), 1_000);
+    let one_more = Markup::of(&line_breaks(1_001));
+    assert!(one_more.is_cut());
+    assert_eq!(one_more.into_iter().count(), 1_000);
+}
+
+#[test]
+fn the_last_piece_kept_is_whole() {
+    // Its text is written by three tokens around an empty tag; a reading that stopped at its
+    // first would keep « ab ».
+    let markup = Markup::of(&(line_breaks(999) + "ab<b>{}cd\nlost"));
+    assert!(markup.is_cut());
+    assert_eq!(
+        markup.into_iter().last(),
+        Some(plain("abcd")),
+        "the 1,000th piece"
+    );
+}
+
+#[test]
+fn what_adds_no_piece_after_the_last_one_kept_cuts_nothing() {
+    let markup = Markup::of(&(line_breaks(1_000) + "<b>{}"));
+    assert!(!markup.is_cut(), "an empty tag");
+    let pieces: Vec<Piece> = Markup::of(&(line_breaks(1_000) + "\u{202e}"))
+        .into_iter()
+        .collect();
+    assert_eq!(pieces.len(), 1_000, "a mark of direction, removed");
+}
+
+#[test]
+fn the_links_of_a_description_count_among_its_pieces() {
+    let written = line_breaks(998) + "See https://a.com now";
+    assert!(!Markup::of(&written).is_cut(), "999 pieces of markup");
+    let description = Markup::of_description(&written);
+    assert!(description.is_cut());
+    assert_eq!(
+        description.into_iter().skip(998).collect::<Vec<_>>(),
+        [plain("See "), link("https://a.com", Style::default())]
+    );
+}
+
+#[test]
+fn a_description_cut_by_its_markup_is_cut() {
+    let description = Markup::of_description(&(line_breaks(1_000) + "https://a.com"));
+    assert!(description.is_cut());
+    assert_eq!(description.into_iter().count(), 1_000);
+}
+
+#[test]
+fn a_megabyte_of_addresses_past_the_pieces_kept_is_read_in_time() {
+    let start = Instant::now();
+    let addresses = "https://a.com ".repeat(75_000);
+    let description = Markup::of_description(&addresses);
+    let elapsed = start.elapsed();
+    assert!(elapsed < Duration::from_secs(10), "{elapsed:?}");
+    assert!(description.is_cut());
+    assert_eq!(description.into_iter().count(), 1_000);
+}
