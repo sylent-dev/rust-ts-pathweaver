@@ -1,7 +1,7 @@
 import { FluentParser } from '@fluent/syntax';
 import { describe, expect, it, vi } from 'vitest';
 import english from '../../locales/en.ftl?raw';
-import { createBundle, formatMessage, t } from './i18n.ts';
+import { createBundle, formatMessage, t, tAround } from './i18n.ts';
 
 describe('locales/en.ftl', () => {
 	// The parser of the bundle skips a message it can't read without a word: the full parser
@@ -45,5 +45,17 @@ describe('formatMessage', () => {
 describe('t', () => {
 	it('formats the messages of the interface in English', () => {
 		expect(t('build-by', { author: 'Lolcohol' })).toBe('by Lolcohol');
+	});
+});
+
+describe('tAround', () => {
+	it('parts a message into its text before and after its value', () => {
+		expect(tAround('build-by', 'author')).toEqual({ before: 'by ', after: '' });
+	});
+
+	it("gives the whole message before a value it doesn't write, and warns", () => {
+		const warn = vi.spyOn(console, 'warn').mockImplementation(() => {});
+		expect(tAround('build-by', 'name')).toEqual({ before: 'by {$author}', after: '' });
+		expect(warn).toHaveBeenCalledOnce();
 	});
 });

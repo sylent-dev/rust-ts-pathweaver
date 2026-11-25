@@ -1,13 +1,13 @@
-# Opening builds: the tests (4e, 4f)
+# Opening builds: the tests (4e, 4f, 4g)
 
-The home page of the first visit opens builds three ways: files dropped anywhere on the page, files chosen with a click on the zone, and the JSON of a build pasted in the zone become a field; when nothing opens, the zone says why. These tests check what only a real browser shows: the files of the desktop, the clipboard, the page lit under files. Since 4f1, a build opened shows its page: its header and its five tabs, their panels still empty; since 4f2, the band of the open builds over it, a tab per build and +, which chooses more; since 4f3, the band of the site over both, and between them the notice of the files refused; since 4f4, the box of What's next. Run the tests in a row. A ✅ is enough when it works; detail only what goes wrong.
+The home page of the first visit opens builds three ways: files dropped anywhere on the page, files chosen with a click on the zone, and the JSON of a build pasted in the zone become a field; when nothing opens, the zone says why. These tests check what only a real browser shows: the files of the desktop, the clipboard, the page lit under files. Since 4f1, a build opened shows its page: its header and its five tabs, their panels still empty; since 4f2, the band of the open builds over it, a tab per build and +, which chooses more; since 4f3, the band of the site over both, and between them the notice of the files refused; since 4f4, the box of What's next; since 4g4b, the About tab, its colophon and the links of its guide and its description. Run the tests in a row. A ✅ is enough when it works; detail only what goes wrong.
 
 ## Before
 
 1. In the folder of the project, on the branch of the step: `cd web && npm run dev`, then open the address it prints.
-2. Run every test in Firefox, then the tests 1, 4, 8, 10, 11, 12 and 13 again in a Chromium (Chrome, Edge, Brave).
+2. Run every test in Firefox, then the tests 1, 4, 8, 10, 11, 12, 13 and 14 again in a Chromium (Chrome, Edge, Brave).
 3. Reload the page (F5) before each test: until the library (step 8), a reload closes the builds open and gives the first visit back.
-4. The files of `inputs/builds/`: `ggg-titan-warrior-sample.build`, `pob-twobyul-deadeye.build`, `utkarshbehre-spark-comet.build`; any image of the desktop, named `passive-tree.png` here; and a file `broken.build` made in a text editor, of these three lines:
+4. The files of `inputs/builds/`: `ggg-titan-warrior-sample.build`, `pob-twobyul-deadeye.build`, `utkarshbehre-spark-comet.build`, `maxroll-aer0-ice-shot-amazon.build`, `mobalytics-animeprincess-coc-comet-annotated.build`; any image of the desktop, named `passive-tree.png` here; and a file `broken.build` made in a text editor, of these three lines:
 
    ```
    {
@@ -15,11 +15,17 @@ The home page of the first visit opens builds three ways: files dropped anywhere
    }
    ```
 
-5. Seven files that aren't builds (images, texts), one of them renamed with a name of more than 80 characters.
+5. A file `long-guide.build` made in a text editor, of this line:
+
+   ```
+   { "name": "Long guide", "link": "https://mobalytics.gg-guides-and-builds-for-poe2.evil.io/x" }
+   ```
+
+6. Seven files that aren't builds (images, texts), one of them renamed with a name of more than 80 characters.
 
 ## The tests
 
-1. **Several files dropped**: select the three `.build` files in the file manager and drop them together anywhere on the page, outside the zone.
+1. **Several files dropped**: select `ggg-titan-warrior-sample.build`, `pob-twobyul-deadeye.build` and `utkarshbehre-spark-comet.build` in the file manager and drop them together anywhere on the page, outside the zone.
    ✅ The first visit gives way to a build at once, without a button: one of the three (the last in the order the system gives them, « Titan Warrior », « TwobyulDeadeye » or « Spark - Comet »), its header: its name, its portrait on the left, and under it « by Grinding Gear Games · Titan Warrior », « Deadeye Ranger » alone for TwobyulDeadeye, which names no author, or « by UtkarshBehre · Stormweaver Sorceress »; under the header the five tabs, **Overview** in white over its bar.
 
 2. **A build and an image dropped together**: drop `ggg-titan-warrior-sample.build` and `passive-tree.png` together; hover the red × on the right of the notice, then click it. Drop `passive-tree.png` alone on the page of the build.
@@ -58,7 +64,10 @@ The home page of the first visit opens builds three ways: files dropped anywhere
 13. **What's next**: on the first visit, click **What's next** at the top right; close the box with its ×. Drop `ggg-titan-warrior-sample.build`, click **What's next** in the band of the site; close with Esc. Open it again, press the mouse button on a line of a card, move to the dark veil and let go there; then click on the dark veil, outside the box. Then turn on the reduced motion of the system (GNOME: Settings, Accessibility, Seeing, Reduced Animation; Windows: Settings, Accessibility, Visual effects, Animation effects off; macOS: Accessibility, Display, Reduce motion), reload, and open the box once more.
     ✅ The page darkens and a panel opens in its middle, two cards side by side, a thin grey line between them: the left one, « Version 2 · The Editor Update », a large portrait of a sorceress at its top, comes down from a little above; the right one, « Version 3 · The Community Update », four portraits side by side, comes up from a little below. Their portraits fade into the panel under their names; each line after a small blue diamond. While it is open, **What's next** stays white. ×, Esc and the click on the veil each close it; after each, Tab shows the ring of the keyboard on the drop zone on the first visit, on the tab of « Titan Warrior » on the page of the build. The press begun on a card and let go on the veil leaves the box open. With less motion, the box and its veil only fade in, the cards in place.
 
-14. **Your own scenarios**: whatever else you want to try.
+14. **The links of the About tab**: drop `maxroll-aer0-ice-shot-amazon.build` and click the **About** tab; hover the guide in the colophon at the left, under « Guide », and leave the pointer there a second; click it. Back on the tab of Pathweaver, hover the second chip of the description, « maxroll.gg », and click it. Then drop `mobalytics-animeprincess-coc-comet-annotated.build`, show its **About** tab, hover its guide and click it. Then drop `long-guide.build` and show its **About** tab. Last, drop `ggg-titan-warrior-sample.build` and show its **About** tab.
+    ✅ The colophon shows the portrait of the Amazon fading toward its foot, the name of the build over it, then each fact under its title in grey: « Levels » over « 1–100 », « Entries » over « 171 passives », « 16 skills », « 58 supports » and « 26 items », « Guide » over the guide: « maxroll.gg » in blue, semi-bold, turning white on hover, « from the description » small and grey under it. Its tooltip gives its whole address, `https://maxroll.gg/poe2/build-guides/ice-shot-amazon-build-guide`; the click opens it in a new tab, the page of Pathweaver staying as it was in its own tab. The chip of the description gives `https://maxroll.gg/poe2/planner/0pgpe000` in its tooltip and opens the planner in a new tab. The guide of the Mobalytics build, « mobalytics.gg », has no « from the description » under it, gives `https://mobalytics.gg/poe-2/builds/animeprincess-coc-comet-stormweaver` in its tooltip and opens it in a new tab. The guide of « Long guide » reads « …and-builds-for-poe2.evil.io » on one line, inside the dark pane, its whole address in its tooltip. The colophon of « Titan Warrior » says « a snapshot » under « Levels », and « none » in grey under « Guide ».
+
+15. **Your own scenarios**: whatever else you want to try.
 
 ## Results
 
@@ -77,4 +86,5 @@ The home page of the first visit opens builds three ways: files dropped anywhere
 | 11. + in the band | | |
 | 12. Six builds in a narrow window | | |
 | 13. What's next | | |
-| 14. Your own scenarios | | |
+| 14. The links of the About tab | | |
+| 15. Your own scenarios | | |

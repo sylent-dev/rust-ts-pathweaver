@@ -68,3 +68,7 @@
 
 /* The section of the box of Download .build (sections/download-box.js): the window the box hangs in. */
 .dl-case { position: relative; }
+
+/* The section of the guide of the colophon (sections/guide-width.js): three colophons side by side, at their height. */
+.guide-width { display: flex; gap: 24px; }
+.guide-width .ab-colophon { min-height: 0; }

@@ -49,6 +49,13 @@ const chosen = Object.fromEntries(Object.entries(VARIANTS).map(([key, variant]) 
 // Escapes a text of the data before it goes into HTML: the data come from files of strangers.
 const escapeHtml = text => String(text).replace(/[&<>"']/g, c => `&#${c.charCodeAt(0)};`);
 
+// The name of a build, which the core gives as none when it shows nothing (4g4a: spaces, marks of direction,
+// characters drawn as nothing), empty in the data of the mock-up: « Untitled build » in the weak grey, in the
+// header, the band and the colophon (4g4b); in a tooltip, the same words without the grey.
+const UNTITLED = "Untitled build";
+const buildName = name => (name ? escapeHtml(name) : `<span class="app-weak">${UNTITLED}</span>`);
+const buildTitle = name => escapeHtml(name || UNTITLED);
+
 function applyVariables() {
   for (const [key, variant] of Object.entries(VARIANTS)) {
     if (variant.variable) document.documentElement.style.setProperty(variant.variable, chosen[key] + (variant.unit ?? ""));

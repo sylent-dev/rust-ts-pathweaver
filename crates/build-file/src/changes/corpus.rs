@@ -152,6 +152,31 @@ fn the_levels_and_the_changes_of_each_build_of_the_corpus() {
 
 #[test]
 #[ignore = "reads the corpus of inputs/builds, kept out of Git"]
+fn the_snapshots_of_the_corpus_are_its_builds_without_a_change() {
+    let corpus = corpus();
+    let snapshots: Vec<&str> = corpus
+        .iter()
+        .filter(|(_, build)| build.is_snapshot())
+        .map(|(name, _)| name.as_str())
+        .collect();
+
+    // Measured on 2026-11-25: those of NUMBERS without a change, passives included.
+    assert_eq!(
+        snapshots,
+        [
+            "chatgpt-untether-gemling.build",
+            "ggg-titan-warrior-docs.build",
+            "ggg-titan-warrior-sample.build",
+            "pob-twobyul-deadeye.build",
+            "pobr-summoner-lv98.build",
+            "pobr-writer-fixture.build",
+            "poe-ninja-disciple-of-varashta-lvl-22-65.build",
+        ]
+    );
+}
+
+#[test]
+#[ignore = "reads the corpus of inputs/builds, kept out of Git"]
 fn a_build_that_lists_its_supports_again_at_71_changes_only_by_those_that_come() {
     let corpus = corpus();
     let build = &corpus["utkarshbehre-spark-comet.build"];

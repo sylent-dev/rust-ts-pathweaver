@@ -18,14 +18,22 @@ afterEach(() => {
 });
 
 /** What a label shows of a build of this ascendancy, once the game data have named it. */
-async function label(ascendancy: string | undefined): Promise<{
+async function label(
+	ascendancy: string | undefined,
+	build: Partial<OpenedBuild> = {}
+): Promise<{
 	texts: string[];
 	portrait: string | null | undefined;
 	hover: string | null | undefined;
 }> {
 	await pageGameData.load();
-	const build: OpenedBuild = { ...openedBuild('key'), name: 'Spark Stormweaver', ascendancy };
-	shown = mount(BuildLabel, { target: document.body, props: { build } });
+	const shownBuild: OpenedBuild = {
+		...openedBuild('key'),
+		name: 'Spark Stormweaver',
+		ascendancy,
+		...build
+	};
+	shown = mount(BuildLabel, { target: document.body, props: { build: shownBuild } });
 	flushSync();
 	const element = document.querySelector('.label');
 	return {
@@ -45,6 +53,11 @@ describe('the label of an open build', () => {
 		expect(portrait).toMatch(/sorceress1-88/);
 	});
 
+	it('draws the name in an isolate of its direction', async () => {
+		await label('Sorceress1', { name: 'מכשף' });
+		expect(document.querySelector('.name bdi')?.textContent).toBe('מכשף');
+	});
+
 	it('writes an ascendancy the game data know not as its id, without a portrait', async () => {
 		expect(await label('Ranger2')).toEqual({
 			texts: ['Spark Stormweaver', 'Ranger2'],
@@ -59,5 +72,14 @@ describe('the label of an open build', () => {
 			portrait: undefined,
 			hover: 'Spark Stormweaver'
 		});
+	});
+
+	it('calls a build whose name shows nothing untitled, in the weak grey and on hover', async () => {
+		const { texts, hover } = await label('Sorceress1', { name: undefined });
+		expect([texts, hover]).toEqual([
+			['Untitled build', 'Stormweaver'],
+			'Untitled build\nStormweaver'
+		]);
+		expect(document.querySelector('.name .untitled')?.textContent).toBe('Untitled build');
 	});
 });

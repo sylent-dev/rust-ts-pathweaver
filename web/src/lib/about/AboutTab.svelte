@@ -1,6 +1,6 @@
 <!-- The About tab of a build (specs.md, Window layout: the About tab; 2k3 of the mock-up), as high
      as the Overview, scrolling inside, on the graph paper of the blocks: the colophon at the left
-     on a pane as dark as a slot (its content at 4g4), the description at the right at the width of
+     on a pane as dark as a slot (Colophon.svelte), the description at the right at the width of
      a page of text, behind it the mark of a note of the author as a watermark. The warnings (4i),
      the file to download and where the game reads the builds (7) come with their steps. -->
 <script lang="ts">
@@ -8,6 +8,7 @@
 	import { t } from '#lib/i18n.ts';
 	import Icon from '#lib/icons/Icon.svelte';
 	import AuthorText from '#lib/markup/AuthorText.svelte';
+	import Colophon from './Colophon.svelte';
 
 	interface Props {
 		build: OpenedBuild;
@@ -18,7 +19,7 @@
 
 <div class="about-tab">
 	<div class="about graph-paper">
-		<div class="colophon"></div>
+		<Colophon {build} />
 		<div class="main">
 			<span class="watermark"><Icon name="note" size={240} /></span>
 			{#if build.description === undefined}
@@ -45,12 +46,6 @@
 		min-height: 100%;
 		font-size: 13px;
 		line-height: 1.5;
-	}
-
-	.colophon {
-		flex: none;
-		width: 260px;
-		background: var(--pane);
 	}
 
 	.main {

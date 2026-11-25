@@ -30,11 +30,11 @@ const AB_URL = /https:\/\/[^\s<>"'{}]+[^\s<>"'{}.,;:!?)]/g;
 // 2026-11-24: an ellipsis at its end hid the domain, and a chip on several lines crowded the guide). An address
 // whose site the browser can't read stays text.
 const AB_SITE_KEPT = 40;
-function abSite(url) {
+function abSite(url, kept = AB_SITE_KEPT) {
   if (!URL.canParse(url)) return undefined;
   const { host } = new URL(url);
   const site = host.startsWith("www.") && host.slice(4).includes(".") ? host.slice(4) : host;
-  return site.length > AB_SITE_KEPT ? `…${site.slice(-(AB_SITE_KEPT - 1))}` : site;
+  return site.length > kept ? `…${site.slice(-(kept - 1))}` : site;
 }
 const abLink = url => {
   const site = abSite(url);
@@ -51,11 +51,15 @@ const abDescription = about => (about.description
   : '<p class="ab-none app-weak">The author wrote no description.</p>');
 // A link of the guide in the look of « Download .build » (the owner, 2026-11-21: no icon, the same hover): its
 // site alone in the accent, turning to the colour of the text on hover; its whole address in its tooltip (the
-// rest of the address written under it set aside: not pretty).
+// rest of the address written under it set aside: not pretty). Its site read as a chip reads it, on one line, its
+// end only past 28 characters, what the pane holds of usual letters under its title, a site of wide letters
+// running over it, its true domain still at its end (4g4b, its third and fourth reviews: a site of 40
+// characters ran 83 pixels over the description).
+const AB_GUIDE_KEPT = 28;
 function abGuideLink(url) {
-  let host = url;
-  try { host = new URL(url).host.replace(/^www\./, ""); } catch { /* shown whole */ }
-  return `<a class="ab-link" href="${escapeHtml(url)}" target="_blank" rel="noopener noreferrer" title="${escapeHtml(url)}">${escapeHtml(host)}</a>`;
+  const site = abSite(url, AB_GUIDE_KEPT);
+  return site === undefined ? `<span class="ab-link-text">${escapeHtml(url)}</span>`
+    : `<a class="ab-link" href="${escapeHtml(url)}" target="_blank" rel="noopener noreferrer" title="${escapeHtml(url)}">${escapeHtml(site)}</a>`;
 }
 // The guide, one link: the link of the file, the one its author named; when it has none, the first address of the
 // description, said to come from it (the owner, 2026-11-21: one guide, not two links to the same site; the Amazon
@@ -82,6 +86,15 @@ const abWarnings = about => `${abTitle(`<span class="ab-warned">${plural(about.w
 // large, in the middle of the part (its outline set aside).
 const abWatermark = () => `<svg class="ab-watermark" viewBox="0 0 16 16" aria-hidden="true">${ICONS.note}</svg>`;
 
+// The colophon of a build: its portrait, its name, its levels, its entries, its guide and its file; each fact
+// under its title, across the pane (C of three, the owner, 2026-11-25: one rule for every fact, the guide its
+// width; the titles in a column beside the facts, the guide alone under its title, set aside).
+const abColophon = about => `<aside class="ab-colophon-side"><img class="ab-portrait" src="pathweaver/img/portraits-about/${about.portrait}.webp" width="260" height="260" alt="">
+    <h3 class="ab-name app-title">${buildName(about.name)}</h3>
+    <p class="ab-by">${about.author ? `by ${escapeHtml(about.author)} · ` : ""}${escapeHtml(about.ascendancy)} <span class="app-weak">${escapeHtml(about.class)}</span></p>
+    <dl class="ab-facts"><dt>Levels</dt><dd>${about.levels ? `${about.levels[0]}–${about.levels[1]}` : "a snapshot"}</dd><dt>Entries</dt><dd>${abCounts(about).join("<br>")}</dd><dt>Guide</dt><dd class="ab-guide">${abGuide(about)}</dd></dl>
+    ${abFile(about)}</aside>`;
+
 // The About tab of the build shown, or of a case (`source`, a key of BUILDS.abouts).
 // The warnings before the description, where ⚠ of the header leads (data-warnings, its anchor; the owner,
 // 2026-11-21); `wide`, in a column of their own between the colophon and the description, only when there are
@@ -90,11 +103,7 @@ function aboutTab(level, source = "shown", { wide = false } = {}) {
   const about = BUILDS.abouts[source];
   const warnings = about.warnings.length ? `<div class="ab-warnings-part" data-warnings="">${abWarnings(about)}</div>` : "";
   return `<div class="app-about-tab"><div class="app-ab graph-paper"><div class="ab-colophon">
-      <aside class="ab-colophon-side"><img class="ab-portrait" src="pathweaver/img/portraits-about/${about.portrait}.webp" width="260" height="260" alt="">
-        <h3 class="ab-name app-title">${escapeHtml(about.name)}</h3>
-        <p class="ab-by">${about.author ? `by ${escapeHtml(about.author)} · ` : ""}${escapeHtml(about.ascendancy)} <span class="app-weak">${escapeHtml(about.class)}</span></p>
-        <dl class="ab-facts"><dt>Levels</dt><dd>${about.levels ? `${about.levels[0]}–${about.levels[1]}` : "a snapshot"}</dd><dt>Entries</dt><dd>${abCounts(about).join("<br>")}</dd><dt>Guide</dt><dd class="ab-guide">${abGuide(about)}</dd></dl>
-        ${abFile(about)}</aside>
+      ${abColophon(about)}
       ${wide && warnings ? `<div class="ab-aside">${warnings}</div>` : ""}
       <div class="ab-colophon-main">${abWatermark()}${!wide && warnings ? warnings : ""}${abDescription(about)}${abWhere()}</div>
     </div></div></div>`;

@@ -11,7 +11,7 @@ export function openedBuild(contentKey: string, markers: number[] = []): OpenedB
 		ascendancy: undefined,
 		description: undefined,
 		guide: undefined,
-		levels: { lowest: 1, highest: 100, markers },
+		levels: { lowest: 1, highest: 100, markers, isSnapshot: false },
 		totals: { passives: 0, skills: 0, supports: 0, hints: 0 }
 	};
 }

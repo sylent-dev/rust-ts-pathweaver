@@ -30,8 +30,8 @@ const portrait = (key, size) => `<img class="app-portrait" src="pathweaver/img/p
 // game gives, the full height of the band; its name over its ascendancy, smaller and weaker, each
 // cut to fit; and its close button. `states`
 // adds is-current, or is-hover and is-close-hover to show a state without the mouse.
-const openBuildTab = (build, states = "") => `<div class="app-builds-tab ${states}" role="tab" aria-selected="${states.includes("is-current")}" title="${escapeHtml(build.name)} · ${escapeHtml(build.ascendancy)}">
-    <img class="app-builds-portrait" src="pathweaver/img/portraits-square/${build.portrait}.webp" width="44" height="44" alt=""><span class="app-builds-tab-text"><span class="app-builds-tab-name">${escapeHtml(build.name)}</span><span class="app-builds-tab-ascendancy">${escapeHtml(build.ascendancy)}</span></span>
+const openBuildTab = (build, states = "") => `<div class="app-builds-tab ${states}" role="tab" aria-selected="${states.includes("is-current")}" title="${buildTitle(build.name)} · ${escapeHtml(build.ascendancy)}">
+    <img class="app-builds-portrait" src="pathweaver/img/portraits-square/${build.portrait}.webp" width="44" height="44" alt=""><span class="app-builds-tab-text"><span class="app-builds-tab-name">${buildName(build.name)}</span><span class="app-builds-tab-ascendancy">${escapeHtml(build.ascendancy)}</span></span>
     <button type="button" class="app-builds-close" aria-label="Close">${icon(12, ICONS.close)}</button>
   </div>`;
 
@@ -45,9 +45,9 @@ const TAB_WIDTH = 184, TAB_MAX_WIDTH = 240, TAB_GAP = 0;
 // The number of the band of the open builds whose menu is open (nextInstance), or false.
 STATE.buildsMenu = false;
 
-const menuBuild = build => `<div class="app-builds-menu-item" role="menuitem" title="${escapeHtml(build.name)} · ${escapeHtml(build.ascendancy)}">
+const menuBuild = build => `<div class="app-builds-menu-item" role="menuitem" title="${buildTitle(build.name)} · ${escapeHtml(build.ascendancy)}">
   <img class="app-builds-menu-portrait" src="pathweaver/img/portraits-square/${build.portrait}.webp" width="44" height="44" alt="">
-  <span class="app-builds-menu-text"><span class="app-builds-menu-name">${escapeHtml(build.name)}</span><span class="app-builds-menu-ascendancy">${escapeHtml(build.ascendancy)}</span></span>
+  <span class="app-builds-menu-text"><span class="app-builds-menu-name">${buildName(build.name)}</span><span class="app-builds-menu-ascendancy">${escapeHtml(build.ascendancy)}</span></span>
 </div>`;
 
 // A section that shows the menu on its own passes `menuOpen` and its `action`.

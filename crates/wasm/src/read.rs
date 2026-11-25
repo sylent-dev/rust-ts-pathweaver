@@ -26,8 +26,8 @@ pub struct OpenedBuild {
     /// The key of its content: two files of the same build have the same key.
     pub content_key: String,
     /// Its name, without the characters that move the text around it, nor the spaces around it;
-    /// empty when it shows nothing.
-    pub name: String,
+    /// none when it shows nothing, a build the page calls « Untitled build ».
+    pub name: Option<String>,
     /// Its author, without the characters that move the text around it, nor the spaces around
     /// it; none when it shows nothing.
     pub author: Option<String>,
@@ -55,6 +55,8 @@ pub struct BuildLevels {
     /// The markers: the levels where the build changes, but those where it only takes
     /// passives, each once, from the lowest to the highest.
     pub markers: Vec<u32>,
+    /// Whether it is a snapshot, the same at every level it covers, the passives included.
+    pub is_snapshot: bool,
 }
 
 impl From<&Build> for BuildLevels {
@@ -64,6 +66,7 @@ impl From<&Build> for BuildLevels {
             lowest: levels.first(),
             highest: levels.last(),
             markers: build.markers(),
+            is_snapshot: build.is_snapshot(),
         }
     }
 }
@@ -174,7 +177,7 @@ pub fn read_file(bytes: &[u8]) -> BuildFile {
                     totals: build.held_totals().into(),
                     description: description.map(MarkupText::from),
                     guide,
-                    name: build.shown_name().into_owned(),
+                    name: build.shown_name().map(Cow::into_owned),
                     author: build.shown_author().map(Cow::into_owned),
                     ascendancy: build.ascendancy.into_option(),
                 },
@@ -220,7 +223,7 @@ mod tests {
             BuildFile::Build {
                 build: OpenedBuild {
                     content_key: Build::read(text).unwrap().content_key(),
-                    name: "Every Field".to_owned(),
+                    name: Some("Every Field".to_owned()),
                     author: Some("Pathweaver".to_owned()),
                     ascendancy: Some("Warrior1".to_owned()),
                     description: Some(whole(vec![MarkupPiece::Text {
@@ -234,6 +237,7 @@ mod tests {
                         lowest: 1,
                         highest: 100,
                         markers: vec![30, 51, 60],
+                        is_snapshot: false,
                     },
                     totals: BuildTotals {
                         passives: 3,
@@ -422,9 +426,9 @@ mod tests {
             panic!("the text is a build");
         };
         assert_eq!(
-            (build.name.as_str(), build.author, build.guide),
+            (build.name.as_deref(), build.author, build.guide),
             (
-                "Ice Shot",
+                Some("Ice Shot"),
                 None,
                 Some(BuildGuide::Text {
                     text: "my guide".to_owned()
@@ -434,7 +438,7 @@ mod tests {
     }
 
     #[test]
-    fn a_build_gives_the_levels_it_covers_and_its_markers() {
+    fn a_build_gives_the_levels_it_covers_its_markers_and_whether_it_is_a_snapshot() {
         let guide_of_the_maps = r#"{ "name": "Maps", "skills": [
             { "id": "Spark", "level_interval": [65, 89] },
             { "id": "Comet", "level_interval": [90, 100] }
@@ -449,6 +453,25 @@ mod tests {
                 lowest: 65,
                 highest: 100,
                 markers: vec![90],
+                is_snapshot: false,
+            }
+        );
+    }
+
+    #[test]
+    fn a_snapshot_crosses_the_bridge_as_a_snapshot() {
+        let snapshot = r#"{ "name": "Ninja", "skills": [{ "id": "Spark" }] }"#;
+
+        let BuildFile::Build { build } = read_file(snapshot.as_bytes()) else {
+            panic!("the text is a build");
+        };
+        assert_eq!(
+            build.levels,
+            BuildLevels {
+                lowest: 1,
+                highest: 100,
+                markers: vec![],
+                is_snapshot: true,
             }
         );
     }

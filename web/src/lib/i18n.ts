@@ -50,3 +50,16 @@ for (const error of errors) {
 export function t(id: string, args?: MessageArguments): string {
 	return formatMessage(bundle, id, args);
 }
+
+/** Where the value goes in a message read by {@link tAround}: a character of private use, which no message writes. */
+const VALUE_PLACE = '\u{E000}';
+
+/**
+ * The text of a message before and after its one value (`variable`, as `author` for
+ * `{ $author }`), so that the page draws the value apart: a name written by a stranger in an
+ * isolate of its direction (`<bdi>`), which never moves the words around it.
+ */
+export function tAround(id: string, variable: string): { before: string; after: string } {
+	const [before = '', ...after] = t(id, { [variable]: VALUE_PLACE }).split(VALUE_PLACE);
+	return { before, after: after.join('') };
+}

@@ -6,8 +6,9 @@
      right. -->
 <script lang="ts">
 	import type { OpenedBuild } from '#lib/core.ts';
-	import { t } from '#lib/i18n.ts';
 	import { pageGameData } from '#lib/page/game-data.svelte.ts';
+	import BuildByline from './BuildByline.svelte';
+	import BuildName from './BuildName.svelte';
 	import { pageAscendancy } from './named-ascendancy.ts';
 
 	interface Props {
@@ -15,9 +16,6 @@
 	}
 
 	let { build }: Props = $props();
-
-	/** What parts the author from the ascendancy, written here until French (docs/backlog.md). */
-	const SEPARATOR = ' · ';
 
 	// The game data of the page: a failure is written to the console, the ascendancy named by its id.
 	pageGameData.load().catch(() => undefined);
@@ -33,17 +31,8 @@
 		<img class="portrait" src={portrait} width="66" height="66" alt="" />
 	{/if}
 	<div class="text">
-		<h1 class="name">{build.name}</h1>
-		<p class="by">
-			{#if build.author !== undefined}
-				{t('build-by', { author: build.author })}{#if ascendancy !== undefined}{SEPARATOR}{/if}
-			{/if}
-			{#if ascendancy?.kind === 'known'}
-				{ascendancy.name} <span class="class">{ascendancy.characterClass}</span>
-			{:else if ascendancy?.kind === 'unknown'}
-				{ascendancy.id}
-			{/if}
-		</p>
+		<h1 class="name"><BuildName name={build.name} /></h1>
+		<p class="by"><BuildByline author={build.author} {ascendancy} /></p>
 	</div>
 </header>
 
@@ -94,10 +83,7 @@
 		white-space: nowrap;
 		color: var(--weak);
 		font-size: 13px;
-	}
-
-	/* The class, a grey a little darker than the rest of the line: the weak grey over the page. */
-	.class {
-		color: color-mix(in srgb, var(--weak) 70%, var(--page));
+		/* The class, a grey a little darker than the rest of the line: the weak grey over the page. */
+		--class-colour: color-mix(in srgb, var(--weak) 70%, var(--page));
 	}
 </style>

@@ -536,6 +536,47 @@ fn a_build_that_is_the_same_at_every_level_has_no_change_and_no_marker() {
 
     assert_eq!(snapshot.changes_by_level(), []);
     assert_eq!(snapshot.markers(), [] as [u32; 0]);
+    assert!(snapshot.is_snapshot());
+}
+
+#[test]
+fn a_build_that_only_takes_passives_along_its_levels_is_no_snapshot_though_it_has_no_marker() {
+    let build = build(json!({
+        "passives": ["strength89", { "id": "melee17", "level_interval": [10, 100] }],
+        "skills": [{ "id": "Spark" }]
+    }));
+
+    assert_eq!(build.markers(), [] as [u32; 0]);
+    assert!(!build.is_snapshot());
+}
+
+#[test]
+fn a_build_whose_entries_stop_and_start_again_the_same_or_cover_only_late_levels_is_a_snapshot() {
+    let again = build(json!({
+        "skills": [
+            { "id": "Spark", "level_interval": [1, 40] },
+            { "id": "Spark", "level_interval": [41, 100] }
+        ]
+    }));
+    let late = build(json!({
+        "passives": [{ "id": "melee17", "level_interval": [65, 100] }],
+        "skills": [{ "id": "Comet", "level_interval": [65, 100] }]
+    }));
+
+    assert!(again.is_snapshot());
+    assert!(late.is_snapshot());
+}
+
+#[test]
+fn a_build_that_changes_only_at_its_highest_level_is_no_snapshot() {
+    let build = build(json!({
+        "skills": [
+            { "id": "Spark", "level_interval": [1, 99] },
+            { "id": "Comet", "level_interval": [100, 100] }
+        ]
+    }));
+
+    assert!(!build.is_snapshot());
 }
 
 #[test]

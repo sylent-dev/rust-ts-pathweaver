@@ -7,6 +7,8 @@
      none; --portrait-opacity, 1). -->
 <script lang="ts">
 	import type { OpenedBuild } from '#lib/core.ts';
+	import BuildName from '#lib/build/BuildName.svelte';
+	import { plainName } from '#lib/build/build-name.ts';
 	import { pageAscendancy } from '#lib/build/named-ascendancy.ts';
 	import { pageGameData } from '#lib/page/game-data.svelte.ts';
 
@@ -24,14 +26,14 @@
 	const ascendancyName = $derived(ascendancy?.kind === 'known' ? ascendancy.name : ascendancy?.id);
 </script>
 
-<span class="label" title={[build.name, ascendancyName].filter(Boolean).join('\n')}>
+<span class="label" title={[plainName(build.name), ascendancyName].filter(Boolean).join('\n')}>
 	{#if portrait === undefined}
 		<span class="portrait"></span>
 	{:else}
 		<img class="portrait" src={portrait} width="44" height="44" alt="" />
 	{/if}
 	<span class="text">
-		<span class="name">{build.name}</span>
+		<span class="name"><BuildName name={build.name} /></span>
 		{#if ascendancyName !== undefined}
 			<span class="ascendancy">{ascendancyName}</span>
 		{/if}

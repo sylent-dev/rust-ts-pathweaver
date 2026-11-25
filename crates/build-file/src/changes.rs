@@ -79,27 +79,38 @@ pub struct LevelChanges<'a> {
 impl Build {
     /// What changes at each level of the build where something does, from the lowest to the
     /// highest. Nothing changes at the lowest level it covers, which nothing comes before to
-    /// compare with. Only the levels where an entry starts or has just stopped are read:
-    /// reading all hundred took 3.8 s for a snapshot of 1 MB (`changes/large_files.rs`).
+    /// compare with.
     #[must_use]
     pub fn changes_by_level(&self) -> Vec<LevelChanges<'_>> {
+        self.levels_with_changes().collect()
+    }
+
+    /// Whether the build is a snapshot, the same at every level it covers: nothing changes at
+    /// any of them, the passives taken included (`specs.md`, The level). Its levels are read only
+    /// up to the first that changes.
+    #[must_use]
+    pub fn is_snapshot(&self) -> bool {
+        self.levels_with_changes().next().is_none()
+    }
+
+    /// The changes of each level where something does, from the lowest to the highest, read
+    /// as they are asked for. Only the levels where an entry starts or has just stopped are
+    /// read: reading all hundred took 3.8 s for a snapshot of 1 MB (`changes/large_files.rs`).
+    fn levels_with_changes(&self) -> impl Iterator<Item = LevelChanges<'_>> {
         let levels = self.covered_levels();
         let turning_levels = self.turning_levels();
         let mut before = self.at_level(levels.first());
-        let mut by_level = Vec::new();
-        for level in (levels.first()..=levels.last()).skip(1) {
-            // The build holds what it held at the level before, which `before` still is.
-            if !turning_levels.contains(&level) {
-                continue;
-            }
-            let held = self.at_level(level);
-            let changes = held.changes_since(&before);
-            if !changes.is_empty() {
-                by_level.push(LevelChanges { level, changes });
-            }
-            before = held;
-        }
-        by_level
+        // Nothing comes before the lowest level to compare it with.
+        let after_the_lowest = (levels.first()..=levels.last()).skip(1);
+        after_the_lowest
+            // Elsewhere the build holds what it held at the level before, which `before` still is.
+            .filter(move |level| turning_levels.contains(level))
+            .filter_map(move |level| {
+                let held = self.at_level(level);
+                let changes = held.changes_since(&before);
+                before = held;
+                (!changes.is_empty()).then_some(LevelChanges { level, changes })
+            })
     }
 
     /// The markers of the build: the levels where it changes, from the lowest to the highest,

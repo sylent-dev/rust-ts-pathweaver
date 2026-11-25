@@ -92,6 +92,7 @@ Set aside at the wireframes (2026-11-16, see `docs/wireframes/archive.excalidraw
 ## The copy into Svelte
 
 - **Two components the mock-up repeats** (refactoring, the review of the style sheets of 2n2, item 6, left out of 2n3b by the owner on 2026-11-22; for step 4, when the first view is copied): a panel of a tab of a build, `BuildTabPanel.svelte`, which holds the height, the scroll and the background that `.app-skills-tab`, `.app-inventory-tab` and `.app-about-tab` write three times, each followed by the same reset of its lists; and the small capitals written eight times in six sheets (`11px`, `.12em`, uppercase, the weak grey on a band; `10px`, `.08em`, uppercase) as two shared classes or components, a caption and a label, beside `.app-title`.
+- **The style of a title written three times** (refactoring, the review of 4g4b, item 7, 2026-11-25; for 4k): the font, the weight, the spacing and the case of a title (`--font-title`, `--title-weight`, `--title-spacing`, `--title-transform`) in `BuildHeader.svelte`, `UpdateCard.svelte` and `Colophon.svelte`, as one global rule `:where(.title)` in `web/src/lib/style/base.css`, as the mock-up's `.app-title`, each component keeping its size and its line height.
 
 ## Deployment
 
