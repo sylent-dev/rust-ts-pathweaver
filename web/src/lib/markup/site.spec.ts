@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { siteOf } from './site.ts';
+import { siteOf, strangerLink } from './site.ts';
 
 describe('the site of an address', () => {
 	it('is its host without www.', () => {
@@ -34,5 +34,17 @@ describe('the site of an address', () => {
 		]).toEqual([forty, forty, `…${longer.slice(-39)}`]);
 		expect(siteOf(`https://${longer}/x`)?.endsWith('.evil.io')).toBe(true);
 		expect(siteOf(`https://${longer}/x`)).toHaveLength(40);
+	});
+});
+
+describe('a link to an address of a stranger', () => {
+	it('opens in a new tab that keeps no hold on the page, its whole address in its tooltip', () => {
+		const address = 'https://maxroll.gg/poe2/planner/0pgpe000';
+		expect(strangerLink(address)).toEqual({
+			href: address,
+			target: '_blank',
+			rel: 'noopener noreferrer',
+			title: address
+		});
 	});
 });

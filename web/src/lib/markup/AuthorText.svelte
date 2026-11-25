@@ -13,7 +13,7 @@
 	import { t } from '#lib/i18n.ts';
 	import { markupSurface } from './markup-surface.ts';
 	import { readableOn } from './readable-colour.ts';
-	import { siteOf } from './site.ts';
+	import { siteOf, strangerLink } from './site.ts';
 
 	/** The token of each colour the game names: a name without its token stops the type check. */
 	const NAMED_COLOURS: Record<MarkupColourName, string> = {
@@ -69,16 +69,11 @@
 		style:color={colourOf(style)}>{words}</span
 	>{/snippet}
 
-<!-- eslint-disable svelte/no-navigation-without-resolve -- an address outside the website, which resolve() would put under its path -->
 {#snippet link(address: string, style: MarkupStyle)}{@const site =
 		siteOf(address)}{#if site === undefined}{@render styled(address, style)}{:else}<a
 			class="chip"
-			href={address}
-			target="_blank"
-			rel="noopener noreferrer"
-			title={address}>{site}</a
+			{...strangerLink(address)}>{site}</a
 		>{/if}{/snippet}
-<!-- eslint-enable svelte/no-navigation-without-resolve -->
 
 <span class="author-text"
 	>{#each text.pieces as piece, index (index)}{#if piece.kind === 'lineBreak'}<br

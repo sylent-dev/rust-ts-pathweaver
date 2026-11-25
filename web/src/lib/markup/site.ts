@@ -32,3 +32,18 @@ export function siteOf(address: string): string | undefined {
 		? ELLIPSIS + site.slice(-(SHOWN_CHARACTERS - ELLIPSIS.length))
 		: site;
 }
+
+/**
+ * The attributes of a link to an address written by a stranger, the guide of a build or a chip
+ * of its description (specs.md, The header of a build): a new tab that keeps no hold on the page,
+ * since the link may lead anywhere, and its whole address in its tooltip. The address is outside
+ * the website: never passed to `resolve()`, which would put it under the path of the website.
+ */
+export function strangerLink(address: string): {
+	href: string;
+	target: '_blank';
+	rel: 'noopener noreferrer';
+	title: string;
+} {
+	return { href: address, target: '_blank', rel: 'noopener noreferrer', title: address };
+}

@@ -7,7 +7,7 @@
 <script lang="ts">
 	import type { BuildGuide } from '#lib/core.ts';
 	import { t } from '#lib/i18n.ts';
-	import { siteOf } from '#lib/markup/site.ts';
+	import { siteOf, strangerLink } from '#lib/markup/site.ts';
 
 	interface Props {
 		guide: BuildGuide | undefined;
@@ -16,18 +16,14 @@
 	let { guide }: Props = $props();
 </script>
 
-<!-- eslint-disable svelte/no-navigation-without-resolve -- an address outside the website, which resolve() would put under its path -->
 {#snippet link(address: string)}
 	{@const site = siteOf(address)}
 	{#if site === undefined}
 		<span class="text">{address}</span>
 	{:else}
-		<a class="link" href={address} target="_blank" rel="noopener noreferrer" title={address}
-			>{site}</a
-		>
+		<a class="link" {...strangerLink(address)}>{site}</a>
 	{/if}
 {/snippet}
-<!-- eslint-enable svelte/no-navigation-without-resolve -->
 
 <div class="guide">
 	{#if guide === undefined}
