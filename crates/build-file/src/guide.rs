@@ -27,8 +27,8 @@ impl<'a> Guide<'a> {
     /// The guide of a build of this `link` and this description read with its links; none
     /// when the link shows nothing (empty, or of spaces, marks that move the text and
     /// characters drawn as nothing only) and the description holds no address. The link is
-    /// read as an address before any character is taken from it: one with a hidden character
-    /// is a text.
+    /// read as an address once the spaces around it are taken off, before any other character
+    /// is: one with a hidden character is a text.
     #[must_use]
     pub fn of(link: Option<&'a str>, description: Option<&'a Markup>) -> Option<Self> {
         let link = link.and_then(|link| Some((link.trim(), plain_text(link)?)));

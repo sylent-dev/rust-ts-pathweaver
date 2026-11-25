@@ -286,8 +286,8 @@ fn text(rest: &str) -> (Token<'_>, usize) {
 /// text, which no style of the page contains: the embeddings, overrides and isolates of
 /// Unicode, and the separators of paragraphs of its algorithm of direction (4g3, its second
 /// review: U+202B before a link drew the text before it at its right, U+2069 closed the isolate
-/// the page puts around the text). The strong marks U+200E, U+200F and U+061C stay: invisible
-/// letters, they turn no Latin letter.
+/// the page puts around the text). The strong marks U+200E, U+200F and U+061C stay: letters
+/// drawn as nothing, they turn no Latin letter.
 fn moves_the_text_around(character: char) -> bool {
     matches!(
         character,
@@ -498,15 +498,15 @@ impl Markup {
 }
 
 /// Whether a text of the file shows nothing: spaces, marks that move the text around them and
-/// characters without a glyph only, or empty.
+/// characters drawn as nothing only, or empty.
 pub(crate) fn is_blank(text: &str) -> bool {
     text.chars().all(shows_nothing)
 }
 
 /// Whether a character shows nothing on its own: a space, a mark that moves the text around it
-/// or a character without a glyph.
+/// or a character drawn as nothing.
 fn shows_nothing(character: char) -> bool {
-    character.is_whitespace() || moves_the_text_around(character) || is_invisible(character)
+    character.is_whitespace() || moves_the_text_around(character) || is_drawn_as_nothing(character)
 }
 
 /// Whether a character is drawn as nothing (4g4a, its reviews: an author of U+200B or U+17B5
@@ -515,7 +515,7 @@ fn shows_nothing(character: char) -> bool {
 /// joiners, the strong marks of direction, the fillers of Hangul, the vowels of Khmer without a
 /// glyph, the selectors of variants, the tags…), and the blank of Braille, which it doesn't name
 /// but games take for a name that looks empty.
-fn is_invisible(character: char) -> bool {
+fn is_drawn_as_nothing(character: char) -> bool {
     matches!(
         character,
         '\u{ad}'

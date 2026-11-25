@@ -74,6 +74,11 @@ mod tests {
             "\u{1f3f4}\u{e0067}\u{e0062}\u{e0065}\u{e006e}\u{e0067}\u{e007f}",
             "\u{5e9}\u{5dc}\u{5d5}\u{5dd}!\u{200f}",
         ];
+        // At the start, the space after it stays too: the cost of the rule, a space shown.
+        let mut at_start = build(json!({ "author": "\u{200b} Fubgun" }));
+        at_start.name = "\u{feff} Ice Shot".to_owned();
+        assert_eq!(at_start.shown_name(), "\u{feff} Ice Shot");
+        assert_eq!(at_start.shown_author().as_deref(), Some("\u{200b} Fubgun"));
         for text in texts {
             let mut build = build(json!({ "author": text }));
             build.name = text.to_owned();

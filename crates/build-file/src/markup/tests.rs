@@ -674,12 +674,12 @@ fn the_characters_drawn_as_nothing_are_those_of_the_table_and_the_blank_of_brail
     let mut wrong = Vec::new();
     for (first, last) in ranges {
         for character in [first, last] {
-            if !is_invisible(character) {
+            if !is_drawn_as_nothing(character) {
                 wrong.push(format!("U+{:04X} shows", u32::from(character)));
             }
         }
         for character in [neighbour(first, -1), neighbour(last, 1)] {
-            if is_invisible(character) {
+            if is_drawn_as_nothing(character) {
                 wrong.push(format!("U+{:04X} shows nothing", u32::from(character)));
             }
         }
