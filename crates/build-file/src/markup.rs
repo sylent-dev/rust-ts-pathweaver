@@ -500,31 +500,42 @@ impl Markup {
 /// Whether a text of the file shows nothing: spaces, marks that move the text around them and
 /// characters without a glyph only, or empty.
 pub(crate) fn is_blank(text: &str) -> bool {
-    text.chars().all(|character| {
-        character.is_whitespace() || moves_the_text_around(character) || is_invisible(character)
-    })
+    text.chars().all(shows_nothing)
 }
 
-/// Whether a character is drawn as nothing, neither a space nor a mark that moves the text (4g4a,
-/// its review: an author of U+200B alone showed « by  · Deadeye »): the joiners and the strong
-/// marks of direction, the invisible operators, the mark of the order of bytes, the soft hyphen,
-/// the separator of Mongolian vowels, the fillers of Hangul and the blank of Braille, which
-/// games take for a name that looks empty.
+/// Whether a character shows nothing on its own: a space, a mark that moves the text around it
+/// or a character without a glyph.
+pub(crate) fn shows_nothing(character: char) -> bool {
+    character.is_whitespace() || moves_the_text_around(character) || is_invisible(character)
+}
+
+/// Whether a character is drawn as nothing (4g4a, its reviews: an author of U+200B or U+17B5
+/// alone showed « by  · Deadeye »): those Unicode says a program ignores when it can't show
+/// them (`Default_Ignorable_Code_Point`, `DerivedCoreProperties.txt` of Unicode 18.0.0: the
+/// joiners, the strong marks of direction, the fillers of Hangul, the vowels of Khmer without a
+/// glyph, the selectors of variants, the tags…), and the blank of Braille, which it doesn't name
+/// but games take for a name that looks empty.
 fn is_invisible(character: char) -> bool {
     matches!(
         character,
         '\u{ad}'
             | '\u{34f}'
             | '\u{61c}'
-            | '\u{115f}'
-            | '\u{1160}'
-            | '\u{180e}'
+            | '\u{115f}'..='\u{1160}'
+            | '\u{17b4}'..='\u{17b5}'
+            | '\u{180b}'..='\u{180f}'
             | '\u{200b}'..='\u{200f}'
-            | '\u{2060}'..='\u{2064}'
+            | '\u{202a}'..='\u{202e}'
+            | '\u{2060}'..='\u{206f}'
             | '\u{2800}'
             | '\u{3164}'
+            | '\u{fe00}'..='\u{fe0f}'
             | '\u{feff}'
             | '\u{ffa0}'
+            | '\u{fff0}'..='\u{fff8}'
+            | '\u{1bca0}'..='\u{1bca3}'
+            | '\u{1d173}'..='\u{1d17a}'
+            | '\u{e0000}'..='\u{e0fff}'
     )
 }
 
