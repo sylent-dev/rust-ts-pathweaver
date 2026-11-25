@@ -121,7 +121,7 @@ impl Build {
         let skills = self.skills.get().into_iter().flatten();
         let skills = skills.filter(|skill| applies(skill.levels()));
         let supports = self.supports_on_skills();
-        let supports = supports.filter(|support| applies(support.levels));
+        let supports = supports.filter(|support| applies(support.applies_at));
         let passives = self.passives.get().into_iter().flatten();
         let passives = passives.filter(|passive| applies(passive.levels()));
         let hints = self.inventory_slots.get().into_iter().flatten();
@@ -152,7 +152,7 @@ impl Build {
                     id: support.id(),
                     skill: skill.id(),
                 },
-                levels: skill_levels
+                applies_at: skill_levels
                     .zip(support.levels())
                     .and_then(|(skill_levels, levels)| levels.shared_with(skill_levels)),
             })
@@ -166,7 +166,7 @@ pub(crate) struct SupportEntry<'a> {
     pub on_skill: SupportOnSkill<'a>,
     /// The levels it applies at: those where both it and its skill apply; none when they share
     /// no level.
-    pub levels: Option<LevelRange>,
+    pub applies_at: Option<LevelRange>,
 }
 
 impl Entry<Passive> {

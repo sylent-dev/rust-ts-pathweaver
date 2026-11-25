@@ -15,8 +15,8 @@ pub enum Guide<'a> {
     /// The `link` of the file, one address whole by the rule of the addresses of a
     /// description.
     Link(&'a str),
-    /// The `link` of the file, a text that isn't one address whole, shown as it is, without the
-    /// characters that move the text around it.
+    /// The `link` of the file, a text that isn't one address whole, shown as it is: without the
+    /// characters that move the text around it, nor those that show nothing at its ends.
     Text(Cow<'a, str>),
     /// The first address of the description among its pieces shown, for a file without a
     /// `link`.
@@ -25,8 +25,8 @@ pub enum Guide<'a> {
 
 impl<'a> Guide<'a> {
     /// The guide of a build of this `link` and this description read with its links; none
-    /// when the link shows nothing (empty, of spaces and marks that move the text only) and the
-    /// description holds no address. The link is read as an address before any character is
+    /// when the link shows nothing (empty, or of spaces, marks that move the text and
+    /// characters drawn as nothing only) and the description holds no address. The link is read as an address before any character is
     /// taken from it: one with a hidden character is a text.
     #[must_use]
     pub fn of(link: Option<&'a str>, description: Option<&'a Markup>) -> Option<Self> {
@@ -117,7 +117,13 @@ mod tests {
     #[test]
     fn without_a_link_the_guide_is_the_first_address_of_the_description() {
         let description = Markup::of_description(DESCRIPTION);
-        for link in [None, Some(""), Some("  "), Some(" \u{202e}\u{2069} ")] {
+        for link in [
+            None,
+            Some(""),
+            Some("  "),
+            Some(" \u{202e}\u{2069} "),
+            Some("\u{200b}\u{17b5}\u{feff}"),
+        ] {
             assert_eq!(
                 Guide::of(link, Some(&description)),
                 Some(Guide::FromDescription("https://maxroll.gg/guide")),

@@ -30,7 +30,7 @@ impl Build {
         let skills = self.skills.get().into_iter().flatten();
         let skills = skills.filter(|skill| skill.levels().is_some());
         let supports = self.supports_on_skills();
-        let supports = supports.filter(|support| support.levels.is_some());
+        let supports = supports.filter(|support| support.applies_at.is_some());
         let passives = self.passives.get().into_iter().flatten();
         let passives = passives.filter(|passive| passive.levels().is_some());
         let hints = self.inventory_slots.get().into_iter().flatten();

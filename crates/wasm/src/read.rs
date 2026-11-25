@@ -25,10 +25,11 @@ pub enum BuildFile {
 pub struct OpenedBuild {
     /// The key of its content: two files of the same build have the same key.
     pub content_key: String,
-    /// Its name, without the characters that move the text around it.
+    /// Its name, without the characters that move the text around it, nor those that show
+    /// nothing at its ends.
     pub name: String,
-    /// Its author, without the characters that move the text around it; none when nothing is
-    /// left.
+    /// Its author, without the characters that move the text around it, nor those that show
+    /// nothing at its ends; none when nothing else is left.
     pub author: Option<String>,
     /// The id of the ascendancy, such as `Warrior1`.
     pub ascendancy: Option<String>,
