@@ -4,13 +4,13 @@ import { OpenBuilds, type OpenBuild } from './open-builds.svelte.ts';
 
 /** A build as the core reads it, from level 1 to 100, with its markers. */
 function build(contentKey: string, markers: number[] = []): OpenBuild {
-	return { contentKey, levels: { lowest: 1, highest: 100, markers } };
+	return { contentKey, levels: { lowest: 1, highest: 100, markers, isSnapshot: false } };
 }
 
 /** A guide of the maps, from level 65 to 100. */
 const mapsGuide: OpenBuild = {
 	contentKey: 'maps',
-	levels: { lowest: 65, highest: 100, markers: [] }
+	levels: { lowest: 65, highest: 100, markers: [], isSnapshot: false }
 };
 
 /** The open builds, once each of the builds given is opened in turn. */
@@ -37,12 +37,12 @@ describe('opening a build', () => {
 	it('adds it to the list and shows it at the highest level it covers', () => {
 		const openBuilds = opened(build('a'), {
 			...mapsGuide,
-			levels: { lowest: 65, highest: 90, markers: [] }
+			levels: { lowest: 65, highest: 90, markers: [], isSnapshot: false }
 		});
 		expect(keys(openBuilds)).toEqual(['a', 'maps']);
 		expect(openBuilds.shown).toEqual({
 			contentKey: 'maps',
-			levels: { lowest: 65, highest: 90, markers: [] }
+			levels: { lowest: 65, highest: 90, markers: [], isSnapshot: false }
 		});
 		expect(openBuilds.level).toBe(90);
 	});

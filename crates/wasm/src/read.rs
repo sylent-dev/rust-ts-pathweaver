@@ -55,6 +55,8 @@ pub struct BuildLevels {
     /// The markers: the levels where the build changes, but those where it only takes
     /// passives, each once, from the lowest to the highest.
     pub markers: Vec<u32>,
+    /// Whether it is a snapshot, the same at every level it covers, the passives included.
+    pub is_snapshot: bool,
 }
 
 impl From<&Build> for BuildLevels {
@@ -64,6 +66,7 @@ impl From<&Build> for BuildLevels {
             lowest: levels.first(),
             highest: levels.last(),
             markers: build.markers(),
+            is_snapshot: build.is_snapshot(),
         }
     }
 }
@@ -234,6 +237,7 @@ mod tests {
                         lowest: 1,
                         highest: 100,
                         markers: vec![30, 51, 60],
+                        is_snapshot: false,
                     },
                     totals: BuildTotals {
                         passives: 3,
@@ -434,7 +438,7 @@ mod tests {
     }
 
     #[test]
-    fn a_build_gives_the_levels_it_covers_and_its_markers() {
+    fn a_build_gives_the_levels_it_covers_its_markers_and_whether_it_is_a_snapshot() {
         let guide_of_the_maps = r#"{ "name": "Maps", "skills": [
             { "id": "Spark", "level_interval": [65, 89] },
             { "id": "Comet", "level_interval": [90, 100] }
@@ -449,6 +453,25 @@ mod tests {
                 lowest: 65,
                 highest: 100,
                 markers: vec![90],
+                is_snapshot: false,
+            }
+        );
+    }
+
+    #[test]
+    fn a_snapshot_crosses_as_one() {
+        let snapshot = r#"{ "name": "Ninja", "skills": [{ "id": "Spark" }] }"#;
+
+        let BuildFile::Build { build } = read_file(snapshot.as_bytes()) else {
+            panic!("the text is a build");
+        };
+        assert_eq!(
+            build.levels,
+            BuildLevels {
+                lowest: 1,
+                highest: 100,
+                markers: vec![],
+                is_snapshot: true,
             }
         );
     }
