@@ -28,15 +28,20 @@
 			? t('about-snapshot')
 			: t('about-level-range', { lowest: build.levels.lowest, highest: build.levels.highest })
 	);
-	const entries = $derived([
-		t('about-passives', { count: build.totals.passives }),
-		t('about-skills', { count: build.totals.skills }),
-		t('about-supports', { count: build.totals.supports }),
-		t('about-items', { count: build.totals.hints })
-	]);
+	// Each entry keyed by its message, never by its text, which a language may write twice.
+	const entries = $derived(
+		(
+			[
+				['about-passives', build.totals.passives],
+				['about-skills', build.totals.skills],
+				['about-supports', build.totals.supports],
+				['about-items', build.totals.hints]
+			] as const
+		).map(([id, count]) => ({ id, text: t(id, { count }) }))
+	);
 </script>
 
-<aside class="colophon">
+<div class="colophon">
 	{#if portrait !== undefined}
 		<img class="portrait" src={portrait} width="260" height="260" alt="" />
 	{/if}
@@ -47,14 +52,14 @@
 		<dd>{levels}</dd>
 		<dt>{t('about-entries')}</dt>
 		<dd>
-			{#each entries as entry (entry)}
-				<span class="entry">{entry}</span>
+			{#each entries as entry (entry.id)}
+				<span class="entry">{entry.text}</span>
 			{/each}
 		</dd>
 		<dt>{t('about-guide')}</dt>
 		<dd><Guide guide={build.guide} /></dd>
 	</dl>
-</aside>
+</div>
 
 <style>
 	.colophon {

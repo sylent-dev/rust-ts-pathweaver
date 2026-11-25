@@ -107,7 +107,11 @@ fn cases() -> [(Build, usize); 10] {
 /// the markers and whether the build is a snapshot: 28 ms, 0.38 s, 0.75 s, 21 ms, 0.17 s,
 /// 90 ms, 80 ms, 70 ms, 0.56 s and 22 ms. A snapshot is read twice, its markers then
 /// `is_snapshot` (the review of 4g4b), the fifth case 0.17 s against 77 ms for its markers
-/// alone: kept, under a second, rather than a type that carries both. The ninth case peaks at
+/// alone. None of these cases has both a long list and a turning level at every level: a
+/// snapshot of one skill written `[n, n]` for each level beside 115,606 passives takes 3.5 s a
+/// reading, 7 s for the two (the second review of 4g4b), every level comparing the whole
+/// build; that case and its fix, comparing only what an entry touches at a level, are 4g4c
+/// (`roadmap.md`), which makes the double reading cheap again. The ninth case peaks at
 /// about 100 MB of memory, its notes copied at every level (the third review of 4c). Before the sorted tables of `held_once`, 10,000 passives (90 KB) took 6.1 s, 20,000
 /// took 23 s, and a snapshot of 1 MB took 3.8 s while every level was read; with the notes of
 /// a thing looked up in a list, the cases of one thing took 2.2 to 3.7 s.

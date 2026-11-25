@@ -459,7 +459,7 @@ mod tests {
     }
 
     #[test]
-    fn a_snapshot_crosses_as_one() {
+    fn a_snapshot_crosses_the_bridge_as_a_snapshot() {
         let snapshot = r#"{ "name": "Ninja", "skills": [{ "id": "Spark" }] }"#;
 
         let BuildFile::Build { build } = read_file(snapshot.as_bytes()) else {

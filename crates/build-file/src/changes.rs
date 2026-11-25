@@ -86,8 +86,8 @@ impl Build {
     }
 
     /// Whether the build is a snapshot, the same at every level it covers: nothing changes at
-    /// any of them, the passives taken included (`specs.md`, The level). Its levels are read up
-    /// to the first that changes only.
+    /// any of them, the passives taken included (`specs.md`, The level). Its levels are read only
+    /// up to the first that changes.
     #[must_use]
     pub fn is_snapshot(&self) -> bool {
         self.levels_with_changes().next().is_none()
