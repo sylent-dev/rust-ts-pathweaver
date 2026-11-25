@@ -6,20 +6,18 @@
 use std::borrow::Cow;
 
 use crate::Build;
-use crate::markup::{shows_nothing, without_characters_that_move_the_text};
+use crate::markup::{is_blank, without_characters_that_move_the_text};
 
 impl Build {
     /// The name of the build as the page shows it: without the characters that move the text
-    /// around it, nor the characters that show nothing around it; empty when nothing else is
-    /// left.
+    /// around it, nor the spaces around it; empty when it shows nothing.
     #[must_use]
     pub fn shown_name(&self) -> Cow<'_, str> {
         plain_text(&self.name).unwrap_or_default()
     }
 
     /// The author of the build as the page shows it: without the characters that move the text
-    /// around it, nor the characters that show nothing around it; none when the file has none or
-    /// nothing else is left.
+    /// around it, nor the spaces around it; none when the file has none or it shows nothing.
     #[must_use]
     pub fn shown_author(&self) -> Option<Cow<'_, str>> {
         self.author.get().and_then(|author| plain_text(author))
@@ -27,14 +25,18 @@ impl Build {
 }
 
 /// A text of the file shown as it is: without the characters that move the text around it,
-/// nor the characters that show nothing around it (spaces, characters without a glyph); none
-/// when nothing else is left.
+/// nor the spaces around it; none when it shows nothing (spaces, marks that move the text and
+/// characters drawn as nothing only). A character drawn as nothing stays where it is, even at
+/// an end: it may shape the one before it (the form of an emoji, a flag) or set where its
+/// punctuation goes (a mark of direction at the end of a name of Hebrew).
 pub(crate) fn plain_text(text: &str) -> Option<Cow<'_, str>> {
-    let shown = match without_characters_that_move_the_text(text) {
-        Cow::Borrowed(text) => Cow::Borrowed(text.trim_matches(shows_nothing)),
-        Cow::Owned(text) => Cow::Owned(text.trim_matches(shows_nothing).to_owned()),
-    };
-    (!shown.is_empty()).then_some(shown)
+    if is_blank(text) {
+        return None;
+    }
+    Some(match without_characters_that_move_the_text(text) {
+        Cow::Borrowed(text) => Cow::Borrowed(text.trim()),
+        Cow::Owned(text) => Cow::Owned(text.trim().to_owned()),
+    })
 }
 
 #[cfg(test)]
@@ -63,50 +65,21 @@ mod tests {
     }
 
     #[test]
-    fn a_character_drawn_as_nothing_stays_inside_a_text_and_goes_at_its_ends() {
-        let build = build(json!({ "author": "\u{200b} Fub\u{200b}gun\u{200f} \u{feff}" }));
-
-        assert_eq!(build.shown_author().as_deref(), Some("Fub\u{200b}gun"));
-    }
-
-    #[test]
-    fn each_range_of_the_characters_drawn_as_nothing_shows_nothing() {
-        let drawn_as_nothing = [
-            '\u{ad}',
-            '\u{34f}',
-            '\u{61c}',
-            '\u{1160}',
-            '\u{17b5}',
-            '\u{180e}',
-            '\u{200d}',
-            '\u{2064}',
-            '\u{206f}',
-            '\u{2800}',
-            '\u{3164}',
-            '\u{fe0f}',
-            '\u{feff}',
-            '\u{ffa0}',
-            '\u{fff8}',
-            '\u{1bca3}',
-            '\u{1d17a}',
-            '\u{e0001}',
-            '\u{e0fff}',
+    fn a_character_drawn_as_nothing_stays_where_it_is() {
+        // The emoji of a frost and of swords, the flag of England, a name of Hebrew ending on its
+        // mark of direction, which sets its « ! » at its end.
+        let texts = [
+            "Ice Strike \u{2744}\u{fe0f}",
+            "Fub\u{200b}gun \u{2694}\u{fe0f}",
+            "\u{1f3f4}\u{e0067}\u{e0062}\u{e0065}\u{e006e}\u{e0067}\u{e007f}",
+            "\u{5e9}\u{5dc}\u{5d5}\u{5dd}!\u{200f}",
         ];
-        for character in drawn_as_nothing {
-            let build = build(json!({ "author": character.to_string() }));
+        for text in texts {
+            let mut build = build(json!({ "author": text }));
+            build.name = text.to_owned();
 
-            assert_eq!(build.shown_author(), None, "U+{:04X}", u32::from(character));
-        }
-        // Their neighbours show something: a dot of Braille, a vowel of Khmer, a letter of Hangul.
-        for character in ['\u{2801}', '\u{17b6}', '\u{3165}', '\u{1161}'] {
-            let build = build(json!({ "author": character.to_string() }));
-
-            assert_eq!(
-                build.shown_author().as_deref(),
-                Some(character.to_string().as_str()),
-                "U+{:04X}",
-                u32::from(character)
-            );
+            assert_eq!(build.shown_name(), text);
+            assert_eq!(build.shown_author().as_deref(), Some(text));
         }
     }
 

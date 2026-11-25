@@ -505,7 +505,7 @@ pub(crate) fn is_blank(text: &str) -> bool {
 
 /// Whether a character shows nothing on its own: a space, a mark that moves the text around it
 /// or a character without a glyph.
-pub(crate) fn shows_nothing(character: char) -> bool {
+fn shows_nothing(character: char) -> bool {
     character.is_whitespace() || moves_the_text_around(character) || is_invisible(character)
 }
 

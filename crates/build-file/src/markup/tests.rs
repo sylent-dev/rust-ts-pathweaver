@@ -644,3 +644,45 @@ fn a_megabyte_of_addresses_past_the_pieces_kept_is_read_in_time() {
     assert!(description.is_cut());
     assert_eq!(description.into_iter().count(), 1_000);
 }
+
+#[test]
+fn the_characters_drawn_as_nothing_are_those_of_the_table_and_the_blank_of_braille() {
+    // `Default_Ignorable_Code_Point` of Unicode 18.0.0, by ranges, then U+2800.
+    let ranges = [
+        ('\u{ad}', '\u{ad}'),
+        ('\u{34f}', '\u{34f}'),
+        ('\u{61c}', '\u{61c}'),
+        ('\u{115f}', '\u{1160}'),
+        ('\u{17b4}', '\u{17b5}'),
+        ('\u{180b}', '\u{180f}'),
+        ('\u{200b}', '\u{200f}'),
+        ('\u{202a}', '\u{202e}'),
+        ('\u{2060}', '\u{206f}'),
+        ('\u{2800}', '\u{2800}'),
+        ('\u{3164}', '\u{3164}'),
+        ('\u{fe00}', '\u{fe0f}'),
+        ('\u{feff}', '\u{feff}'),
+        ('\u{ffa0}', '\u{ffa0}'),
+        ('\u{fff0}', '\u{fff8}'),
+        ('\u{1bca0}', '\u{1bca3}'),
+        ('\u{1d173}', '\u{1d17a}'),
+        ('\u{e0000}', '\u{e0fff}'),
+    ];
+    let neighbour = |character: char, step: i64| {
+        char::from_u32(u32::try_from(i64::from(u32::from(character)) + step).unwrap()).unwrap()
+    };
+    let mut wrong = Vec::new();
+    for (first, last) in ranges {
+        for character in [first, last] {
+            if !is_invisible(character) {
+                wrong.push(format!("U+{:04X} shows", u32::from(character)));
+            }
+        }
+        for character in [neighbour(first, -1), neighbour(last, 1)] {
+            if is_invisible(character) {
+                wrong.push(format!("U+{:04X} shows nothing", u32::from(character)));
+            }
+        }
+    }
+    assert_eq!(wrong, Vec::<String>::new());
+}
