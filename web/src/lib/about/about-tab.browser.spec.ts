@@ -98,9 +98,9 @@ describe('the About tab', () => {
 		expect(colophon?.querySelector('img')?.getAttribute('src')).toMatch(/sorceress1-520/);
 	});
 
-	it('gives the levels the build covers and its entries, each thing once', () => {
+	it('gives the levels the build covers, without a marker too, and its entries, each thing once', () => {
 		const panel = aboutTab({
-			levels: { lowest: 65, highest: 100, markers: [90], isSnapshot: false },
+			levels: { lowest: 65, highest: 100, markers: [], isSnapshot: false },
 			totals: { passives: 1, skills: 10, supports: 35, hints: 14 }
 		});
 		expect(facts(panel)).toEqual([

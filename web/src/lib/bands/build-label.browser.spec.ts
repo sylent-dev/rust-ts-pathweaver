@@ -53,6 +53,11 @@ describe('the label of an open build', () => {
 		expect(portrait).toMatch(/sorceress1-88/);
 	});
 
+	it('draws the name in an isolate of its direction', async () => {
+		await label('Sorceress1', { name: 'מכשף' });
+		expect(document.querySelector('.name bdi')?.textContent).toBe('מכשף');
+	});
+
 	it('writes an ascendancy the game data know not as its id, without a portrait', async () => {
 		expect(await label('Ranger2')).toEqual({
 			texts: ['Spark Stormweaver', 'Ranger2'],

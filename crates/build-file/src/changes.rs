@@ -99,11 +99,11 @@ impl Build {
     fn levels_with_changes(&self) -> impl Iterator<Item = LevelChanges<'_>> {
         let levels = self.covered_levels();
         let turning_levels = self.turning_levels();
-        // The build holds what it held at the level before, which `before` still is.
         let mut before = self.at_level(levels.first());
         // Nothing comes before the lowest level to compare it with.
         let after_the_lowest = (levels.first()..=levels.last()).skip(1);
         after_the_lowest
+            // Elsewhere the build holds what it held at the level before, which `before` still is.
             .filter(move |level| turning_levels.contains(level))
             .filter_map(move |level| {
                 let held = self.at_level(level);

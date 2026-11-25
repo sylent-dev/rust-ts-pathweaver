@@ -57,7 +57,7 @@ describe('the header of a build', () => {
 		expect(byLine(element)).toBe('by Lolcohol');
 	});
 
-	it('draws the name and the author each in an isolate of their direction', async () => {
+	it("draws the name, the author and an ascendancy the game data don't know each in an isolate of their direction", async () => {
 		const element = await header({ name: 'מכשף', author: 'אבי', ascendancy: 'Ranger2' });
 		expect([...element.querySelectorAll('bdi')].map((bdi) => bdi.textContent)).toEqual([
 			'מכשף',

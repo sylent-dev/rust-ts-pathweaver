@@ -33,9 +33,10 @@ fn list_of(part: &str, entry: impl Fn(usize) -> String) -> (Build, usize) {
 }
 
 /// The entries of the cases, each written from its number: the first four give each entry a
-/// thing of its own, the next four one thing with a note of its own on each entry, the last one
-/// support whose note changes at every level beside those its other entries carry at all.
-fn cases() -> [(Build, usize); 9] {
+/// thing of its own, the next four one thing with a note of its own on each entry, the ninth one
+/// support whose note changes at every level beside those its other entries carry at all, the
+/// last a snapshot whose skill stops and starts again the same at every level.
+fn cases() -> [(Build, usize); 10] {
     let level = |number: usize| number % 100 + 1;
     [
         list_of("passives", |number| format!(r#""p{number}""#)),
@@ -93,11 +94,20 @@ fn cases() -> [(Build, usize); 9] {
                 _ => format!(r#"{{"id":"u","additional_text":"n{number}"}}"#),
             },
         ),
+        list_of("skills", |number| {
+            format!(
+                r#"{{"id":"s","level_interval":[{0},{0}],"additional_text":"n"}}"#,
+                level(number)
+            )
+        }),
     ]
 }
 
-/// Measured on 2026-11-22 in release, natively, each file of 1 MB, in the order of the cases:
-/// 15 ms, 0.37 s, 0.63 s, 16 ms, 77 ms, 82 ms, 66 ms, 52 ms and 0.47 s; the last one peaks at
+/// Measured on 2026-11-25 in release, natively, each file of 1 MB, in the order of the cases,
+/// the markers and whether the build is a snapshot: 28 ms, 0.38 s, 0.75 s, 21 ms, 0.17 s,
+/// 90 ms, 80 ms, 70 ms, 0.56 s and 22 ms. A snapshot is read twice, its markers then
+/// `is_snapshot` (the review of 4g4b), the fifth case 0.17 s against 77 ms for its markers
+/// alone: kept, under a second, rather than a type that carries both. The ninth case peaks at
 /// about 100 MB of memory, its notes copied at every level (the third review of 4c). Before the sorted tables of `held_once`, 10,000 passives (90 KB) took 6.1 s, 20,000
 /// took 23 s, and a snapshot of 1 MB took 3.8 s while every level was read; with the notes of
 /// a thing looked up in a list, the cases of one thing took 2.2 to 3.7 s.
@@ -106,12 +116,14 @@ fn cases() -> [(Build, usize); 9] {
 fn the_levels_of_a_file_of_the_largest_size_are_read_in_less_than_a_second() {
     let mut times = String::new();
     for (build, entries) in &cases() {
+        // What the bridge reads of the levels of a file it opens.
         let start = Instant::now();
         let markers = build.markers();
+        let is_snapshot = build.is_snapshot();
         let elapsed = start.elapsed();
         writeln!(
             times,
-            "{entries} entries, {} markers: {elapsed:?}",
+            "{entries} entries, {} markers, a snapshot {is_snapshot}: {elapsed:?}",
             markers.len()
         )
         .unwrap();
@@ -121,9 +133,10 @@ fn the_levels_of_a_file_of_the_largest_size_are_read_in_less_than_a_second() {
 }
 
 /// Measured on 2026-11-24 in release, natively, in the order of the cases: 6.0 ms, 1.4 ms,
-/// 1.4 ms, 1.5 ms, 0.5 ms, 0.4 ms, 0.8 ms, 0.5 ms and 0.6 ms; reading what the build holds at
-/// each of the 100 levels, which counting it over them would take at least: 1.2 s, 126 ms,
-/// 139 ms, 5.5 ms, 75 ms, 80 ms, 69 ms, 53 ms and 0.28 s.
+/// 1.4 ms, 1.5 ms, 0.5 ms, 0.4 ms, 0.8 ms, 0.5 ms and 0.6 ms, and 0.5 ms for the snapshot
+/// added on 2026-11-25; reading what the build holds at each of the 100 levels, which counting
+/// it over them would take at least: 1.2 s, 126 ms, 139 ms, 5.5 ms, 75 ms, 80 ms, 69 ms, 53 ms,
+/// 0.28 s and 10 ms.
 #[test]
 #[ignore = "a measure, to run in release"]
 fn the_totals_of_a_file_of_the_largest_size_are_counted_in_a_few_milliseconds() {

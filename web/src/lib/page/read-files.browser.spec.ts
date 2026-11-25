@@ -18,6 +18,11 @@ describe('reading the files given', () => {
 		expect(read?.kind === 'build' && read.build.name).toBe('Every Field');
 	});
 
+	it('gives a name that shows nothing as none, never as an empty text nor null', async () => {
+		const [read] = await readFiles([fileOf('blank.build', '{ "name": " \\u202e\\u200b " }')]);
+		expect(read?.kind === 'build' ? read.build.name : 'not a build').toBeUndefined();
+	});
+
 	it('reads each file in its order, a file refused between two builds', async () => {
 		const read = await readFiles([
 			fileOf('a.build', '{ "name": "A" }'),

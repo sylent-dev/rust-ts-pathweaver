@@ -1,4 +1,4 @@
-// A build whose name shows nothing (4g4b): the core gives an empty name for one of spaces, marks of direction or
+// A build whose name shows nothing (4g4b): the core gives no name for one of spaces, marks of direction or
 // characters drawn as nothing (4g4a), and the page writes « Untitled build » in the weak grey where the name
 // goes, in the band of the open builds, the header and the colophon, and without the grey in the tooltip of
 // its tab (js/page.js, buildName). The case: the build shown, its name a stranger's three spaces; its file
