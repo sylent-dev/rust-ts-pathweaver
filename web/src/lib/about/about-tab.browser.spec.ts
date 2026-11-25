@@ -78,7 +78,7 @@ describe('the About tab', () => {
 	it('says so when the author wrote no description', () => {
 		const panel = aboutTab({ description: undefined });
 		expect([
-			panel.querySelector('.none')?.textContent,
+			panel.querySelector('.main .none')?.textContent,
 			panel.querySelector('.description')
 		]).toEqual(['The author wrote no description.', null]);
 	});
@@ -105,7 +105,8 @@ describe('the About tab', () => {
 		});
 		expect(facts(panel)).toEqual([
 			['Levels', '65–100'],
-			['Entries', '1 passive', '10 skills', '35 supports', '14 items']
+			['Entries', '1 passive', '10 skills', '35 supports', '14 items'],
+			['Guide', 'none']
 		]);
 	});
 
@@ -114,6 +115,49 @@ describe('the About tab', () => {
 			levels: { lowest: 1, highest: 100, markers: [], isSnapshot: true }
 		});
 		expect(facts(panel)[0]).toEqual(['Levels', 'a snapshot']);
+	});
+
+	it('links its guide by its site, in a new tab that keeps no hold on the page', () => {
+		const address = 'https://www.mobalytics.gg/poe-2/builds/comet';
+		const guide = aboutTab({ guide: { kind: 'link', address } }).querySelector('.guide');
+		const link = guide?.querySelector('a');
+		expect([
+			link?.textContent,
+			link?.getAttribute('href'),
+			link?.getAttribute('title'),
+			link?.getAttribute('target'),
+			link?.getAttribute('rel'),
+			guide?.querySelector('.from')
+		]).toEqual(['mobalytics.gg', address, address, '_blank', 'noopener noreferrer', null]);
+	});
+
+	it('says a guide taken from the description comes from there', () => {
+		const address = 'https://maxroll.gg/poe2/build-guides/ice-shot';
+		const guide = aboutTab({ guide: { kind: 'fromDescription', address } }).querySelector('.guide');
+		expect([
+			guide?.querySelector('a')?.textContent,
+			guide?.querySelector('a')?.getAttribute('title'),
+			guide?.querySelector('.from')?.textContent
+		]).toEqual(['maxroll.gg', address, 'from the description']);
+	});
+
+	it.each([
+		[{ kind: 'text', text: 'my guide' }, 'my guide'],
+		[{ kind: 'link', address: 'https://[' }, 'https://[']
+	] as const)(
+		"writes a guide that is no address, or whose site the browser can't read, as text: %o",
+		(guide, text) => {
+			const element = aboutTab({ guide }).querySelector('.guide');
+			expect([element?.querySelector('a'), element?.querySelector('.text')?.textContent]).toEqual([
+				null,
+				text
+			]);
+		}
+	);
+
+	it('says none in the weak grey without a guide', () => {
+		const guide = aboutTab({ guide: undefined }).querySelector('.guide');
+		expect(guide?.querySelector('.none')?.textContent).toBe('none');
 	});
 
 	it('calls a build whose name shows nothing untitled, in the weak grey', () => {

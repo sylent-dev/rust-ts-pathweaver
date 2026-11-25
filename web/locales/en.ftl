@@ -159,6 +159,7 @@ about-no-description = The author wrote no description.
 # The colophon, at the left of the About tab: the facts of the build, each under its title.
 about-levels = Levels
 about-entries = Entries
+about-guide = Guide
 # $lowest (Number), $highest (Number): the levels its entries cover, the highest included.
 about-level-range = { $lowest }–{ $highest }
 # The levels of a build that is the same at every level.
@@ -180,6 +181,10 @@ about-items = { $count ->
     [one] { $count } item
    *[other] { $count } items
 }
+# Small and grey under the guide, when the file names none and its description does.
+about-guide-from-description = from the description
+# In the weak grey, in place of the guide of a build that names none.
+about-no-guide = none
 
 ## An author's text: a description or a note, with the markup of the game.
 

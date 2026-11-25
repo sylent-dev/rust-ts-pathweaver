@@ -1,8 +1,8 @@
 <!-- The colophon of a build, at the left of its About tab (specs.md, Window layout: the About tab;
      2k3 of the mock-up), on a pane as dark as a slot: the portrait of its ascendancy the width of
      the pane from its top, fading toward its foot; over its foot, the name and « by author ·
-     ascendancy class »; the levels it covers and its entries, each thing once over every level.
-     The guide comes next (4g4b), the file to download with its step (7). -->
+     ascendancy class »; the levels it covers, its entries, each thing once over every level, and
+     its guide. The file to download comes with its step (7). -->
 <script lang="ts">
 	import BuildByline from '#lib/build/BuildByline.svelte';
 	import BuildName from '#lib/build/BuildName.svelte';
@@ -10,6 +10,7 @@
 	import type { OpenedBuild } from '#lib/core.ts';
 	import { t } from '#lib/i18n.ts';
 	import { pageGameData } from '#lib/page/game-data.svelte.ts';
+	import Guide from './Guide.svelte';
 
 	interface Props {
 		build: OpenedBuild;
@@ -50,6 +51,8 @@
 				<span class="entry">{entry}</span>
 			{/each}
 		</dd>
+		<dt>{t('about-guide')}</dt>
+		<dd><Guide guide={build.guide} /></dd>
 	</dl>
 </aside>
 
