@@ -104,10 +104,9 @@
 		--class-colour: var(--weak);
 	}
 
+	/* Each fact under its title, across the pane, a wider gap between two facts than between a
+	   title and its value (C of three, the owner, 2026-11-25). */
 	.facts {
-		display: grid;
-		grid-template-columns: 58px 1fr;
-		gap: 8px 10px;
 		margin: 16px 0;
 		font-size: 12.5px;
 	}
@@ -118,8 +117,11 @@
 	}
 
 	dd {
-		margin: 0;
-		min-width: 0;
+		margin: 3px 0 14px;
+	}
+
+	dd:last-child {
+		margin-bottom: 0;
 	}
 
 	.entry {

@@ -69,8 +69,10 @@
 		style:color={colourOf(style)}>{words}</span
 	>{/snippet}
 
-{#snippet link(address: string, style: MarkupStyle)}{@const site =
-		siteOf(address)}{#if site === undefined}{@render styled(address, style)}{:else}<a
+{#snippet link(address: string, style: MarkupStyle)}{@const site = siteOf(
+		address,
+		'chip'
+	)}{#if site === undefined}{@render styled(address, style)}{:else}<a
 			class="chip"
 			{...strangerLink(address)}>{site}</a
 		>{/if}{/snippet}

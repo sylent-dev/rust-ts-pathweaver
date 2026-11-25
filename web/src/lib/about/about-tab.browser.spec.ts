@@ -98,7 +98,7 @@ describe('the About tab', () => {
 		expect(colophon?.querySelector('img')?.getAttribute('src')).toMatch(/sorceress1-520/);
 	});
 
-	it('gives the levels the build covers, without a marker too, and its entries, each thing once', () => {
+	it('gives the levels of a build without a marker that is no snapshot, and its entries, each thing once', () => {
 		const panel = aboutTab({
 			levels: { lowest: 65, highest: 100, markers: [], isSnapshot: false },
 			totals: { passives: 1, skills: 10, supports: 35, hints: 14 }
@@ -129,6 +129,23 @@ describe('the About tab', () => {
 			link?.getAttribute('rel'),
 			guide?.querySelector('.from')
 		]).toEqual(['mobalytics.gg', address, address, '_blank', 'noopener noreferrer', null]);
+	});
+
+	it('keeps its guide on one line inside its pane, the end only of a long site', () => {
+		const address = 'https://mobalytics.gg-guides-and-builds-for-poe2.evil.io/x';
+		const panel = aboutTab({ guide: { kind: 'link', address } });
+		const link = panel.querySelector('.guide a');
+		const pane = panel.querySelector('.colophon')?.getBoundingClientRect();
+		if (link === null || pane === undefined) {
+			throw new Error('no guide');
+		}
+		const text = document.createRange();
+		text.selectNodeContents(link);
+		expect([link.textContent, text.getClientRects().length]).toEqual([
+			'…and-builds-for-poe2.evil.io',
+			1
+		]);
+		expect(text.getBoundingClientRect().right).toBeLessThanOrEqual(pane.right);
 	});
 
 	it('says a guide taken from the description comes from there', () => {
