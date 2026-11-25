@@ -6,6 +6,7 @@
      2026-11-19). -->
 <script lang="ts">
 	import type { OpenedBuild } from '#lib/core.ts';
+	import { plainName } from '#lib/build/build-name.ts';
 	import Icon from '#lib/icons/Icon.svelte';
 	import { t } from '#lib/i18n.ts';
 	import BuildLabel from './BuildLabel.svelte';
@@ -28,7 +29,7 @@
 	<button
 		type="button"
 		class="close"
-		aria-label={t('builds-close', { name: build.name })}
+		aria-label={t('builds-close', { name: plainName(build.name) })}
 		onclick={onclose}
 	>
 		<Icon name="close" size={12} />

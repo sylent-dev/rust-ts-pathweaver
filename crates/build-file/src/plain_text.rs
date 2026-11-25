@@ -10,10 +10,11 @@ use crate::markup::{is_blank, without_characters_that_move_the_text};
 
 impl Build {
     /// The name of the build as the page shows it: without the characters that move the text
-    /// around it, nor the spaces around it; empty when it shows nothing.
+    /// around it, nor the spaces around it; none when it shows nothing, a build the page calls
+    /// untitled.
     #[must_use]
-    pub fn shown_name(&self) -> Cow<'_, str> {
-        plain_text(&self.name).unwrap_or_default()
+    pub fn shown_name(&self) -> Option<Cow<'_, str>> {
+        plain_text(&self.name)
     }
 
     /// The author of the build as the page shows it: without the characters that move the text
@@ -51,7 +52,10 @@ mod tests {
         let mut build = build(json!({ "author": " \u{202e}Fub\u{2066}gun\u{2069} " }));
         build.name = "\u{202b}Ice Shot\u{200f} \u{2029}Deadeye\u{85}".to_owned();
 
-        assert_eq!(build.shown_name(), "Ice Shot\u{200f} Deadeye");
+        assert_eq!(
+            build.shown_name().as_deref(),
+            Some("Ice Shot\u{200f} Deadeye")
+        );
         assert_eq!(build.shown_author().as_deref(), Some("Fubgun"));
     }
 
@@ -60,7 +64,7 @@ mod tests {
         let mut build = build(json!({ "author": "\u{202e} Fubgun \u{2069}" }));
         build.name = "\u{2066} Ice Shot \u{2069}".to_owned();
 
-        assert_eq!(build.shown_name(), "Ice Shot");
+        assert_eq!(build.shown_name().as_deref(), Some("Ice Shot"));
         assert_eq!(build.shown_author().as_deref(), Some("Fubgun"));
     }
 
@@ -77,13 +81,13 @@ mod tests {
         // At the start, the space after it stays too: the cost of the rule, a space shown.
         let mut at_start = build(json!({ "author": "\u{200b} Fubgun" }));
         at_start.name = "\u{feff} Ice Shot".to_owned();
-        assert_eq!(at_start.shown_name(), "\u{feff} Ice Shot");
+        assert_eq!(at_start.shown_name().as_deref(), Some("\u{feff} Ice Shot"));
         assert_eq!(at_start.shown_author().as_deref(), Some("\u{200b} Fubgun"));
         for text in texts {
             let mut build = build(json!({ "author": text }));
             build.name = text.to_owned();
 
-            assert_eq!(build.shown_name(), text);
+            assert_eq!(build.shown_name().as_deref(), Some(text));
             assert_eq!(build.shown_author().as_deref(), Some(text));
         }
     }
@@ -93,7 +97,10 @@ mod tests {
         let mut build = build(json!({ "author": "Fubgun" }));
         build.name = "  Ice Shot  ".to_owned();
 
-        assert!(matches!(build.shown_name(), Cow::Borrowed("Ice Shot")));
+        assert!(matches!(
+            build.shown_name(),
+            Some(Cow::Borrowed("Ice Shot"))
+        ));
         assert!(matches!(
             build.shown_author(),
             Some(Cow::Borrowed("Fubgun"))
@@ -101,7 +108,7 @@ mod tests {
     }
 
     #[test]
-    fn an_author_that_shows_nothing_is_none() {
+    fn an_author_or_a_name_that_shows_nothing_is_none() {
         for author in [
             json!(""),
             json!(" \u{202e} \u{2069}"),
@@ -115,6 +122,6 @@ mod tests {
         }
         let mut build = build(json!({}));
         build.name = "\u{202e} ".to_owned();
-        assert_eq!(build.shown_name(), "");
+        assert_eq!(build.shown_name(), None);
     }
 }

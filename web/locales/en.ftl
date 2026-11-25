@@ -84,6 +84,8 @@ builds-more =
 
 # Before the ascendancy, after a « · ». $author (String): as the file writes it.
 build-by = by { $author }
+# In the weak grey, in place of the name of a build that shows nothing (spaces, marks of direction).
+build-untitled = Untitled build
 
 ## The tabs of the page of a build.
 
@@ -153,6 +155,31 @@ next-community-french = In French too
 
 # In the weak grey, in place of the description of a file that has none.
 about-no-description = The author wrote no description.
+
+# The colophon, at the left of the About tab: the facts of the build, each under its title.
+about-levels = Levels
+about-entries = Entries
+# $lowest (Number), $highest (Number): the levels its entries cover, the highest included.
+about-level-range = { $lowest }–{ $highest }
+# The levels of a build that is the same at every level.
+about-snapshot = a snapshot
+# Its entries, each thing once over every level. $count (Number).
+about-passives = { $count ->
+    [one] { $count } passive
+   *[other] { $count } passives
+}
+about-skills = { $count ->
+    [one] { $count } skill
+   *[other] { $count } skills
+}
+about-supports = { $count ->
+    [one] { $count } support
+   *[other] { $count } supports
+}
+about-items = { $count ->
+    [one] { $count } item
+   *[other] { $count } items
+}
 
 ## An author's text: a description or a note, with the markup of the game.
 

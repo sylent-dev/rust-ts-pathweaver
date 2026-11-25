@@ -26,8 +26,8 @@ pub struct OpenedBuild {
     /// The key of its content: two files of the same build have the same key.
     pub content_key: String,
     /// Its name, without the characters that move the text around it, nor the spaces around it;
-    /// empty when it shows nothing.
-    pub name: String,
+    /// none when it shows nothing, a build the page calls « Untitled build ».
+    pub name: Option<String>,
     /// Its author, without the characters that move the text around it, nor the spaces around
     /// it; none when it shows nothing.
     pub author: Option<String>,
@@ -177,7 +177,7 @@ pub fn read_file(bytes: &[u8]) -> BuildFile {
                     totals: build.held_totals().into(),
                     description: description.map(MarkupText::from),
                     guide,
-                    name: build.shown_name().into_owned(),
+                    name: build.shown_name().map(Cow::into_owned),
                     author: build.shown_author().map(Cow::into_owned),
                     ascendancy: build.ascendancy.into_option(),
                 },
@@ -223,7 +223,7 @@ mod tests {
             BuildFile::Build {
                 build: OpenedBuild {
                     content_key: Build::read(text).unwrap().content_key(),
-                    name: "Every Field".to_owned(),
+                    name: Some("Every Field".to_owned()),
                     author: Some("Pathweaver".to_owned()),
                     ascendancy: Some("Warrior1".to_owned()),
                     description: Some(whole(vec![MarkupPiece::Text {
@@ -426,9 +426,9 @@ mod tests {
             panic!("the text is a build");
         };
         assert_eq!(
-            (build.name.as_str(), build.author, build.guide),
+            (build.name.as_deref(), build.author, build.guide),
             (
-                "Ice Shot",
+                Some("Ice Shot"),
                 None,
                 Some(BuildGuide::Text {
                     text: "my guide".to_owned()
