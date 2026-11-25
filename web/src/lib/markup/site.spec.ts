@@ -48,6 +48,11 @@ describe('the site of an address', () => {
 			siteOf(`https://${longer}/x`, 'guide')
 		]).toEqual(['forum.pathofexile.com', twentyEight, `…${longer.slice(-27)}`]);
 	});
+
+	it('is counted in characters, a site of wide letters keeping its true end', () => {
+		const wide = `${'m'.repeat(40)}.io`;
+		expect(siteOf(`https://${wide}/x`, 'guide')).toBe(`…${'m'.repeat(24)}.io`);
+	});
 });
 
 describe('a link to an address of a stranger', () => {

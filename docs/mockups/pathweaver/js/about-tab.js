@@ -52,7 +52,8 @@ const abDescription = about => (about.description
 // A link of the guide in the look of « Download .build » (the owner, 2026-11-21: no icon, the same hover): its
 // site alone in the accent, turning to the colour of the text on hover; its whole address in its tooltip (the
 // rest of the address written under it set aside: not pretty). Its site read as a chip reads it, on one line, its
-// end only past 28 characters, what the pane holds under its title (4g4b, its third review: a site of 40
+// end only past 28 characters, what the pane holds of usual letters under its title, a site of wide letters
+// running over it, its true domain still at its end (4g4b, its third and fourth reviews: a site of 40
 // characters ran 83 pixels over the description).
 const AB_GUIDE_KEPT = 28;
 function abGuideLink(url) {

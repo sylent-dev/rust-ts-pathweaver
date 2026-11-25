@@ -1,7 +1,8 @@
 <!-- The guide of a build in its colophon (specs.md, The header of a build; 2k3 of the mock-up): one
      link, in the look of « Download .build » without an icon, its site alone in the accent, on one
-     line, its end only past what the pane holds, its whole address in its tooltip, opened in a new tab that keeps no hold on the page; « from the
-     description », small and grey under it, when the file names none and its description does.
+     line, its end only past 28 characters (site.ts), its whole address in its tooltip, opened in a
+     new tab that keeps no hold on the page; « from the description », small and grey under it,
+     when the file names none and its description does.
      A `link` that isn't an address shows as text; an address whose site the browser can't read
      too, as a chip of the description does; « none » in the weak grey without a guide. -->
 <script lang="ts">
@@ -47,7 +48,7 @@
 	}
 
 	/* In the look of « Download .build »: its site in the accent, the colour of the text on hover,
-	   never cut across two lines (siteOf keeps what the pane holds). */
+	   never cut across two lines (siteOf keeps 28 characters). */
 	.link {
 		color: var(--accent);
 		font-size: 13px;

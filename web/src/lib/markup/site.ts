@@ -11,7 +11,8 @@ const WWW = 'www.';
  * ellipsis, as the address bar of a browser cuts a long site, since its true domain is at its end
  * and its start may be chosen to read as another (4g3, its fourth review, the owner, 2026-11-24:
  * an ellipsis at its end hid the domain, a chip on several lines crowded the guide). A chip of a
- * description, 40; the guide of the colophon, 28, what its pane holds on one line (the third
+ * description, 40; the guide of the colophon, 28, what its pane holds of usual letters on one
+ * line, a site of wide letters running over it, its true domain still at its end (the third
  * review of 4g4b: one of 40 ran 83 pixels over the description; `forum.pathofexile.com`, 21,
  * stays whole).
  */
