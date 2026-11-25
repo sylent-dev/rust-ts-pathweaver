@@ -20,9 +20,12 @@
 .ab-name, .ab-by { position: relative; }
 .ab-name { margin: 0; font-size: 17px; line-height: 1.25; overflow-wrap: anywhere; }
 .ab-by { margin: 2px 0 0; font-size: 12.5px; }
-.ab-facts { display: grid; grid-template-columns: 58px 1fr; gap: 8px 10px; margin: 16px 0; font-size: 12.5px; }
+/* Each fact under its title, across the pane, a wider gap between two facts than between a title and its value
+   (C of three, the owner, 2026-11-25). */
+.ab-facts { margin: 16px 0; font-size: 12.5px; }
 .ab-facts dt { color: var(--on-band-weak); font-size: 11px; }
-.ab-facts dd { margin: 0; min-width: 0; }
+.ab-facts dd { margin: 3px 0 14px; }
+.ab-facts dd:last-child { margin-bottom: 0; }
 .ab-file { flex: none; padding-left: 0; }
 
 /* The description, the author's words, colours and styles; an address in it a link where it is, underlined
@@ -41,7 +44,7 @@
 /* A link of the guide, in the look of « Download .build » (css/build-header.css): its site in the accent, the
    colour of the text on hover, its site alone, its whole address in its tooltip. */
 .ab-guide { display: flex; flex-direction: column; gap: 3px; }
-.ab-link { color: var(--accent); font-size: 13px; font-weight: 600; line-height: 1.1; text-decoration: none; transition: color var(--hover-fade); }
+.ab-link { color: var(--accent); font-size: 13px; font-weight: 600; line-height: 1.1; text-decoration: none; white-space: nowrap; transition: color var(--hover-fade); }
 .ab-link:hover { color: var(--text); }
 .ab-link-text { overflow-wrap: anywhere; }
 .ab-from { font-size: 11px; line-height: 1.3; }
