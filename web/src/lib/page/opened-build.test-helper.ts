@@ -2,7 +2,7 @@
 
 import type { OpenedBuild } from '#lib/core.ts';
 
-/** A build of this key, named after it, from level 1 to 100, with these markers. */
+/** A build of this key, named after it, from level 1 to 100, with these markers, holding nothing. */
 export function openedBuild(contentKey: string, markers: number[] = []): OpenedBuild {
 	return {
 		contentKey,
@@ -11,6 +11,7 @@ export function openedBuild(contentKey: string, markers: number[] = []): OpenedB
 		ascendancy: undefined,
 		description: undefined,
 		guide: undefined,
-		levels: { lowest: 1, highest: 100, markers }
+		levels: { lowest: 1, highest: 100, markers },
+		totals: { passives: 0, skills: 0, supports: 0, hints: 0 }
 	};
 }

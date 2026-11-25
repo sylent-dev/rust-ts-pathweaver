@@ -186,7 +186,7 @@ impl From<Guide<'_>> for BuildGuide {
                 address: address.to_owned(),
             },
             Guide::Text(text) => Self::Text {
-                text: text.to_owned(),
+                text: text.into_owned(),
             },
             Guide::FromDescription(address) => Self::FromDescription {
                 address: address.to_owned(),

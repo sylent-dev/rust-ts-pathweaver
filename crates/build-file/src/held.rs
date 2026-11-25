@@ -3,7 +3,7 @@
 
 use std::collections::{BTreeMap, BTreeSet};
 
-use crate::{Build, Entry, InventorySlot, LevelRange, Passive};
+use crate::{Build, Entry, InventorySlot, LevelRange, Passive, Support};
 
 /// A thing a build holds at a level (a gem, a passive, the item of a hint), once, with the
 /// notes of its author on the entries that set it there.
@@ -118,43 +118,67 @@ impl Build {
     pub fn at_level(&self, level: u32) -> BuildAtLevel<'_> {
         let applies =
             |levels: Option<LevelRange>| levels.is_some_and(|levels| levels.contains(level));
-        let skills = || {
-            let skills = self.skills.get().into_iter().flatten();
-            skills.filter(|skill| applies(skill.levels()))
-        };
-        let supports = skills().flat_map(|skill| {
-            let supports = skill.supports().iter();
-            let supports = supports.filter(|support| applies(support.levels()));
-            supports.map(|support| {
-                let on_skill = SupportOnSkill {
-                    id: support.id(),
-                    skill: skill.id(),
-                };
-                (on_skill, note(support.additional_text()))
-            })
-        });
+        let skills = self.skills.get().into_iter().flatten();
+        let skills = skills.filter(|skill| applies(skill.levels()));
+        let supports = self.supports_on_skills();
+        let supports = supports.filter(|support| applies(support.applies_at));
         let passives = self.passives.get().into_iter().flatten();
         let passives = passives.filter(|passive| applies(passive.levels()));
         let hints = self.inventory_slots.get().into_iter().flatten();
         let hints = hints.filter(|hint| applies(hint.levels()));
         BuildAtLevel {
-            skills: held_once(skills().map(|skill| (skill.id(), note(skill.additional_text())))),
-            supports: held_once(supports),
-            passives: held_once(passives.map(|passive| {
-                let in_set = PassiveInSet {
-                    id: passive.id(),
-                    weapon_set: passive.weapon_set(),
-                };
-                (in_set, note(passive.additional_text()))
-            })),
+            skills: held_once(skills.map(|skill| (skill.id(), note(skill.additional_text())))),
+            supports: held_once(
+                supports.map(|support| (support.on_skill, note(support.entry.additional_text()))),
+            ),
+            passives: held_once(
+                passives.map(|passive| (passive.in_set(), note(passive.additional_text()))),
+            ),
             hints: held_once(
                 hints.map(|hint| (hint.on_slot(), note(hint.additional_text.as_deref()))),
             ),
         }
     }
+
+    /// Every support of the build on its skill, in the order of the file, with the levels it
+    /// applies at.
+    pub(crate) fn supports_on_skills(&self) -> impl Iterator<Item = SupportEntry<'_>> {
+        let skills = self.skills.get().into_iter().flatten();
+        skills.flat_map(|skill| {
+            let skill_levels = skill.levels();
+            skill.supports().iter().map(move |support| SupportEntry {
+                entry: support,
+                on_skill: SupportOnSkill {
+                    id: support.id(),
+                    skill: skill.id(),
+                },
+                applies_at: skill_levels
+                    .zip(support.levels())
+                    .and_then(|(skill_levels, levels)| levels.shared_with(skill_levels)),
+            })
+        })
+    }
+}
+
+/// A support of a build, on its skill.
+pub(crate) struct SupportEntry<'a> {
+    pub entry: &'a Entry<Support>,
+    pub on_skill: SupportOnSkill<'a>,
+    /// The levels it applies at: those where both it and its skill apply; none when they share
+    /// no level.
+    pub applies_at: Option<LevelRange>,
 }
 
 impl Entry<Passive> {
+    /// The passive in its weapon set, as a build holds it.
+    #[must_use]
+    pub fn in_set(&self) -> PassiveInSet<'_> {
+        PassiveInSet {
+            id: self.id(),
+            weapon_set: self.weapon_set(),
+        }
+    }
+
     /// The weapon set the passive is taken in: both for a passive written as its id alone.
     #[must_use]
     pub fn weapon_set(&self) -> WeaponSet {

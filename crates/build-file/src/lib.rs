@@ -30,10 +30,12 @@ mod entries;
 mod fixtures;
 mod guide;
 mod held;
+mod held_totals;
 mod level_interval;
 mod levels;
 mod markup;
 mod nullable;
+mod plain_text;
 mod read_error;
 
 use serde::{Deserialize, Serialize};
@@ -45,6 +47,7 @@ pub use guide::Guide;
 pub use held::{
     BuildAtLevel, Held, HintItem, HintOnSlot, Notes, PassiveInSet, SupportOnSkill, WeaponSet,
 };
+pub use held_totals::HeldTotals;
 pub use level_interval::LevelInterval;
 pub use levels::{EntryName, HIGHEST_LEVEL, InvalidInterval, LOWEST_LEVEL, LevelRange};
 pub use markup::{Colour, Markup, NamedColour, Piece, Size, Style};

@@ -437,6 +437,52 @@ def library_row(build, ascendancies):
             "levels": level_range(build)}
 
 
+def held_levels(entry):
+    """The levels an entry applies at, as the core reads them (LevelRange): [min, max] or a single number
+    from it to 100, 0 counting as 1 and a max above 100 stopping at 100; none for an invalid interval (a min
+    above its max or above 100, a list that isn't two numbers)."""
+    value = entry.get("level_interval")
+    if value is None:
+        return (1, 100)
+    if isinstance(value, int):
+        low, high = value, 100
+    elif isinstance(value, list) and len(value) == 2:
+        low, high = value
+    else:
+        return None
+    low, high = max(low, 1), min(max(high, 1), 100)
+    return (low, high) if low <= high else None
+
+
+def held_counts(build):
+    """How many things a build holds over its levels, each once, as the core counts them (4g4a, specs.md,
+    The level: what the build holds is read thing by thing): a passive by its id and its weapon set, a skill
+    by its id, a support by its id and its skill, a hint by its slot and its item, its unique or else the first
+    line of its text; what applies at no level counts nothing. The entries of the file say more where a tool
+    lists a thing again."""
+    entry = lambda item: item if isinstance(item, dict) else {"id": item}
+    passives, skill_ids, supports, hints = set(), set(), set(), set()
+    for passive in map(entry, build.get("passives") or []):
+        if held_levels(passive):
+            passives.add((passive["id"], passive.get("weapon_set") if passive.get("weapon_set") in (1, 2) else 0))
+    for skill in map(entry, build.get("skills") or []):
+        skill_levels = held_levels(skill)
+        if not skill_levels:
+            continue
+        skill_ids.add(skill["id"])
+        for support in map(entry, skill.get("support_skills") or []):
+            levels = held_levels(support)
+            if levels and levels[0] <= skill_levels[1] and skill_levels[0] <= levels[1]:
+                supports.add((support["id"], skill["id"]))
+    for hint in build.get("inventory_slots") or []:
+        if held_levels(hint):
+            unique = (hint.get("unique_name") or "").strip()
+            text = (hint.get("additional_text") or "").strip()
+            item = ("unique", unique) if unique else ("named", text.split("\n")[0].rstrip()) if text else None
+            hints.add((hint.get("inventory_id"), item))
+    return {"passives": len(passives), "skills": len(skill_ids), "supports": len(supports), "hints": len(hints)}
+
+
 def about_of(name, build, tree, names, uniques, ascendancies):
     """What the About tab shows of a build (2k3): its words, its link, its file and its size, the levels it
     covers, its counts, and its warnings by part: an id the game data don't know (a passive, a gem, a
@@ -478,9 +524,7 @@ def about_of(name, build, tree, names, uniques, ascendancies):
         "description": build.get("description") or "", "link": build.get("link") or "",
         "file": f"{build.get('name', name)}.build", "size": (CORPUS / name).stat().st_size,
         "levels": level_range(build),
-        "counts": {"passives": len(dicts(build.get("passives"))), "skills": len(skills),
-                   "supports": sum(len(dicts(s.get("support_skills"))) for s in skills),
-                   "hints": len(dicts(build.get("inventory_slots")))},
+        "counts": held_counts(build),
         "warnings": warnings,
     }
 

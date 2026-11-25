@@ -1,0 +1,120 @@
+//! The texts of a file the page shows as they are, without markup (`specs.md`, The header of a
+//! build): the name, the author and a `link` that isn't an address. Like the author's texts,
+//! they lose the characters that move the text around them (4g3, its third review): a mark
+//! that turns the direction, in the name of a build, would turn the words drawn after it.
+
+use std::borrow::Cow;
+
+use crate::Build;
+use crate::markup::{is_blank, without_characters_that_move_the_text};
+
+impl Build {
+    /// The name of the build as the page shows it: without the characters that move the text
+    /// around it, nor the spaces around it; empty when it shows nothing.
+    #[must_use]
+    pub fn shown_name(&self) -> Cow<'_, str> {
+        plain_text(&self.name).unwrap_or_default()
+    }
+
+    /// The author of the build as the page shows it: without the characters that move the text
+    /// around it, nor the spaces around it; none when the file has none or it shows nothing.
+    #[must_use]
+    pub fn shown_author(&self) -> Option<Cow<'_, str>> {
+        self.author.get().and_then(|author| plain_text(author))
+    }
+}
+
+/// A text of the file shown as it is: without the characters that move the text around it,
+/// nor the spaces around it; none when it shows nothing (spaces, marks that move the text and
+/// characters drawn as nothing only). A character drawn as nothing stays where it is, even at
+/// an end: it may shape the one before it (the form of an emoji, a flag) or set where its
+/// punctuation goes (a mark of direction at the end of a name of Hebrew).
+pub(crate) fn plain_text(text: &str) -> Option<Cow<'_, str>> {
+    if is_blank(text) {
+        return None;
+    }
+    Some(match without_characters_that_move_the_text(text) {
+        Cow::Borrowed(text) => Cow::Borrowed(text.trim()),
+        Cow::Owned(text) => Cow::Owned(text.trim().to_owned()),
+    })
+}
+
+#[cfg(test)]
+mod tests {
+    use serde_json::json;
+
+    use super::*;
+    use crate::fixtures::build;
+
+    #[test]
+    fn the_name_and_the_author_lose_what_moves_the_text_around_them() {
+        let mut build = build(json!({ "author": " \u{202e}Fub\u{2066}gun\u{2069} " }));
+        build.name = "\u{202b}Ice Shot\u{200f} \u{2029}Deadeye\u{85}".to_owned();
+
+        assert_eq!(build.shown_name(), "Ice Shot\u{200f} Deadeye");
+        assert_eq!(build.shown_author().as_deref(), Some("Fubgun"));
+    }
+
+    #[test]
+    fn the_spaces_left_by_a_mark_that_moves_the_text_are_taken_off_too() {
+        let mut build = build(json!({ "author": "\u{202e} Fubgun \u{2069}" }));
+        build.name = "\u{2066} Ice Shot \u{2069}".to_owned();
+
+        assert_eq!(build.shown_name(), "Ice Shot");
+        assert_eq!(build.shown_author().as_deref(), Some("Fubgun"));
+    }
+
+    #[test]
+    fn a_character_drawn_as_nothing_stays_where_it_is() {
+        // The emoji of a frost and of swords, the flag of England, a name of Hebrew ending on its
+        // mark of direction, which sets its « ! » at its end.
+        let texts = [
+            "Ice Strike \u{2744}\u{fe0f}",
+            "Fub\u{200b}gun \u{2694}\u{fe0f}",
+            "\u{1f3f4}\u{e0067}\u{e0062}\u{e0065}\u{e006e}\u{e0067}\u{e007f}",
+            "\u{5e9}\u{5dc}\u{5d5}\u{5dd}!\u{200f}",
+        ];
+        // At the start, the space after it stays too: the cost of the rule, a space shown.
+        let mut at_start = build(json!({ "author": "\u{200b} Fubgun" }));
+        at_start.name = "\u{feff} Ice Shot".to_owned();
+        assert_eq!(at_start.shown_name(), "\u{feff} Ice Shot");
+        assert_eq!(at_start.shown_author().as_deref(), Some("\u{200b} Fubgun"));
+        for text in texts {
+            let mut build = build(json!({ "author": text }));
+            build.name = text.to_owned();
+
+            assert_eq!(build.shown_name(), text);
+            assert_eq!(build.shown_author().as_deref(), Some(text));
+        }
+    }
+
+    #[test]
+    fn a_text_without_such_characters_is_borrowed_as_it_is_but_its_spaces() {
+        let mut build = build(json!({ "author": "Fubgun" }));
+        build.name = "  Ice Shot  ".to_owned();
+
+        assert!(matches!(build.shown_name(), Cow::Borrowed("Ice Shot")));
+        assert!(matches!(
+            build.shown_author(),
+            Some(Cow::Borrowed("Fubgun"))
+        ));
+    }
+
+    #[test]
+    fn an_author_that_shows_nothing_is_none() {
+        for author in [
+            json!(""),
+            json!(" \u{202e} \u{2069}"),
+            json!("\u{200b}"),
+            json!("\u{200f}\u{ad}\u{2800}"),
+            json!(null),
+        ] {
+            let build = build(json!({ "author": author }));
+
+            assert_eq!(build.shown_author(), None, "{author}");
+        }
+        let mut build = build(json!({}));
+        build.name = "\u{202e} ".to_owned();
+        assert_eq!(build.shown_name(), "");
+    }
+}

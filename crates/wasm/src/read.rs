@@ -1,7 +1,9 @@
 //! A file opened in the page (`specs.md`, Opening builds): the build it holds, or why it is
 //! refused, as data the interface writes in each language.
 
-use pathweaver_build_file::{Build, Guide, ReadError};
+use std::borrow::Cow;
+
+use pathweaver_build_file::{Build, Guide, HeldTotals, ReadError};
 use serde::Serialize;
 use tsify::{Ts, Tsify};
 use wasm_bindgen::prelude::{JsError, wasm_bindgen};
@@ -23,7 +25,11 @@ pub enum BuildFile {
 pub struct OpenedBuild {
     /// The key of its content: two files of the same build have the same key.
     pub content_key: String,
+    /// Its name, without the characters that move the text around it, nor the spaces around it;
+    /// empty when it shows nothing.
     pub name: String,
+    /// Its author, without the characters that move the text around it, nor the spaces around
+    /// it; none when it shows nothing.
     pub author: Option<String>,
     /// The id of the ascendancy, such as `Warrior1`.
     pub ascendancy: Option<String>,
@@ -34,6 +40,8 @@ pub struct OpenedBuild {
     /// pieces shown.
     pub guide: Option<BuildGuide>,
     pub levels: BuildLevels,
+    /// How many things it holds over its levels, each once: the entries of its colophon.
+    pub totals: BuildTotals,
 }
 
 /// The levels of a build, as far as the page moves among them (`specs.md`, The level).
@@ -56,6 +64,35 @@ impl From<&Build> for BuildLevels {
             lowest: levels.first(),
             highest: levels.last(),
             markers: build.markers(),
+        }
+    }
+}
+
+/// How many things a build holds over its levels, each once, [`HeldTotals`] as the interface
+/// reads it.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Tsify)]
+#[serde(rename_all = "camelCase")]
+pub struct BuildTotals {
+    pub passives: usize,
+    pub skills: usize,
+    pub supports: usize,
+    /// The hints of the inventory, the items of the colophon.
+    pub hints: usize,
+}
+
+impl From<HeldTotals> for BuildTotals {
+    fn from(totals: HeldTotals) -> Self {
+        let HeldTotals {
+            passives,
+            skills,
+            supports,
+            hints,
+        } = totals;
+        Self {
+            passives,
+            skills,
+            supports,
+            hints,
         }
     }
 }
@@ -134,10 +171,11 @@ pub fn read_file(bytes: &[u8]) -> BuildFile {
                 build: OpenedBuild {
                     content_key: build.content_key(),
                     levels: BuildLevels::from(&build),
+                    totals: build.held_totals().into(),
                     description: description.map(MarkupText::from),
                     guide,
-                    name: build.name,
-                    author: build.author.into_option(),
+                    name: build.shown_name().into_owned(),
+                    author: build.shown_author().map(Cow::into_owned),
                     ascendancy: build.ascendancy.into_option(),
                 },
             }
@@ -196,6 +234,12 @@ mod tests {
                         lowest: 1,
                         highest: 100,
                         markers: vec![30, 51, 60],
+                    },
+                    totals: BuildTotals {
+                        passives: 3,
+                        skills: 2,
+                        supports: 2,
+                        hints: 2,
                     },
                 },
             }
@@ -367,6 +411,26 @@ mod tests {
             serde_json::json!({ "kind": "fromDescription", "address": "https://b.com" })
         );
         assert_eq!(guide_of("", "none"), serde_json::Value::Null);
+    }
+
+    #[test]
+    fn the_name_the_author_and_a_link_of_text_cross_without_what_moves_the_text_around_them() {
+        let text = r#"{ "name": "\u202bIce Shot\u2069", "author": "\u202e ",
+            "link": "my \u2066guide" }"#;
+
+        let BuildFile::Build { build } = read_file(text.as_bytes()) else {
+            panic!("the text is a build");
+        };
+        assert_eq!(
+            (build.name.as_str(), build.author, build.guide),
+            (
+                "Ice Shot",
+                None,
+                Some(BuildGuide::Text {
+                    text: "my guide".to_owned()
+                })
+            )
+        );
     }
 
     #[test]

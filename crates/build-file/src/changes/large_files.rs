@@ -5,7 +5,7 @@
 use std::fmt::Write;
 use std::time::{Duration, Instant};
 
-use crate::{Build, MAX_BYTES};
+use crate::{Build, HIGHEST_LEVEL, LOWEST_LEVEL, MAX_BYTES};
 
 /// A build of as many entries as fit in a file between `opening` and `closing`, each written by
 /// `entry` from its number.
@@ -116,6 +116,33 @@ fn the_levels_of_a_file_of_the_largest_size_are_read_in_less_than_a_second() {
         )
         .unwrap();
         assert!(elapsed < Duration::from_secs(1), "{times}");
+    }
+    println!("{times}");
+}
+
+/// Measured on 2026-11-24 in release, natively, in the order of the cases: 6.0 ms, 1.4 ms,
+/// 1.4 ms, 1.5 ms, 0.5 ms, 0.4 ms, 0.8 ms, 0.5 ms and 0.6 ms; reading what the build holds at
+/// each of the 100 levels, which counting it over them would take at least: 1.2 s, 126 ms,
+/// 139 ms, 5.5 ms, 75 ms, 80 ms, 69 ms, 53 ms and 0.28 s.
+#[test]
+#[ignore = "a measure, to run in release"]
+fn the_totals_of_a_file_of_the_largest_size_are_counted_in_a_few_milliseconds() {
+    let mut times = String::new();
+    for (build, entries) in &cases() {
+        let start = Instant::now();
+        let totals = build.held_totals();
+        let elapsed = start.elapsed();
+        let start = Instant::now();
+        for level in LOWEST_LEVEL..=HIGHEST_LEVEL {
+            std::hint::black_box(build.at_level(level));
+        }
+        let level_by_level = start.elapsed();
+        writeln!(
+            times,
+            "{entries} entries, {totals:?}: {elapsed:?}, level by level {level_by_level:?}"
+        )
+        .unwrap();
+        assert!(elapsed < Duration::from_millis(100), "{times}");
     }
     println!("{times}");
 }

@@ -286,8 +286,8 @@ fn text(rest: &str) -> (Token<'_>, usize) {
 /// text, which no style of the page contains: the embeddings, overrides and isolates of
 /// Unicode, and the separators of paragraphs of its algorithm of direction (4g3, its second
 /// review: U+202B before a link drew the text before it at its right, U+2069 closed the isolate
-/// the page puts around the text). The strong marks U+200E, U+200F and U+061C stay: invisible
-/// letters, they turn no Latin letter.
+/// the page puts around the text). The strong marks U+200E, U+200F and U+061C stay: letters
+/// drawn as nothing, they turn no Latin letter.
 fn moves_the_text_around(character: char) -> bool {
     matches!(
         character,
@@ -297,7 +297,7 @@ fn moves_the_text_around(character: char) -> bool {
 
 /// An author's text without the characters that move the text around it; borrowed when it holds
 /// none, the most usual case (the corpus holds none).
-fn without_characters_that_move_the_text(text: &str) -> std::borrow::Cow<'_, str> {
+pub(crate) fn without_characters_that_move_the_text(text: &str) -> std::borrow::Cow<'_, str> {
     if text.contains(moves_the_text_around) {
         text.chars()
             .filter(|character| !moves_the_text_around(*character))
@@ -497,18 +497,56 @@ impl Markup {
     }
 }
 
+/// Whether a text of the file shows nothing: spaces, marks that move the text around them and
+/// characters drawn as nothing only, or empty.
+pub(crate) fn is_blank(text: &str) -> bool {
+    text.chars().all(shows_nothing)
+}
+
+/// Whether a character shows nothing on its own: a space, a mark that moves the text around it
+/// or a character drawn as nothing.
+fn shows_nothing(character: char) -> bool {
+    character.is_whitespace() || moves_the_text_around(character) || is_drawn_as_nothing(character)
+}
+
+/// Whether a character is drawn as nothing (4g4a, its reviews: an author of U+200B or U+17B5
+/// alone showed « by  · Deadeye »): those Unicode says a program ignores when it can't show
+/// them (`Default_Ignorable_Code_Point`, `DerivedCoreProperties.txt` of Unicode 18.0.0: the
+/// joiners, the strong marks of direction, the fillers of Hangul, the vowels of Khmer without a
+/// glyph, the selectors of variants, the tags…), and the blank of Braille, which it doesn't name
+/// but games take for a name that looks empty.
+fn is_drawn_as_nothing(character: char) -> bool {
+    matches!(
+        character,
+        '\u{ad}'
+            | '\u{34f}'
+            | '\u{61c}'
+            | '\u{115f}'..='\u{1160}'
+            | '\u{17b4}'..='\u{17b5}'
+            | '\u{180b}'..='\u{180f}'
+            | '\u{200b}'..='\u{200f}'
+            | '\u{202a}'..='\u{202e}'
+            | '\u{2060}'..='\u{206f}'
+            | '\u{2800}'
+            | '\u{3164}'
+            | '\u{fe00}'..='\u{fe0f}'
+            | '\u{feff}'
+            | '\u{ffa0}'
+            | '\u{fff0}'..='\u{fff8}'
+            | '\u{1bca0}'..='\u{1bca3}'
+            | '\u{1d173}'..='\u{1d17a}'
+            | '\u{e0000}'..='\u{e0fff}'
+    )
+}
+
 impl crate::Build {
     /// The description of the build read with its markup and its links; none when its file has
-    /// none, or one of spaces and marks of direction only (« The author wrote no description. »).
+    /// none, or one that shows nothing (« The author wrote no description. »).
     #[must_use]
     pub fn description_markup(&self) -> Option<Markup> {
         self.description
             .as_deref()
-            .filter(|description| {
-                !description
-                    .chars()
-                    .all(|character| character.is_whitespace() || moves_the_text_around(character))
-            })
+            .filter(|description| !is_blank(description))
             .map(Markup::of_description)
     }
 }
