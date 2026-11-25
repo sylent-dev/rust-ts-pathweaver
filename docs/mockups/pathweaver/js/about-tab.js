@@ -91,7 +91,7 @@ function aboutTab(level, source = "shown", { wide = false } = {}) {
   const warnings = about.warnings.length ? `<div class="ab-warnings-part" data-warnings="">${abWarnings(about)}</div>` : "";
   return `<div class="app-about-tab"><div class="app-ab graph-paper"><div class="ab-colophon">
       <aside class="ab-colophon-side"><img class="ab-portrait" src="pathweaver/img/portraits-about/${about.portrait}.webp" width="260" height="260" alt="">
-        <h3 class="ab-name app-title">${escapeHtml(about.name)}</h3>
+        <h3 class="ab-name app-title">${buildName(about.name)}</h3>
         <p class="ab-by">${about.author ? `by ${escapeHtml(about.author)} · ` : ""}${escapeHtml(about.ascendancy)} <span class="app-weak">${escapeHtml(about.class)}</span></p>
         <dl class="ab-facts"><dt>Levels</dt><dd>${about.levels ? `${about.levels[0]}–${about.levels[1]}` : "a snapshot"}</dd><dt>Entries</dt><dd>${abCounts(about).join("<br>")}</dd><dt>Guide</dt><dd class="ab-guide">${abGuide(about)}</dd></dl>
         ${abFile(about)}</aside>

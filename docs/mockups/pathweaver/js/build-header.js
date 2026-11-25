@@ -24,7 +24,7 @@ function buildHeader(build = SHOWN, warnings = TREE.unknown.length
   return `<div class="app-header graph-paper">
     <img class="app-header-portrait" src="pathweaver/img/portraits-square/${build.portrait}.webp" width="66" height="66" alt="">
     <div class="app-header-text">
-      <h1 class="app-header-name app-title">${escapeHtml(build.name)}</h1>
+      <h1 class="app-header-name app-title">${buildName(build.name)}</h1>
       <p class="app-header-by app-weak">${build.author ? `by ${escapeHtml(build.author)} · ` : ""}${escapeHtml(build.ascendancy)} <span class="app-header-class">${escapeHtml(build.class)}</span></p>
     </div>
     <div class="app-header-actions">
